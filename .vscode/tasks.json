@@ -1,0 +1,12 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "start:local-proxy",
+			"problemMatcher": [],
+			"label": "npm: start:local-proxy",
+			"detail": "ng serve --proxy-config proxy.conf.js"
+		}
+	]
+}

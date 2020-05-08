@@ -1,0 +1,11 @@
+{
+    "files.watcherExclude": {
+        "./.idea/**": true,
+        "./.run/**": true
+    },
+    "files.exclude": {
+      "node_modules/": true,
+      ".idea/": true,
+      ".run/": true
+    }
+}
