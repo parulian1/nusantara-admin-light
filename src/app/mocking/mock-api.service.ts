@@ -34,7 +34,7 @@ export class MockApiInterceptorService implements HttpInterceptor {
 
 const HTTP_API_RESPONSES = {
   GET: {
-    ...CATEGORY_GET_RESPONSES,
+    // ...CATEGORY_GET_RESPONSES,
     // ...PRODUCT_CLASSES_GET_RESPONSES,
     ...PRODUCT_GET_RESPONSES,
   },

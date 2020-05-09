@@ -3,7 +3,7 @@ import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@a
 import { Observable, of, } from 'rxjs';
 
 import { IEntityHref } from '@nusantara/core';
-import { CategoryService } from './category.service';
+import { CategoryService } from '@nusantara/services';
 
 /**
  * Finds all the possible parent categories, and returns in a flattened

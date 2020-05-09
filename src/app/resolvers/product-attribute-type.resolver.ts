@@ -3,7 +3,7 @@ import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@a
 import { Observable } from 'rxjs';
 
 import { IChoiceFieldChoice } from '@nusantara/core';
-import { ProductAttributeService } from './product-attribute.service';
+import { ProductAttributeService } from '@nusantara/services';
 
 /**
  * Gets the valid "types" for product attributes.

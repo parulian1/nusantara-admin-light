@@ -1,12 +1,8 @@
 import { Injectable } from '@angular/core';
-import {
-  Router, Resolve,
-  RouterStateSnapshot,
-  ActivatedRouteSnapshot
-} from '@angular/router';
+import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { ProductClassService } from '@nusantara/pages/catalog/product-class/product-class.service';
+import { ProductClassService } from '@nusantara/services';
 import { IChoiceFieldChoice } from '@nusantara/core';
 
 
@@ -16,7 +12,7 @@ import { IChoiceFieldChoice } from '@nusantara/core';
 @Injectable({
   providedIn: 'root',
 })
-export class ProductClassChoiceResolver implements Resolve<IChoiceFieldChoice[]> {
+export class ProductClassTypeResolver implements Resolve<IChoiceFieldChoice[]> {
 
   constructor(private service: ProductClassService, private router: Router) {}
 

@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
 
 import { IChoiceField, IChoiceFieldChoice, IDrfOptionsResponse, } from '@nusantara/core';
 import { ErrorResult, IResultResponse, SuccessResult } from '@nusantara/core/responses';
-import { IProductAttribute } from './product-attribute.interface';
+import { IProductAttribute } from '@nusantara/models';
 
 @Injectable({
   providedIn: 'root'

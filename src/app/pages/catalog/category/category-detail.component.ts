@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ICategory, CategoryService } from './category.service';
+import { ICategory } from '@nusantara/models'
+import { CategoryService } from '@nusantara/services';
 import { IEntityHref } from '@nusantara/core';
 
 @Component({
@@ -74,36 +75,36 @@ export class CategoryDetailComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.entity = {
-      name: '',
-      href: null,
-      icon: null,
-      children: [],
-      parent: null,
-      products: null,
-      sourceMappings: [],
-    };
+  //   this.entity = {
+  //     name: '',
+  //     href: null,
+  //     icon: null,
+  //     children: [],
+  //     parent: null,
+  //     products: null,
+  //     sourceMappings: [],
+  //   };
 
-    this.route.data
-      .subscribe((data: { entity: ICategory, parentOptions: IEntityHref[] }) => {
-        if (data.entity) {
-          this.entity = data.entity;
+  //   this.route.data
+  //     .subscribe((data: { entity: ICategory, parentOptions: IEntityHref[] }) => {
+  //       if (data.entity) {
+  //         this.entity = data.entity;
 
-          this.form.setValue({
-            name: this.entity.name,
-            icon: this.entity.icon.href,
-            parent: null,
-            sourceMappings: this.entity.sourceMappings
-          });
+  //         this.form.setValue({
+  //           name: this.entity.name,
+  //           icon: this.entity.icon.href,
+  //           parent: null,
+  //           sourceMappings: this.entity.sourceMappings
+  //         });
 
-          this.isNew = false;
-        }
+  //         this.isNew = false;
+  //       }
 
-        // make sure that parent options **always** has a null option, too.
-        this.parentOptions = data.parentOptions;
-        this.parentOptions.unshift({name: '<none>', href: null});
-        this.isBusy = false;
-      });
+  //       // make sure that parent options **always** has a null option, too.
+  //       this.parentOptions = data.parentOptions;
+  //       this.parentOptions.unshift({name: '<none>', href: null});
+  //       this.isBusy = false;
+  //     });
   }
 
   trySubmit() {

@@ -1,13 +1,10 @@
 import { Injectable } from '@angular/core';
-import {
-  Router, Resolve,
-  RouterStateSnapshot,
-  ActivatedRouteSnapshot
-} from '@angular/router';
+import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap, take } from 'rxjs/operators';
-import { ICategory, CategoryService } from './category.service';
 
+import { ICategory } from '@nusantara/models';
+import { CategoryService } from '@nusantara/services';
 
 /**
  * Finds a single category, based on it's slug in the route.
@@ -15,7 +12,7 @@ import { ICategory, CategoryService } from './category.service';
 @Injectable({
   providedIn: 'root',
 })
-export class CategoryResolverService implements Resolve<ICategory> {
+export class CategoryResolver implements Resolve<ICategory> {
   constructor(private service: CategoryService, private router: Router) {}
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ICategory> | Observable<never> {
     const slug = route.paramMap.get('slug');

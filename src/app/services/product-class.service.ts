@@ -6,7 +6,8 @@ import { map } from 'rxjs/operators';
 import { IChoiceField, IChoiceFieldChoice, IDrfOptionsResponse } from '@nusantara/core';
 import { PagedResponse } from '@nusantara/core/pagination';
 import { ErrorResult, IResultResponse, SuccessResult } from '@nusantara/core/responses';
-import { IProductAttribute, ProductAttributeService } from '@nusantara/pages/catalog/product-attribute';
+
+import { IProductClass } from '@nusantara/models';
 
 
 @Injectable({
@@ -14,8 +15,7 @@ import { IProductAttribute, ProductAttributeService } from '@nusantara/pages/cat
 })
 export class ProductClassService {
 
-  constructor(private httpClient: HttpClient,
-              private attributeService: ProductAttributeService) { }
+  constructor(private httpClient: HttpClient) { }
 
   fetch(slug: string): Observable<IProductClass> {
     return this.httpClient.get<IProductClass>(
@@ -89,14 +89,4 @@ export class ProductClassService {
       )
     );
   }
-}
-
-export interface IProductClass {
-  name: string;
-  href: string;
-  requiresShipping: boolean;
-  trackStock: boolean;
-  isPerishable: boolean;
-  type: string;
-  attributes: IProductAttribute[];
 }

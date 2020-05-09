@@ -3,9 +3,9 @@ import { FormControl, FormGroup, FormArray, Validators, FormBuilder } from '@ang
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { IChoiceFieldChoice } from '@nusantara/core';
-import { IProductClass, ProductClassService } from './product-class.service';
-import { AbstractDetailComponent } from '@nusantara/core/components/abstract-detail.component';
-import { IProductAttribute, ProductAttributeService } from '@nusantara/pages/catalog/product-attribute';
+import { IProductAttribute, IProductClass } from '@nusantara/models';
+import { ProductClassService, ProductAttributeService } from '@nusantara/services';
+import { AbstractDetailComponent } from '@nusantara/core/components';
 
 /**
  * Update or create a new Product Class.
@@ -13,13 +13,7 @@ import { IProductAttribute, ProductAttributeService } from '@nusantara/pages/cat
 @Component({
   selector: 'nus-product-class-detail',
   template: `
-    <h1>
-      <i *ngIf="!isNew; then thenBlock else elseBlock"></i>
-      <ng-template #thenBlock>Update "{{ entity.name }}"</ng-template>
-      <ng-template #elseBlock>New Product Class</ng-template>
-    </h1>
-
-    <h1 *ngIf="isBusy">Please Wait..</h1>
+    <nus-detail-title [originalName]="entityName" typeName="Product Class"></nus-detail-title>
 
     <form [formGroup]="form" (ngSubmit)="submit()">
       <h2>Basic</h2>
@@ -98,6 +92,7 @@ export class ProductClassDetailComponent extends AbstractDetailComponent impleme
   public attributeTypeChoices: IChoiceFieldChoice[];
 
   public isNew = true;
+  public entityName: string;
   public isBusy = false;
   public form: FormGroup;
 
@@ -111,21 +106,24 @@ export class ProductClassDetailComponent extends AbstractDetailComponent impleme
 
   ngOnInit(): void {
 
-    this.route.data.subscribe(
-      (data: { entity: IProductClass, typeChoices: IChoiceFieldChoice[], attributeTypeChoices: IChoiceFieldChoice[] }) => {
+    this.route.data.subscribe((data: { entity: IProductClass,
+                                       typeChoices: IChoiceFieldChoice[],
+                                       attributeTypeChoices: IChoiceFieldChoice[] }) => {
 
       this.form = this.fb.group({
-        name: [data.entity.name, [Validators.required]],
-        href: [data.entity.href],
-        type: [data.entity.type, [Validators.required]],
-        requiresShipping: [data.entity.requiresShipping, [Validators.required]],
-        trackStock: [data.entity.trackStock, [Validators.required]],
-        isPerishable: [data.entity.isPerishable, [Validators.required]],
+        name: [data.entity?.name, [Validators.required]],
+        href: [data.entity?.href],
+        type: [data.entity?.type, [Validators.required]],
+        requiresShipping: [data.entity?.requiresShipping, [Validators.required]],
+        trackStock: [data.entity?.trackStock, [Validators.required]],
+        isPerishable: [data.entity?.isPerishable, [Validators.required]],
         attributes: this.fb.array([]),
         _deletedAttributes: this.fb.array([])
       });
 
-      data.entity.attributes.forEach(
+      this.entityName = data.entity?.name;
+
+      data.entity?.attributes.forEach(
         attr => this.addAttribute(attr)
       );
 

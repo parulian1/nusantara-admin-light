@@ -1,27 +1,62 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { CategoryDetailComponent, CategoryListComponent, CategoryResolverService } from './category';
-import { ProductClassListComponent } from '@nusantara/pages/catalog/product-class/product-class-list.component';
-import { ProductClassDetailComponent } from '@nusantara/pages/catalog/product-class/product-class-detail.component';
-import { ProductClassResolver } from '@nusantara/pages/catalog/product-class/product-class-resolver';
-import { ParentCategoriesResolver } from '@nusantara/pages/catalog/category/parent-categories.resolver';
-import { ProductClassChoiceResolver } from '@nusantara/pages/catalog/product-class/product-class-type-resolver';
-import { ProductAttributeTypeResolver } from '@nusantara/pages/catalog/product-attribute';
-import { ProductClassListResolver } from '@nusantara/pages/catalog/product-class';
-
+import { CategoryDetailComponent, CategoryListComponent } from './category';
+import { ProductClassListComponent, ProductClassDetailComponent } from './product-class';
+import { ProductListComponent, ProductDetailComponent } from './product';
+import {
+  CategoryResolver,
+  CategoryListResolver,
+  ParentCategoriesResolver,
+  ProductAttributeTypeResolver,
+  ProductClassResolver,
+  ProductClassListResolver,
+  ProductClassTypeResolver,
+  ProductListResolver,
+  ProductResolver } from '@nusantara/resolvers';
 
 const routes: Routes = [
-
-  { path: 'categories', component: CategoryListComponent },
-  { path: 'categories/new', component: CategoryDetailComponent, resolve: { parentOptions: ParentCategoriesResolver }},
   {
-    path: 'categories/:slug',
-    component: CategoryDetailComponent,
-    resolve: {
-      entity: CategoryResolverService,
-      parentOptions: ParentCategoriesResolver
-    }
+    path: 'categories',
+    children: [
+      {
+        path: '',
+        component: CategoryListComponent,
+        resolve: { page: CategoryListResolver }
+      },
+      {
+        path: 'new',
+        component: CategoryDetailComponent,
+        resolve: { parentOptions: ParentCategoriesResolver }
+      },
+      {
+        path: ':slug',
+        component: CategoryDetailComponent,
+        resolve: {
+          entity: CategoryResolver,
+          parentOptions: ParentCategoriesResolver
+        }
+      },
+    ]
+  },
+  {
+    path: 'products',
+    children: [
+      {
+        path: '',
+        component: ProductListComponent,
+        resolve: { page: ProductListResolver },
+      },
+      {
+        path: 'new',
+        component: ProductDetailComponent
+      },
+      {
+        path: ':slug',
+        component: ProductDetailComponent,
+        resolve: { entity: ProductResolver }
+      }
+    ]
   },
 
   {
@@ -35,14 +70,14 @@ const routes: Routes = [
       {
         path: 'new',
         component: ProductClassDetailComponent,
-        resolve: { typeChoices: ProductClassChoiceResolver }
+        resolve: { typeChoices: ProductClassTypeResolver }
       },
       {
         path: ':slug',
         component: ProductClassDetailComponent,
         resolve: {
           entity: ProductClassResolver,
-          typeChoices: ProductClassChoiceResolver,
+          typeChoices: ProductClassTypeResolver,
           attributeTypeChoices: ProductAttributeTypeResolver,
         },
         runGuardsAndResolvers: 'always',

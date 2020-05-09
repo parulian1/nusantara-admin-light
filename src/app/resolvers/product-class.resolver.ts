@@ -3,7 +3,8 @@ import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@a
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap, take } from 'rxjs/operators';
 
-import { IProductClass, ProductClassService } from './product-class.service';
+import { ProductClassService } from '@nusantara/services';
+import { IProductClass } from '@nusantara/models';
 
 
 @Injectable({

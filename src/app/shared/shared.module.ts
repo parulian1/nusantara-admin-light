@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { EntityToSlugPipe } from './entity-to-slug.pipe';
 import { PaginationComponent } from './pagination.component';
+import { EntityDetailTitle } from './entity-detail-title.component';
+import { CommonModule } from '@angular/common';
 
 /**
  * The purpose of this module is to make common code (like pipes)
@@ -10,11 +12,16 @@ import { PaginationComponent } from './pagination.component';
   declarations: [
     EntityToSlugPipe,
     PaginationComponent,
+    EntityDetailTitle,
   ],
   exports: [
     EntityToSlugPipe,
     PaginationComponent,
+    EntityDetailTitle,
   ],
-  imports: [ ],
+  imports: [
+    CommonModule,
+  ],
+
 })
 export class SharedModule { }

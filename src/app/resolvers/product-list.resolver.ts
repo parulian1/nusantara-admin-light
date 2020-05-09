@@ -2,18 +2,18 @@ import { Injectable } from '@angular/core';
 import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { IProductClass, ProductClassService } from './product-class.service';
+import { ProductService } from '@nusantara/services';
 import { PagedResponse } from '@nusantara/core/pagination';
-
+import { IProduct } from '@nusantara/models';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
-export class ProductClassListResolver implements Resolve<PagedResponse<IProductClass>> {
+export class ProductListResolver implements Resolve<PagedResponse<IProduct>> {
 
-  constructor(private service: ProductClassService, private router: Router) {}
+  constructor(private service: ProductService, private router: Router) { }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<PagedResponse<IProductClass>> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<PagedResponse<IProduct>> | Observable<never> {
     const query = route.queryParamMap.get('q');
     const page = parseInt(route.queryParamMap.get('page') || '1', 10);
     return this.service.fetchList(query, page);

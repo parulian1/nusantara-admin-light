@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { JwtModule } from '@auth0/angular-jwt';
 
-import { MockApiInterceptorService } from '@nusantara/mocking';
+// import { MockApiInterceptorService } from '@nusantara/mocking';
 import { AnonWrapperComponent, MainWrapperComponent } from '@nusantara/view-wrappers';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -36,11 +36,11 @@ export function tokenGetter() {
     })
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: MockApiInterceptorService,
-      multi: true
-    },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: MockApiInterceptorService,
+    //   multi: true
+    // },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ApiPrefixInterceptor,
