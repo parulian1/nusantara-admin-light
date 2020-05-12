@@ -26,9 +26,9 @@ export abstract class AbstractCrudService<T extends {href: string}> {
    */
   fetchList(query?: string, page: number = 1): Observable<PagedResponse<T>> {
     // create query params --> ?q=maybe&page=1
-    const params = new HttpParams().append('page', page.toFixed(0).toString());
+    let params = new HttpParams().set('page', page.toFixed(0).toString());
     if (query) {
-      params.append('q', query);
+      params = params.set('q', query);
     }
 
     return this.httpClient

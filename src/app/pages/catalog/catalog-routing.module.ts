@@ -26,12 +26,14 @@ const routes: Routes = [
       {
         path: '',
         component: CategoryListComponent,
-        resolve: { page: CategoryListResolver }
+        resolve: { page: CategoryListResolver },
+        runGuardsAndResolvers: 'always',
       },
       {
         path: 'new',
         component: CategoryDetailComponent,
-        resolve: { parentOptions: CategoryParentOptionsResolver }
+        resolve: { parentOptions: CategoryParentOptionsResolver },
+        runGuardsAndResolvers: 'always',
       },
       {
         path: ':slug',
@@ -39,7 +41,8 @@ const routes: Routes = [
         resolve: {
           entity: CategoryResolver,
           parentOptions: CategoryParentOptionsResolver
-        }
+        },
+        runGuardsAndResolvers: 'always',
       },
     ]
   },
@@ -50,15 +53,18 @@ const routes: Routes = [
         path: '',
         component: ProductListComponent,
         resolve: { page: ProductListResolver },
+        runGuardsAndResolvers: 'always',
       },
       {
         path: 'new',
-        component: ProductDetailComponent
+        component: ProductDetailComponent,
+        runGuardsAndResolvers: 'always',
       },
       {
         path: ':slug',
         component: ProductDetailComponent,
-        resolve: { entity: ProductResolver }
+        resolve: { entity: ProductResolver },
+        runGuardsAndResolvers: 'always',
       }
     ]
   },
@@ -70,11 +76,13 @@ const routes: Routes = [
         path: '',
         component: ProductClassListComponent,
         resolve: { page: ProductClassListResolver },
+        runGuardsAndResolvers: 'always',
       },
       {
         path: 'new',
         component: ProductClassDetailComponent,
-        resolve: { typeChoices: ProductClassTypeResolver }
+        resolve: { typeChoices: ProductClassTypeResolver },
+        runGuardsAndResolvers: 'always',
       },
       {
         path: ':slug',
@@ -95,16 +103,19 @@ const routes: Routes = [
       {
         path: '',
         component: VendorListComponent,
-        resolve: { page: VendorListResolver }
+        resolve: { page: VendorListResolver },
+        runGuardsAndResolvers: 'always',
       },
       {
         path: 'new',
-        component: VendorDetailComponent
+        component: VendorDetailComponent,
+        runGuardsAndResolvers: 'always',
       },
       {
         path: ':slug',
         component: VendorDetailComponent,
-        resolve: { entity: VendorResolver }
+        resolve: { entity: VendorResolver },
+        runGuardsAndResolvers: 'always',
       }
     ]
   }
