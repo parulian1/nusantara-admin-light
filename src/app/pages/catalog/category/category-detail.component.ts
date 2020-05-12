@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ICategory } from '@nusantara/models';
 import { CategoryService } from '@nusantara/services';
-import { AbstractDetailComponent, IEntityHref } from '@nusantara/core';
+import { AbstractDetailComponent } from '@nusantara/core';
 
 @Component({
   selector: 'nus-category-detail',
@@ -13,25 +13,27 @@ import { AbstractDetailComponent, IEntityHref } from '@nusantara/core';
     </nus-detail-title>
 
     <form [formGroup]="form" (ngSubmit)="submit()">
-      <label>Name
+      <label>
+        <span>Name</span>
         <input type="text" formControlName="name" required>
       </label>
       <label>
-        Icon
-        <input type="image" formControlName="icon" required>
+        <span>Icon</span>
+        <input type="file" formControlName="icon" required>
       </label>
       <label>
-        Parent
+        <span>Parent</span>
         <select formControlName="parent">
           <option *ngFor="let parent of parentOptions" [ngValue]="parent.href">{{parent.pathName}}</option>
         </select>
       </label>
+
+      <h3>Source Mappings (optional) <button type="button" (click)="addMapping()">Add</button></h3>
       <label>
         Source Mappings (optional)
         <div *ngFor="let control of sourceMappings.controls; index as i">
           <input [formControl]="sourceMappings.controls[i]">
         </div>
-        <button type="button" (click)="addMapping()">Add</button>
       </label>
       <div class="actions-container">
         <button type="submit" [disabled]="!form.valid">Save</button>
@@ -41,10 +43,19 @@ import { AbstractDetailComponent, IEntityHref } from '@nusantara/core';
     </form>
   `,
   styles: [`
-
     label {
       display: block;
+      margin-bottom: .5em;
     }
+    label > span {
+      display: inline-block;
+      width: 65px;
+    }
+    input {
+      font-size: 1em;
+      font-family: Roboto, "Helvetica Neue", sans-serif;
+    }
+
   `]
 })
 export class CategoryDetailComponent extends AbstractDetailComponent implements OnInit {
@@ -56,17 +67,6 @@ export class CategoryDetailComponent extends AbstractDetailComponent implements 
 
   public parentOptions: ICategory[] = [];
 
-  public name = new FormControl();
-  public icon = new FormControl();
-  public parent = new FormControl();
-  public sourceMappings = new FormArray([]);
-
-  public form = new FormGroup({
-    name: this.name,
-    icon: this.icon,
-    parent: this.parent,
-    sourceMappings: this.sourceMappings
-  });
 
   constructor(public service: CategoryService,
               public route: ActivatedRoute,
@@ -76,7 +76,6 @@ export class CategoryDetailComponent extends AbstractDetailComponent implements 
   }
 
   ngOnInit(): void {
-
     this.route.data.subscribe((data: {entity: ICategory, parentOptions: ICategory[]}) => {
       this.form = this.fb.group({
         name: [data.entity?.name, [Validators.required, ]],
@@ -87,41 +86,14 @@ export class CategoryDetailComponent extends AbstractDetailComponent implements 
       });
       this.parentOptions = data.parentOptions;
     });
+  }
 
-    //   this.entity = {
-    //     name: '',
-    //     href: null,
-    //     icon: null,
-    //     children: [],
-    //     parent: null,
-    //     products: null,
-    //     sourceMappings: [],
-    //   };
-
-    //   this.route.data
-    //     .subscribe((data: { entity: ICategory, parentOptions: IEntityHref[] }) => {
-    //       if (data.entity) {
-    //         this.entity = data.entity;
-
-    //         this.form.setValue({
-    //           name: this.entity.name,
-    //           icon: this.entity.icon.href,
-    //           parent: null,
-    //           sourceMappings: this.entity.sourceMappings
-    //         });
-
-    //         this.isNew = false;
-    //       }
-
-    //       // make sure that parent options **always** has a null option, too.
-    //       this.parentOptions = data.parentOptions;
-    //       this.parentOptions.unshift({name: '<none>', href: null});
-    //       this.isBusy = false;
-    //     });
+  get sourceMappings(): FormArray {
+    return this.form.get('sourceMappings') as FormArray;
   }
 
   addMapping() {
-    this.sourceMappings.push(new FormControl());
+    this.sourceMappings.push(new FormControl('', [Validators.required, ]));
   }
   removeMapping(index: number) {
     this.sourceMappings.removeAt(index);

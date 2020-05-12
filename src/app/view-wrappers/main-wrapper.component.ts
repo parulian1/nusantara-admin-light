@@ -12,6 +12,7 @@ import { Component, OnInit } from '@angular/core';
         <li><a [routerLink]="['/catalog/products']" translate>Products</a></li>
         <li><a [routerLink]="['/catalog/categories']" translate>Categories</a></li>
         <li><a [routerLink]="['/catalog/product-classes']" translate>Product Classes</a></li>
+        <li><a [routerLink]="['/catalog/vendor']" translate>Vendors</a></li>
 
         <li class="section-header"><i class="material-icons">local_offer</i>Promotion Management</li>
 
@@ -39,7 +40,10 @@ import { Component, OnInit } from '@angular/core';
     'nav { grid-row: 2; grid-column: 1; background: black; color: white; }',
     'nav > ul { padding: 0; list-style-type: none; }',
     'nav li { height: 35px; line-height: 35px; }',
-    'nav li.section-header { font-weight: 900; padding-left: 0; }',
+
+    'nav li.section-header { font-weight: 900; padding-left: 0; display: flex; }',
+    'nav li.section-header i { line-height:35px;  height: 35px; }',
+
     'nav li.icon-button a { padding-left: 0; }',
     'nav > ul a { color: white; text-decoration: underline; display: block; padding-left: 25px; text-decoration: none; }',
     `nav > ul a:hover, nav > ul a:focus {

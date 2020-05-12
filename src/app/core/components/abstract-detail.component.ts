@@ -7,6 +7,8 @@ export abstract class AbstractDetailComponent {
   router: Router;
   form: FormGroup;
   service: any;
+  originalEntityName: string;
+
 
   navigateToParent(warnOnDirty = false) {
     if (warnOnDirty && this.form?.dirty) {

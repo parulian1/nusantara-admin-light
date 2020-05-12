@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { CategoryDetailComponent, CategoryListComponent } from './category';
 import { ProductClassListComponent, ProductClassDetailComponent } from './product-class';
 import { ProductListComponent, ProductDetailComponent } from './product';
+import { VendorDetailComponent, VendorListComponent } from './vendor';
 import {
   CategoryResolver,
   CategoryListResolver,
@@ -13,7 +14,10 @@ import {
   ProductClassListResolver,
   ProductClassTypeResolver,
   ProductListResolver,
-  ProductResolver } from '@nusantara/resolvers';
+  ProductResolver,
+  VendorListResolver,
+  VendorResolver,
+} from '@nusantara/resolvers';
 
 const routes: Routes = [
   {
@@ -84,6 +88,26 @@ const routes: Routes = [
       },
     ]
   },
+
+  {
+    path: 'vendor',
+    children: [
+      {
+        path: '',
+        component: VendorListComponent,
+        resolve: { page: VendorListResolver }
+      },
+      {
+        path: 'new',
+        component: VendorDetailComponent
+      },
+      {
+        path: ':slug',
+        component: VendorDetailComponent,
+        resolve: { entity: VendorResolver }
+      }
+    ]
+  }
 ];
 
 @NgModule({

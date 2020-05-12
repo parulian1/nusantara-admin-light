@@ -7,6 +7,7 @@ import { CatalogRoutingModule } from './catalog-routing.module';
 import { CategoryListComponent, CategoryDetailComponent } from './category';
 import { ProductClassListComponent, ProductClassDetailComponent } from './product-class';
 import { ProductListComponent, ProductDetailComponent } from './product';
+import { VendorListComponent, VendorDetailComponent } from './vendor';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,9 @@ import { ProductListComponent, ProductDetailComponent } from './product';
 
     ProductListComponent,
     ProductDetailComponent,
+
+    VendorListComponent,
+    VendorDetailComponent,
   ],
   imports: [
     CommonModule,

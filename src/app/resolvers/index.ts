@@ -11,3 +11,5 @@ export * from './product-class-list.resolver';
 export * from './product-class.resolver';
 export * from './product-class-type.resolver';
 
+export * from './vendor-list.resolver';
+export * from './vendor.resolver';
