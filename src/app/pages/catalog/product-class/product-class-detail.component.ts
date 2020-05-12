@@ -72,10 +72,6 @@ import { AbstractDetailComponent } from '@nusantara/core/components';
       <div>
         <button type="submit" [disabled]="!form.valid">Save</button>
       </div>
-
-      <div>
-        <code><pre>{{ form.value | json }}</pre></code>
-      </div>
     </form>
 
   `,
@@ -91,16 +87,14 @@ export class ProductClassDetailComponent extends AbstractDetailComponent impleme
   public typeChoices: IChoiceFieldChoice[];
   public attributeTypeChoices: IChoiceFieldChoice[];
 
-  public isNew = true;
   public entityName: string;
   public isBusy = false;
-  public form: FormGroup;
 
-  constructor(private service: ProductClassService,
+  constructor(public service: ProductClassService,
               private attributeService: ProductAttributeService,
               private fb: FormBuilder,
-              protected route: ActivatedRoute,
-              protected router: Router) {
+              public route: ActivatedRoute,
+              public router: Router) {
     super();
   }
 
@@ -186,6 +180,10 @@ export class ProductClassDetailComponent extends AbstractDetailComponent impleme
       this.isBusy = false;
       this.router.navigate(['.'], {relativeTo: this.route});
     });
+
+  }
+
+  delete() {
 
   }
 

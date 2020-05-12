@@ -1,9 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
 
 import { ICategory } from '@nusantara/models';
 import { AbstractCrudService } from '@nusantara/core/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,4 +15,23 @@ export class CategoryService extends AbstractCrudService<ICategory> {
   constructor(protected httpClient: HttpClient) {
     super();
    }
+
+  /**
+   * Not all categories can be 'parents' for other categories.
+   * We only support 3 levels of nesting for categories, so only
+   * depth 1 or 2 categories ca be parents.
+   *
+   * Special note -> We want to fetch **all** the results here (non-paged)
+   * so this call is made with a page_size=999.
+   */
+  fetchAvailableParentCategories(): Observable<ICategory[]> {
+
+    const params = new HttpParams()
+      .append('page_size', '999')
+      .append('depth__lte', '2');
+
+    return this.httpClient
+      .get<ICategory[]>(`${this.baseUrl}/`, {observe: 'body', responseType: 'json', params});
+  }
+
 }

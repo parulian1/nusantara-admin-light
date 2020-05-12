@@ -1,8 +1,12 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+
 import { EntityToSlugPipe } from './entity-to-slug.pipe';
 import { PaginationComponent } from './pagination.component';
-import { EntityDetailTitle } from './entity-detail-title.component';
-import { CommonModule } from '@angular/common';
+import { DetailTitleComponent } from './detail-title.component';
+import { ListHeaderComponent } from './list-header.component';
+import { DetailActionsComponent } from './detail-actions.component';
 
 /**
  * The purpose of this module is to make common code (like pipes)
@@ -12,15 +16,20 @@ import { CommonModule } from '@angular/common';
   declarations: [
     EntityToSlugPipe,
     PaginationComponent,
-    EntityDetailTitle,
+    DetailTitleComponent,
+    DetailActionsComponent,
+    ListHeaderComponent,
   ],
   exports: [
     EntityToSlugPipe,
     PaginationComponent,
-    EntityDetailTitle,
+    DetailTitleComponent,
+    ListHeaderComponent,
+    DetailActionsComponent,
   ],
   imports: [
     CommonModule,
+    RouterModule,
   ],
 
 })

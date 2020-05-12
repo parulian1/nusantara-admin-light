@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-
-import { ICategory } from '@nusantara/models';
-import { PagedResponse } from '@nusantara/core/pagination';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
+import { AbstractListComponent } from '@nusantara/core';
+import { ICategory } from '@nusantara/models';
 
 @Component({
   selector: 'nus-category-list',
   template: `
-    <h1>Categories</h1>
-    <nav>
-      <a [routerLink]="['new']">New</a>
-    </nav>
+    <nus-list-header
+      title="Categories"
+      description="Groups related products together, so customers
+                   can discover something-something">
+    </nus-list-header>
+
     <table>
       <thead>
         <tr>
@@ -23,26 +25,17 @@ import { ActivatedRoute } from '@angular/router';
       <tbody>
         <tr *ngFor="let entity of page.entities">
           <td><a [routerLink]="[entity|entityToSlug]">{{ entity.pathName }}</a></td>
-          <td><img [src]="entity.icon.href" alt="icon" class="icon"></td>
-          <td>---</td>
+          <td>{{entity.depth}}</td>
+          <td><img [src]="entity.icon?.href" alt="icon" class="icon"></td>
+          <td> --- </td>
         </tr>
       </tbody>
     </table>
-    <code><pre>{{page|json}}</pre></code>
   `,
   styles: [
-    'img.icon { background-color: gray; height: 16px; width: 16px; }'
+    'img.icon { background-color: gray; height: 16px; width: 16px; }',
   ]
 })
-export class CategoryListComponent implements OnInit {
-
-  page: PagedResponse<ICategory>;
-
-  constructor(private route: ActivatedRoute) { }
-
-  ngOnInit(): void {
-    this.route.data.subscribe((data: { page: PagedResponse<ICategory> }) => {
-      this.page = data.page;
-    });
-  }
+export class CategoryListComponent extends AbstractListComponent<ICategory> {
+  constructor(protected route: ActivatedRoute) { super(); }
 }

@@ -7,10 +7,10 @@ import { IProduct } from '@nusantara/models';
 @Component({
   selector: 'nus-product-list',
   template: `
-    <h1>Products</h1>
-    <nav>
-      <a [routerLink]="['new']">New</a>
-    </nav>
+    <nus-list-header
+      title="Products">
+    </nus-list-header>
+
     <table>
       <thead>
         <tr>

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { splitAtColon } from '@angular/compiler/src/util';
 
 @Component({
   selector: 'nus-main-wrapper',
@@ -35,12 +34,11 @@ import { splitAtColon } from '@angular/compiler/src/util';
     </div>
   `,
   styles: [
-    ':host { --navbar-btn-height: 35px; }',
     ':host { display: grid; grid-template-columns: 250px auto; grid-template-rows: 65px auto; min-height: 100vh; }',
     'header { grid-row: 1; grid-column: 1/3; background: black; color: white; }',
     'nav { grid-row: 2; grid-column: 1; background: black; color: white; }',
     'nav > ul { padding: 0; list-style-type: none; }',
-    'nav li { height: var(--navbar-btn-height); line-height: var(--navbar-btn-height); }',
+    'nav li { height: 35px; line-height: 35px; }',
     'nav li.section-header { font-weight: 900; padding-left: 0; }',
     'nav li.icon-button a { padding-left: 0; }',
     'nav > ul a { color: white; text-decoration: underline; display: block; padding-left: 25px; text-decoration: none; }',
@@ -48,8 +46,9 @@ import { splitAtColon } from '@angular/compiler/src/util';
       transition: background-color .3s;
       background-color: gray;
     }`,
-    '#pages-content { grid-column: 2; grid-row: 2; }',
-]
+    '#dashboard-content { margin: 15px; }',
+    '#pages-content { grid-column: 2; grid-row: 2; margin: 5px;}',
+],
 })
 export class MainWrapperComponent implements OnInit {
 
@@ -57,5 +56,6 @@ export class MainWrapperComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }
+
+

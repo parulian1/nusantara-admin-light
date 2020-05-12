@@ -12,31 +12,42 @@ import { IEntityHref } from '@nusantara/core';
   template: `
     <nus-detail-title [originalName]="entityName" typeName="Product"></nus-detail-title>
 
-    <form [formGroup]="form" (ngSubmit)="submit()">
+    <form [formGroup]="form" (ngSubmit)="submit()" class="entity-detail-form">
 
-      <div>
+      <label>
+        <span>Name</span>
+        <input type="text" formControlName="name"></label>
+      <label>
+        <span>UPC</span>
+        <input type="text" formControlName="upc"></label>
+      <label>
+        <span>Description</span>
+        <textarea formControlName="description"></textarea>
+      </label>
+      <label>
+        <span>Weight (kg)</span>
+        <input type="number" formControlName="weight">
+      </label>
+
+      <div class="actions-container">
         <button type="submit" [disabled]="!form.valid">Save</button>
+        <button (click)="navigateToParent(true)">Cancel</button>
+        <button (click)="delete()" *ngIf="!isNew">Delete</button>
       </div>
 
-      <div>
-        <code><pre>{{ form.value | json }}</pre></code>
-      </div>
     </form>
-
   `,
   styles: [ ]
 })
 export class ProductDetailComponent extends AbstractDetailComponent implements OnInit {
 
-  public isNew = true;
   public entityName: string;
   public isBusy = false;
-  public form: FormGroup;
 
-  constructor(private service: ProductService,
+  constructor(public service: ProductService,
               private fb: FormBuilder,
-              protected route: ActivatedRoute,
-              protected router: Router) {
+              public route: ActivatedRoute,
+              public router: Router) {
     super();
   }
 
@@ -47,11 +58,11 @@ export class ProductDetailComponent extends AbstractDetailComponent implements O
     // - whole mess of attributes
     this.route.data.subscribe((data: { entity: IProduct, categories: IEntityHref, classes: IEntityHref }) => {
       this.form = this.fb.group({
-        name: [data.entity?.name, [Validators.required,]],
+        name: [data.entity?.name, [Validators.required, ]],
         href: [data.entity?.href],
-        upc: [data.entity?.upc, [Validators.required]],
-        description: [data.entity?.description, [Validators.required]],
-        weight: [data.entity?.weight, [Validators.required]],
+        upc: [data.entity?.upc, [Validators.required, ]],
+        description: [data.entity?.description, [Validators.required, ]],
+        weight: [data.entity?.weight, [Validators.required, ]],
         // vendor
         // class
         // media[]
@@ -60,7 +71,6 @@ export class ProductDetailComponent extends AbstractDetailComponent implements O
         // attributes =(
       });
 
-      this.isNew = !data.entity;
       this.entityName = data.entity?.name;
     });
   }
@@ -68,5 +78,9 @@ export class ProductDetailComponent extends AbstractDetailComponent implements O
   submit() {
     this.isBusy = true;
     let obs = this.service.save(this.form.value as IProduct);
+  }
+
+  delete() {
+
   }
 }

@@ -13,7 +13,7 @@ import { Input, Component } from '@angular/core';
     </h1>
   `
 })
-export class EntityDetailTitle {
+export class DetailTitleComponent {
   @Input() originalName?: string;
   @Input() typeName: string;
 }

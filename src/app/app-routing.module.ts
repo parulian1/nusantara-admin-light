@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AnonWrapperComponent } from './view-wrappers/anon-wrapper.component';
 import { MainWrapperComponent } from './view-wrappers/main-wrapper.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 const routes: Routes = [
@@ -38,7 +39,10 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'})],
+  imports: [
+    RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'}),
+    BrowserAnimationsModule,
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

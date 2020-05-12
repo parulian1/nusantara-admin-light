@@ -10,7 +10,9 @@ import { PagedResponse } from '@nusantara/core/pagination';
   providedIn: 'root',
 })
 export class CategoryListResolver implements Resolve<PagedResponse<ICategory>> {
+
   constructor(private service: CategoryService, private router: Router) {}
+
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<PagedResponse<ICategory>> {
     const query = route.queryParamMap.get('q');
     const page = parseInt(route.queryParamMap.get('page') || '1', 10);

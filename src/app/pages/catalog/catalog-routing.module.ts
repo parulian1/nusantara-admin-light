@@ -7,7 +7,7 @@ import { ProductListComponent, ProductDetailComponent } from './product';
 import {
   CategoryResolver,
   CategoryListResolver,
-  ParentCategoriesResolver,
+  CategoryParentOptionsResolver,
   ProductAttributeTypeResolver,
   ProductClassResolver,
   ProductClassListResolver,
@@ -27,14 +27,14 @@ const routes: Routes = [
       {
         path: 'new',
         component: CategoryDetailComponent,
-        resolve: { parentOptions: ParentCategoriesResolver }
+        resolve: { parentOptions: CategoryParentOptionsResolver }
       },
       {
         path: ':slug',
         component: CategoryDetailComponent,
         resolve: {
           entity: CategoryResolver,
-          parentOptions: ParentCategoriesResolver
+          parentOptions: CategoryParentOptionsResolver
         }
       },
     ]

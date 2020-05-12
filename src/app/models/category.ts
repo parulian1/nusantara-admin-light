@@ -5,4 +5,5 @@ export interface ICategory {
   depth: number;
   image: string;
   parent: string;
+  sourceMappings: Array<string>;
 }

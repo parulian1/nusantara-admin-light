@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { PagedResponse } from '@nusantara/core/pagination';
 import { IProductClass } from '@nusantara/models';
+import { AbstractListComponent } from '@nusantara/core/components/abstract-list.component';
 
 /**
  * Browse a list of Product Classes.
@@ -34,15 +34,6 @@ import { IProductClass } from '@nusantara/models';
   `,
   styles: []
 })
-export class ProductClassListComponent implements OnInit {
-
-  page: PagedResponse<IProductClass>;
-
-  constructor(private route: ActivatedRoute) { }
-
-  ngOnInit(): void {
-    this.route.data.subscribe((data: { page: PagedResponse<IProductClass> }) => {
-      this.page = data.page;
-    });
-  }
+export class ProductClassListComponent extends AbstractListComponent<IProductClass> {
+  constructor(protected route: ActivatedRoute) { super(); }
 }

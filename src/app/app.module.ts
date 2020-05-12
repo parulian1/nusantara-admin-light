@@ -1,13 +1,13 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JwtModule } from '@auth0/angular-jwt';
 
-// import { MockApiInterceptorService } from '@nusantara/mocking';
+import { ApiPrefixInterceptor } from '@nusantara/core';
 import { AnonWrapperComponent, MainWrapperComponent } from '@nusantara/view-wrappers';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ApiPrefixInterceptor } from '@nusantara/core';
 
 export function tokenGetter() {
   return localStorage.getItem('access_token');
@@ -21,6 +21,7 @@ export function tokenGetter() {
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
     JwtModule.forRoot({
@@ -33,14 +34,9 @@ export function tokenGetter() {
           'localhost:8080/api/iam/reset-password/',
         ]
       }
-    })
+    }),
   ],
   providers: [
-    // {
-    //   provide: HTTP_INTERCEPTORS,
-    //   useClass: MockApiInterceptorService,
-    //   multi: true
-    // },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ApiPrefixInterceptor,

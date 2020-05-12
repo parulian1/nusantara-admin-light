@@ -1,6 +1,6 @@
 export * from './category.resolver';
 export * from './category-list.resolver';
-export * from './parent-categories.resolver';
+export * from './category-parent-options.resolver';
 
 export * from './product-attribute-type.resolver';
 

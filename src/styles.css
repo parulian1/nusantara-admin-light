@@ -4,6 +4,155 @@
 
 body {
   margin: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
 }
+input {
+  font-family: inherit;
+ }
+
+
+
+/* html, body { height: 100%; } */
+
+
+
+table {
+  box-shadow: 0 0 8px -1px rgba(0,0,0,0.44);
+  width: 100%;
+  border-collapse: collapse;
+}
+table tbody tr {
+  border-bottom: 1px solid lightgray;
+}
+td, th { padding: 7px; }
+thead th:first-of-type,
+tbody td:first-of-type {
+  text-align: left;
+}
+tbody td { text-align: center; }
+
+
+/**
+ * Entity Detail Form
+ */
+.entity-detail-form {
+  width: 100%;
+  max-width: 500px;
+}
+.entity-detail-form label,
+.entity-detail-form label > span {
+  display: block;
+}
+.entity-detail-form textarea {
+  width: 100%;
+}
+
+
+.list-page-header {
+  margin-bottom: 25px;
+}
+
+
+.control {
+  border: 1px solid black;
+  border-radius: 2px;
+}
+button.control,
+a.control {
+  font-size: 11px; font-weight: bold; text-decoration: none;
+  color: black;
+  height: 26px; line-height: 26px;
+  padding: 0 15px;
+  box-sizing: border-box;
+  transition: all 0.2s;
+}
+button.control:hover:not([disabled]),
+a.control:hover:not([disabled]) {
+  color: white;
+  background-color: black;
+}
+
+@media all and (max-width:30em){
+  button.control, a.control {
+    display:block;
+    margin:0.4em auto;
+  }
+}
+
+
+/**
+ *
+ */
+.new-entity {
+  display:inline-block;
+  border:0.1em solid black;
+  transition: all 0.2s;
+
+  padding:0.35em 1.2em;
+  margin:0 0.3em 0.3em 0;
+
+  border-radius:0.12em;
+  box-sizing: border-box;
+
+  text-decoration:none;
+  font-weight:bold;
+  color: black;
+  text-align:center;
+
+  height: 40px;
+  line-height: 40px;
+}
+.new-entity i.material-icons {
+  color: black;
+  height: 40px;
+  line-height: 40px;
+}
+
+
+/**
+ *
+ */
+.entity-detail-form .actions-container {
+  display: flex;
+  margin-top: 1.5em;
+}
+.entity-detail-form .actions-container button:last-child {
+  margin-left: auto;
+}
+
+.actions-container button,
+.actions-container a {
+  display:inline-block;
+  padding:0.35em 1.2em;
+  border:0.1em solid black;
+  margin:0 0.3em 0.3em 0;
+  border-radius:0.12em;
+  box-sizing: border-box;
+  text-decoration:none;
+  font-family:'Roboto',sans-serif;
+  font-weight:bold;
+  color: black;
+  text-align:center;
+  transition: all 0.2s;
+}
+.actions-container button:hover:not([disabled]),
+.actions-container a:hover:not([disabled]) {
+  color: white;
+  background-color: black;
+}
+
+.actions-container button:disabled,
+.actions-container a:disabled {
+  color: lightgray;
+  border-color: lightgray
+}
+
+@media all and (max-width:30em){
+  .actions-container button,
+  .actions-container a {
+    display:block;
+    margin:0.4em auto;
+  }
+}
+
 
