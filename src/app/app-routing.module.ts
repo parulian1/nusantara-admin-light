@@ -29,6 +29,10 @@ const routes: Routes = [
         loadChildren: () => import('./pages/users').then(m => m.UsersModule)
       },
       {
+        path: 'fulfillment',
+        loadChildren: () => import('./pages/fulfillment').then(m => m.FulfillmentModule)
+      },
+      {
         path: 'config',
         loadChildren: () => import('./pages/config/config.module').then(m => m.ConfigModule)
       },

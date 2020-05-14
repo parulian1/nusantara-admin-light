@@ -26,7 +26,10 @@ import { ICategory } from '@nusantara/models';
         <tr *ngFor="let entity of page.entities">
           <td><a [routerLink]="[entity|entityToSlug]">{{ entity.pathName }}</a></td>
           <td>{{entity.depth}}</td>
-          <td><img [src]="entity.icon?.href" alt="icon" class="icon"></td>
+          <td>
+            <img [src]="entity.image" alt="icon" class="icon" *ngIf="entity.image">
+            <span *ngIf="!entity.image">---</span>
+          </td>
           <td> --- </td>
         </tr>
       </tbody>

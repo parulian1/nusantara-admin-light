@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { PagedResponse } from '@nusantara/core/pagination';
-import { IResultResponse, SuccessResult, ErrorResult } from '../responses';
+import { IResultResponse, SuccessResult, ErrorResult, SuccessCreatedResult } from '../responses';
 import { IDrfOptionsResponse, IChoiceFieldChoice, IChoiceField } from '..';
 
 
@@ -39,7 +39,7 @@ export abstract class AbstractCrudService<T extends {href: string}> {
   create(entity: T): Observable<IResultResponse> {
     return this.httpClient
       .post(`${this.baseUrl}/`, entity, {observe: 'response', responseType: 'json'})
-      .pipe(map(resp => resp.status === 201 ? new SuccessResult() : new ErrorResult()));
+      .pipe(map(resp => resp.status === 201 ? new SuccessCreatedResult(resp.headers.get('Location')) : new ErrorResult()));
   }
 
   update(entity: T): Observable<IResultResponse> {

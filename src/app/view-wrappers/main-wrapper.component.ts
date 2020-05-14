@@ -17,7 +17,7 @@ import { Component, OnInit } from '@angular/core';
         <li class="section-header"><i class="material-icons">local_offer</i>Promotion Management</li>
 
         <li class="section-header"><i class="material-icons">shopping_cart</i> Order Fulfillment</li>
-        <li>Orders</li>
+        <li><a [routerLink]="['/fulfillment/orders']" translate>Orders</a></li>
 
         <li class="section-header"><i class="material-icons">people</i>Customers and Users</li>
         <li><a [routerLink]="['/users']" translate>Users</a></li>

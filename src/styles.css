@@ -1,21 +1,58 @@
-/* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;700&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
+
+:root {
+  --primary-color: green;
+  --danger-color: #c40000;
+}
+
+/**
+ * Standard overrides
+ */
 body {
   margin: 0;
   font-family: 'Roboto', 'Helvetica Neue', sans-serif;
 }
-input {
+h1 {
+  font-size: 1.5em;
+  font-weight: normal;
+}
+h2 {
+  font-size: 1em;
+  font-weight: bold;
+}
+
+
+/*
+ * Forms
+ */
+input, select {
+  font-size: 1em;
   font-family: inherit;
- }
+}
+
+/*
+ * Form Error State
+ */
+input.error {
+  border: red solid 1px
+}
+
+form .error-detail {
+  /* Small help-text displayed below form input fields when validation fails */
+  color: red;
+  font-size: .5em;
+  font-weight: bold;
+}
 
 
-
-/* html, body { height: 100%; } */
-
-
-
+/*
+ * List Pages
+ */
+.list-page-header {
+  margin-bottom: 25px;
+}
 table {
   box-shadow: 0 0 8px -1px rgba(0,0,0,0.44);
   width: 100%;
@@ -24,16 +61,20 @@ table {
 table tbody tr {
   border-bottom: 1px solid lightgray;
 }
-td, th { padding: 7px; }
+td, th {
+  padding: 7px;
+}
 thead th:first-of-type,
 tbody td:first-of-type {
   text-align: left;
 }
-tbody td { text-align: center; }
+tbody td {
+  text-align: center;
+}
 
 
 /**
- * Entity Detail Form
+ *  Detail Pages
  */
 .entity-detail-form {
   width: 100%;
@@ -45,11 +86,6 @@ tbody td { text-align: center; }
 }
 .entity-detail-form textarea {
   width: 100%;
-}
-
-
-.list-page-header {
-  margin-bottom: 25px;
 }
 
 
@@ -140,6 +176,24 @@ a.control:hover:not([disabled]) {
   color: white;
   background-color: black;
 }
+
+
+.primary:hover:not([disabled]),
+.primary:focus:not([disabled]) {
+  color: white;
+  border-color: var(--primary-color);
+  background-color: var(--primary-color);
+}
+
+.danger:hover:not([disabled]),
+.danger:focus:not([disabled]) {
+  color: white;
+  border-color: var(--danger-color);
+  background-color: var(--danger-color);
+}
+
+
+
 
 .actions-container button:disabled,
 .actions-container a:disabled {

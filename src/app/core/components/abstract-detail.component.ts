@@ -21,7 +21,7 @@ export abstract class AbstractDetailComponent {
   }
 
   get isNew(): boolean {
-    return !this.form?.get('href');
+    return !this.form?.get('href').value;
   }
 
   abstract delete(): void;

@@ -68,7 +68,6 @@ const routes: Routes = [
       }
     ]
   },
-
   {
     path: 'product-classes',
     children: [
@@ -96,7 +95,6 @@ const routes: Routes = [
       },
     ]
   },
-
   {
     path: 'vendor',
     children: [
