@@ -32,7 +32,7 @@ import { AbstractListComponent } from '@nusantara/core/components/abstract-list.
       </tbody>
     </table>
   `,
-  styles: []
+  styles: [ ]
 })
 export class ProductClassListComponent extends AbstractListComponent<IProductClass> {
   constructor(protected route: ActivatedRoute) { super(); }

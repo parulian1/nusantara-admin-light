@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';  // todo: remove this unless route change ani needed
 
-import { AnonWrapperComponent } from './view-wrappers/anon-wrapper.component';
-import { MainWrapperComponent } from './view-wrappers/main-wrapper.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MainWrapperComponent, AnonWrapperComponent } from '@nusantara/view-wrappers';
 
 
 const routes: Routes = [
@@ -25,6 +24,10 @@ const routes: Routes = [
         loadChildren: () => import('./pages/catalog').then(m => m.CatalogModule)
       },
       {
+        path: 'promotion',
+        loadChildren: () => import('./pages/promotion').then(m => m.PromotionModule)
+      },
+      {
         path: 'users',
         loadChildren: () => import('./pages/users').then(m => m.UsersModule)
       },
@@ -44,7 +47,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'}),
+    RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' }),
     BrowserAnimationsModule,
   ],
   exports: [RouterModule]

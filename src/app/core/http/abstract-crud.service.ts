@@ -56,7 +56,7 @@ export abstract class AbstractCrudService<T extends {href: string}> {
     return (!!entity.href) ? this.update(entity) : this.create(entity);
   }
 
-  delete(entity: T): Observable<IResultResponse> {
+  delete(entity: T|{href: string}): Observable<IResultResponse> {
     return this.httpClient
       .delete(entity.href, {observe: 'response', responseType: 'json'})
       .pipe(map(resp => resp.status === 204 ? new SuccessResult() : new ErrorResult()));

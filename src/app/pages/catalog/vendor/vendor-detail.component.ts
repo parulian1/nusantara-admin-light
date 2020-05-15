@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ICategory, IVendor } from '@nusantara/models';
-import { CategoryService, VendorService } from '@nusantara/services';
+import { IVendor } from '@nusantara/models';
+import { VendorService } from '@nusantara/services';
 import { AbstractDetailComponent } from '@nusantara/core';
 
 @Component({
@@ -74,11 +74,27 @@ export class VendorDetailComponent extends AbstractDetailComponent implements On
   }
 
   submit() {
-    if (this.isNew) {
-
-    }
+    this.service.save(this.form.value).subscribe(
+      resp => {
+        if (resp.success) {
+          this.navigateToParent(false);
+        } else {
+          alert('There was a problem saving');
+        }
+      }
+    );
   }
 
-  delete() { }
+  delete() {
+    this.service.delete(this.form.get('href').value).subscribe(
+      resp => {
+        if (resp.success) {
+          this.navigateToParent(false);
+        } else {
+          alert('Error deleting');
+        }
+      }
+    );
+  }
 
 }
