@@ -11,10 +11,10 @@ import { AbstractListComponent } from '@nusantara/core/components/abstract-list.
 @Component({
   selector: 'nus-product-class-list',
   template: `
-    <h1>Product Classes</h1>
-    <nav>
-      <a [routerLink]="['new']">New</a>
-    </nav>
+    <nus-list-header
+      title="Product Classes"
+      description="Defines 'types' of products which are sold.">
+    </nus-list-header>
     <table>
       <thead>
         <tr>

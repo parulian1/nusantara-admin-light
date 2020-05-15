@@ -8,7 +8,8 @@ import { ActivatedRoute } from '@angular/router';
   selector: 'nus-vendor-list',
   template: `
     <nus-list-header
-      title="Vendors">
+      title="Vendors"
+      description="Principals or distributors that provides the products sold.">
     </nus-list-header>
     <table>
       <thead>
