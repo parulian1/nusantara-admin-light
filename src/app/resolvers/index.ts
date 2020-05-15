@@ -2,6 +2,8 @@ export * from './category.resolver';
 export * from './category-list.resolver';
 export * from './category-parent-options.resolver';
 
+export * from './customer-group-list.resolver';
+
 export * from './product-attribute-type.resolver';
 
 export * from './product.resolver';

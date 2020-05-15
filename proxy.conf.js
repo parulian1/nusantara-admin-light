@@ -14,6 +14,13 @@ const proxyConfig = [
     changeOrigin: true,
     secure: false
   },
+  {
+    context: '/api/iam',
+    pathRewrite: {'^/api/iam': ''},
+    target: 'http://127.0.0.1:8000',
+    changeOrigin: true,
+    secure: false
+  }
 ]
 
 module.exports = proxyConfig;

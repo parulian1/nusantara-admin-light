@@ -40,8 +40,8 @@ import { Component, OnInit } from '@angular/core';
           <i class="material-icons">people</i>
           <span>Customers and Users</span>
         </li>
-        <li><a [routerLink]="['/user/customer']" translate>Customers</a></li>
-        <li><a [routerLink]="['/user/customer-group']" translate>Customer Groups</a></li>
+        <li><a [routerLink]="['/users/customer']" translate>Customers</a></li>
+        <li><a [routerLink]="['/users/customer-groups']" translate>Customer Groups</a></li>
 
 <!--        <li class="section-header" translate><i class="material-icons">assessment</i>Reports</li>-->
 <!--        <li><a [routerLink]="[]"></a></li>-->
