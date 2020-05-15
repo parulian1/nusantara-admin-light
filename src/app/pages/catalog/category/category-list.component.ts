@@ -30,7 +30,7 @@ import { ICategory } from '@nusantara/models';
             <img [src]="entity.image" alt="icon" class="icon" *ngIf="entity.image">
             <span *ngIf="!entity.image">---</span>
           </td>
-          <td> --- </td>
+          <td>{{ entity.productCount }}</td>
         </tr>
       </tbody>
     </table>

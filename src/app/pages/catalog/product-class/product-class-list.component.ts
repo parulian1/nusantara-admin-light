@@ -27,7 +27,7 @@ import { AbstractListComponent } from '@nusantara/core/components/abstract-list.
         <tr *ngFor="let entity of page.entities">
           <td><a [routerLink]="[entity|entityToSlug]">{{ entity.name }}</a></td>
           <td>{{ entity.type }}</td>
-          <td>???</td>
+          <td>{{ entity.productCount }}</td>
         </tr>
       </tbody>
     </table>

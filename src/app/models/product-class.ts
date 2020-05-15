@@ -7,5 +7,6 @@ export interface IProductClass {
   trackStock: boolean;
   isPerishable: boolean;
   type: string;
+  productCount?: number;
   attributes: IProductAttribute[];
 }

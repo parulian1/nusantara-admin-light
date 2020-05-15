@@ -15,11 +15,13 @@ import { ActivatedRoute } from '@angular/router';
       <thead>
       <tr>
         <th translate>Name</th>
+        <th>Product Count</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let entity of page.entities">
         <td><a [routerLink]="[entity|entityToSlug]">{{ entity.name }}</a></td>
+        <td>{{ entity.productCount }}</td>
       </tr>
       </tbody>
     </table>
