@@ -23,6 +23,21 @@ import { AbstractDetailComponent } from '@nusantara/core';
         <span>Description</span>
         <textarea formControlName="description"></textarea>
       </label>
+
+      <label>
+        <span>Icon Image</span>
+        <img src="https://picsum.photos/120/120" style="height:120px; width: 120px">
+        <input type="file">
+        <small>Recommended 120px x 120px (1:1)</small>
+      </label>
+
+      <label>
+        <span>Banner Image</span>
+        <img src="https://picsum.photos/1152/360" style="height:125px; width: 400px">
+        <input type="file">
+        <small>Recommended: 1152px x 350px (16:5)</small>
+      </label>
+
       <label>
         <span>Internal Notes</span>
         <textarea formControlName="internalNotes"></textarea>
@@ -35,21 +50,7 @@ import { AbstractDetailComponent } from '@nusantara/core';
       </div>
     </form>
   `,
-  styles: [`
-    label {
-      display: block;
-      margin-bottom: .5em;
-    }
-    label > span {
-      display: inline-block;
-      width: 65px;
-    }
-    input {
-      font-size: 1em;
-      font-family: Roboto, "Helvetica Neue", sans-serif;
-    }
-
-  `]
+  styles: []
 })
 export class VendorDetailComponent extends AbstractDetailComponent implements OnInit {
 

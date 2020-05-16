@@ -15,12 +15,16 @@ import { ActivatedRoute } from '@angular/router';
       <thead>
       <tr>
         <th translate>Name</th>
+        <th>Has Icon</th>
+        <th>Has Banner</th>
         <th>Product Count</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let entity of page.entities">
         <td><a [routerLink]="[entity|entityToSlug]">{{ entity.name }}</a></td>
+        <td><nus-true-false [value]="!!entity.iconImage"></nus-true-false></td>
+        <td><nus-true-false [value]="!!entity.bannerImage"></nus-true-false></td>
         <td>{{ entity.productCount }}</td>
       </tr>
       </tbody>

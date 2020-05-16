@@ -8,6 +8,7 @@ import { ApiPrefixInterceptor } from '@nusantara/core';
 import { AnonWrapperComponent, MainWrapperComponent } from '@nusantara/view-wrappers';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { CoreModule } from '@nusantara/core/core.module';
 
 export function tokenGetter() {
   return localStorage.getItem('access_token');
@@ -22,6 +23,7 @@ export function tokenGetter() {
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    CoreModule,
     AppRoutingModule,
     HttpClientModule,
     JwtModule.forRoot({

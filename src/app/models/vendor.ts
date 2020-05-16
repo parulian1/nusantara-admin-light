@@ -4,4 +4,6 @@ export interface IVendor {
   description: string;
   productCount?: number;
   internalNotes: string;
+  iconImage: string;
+  bannerImage: string;
 }

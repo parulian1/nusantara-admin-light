@@ -147,7 +147,7 @@ import { Component, OnInit } from '@angular/core';
       }
 
       nav > ul a.active {
-        background-color: var(--accent-color);
+        background-color: #7B869B;
         border-left: 6px solid var(--bhisma-orange);
       }
 
@@ -155,7 +155,7 @@ import { Component, OnInit } from '@angular/core';
       nav > ul a:focus {
         transition: all .3s;
         border-left: 6px solid var(--bhisma-orange);
-        background-color: var(--accent-lighter-color);
+        background-color: #7B869B; /*var(--accent-lighter-color);*/
       }
 
 

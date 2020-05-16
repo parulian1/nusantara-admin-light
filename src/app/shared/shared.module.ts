@@ -8,6 +8,7 @@ import { PaginationComponent } from './pagination.component';
 import { DetailTitleComponent } from './detail-title.component';
 import { ListHeaderComponent } from './list-header.component';
 import { DetailActionsComponent } from './detail-actions.component';
+import { TrueFalseComponent } from './true-false.component';
 
 
 /**
@@ -21,6 +22,7 @@ import { DetailActionsComponent } from './detail-actions.component';
     DetailTitleComponent,
     DetailActionsComponent,
     ListHeaderComponent,
+    TrueFalseComponent,
   ],
   exports: [
     EntityToSlugPipe,
@@ -28,6 +30,7 @@ import { DetailActionsComponent } from './detail-actions.component';
     DetailTitleComponent,
     ListHeaderComponent,
     DetailActionsComponent,
+    TrueFalseComponent,
   ],
   imports: [
     CommonModule,

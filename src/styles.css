@@ -11,6 +11,10 @@
 
   --nav-background: #485368;
   --bhisma-orange: #f27720;
+  --info: #BCE7FD;
+  --error: #af3b6e;
+  --success: #1b998b;
+  --light-red: #c492b1;
 }
 
 /**
@@ -45,17 +49,29 @@ h3 {
 input, select {
   font-size: 1em;
   font-family: inherit;
+  border: solid var(--nav-background) 1px;
+  border-radius: 2px;
 }
 textarea {
   font-size: 1em;
   font-family: inherit;
+  border: solid var(--nav-background) 1px;
+  border-radius: 2px;
 }
 label {
+  display: block;
   padding-bottom: 7px;
+  color: var(--nav-background);
 }
 label > span:first-child {
   font-size: .7em;
   font-weight: bold;
+  display: block;
+}
+label small {
+  display: block;
+}
+input[type=file] {
   display: block;
 }
 
