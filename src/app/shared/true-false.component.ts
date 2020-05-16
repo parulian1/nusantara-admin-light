@@ -11,10 +11,13 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'nus-true-false',
   template: `
-    <i class="material-icons" *ngIf="value && showTrueIcon">check</i>
-    <i class="material-icons" *ngIf="!value && showFalseIcon">close</i>
+    <i class="material-icons yes" *ngIf="value && showTrueIcon">check</i>
+    <i class="material-icons no" *ngIf="!value && showFalseIcon">close</i>
   `,
-  styleUrls: []
+  styles: [
+    '.yes { color: var(--success); }',
+    '.no { color: var(--error); }',
+  ]
 })
 export class TrueFalseComponent {
   @Input() value;

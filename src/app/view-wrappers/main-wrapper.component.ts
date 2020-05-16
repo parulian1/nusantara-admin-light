@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
   selector: 'nus-main-wrapper',
   template: `
     <header>
-      <img src="/assets/bhisma-logo.png" alt="logo">
+      <img src="/assets/bhisma-logo.png" alt="logo" id="brand-icon">
       <ul>
         <li>
           <a [routerLink]="['/auth/logout']">Logout</a>
@@ -84,10 +84,12 @@ import { Component, OnInit } from '@angular/core';
       background: var(--nav-background);
       color: white;
     }
-    header > img {
+    #brand-icon {
       grid-row: 1;
       grid-column: 1;
       max-width: 250px;
+      padding: 10px 15px 0 5px;
+      box-sizing: border-box;
     }
     header > ul {
       grid-row: 1;
@@ -137,6 +139,10 @@ import { Component, OnInit } from '@angular/core';
 
       nav li.icon-button a {
         padding-left: 0;
+        display: flex;
+      }
+      .icon-button i {
+        line-height: 35px;
       }
 
       nav > ul a {

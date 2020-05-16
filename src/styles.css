@@ -52,6 +52,9 @@ input, select {
   border: solid var(--nav-background) 1px;
   border-radius: 2px;
 }
+input[type=file] {
+  border: none;
+}
 textarea {
   font-size: 1em;
   font-family: inherit;

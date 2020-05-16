@@ -3,6 +3,9 @@ import { Observable, Subject } from 'rxjs';
 import { ToastLevelEnum } from './toast-level.enum';
 import { ToastMessage } from './toast-messsage';
 
+/**
+ * Registers messages for display by the Toast service.
+ */
 @Injectable({
   providedIn: 'root'
 })

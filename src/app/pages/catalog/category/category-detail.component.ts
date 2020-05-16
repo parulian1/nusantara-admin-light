@@ -139,6 +139,7 @@ export class CategoryDetailComponent extends AbstractDetailComponent implements 
   }
 
   onFileChanged(event) {
+    const target = event.target as HTMLInputElement;
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
       this.newImage = file;
