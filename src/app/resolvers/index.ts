@@ -2,7 +2,11 @@ export * from './category.resolver';
 export * from './category-list.resolver';
 export * from './category-parent-options.resolver';
 
+export * from './customer.resolver';
+
+export * from './customer-group.resolver';
 export * from './customer-group-list.resolver';
+export * from './customer-group-type-options.resolver';
 
 export * from './product-attribute-type.resolver';
 

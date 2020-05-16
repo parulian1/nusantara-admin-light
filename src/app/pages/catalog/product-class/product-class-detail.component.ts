@@ -49,25 +49,58 @@ import { AbstractDetailComponent } from '@nusantara/core/components';
           <i class="material-icons">add_circle</i>
         </button>
       </h2>
-      <div *ngFor="let attrFormGroup of attributeForms; let i=index" class="inline-form">
-        <label>
-          Name
-          <input type="text"
-                 [formControl]="attrFormGroup.get('name')"
-                 placeholder="Name">
-        </label>
-        <label>Type
-          <select [formControl]="attrFormGroup.get('type')">
-            <option *ngFor="let opt of this.attributeTypeChoices"
-                    [ngValue]="opt.value">
-              {{opt.displayName}}
-            </option>
-          </select>
-        </label>
-        <label *ngIf="attrFormGroup.controls.type.value === 'choice'">
-            <button>Add</button>
-        </label>
-      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let attrFormGroup of attributeForms; let i=index">
+            <td>
+              <input type="text"
+                     [formControl]="attrFormGroup.get('name')"
+                     placeholder="Name">
+            </td>
+            <td>
+              <select [formControl]="attrFormGroup.get('type')">
+                <option *ngFor="let opt of this.attributeTypeChoices"
+                        [ngValue]="opt.value">
+                  {{opt.displayName}}
+                </option>
+              </select>
+            </td>
+            <td>
+              <button type="button">
+                <i class="material-icons">delete_outline</i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+<!--      <div *ngFor="let attrFormGroup of attributeForms; let i=index" class="inline-form">-->
+<!--        <label>-->
+<!--          Name-->
+<!--          <input type="text"-->
+<!--                 [formControl]="attrFormGroup.get('name')"-->
+<!--                 placeholder="Name">-->
+<!--        </label>-->
+<!--        <label>Type-->
+<!--          <select [formControl]="attrFormGroup.get('type')">-->
+<!--            <option *ngFor="let opt of this.attributeTypeChoices"-->
+<!--                    [ngValue]="opt.value">-->
+<!--              {{opt.displayName}}-->
+<!--            </option>-->
+<!--          </select>-->
+<!--        </label>-->
+<!--        <label *ngIf="attrFormGroup.controls.type.value === 'choice'">-->
+<!--            <button>Add</button>-->
+<!--        </label>-->
+<!--      </div>-->
 
       <div>
         <button type="submit" [disabled]="!form.valid">Save</button>
@@ -76,10 +109,7 @@ import { AbstractDetailComponent } from '@nusantara/core/components';
 
   `,
   styles: [
-    'label {display:block;}',
-    '.inline-form label { display: inline-block; }',
     'button.add-button { background: transparent; border: none; }',
-    '.hidden { display: none; }'
   ]
 })
 export class ProductClassDetailComponent extends AbstractDetailComponent implements OnInit {

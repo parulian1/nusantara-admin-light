@@ -1,18 +1,21 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { CustomerGroupListResolver } from '@nusantara/resolvers';
+import {
+  CustomerGroupListResolver,
+  CustomerGroupResolver,
+  CustomerGroupTypeOptionsResolver,
+  CustomerResolver
+} from '@nusantara/resolvers';
 
-import { UserListComponent } from './user-list.component';
-import { UserDetailComponent } from './user-detail.component';
-import { UserResolverService } from './user-resolver.service';
-import { CustomerGroupListComponent } from './customer-group';
+import { CustomerListComponent, CustomerDetailComponent } from './customer';
+import { CustomerGroupListComponent, CustomerGroupDetailComponent } from './customer-group';
 
 
 const dashboardRoutes: Routes = [
-  { path: 'users', component: UserListComponent },
-  { path: 'users/new', component: UserDetailComponent },
-  { path: 'users/:username', component: UserDetailComponent, resolve: { user: UserResolverService }},
+  { path: 'users', component: CustomerListComponent },
+  { path: 'users/new', component: CustomerDetailComponent },
+  { path: 'users/:username', component: CustomerDetailComponent, resolve: { user: CustomerResolver }},
 
   {
     path: 'customer-groups',
@@ -22,6 +25,21 @@ const dashboardRoutes: Routes = [
         component: CustomerGroupListComponent,
         resolve: { page: CustomerGroupListResolver },
         runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'new',
+        component: CustomerGroupDetailComponent,
+        resolve: { typeChoices: CustomerGroupTypeOptionsResolver },
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: ':slug',
+        component: CustomerGroupDetailComponent,
+        resolve: {
+          entity: CustomerGroupResolver,
+          typeChoices: CustomerGroupTypeOptionsResolver
+        },
+        runGuardsAndResolvers: 'always'
       }
     ]
   }

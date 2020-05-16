@@ -7,6 +7,10 @@
   --danger-color: #c40000;
   --accent-color: #6c006c;
   --accent-lighter-color: #bb00bb;
+  --error-color: #c40000;
+
+  --nav-background: #485368;
+  --bhisma-orange: #f27720;
 }
 
 /**
@@ -29,6 +33,11 @@ h3 {
   font-weight: bold;
 }
 
+/**
+ * Common Classes
+ */
+.hidden { display: none; }
+
 
 /*
  * Forms
@@ -40,6 +49,14 @@ input, select {
 textarea {
   font-size: 1em;
   font-family: inherit;
+}
+label {
+  padding-bottom: 7px;
+}
+label > span:first-child {
+  font-size: .7em;
+  font-weight: bold;
+  display: block;
 }
 
 /* Form Error State */
@@ -110,9 +127,12 @@ tbody tr:active {
 }
 button.control,
 a.control {
-  font-size: 11px; font-weight: bold; text-decoration: none;
+  font-size: 11px;
+  font-weight: bold;
+  text-decoration: none;
   color: black;
-  height: 26px; line-height: 26px;
+  height: 26px;
+  line-height: 26px;
   padding: 0 15px;
   box-sizing: border-box;
   transition: all 0.2s;

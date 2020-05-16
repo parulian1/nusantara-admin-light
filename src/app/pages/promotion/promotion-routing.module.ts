@@ -1,15 +1,36 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PromotionListComponent } from '@nusantara/pages/promotion/promotion';
+
+import { PromotionListComponent } from './promotion';
+import { WidgetListComponent } from './widget';
+import { VoucherListComponent} from './voucher';
 
 const routes: Routes = [
   {
-    path: 'promotions',
+    path: 'promos',
     children: [
       {
         path: '',
         component: PromotionListComponent,
       },
+    ]
+  },
+  {
+    path: 'vouchers',
+    children: [
+      {
+        path: '',
+        component: VoucherListComponent
+      }
+    ]
+  },
+  {
+    path: 'widgets',
+    children: [
+      {
+        path: '',
+        component: WidgetListComponent
+      }
     ]
   }
 ];

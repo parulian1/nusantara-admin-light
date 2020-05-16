@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { IUser, IUserSummary, UserService } from './users.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { UserService } from '@nusantara/services';
+
+
 @Component({
-  selector: 'nus-user-detail',
+  selector: 'nus-customer-detail',
   template: `
-    <h1>User Details</h1>
+    <h1>Customer Details</h1>
     <tr>
       <td>{{ entity.email }}</td>
 
@@ -13,9 +15,9 @@ import { ActivatedRoute, Router } from '@angular/router';
   `,
   styles: [``]
 })
-export class UserDetailComponent implements OnInit {
+export class CustomerDetailComponent implements OnInit {
 
-  public entity: IUserSummary;
+  public entity: any;
 
   constructor(private service: UserService,
               private route: ActivatedRoute,
@@ -23,7 +25,7 @@ export class UserDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.data
-      .subscribe((data: { user: IUser }) => {
+      .subscribe((data: { user: any }) => {
         this.entity = data.user;
       });
   }

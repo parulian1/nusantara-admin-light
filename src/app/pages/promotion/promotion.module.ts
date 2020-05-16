@@ -6,10 +6,14 @@ import { SharedModule } from '@nusantara/shared';
 import { PromotionRoutingModule } from './promotion-routing.module';
 
 import { PromotionListComponent } from './promotion';
+import { VoucherListComponent} from './voucher';
+import { WidgetListComponent } from './widget';
 
 @NgModule({
   declarations: [
     PromotionListComponent,
+    VoucherListComponent,
+    WidgetListComponent,
   ],
   imports: [
     CommonModule,

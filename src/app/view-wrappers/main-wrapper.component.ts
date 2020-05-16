@@ -3,7 +3,14 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'nus-main-wrapper',
   template: `
-    <header><h2>Nusantara Admin</h2></header>
+    <header>
+      <img src="/assets/bhisma-logo.png" alt="logo">
+      <ul>
+        <li>
+          <a [routerLink]="['/auth/logout']">Logout</a>
+        </li>
+      </ul>
+    </header>
     <nav>
       <ul>
         <li class="icon-button">
@@ -26,9 +33,9 @@ import { Component, OnInit } from '@angular/core';
           <i class="material-icons">local_offer</i>
           <span>Promotion Management</span>
         </li>
-        <li><a [routerLink]="['/promotion/promo']" translate>Promos</a></li>
-        <li><a [routerLink]="['/promotion/voucher']" translate>Vouchers</a></li>
-        <li><a [routerLink]="['/promotion/widget']" translate>Widgets</a></li>
+        <li><a [routerLink]="['/promotion/promos']" translate>Promos</a></li>
+        <li><a [routerLink]="['/promotion/vouchers']" translate>Vouchers</a></li>
+        <li><a [routerLink]="['/promotion/widgets']" translate>Widgets</a></li>
 
         <li class="section-header">
           <i class="material-icons">shopping_cart</i>
@@ -74,13 +81,23 @@ import { Component, OnInit } from '@angular/core';
     header {
       grid-row: 1;
       grid-column: 1/3;
-      background: black;
+      background: var(--nav-background);
       color: white;
     }
+    header > img {
+      grid-row: 1;
+      grid-column: 1;
+      max-width: 250px;
+    }
+    header > ul {
+      grid-row: 1;
+      grid-column: 2
+    }
+
     nav {
       grid-row: 2;
       grid-column: 1;
-      background: black;
+      background: var(--nav-background);
       color: white;
     }
     #dashboard-content {
@@ -131,11 +148,13 @@ import { Component, OnInit } from '@angular/core';
 
       nav > ul a.active {
         background-color: var(--accent-color);
+        border-left: 6px solid var(--bhisma-orange);
       }
 
       nav > ul a:hover,
       nav > ul a:focus {
-        transition: background-color .3s;
+        transition: all .3s;
+        border-left: 6px solid var(--bhisma-orange);
         background-color: var(--accent-lighter-color);
       }
 

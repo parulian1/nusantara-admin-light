@@ -1,22 +1,29 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { SharedModule } from '@nusantara/shared';
 import { UsersRoutingModule } from './users-routing.module';
-import { UserListComponent } from './user-list.component';
-import { UserDetailComponent } from './user-detail.component';
 
-import { CustomerGroupListComponent } from './customer-group';
+import { CustomerListComponent, CustomerDetailComponent } from './customer';
+import { CustomerGroupListComponent, CustomerGroupDetailComponent } from './customer-group';
+import { EmployeeDetailComponent, EmployeeListComponent } from './employee';
 
 @NgModule({
   declarations: [
-    UserListComponent,
-    UserDetailComponent,
-    CustomerGroupListComponent
+    CustomerListComponent,
+    CustomerDetailComponent,
+
+    EmployeeDetailComponent,
+    EmployeeListComponent,
+
+    CustomerGroupListComponent,
+    CustomerGroupDetailComponent,
   ],
   imports: [
     CommonModule,
     SharedModule,
+    ReactiveFormsModule,
     UsersRoutingModule,
   ],
 })
