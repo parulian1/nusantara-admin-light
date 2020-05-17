@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';  // todo: remove this unless route change ani needed
 
+import { AuthGuard } from '@nusantara/auth';
 import { MainWrapperComponent, AnonWrapperComponent } from '@nusantara/view-wrappers';
 
 
@@ -9,11 +10,12 @@ const routes: Routes = [
   {
     path: 'auth',
     component: AnonWrapperComponent,
-    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
+    loadChildren: () => import('./auth').then(m => m.AuthModule),
   },
   {
     path: '',
     component: MainWrapperComponent,
+    canActivate: [AuthGuard, ],
     children: [
       {
         path: 'pages',

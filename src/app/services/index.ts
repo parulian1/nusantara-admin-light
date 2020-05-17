@@ -1,4 +1,3 @@
-export * from './auth.service';
 export * from './category.service';
 export * from './customer-group.service';
 export * from './product.service';

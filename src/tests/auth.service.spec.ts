@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AuthService } from '@nusantara/services/auth.service';
+import { AuthService } from '@nusantara/auth/auth.service';
 
 describe('AuthService', () => {
   let service: AuthService;

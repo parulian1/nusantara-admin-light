@@ -4,17 +4,23 @@ import { FormGroup, FormControl } from '@angular/forms';
 @Component({
   selector: 'nus-login',
   template: `
-  <form [formGroup]="loginForm" (ngSubmit)="tryLogin()">
-    <label>Username
+    <h1>Login</h1>
+    <form [formGroup]="loginForm" (ngSubmit)="tryLogin()">
+      <label>
+        <span>Username</span>
         <input type="text" formControlName="username" required>
-    </label>
-    <label>
+      </label>
+      <label>
+        <span>Password</span>
         <input type="password" formControlName="password" required>
-    </label>
-    <div>
-        <button type="submit">Login</button>
-    </div>
-  </form>
+      </label>
+      <div>
+          <button type="submit">Login</button>
+      </div>
+      <div>
+        <a [routerLink]="['/auth/forgot-password']">Forgot Password</a>
+      </div>
+    </form>
   `,
   styles: ['']
 })
