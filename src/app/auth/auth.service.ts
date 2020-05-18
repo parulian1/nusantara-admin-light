@@ -131,10 +131,4 @@ export class AuthService {
     this.token = tokenPair.access;
     this.refreshToken = tokenPair.refresh;
   }
-
 }
-
-
-// {
-//   "detail": "No active account found with the given credentials"
-// }

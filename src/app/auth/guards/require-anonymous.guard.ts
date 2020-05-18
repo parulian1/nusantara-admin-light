@@ -1,14 +1,12 @@
-// src/app/auth/auth-guard.service.ts
 import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
 
-import { environment } from '@env/environment';
 import { AuthService } from '../auth.service';
 
-
 /**
- * Requires that the user is currently **not** logged in.  If the user is logged in, redirect to the dashboard
- * landing page.
+ * Requires that the user is currently **not** logged in.
+ *
+ * If the user is logged in, redirect to the dashboard landing page.
  */
 @Injectable({
   providedIn: 'root'

@@ -1,8 +1,6 @@
-// src/app/auth/auth-guard.service.ts
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
-import { environment } from '@env/environment';
 import { AuthService } from '../auth.service';
 
 /**
