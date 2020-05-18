@@ -10,10 +10,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from '@nusantara/core/core.module';
 
-export function tokenGetter() {
-  return localStorage.getItem('access_token');
-}
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,9 +24,14 @@ export function tokenGetter() {
     HttpClientModule,
     JwtModule.forRoot({
       config: {
-        tokenGetter,
-        authScheme: 'Bearer',
-        whitelistedDomains: ['localhost:8080'],
+        tokenGetter: () => localStorage.getItem('token'),
+        authScheme: 'Bearer ',
+        whitelistedDomains: [
+          'localhost:8080',
+          'localhost:4200',
+          'bhisma.cloud',
+          'marthatilaarshop.com',
+        ],
         blacklistedRoutes: [
           'localhost:8080/api/iam/login/',
           'localhost:8080/api/iam/reset-password/',

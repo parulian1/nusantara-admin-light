@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ForgotPasswordComponent } from '../app/auth/forgot-password/forgot-password.component';
+import { ForgotPasswordComponent } from '@nusantara/auth/pages/forgot-password.component';
 
 describe('ForgotPasswordComponent', () => {
   let component: ForgotPasswordComponent;

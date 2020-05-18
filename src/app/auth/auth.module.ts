@@ -3,14 +3,19 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { AuthRoutingModule } from './auth-routing.module';
-import { LoginComponent } from './login/login.component';
-import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
-
+import {
+  LoginComponent,
+  ForgotPasswordComponent,
+  ForgotPasswordSentComponent,
+  ResetPasswordComponent,
+} from './pages';
 
 @NgModule({
   declarations: [
     LoginComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    ForgotPasswordSentComponent,
+    ResetPasswordComponent,
   ],
   imports: [
     CommonModule,

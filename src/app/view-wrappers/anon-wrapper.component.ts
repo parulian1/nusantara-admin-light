@@ -13,7 +13,6 @@ import { Component, OnInit } from '@angular/core';
     <div id="auth-container">
       <img src="/assets/bhisma-logo.png" alt="Logo">
       <router-outlet></router-outlet>
-      <nus-toast></nus-toast>
     </div>
   `,
   styles: [`
