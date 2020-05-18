@@ -1,6 +1,6 @@
 // src/app/auth/auth-guard.service.ts
 import { Injectable } from '@angular/core';
-import { Router, CanActivate } from '@angular/router';
+import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
 import { environment } from '@env/environment';
 import { AuthService } from '../auth.service';
@@ -19,19 +19,12 @@ export class RequireLoggedInGuard implements CanActivate {
 
   constructor(public auth: AuthService, public router: Router) { }
 
-  canActivate(): boolean {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if (!this.auth.isAuthenticated) {
-      // possible user's token is expired -- if this is the case
-      // make sure that their tokens are completely deleted before
-      // redirecting them ot the login page.
       this.auth.logout();
-
-
-      this.router.navigate([this.redirectOnFail, ]);
+      this.router.navigate([this.redirectOnFail, ], {queryParams: {next: state.url}});
       return false;
     }
-
-
     return true;
   }
 }

@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AuthRoutingModule } from './auth-routing.module';
 import {
   LoginComponent,
+  LogoutComponent,
   ForgotPasswordComponent,
   ForgotPasswordSentComponent,
   ResetPasswordComponent,
@@ -13,6 +14,7 @@ import {
 @NgModule({
   declarations: [
     LoginComponent,
+    LogoutComponent,
     ForgotPasswordComponent,
     ForgotPasswordSentComponent,
     ResetPasswordComponent,
