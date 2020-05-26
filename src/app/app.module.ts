@@ -29,6 +29,7 @@ import { CoreModule } from '@nusantara/core/core.module';
         whitelistedDomains: [
           'localhost:8080',
           'localhost:4200',
+          'localhost:4201',
           'bhisma.cloud',
           'marthatilaarshop.com',
         ],

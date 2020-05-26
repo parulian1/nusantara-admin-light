@@ -2,10 +2,3 @@ export interface ITokenPair {
   access: string;
   refresh: string;
 }
-
-
-
-// {
-//   "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTU4OTc4NzAyOSwianRpIjoiMTJjMjNmOWFkNDM1NDE4YzljYWYyZTAzYzY1MGZjYTQiLCJ1c2VyX2lkIjo2MSwiaXNfc3RhZmYiOnRydWUsImZpcnN0X25hbWUiOiIiLCJsYXN0X25hbWUiOiIiLCJlbWFpbCI6ImRlcmVrLmN1cnRpc0BncmFtZWRpYS5kaWdpdGFsIn0.ajPIMKmqy2rMAcVRoCtkK9dCXnb0yjMaetCu1VHcoEI",
-//   "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTg5NzAwOTI5LCJqdGkiOiI3NjVkZWE1NDEyNjI0NGQ4YmE1MTk0Nzg4ODMxMTE2ZiIsInVzZXJfaWQiOjYxLCJpc19zdGFmZiI6dHJ1ZSwiZmlyc3RfbmFtZSI6IiIsImxhc3RfbmFtZSI6IiIsImVtYWlsIjoiZGVyZWsuY3VydGlzQGdyYW1lZGlhLmRpZ2l0YWwifQ.lLRHRJymU3ACPZiEgSRkYaFijkMcJpIcNbekR6OY_to"
-// }

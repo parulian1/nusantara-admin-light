@@ -7,16 +7,12 @@ import {Component, OnInit} from '@angular/core';
     <form>
 
     </form>
-    <div>
-      <a [routerLink]="['/auth/login']">Login</a>
-    </div>
   `,
   styles: ['']
 })
 export class ForgotPasswordComponent implements OnInit {
 
-  constructor() {
-  }
+  constructor() { }
 
   ngOnInit(): void {
   }
