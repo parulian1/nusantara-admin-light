@@ -16,6 +16,7 @@ export abstract class AbstractDetailComponent {
   toast: ToastService;
   originalEntityName: string;
   entityTypeName: string;
+  nonFieldErrors: Array<string> = [];
 
   /**
    * Navigates

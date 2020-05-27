@@ -18,7 +18,7 @@ import { ToastService } from '@nusantara/core/toast';
 @Component({
   selector: 'nus-login',
   template: `
-    <h1>Login</h1>
+    <h1>Login</h1> <!-- Hidden: Kept for Screen Readers Only -->
 
     <ul class="non-field-errors">
       <li *ngFor="let err of nonFieldErrors">{{ err }}</li>
@@ -37,7 +37,7 @@ import { ToastService } from '@nusantara/core/toast';
 
       <label>
         <span>Email Address</span>
-        <input type="email" formControlName="email">
+        <input type="email" formControlName="email" placeholder="email@domain.com">
         <div *ngIf="email.invalid && (email.dirty || email.touched)" class="error-detail">
           <div *ngIf="email.errors.required">Email is required</div>
           <div *ngIf="email.errors.apiError">{{ email.getError('apiError') }}</div>
@@ -71,21 +71,10 @@ import { ToastService } from '@nusantara/core/toast';
     }
     h1 { display: none; }
 
-    div.controls-container {
-        margin-top: 20px;
-    }
-    div.controls-container button {
-      width: 100%;
-    }
-
     nav {
       padding-top: 50px;
       padding-bottom: 5px;
       text-align: center;
-    }
-    label {
-      box-sizing: border-box;
-      min-height: 61px;
     }
     a { text-decoration: none; }
   `]

@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { ILoginFailure, ITokenPair } from './models';
 import { ErrorResult, IResultResponse, SuccessResult } from '@nusantara/core/responses';
 import { HttpStatusCode } from '@nusantara/core/http';
+import { IJwtClaims } from '@nusantara/auth/models/jwt-claims';
 
 
 /**
@@ -17,7 +18,7 @@ import { HttpStatusCode } from '@nusantara/core/http';
 })
 export class AuthService {
 
-  static readonly REFRESH_THRESHOLD = 10 * 60 * 1000;
+  static readonly REFRESH_THRESHOLD = 10 * 60 * 1000;  // 10 minutes
   static readonly TOKEN_KEY = 'token';
   static readonly TOKEN_REFRESH_KEY = 'token_refresh';
 
@@ -37,6 +38,19 @@ export class AuthService {
       localStorage.removeItem(AuthService.TOKEN_KEY);
     } else {
       localStorage.setItem(AuthService.TOKEN_KEY, value);
+    }
+  }
+
+  /**
+   * If the user is authenticated, returns the claims present in their JWT
+   * payload.
+   */
+  get tokenPayload(): IJwtClaims {
+    if (this.isAuthenticated) {
+      const tokenBody = this.token.split('.')[1];
+      return JSON.parse(atob(tokenBody)) as IJwtClaims;
+    } else {
+      return null;
     }
   }
 

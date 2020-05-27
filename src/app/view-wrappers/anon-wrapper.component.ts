@@ -23,7 +23,6 @@ import { Component, OnInit } from '@angular/core';
       min-height: 100vh;
       background-color: var(--nav-background);
     }
-
     #auth-container {
       grid-column: 2;
       grid-row: 2;

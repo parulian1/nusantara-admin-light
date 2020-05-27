@@ -15,6 +15,10 @@ import { AbstractDetailComponent, IChoiceFieldChoice } from '@nusantara/core';
       typeName="Customer Group">
     </nus-detail-title>
 
+    <ul class="non-field-errors">
+      <li *ngFor="let err of nonFieldErrors">{{ err }}</li>
+    </ul>
+
     <form [formGroup]="form" (ngSubmit)="submit()">
       <label>
         <span>Name</span>

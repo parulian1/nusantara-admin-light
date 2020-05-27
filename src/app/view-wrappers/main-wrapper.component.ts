@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '@nusantara/auth';
 
 @Component({
   selector: 'nus-main-wrapper',
@@ -6,6 +7,11 @@ import { Component, OnInit } from '@angular/core';
     <header>
       <img src="/assets/bhisma-logo.png" alt="logo" id="brand-icon">
       <ul>
+        <li id="current-user">
+          <img src="/assets/default-profile-img.svg" alt="Profile Image">
+          {{ userDisplayName }}
+          <i class="material-icons">arrow_drop_down</i>
+        </li>
         <li>
           <a [routerLink]="['/auth/logout']">Logout</a>
         </li>
@@ -83,6 +89,7 @@ import { Component, OnInit } from '@angular/core';
       grid-column: 1/3;
       background: var(--nav-background);
       color: white;
+      display: flex;
     }
     #brand-icon {
       grid-row: 1;
@@ -95,6 +102,21 @@ import { Component, OnInit } from '@angular/core';
       grid-row: 1;
       grid-column: 2
     }
+    header > :last-child {
+      margin-left: auto;
+      margin-top: 0;
+      margin-bottom: 0;
+      list-style-type: none;
+    }
+
+    #current-user {
+
+    }
+    #current-user img {
+      height: 45px;
+      width: 45px;
+    }
+
 
     nav {
       grid-row: 2;
@@ -169,7 +191,35 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainWrapperComponent implements OnInit {
 
-  constructor() { }
+  constructor(public authService: AuthService) { }
+
+  /**
+   * Returns the user's own name that should be displayed to them.
+   */
+  get userDisplayName(): string {
+    if (!!this.authService.tokenPayload.first_name) {
+      return this.authService.tokenPayload.first_name;
+    } else if (!!this.authService.tokenPayload.last_name) {
+      return this.authService.tokenPayload.last_name;
+    } else if (!!this.authService.tokenPayload.email) {
+      return this.authService.tokenPayload.email;
+    } else {
+      // this should more-or-less never occur, but if the user's email address
+      // hasn't been set, we're just going to return something.
+      return 'User';
+    }
+  }
+
+  /**
+   * Returns the profile image url
+   */
+  get profileImage(): string {
+    return '/assets/default-profile-img.svg';
+  }
+
+  get currentSiteName(): string {
+    return 'marthatilaarshop.com';
+  }
 
   ngOnInit(): void {
   }
