@@ -22,7 +22,11 @@
 
   --input-border: #cad0d9;
 
+  --shadow-color: rgba(0,0,0,0.44);
+
   --bhisma-orange: #f27720;
+  --bhisma-orange-lighter: #F4924C;
+
   --info: #BCE7FD;
   --error: #af3b6e;
   --success: #1b998b;
@@ -101,28 +105,68 @@ input[type=file] {
   display: block;
 }
 
-/* 2.1 Form Error State */
+/* 2.1 Generic Form Components */
+.control {
+  border: none;
+  border-radius: 2px;
+  color: white;
+  background: var(--bhisma-orange);
+  height: 31px;
+  line-height: 31px;
+  font-weight: lighter;
+  font-size: 1em;
+  text-decoration: none;
+}
+
+button.control, a.control {
+  box-sizing: border-box;
+  transition: all 0.2s;
+}
+
+button.control:hover:not([disabled]), a.control:hover:not([disabled]) {
+  color: white;
+  background-color: var(--bhisma-orange-lighter);
+}
+
+button.control:disabled, a.control:disabled {
+  color: var(--nav-background);
+  background-color: var(--lighter-nav-bg);
+}
+
+
+/* 2.1.2 Form Error States */
 input.error,
 select.error,
 textarea.error {
-  border: red solid 1px
+  border: var(--error) solid 1px
 }
 form .error-detail {
   /* Small help-text displayed below form input fields when validation fails */
-  color: red;
+  color: var(--error);
   font-size: .5em;
   font-weight: bold;
 }
 
+/* 2.1.3 Errors related to data-entry but not linked to a single field */
+ul.non-field-errors {
+  color: var(--error);
+  min-height: 50px;
+  list-style-type: none;
+  padding: 0;
+  text-align: center;
+  margin: 0;
+  display: block;
+}
+
 
 /*
- * List Pages
+ * 2.2 List Pages
  */
 .list-page-header {
   margin-bottom: 25px;
 }
 table {
-  box-shadow: 0 0 8px -1px rgba(0,0,0,0.44);
+  box-shadow: 0 0 8px -1px var(--shadow-color);
   width: 100%;
   border-collapse: collapse;
 }
@@ -148,7 +192,7 @@ tbody tr:active {
 
 
 /**
- *  Detail Pages
+ * 2.3 Detail Pages
  */
 .entity-detail-form {
   width: 100%;
@@ -164,33 +208,41 @@ tbody tr:active {
 
 
 .control {
-  border: 1px solid black;
   border-radius: 2px;
+  border: none;
+  color: white;
+  background: var(--bhisma-orange);
 }
 button.control,
 a.control {
-  font-size: 11px;
-  font-weight: bold;
+  font-weight: lighter;
+  font-size: 1em;
   text-decoration: none;
-  color: black;
-  height: 26px;
-  line-height: 26px;
+  height: 31px;
+  line-height: 31px;
   padding: 0 15px;
   box-sizing: border-box;
   transition: all 0.2s;
 }
+
 button.control:hover:not([disabled]),
 a.control:hover:not([disabled]) {
   color: white;
-  background-color: black;
+  background-color: var(--bhisma-orange-lighter);
 }
 
-@media all and (max-width:30em){
-  button.control, a.control {
-    display:block;
-    margin:0.4em auto;
-  }
+button.control:disabled,
+a.control:disabled {
+  color: var(--nav-background);
+  background-color: var(--lighter-nav-bg);
 }
+
+/*@media all and (max-width:30em){*/
+/*  button.control, a.control {*/
+/*    display:block;*/
+/*    margin:0.4em auto;*/
+/*  }*/
+/*}*/
 
 
 /**

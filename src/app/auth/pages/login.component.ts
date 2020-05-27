@@ -1,13 +1,14 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import { ILoginFailure } from '@nusantara/auth/models';
+import { AuthService } from '@nusantara/auth/auth.service';
 import { ErrorResult } from '@nusantara/core/responses';
-import { AuthService } from '../auth.service';
-import { catchError } from 'rxjs/operators';
-import { HttpErrorResponse } from '@angular/common/http';
-import { of } from 'rxjs';
+import { ToastService } from '@nusantara/core/toast';
 
 /**
  * Allows the user to authenticate with an email address and password.
@@ -19,65 +20,105 @@ import { of } from 'rxjs';
   template: `
     <h1>Login</h1>
 
-    <ul *ngIf="!!nonFieldErrors.length">
+    <ul class="non-field-errors">
       <li *ngFor="let err of nonFieldErrors">{{ err }}</li>
     </ul>
 
-    <form [formGroup]="form" (ngSubmit)="tryLogin()">
+    <form [formGroup]="form" (ngSubmit)="login()">
+
+      <label>
+        <span>Site Domain</span>
+        <input type="text" formControlName="siteDomain" placeholder="Ex, www.mysite.com">
+        <div *ngIf="siteDomain.invalid && (siteDomain.dirty || siteDomain.touched)" class="error-detail">
+          <div *ngIf="siteDomain.errors.required">Site Domain is required</div>
+          <div *ngIf="siteDomain.errors.apiError">{{ siteDomain.getError('apiError') }}</div>
+        </div>
+      </label>
+
       <label>
         <span>Email Address</span>
         <input type="email" formControlName="email">
-
-        <div *ngIf="email.invalid && (email.dirty || email.touched)">
+        <div *ngIf="email.invalid && (email.dirty || email.touched)" class="error-detail">
           <div *ngIf="email.errors.required">Email is required</div>
           <div *ngIf="email.errors.apiError">{{ email.getError('apiError') }}</div>
         </div>
       </label>
+
       <label>
         <span>Password</span>
         <input type="password" formControlName="password">
-
-        <div *ngIf="password.invalid && (password.dirty || password.touched)">
+        <div *ngIf="password.invalid && (password.dirty || password.touched)" class="error-detail">
           <div *ngIf="password.errors.required">Password is required</div>
           <div *ngIf="password.errors.apiError">{{ password.getError('apiError') }}</div>
         </div>
       </label>
-      <div>
-          <button type="submit" [disabled]="!form.valid">Login</button>
+
+      <div class="controls-container">
+        <button type="submit" [disabled]="!form.valid" class="control">Login</button>
       </div>
+
     </form>
-    <div>
-      <a [routerLink]="['/auth/forgot-password']">Forgot Password</a>
-    </div>
+
+    <nav>
+      <a [routerLink]="['/auth/forgot-password']">Forgot Your Password?</a>
+    </nav>
   `,
-  styles: []
+  styles: [`
+    :host {
+      padding-left: 33px;
+      padding-right: 33px;
+      display: block;
+    }
+    h1 { display: none; }
+
+    div.controls-container {
+        margin-top: 20px;
+    }
+    div.controls-container button {
+      width: 100%;
+    }
+
+    nav {
+      padding-top: 50px;
+      padding-bottom: 5px;
+      text-align: center;
+    }
+    label {
+      box-sizing: border-box;
+      min-height: 61px;
+    }
+    a { text-decoration: none; }
+  `]
 })
 export class LoginComponent implements OnInit {
 
-  public form: FormGroup;
-  public nonFieldErrors: Array<string> = [];
-  next: string;
+  form: FormGroup;
+  nonFieldErrors: Array<string> = [];
+  afterLoginUrl: string;
 
   constructor(private fb: FormBuilder,
               private service: AuthService,
               private router: Router,
-              private activatedRoute: ActivatedRoute) { }
+              private activatedRoute: ActivatedRoute,
+              private toastService: ToastService) { }
 
   get email(): FormControl { return this.form?.get('email') as FormControl; }
   get password(): FormControl { return this.form?.get('password') as FormControl; }
+  get siteDomain(): FormControl { return this.form?.get('siteDomain') as FormControl; }
 
   ngOnInit(): void {
     this.form = this.fb.group({
       email: ['', [Validators.required]],
-      password: ['', [Validators.required]]
+      password: ['', [Validators.required]],
+      siteDomain: ['', [Validators.required]],
     });
 
     this.activatedRoute.queryParamMap.subscribe(paramMap => {
-      this.next = paramMap.get('next') ?? '/';
+      this.afterLoginUrl = paramMap.get('next') ?? '/';
     });
   }
 
-  tryLogin() {
+  login() {
 
     this.nonFieldErrors.length = 0;
 
@@ -99,9 +140,13 @@ export class LoginComponent implements OnInit {
   }
 
   private onLoginSuccess() {
-    this.router.navigateByUrl(decodeURIComponent(this.next));
+    this.toastService.addSuccess(`Welcome ${this.email.value}!`, 'Login Success');
+    this.router.navigateByUrl(decodeURIComponent(this.afterLoginUrl));
   }
+
   private onLoginFail(errorDetails: ILoginFailure) {
+
+    this.toastService.addError('Sorry!  Please check your email/password and try again');
 
     if (!!errorDetails.detail) {
       this.nonFieldErrors.push(errorDetails.detail);
@@ -112,10 +157,10 @@ export class LoginComponent implements OnInit {
     );
 
     // form specific errors -- take the first error message and display.
-    if (!!errorDetails?.email.length) {
+    if (!!errorDetails?.email?.length) {
       this.email.setErrors({apiError: errorDetails.email[0]});
     }
-    if (!!errorDetails?.password.length) {
+    if (!!errorDetails?.password?.length) {
       this.password.setErrors({apiError: errorDetails.password[0]});
     }
   }

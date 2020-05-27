@@ -19,17 +19,24 @@ import { Component, OnInit } from '@angular/core';
     :host {
       display: grid;
       grid-template-columns: 1fr 500px 1fr;
-      grid-template-rows: 1fr 300px 1fr;
+      grid-template-rows: 1fr auto 1fr;
       min-height: 100vh;
       background-color: var(--nav-background);
     }
+
     #auth-container {
       grid-column: 2;
       grid-row: 2;
       background-color: white;
       box-sizing: border-box;
       padding: 15px;
-      box-shadow: 0 0 8px -1px rgba(0,0,0,0.44);
+      box-shadow: 0 0 8px -1px rgba(0, 0, 0, 0.44);
+    }
+
+    #auth-container > img {
+      grid-column: 1/3;
+      display: inherit;
+      margin: 60px auto 20px;
     }
   `]
 })
