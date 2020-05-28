@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '@nusantara/auth';
 import { Router } from '@angular/router';
+
 import { ToastService } from '@nusantara/core';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'nus-forgot-password',

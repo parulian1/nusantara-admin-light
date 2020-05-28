@@ -1,4 +1,5 @@
 export * from './category.service';
+export * from './customer.service';
 export * from './customer-group.service';
 export * from './product.service';
 export * from './product-attribute.service';

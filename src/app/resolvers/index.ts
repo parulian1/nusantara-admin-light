@@ -3,6 +3,7 @@ export * from './category-list.resolver';
 export * from './category-parent-options.resolver';
 
 export * from './customer.resolver';
+export * from './customer-list.resolver';
 
 export * from './customer-group.resolver';
 export * from './customer-group-list.resolver';

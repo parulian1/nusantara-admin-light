@@ -1,14 +1,15 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
+import { PagedResponse } from '@nusantara/core/pagination';
 
 @Component({
     selector: 'nus-pagination',
     template: `
         <div class="pagination-container">
             <div class="pg-info">
-                <p *ngIf="totalItem > 0">
-                    Menampilkan <strong>{{startItem}}-{{(endItem)}}</strong> dari <strong>{{totalItem}}</strong> {{label}}
+                <p *ngIf="page?.totalResults > 0">
+                    Menampilkan <strong>{{startItem}}-{{(endItem)}}</strong> dari <strong>{{ page?.totalResults }}</strong> {{label}}
                 </p>
             </div>
             <div class="pg-button">
@@ -28,25 +29,26 @@ import {Subscription} from 'rxjs';
 export class PaginationComponent implements OnInit, OnDestroy {
 
     @Input() maxPages = 1;
-    @Input() gtmServiceFn?: any;
+    // @Input() gtmServiceFn?: any;
     @Input() labeling?: string;
-    @Input() totalItem: number;
-    @Input() limit = 20;
+    // @Input() totalItem: number;
+    // @Input() limit = 20;
     public label: string;
     private subscription: Subscription;
     private _currentPage = 1;
     private _start = 1;
     private _end = 20;
 
-    public constructor(private router: Router, private activatedRoute: ActivatedRoute) {
+    @Input() public page: PagedResponse<any>;
+
+    public constructor(private router: Router,
+                       private activatedRoute: ActivatedRoute) {
+
     }
 
     public ngOnInit(): void {
         this.subscription = this.activatedRoute.queryParams.subscribe(
-            params => {
-                this._currentPage = params.page || 1;
-                this.checkStartEnd();
-            }
+            params => { this._currentPage = params.page || 1; }
         );
         this.label = !!this.labeling ? this.labeling : 'Produk';
     }
@@ -64,27 +66,21 @@ export class PaginationComponent implements OnInit, OnDestroy {
     public set currentPage(value: number) {
         if (value !== this.currentPage) {
             this._currentPage = value;
-            if (this.gtmServiceFn) {
-                this.gtmServiceFn({
-                    value,
-                    status: 'pagination'
-                });
-            }
-            this.router.navigate([], {
-                queryParams: {
-                    page: value
-                },
+            this.router.navigate(
+              [],
+              {
+                queryParams: {page: value},
                 queryParamsHandling: 'merge'
-            });
+              });
         }
     }
 
     public get canGoBack(): boolean {
-        return this.currentPage > 1;
+      return !!this.page.linkHeaders.filter(lh => lh.rel === 'prev').length;
     }
 
     public get canGoNext(): boolean {
-        return this.currentPage < this.maxPages;
+      return !!this.page.linkHeaders.filter(lh => lh.rel === 'next').length;
     }
 
     public goBack(): void {
@@ -100,23 +96,10 @@ export class PaginationComponent implements OnInit, OnDestroy {
     }
 
     public get startItem(): number {
-        this.checkStartEnd();
-        return this._start;
+      return this._start;
     }
 
     public get endItem(): number {
-        this.checkStartEnd();
         return this._end;
     }
-
-    public checkStartEnd(): void {
-        this._start = ((this.currentPage * this.limit) - this.limit) + 1;
-        const _static_end = this.currentPage * this.limit;
-        if (_static_end > this.totalItem) {
-            this._end = this.totalItem;
-        } else {
-            this._end = _static_end;
-        }
-    }
-
 }

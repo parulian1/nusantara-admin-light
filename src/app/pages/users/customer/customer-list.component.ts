@@ -1,24 +1,44 @@
-import { Component, OnInit } from '@angular/core';
-import { UserService } from '@nusantara/services';
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
+import { ICustomer } from '@nusantara/models';
+import { AbstractListComponent } from '@nusantara/core';
 
 @Component({
   selector: 'nus-customer-list',
   template: `
-    <h1>Customers</h1>
+    <nus-list-header
+      title="Customers"
+      description="Users that can make purchases.  This includes employees.">
+    </nus-list-header>
+
+    <nus-pagination [page]="page"></nus-pagination>
+
     <table>
+      <thead>
+      <tr>
+        <th>Email</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Date Registered</th>
+        <th>LTV</th>
+        <th>Last Login</th>
+      </tr>
+      </thead>
       <tbody>
-        <tr *ngFor="let entity of entities">
-          <td><a [routerLink]="[entity|entityToSlug]">---</a></td>
-        </tr>
+      <tr *ngFor="let entity of page.entities">
+        <td><a [routerLink]="[entity|entityToSlug]">{{ entity.email }}</a></td>
+        <td>{{ entity.firstName }}</td>
+        <td>{{ entity.lastName }}</td>
+        <td>{{ entity.dateJoined|date }}</td>
+        <td>{{ entity.lifetimeValue|currency:"IDR" }}</td>
+        <td>{{ entity.lastLogin|date }}</td>
+      </tr>
       </tbody>
     </table>
   `,
   styles: [``]
 })
-export class CustomerListComponent implements OnInit {
-  public entities: Array<any> = [];
-  constructor(private service: UserService) { }
-  hrefToEmail(href) { }
-  ngOnInit(): void { }
+export class CustomerListComponent extends AbstractListComponent<ICustomer> {
+  constructor(protected route: ActivatedRoute) { super(); }
 }

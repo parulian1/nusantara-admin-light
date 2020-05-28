@@ -23,6 +23,11 @@ export class RequireLoggedInGuard implements CanActivate {
       this.router.navigate([this.redirectOnFail, ], {queryParams: {next: state.url}});
       return false;
     }
+
+    if (this.auth.shouldRefresh) {
+      this.auth.refresh();
+    }
+
     return true;
   }
 }

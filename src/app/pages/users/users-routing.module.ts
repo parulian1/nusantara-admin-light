@@ -5,6 +5,7 @@ import {
   CustomerGroupListResolver,
   CustomerGroupResolver,
   CustomerGroupTypeOptionsResolver,
+  CustomerListResolver,
   CustomerResolver
 } from '@nusantara/resolvers';
 
@@ -13,10 +14,28 @@ import { CustomerGroupListComponent, CustomerGroupDetailComponent } from './cust
 
 
 const dashboardRoutes: Routes = [
-  { path: 'users', component: CustomerListComponent },
-  { path: 'users/new', component: CustomerDetailComponent },
-  { path: 'users/:username', component: CustomerDetailComponent, resolve: { user: CustomerResolver }},
-
+  {
+    path: 'customer',
+    children: [
+      {
+        path: '',
+        component: CustomerListComponent,
+        resolve: { page: CustomerListResolver },
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'new',
+        component: CustomerDetailComponent,
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: ':username',
+        component: CustomerDetailComponent,
+        resolve: { user: CustomerResolver },
+        runGuardsAndResolvers: 'always',
+      },
+    ]
+  },
   {
     path: 'customer-groups',
     children: [
@@ -29,7 +48,9 @@ const dashboardRoutes: Routes = [
       {
         path: 'new',
         component: CustomerGroupDetailComponent,
-        resolve: { typeChoices: CustomerGroupTypeOptionsResolver },
+        resolve: {
+          typeChoices: CustomerGroupTypeOptionsResolver
+        },
         runGuardsAndResolvers: 'always',
       },
       {
