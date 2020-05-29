@@ -202,6 +202,7 @@ tbody tr:hover, tbody tr:focus, tbody tr:active {
 }
 
 
+
 /**
  * 2.3 Detail Pages
  */
@@ -216,7 +217,6 @@ tbody tr:hover, tbody tr:focus, tbody tr:active {
 .entity-detail-form textarea {
   width: 100%;
 }
-
 
 .control {
   border-radius: 2px;

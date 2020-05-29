@@ -1,6 +1,5 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Subscription} from 'rxjs';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PagedResponse } from '@nusantara/core/pagination';
 
 @Component({
@@ -9,97 +8,70 @@ import { PagedResponse } from '@nusantara/core/pagination';
         <div class="pagination-container">
             <div class="pg-info">
                 <p *ngIf="page?.totalResults > 0">
-                    Menampilkan <strong>{{startItem}}-{{(endItem)}}</strong> dari <strong>{{ page?.totalResults }}</strong> {{label}}
+                  Menampilkan <strong>{{ startingIndex }}-{{ endingIndex }}</strong>
+                  dari
+                  <strong>{{ page?.totalResults }}</strong>
                 </p>
             </div>
             <div class="pg-button">
                 <button (click)="goBack()"
-                        [disabled]="!canGoBack"><i class="ion-ios-arrow-back"></i></button>
-                <span>{{currentPage}} / {{maxPages}}</span>
+                        [disabled]="!canGoBack"><i class="material-icons">arrow_back_ios</i></button>
+                <span>{{ page?.pageNumber }} / {{ page.maximumPageCount }}</span>
                 <button (click)="goNext()"
-                        [disabled]="!canGoNext"><i class="ion-ios-arrow-forward"></i></button>
+                        [disabled]="!canGoNext"><i class="material-icons">arrow_forward_ios</i></button>
             </div>
         </div>`,
     styles: [
       '.pagination-container { display: flex; justify-content: space-between; }',
-      '.pg-info { color: #464646; font-family: \'Karla\', sans-serif; text-align: left; width: 60%; }',
+      '.pg-info { color: #464646; text-align: left; width: 60%; }',
+      '.pg-button button { border: none; background: none; height: 50px; }',
+      '.pg-button { line-height: 50px; }',
+      '.pg-button span { line-height: 50px; }',
+      '.pg-button i { font-size: 1em; }'
       ]
 })
 
-export class PaginationComponent implements OnInit, OnDestroy {
+export class PaginationComponent implements OnInit {
 
-    @Input() maxPages = 1;
-    // @Input() gtmServiceFn?: any;
-    @Input() labeling?: string;
-    // @Input() totalItem: number;
-    // @Input() limit = 20;
-    public label: string;
-    private subscription: Subscription;
-    private _currentPage = 1;
-    private _start = 1;
-    private _end = 20;
+    @Input() page: PagedResponse<any>;
+    currentPage = 1;
+    startingIndex = 0;
+    endingIndex = 0;
+    canGoBack = false;
+    canGoNext = false;
 
-    @Input() public page: PagedResponse<any>;
+    constructor(private router: Router, private activatedRoute: ActivatedRoute) { }
 
-    public constructor(private router: Router,
-                       private activatedRoute: ActivatedRoute) {
-
+    ngOnInit() {
+      this.currentPage = this.page?.pageNumber;
+      this.startingIndex = ((this.page.pageNumber - 1) * this.page.pageSize) + 1;
+      this.endingIndex = this.startingIndex + this.page.entities.length - 1;
+      this.canGoBack = !!this.page.linkHeaders?.filter(lh => lh.rel === 'prev' || lh.rel === 'previous').length;
+      this.canGoNext = !!this.page.linkHeaders?.filter(lh => lh.rel === 'next').length;
     }
 
-    public ngOnInit(): void {
-        this.subscription = this.activatedRoute.queryParams.subscribe(
-            params => { this._currentPage = params.page || 1; }
-        );
-        this.label = !!this.labeling ? this.labeling : 'Produk';
+    changePage(value: number) {
+      if (value !== this.currentPage) {
+        this.router.navigate(
+          [],
+          {
+            queryParams: {page: value},
+            queryParamsHandling: 'merge',
+            relativeTo: this.activatedRoute,
+            replaceUrl: true,
+          });
+      }
     }
 
-    public ngOnDestroy(): void {
-        if (this.subscription) {
-            this.subscription.unsubscribe();
-        }
-    }
-
-    public get currentPage(): number {
-        return this._currentPage;
-    }
-
-    public set currentPage(value: number) {
-        if (value !== this.currentPage) {
-            this._currentPage = value;
-            this.router.navigate(
-              [],
-              {
-                queryParams: {page: value},
-                queryParamsHandling: 'merge'
-              });
-        }
-    }
-
-    public get canGoBack(): boolean {
-      return !!this.page.linkHeaders.filter(lh => lh.rel === 'prev').length;
-    }
-
-    public get canGoNext(): boolean {
-      return !!this.page.linkHeaders.filter(lh => lh.rel === 'next').length;
-    }
-
-    public goBack(): void {
+    goBack(): void {
         if (this.canGoBack) {
-            --this.currentPage;
+            this.changePage(this.currentPage - 1);
         }
     }
 
-    public goNext(): void {
+    goNext(): void {
         if (this.canGoNext) {
-            this.currentPage++;
+          this.changePage(this.currentPage + 1)
         }
-    }
-
-    public get startItem(): number {
-      return this._start;
-    }
-
-    public get endItem(): number {
-        return this._end;
     }
 }

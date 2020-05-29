@@ -5,7 +5,6 @@ import { LinkHeaderField } from './link-header';
 /**
  * Wraps an HTTP API response containing paginated data.
  * Intended for use only with Nusantara APIs.
- *
  */
 export class PagedResponse<T> {
 
@@ -19,10 +18,16 @@ export class PagedResponse<T> {
     const links = response.headers.get('Link');
 
     this.totalResults = parseInt(response.headers.get('X-Total-Results') ?? '0', 10);
+    this.pageSize = parseInt(response.headers.get('X-Page-Size') ?? '0', 10);
+    this.pageNumber = parseInt(response.headers.get('X-Page') ?? '0', 10);
 
     if (links) {
       this.linkHeaders = links.split(',').map(s => new LinkHeaderField(s));
     }
     this.entities = response.body;
+  }
+
+  get maximumPageCount(): number {
+    return Math.ceil(this.totalResults / this.pageSize);
   }
 }

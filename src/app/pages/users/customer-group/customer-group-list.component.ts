@@ -11,6 +11,9 @@ import { AbstractListComponent } from '@nusantara/core';
       title="Customer Groups"
       description="Groups of customers, typically used for promotional targeting">
     </nus-list-header>
+
+    <nus-pagination [page]="page"></nus-pagination>
+
     <table>
       <thead>
         <tr>

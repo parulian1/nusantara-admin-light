@@ -13,7 +13,7 @@ import { FormControl } from '@angular/forms';
           <i class="material-icons">search</i>
           <input type="search" placeholder="Search" [formControl]="queryText">
         </div>
-        <a [routerLink]="['new']" class="control"><i class="material-icons">add</i> New</a>
+        <a [routerLink]="['new']" class="control" *ngIf="canAddNew"><i class="material-icons">add</i> New</a>
       </div>
     </header>
   `,
@@ -22,14 +22,34 @@ import { FormControl } from '@angular/forms';
     'h1 { font-weight: normal; font-size: 1.5em; }',
     'header > div { display: flex; }',
     'input[type=search] { font-size: 15px; padding-right: 5px; width: 250px; }',
-    '.search { display: flex; }',
-    '.search > input[type=search] { border: none; }',
-    'a { display: flex; margin-left: auto; padding-right:20px; }'
+    'a { display: flex; margin-left: auto; padding-right:20px; }',
+
+    `
+
+      a > i {
+        line-height: 31px;
+      }
+
+      .search {
+        display: flex;
+        border: solid 1px var(--lighter-nav-bg);
+        background-color: transparent;
+      }
+      div.search > i {
+        background-color: white;
+        color: var(--nav-background);
+        line-height: 31px;
+      }
+      .search > input[type=search] {
+        border: none;
+      }
+    `
   ]
 })
 export class ListHeaderComponent implements OnInit {
   @Input() title: string;
   @Input() description: string;
+  @Input() canAddNew = true;
 
   timeoutId: any;
   reloadTimeout = 650;

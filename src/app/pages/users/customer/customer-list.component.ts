@@ -9,7 +9,8 @@ import { AbstractListComponent } from '@nusantara/core';
   template: `
     <nus-list-header
       title="Customers"
-      description="Users that can make purchases.  This includes employees.">
+      description="Users that can make purchases.  This includes employees."
+      [canAddNew]="false">
     </nus-list-header>
 
     <nus-pagination [page]="page"></nus-pagination>
