@@ -7,9 +7,9 @@ import { PagedResponse } from '@nusantara/core/pagination';
     template: `
         <div class="pagination-container">
             <div class="pg-info">
-                <p *ngIf="page?.totalResults > 0">
-                  Menampilkan <strong>{{ startingIndex }}-{{ endingIndex }}</strong>
-                  dari
+                <p *ngIf="page?.totalResults > 0 && showLabels">
+                  Showing <strong>{{ startingIndex }}-{{ endingIndex }}</strong>
+                  of
                   <strong>{{ page?.totalResults }}</strong>
                 </p>
             </div>
@@ -33,6 +33,8 @@ import { PagedResponse } from '@nusantara/core/pagination';
 
 export class PaginationComponent implements OnInit {
 
+
+    @Input() showLabels = true;
     @Input() page: PagedResponse<any>;
     currentPage = 1;
     startingIndex = 0;

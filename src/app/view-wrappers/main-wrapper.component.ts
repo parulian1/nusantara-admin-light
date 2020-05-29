@@ -13,7 +13,7 @@ import { AuthService } from '@nusantara/auth';
           {{ userDisplayName }}
         </button>
         <div class="dropdown-content">
-          <a [routerLink]="['/auth/logout']">Logout</a>
+          <a [routerLink]="['/auth/logout']"><i class="material-icons">exit_to_app</i>Logout</a>
         </div>
       </div>
 
@@ -85,11 +85,11 @@ import { AuthService } from '@nusantara/auth';
         /*padding: 16px;*/
         padding: 0;
         padding-left: 25px;
-        padding-right: 25px;
+        padding-right: 40px;
         height: 65px;
         /*font-size: 16px;*/
         border: none;
-        font-size: 1.5em;
+        font-size: 20px;
         font-weight: lighter;
         font-family: Roboto, "Helvetica Neue", sans-serif;
         cursor: pointer;
@@ -97,9 +97,9 @@ import { AuthService } from '@nusantara/auth';
         line-height: 65px;
       }
       .dropbtn img {
-        height: 29px;
-        padding-top:16px;
-        margin-right: 7px;
+        height: 45px;
+        padding-top: 7px;
+        margin-right: 18px;
       }
 
       /* The container <div> - needed to position the dropdown content */
@@ -114,6 +114,7 @@ import { AuthService } from '@nusantara/auth';
         position: absolute;
         background-color: #f9f9f9;
         min-width: 160px;
+        width: 100%;
         box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
         z-index: 1;
       }
