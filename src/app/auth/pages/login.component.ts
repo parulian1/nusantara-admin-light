@@ -96,6 +96,7 @@ export class LoginComponent implements OnInit {
   get siteDomain(): FormControl { return this.form?.get('siteDomain') as FormControl; }
 
   ngOnInit(): void {
+
     this.form = this.fb.group({
       email: ['', [Validators.required]],
       password: ['', [Validators.required]],

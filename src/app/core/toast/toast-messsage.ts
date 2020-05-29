@@ -16,7 +16,7 @@ export class ToastMessage {
   private transitionDelay = 400;
   private ttl = 15_000;
 
-  ttlTimerId: number;
+  ttlTimerId: any;
 
   constructor(public title: string,
               public message: string,
