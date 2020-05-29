@@ -6,16 +6,17 @@ import { AuthService } from '@nusantara/auth';
   template: `
     <header>
       <img src="/assets/bhisma-logo.png" alt="logo" id="brand-icon">
-      <ul>
-        <li id="current-user">
+
+      <div class="dropdown">
+        <button class="dropbtn">
           <img src="/assets/default-profile-img.svg" alt="Profile Image">
           {{ userDisplayName }}
-          <i class="material-icons">arrow_drop_down</i>
-        </li>
-        <li>
+        </button>
+        <div class="dropdown-content">
           <a [routerLink]="['/auth/logout']">Logout</a>
-        </li>
-      </ul>
+        </div>
+      </div>
+
     </header>
     <nav>
       <ul>
@@ -75,6 +76,71 @@ import { AuthService } from '@nusantara/auth';
   `,
   styles: [
     `
+
+      /* Style The Dropdown Button */
+      .dropbtn {
+        /*background-color: #4CAF50;*/
+        background: transparent;
+        color: white;
+        /*padding: 16px;*/
+        padding: 0;
+        padding-left: 25px;
+        padding-right: 25px;
+        height: 65px;
+        /*font-size: 16px;*/
+        border: none;
+        font-size: 1.5em;
+        font-weight: lighter;
+        font-family: Roboto, "Helvetica Neue", sans-serif;
+        cursor: pointer;
+        display: flex;
+        line-height: 65px;
+      }
+      .dropbtn img {
+        height: 29px;
+        padding-top:16px;
+        margin-right: 7px;
+      }
+
+      /* The container <div> - needed to position the dropdown content */
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+
+      /* Dropdown Content (Hidden by Default) */
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+      }
+
+      /* Links inside the dropdown */
+      .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+      }
+
+      /* Change color of dropdown links on hover */
+      .dropdown-content a:hover {background-color: #f1f1f1}
+
+      /* Show the dropdown menu on hover */
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+
+      /* Change the background color of the dropdown button when the dropdown content is shown */
+      .dropdown:hover .dropbtn {
+        background-color: var(--lighter-nav-bg);
+      }
+
+
+
     /*
      * Main Page Layout
      */
@@ -95,7 +161,7 @@ import { AuthService } from '@nusantara/auth';
       grid-row: 1;
       grid-column: 1;
       max-width: 250px;
-      padding: 10px 15px 0 5px;
+      padding: 15px 15px 10px 5px;
       box-sizing: border-box;
     }
     header > ul {
