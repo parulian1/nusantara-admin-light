@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "start:local-proxy": "ng serve --proxy-config proxy.conf.js",
+    "start:prod": "ng serve --prod",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -21,7 +22,9 @@
     "@angular/platform-browser-dynamic": "~9.0.2",
     "@angular/router": "~9.0.2",
     "@auth0/angular-jwt": "^4.0.0",
+    "echarts": "^4.8.0",
     "iso8601-duration": "^1.2.0",
+    "ngx-echarts": "^5.0.0",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"

@@ -25,8 +25,8 @@ const proxyConfig = [
   },
   {
     context: '/api/iam',
-    pathRewrite: {'^/api/iam': ''},
-    target: 'http://127.0.0.1:8000',
+    // pathRewrite: {'^/api/iam': ''},
+    target: 'https://bhisma.cloud/api/iam',
     changeOrigin: true,
     secure: false
   }

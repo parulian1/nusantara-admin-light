@@ -12,7 +12,7 @@ import { flatMap, map } from 'rxjs/operators';
 })
 export class CategoryService extends AbstractCrudService<ICategory> {
 
-  baseUrl = 'api/catalog/category';
+  baseUrl = '/api/catalog/category';
 
   constructor(protected httpClient: HttpClient) {
     super();

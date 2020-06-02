@@ -15,7 +15,7 @@ export abstract class AbstractCrudService<T extends {href: string}> {
   // retrieves a single object from the API based on it's slug
   fetch(slug: string): Observable<T> {
     return this.httpClient
-      .get<T>(`/${this.baseUrl}/${slug}/`, {observe: 'body', responseType: 'json'});
+      .get<T>(`${this.baseUrl}/${slug}/`, {observe: 'body', responseType: 'json'});
   }
 
   /**

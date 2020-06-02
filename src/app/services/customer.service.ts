@@ -9,7 +9,7 @@ import { ICustomer } from '@nusantara/models';
 })
 export class CustomerService extends AbstractCrudService<ICustomer> {
 
-  protected baseUrl = 'api/iam/customer';
+  protected baseUrl = '/api/iam/customer';
 
   constructor(protected httpClient: HttpClient) {
     super();

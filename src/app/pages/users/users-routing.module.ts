@@ -31,7 +31,7 @@ const dashboardRoutes: Routes = [
       {
         path: ':username',
         component: CustomerDetailComponent,
-        resolve: { user: CustomerResolver },
+        resolve: { entity: CustomerResolver },
         runGuardsAndResolvers: 'always',
       },
     ]

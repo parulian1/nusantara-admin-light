@@ -8,7 +8,7 @@ import { IUser } from '@nusantara/models';
 })
 export class UserService extends AbstractCrudService<IUser> {
 
-  protected baseUrl = 'api/iam/user';
+  protected baseUrl = '/api/iam/user';
 
   constructor(protected httpClient: HttpClient) {
     super();

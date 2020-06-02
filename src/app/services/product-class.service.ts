@@ -16,7 +16,7 @@ import { IProductClass } from '@nusantara/models';
 })
 export class ProductClassService extends AbstractCrudService<IProductClass> {
 
-  baseUrl = 'api/catalog/product-class';
+  baseUrl = '/api/catalog/product-class';
 
   constructor(protected httpClient: HttpClient) { super(); }
 

@@ -13,7 +13,7 @@ import { IEntityHref } from '@nusantara/core';
 })
 export class VendorService extends AbstractCrudService<IVendor> {
 
-  baseUrl = 'api/catalog/vendor';
+  baseUrl = '/api/catalog/vendor';
 
   constructor(protected httpClient: HttpClient) {
     super();

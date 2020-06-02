@@ -10,7 +10,7 @@ import { AbstractCrudService } from '@nusantara/core/http';
 })
 export class CustomerGroupService extends AbstractCrudService<ICustomerGroup> {
 
-  baseUrl = 'api/iam/customer-group';
+  baseUrl = '/api/iam/customer-group';
 
   constructor(protected httpClient: HttpClient) {
     super();

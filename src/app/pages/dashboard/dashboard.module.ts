@@ -5,6 +5,7 @@ import { SharedModule } from '@nusantara/shared';
 
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
     CommonModule,
     SharedModule,
     DashboardRoutingModule,
+    NgxEchartsModule.forChild(),
   ],
 })
 export class DashboardModule { }

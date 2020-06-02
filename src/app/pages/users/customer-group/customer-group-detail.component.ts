@@ -139,7 +139,9 @@ export class CustomerGroupDetailComponent extends AbstractDetailComponent implem
 
     // convert this to the proper type.  find a better solution here.
     const formValue = this.form.value as ICustomerGroup;
-    formValue.timeThreshold = `P${formValue.timeThreshold}D`;
+    if (formValue.timeThreshold) {
+      formValue.timeThreshold = `P${formValue.timeThreshold}D`;
+    }
 
     this.service.save(formValue).subscribe(
       resp => {
