@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '@nusantara/services';
 import { AbstractDetailComponent } from '@nusantara/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ICustomer, ICustomerGroup, ICustomerProfile } from '@nusantara/models';
+import { ICustomer, ICustomerGroup } from '@nusantara/models';
 
 /**
  * Displays basic information about a customer, their profile, purchase history,

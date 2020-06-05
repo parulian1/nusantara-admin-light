@@ -5,7 +5,7 @@ import { ICategory } from '@nusantara/models';
 import { AbstractCrudService } from '@nusantara/core/http';
 import { Observable } from 'rxjs';
 import { ErrorResult, IResultResponse, SuccessResult } from '@nusantara/core/responses';
-import { flatMap, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

@@ -1,5 +1,4 @@
-import { Input, Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Input, Component } from '@angular/core';
 import { AbstractDetailComponent } from '@nusantara/core';
 
 @Component({

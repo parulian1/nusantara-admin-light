@@ -1,8 +1,6 @@
 /*
  * Common data structure interfaces returned from the Nusantara APIs.
  */
-import {HttpResponse} from '@angular/common/http';
-
 
 /**
  * Standard convention for links to related resources, returned from our API.
