@@ -4,16 +4,44 @@ import { Component, OnInit } from '@angular/core';
   selector: 'nus-dashboard',
   template: `
     <h1>Dashboard</h1>
-    <div echarts [options]="options" class="demo-chart"></div>
+    {{ isLoading }}
+    <button type="button" (click)="isLoading=!isLoading">Toggle Loading</button>
+    <div echarts [options]="options"
+         (chartInit)="isLoading = true"
+         [loading]="isLoading"
+         id="sales-chart"></div>
+    <div id="sales-by-category-chart">
+      <h2>Categories</h2>
+    </div>
+    <div id="fulfillment-snapshot">
+      <h2>Fulfillment</h2>
+    </div>
   `,
   styles: [`
+    :host {
+      display: grid;
+      grid-template-columns: auto auto;
+      grid-template-rows: auto auto auto auto;
+    }
+    h1 { grid-row: 1; grid-column: 1/3; }
+    #sales-chart {
+      grid-column: 1/3;
+      grid-row: 2;
+    }
 
-
+    #sales-by-category-chart {
+      grid-row: 3;
+    }
+    #fulfillment-snapshot {
+      grid-row: 3;
+      grid-column: 2;
+    }
   `]
 })
 export class DashboardComponent implements OnInit {
 
   options: any;
+  isLoading = false;
 
   constructor() { }
 
@@ -67,6 +95,12 @@ export class DashboardComponent implements OnInit {
       animationEasing: 'elasticOut',
       animationDelayUpdate: (idx) => idx * 5,
     };
+
+
+
+
+    // this.isLoading = true;
+
   }
 
 }

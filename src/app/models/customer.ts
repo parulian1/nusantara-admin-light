@@ -1,9 +1,11 @@
 import { IUser } from './user';
 import { ICustomerProfile } from './customer-profile';
+import { ICustomerGroup } from './customer-group';
 
 export interface ICustomer extends IUser {
   lastLogin: string;
-  lifetimeValue: number;
-  purchaseCount: number;
+  phoneNumber: string;
+  homePhoneNumber: string;
   profile: ICustomerProfile;
+  customerGroups: ICustomerGroup[];
 }

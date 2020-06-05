@@ -9,6 +9,7 @@ import { DetailTitleComponent } from './detail-title.component';
 import { ListHeaderComponent } from './list-header.component';
 import { DetailActionsComponent } from './detail-actions.component';
 import { TrueFalseComponent } from './true-false.component';
+import { CamelToHumanizedPipe } from './camel-to-humanized.pipe';
 
 
 /**
@@ -18,6 +19,7 @@ import { TrueFalseComponent } from './true-false.component';
 @NgModule({
   declarations: [
     EntityToSlugPipe,
+    CamelToHumanizedPipe,
     PaginationComponent,
     DetailTitleComponent,
     DetailActionsComponent,
@@ -26,6 +28,7 @@ import { TrueFalseComponent } from './true-false.component';
   ],
   exports: [
     EntityToSlugPipe,
+    CamelToHumanizedPipe,
     PaginationComponent,
     DetailTitleComponent,
     ListHeaderComponent,

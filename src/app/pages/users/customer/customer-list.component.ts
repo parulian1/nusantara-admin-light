@@ -32,7 +32,7 @@ import { AbstractListComponent } from '@nusantara/core';
         <td>{{ entity.firstName }}</td>
         <td>{{ entity.lastName }}</td>
         <td>{{ entity.dateJoined|date }}</td>
-        <td>{{ entity.lifetimeValue|currency:"IDR" }}</td>
+        <td>{{ entity.profile?.lifetimeValue|currency:"IDR" }}</td>
         <td>{{ entity.lastLogin|date }}</td>
       </tr>
       </tbody>

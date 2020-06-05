@@ -40,22 +40,22 @@ import { AuthService } from '@nusantara/auth';
           <i class="material-icons">local_offer</i>
           <span>Promotion Management</span>
         </li>
-        <li><a [routerLink]="['/promotion/promos']" translate>Promos</a></li>
-        <li><a [routerLink]="['/promotion/vouchers']" translate>Vouchers</a></li>
-        <li><a [routerLink]="['/promotion/widgets']" translate>Widgets</a></li>
+        <li><a [routerLink]="['/promotion/promos']" routerLinkActive="active" translate>Promos</a></li>
+        <li><a [routerLink]="['/promotion/vouchers']" routerLinkActive="active" translate>Vouchers</a></li>
+        <li><a [routerLink]="['/promotion/widgets']" routerLinkActive="active" translate>Widgets</a></li>
 
         <li class="section-header">
           <i class="material-icons">shopping_cart</i>
           <span>Order Fulfillment</span>
         </li>
-        <li><a [routerLink]="['/fulfillment/orders']" translate>Orders</a></li>
+        <li><a [routerLink]="['/fulfillment/orders']" routerLinkActive="active" translate>Orders</a></li>
 
         <li class="section-header">
           <i class="material-icons">people</i>
           <span>Customers and Users</span>
         </li>
-        <li><a [routerLink]="['/users/customer']" translate>Customers</a></li>
-        <li><a [routerLink]="['/users/customer-groups']" translate>Customer Groups</a></li>
+        <li><a [routerLink]="['/users/customer']" routerLinkActive="active" translate>Customers</a></li>
+        <li><a [routerLink]="['/users/customer-groups']" routerLinkActive="active" translate>Customer Groups</a></li>
 
 <!--        <li class="section-header" translate><i class="material-icons">assessment</i>Reports</li>-->
 <!--        <li><a [routerLink]="[]"></a></li>-->

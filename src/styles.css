@@ -331,8 +331,10 @@ button.control:disabled, a.control:disabled {
 /*  background-color: var(--danger-color);*/
 /*}*/
 
-
-
+.shadow-box {
+  box-shadow: 0 0 8px -1px var(--shadow-color);
+  border-collapse: collapse;
+}
 
 .actions-container button:disabled,
 .actions-container a:disabled {

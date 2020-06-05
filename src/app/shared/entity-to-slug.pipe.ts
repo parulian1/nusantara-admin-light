@@ -1,7 +1,6 @@
-
-import {getSlugFromHref} from './helpers';
 import { Pipe, PipeTransform } from '@angular/core';
 
+import { getSlugFromHref } from './helpers';
 
 @Pipe({
   name: 'entityToSlug',
