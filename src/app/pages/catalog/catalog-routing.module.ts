@@ -16,7 +16,7 @@ import {
   ProductListResolver,
   ProductResolver,
   VendorListResolver,
-  VendorResolver,
+  VendorResolver, ProductAttributeListResolver,
 } from '@nusantara/resolvers';
 
 const routes: Routes = [
@@ -95,7 +95,11 @@ const routes: Routes = [
       {
         path: 'new',
         component: ProductClassDetailComponent,
-        resolve: { typeChoices: ProductClassTypeResolver },
+        resolve: {
+          typeChoices: ProductClassTypeResolver,
+          attributeTypeChoices: ProductAttributeTypeResolver,
+          productAttributes: ProductAttributeListResolver,
+        },
         runGuardsAndResolvers: 'always',
       },
       {
@@ -105,6 +109,7 @@ const routes: Routes = [
           entity: ProductClassResolver,
           typeChoices: ProductClassTypeResolver,
           attributeTypeChoices: ProductAttributeTypeResolver,
+          productAttributes: ProductAttributeListResolver,
         },
         runGuardsAndResolvers: 'always',
       },

@@ -6,6 +6,7 @@ import { IChoiceFieldChoice } from '@nusantara/core';
 import { IProductAttribute, IProductClass } from '@nusantara/models';
 import { ProductClassService, ProductAttributeService } from '@nusantara/services';
 import { AbstractDetailComponent } from '@nusantara/core/components';
+import { PagedResponse } from '@nusantara/core/pagination';
 
 /**
  * Update or create a new Product Class.
@@ -61,9 +62,11 @@ import { AbstractDetailComponent } from '@nusantara/core/components';
         <tbody>
           <tr *ngFor="let attrFormGroup of attributeForms; let i=index">
             <td>
-              <input type="text"
-                     [formControl]="attrFormGroup.get('name')"
-                     placeholder="Name">
+              <select [formControl]="attrFormGroup.get('name')">
+                <option *ngFor="let pa of this.productAttributes" [ngValue]="pa.href">
+                  {{ pa.name || "NEW" }}
+                </option>
+              </select>
             </td>
             <td>
               <select [formControl]="attrFormGroup.get('type')">
@@ -94,11 +97,12 @@ import { AbstractDetailComponent } from '@nusantara/core/components';
 })
 export class ProductClassDetailComponent extends AbstractDetailComponent implements OnInit {
 
-  public typeChoices: IChoiceFieldChoice[];
-  public attributeTypeChoices: IChoiceFieldChoice[];
+  typeChoices: IChoiceFieldChoice[];
+  attributeTypeChoices: IChoiceFieldChoice[];
+  productAttributes: IProductAttribute[];
 
-  public entityName: string;
-  public isBusy = false;
+  entityName: string;
+  isBusy = false;
 
   constructor(public service: ProductClassService,
               private attributeService: ProductAttributeService,
@@ -110,9 +114,17 @@ export class ProductClassDetailComponent extends AbstractDetailComponent impleme
 
   ngOnInit(): void {
 
-    this.route.data.subscribe((data: { entity: IProductClass,
-                                       typeChoices: IChoiceFieldChoice[],
-                                       attributeTypeChoices: IChoiceFieldChoice[] }) => {
+    this.route.data.subscribe((
+      data: {
+        entity: IProductClass,
+        typeChoices: IChoiceFieldChoice[],
+        attributeTypeChoices: IChoiceFieldChoice[],
+        productAttributes: PagedResponse<IProductAttribute>}) => {
+
+      this.attributeTypeChoices = data.attributeTypeChoices;
+      this.typeChoices = data.typeChoices;
+      this.productAttributes = data.productAttributes?.entities ?? [];
+      this.productAttributes.unshift(null);
 
       this.form = this.fb.group({
         name: [data.entity?.name, [Validators.required]],
@@ -131,14 +143,10 @@ export class ProductClassDetailComponent extends AbstractDetailComponent impleme
         this.addAttribute(attr);
       }
 
-      // data.entity?.attributes.forEach(
-      //   attr => this.addAttribute(attr)
-      // );
+      this.form.get('type').valueChanges.subscribe(
+        (value) => this.onTypeChanged(value)
+      );
 
-      this.attributeTypeChoices = data.attributeTypeChoices;
-      this.typeChoices = data.typeChoices;
-
-      this.form.get('type').valueChanges.subscribe((value) => this.onTypeChanged(value));
     });
   }
 
@@ -151,7 +159,7 @@ export class ProductClassDetailComponent extends AbstractDetailComponent impleme
   // }
 
   get isDigitalProduct(): boolean {
-    return (this.form.get('type') as FormControl).value === 'digital';
+    return (this.form.get('type') as FormControl)?.value === 'digital';
   }
 
   addAttribute(attr?: IProductAttribute) {

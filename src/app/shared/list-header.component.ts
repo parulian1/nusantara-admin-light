@@ -53,6 +53,7 @@ export class ListHeaderComponent implements OnInit {
 
   timeoutId: any;
   reloadTimeout = 650;
+  originalValue: string = null;
   queryText = new FormControl('');
 
   constructor(public route: ActivatedRoute,
@@ -62,6 +63,7 @@ export class ListHeaderComponent implements OnInit {
     this.route.queryParamMap.subscribe(
       (value) => {
         this.queryText.setValue(value.get('q'));
+        this.originalValue = value.get('q');
         this.queryText.valueChanges.subscribe(
           (newValue) => { this.onQueryTextChanged(newValue); }
         );
@@ -70,9 +72,16 @@ export class ListHeaderComponent implements OnInit {
   }
 
   onQueryTextChanged(newValue: string) {
+
     if (!!this.timeoutId) {
       clearTimeout(this.timeoutId);
     }
+
+    // don't run if the value hasn't actually changed from the original.
+    if (newValue === this.originalValue) {
+      return;
+    }
+
     // always go back to page 1 when a new filter is applied
     if (!newValue) {
       // if the search input was cleared -> navigate immediately

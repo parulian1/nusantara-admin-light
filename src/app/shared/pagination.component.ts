@@ -15,11 +15,9 @@ import { PagedResponse } from '@nusantara/core/pagination';
         </p>
       </div>
       <div class="pg-button">
-        <button (click)="goBack()"
-                [disabled]="!canGoBack"><i class="material-icons">arrow_back_ios</i></button>
+        <button (click)="goBack()"><i class="material-icons">arrow_back_ios</i></button>
         <span>{{ page?.pageNumber }} / {{ page.maximumPageCount }}</span>
-        <button (click)="goNext()"
-                [disabled]="!canGoNext"><i class="material-icons">arrow_forward_ios</i></button>
+        <button (click)="goNext()"><i class="material-icons">arrow_forward_ios</i></button>
       </div>
     </div>
   `,
@@ -37,22 +35,53 @@ export class PaginationComponent implements OnInit {
   @Input() showLabels = true;
   @Input() page: PagedResponse<any>;
 
-  currentPage = 1;
-  startingIndex = 0;
-  endingIndex = 0;
-  canGoBack = false;
-  canGoNext = false;
+  // currentPage = 1;
+  // startingIndex = 0;
+  // endingIndex = 0;
+  // canGoBack = false;
+  // canGoNext = false;
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
-    console.log('is page null?', this.page);
-    this.currentPage = this.page?.pageNumber || 1;
-    this.startingIndex = ((this.page.pageNumber - 1) * this.page.pageSize) + 1;
-    this.endingIndex = this.startingIndex + this.page.entities.length - 1;
-    this.canGoBack = !!this.page.linkHeaders?.filter(lh => lh.rel === 'prev' || lh.rel === 'previous').length;
-    this.canGoNext = !!this.page.linkHeaders?.filter(lh => lh.rel === 'next').length;
+    // this.currentPage = this.page?.pageNumber || 1;
+    // this.startingIndex = ((this.page.pageNumber - 1) * this.page.pageSize) + 1;
+    // this.endingIndex = this.startingIndex + this.page.entities.length - 1;
+    // this.canGoBack = !!this.page.linkHeaders?.filter(lh => lh.rel === 'prev' || lh.rel === 'previous').length;
+    // this.canGoNext = !!this.page.linkHeaders?.filter(lh => lh.rel === 'next').length;
+  }
+
+  get currentPage(): number {
+    return this.page?.pageNumber || 1;
+  }
+
+  get startingIndex(): number {
+    if (!!this.page) {
+      return ((this.page.pageNumber - 1) * this.page.pageSize) + 1;
+    }
+    return 0;
+  }
+
+  get endingIndex(): number {
+    if (!!this.page) {
+      return this.startingIndex + this.page.entities.length - 1;
+    }
+    return 0;
+  }
+
+  get canGoBack(): boolean {
+    if (!!this.page) {
+      return !!this.page.linkHeaders?.filter(lh => lh.rel === 'prev' || lh.rel === 'previous').length;
+    }
+    return false;
+  }
+
+  get canGoNext(): boolean {
+    if (!!this.page) {
+      return !!this.page.linkHeaders?.filter(lh => lh.rel === 'next').length;
+    }
+    return false;
   }
 
   changePage(value: number) {
@@ -62,8 +91,7 @@ export class PaginationComponent implements OnInit {
         {
           queryParams: {page: value},
           queryParamsHandling: 'merge',
-          relativeTo: this.activatedRoute,
-          replaceUrl: true
+          relativeTo: this.activatedRoute
         });
     }
   }

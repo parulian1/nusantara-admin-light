@@ -51,7 +51,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { onSameUrlNavigation: 'ignore' }),
+    RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' }),
     BrowserAnimationsModule,
   ],
   exports: [RouterModule]
