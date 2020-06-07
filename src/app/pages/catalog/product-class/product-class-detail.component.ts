@@ -82,26 +82,6 @@ import { AbstractDetailComponent } from '@nusantara/core/components';
         </tbody>
       </table>
 
-<!--      <div *ngFor="let attrFormGroup of attributeForms; let i=index" class="inline-form">-->
-<!--        <label>-->
-<!--          Name-->
-<!--          <input type="text"-->
-<!--                 [formControl]="attrFormGroup.get('name')"-->
-<!--                 placeholder="Name">-->
-<!--        </label>-->
-<!--        <label>Type-->
-<!--          <select [formControl]="attrFormGroup.get('type')">-->
-<!--            <option *ngFor="let opt of this.attributeTypeChoices"-->
-<!--                    [ngValue]="opt.value">-->
-<!--              {{opt.displayName}}-->
-<!--            </option>-->
-<!--          </select>-->
-<!--        </label>-->
-<!--        <label *ngIf="attrFormGroup.controls.type.value === 'choice'">-->
-<!--            <button>Add</button>-->
-<!--        </label>-->
-<!--      </div>-->
-
       <div>
         <button type="submit" [disabled]="!form.valid">Save</button>
       </div>
@@ -147,9 +127,13 @@ export class ProductClassDetailComponent extends AbstractDetailComponent impleme
 
       this.entityName = data.entity?.name;
 
-      data.entity?.attributes.forEach(
-        attr => this.addAttribute(attr)
-      );
+      for (const attr of data.entity?.attributes ?? []) {
+        this.addAttribute(attr);
+      }
+
+      // data.entity?.attributes.forEach(
+      //   attr => this.addAttribute(attr)
+      // );
 
       this.attributeTypeChoices = data.attributeTypeChoices;
       this.typeChoices = data.typeChoices;
@@ -218,7 +202,10 @@ export class ProductClassDetailComponent extends AbstractDetailComponent impleme
   }
 
   /**
-   * For digital products, we have to enable/disable stock
+   * Event handler for whenever the user has changed the type of the product.
+   *
+   * For digital products, disable attributes only relevant for physical
+   * products, otherwise, ensure they're enabled.
    */
   private onTypeChanged(value: string) {
     [this.form.get('requiresShipping'), this.form.get('trackStock'), this.form.get('isPerishable')].forEach(

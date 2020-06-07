@@ -3,11 +3,11 @@ export interface IProduct {
   name: string;
   upc: string;
   description: string;
-  // vendor
-  // product class
-  // media
+  vendor: string;
+  productClass: string;
+  media: Array<{href: string; type: string; youtubeVideoId: string;}>;
   weight: number;
-  // category
+  category: string;
   // related[]
   // attributes
 }

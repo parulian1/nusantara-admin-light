@@ -20,7 +20,7 @@ const routes: Routes = [
     runGuardsAndResolvers: 'always',
     children: [
       {
-        path: 'pages',
+        path: 'dashboard',
         loadChildren: () => import('./pages/dashboard').then(m => m.DashboardModule)
       },
       {
@@ -44,14 +44,14 @@ const routes: Routes = [
         loadChildren: () => import('./pages/config/config.module').then(m => m.ConfigModule)
       },
 
-      { path: '',   redirectTo: '/pages', pathMatch: 'full' }
+      { path: '',   redirectTo: '/dashboard', pathMatch: 'full' }
     ]
   }
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' }),
+    RouterModule.forRoot(routes, { onSameUrlNavigation: 'ignore' }),
     BrowserAnimationsModule,
   ],
   exports: [RouterModule]

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ICustomer } from '@nusantara/models';
 import { AbstractListComponent } from '@nusantara/core';
@@ -41,5 +41,5 @@ import { AbstractListComponent } from '@nusantara/core';
   styles: [``]
 })
 export class CustomerListComponent extends AbstractListComponent<ICustomer> {
-  constructor(protected route: ActivatedRoute) { super(); }
+  constructor(protected route: ActivatedRoute, protected router: Router) { super(); }
 }

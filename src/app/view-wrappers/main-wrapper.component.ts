@@ -21,7 +21,7 @@ import { AuthService } from '@nusantara/auth';
     <nav>
       <ul>
         <li class="icon-button">
-          <a [routerLink]="['/pages']" routerLinkActive="active">
+          <a [routerLink]="['/dashboard']" routerLinkActive="active">
             <i class="material-icons">dashboard</i>
             <span translate>Dashboard</span>
             </a>

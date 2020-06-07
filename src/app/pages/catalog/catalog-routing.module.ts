@@ -52,18 +52,33 @@ const routes: Routes = [
       {
         path: '',
         component: ProductListComponent,
-        resolve: { page: ProductListResolver },
+        resolve: {
+          page: ProductListResolver,
+          productClasses: ProductClassListResolver,
+          vendors: VendorListResolver,
+          categories: CategoryListResolver,
+        },
         runGuardsAndResolvers: 'always',
       },
       {
         path: 'new',
         component: ProductDetailComponent,
+        resolve: {
+          productClasses: ProductClassListResolver,
+          vendors: VendorListResolver,
+          categories: CategoryListResolver,
+        },
         runGuardsAndResolvers: 'always',
       },
       {
         path: ':slug',
         component: ProductDetailComponent,
-        resolve: { entity: ProductResolver },
+        resolve: {
+          entity: ProductResolver,
+          productClasses: ProductClassListResolver,
+          vendors: VendorListResolver,
+          categories: CategoryListResolver,
+        },
         runGuardsAndResolvers: 'always',
       }
     ]

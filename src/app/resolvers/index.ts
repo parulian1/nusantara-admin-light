@@ -9,6 +9,7 @@ export * from './customer-group.resolver';
 export * from './customer-group-list.resolver';
 export * from './customer-group-type-options.resolver';
 
+export * from './product-attribute-list.resolver';
 export * from './product-attribute-type.resolver';
 
 export * from './product.resolver';
