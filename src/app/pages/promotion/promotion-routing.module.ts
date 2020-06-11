@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { PromotionListComponent } from './promotion';
-import { WidgetListComponent } from './widget';
 import { VoucherListComponent} from './voucher';
 
 const routes: Routes = [
@@ -21,15 +20,6 @@ const routes: Routes = [
       {
         path: '',
         component: VoucherListComponent
-      }
-    ]
-  },
-  {
-    path: 'widgets',
-    children: [
-      {
-        path: '',
-        component: WidgetListComponent
       }
     ]
   }

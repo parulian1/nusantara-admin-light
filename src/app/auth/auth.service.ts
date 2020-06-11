@@ -1,10 +1,10 @@
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { ILoginFailure, ITokenPair } from './models';
+import { ILoginFailure, ITokenPair, IAccessToken } from './models';
 import { ErrorResult, IResultResponse, SuccessResult } from '@nusantara/core/responses';
 import { HttpStatusCode } from '@nusantara/core/http';
 import { IJwtClaims } from '@nusantara/auth/models/jwt-claims';
@@ -12,6 +12,10 @@ import { IJwtClaims } from '@nusantara/auth/models/jwt-claims';
 
 /**
  * Allows a user to login/logout or refresh their current token.
+ *
+ * This service performs the responsibilities of
+ * saving and fetching the user's access credentials from
+ * the browser's localStorage
  */
 @Injectable({
   providedIn: 'root'
@@ -99,9 +103,26 @@ export class AuthService {
    * Indicates whether a token can be refreshed.  This is only true if:
    * 1. There is a refresh token saved to localStorage
    * 2. The current access token **is not** expired.
+   *
+   * Even though we **can** refresh the token after expiry, because
+   * this is within the scope of an admin panel, this will essentially
+   * have the effect of logging out the current user after a period of
+   * 10-30 minutes of inactivity.
    */
   public get canRefresh(): boolean {
     return !(!this.refreshToken || this.isTokenExpired);
+  }
+
+  public get siteDomain(): string {
+    return window.localStorage.getItem('site_domain');
+  }
+  public set siteDomain(value: string) {
+    console.log('setting site domain to ', value);
+    if (value === null) {
+      window.localStorage.removeItem('site_domain');
+    } else {
+      window.localStorage.setItem('site_domain', value);
+    }
   }
 
   /**
@@ -109,8 +130,12 @@ export class AuthService {
    *
    * @param email the user's email address.
    * @param rawPassword the user's plaintext password.
+   * @param authDomain the registered site domain the user will be authenticating for.
    */
-  public login(email: string, rawPassword: string): Observable<IResultResponse> {
+  public login(email: string, rawPassword: string, authDomain: string): Observable<IResultResponse> {
+
+    this.siteDomain = authDomain;
+
     return this.httpClient.post<ITokenPair|ILoginFailure>(
       '/api/iam/auth/login/',
       { email, password: rawPassword },
@@ -122,6 +147,7 @@ export class AuthService {
               this.saveToken(response.body as ITokenPair);
               return new SuccessResult();
             } else {
+              this.siteDomain = null;
               return new ErrorResult<ILoginFailure>(response.body as ILoginFailure, response.status);
             }
           }
@@ -133,12 +159,32 @@ export class AuthService {
    * Removes the token and refresh token from the browser's localStorage.
    */
   public logout(): void {
+    this.siteDomain = null;
     this.token = null;
     this.refreshToken = null;
   }
 
-  public refresh(): Observable<boolean> {
-    return of(false);
+  /**
+   * Sends the 'refresh' token stored in the browser's localStorage
+   * and attempts to get a new access token.
+   * The saved refresh token **is not** replaced, which will cause
+   * the user to eventually be logged out when this token expires.
+   */
+  public refresh(): Observable<IResultResponse> {
+    return this.httpClient.post<IAccessToken|ILoginFailure>(
+      '/api/iam/auth/refresh/',
+      { refresh: this.refreshToken },
+      {responseType: 'json', observe: 'response'}
+    ).pipe(
+      map((response) => {
+        if (response.status === HttpStatusCode.OK) {
+          this.token = (response.body as IAccessToken).access;
+          return new SuccessResult();
+        } else {
+          return new ErrorResult<ILoginFailure>(response.body as ILoginFailure, response.status);
+        }
+      })
+    );
   }
 
   private saveToken(tokenPair: ITokenPair): void {

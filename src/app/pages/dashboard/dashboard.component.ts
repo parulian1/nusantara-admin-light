@@ -4,8 +4,6 @@ import { Component, OnInit } from '@angular/core';
   selector: 'nus-dashboard',
   template: `
     <h1>Dashboard</h1>
-    {{ isLoading }}
-    <button type="button" (click)="isLoading=!isLoading">Toggle Loading</button>
     <div echarts [options]="options"
          (chartInit)="isLoading = true"
          [loading]="isLoading"
@@ -46,6 +44,7 @@ export class DashboardComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+
     const xAxisData = [];
     const data1 = [];
     const data2 = [];

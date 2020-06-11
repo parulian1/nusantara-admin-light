@@ -108,11 +108,16 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  /**
+   * Attempts to log the user in.
+   * If successful, their auth token will be saved and they will be redirected.
+   */
   login() {
 
     this.nonFieldErrors.length = 0;
 
-    this.service.login(this.email.value, this.password.value)
+    this.service
+      .login(this.email.value, this.password.value, this.siteDomain.value)
       .pipe(catchError((err) => {
         if (err instanceof HttpErrorResponse) {
           return of(new ErrorResult<ILoginFailure>(err.error, err.status));

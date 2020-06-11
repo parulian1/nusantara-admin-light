@@ -5,7 +5,10 @@ import { AuthService } from '@nusantara/auth';
   selector: 'nus-main-wrapper',
   template: `
     <header>
-      <img src="/assets/bhisma-logo.png" alt="logo" id="brand-icon">
+      <div id="branding">
+        <img src="/assets/bhisma-logo.png" alt="logo" id="brand-icon">
+        <div>{{ authService.siteDomain }}</div>
+      </div>
 
       <div class="dropdown">
         <button class="dropbtn">
@@ -158,12 +161,18 @@ import { AuthService } from '@nusantara/auth';
       color: white;
       display: flex;
     }
-    #brand-icon {
+    #branding {
       grid-row: 1;
       grid-column: 1;
       max-width: 250px;
       padding: 15px 15px 10px 5px;
       box-sizing: border-box;
+      font-weight: bold;
+      text-align: center;
+      width: 100%;
+    }
+    #branding img {
+      height: 20px;
     }
     header > ul {
       grid-row: 1;

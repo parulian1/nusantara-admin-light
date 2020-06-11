@@ -15,11 +15,17 @@ import { SuccessCreatedResult } from '@nusantara/core/responses';
       [typeName]="entityTypeName">
     </nus-detail-title>
 
+    <ul class="non-field-errors" *ngIf="!!nonFieldErrors.length">
+      <li *ngFor="let err of nonFieldErrors">{{ err }}</li>
+    </ul>
+
     <form [formGroup]="form" (ngSubmit)="save()">
       <label>
         <span>Name</span>
         <input type="text" formControlName="name">
+
       </label>
+
       <label>
         <span>Description</span>
         <textarea formControlName="description"></textarea>
@@ -150,4 +156,5 @@ export class VendorDetailComponent extends AbstractDetailComponent implements On
       this.originalEntityName = data.entity?.name;
     });
   }
+
 }

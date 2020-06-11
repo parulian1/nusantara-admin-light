@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JwtModule } from '@auth0/angular-jwt';
 import * as echarts from 'echarts';
 import { NgxEchartsModule } from 'ngx-echarts';
+import { NgxSmartModalModule } from 'ngx-smart-modal';
 
 import { ApiPrefixInterceptor } from '@nusantara/core';
 import { AnonWrapperComponent, MainWrapperComponent } from '@nusantara/view-wrappers';
@@ -21,9 +22,8 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    NgxEchartsModule.forRoot({
-      echarts
-    }),
+    NgxEchartsModule.forRoot({ echarts }),
+    NgxSmartModalModule.forRoot(),
     CoreModule,
     AppRoutingModule,
     HttpClientModule,

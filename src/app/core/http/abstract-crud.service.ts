@@ -44,7 +44,7 @@ export abstract class AbstractCrudService<T extends {href: string}> {
 
   update(entity: T): Observable<IResultResponse> {
     return this.httpClient
-      .put<T>(entity.href, entity, {observe: 'response', responseType: 'json'})
+      .patch<T>(entity.href, entity, {observe: 'response', responseType: 'json'})
       .pipe(map(resp => resp.status === 200 ? new SuccessResult() : new ErrorResult()));
   }
 

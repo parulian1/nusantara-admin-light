@@ -7,18 +7,23 @@ import { IProductAttribute, IProductClass } from '@nusantara/models';
 import { ProductClassService, ProductAttributeService } from '@nusantara/services';
 import { AbstractDetailComponent } from '@nusantara/core/components';
 import { PagedResponse } from '@nusantara/core/pagination';
+import { NgxSmartModalService } from 'ngx-smart-modal';
 
-/**
- * Update or create a new Product Class.
- */
 @Component({
   selector: 'nus-product-class-detail',
   template: `
-    <nus-detail-title [originalName]="entityName" typeName="Product Class"></nus-detail-title>
+    <nus-detail-title
+      [originalName]="entityName"
+      typeName="Product Class">
+    </nus-detail-title>
 
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <h2>Basic</h2>
-      <label>Name <input type="text" formControlName="name"></label>
+    <form [formGroup]="form" (ngSubmit)="save()">
+
+      <label>
+        <span>Name</span>
+        <input type="text" formControlName="name">
+      </label>
+
       <label>Type
         <select formControlName="type">
             <option *ngFor="let opt of typeChoices" [ngValue]="opt.value">
@@ -27,18 +32,15 @@ import { PagedResponse } from '@nusantara/core/pagination';
         </select>
       </label>
       <label [ngClass]="{'hidden': isDigitalProduct}">
-        <input type="checkbox"
-               formControlName="requiresShipping">
+        <input type="checkbox" formControlName="requiresShipping">
         Requires Shipping?
       </label>
       <label [ngClass]="{'hidden': isDigitalProduct}">
-        <input type="checkbox"
-               formControlName="trackStock">
+        <input type="checkbox" formControlName="trackStock">
         Track Stock?
       </label>
       <label [ngClass]="{'hidden': isDigitalProduct}">
-        <input type="checkbox"
-               formControlName="isPerishable">
+        <input type="checkbox" formControlName="isPerishable">
         Is Perishable?
       </label>
 
@@ -62,11 +64,7 @@ import { PagedResponse } from '@nusantara/core/pagination';
         <tbody>
           <tr *ngFor="let attrFormGroup of attributeForms; let i=index">
             <td>
-              <select [formControl]="attrFormGroup.get('name')">
-                <option *ngFor="let pa of this.productAttributes" [ngValue]="pa.href">
-                  {{ pa.name || "NEW" }}
-                </option>
-              </select>
+              <input type="text" [formControl]="attrFormGroup.get('name')">
             </td>
             <td>
               <select [formControl]="attrFormGroup.get('type')">
@@ -89,7 +87,6 @@ import { PagedResponse } from '@nusantara/core/pagination';
         <button type="submit" [disabled]="!form.valid">Save</button>
       </div>
     </form>
-
   `,
   styles: [
     'button.add-button { background: transparent; border: none; }',
@@ -104,12 +101,31 @@ export class ProductClassDetailComponent extends AbstractDetailComponent impleme
   entityName: string;
   isBusy = false;
 
+  deletedAttributes: IProductAttribute[] = [];
+
   constructor(public service: ProductClassService,
               private attributeService: ProductAttributeService,
               private fb: FormBuilder,
+              private modalService: NgxSmartModalService,
               public route: ActivatedRoute,
               public router: Router) {
     super();
+  }
+
+  get name(): FormControl { return this.form.get('name') as FormControl; }
+  get type(): FormControl { return this.form.get('type') as FormControl; }
+  get href(): FormControl { return this.form.get('href') as FormControl; }
+
+  get attributeForms(): FormGroup[] {
+    return (this.form.controls.attributes as FormArray).controls as FormGroup[];
+  }
+
+  // get deletedAttributes(): IProductAttribute[] {
+  //   (this.form.get('_deletedAttributes') as FormArray).value()
+  // }
+
+  get isDigitalProduct(): boolean {
+    return (this.form.get('type') as FormControl)?.value === 'digital';
   }
 
   ngOnInit(): void {
@@ -126,40 +142,40 @@ export class ProductClassDetailComponent extends AbstractDetailComponent impleme
       this.productAttributes = data.productAttributes?.entities ?? [];
       this.productAttributes.unshift(null);
 
-      this.form = this.fb.group({
-        name: [data.entity?.name, [Validators.required]],
-        href: [data.entity?.href],
-        type: [data.entity?.type, [Validators.required]],
-        requiresShipping: [data.entity?.requiresShipping, [Validators.required]],
-        trackStock: [data.entity?.trackStock, [Validators.required]],
-        isPerishable: [data.entity?.isPerishable, [Validators.required]],
-        attributes: this.fb.array([]),
-        _deletedAttributes: this.fb.array([])
-      });
+      this.initializeForm(data.entity);
 
       this.entityName = data.entity?.name;
 
-      for (const attr of data.entity?.attributes ?? []) {
-        this.addAttribute(attr);
-      }
-
-      this.form.get('type').valueChanges.subscribe(
-        (value) => this.onTypeChanged(value)
-      );
-
+      this.type.valueChanges.subscribe((value) => this.onTypeChanged(value));
     });
   }
 
-  get attributeForms(): FormGroup[] {
-    return (this.form.controls.attributes as FormArray).controls as FormGroup[];
-  }
+  /**
+   * Sets up the initial form state.
+   *
+   * @param entity
+   */
+  initializeForm(entity?: IProductClass) {
 
-  // get deletedAttributes(): IProductAttribute[] {
-  //   (this.form.get('_deletedAttributes') as FormArray).value()
-  // }
+    this.form = this.fb.group({
+      name: [entity?.name, [Validators.required]],
+      href: [entity?.href],
+      type: [entity?.type, [Validators.required]],
+      requiresShipping: [entity?.requiresShipping, [Validators.required]],
+      trackStock: [entity?.trackStock, [Validators.required]],
+      isPerishable: [entity?.isPerishable, [Validators.required]],
+      attributes: this.fb.array([]),
+    });
 
-  get isDigitalProduct(): boolean {
-    return (this.form.get('type') as FormControl)?.value === 'digital';
+    // attributes are added separately from the primary loop because they're require substational authentication logic
+    for (const attr of entity?.attributes ?? []) {
+      this.addAttribute(attr);
+    }
+
+    // users cannot change 'type' of product class once it has been created.
+    if (!this.isNew) {
+      this.type.disable();
+    }
   }
 
   addAttribute(attr?: IProductAttribute) {
@@ -167,41 +183,76 @@ export class ProductClassDetailComponent extends AbstractDetailComponent impleme
       name: [attr?.name, [Validators.required, ]],
       href: [attr?.href, ],
       type: [attr?.type, ],
-      productClass: [attr?.productClass ?? this.form.get('href').value],
-      choices: this.fb.array(
-        attr?.choices.map(v => new FormControl(v)) ?? []
-      ),
+      productClasses: [attr?.productClasses ?? [this.form.get('href').value, ]],
       minValue: [attr?.minValue, ],
       maxValue: [attr?.maxValue, ]
     });
+
+    // if the attr already has an href (it exists in the database)
+    // then the name and type may not be changed.
+    if (!!attrGroup.get('href').value) {
+      attrGroup.get('name').disable();
+      attrGroup.get('type').disable();
+      attrGroup.get('minValue').disable();
+      attrGroup.get('maxValue').disable();
+    }
+
     (this.form.get('attributes') as FormArray).push(attrGroup);
   }
 
+  /**
+   * Flags an attribute
+   * @param attr
+   */
   removeAttribute(attr: IProductAttribute) {
-    // moves it to the 'removed' attributes group.
+    // todo: remove the attribute from the forms
+
+    if (!attr.href || this.isNew) {
+      // doesn't need pushed to api if all the same.
+    } else {
+      attr.productClasses = attr.productClasses.filter(
+        href => href !== this.href.value
+      );
+
+    }
   }
 
-  /**
-   * Tries to save the form data to the API.
-   */
-  submit() {
-    this.isBusy = true;
-    let obs = this.service.save(this.form.value as IProductClass);
+  save() {
+    this.service
+    .save(this.form.getRawValue() as IProductClass)
+    .subscribe((result) => {
+      if (result.success) {
+        // update all the attributes
+        for (const attrForm of this.attributeForms) {
+          // todo: make sure the href of parent is present!
+          const attr = attrForm.value as IProductAttribute;
+          if (!attr.productClasses.includes(this.href.value)) {
+            attr.productClasses.push(this.href.value);
+          }
+          this.attributeService.save(attr).subscribe();
+        }
 
-    // save all the attributes
-    this.attributeForms.forEach(
-      (attrForm) => {
-        obs = obs.pipe(
-          result => this.attributeService.save(attrForm.value as IProductAttribute)
-        );
+        // todo: remove any of the deleted attributes
+        for (const attrToRemove of this.deletedAttributes) {
+          if (attrToRemove.productClasses.includes(this.href.value)) {
+            attrToRemove.productClasses = attrToRemove.productClasses.filter(href => href !== this.href.value);
+          }
+        }
       }
-    );
-
-    obs.subscribe(result => {
-      console.log('Success?', result.success);
-      this.isBusy = false;
-      this.router.navigate(['.'], {relativeTo: this.route});
     });
+
+    // // save all the attributes
+    // this.attributeForms.forEach(
+    //   (attrForm) => {
+    //     obs = obs.pipe(
+    //       result => this.attributeService.save(attrForm.value as IProductAttribute)
+    //     );
+    //   }
+    // );
+    //
+    // obs.subscribe(result => {
+    //   this.router.navigate(['.'], {relativeTo: this.route});
+    // });
 
   }
 

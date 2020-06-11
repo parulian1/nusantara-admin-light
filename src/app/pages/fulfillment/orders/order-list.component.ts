@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'nus-order-list',
-  template: `order list yo`,
+  template: ``,
   styles: ['']
 })
 export class OrderListComponent implements OnInit {

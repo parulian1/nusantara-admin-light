@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxSmartModalModule } from 'ngx-smart-modal';
 
 import { SharedModule } from '@nusantara/shared';
 import { CatalogRoutingModule } from './catalog-routing.module';
@@ -26,6 +27,7 @@ import { VendorListComponent, VendorDetailComponent } from './vendor';
   imports: [
     CommonModule,
     SharedModule,
+    NgxSmartModalModule.forChild(),
     FormsModule,
     ReactiveFormsModule,
     CatalogRoutingModule,
