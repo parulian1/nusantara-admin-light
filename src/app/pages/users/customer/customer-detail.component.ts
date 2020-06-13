@@ -213,7 +213,7 @@ import { ICustomer, ICustomerGroup } from '@nusantara/models';
     }
   `]
 })
-export class CustomerDetailComponent extends AbstractDetailComponent implements OnInit {
+export class CustomerDetailComponent extends AbstractDetailComponent<ICustomer> {
 
   dateJoined: Date;
   registrationCampaign: string;
@@ -232,29 +232,23 @@ export class CustomerDetailComponent extends AbstractDetailComponent implements 
     super();
   }
 
-  ngOnInit(): void {
-    this.route.data.subscribe((data: { entity: ICustomer }) => {
-      this.form = this.fb.group({
-        firstName: [data.entity?.firstName, [Validators.required, ]],
-        lastName: [data.entity?.lastName, [Validators.required, ]],
-        email: [data.entity?.email, [Validators.required, ]],
-        href: [data.entity?.href, []],
-        phoneNumber: [data.entity?.phoneNumber, []],
-        homePhoneNumber: [data.entity?.homePhoneNumber, []],
-        currentTab: ['summary', []]
-      });
-
-      this.dateJoined = new Date(data.entity?.dateJoined);
-      this.lastLogin = new Date(data.entity?.lastLogin);
-      this.registrationCampaign = data.entity.profile?.registrationCampaign;
-      this.profile = data.entity.profile;
-      console.log(data.entity.customerGroups);
-      this.customerGroups = data.entity.customerGroups;
+  initializeForm(entity?: ICustomer) {
+    this.form = this.fb.group({
+      firstName: [entity?.firstName, [Validators.required, ]],
+      lastName: [entity?.lastName, [Validators.required, ]],
+      email: [entity?.email, [Validators.required, ]],
+      href: [entity?.href, []],
+      phoneNumber: [entity?.phoneNumber, []],
+      homePhoneNumber: [entity?.homePhoneNumber, []],
+      currentTab: ['summary', []]
     });
+
+    this.dateJoined = new Date(entity?.dateJoined);
+    this.lastLogin = new Date(entity?.lastLogin);
+    this.registrationCampaign = entity.profile?.registrationCampaign;
+    this.profile = entity.profile;
+    this.customerGroups = entity.customerGroups;
   }
-
-
-
 
   submit() {
 

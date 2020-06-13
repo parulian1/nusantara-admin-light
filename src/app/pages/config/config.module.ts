@@ -2,16 +2,16 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { ConfigHubComponent } from './config-hub.component';
-import { ConfigRoutingModule } from './config-routing.module';
 import { SharedModule } from '@nusantara/shared';
-// import { WarehouseListComponent, WarehouseDetailComponent } from './warehouse';
+import { ConfigRoutingModule } from './config-routing.module';
+import { ConfigHubComponent } from './config-hub.component';
+import { WarehouseListComponent, WarehouseDetailComponent } from './warehouse';
 
 @NgModule({
   declarations: [
     ConfigHubComponent,
-    // WarehouseListComponent,
-    // WarehouseDetailComponent,
+    WarehouseListComponent,
+    WarehouseDetailComponent,
   ],
   imports: [
     CommonModule,

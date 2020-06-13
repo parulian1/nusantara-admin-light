@@ -13,7 +13,7 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
   selector: 'nus-product-class-detail',
   template: `
     <nus-detail-title
-      [originalName]="entityName"
+      [originalName]="originalEntityName"
       typeName="Product Class">
     </nus-detail-title>
 
@@ -92,14 +92,11 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
     'button.add-button { background: transparent; border: none; }',
   ]
 })
-export class ProductClassDetailComponent extends AbstractDetailComponent implements OnInit {
+export class ProductClassDetailComponent extends AbstractDetailComponent<IProductClass> implements OnInit {
 
   typeChoices: IChoiceFieldChoice[];
   attributeTypeChoices: IChoiceFieldChoice[];
   productAttributes: IProductAttribute[];
-
-  entityName: string;
-  isBusy = false;
 
   deletedAttributes: IProductAttribute[] = [];
 
@@ -129,10 +126,9 @@ export class ProductClassDetailComponent extends AbstractDetailComponent impleme
   }
 
   ngOnInit(): void {
-
+    super.ngOnInit();
     this.route.data.subscribe((
       data: {
-        entity: IProductClass,
         typeChoices: IChoiceFieldChoice[],
         attributeTypeChoices: IChoiceFieldChoice[],
         productAttributes: PagedResponse<IProductAttribute>}) => {
@@ -142,10 +138,6 @@ export class ProductClassDetailComponent extends AbstractDetailComponent impleme
       this.productAttributes = data.productAttributes?.entities ?? [];
       this.productAttributes.unshift(null);
 
-      this.initializeForm(data.entity);
-
-      this.entityName = data.entity?.name;
-
       this.type.valueChanges.subscribe((value) => this.onTypeChanged(value));
     });
   }
@@ -153,7 +145,7 @@ export class ProductClassDetailComponent extends AbstractDetailComponent impleme
   /**
    * Sets up the initial form state.
    *
-   * @param entity
+   * @param entity the product class that is being edited (or null)
    */
   initializeForm(entity?: IProductClass) {
 
@@ -201,8 +193,8 @@ export class ProductClassDetailComponent extends AbstractDetailComponent impleme
   }
 
   /**
-   * Flags an attribute
-   * @param attr
+   * Flags an attribute for removal.
+   * @param attr A product attribute that would be removed
    */
   removeAttribute(attr: IProductAttribute) {
     // todo: remove the attribute from the forms

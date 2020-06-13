@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { UserService } from '@nusantara/services';
 import { AbstractDetailComponent } from '@nusantara/core';
+import { IUser } from '@nusantara/models';
 
 @Component({
   selector: 'nus-employee-detail',
@@ -23,13 +24,17 @@ import { AbstractDetailComponent } from '@nusantara/core';
   `,
   styles: [ ]
 })
-export class EmployeeDetailComponent extends AbstractDetailComponent implements OnInit {
+export class EmployeeDetailComponent extends AbstractDetailComponent<IUser> implements OnInit {
 
   constructor(public service: UserService,
               public route: ActivatedRoute,
               public router: Router,
               private fb: FormBuilder) {
     super();
+  }
+
+  initializeForm(entity?: IUser) {
+    throw new Error('Method not implemented.');
   }
 
   ngOnInit(): void { }

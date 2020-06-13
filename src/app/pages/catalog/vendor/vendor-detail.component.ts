@@ -69,7 +69,7 @@ import { SuccessCreatedResult } from '@nusantara/core/responses';
     }
   `]
 })
-export class VendorDetailComponent extends AbstractDetailComponent implements OnInit {
+export class VendorDetailComponent extends AbstractDetailComponent<IVendor> {
 
   iconUrl: string;
   bannerUrl: string;
@@ -83,22 +83,32 @@ export class VendorDetailComponent extends AbstractDetailComponent implements On
     super();
   }
 
-  get hasImagesToUpload(): boolean {
-    return !!this.files.bannerImage || !!this.files.iconImage;
-  }
-
+  get hasImagesToUpload(): boolean { return !!this.files.bannerImage || !!this.files.iconImage; }
   set iconFile(value: File) {
     this.files.iconImage = value;
     const reader = new FileReader();
     reader.onload = (ev) => this.iconUrl = reader.result as string;
     reader.readAsDataURL(value);
   }
-
   set bannerFile(value: File) {
     this.files.bannerImage = value;
     const reader = new FileReader();
     reader.onload = (ev) => this.bannerUrl = reader.result as string;
     reader.readAsDataURL(value);
+  }
+
+  initializeForm(entity?: IVendor) {
+    this.form = this.fb.group({
+      name: [entity?.name, [Validators.required, ]],
+      href: [entity?.href, []],
+      description: [entity?.description ?? '', []],
+      internalNotes: [entity?.internalNotes ?? '', []],
+    });
+
+    this.iconUrl = entity?.iconImage ?? '/assets/no-image_id.png';
+    this.bannerUrl = entity?.bannerImage ?? '/assets/no-image_id.png';
+
+    this.originalEntityName = entity?.name;
   }
 
   // called when a file changes
@@ -140,21 +150,4 @@ export class VendorDetailComponent extends AbstractDetailComponent implements On
       }
     );
   }
-
-  ngOnInit(): void {
-    this.route.data.subscribe((data: {entity: IVendor}) => {
-      this.form = this.fb.group({
-        name: [data.entity?.name, [Validators.required, ]],
-        href: [data.entity?.href, []],
-        description: [data.entity?.description ?? '', []],
-        internalNotes: [data.entity?.internalNotes ?? '', []],
-      });
-
-      this.iconUrl = data.entity?.iconImage ?? '/assets/no-image_id.png';
-      this.bannerUrl = data.entity?.bannerImage ?? '/assets/no-image_id.png';
-
-      this.originalEntityName = data.entity?.name;
-    });
-  }
-
 }

@@ -9,7 +9,7 @@ import { IWarehouse } from '@nusantara/models';
 })
 export class WarehouseService extends AbstractCrudService<IWarehouse> {
 
-  baseUrl = '/api/catalog/warehouse';
+  baseUrl = '/api/fulfillment/warehouse';
 
   constructor(protected httpClient: HttpClient) {
     super();

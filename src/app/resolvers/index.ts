@@ -21,3 +21,6 @@ export * from './product-class-type.resolver';
 
 export * from './vendor-list.resolver';
 export * from './vendor.resolver';
+
+export * from './warehouse-list.resolver';
+export * from './warehouse.resolver';

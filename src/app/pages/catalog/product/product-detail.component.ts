@@ -67,7 +67,7 @@ import { PagedResponse } from '@nusantara/core/pagination';
   `,
   styles: [ ]
 })
-export class ProductDetailComponent extends AbstractDetailComponent implements OnInit {
+export class ProductDetailComponent extends AbstractDetailComponent<IProduct> implements OnInit {
 
   public entityName: string;
 
@@ -86,12 +86,13 @@ export class ProductDetailComponent extends AbstractDetailComponent implements O
   }
 
   ngOnInit(): void {
+    super.ngOnInit();
+
     // todo:
     // - product type selection
     // - product category selection
     // - whole mess of attributes
     this.route.data.subscribe((data: {
-        entity: IProduct,
         categories: PagedResponse<ICategory>,
         vendors: PagedResponse<IVendor>,
         productClasses: PagedResponse<IProductClass> }) => {
@@ -100,30 +101,29 @@ export class ProductDetailComponent extends AbstractDetailComponent implements O
       this.vendors = data.vendors.entities;
       this.categories = data.categories.entities;
       this.productClasses = data.productClasses.entities;
-
-      this.form = this.fb.group({
-        name: [data.entity?.name, [Validators.required, ]],
-        href: [data.entity?.href],
-        upc: [data.entity?.upc, [Validators.required, ]],
-        description: [data.entity?.description, [Validators.required, ]],
-        weight: [data.entity?.weight, [Validators.required, ]],
-        productClass: [data.entity?.productClass, [Validators.required, ]],
-        category: [data.entity?.category, [Validators.required]],
-        vendor: [data.entity?.vendor, [Validators.required]],
-        media: [data.entity?.media, [Validators.required]],
-        // related products
-        // attributes =(
-      });
-
-      this.entityName = data.entity?.name;
-
-      // listen for any changes to this so we can disable weight when appropriate
-      this.form.get('productClass').valueChanges.subscribe(
-        val => this.onProductClassChanged(val)
-      );
-      this.onProductClassChanged(this.form.get('productClass').value);
-
     });
+  }
+
+  initializeForm(entity?: IProduct) {
+    this.form = this.fb.group({
+      name: [entity?.name, [Validators.required, ]],
+      href: [entity?.href],
+      upc: [entity?.upc, [Validators.required, ]],
+      description: [entity?.description, [Validators.required, ]],
+      weight: [entity?.weight, [Validators.required, ]],
+      productClass: [entity?.productClass, [Validators.required, ]],
+      category: [entity?.category, [Validators.required]],
+      vendor: [entity?.vendor, [Validators.required]],
+      media: [entity?.media, [Validators.required]],
+      // related products
+      // attributes =(
+    });
+
+    // listen for any changes to this so we can disable weight when appropriate
+    this.form.get('productClass').valueChanges.subscribe(
+      val => this.onProductClassChanged(val)
+    );
+    this.onProductClassChanged(this.form.get('productClass').value);
   }
 
   /**
@@ -144,7 +144,7 @@ export class ProductDetailComponent extends AbstractDetailComponent implements O
 
   submit() {
     this.isBusy = true;
-    let obs = this.service.save(this.form.value as IProduct);
+    this.service.save(this.form.value as IProduct);
   }
 
   delete() {

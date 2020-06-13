@@ -1,4 +1,5 @@
 import { Input, Component } from '@angular/core';
+
 import { AbstractDetailComponent } from '@nusantara/core';
 
 @Component({
@@ -15,5 +16,5 @@ import { AbstractDetailComponent } from '@nusantara/core';
   ]
 })
 export class DetailActionsComponent {
-  @Input() component: AbstractDetailComponent;
+  @Input() component: AbstractDetailComponent<any>;
 }

@@ -64,7 +64,7 @@ import { AuthService } from '@nusantara/auth';
 <!--        <li><a [routerLink]="[]"></a></li>-->
 
         <li class="icon-button">
-          <a [routerLink]="['/config']">
+          <a [routerLink]="['/config']" routerLinkActive="active">
             <i class="material-icons">settings</i>
             <span translate>Config</span>
           </a>

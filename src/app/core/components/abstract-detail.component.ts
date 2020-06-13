@@ -1,5 +1,6 @@
-import { ActivatedRoute, Router } from '@angular/router';
+import { OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ToastService } from '@nusantara/core';
 import { ToastLevelEnum } from '@nusantara/core/toast/toast-level.enum';
@@ -8,7 +9,7 @@ import { ToastLevelEnum } from '@nusantara/core/toast/toast-level.enum';
  * Base class for components that display a create/edit form
  * for a single entity.
  */
-export abstract class AbstractDetailComponent {
+export abstract class AbstractDetailComponent<T> implements OnInit {
 
   route: ActivatedRoute;
   router: Router;
@@ -18,6 +19,34 @@ export abstract class AbstractDetailComponent {
   originalEntityName: string;
   entityTypeName: string;
   nonFieldErrors: Array<string> = [];
+
+  ngOnInit() {
+    this.route.data.subscribe((data: {entity: T}) => {
+      this.initializeForm(data.entity);
+      this.setOriginalEntityName(data.entity);
+    });
+  }
+
+  /**
+   * Initializes the value of 'form'.
+   *
+   * @param entity Typically the object passed in data.entity key of route data.
+   */
+  abstract initializeForm(entity?: T);
+
+  /**
+   * Sets the 'originalEntityName' property (typically used
+   * in the header when displaying a component that is being
+   * edited).
+   *
+   * @param entity Typically the object passed in data.entity key of route data.
+   */
+  setOriginalEntityName(entity?: T) {
+    if (!!entity && entity.hasOwnProperty('name')) {
+      // tslint:disable:no-string-literal
+      this.originalEntityName = entity['name'];
+    }
+  }
 
   /**
    * Navigates

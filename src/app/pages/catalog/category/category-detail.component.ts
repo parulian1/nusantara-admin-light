@@ -84,7 +84,7 @@ import { AbstractDetailComponent } from '@nusantara/core';
 
   `]
 })
-export class CategoryDetailComponent extends AbstractDetailComponent implements OnInit {
+export class CategoryDetailComponent extends AbstractDetailComponent<ICategory> implements OnInit {
 
   public parentOptions: ICategory[] = [];
   originalImage: string;
@@ -98,29 +98,27 @@ export class CategoryDetailComponent extends AbstractDetailComponent implements 
   }
 
   ngOnInit(): void {
-    this.route.data.subscribe((data: {entity: ICategory, parentOptions: ICategory[]}) => {
-
-      // setup form and data
-      this.form = this.fb.group({
-        name: [data.entity?.name, [Validators.required, ]],
-        href: [data.entity?.href, []],
-        image: ['', []],
-        parent: [{value: data.entity?.parent, disabled: !!data.entity?.href }, []],
-        sourceMappings: this.fb.array([])
-      });
-
-      this.originalImage = data.entity?.image;
-
-      data.entity?.sourceMappings.forEach(
-        (value) => { this.addMapping(value); }
-      );
-
-      // page title
-      this.originalEntityName = data.entity?.name;
-
-      // source
+    super.ngOnInit();
+    this.route.data.subscribe((data: {parentOptions: ICategory[]}) => {
       this.parentOptions = data.parentOptions;
     });
+  }
+
+  initializeForm(entity?: ICategory) {
+    // setup form and data
+    this.form = this.fb.group({
+      name: [entity?.name, [Validators.required, ]],
+      href: [entity?.href, []],
+      image: ['', []],
+      parent: [{value: entity?.parent, disabled: !!entity?.href }, []],
+      sourceMappings: this.fb.array([])
+    });
+
+    this.originalImage = entity?.image;
+
+    entity?.sourceMappings.forEach(
+      (value) => { this.addMapping(value); }
+    );
   }
 
   get name() { return this.form.get('name'); }

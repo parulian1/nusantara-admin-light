@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { parse } from 'iso8601-duration';
 
+import { AbstractDetailComponent, IChoiceFieldChoice } from '@nusantara/core';
 import { ICustomerGroup, CustomerGroupType } from '@nusantara/models';
 import { CustomerGroupService } from '@nusantara/services';
-import { AbstractDetailComponent, IChoiceFieldChoice } from '@nusantara/core';
 
 @Component({
   selector: 'nus-customer-group-detail',
@@ -56,7 +56,7 @@ import { AbstractDetailComponent, IChoiceFieldChoice } from '@nusantara/core';
     '.hidden { display: none; }',
   ]
 })
-export class CustomerGroupDetailComponent extends AbstractDetailComponent implements OnInit {
+export class CustomerGroupDetailComponent extends AbstractDetailComponent<ICustomerGroup> implements OnInit {
 
   typeChoices: IChoiceFieldChoice[] = [];
 
@@ -70,28 +70,30 @@ export class CustomerGroupDetailComponent extends AbstractDetailComponent implem
     super();
   }
 
+  get type(): FormControl { return this.form.get('type') as FormControl; }
+
   ngOnInit(): void {
-
-    this.route.data.subscribe((data: {entity: ICustomerGroup, typeChoices: IChoiceFieldChoice[]}) => {
-
-      this.form = this.fb.group({
-        name: [data.entity?.name, [Validators.required, ]],
-        href: [data.entity?.href, []],
-        type: [data.entity?.type, [Validators.required]],
-        amountThreshold: [data.entity?.amountThreshold, [Validators.required]],
-        timeThreshold: [parse(data.entity?.timeThreshold ?? 'P0D').days, [Validators.required]],
-      });
-
-      this.form.get('type').valueChanges.subscribe(
-        (value) => this.onTypeChanged(value)
-      );
-      // trigger manually so initial state of the form is accurate.
-      this.onTypeChanged(this.form.get('type').value);
-
-      this.originalEntityName = data.entity?.name;
-
+    super.ngOnInit();
+    this.route.data.subscribe((data: {typeChoices: IChoiceFieldChoice[]}) => {
       this.typeChoices = data.typeChoices;
     });
+  }
+
+  initializeForm(entity?: ICustomerGroup) {
+    this.form = this.fb.group({
+      name: [entity?.name, [Validators.required, ]],
+      href: [entity?.href, []],
+      type: [entity?.type, [Validators.required]],
+      amountThreshold: [entity?.amountThreshold, [Validators.required]],
+      timeThreshold: [parse(entity?.timeThreshold ?? 'P0D').days, [Validators.required]],
+    });
+
+    // wire up event handlers
+    this.type.valueChanges.subscribe(
+      (value) => this.onTypeChanged(value)
+    );
+    // trigger manually so initial state of the form is accurate.
+    this.onTypeChanged(this.type.value);
   }
 
   get currentType(): CustomerGroupType {

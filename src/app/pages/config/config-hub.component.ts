@@ -1,12 +1,18 @@
 import { Component } from '@angular/core';
 
-
+/**
+ * A simple page that displays links to all of the configuration options
+ * for a client's site.
+ *
+ * These are displayed here, rather than on the primary left-hand navigation
+ * because these options are more infrequently-accessed.
+ */
 @Component({
   selector: 'nus-config-hub',
   template: `
     <h1>Config Hub</h1>
     <div>
-      <a id="warehouse-config">Warehouses</a>
+      <a id="warehouse-config" [routerLink]="['./warehouses']"><i class="material-icons">domain</i> Warehouses</a>
       <a id="pg-config">Payment Gateways</a>
       <a id="payment-methods-config">Payment Methods</a>
     </div>
