@@ -12,17 +12,25 @@ import { IWarehouse } from '@nusantara/models';
       description="A warehouse is any location where inventory is held;  This can involved retail locations.">
     </nus-list-header>
 
+    <nus-pagination [page]="page"></nus-pagination>
+
     <table>
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Code</th>
+          <th>Name/Code</th>
+          <th>Street</th>
+          <th>City</th>
+          <th>Type</th>
+          <th>Stock Locations</th>
         </tr>
       </thead>
       <tbody>
       <tr *ngFor="let entity of page.entities">
-        <td><a [routerLink]="[entity|entityToSlug]">{{ entity.name }}</a></td>
-        <td>{{ entity.code }}</td>
+        <td><a [routerLink]="[entity|entityToSlug]">{{ entity.name }} ({{ entity.code}})</a></td>
+        <td>{{ entity.address?.street }}</td>
+        <td>{{ entity.address?.city }}</td>
+        <td>{{ entity.type }}</td>
+        <td>{{ entity.subLocations.length }}</td>
       </tr>
       </tbody>
     </table>

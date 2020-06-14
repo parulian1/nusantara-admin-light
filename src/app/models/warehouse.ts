@@ -6,9 +6,9 @@ export class IWarehouse {
   name: string;
   code: string;
   address?: IAddress;
-  notes: string;
   internalNotes?: string;
   type: string;
   isActive: boolean;
   subLocations: ILocation[];
+  financialReportingAs?: string;
 }

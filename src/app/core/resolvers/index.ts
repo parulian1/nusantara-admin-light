@@ -1,1 +1,3 @@
-export * from './base-detail.resolver';
+export * from './abstract-list.resolver';
+export * from './abstract-detail.resolver';
+export * from './abstract-choice.resolver';

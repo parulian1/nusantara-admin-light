@@ -1,0 +1,22 @@
+import { Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
+import { Observable } from 'rxjs';
+
+import { IHyperlinkedEntity } from '@nusantara/models/base';
+import { AbstractCrudService } from '@nusantara/core/http';
+
+/**
+ * Standard resolver for detail pages (eg, any page where the user is editing an
+ * existing entity).
+ *
+ * This resolver assumes there will be a single url parameter named /:slug which can be used
+ * to fetch the desired object.
+ */
+export abstract class AbstractDetailResolver<T extends IHyperlinkedEntity> implements Resolve<T> {
+
+  protected readonly service: AbstractCrudService<T>;
+
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<T> | Observable<never> {
+    const slug = route.paramMap.get('slug');
+    return this.service.fetch(slug);
+  }
+}

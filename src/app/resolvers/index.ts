@@ -24,3 +24,4 @@ export * from './vendor.resolver';
 
 export * from './warehouse-list.resolver';
 export * from './warehouse.resolver';
+export * from './warehouse-type-choices.resolver';

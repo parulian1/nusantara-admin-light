@@ -6,7 +6,6 @@ import { ProductClassService } from '@nusantara/services';
 import { PagedResponse } from '@nusantara/core/pagination';
 import { IProductClass } from '@nusantara/models';
 
-
 @Injectable({
   providedIn: 'root',
 })

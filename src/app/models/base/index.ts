@@ -1,0 +1,1 @@
+export * from './hyperlinked-entity';

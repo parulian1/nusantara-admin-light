@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { Observable } from 'rxjs';
 
-import { BaseDetailResolver } from '@nusantara/core';
 import { ICustomer } from '@nusantara/models';
 import { CustomerService } from '@nusantara/services';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
-export class CustomerResolver extends BaseDetailResolver<ICustomer> {
-  constructor(protected service: CustomerService) { super(); }
+export class CustomerResolver implements Resolve<ICustomer> {
+  constructor(protected service: CustomerService) { }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ICustomer> {
     const username = route.paramMap.get('username');

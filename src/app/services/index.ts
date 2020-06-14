@@ -1,6 +1,7 @@
 export * from './category.service';
 export * from './customer.service';
 export * from './customer-group.service';
+export * from './payment-gateway.service';
 export * from './product.service';
 export * from './product-attribute.service';
 export * from './product-class.service';

@@ -6,6 +6,7 @@ export * from './user';
 export * from './customer-group';
 export * from './customer-group-type.enum';
 export * from './location';
+export * from './payment-gateway';
 export * from './product-attribute';
 export * from './product-class';
 export * from './product';
