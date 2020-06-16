@@ -11,6 +11,7 @@ export abstract class AbstractCrudService<T extends {href: string}> {
 
   protected httpClient: HttpClient;
   protected baseUrl: string;  // this would be best set from crawling the API root, but maybe later for that.
+  public readonly maxPageSize = 250;
 
   // retrieves a single object from the API based on it's slug
   fetch(slug: string): Observable<T> {
@@ -23,10 +24,16 @@ export abstract class AbstractCrudService<T extends {href: string}> {
    *
    * @param query some text used to filter the results; optional.
    * @param page the page number to fetch from the API; default 1.
+   * @param perPage the size of the page to be returned (API default = 50, max 250)
    */
-  fetchList(query?: string, page: number = 1): Observable<PagedResponse<T>> {
+  fetchList(query?: string, page: number = 1, perPage?: number): Observable<PagedResponse<T>> {
     // create query params --> ?q=maybe&page=1
     let params = new HttpParams().set('page', page.toFixed(0).toString());
+
+    if (perPage) {
+      params = params.set('per_page', perPage.toFixed(0).toString());
+    }
+
     if (query) {
       params = params.set('q', query);
     }

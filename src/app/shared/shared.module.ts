@@ -10,6 +10,7 @@ import { ListHeaderComponent } from './list-header.component';
 import { DetailActionsComponent } from './detail-actions.component';
 import { TrueFalseComponent } from './true-false.component';
 import { CamelToHumanizedPipe } from './camel-to-humanized.pipe';
+import { AddressComponent } from '@nusantara/shared/address.component';
 
 
 /**
@@ -25,6 +26,7 @@ import { CamelToHumanizedPipe } from './camel-to-humanized.pipe';
     DetailActionsComponent,
     ListHeaderComponent,
     TrueFalseComponent,
+    AddressComponent,
   ],
   exports: [
     EntityToSlugPipe,
@@ -34,6 +36,7 @@ import { CamelToHumanizedPipe } from './camel-to-humanized.pipe';
     ListHeaderComponent,
     DetailActionsComponent,
     TrueFalseComponent,
+    AddressComponent,
   ],
   imports: [
     CommonModule,

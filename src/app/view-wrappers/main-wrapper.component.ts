@@ -45,7 +45,13 @@ import { AuthService } from '@nusantara/auth';
         </li>
         <li><a [routerLink]="['/promotion/promos']" routerLinkActive="active" translate>Promos</a></li>
         <li><a [routerLink]="['/promotion/vouchers']" routerLinkActive="active" translate>Vouchers</a></li>
-        <li><a [routerLink]="['/promotion/widgets']" routerLinkActive="active" translate>Widgets</a></li>
+
+        <li class="section-header">
+          <i class="material-icons">edit</i>
+          <span>CMS</span>
+        </li>
+        <li><a [routerLink]="['/cms/widgets']" routerLinkActive="active" translate>Widgets</a></li>
+        <li><a [routerLink]="['/cms/flat-pages']" routerLinkActive="active">Pages</a></li>
 
         <li class="section-header">
           <i class="material-icons">shopping_cart</i>

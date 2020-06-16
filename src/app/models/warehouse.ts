@@ -1,5 +1,5 @@
-import { ILocation } from './location';
 import { IAddress } from './address';
+import { ISubLocation } from './sub-location';
 
 export class IWarehouse {
   href: string;
@@ -8,7 +8,7 @@ export class IWarehouse {
   address?: IAddress;
   internalNotes?: string;
   type: string;
-  isActive: boolean;
-  subLocations: ILocation[];
+  subLocations: ISubLocation[];
   financialReportingAs?: string;
+  allowReassignmentFrom?: string[];
 }

@@ -9,5 +9,4 @@ export interface IAddress {
   latitude: number;
   longitude: number;
   notes: string;
-  internalNotes?: string;
 }
