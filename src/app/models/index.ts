@@ -1,6 +1,3 @@
-export * from './address';
-
-export * from './city-postal-info';
 export * from './customer';
 export * from './customer-profile';
 export * from './user';

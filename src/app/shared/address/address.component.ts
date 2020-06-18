@@ -1,7 +1,7 @@
 import { Input, Component } from '@angular/core';
-
-import { AddressAutocompleteService } from '@nusantara/services';
 import { FormControl, FormGroup } from '@angular/forms';
+
+import { AddressAutocompleteService } from './address-autocomplete.service';
 
 /**
  * A component for rendering an address selector
@@ -42,7 +42,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 
     <label *ngIf="showCountry">
       <span>Country</span>
-      <select formControlName="country">
+      <select [formControl]="country">
         <option *ngFor="let c of countries" [ngValue]="c.value">
           {{c.displayName}}
         </option>
@@ -61,6 +61,8 @@ export class AddressComponent {
 
   isBusy: false;
 
+  get province(): FormControl { return this.form.get('province') as FormControl; }
+  get city(): FormControl { return this.form.get('city') as FormControl; }
   get postalCode(): FormControl { return this.form.get('postalCode') as FormControl; }
   get country(): FormControl { return this.form.get('country') as FormControl; }
 
@@ -69,6 +71,8 @@ export class AddressComponent {
     {displayName: 'Indonesia', value: 'id'},
   ];
 
-  constructor(public service: AddressAutocompleteService) { }
+  constructor(public service: AddressAutocompleteService) {
+
+  }
 
 }

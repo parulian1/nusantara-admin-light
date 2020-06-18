@@ -10,7 +10,7 @@ import { ListHeaderComponent } from './list-header.component';
 import { DetailActionsComponent } from './detail-actions.component';
 import { TrueFalseComponent } from './true-false.component';
 import { CamelToHumanizedPipe } from './camel-to-humanized.pipe';
-import { AddressComponent } from '@nusantara/shared/address.component';
+import { AddressComponent } from './address';
 
 
 /**

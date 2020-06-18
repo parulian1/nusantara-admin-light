@@ -1,4 +1,4 @@
-import { IAddress } from './address';
+import { IAddress } from '@nusantara/shared/address';
 import { ISubLocation } from './sub-location';
 
 export class IWarehouse {

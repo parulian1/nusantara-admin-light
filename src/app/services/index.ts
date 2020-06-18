@@ -1,5 +1,3 @@
-export * from './address-autocomplete.service';
-
 export * from './users.service';
 export * from './customer.service';
 export * from './customer-group.service';

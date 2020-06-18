@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { IEntityHref } from '@nusantara/core';
 import { Injectable } from '@angular/core';
-import { ICityPostalInfo } from '@nusantara/models';
+import { Observable } from 'rxjs';
+
+import { IEntityHref } from '@nusantara/core';
+import { ICityPostalInfo } from './city-postal-info';
 
 /**
  * Gets data to be used for the auto-completion options in forms.

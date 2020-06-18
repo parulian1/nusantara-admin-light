@@ -1,3 +1,6 @@
+/**
+ * A postal (street) address.
+ */
 export interface IAddress {
   country: string;
   province: string;

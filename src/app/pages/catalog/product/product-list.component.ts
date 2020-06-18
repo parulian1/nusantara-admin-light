@@ -1,10 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { PagedResponse } from '@nusantara/core/pagination';
 import { ICategory, IProduct, IProductClass, IVendor } from '@nusantara/models';
 import { AbstractListComponent } from '@nusantara/core';
 
+/**
+ * A searchable list of all products.
+ *
+ * @see IProduct
+ */
 @Component({
   selector: 'nus-product-list',
   template: `

@@ -4,9 +4,12 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { IChoiceFieldChoice } from '@nusantara/core';
 
 /**
- * Displays media for a given product.
+ * A single media object (youtube video or image) configured for a
+ * product.
  *
  * This in intended for displaying as a row within a table.
+ *
+ * @see IProduct
  */
 @Component({
   selector: 'nus-product-media-row',
