@@ -6,7 +6,6 @@ import { PagedResponse } from '@nusantara/core/pagination';
 import { IResultResponse, SuccessResult, ErrorResult, SuccessCreatedResult } from '../responses';
 import { IDrfOptionsResponse, IChoiceFieldChoice, IChoiceField } from '..';
 
-
 export abstract class AbstractCrudService<T extends {href: string}> {
 
   protected httpClient: HttpClient;
@@ -69,6 +68,26 @@ export abstract class AbstractCrudService<T extends {href: string}> {
       .pipe(map(resp => resp.status === 204 ? new SuccessResult() : new ErrorResult()));
   }
 
+  /**
+   * Fetches the options for a field;  This method does not support nested attributes.
+   *
+   * @example
+   *  // Assuming this API has a field named "type" which can be "book", "ebook" or "subscription"
+   *  [
+   *    { href: "https://gra.media/1", "name": "Some Book" "type": "book" },
+   *    { href: "https://gra.media/2", "name": "Some E-Book" "type": "ebook" }
+   *  ]
+   *
+   *  // Then the following call would return you
+   *  service.getFieldChoices('type').subscribe(next => console.log(next));
+   *  [
+   *    {value: "book", displayName: "Book"},
+   *    {value: "ebook", displayName: "E-Book"},
+   *    {value: "subscription", displayName: "Subscription"}
+   *  ]
+   *
+   * @param fieldName A field with choices.  This field **must** be at the top level of the object(s).
+   */
   getFieldChoices(fieldName: string): Observable<IChoiceFieldChoice[]> {
     return this.httpClient
       .options<IDrfOptionsResponse>(`${this.baseUrl}/`, {observe: 'body', responseType: 'json'})

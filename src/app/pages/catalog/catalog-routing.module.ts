@@ -16,8 +16,9 @@ import {
   ProductListResolver,
   ProductResolver,
   VendorListResolver,
-  VendorResolver, ProductAttributeListResolver,
+  VendorResolver,
 } from '@nusantara/resolvers';
+import { MediaTypeResolver } from '@nusantara/pages/catalog/product/media-type.resolver';
 
 const routes: Routes = [
   {
@@ -67,6 +68,7 @@ const routes: Routes = [
           productClasses: ProductClassListResolver,
           vendors: VendorListResolver,
           categories: CategoryListResolver,
+          mediaTypes: MediaTypeResolver,
         },
         runGuardsAndResolvers: 'always',
       },
@@ -78,6 +80,7 @@ const routes: Routes = [
           productClasses: ProductClassListResolver,
           vendors: VendorListResolver,
           categories: CategoryListResolver,
+          mediaTypes: MediaTypeResolver,
         },
         runGuardsAndResolvers: 'always',
       }
@@ -97,8 +100,7 @@ const routes: Routes = [
         component: ProductClassDetailComponent,
         resolve: {
           typeChoices: ProductClassTypeResolver,
-          attributeTypeChoices: ProductAttributeTypeResolver,
-          productAttributes: ProductAttributeListResolver,
+          attributeTypeChoices: ProductAttributeTypeResolver
         },
         runGuardsAndResolvers: 'always',
       },
@@ -108,8 +110,7 @@ const routes: Routes = [
         resolve: {
           entity: ProductClassResolver,
           typeChoices: ProductClassTypeResolver,
-          attributeTypeChoices: ProductAttributeTypeResolver,
-          productAttributes: ProductAttributeListResolver,
+          attributeTypeChoices: ProductAttributeTypeResolver
         },
         runGuardsAndResolvers: 'always',
       },

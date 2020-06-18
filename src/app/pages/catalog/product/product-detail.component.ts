@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Validators, FormBuilder } from '@angular/forms';
+import { Validators, FormBuilder, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ICategory, IProduct, IProductAttribute, IProductClass, IVendor } from '@nusantara/models';
+import { ICategory, IProduct, IProductAttribute, IProductClass, IProductMedia, IVendor } from '@nusantara/models';
 import { ProductService } from '@nusantara/services';
+import { IChoiceFieldChoice } from '@nusantara/core';
 import { AbstractDetailComponent } from '@nusantara/core/components';
 import { PagedResponse } from '@nusantara/core/pagination';
 
@@ -12,7 +13,7 @@ import { PagedResponse } from '@nusantara/core/pagination';
   template: `
     <nus-detail-title [originalName]="entityName" typeName="Product"></nus-detail-title>
 
-    <form [formGroup]="form" (ngSubmit)="submit()" class="entity-detail-form">
+    <form [formGroup]="form" (ngSubmit)="save()" class="entity-detail-form">
 
       <label>
         <span>Name</span>
@@ -57,6 +58,36 @@ import { PagedResponse } from '@nusantara/core/pagination';
         <input type="number" formControlName="weight">
       </label>
 
+      <h2>Inventory</h2>
+
+      <h2>Media
+        <button (click)="addMedia()" type="button">Add</button>
+      </h2>
+      <table>
+        <thead>
+        <tr>
+          <th>Type</th>
+          <th>Value</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <nus-product-media-row
+          *ngFor="let m of media.controls; let i=index"
+          [form]="m"
+          [mediaTypes]="mediaTypes"
+          (remove)="removeMedia(i)">
+        </nus-product-media-row>
+        </tbody>
+      </table>
+
+      <h2>Attributes</h2>
+
+
+      <h2>Variants</h2>
+
+      <h2>Related Products</h2>
+
       <div class="actions-container">
         <button type="submit" [disabled]="!form.valid">Save</button>
         <button (click)="navigateToParent(true)">Cancel</button>
@@ -65,7 +96,8 @@ import { PagedResponse } from '@nusantara/core/pagination';
 
     </form>
   `,
-  styles: [ ]
+  styles: [`
+  `]
 })
 export class ProductDetailComponent extends AbstractDetailComponent<IProduct> implements OnInit {
 
@@ -75,8 +107,7 @@ export class ProductDetailComponent extends AbstractDetailComponent<IProduct> im
   categories: Array<ICategory>;
   vendors: Array<IVendor>;
   attribute: Array<IProductAttribute>;
-
-  public isBusy = false;
+  mediaTypes: Array<IChoiceFieldChoice>;
 
   constructor(public service: ProductService,
               private fb: FormBuilder,
@@ -85,22 +116,19 @@ export class ProductDetailComponent extends AbstractDetailComponent<IProduct> im
     super();
   }
 
+  get media(): FormArray { return this.form.get('media') as FormArray; }
+  get productClass(): FormControl { return this.form.get('productClass') as FormControl; }
+
   ngOnInit(): void {
     super.ngOnInit();
-
-    // todo:
-    // - product type selection
-    // - product category selection
-    // - whole mess of attributes
-    this.route.data.subscribe((data: {
-        categories: PagedResponse<ICategory>,
-        vendors: PagedResponse<IVendor>,
-        productClasses: PagedResponse<IProductClass> }) => {
-
-      // reference data
+    this.route.data.subscribe((data: { categories: PagedResponse<ICategory>,
+                                             vendors: PagedResponse<IVendor>,
+                                             productClasses: PagedResponse<IProductClass>,
+                                             mediaTypes: IChoiceFieldChoice[]}) => {
       this.vendors = data.vendors.entities;
       this.categories = data.categories.entities;
       this.productClasses = data.productClasses.entities;
+      this.mediaTypes = data.mediaTypes;
     });
   }
 
@@ -114,10 +142,16 @@ export class ProductDetailComponent extends AbstractDetailComponent<IProduct> im
       productClass: [entity?.productClass, [Validators.required, ]],
       category: [entity?.category, [Validators.required]],
       vendor: [entity?.vendor, [Validators.required]],
-      media: [entity?.media, [Validators.required]],
+      media: this.fb.array([]),
+      attributes: this.fb.array([]),
       // related products
-      // attributes =(
+      // variants
     });
+
+    // todo: disable changing the product type
+    for (const media of entity?.media ?? []) {
+      this.addMedia(media);
+    }
 
     // listen for any changes to this so we can disable weight when appropriate
     this.form.get('productClass').valueChanges.subscribe(
@@ -126,11 +160,29 @@ export class ProductDetailComponent extends AbstractDetailComponent<IProduct> im
     this.onProductClassChanged(this.form.get('productClass').value);
   }
 
+  addMedia(media?: IProductMedia) {
+    const f = this.fb.group({
+      type: [media?.type || this.mediaTypes[0].value, []],
+      href: [media?.href, []],
+      image: [media?.image, []],
+      youtubeVideoId: [media?.youtubeVideoId, []]
+    });
+    this.media.push(f);
+  }
+  removeMedia(index: number) {
+    this.media.removeAt(index);
+  }
+
   /**
    * Disables irrelevant/invalid product values for certain classes
    * of product.
    */
   onProductClassChanged(newValue: string) {
+    // protect against triggering during initialization
+    if (!newValue || !this.productClasses) {
+      return;
+    }
+
     const matches = this.productClasses.filter(
       e => e.href === newValue
     );
@@ -140,14 +192,6 @@ export class ProductDetailComponent extends AbstractDetailComponent<IProduct> im
     } else {
       this.form.get('weight').disable();
     }
-  }
-
-  submit() {
-    this.isBusy = true;
-    this.service.save(this.form.value as IProduct);
-  }
-
-  delete() {
 
   }
 }

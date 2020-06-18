@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormArray, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { IChoiceFieldChoice } from '@nusantara/core';
+import { IChoiceFieldChoice, ToastService } from '@nusantara/core';
 import { IProductAttribute, IProductClass } from '@nusantara/models';
 import { ProductClassService, ProductAttributeService } from '@nusantara/services';
 import { AbstractDetailComponent } from '@nusantara/core/components';
-import { PagedResponse } from '@nusantara/core/pagination';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 
 @Component({
@@ -58,16 +57,18 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
           <tr>
             <th>Name</th>
             <th>Type</th>
+            <th>Searchable</th>
+            <th>Filterable</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let attrFormGroup of attributeForms; let i=index">
+          <tr *ngFor="let attrFormGroup of attributeForms; let i=index" [formGroup]="attrFormGroup">
             <td>
-              <input type="text" [formControl]="attrFormGroup.get('name')">
+              <input type="text" formControlName="name">
             </td>
             <td>
-              <select [formControl]="attrFormGroup.get('type')">
+              <select formControlName="type">
                 <option *ngFor="let opt of this.attributeTypeChoices"
                         [ngValue]="opt.value">
                   {{opt.displayName}}
@@ -75,7 +76,13 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
               </select>
             </td>
             <td>
-              <button type="button">
+              <input type="checkbox" formControlName="isSearchable">
+            </td>
+            <td>
+              <input type="checkbox" formControlName="isFilterable">
+            </td>
+            <td>
+              <button type="button" (click)="removeAttribute(i)">
                 <i class="material-icons">delete_outline</i>
               </button>
             </td>
@@ -96,14 +103,12 @@ export class ProductClassDetailComponent extends AbstractDetailComponent<IProduc
 
   typeChoices: IChoiceFieldChoice[];
   attributeTypeChoices: IChoiceFieldChoice[];
-  productAttributes: IProductAttribute[];
-
-  deletedAttributes: IProductAttribute[] = [];
 
   constructor(public service: ProductClassService,
               private attributeService: ProductAttributeService,
               private fb: FormBuilder,
               private modalService: NgxSmartModalService,
+              public toast: ToastService,
               public route: ActivatedRoute,
               public router: Router) {
     super();
@@ -112,14 +117,11 @@ export class ProductClassDetailComponent extends AbstractDetailComponent<IProduc
   get name(): FormControl { return this.form.get('name') as FormControl; }
   get type(): FormControl { return this.form.get('type') as FormControl; }
   get href(): FormControl { return this.form.get('href') as FormControl; }
+  get attributes(): FormArray { return this.form.get('attributes') as FormArray; }
 
   get attributeForms(): FormGroup[] {
     return (this.form.controls.attributes as FormArray).controls as FormGroup[];
   }
-
-  // get deletedAttributes(): IProductAttribute[] {
-  //   (this.form.get('_deletedAttributes') as FormArray).value()
-  // }
 
   get isDigitalProduct(): boolean {
     return (this.form.get('type') as FormControl)?.value === 'digital';
@@ -127,17 +129,9 @@ export class ProductClassDetailComponent extends AbstractDetailComponent<IProduc
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.route.data.subscribe((
-      data: {
-        typeChoices: IChoiceFieldChoice[],
-        attributeTypeChoices: IChoiceFieldChoice[],
-        productAttributes: PagedResponse<IProductAttribute>}) => {
-
+    this.route.data.subscribe((data: { typeChoices: IChoiceFieldChoice[], attributeTypeChoices: IChoiceFieldChoice[] }) => {
       this.attributeTypeChoices = data.attributeTypeChoices;
       this.typeChoices = data.typeChoices;
-      this.productAttributes = data.productAttributes?.entities ?? [];
-      this.productAttributes.unshift(null);
-
       this.type.valueChanges.subscribe((value) => this.onTypeChanged(value));
     });
   }
@@ -174,82 +168,33 @@ export class ProductClassDetailComponent extends AbstractDetailComponent<IProduc
     const attrGroup = this.fb.group({
       name: [attr?.name, [Validators.required, ]],
       href: [attr?.href, ],
-      type: [attr?.type, ],
-      productClasses: [attr?.productClasses ?? [this.form.get('href').value, ]],
+      type: [attr?.type, [Validators.required, ]],
       minValue: [attr?.minValue, ],
-      maxValue: [attr?.maxValue, ]
+      maxValue: [attr?.maxValue, ],
+      isSearchable: [attr?.isSearchable ?? false, []],
+      isFilterable: [attr?.isFilterable ?? false, []],
     });
 
     // if the attr already has an href (it exists in the database)
     // then the name and type may not be changed.
     if (!!attrGroup.get('href').value) {
-      attrGroup.get('name').disable();
       attrGroup.get('type').disable();
-      attrGroup.get('minValue').disable();
-      attrGroup.get('maxValue').disable();
     }
 
-    (this.form.get('attributes') as FormArray).push(attrGroup);
+    this.attributes.push(attrGroup);
   }
 
   /**
    * Flags an attribute for removal.
    * @param attr A product attribute that would be removed
    */
-  removeAttribute(attr: IProductAttribute) {
-    // todo: remove the attribute from the forms
-
-    if (!attr.href || this.isNew) {
-      // doesn't need pushed to api if all the same.
-    } else {
-      attr.productClasses = attr.productClasses.filter(
-        href => href !== this.href.value
-      );
-
-    }
+  removeAttribute(index: number) {
+    this.attributes.removeAt(index);
   }
 
-  save() {
-    this.service
-    .save(this.form.getRawValue() as IProductClass)
-    .subscribe((result) => {
-      if (result.success) {
-        // update all the attributes
-        for (const attrForm of this.attributeForms) {
-          // todo: make sure the href of parent is present!
-          const attr = attrForm.value as IProductAttribute;
-          if (!attr.productClasses.includes(this.href.value)) {
-            attr.productClasses.push(this.href.value);
-          }
-          this.attributeService.save(attr).subscribe();
-        }
-
-        // todo: remove any of the deleted attributes
-        for (const attrToRemove of this.deletedAttributes) {
-          if (attrToRemove.productClasses.includes(this.href.value)) {
-            attrToRemove.productClasses = attrToRemove.productClasses.filter(href => href !== this.href.value);
-          }
-        }
-      }
-    });
-
-    // // save all the attributes
-    // this.attributeForms.forEach(
-    //   (attrForm) => {
-    //     obs = obs.pipe(
-    //       result => this.attributeService.save(attrForm.value as IProductAttribute)
-    //     );
-    //   }
-    // );
-    //
-    // obs.subscribe(result => {
-    //   this.router.navigate(['.'], {relativeTo: this.route});
-    // });
-
-  }
-
-  delete() {
-
+  getFormValue(): any {
+    // in this case, we want to include the value of disabled components.
+    return this.form.getRawValue();
   }
 
   /**

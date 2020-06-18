@@ -1,17 +1,22 @@
 export * from './address';
-export * from './category';
+
 export * from './city-postal-info';
 export * from './customer';
 export * from './customer-profile';
 export * from './user';
 export * from './customer-group';
 export * from './customer-group-type.enum';
-export * from './sub-location';
+
 export * from './payment-gateway';
+
+export * from './product';
 export * from './product-attribute';
 export * from './product-class';
-export * from './product';
+export * from './product-media';
+export * from './category';
 export * from './vendor';
+
 export * from './voucher';
 export * from './widget';
 export * from './warehouse';
+export * from './sub-location';

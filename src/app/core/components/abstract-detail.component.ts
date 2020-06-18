@@ -49,7 +49,8 @@ export abstract class AbstractDetailComponent<T> implements OnInit {
   }
 
   /**
-   * Navigates
+   * Navigates to the direct parent of the current component.  This will typically be the 'list' component
+   * for a given 'detail' type component.
    *
    * @param warnOnDirty if 'true', a pop-up will be shown to the user if there are any data changes, letting them cancel.
    */
@@ -67,11 +68,12 @@ export abstract class AbstractDetailComponent<T> implements OnInit {
     return !this.form?.get('href').value;
   }
 
-  /**
-   *
-   */
+  getFormValue() {
+    return this.form.value;
+  }
+
   save() {
-    this.service.save(this.form.value).subscribe(
+    this.service.save(this.getFormValue()).subscribe(
       resp => {
         if (resp.success) {
           this.onSaveSuccess();
@@ -84,9 +86,11 @@ export abstract class AbstractDetailComponent<T> implements OnInit {
 
   /**
    * Called when a save successfully completes.
+   * By default, shows a toast notification to the user that their save was successful,
+   * and navigates back to the parent component URL.
    */
   protected onSaveSuccess() {
-    this.toast.addMessage(`"${this.form.get('name').value}" was saved successfully.`, 'Saved', ToastLevelEnum.success);
+    this.toast.addMessage(`"${this.form.get('name')?.value ?? 'data'}" was saved successfully.`, 'Saved', ToastLevelEnum.success);
     this.navigateToParent(false);
   }
 

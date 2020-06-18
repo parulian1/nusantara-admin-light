@@ -7,7 +7,7 @@ import { SharedModule } from '@nusantara/shared';
 import { CatalogRoutingModule } from './catalog-routing.module';
 import { CategoryListComponent, CategoryDetailComponent } from './category';
 import { ProductClassListComponent, ProductClassDetailComponent } from './product-class';
-import { ProductListComponent, ProductDetailComponent } from './product';
+import { ProductListComponent, ProductDetailComponent, ProductMediaRowComponent } from './product';
 import { VendorListComponent, VendorDetailComponent } from './vendor';
 
 @NgModule({
@@ -20,6 +20,7 @@ import { VendorListComponent, VendorDetailComponent } from './vendor';
 
     ProductListComponent,
     ProductDetailComponent,
+    ProductMediaRowComponent,
 
     VendorListComponent,
     VendorDetailComponent,

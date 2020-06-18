@@ -1,3 +1,5 @@
+import { IProductMedia } from './product-media';
+
 export interface IProduct {
   href: string;
   name: string;
@@ -5,7 +7,7 @@ export interface IProduct {
   description: string;
   vendor: string;
   productClass: string;
-  media: Array<{href: string; type: string; youtubeVideoId: string;}>;
+  media: IProductMedia[];
   weight: number;
   category: string;
   // related[]
