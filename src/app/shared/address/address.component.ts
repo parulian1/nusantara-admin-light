@@ -1,78 +1,251 @@
-import { Input, Component } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Input, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
+import { IEntityHref } from '@nusantara/core';
 import { AddressAutocompleteService } from './address-autocomplete.service';
+import { ICityPostalInfo } from './city-postal-info';
+import { IAddress } from './address';
+import { InternalAddressValue } from './internal-address-value';
 
 /**
  * A component for rendering an address selector
  * within other forms.
+ *
+ * @example
+ *  <nus-address [form]="myAddressFormGroup"></nus-address>
+ *
+ * Please pay attention!  This form is a little bit unique.. even though
+ * you must bind a form group to this component, there is an inner form here
+ * which is adapted to the outer adddress format.
  */
 @Component({
   selector: 'nus-address',
   template: `
-    <label>
-      <span>Street</span>
-      <input formControlName="street">
-    </label>
+    <div [formGroup]="innerForm">
+      <label>
+        <span>Street</span>
+        <input [formControl]="street">
+      </label>
 
-    <label>
-      <span>Province</span>
-      <input formControlName="province">
-    </label>
+      <label>
+        <span>Province</span>
+        <select [formControl]="province">
+          <option *ngFor="let prov of availableProvinces" [ngValue]="prov">
+            {{ prov.name }}
+          </option>
+        </select>
+      </label>
 
-    <label>
-      <span>City</span>
-      <input formControlName="city">
-    </label>
+      <label>
+        <span>City</span>
+        <select [formControl]="city">
+          <option *ngFor="let city of availableCities" [ngValue]="city">
+            {{ city.name }}
+          </option>
+        </select>
+      </label>
 
-    <label>
-      <span>District</span>
-      <input formControlName="district">
-    </label>
-
-    <label>
-      <span>Sub-District</span>
-      <input formControlName="subDistrict">
-    </label>
-
-    <label>
-      <span>Postal Code</span>
-      <input formControlName="postalCode">
-    </label>
-
-    <label *ngIf="showCountry">
-      <span>Country</span>
-      <select [formControl]="country">
-        <option *ngFor="let c of countries" [ngValue]="c.value">
-          {{c.displayName}}
-        </option>
-      </select>
-    </label>
+      <label>
+        <span>Postal Code</span>
+        <select [formControl]="postal">
+          <option *ngFor="let postalInfo of availablePostals" [ngValue]="postalInfo">
+            {{ postalInfo.district }} / {{ postalInfo.subDistrict }} ({{ postalInfo.postalCode }})
+          </option>
+        </select>
+      </label>
+    </div>
   `,
-  styles: [
-
-  ]
+  styles: [ ]
 })
-export class AddressComponent {
+export class AddressComponent implements OnInit {
 
-  @Input() showCountry = false;
+  private isInitializing = true;
+
   @Input() form: FormGroup;
-  @Input() showDiscreteDistrictData = false;
 
-  isBusy: false;
+  innerForm: FormGroup;
 
-  get province(): FormControl { return this.form.get('province') as FormControl; }
-  get city(): FormControl { return this.form.get('city') as FormControl; }
-  get postalCode(): FormControl { return this.form.get('postalCode') as FormControl; }
-  get country(): FormControl { return this.form.get('country') as FormControl; }
+  availableProvinces: IEntityHref[] = [];
+  availableCities: IEntityHref[] = [];
+  availablePostals: ICityPostalInfo[] = [];
 
-  // only supporting indonesia, so we're going to hardcode this.
-  countries: Array<{displayName: string, value: string}> = [
-    {displayName: 'Indonesia', value: 'id'},
-  ];
+  constructor(public service: AddressAutocompleteService, public fb: FormBuilder) { }
 
-  constructor(public service: AddressAutocompleteService) {
+  get street(): FormControl { return this.innerForm.get('street') as FormControl; }
+  get province(): FormControl { return this.innerForm.get('province') as FormControl; }
+  get city(): FormControl { return this.innerForm.get('city') as FormControl; }
+  get postal(): FormControl { return this.innerForm.get('postal') as FormControl; }
 
+  ngOnInit(): void {
+    // setup initial form state
+    this.innerForm = this.fb.group({
+      street: ['', [Validators.required, ]],
+      province: [null, [Validators.required, ]],
+      city: [{value: null, disabled: true}, [Validators.required, ]],
+      postal: [{value: null, disabled: true}, [Validators.required, ]],
+    });
+
+    // initialize province choices, then initialize inner address data (if outer address data set)
+    this.service
+      .fetchProvinces('id')
+      .subscribe(data => {
+        // populate all available province
+        this.availableProvinces = data;
+
+        // initialize our inner form, with data from the outer form
+        this.adaptToInner(this.form.value as IAddress);
+      });
+
+    // wire up event handlers
+    this.province.valueChanges.subscribe((newProvince) => {
+      if (!this.isInitializing) {
+        this.onProvinceChanged(newProvince);
+      }
+    });
+    this.city.valueChanges.subscribe((newCity) => {
+      if (!this.isInitializing) {
+        this.onCityChanged(newCity);
+      }
+    });
+    this.innerForm.valueChanges.subscribe((address) => {
+      if (!this.isInitializing) {
+        this.adaptToOuter(address);
+      }
+    });
+  }
+
+  private onProvinceChanged(newValue: IEntityHref) {
+
+    // always clear cities and postals
+    this.availableCities.length = 0;
+    this.city.setValue(null);
+    this.city.disable();
+
+    this.availablePostals.length = 0;
+    this.postal.setValue(null);
+    this.postal.disable();
+
+    if (!!newValue) {
+
+      // populate cities
+      this.service
+        .fetchCities((this.province.value as IEntityHref).href)
+        .subscribe(data => {
+          this.availableCities = data;
+          this.city.enable();
+        });
+    }
+  }
+  private onCityChanged(newValue: IEntityHref) {
+
+    this.availablePostals.length = 0;
+    this.postal.setValue(null);
+    this.postal.disable();
+
+    if (!!newValue) {
+      this.service
+        .fetchPostalData((this.city.value as IEntityHref).href)
+        .subscribe(data => {
+          this.availablePostals = data;
+          this.postal.enable();
+        });
+    }
+  }
+
+  /**
+   * Takes whatever value is currently set
+   *
+   * This is a very brutally-ugly callback-laden method.
+   *
+   * @param outerValue The value of the external FormGroup that is bound to this component.
+   */
+  private adaptToInner(outerValue: IAddress) {
+
+    this.street.setValue(outerValue.street);
+
+    // source value doesn't have a province; stop initialization.
+    if (!outerValue.province) {
+      this.isInitializing = false;
+      return;
+    }
+
+    // Step 1/3 -- initialize province
+    this.province.setValue(this.getProvinceFromName(outerValue.province));
+
+    // failed to match the province to our form data; stop initialization
+    if (!this.province.value) {
+      this.isInitializing = false;
+      return;
+    }
+
+    // step 2/3 -- initialize city
+    this.service
+      .fetchCities((this.province.value as IEntityHref).href)
+      .subscribe(cityList => {
+        this.city.enable();
+        this.availableCities = cityList;
+        this.city.setValue(this.getCityFromName(outerValue.city));
+
+        // failed to match the city to our form data; stop initialization
+        if (!this.city.value) {
+          this.isInitializing = false;
+          return;
+        }
+
+        // step 3/3 -- initialize postal
+        this.service
+          .fetchPostalData((this.city.value as IEntityHref).href)
+          .subscribe(postalList => {
+            this.postal.enable();
+            this.availablePostals = postalList;
+            this.postal.setValue(
+              this.getPostalInfo(outerValue.district, outerValue.subDistrict, outerValue.postalCode)
+            );
+
+            // regardless if we matched a postal or not, initialization is now complete
+            this.isInitializing = false;
+          });
+      });
+  }
+
+  private getProvinceFromName(provinceName: string): IEntityHref {
+    const matches = this.availableProvinces.filter(prov => prov.name === provinceName);
+    if (!!matches.length) {
+      return matches[0];
+    }
+    return null;
+  }
+  private getCityFromName(cityName: string): IEntityHref {
+    const matches = this.availableCities.filter(city => city.name === cityName);
+    if (!!matches.length) {
+      return matches[0];
+    }
+    return null;
+  }
+  private getPostalInfo(district: string, subDistrict: string, postalCode: string): ICityPostalInfo {
+    const matches = this.availablePostals.filter(
+      p => p.district === district && p.subDistrict === subDistrict && p.postalCode === postalCode
+    );
+    if (!!matches.length) {
+      return matches[0];
+    }
+    return null;
+  }
+
+  private adaptToOuter(innerValue: InternalAddressValue) {
+    this.form.setValue({
+      street: innerValue.street,
+      city: innerValue.city?.name ?? null,
+      district: innerValue.postal?.district ?? null,
+      subDistrict: innerValue.postal?.subDistrict ?? null,
+      postalCode: innerValue.postal?.postalCode ?? null,
+      province: innerValue.province?.name ?? null,
+      country: 'id', // this is always indonesia, for our purposes.
+      notes: '',
+      latitude: null,
+      longitude: null,
+    });
   }
 
 }
+

@@ -6,7 +6,8 @@ import { IEntityHref } from '@nusantara/core';
 import { ICityPostalInfo } from './city-postal-info';
 
 /**
- * Gets data to be used for the auto-completion options in forms.
+ * Gets data to be used for the auto-completion options
+ * (provinces > cities > postals) in the address forms.
  */
 @Injectable({
   providedIn: 'root'
@@ -20,8 +21,8 @@ export class AddressAutocompleteService {
    *
    * @param countryCode The country code to fetch provinces for.
    */
-  fetchProvinces(countryCode = 'id'): Observable<IEntityHref> {
-    return this.httpClient.get<IEntityHref>(
+  fetchProvinces(countryCode = 'id'): Observable<IEntityHref[]> {
+    return this.httpClient.get<IEntityHref[]>(
       `/api/fulfillment/address/${countryCode}/`,
       { observe: 'body', responseType: 'json' }
     );
@@ -32,8 +33,8 @@ export class AddressAutocompleteService {
    *
    * @param provinceUrl One of the hrefs fetched from the results of fetchProvinces
    */
-  fetchCities(provinceUrl: string): Observable<IEntityHref> {
-    return this.httpClient.get<IEntityHref>(provinceUrl, { observe: 'body', responseType: 'json' });
+  fetchCities(provinceUrl: string): Observable<IEntityHref[]> {
+    return this.httpClient.get<IEntityHref[]>(provinceUrl, { observe: 'body', responseType: 'json' });
   }
 
   /**
@@ -41,8 +42,8 @@ export class AddressAutocompleteService {
    *
    * @param cityUrl One of the hrefs from the results of fetchCities.
    */
-  fetchPostalData(cityUrl: string): Observable<ICityPostalInfo> {
-    return this.httpClient.get<ICityPostalInfo>(cityUrl, { observe: 'body', responseType: 'json' });
+  fetchPostalData(cityUrl: string): Observable<ICityPostalInfo[]> {
+    return this.httpClient.get<ICityPostalInfo[]>(cityUrl, { observe: 'body', responseType: 'json' });
   }
 
 }

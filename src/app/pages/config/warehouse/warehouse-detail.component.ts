@@ -54,53 +54,54 @@ import { PagedResponse } from '@nusantara/core/pagination';
       </label>
 
 
-      <div formGroupName="address">
+<!--      <div formGroupName="address">-->
+        <nus-address [form]="form.get('address')" formGroupName="address">
+        </nus-address>
+<!--        <h2>Address</h2>-->
+<!--        <label>-->
+<!--          <span>Street</span>-->
+<!--          <input formControlName="street">-->
+<!--        </label>-->
 
-        <h2>Address</h2>
-        <label>
-          <span>Street</span>
-          <input formControlName="street">
-        </label>
+<!--        <label>-->
+<!--          <span>City</span>-->
+<!--          <input formControlName="city">-->
+<!--        </label>-->
 
-        <label>
-          <span>City</span>
-          <input formControlName="city">
-        </label>
+<!--        <label>-->
+<!--          <span>Province</span>-->
+<!--          <input formControlName="province">-->
+<!--        </label>-->
 
-        <label>
-          <span>Province</span>
-          <input formControlName="province">
-        </label>
+<!--        <label>-->
+<!--          <span>District</span>-->
+<!--          <input formControlName="district">-->
+<!--        </label>-->
 
-        <label>
-          <span>District</span>
-          <input formControlName="district">
-        </label>
+<!--        <label>-->
+<!--          <span>Sub-District</span>-->
+<!--          <input formControlName="subDistrict">-->
+<!--        </label>-->
 
-        <label>
-          <span>Sub-District</span>
-          <input formControlName="subDistrict">
-        </label>
+<!--        <label>-->
+<!--          <span>Postal Code</span>-->
+<!--          <input formControlName="postalCode">-->
+<!--        </label>-->
 
-        <label>
-          <span>Postal Code</span>
-          <input formControlName="postalCode">
-        </label>
+<!--        <label>-->
+<!--          <span>Country</span>-->
+<!--          <select formControlName="country">-->
+<!--            <option *ngFor="let c of countries" [ngValue]="c.value">-->
+<!--              {{c.displayName}}-->
+<!--            </option>-->
+<!--          </select>-->
+<!--        </label>-->
 
-        <label>
-          <span>Country</span>
-          <select formControlName="country">
-            <option *ngFor="let c of countries" [ngValue]="c.value">
-              {{c.displayName}}
-            </option>
-          </select>
-        </label>
-
-        <label>
-          <span>Notes</span>
-          <textarea formControlName="notes"></textarea>
-        </label>
-      </div>
+<!--        <label>-->
+<!--          <span>Notes</span>-->
+<!--          <textarea formControlName="notes"></textarea>-->
+<!--        </label>-->
+<!--      </div>-->
 
       <div>
         <h2>
@@ -184,8 +185,9 @@ export class WarehouseDetailComponent extends AbstractDetailComponent<IWarehouse
       code: [entity?.code, [Validators.required, ]],
       href: [entity?.href, []],
       type: [entity?.type, []],
-      internalNotes: [entity?.internalNotes, []],
+      internalNotes: [entity?.internalNotes || '', []],
       financialReportingAs: [entity?.financialReportingAs, []],
+      allowReassignmentFrom: this.fb.array([]),
       subLocations: this.fb.array([]),
       address: this.fb.group({
         country: [entity?.address?.street || 'id', [Validators.required, ]],
@@ -201,7 +203,14 @@ export class WarehouseDetailComponent extends AbstractDetailComponent<IWarehouse
       }),
     });
 
-    for (const subLoc of entity?.subLocations ?? []) {
+    const defaultSubLoc: ISubLocation = {
+      href: null,
+      name: 'default',
+      code: 'default',
+      type: 'omni_channel'
+    };
+
+    for (const subLoc of entity?.subLocations ?? [defaultSubLoc, ]) {
       this.addSubLocation(subLoc);
     }
   }

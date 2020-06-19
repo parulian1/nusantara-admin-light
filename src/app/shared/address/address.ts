@@ -2,14 +2,16 @@
  * A postal (street) address.
  */
 export interface IAddress {
-  country: string;
+  street: string;
   province: string;
   city: string;
   district: string;
   subDistrict: string;
-  street: string;
-  postalCode: number;
+  postalCode: string;
+  country: string;
+
   latitude: number;
   longitude: number;
+
   notes: string;
 }
