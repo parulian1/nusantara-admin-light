@@ -11,12 +11,12 @@ import { InternalAddressValue } from './internal-address-value';
  * A component for rendering an address selector
  * within other forms.
  *
- * @example
- *  <nus-address [form]="myAddressFormGroup"></nus-address>
- *
  * Please pay attention!  This form is a little bit unique.. even though
  * you must bind a form group to this component, there is an inner form here
  * which is adapted to the outer adddress format.
+ *
+ * @example
+ *  <nus-address [form]="myAddressFormGroup"></nus-address>
  */
 @Component({
   selector: 'nus-address',

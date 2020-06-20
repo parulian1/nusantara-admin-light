@@ -17,3 +17,7 @@ export * from './voucher';
 export * from './widget';
 export * from './warehouse';
 export * from './sub-location';
+
+export * from './shipping-provider';
+export * from './shipping-service';
+export * from './shipping-rate';

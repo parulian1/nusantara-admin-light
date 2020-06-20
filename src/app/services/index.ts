@@ -12,3 +12,5 @@ export * from './category.service';
 
 export * from './warehouse.service';
 export * from './payment-gateway.service';
+
+export * from './shipping-provider.service';
