@@ -21,3 +21,5 @@ export * from './sub-location';
 export * from './shipping-provider';
 export * from './shipping-service';
 export * from './shipping-rate';
+
+export * from './flat-page';

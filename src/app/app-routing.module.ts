@@ -28,6 +28,10 @@ const routes: Routes = [
         loadChildren: () => import('./pages/catalog').then(m => m.CatalogModule)
       },
       {
+        path: 'cms',
+        loadChildren: () => import('./pages/cms').then(m => m.CmsModule)
+      },
+      {
         path: 'promotion',
         loadChildren: () => import('./pages/promotion').then(m => m.PromotionModule)
       },

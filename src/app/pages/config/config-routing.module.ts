@@ -5,7 +5,13 @@ import { WarehouseListResolver, WarehouseResolver } from '@nusantara/resolvers';
 import { WarehouseListComponent, WarehouseDetailComponent, SubLocationTypeResolver, WarehouseTypeResolver } from './warehouse';
 import { PaymentGatewayListComponent, PaymentGatewayListResolver } from './payment-gateways';
 import { ConfigHubComponent } from './config-hub.component';
-import { ShippingMethodListComponent } from './shipping-methods';
+import {
+  ShippingMethodListComponent,
+  ShippingProviderDetailComponent,
+  ShippingProviderListResolver,
+  ShippingProviderResolver,
+  ShippingProviderTypeResolver,
+} from './shipping';
 import { WarehouseFullListResolver } from '@nusantara/pages/config/warehouse/warehouse-full-list.resolver';
 
 
@@ -61,8 +67,25 @@ const routes: Routes = [
       {
         path: '',
         component: ShippingMethodListComponent,
-        // resolve: { page: ShippingMethodListResolver },
+        resolve: { page: ShippingProviderListResolver },
         runGuardsAndResolvers: 'always'
+      },
+      {
+        path: 'new',
+        component: ShippingProviderDetailComponent,
+        runGuardsAndResolvers: 'always',
+        resolve: {
+          types: ShippingProviderTypeResolver,
+        }
+      },
+      {
+        path: ':slug',
+        component: ShippingProviderDetailComponent,
+        runGuardsAndResolvers: 'always',
+        resolve: {
+          entity: ShippingProviderResolver,
+          types: ShippingProviderTypeResolver,
+        }
       }
     ]
   }

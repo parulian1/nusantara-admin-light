@@ -12,5 +12,4 @@ export interface IShippingService {
   handlingFee: number;
   graceAmount: number;
   description: string;
-  provider: string;
 }

@@ -7,7 +7,7 @@ import { ConfigRoutingModule } from './config-routing.module';
 import { ConfigHubComponent } from './config-hub.component';
 import { WarehouseListComponent, WarehouseDetailComponent } from './warehouse';
 import { PaymentGatewayListComponent } from './payment-gateways';
-import { ShippingMethodListComponent} from './shipping-methods';
+import { ShippingMethodListComponent, ShippingProviderDetailComponent, ShippingServiceComponent} from './shipping';
 
 @NgModule({
   declarations: [
@@ -16,6 +16,8 @@ import { ShippingMethodListComponent} from './shipping-methods';
     WarehouseDetailComponent,
     PaymentGatewayListComponent,
     ShippingMethodListComponent,
+    ShippingProviderDetailComponent,
+    ShippingServiceComponent,
   ],
   imports: [
     CommonModule,

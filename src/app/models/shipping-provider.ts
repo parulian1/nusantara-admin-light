@@ -1,9 +1,11 @@
+import { IShippingService } from './shipping-service';
+
 export interface IShippingProvider {
   href: string;
-  isActive: boolean;
   name: string;
   type: string;
   description: string;
+  isActive: boolean;
   icon: string;
-  services: string[];
+  services: IShippingService[];
 }
