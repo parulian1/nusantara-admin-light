@@ -11,6 +11,8 @@ import { DetailActionsComponent } from './detail-actions.component';
 import { TrueFalseComponent } from './true-false.component';
 import { CamelToHumanizedPipe } from './camel-to-humanized.pipe';
 import { AddressComponent } from './address';
+import { FieldErrorsComponent } from './field-errors.component';
+import { NonFieldErrorsComponent } from './non-field-errors.component';
 
 
 /**
@@ -27,6 +29,8 @@ import { AddressComponent } from './address';
     ListHeaderComponent,
     TrueFalseComponent,
     AddressComponent,
+    FieldErrorsComponent,
+    NonFieldErrorsComponent,
   ],
   exports: [
     EntityToSlugPipe,
@@ -37,6 +41,8 @@ import { AddressComponent } from './address';
     DetailActionsComponent,
     TrueFalseComponent,
     AddressComponent,
+    FieldErrorsComponent,
+    NonFieldErrorsComponent,
   ],
   imports: [
     CommonModule,

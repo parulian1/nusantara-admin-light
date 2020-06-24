@@ -16,3 +16,4 @@ export * from './payment-gateway.service';
 export * from './shipping-provider.service';
 
 export * from './flat-page.service';
+export * from './widget.service';

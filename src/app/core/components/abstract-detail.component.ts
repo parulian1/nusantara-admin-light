@@ -1,4 +1,4 @@
-import { OnInit } from '@angular/core';
+import { ElementRef, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -13,7 +13,10 @@ export abstract class AbstractDetailComponent<T> implements OnInit {
 
   route: ActivatedRoute;
   router: Router;
+
   form: FormGroup;
+  formView: ElementRef<HTMLFormElement>;
+
   service: any;
   toast: ToastService;
   originalEntityName: string;
@@ -25,6 +28,13 @@ export abstract class AbstractDetailComponent<T> implements OnInit {
       this.initializeForm(data.entity);
       this.setOriginalEntityName(data.entity);
     });
+  }
+
+  /**
+   * URL to be used for an image preview, when there is no image available.
+   */
+  get emptyImagePreviewURL(): string {
+    return '/assets/no-image_id.png';
   }
 
   /**
@@ -85,6 +95,29 @@ export abstract class AbstractDetailComponent<T> implements OnInit {
   }
 
   /**
+   * Similar to the save method, but posts form/multi-part data instead of json
+   * to this API.
+   */
+  saveAsForm() {
+
+    if (!this.formView) {
+      console.log('formView attribute **must** be set when using this method.');
+      throw Error('formView is null');
+    }
+
+    const formData = new FormData(this.formView.nativeElement);
+
+    this.service.save(formData).subscribe(
+      resp => {
+        if (resp.success) {
+          this.onSaveSuccess();
+        } else {
+          this.onSaveError();
+        }
+    });
+  }
+
+  /**
    * Called when a save successfully completes.
    * By default, shows a toast notification to the user that their save was successful,
    * and navigates back to the parent component URL.
@@ -125,4 +158,23 @@ export abstract class AbstractDetailComponent<T> implements OnInit {
   }
 
 
+  readFileURL(event: Event, callback: (dataAsURL: string) => void) {
+    const target = event.target as HTMLInputElement;
+    if (target.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = (ev) => callback(reader.result as string);
+      reader.readAsDataURL(target.files[0]);
+    }
+  }
+
+
+  setImagePreview(data: Event | string, setterFn: (dataAsUrl) => void) {
+    if (!data) {
+      setterFn(this.emptyImagePreviewURL);
+    } else if (data instanceof Event) {
+      this.readFileURL(data, setterFn);
+    } else {
+      setterFn(data);
+    }
+  }
 }

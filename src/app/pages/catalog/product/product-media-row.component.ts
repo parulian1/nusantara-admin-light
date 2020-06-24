@@ -43,4 +43,15 @@ export class ProductMediaRowComponent {
   get youtubeVideoId(): FormControl { return this.form.get('youtubeVideoId') as FormControl; }
   get image(): FormControl { return this.form.get('image') as FormControl; }
 
+  set imageValue(value: File) {
+
+  }
+
+  onFileChanged(event: Event) {
+    // bug in typescript: https://github.com/microsoft/TypeScript/issues/31816
+    const target = event.target as HTMLInputElement;
+    if (target.files.length > 0) {
+      // this.image = target.files[0];
+    }
+  }
 }

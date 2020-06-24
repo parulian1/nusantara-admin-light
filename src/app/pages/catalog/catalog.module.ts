@@ -8,7 +8,7 @@ import { CatalogRoutingModule } from './catalog-routing.module';
 import { CategoryListComponent, CategoryDetailComponent } from './category';
 import { ProductClassListComponent, ProductClassDetailComponent } from './product-class';
 import { ProductListComponent, ProductDetailComponent, ProductMediaRowComponent } from './product';
-import { VendorListComponent, VendorDetailComponent } from './vendor';
+import { VendorListComponent, VendorComponent } from './vendor';
 
 @NgModule({
   declarations: [
@@ -23,7 +23,7 @@ import { VendorListComponent, VendorDetailComponent } from './vendor';
     ProductMediaRowComponent,
 
     VendorListComponent,
-    VendorDetailComponent,
+    VendorComponent,
   ],
   imports: [
     CommonModule,

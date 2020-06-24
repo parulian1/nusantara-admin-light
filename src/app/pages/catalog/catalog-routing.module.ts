@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { CategoryDetailComponent, CategoryListComponent } from './category';
 import { ProductClassListComponent, ProductClassDetailComponent } from './product-class';
 import { ProductListComponent, ProductDetailComponent } from './product';
-import { VendorDetailComponent, VendorListComponent } from './vendor';
+import { VendorComponent, VendorListComponent } from './vendor';
 import {
   CategoryResolver,
   CategoryListResolver,
@@ -127,12 +127,12 @@ const routes: Routes = [
       },
       {
         path: 'new',
-        component: VendorDetailComponent,
+        component: VendorComponent,
         runGuardsAndResolvers: 'always',
       },
       {
         path: ':slug',
-        component: VendorDetailComponent,
+        component: VendorComponent,
         resolve: { entity: VendorResolver },
         runGuardsAndResolvers: 'always',
       }

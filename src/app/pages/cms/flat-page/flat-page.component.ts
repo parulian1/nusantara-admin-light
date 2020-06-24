@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormArray, Validators, FormBuilder } from '@angular/forms';
+import { FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ToastService } from '@nusantara/core';
 import { AbstractDetailComponent } from '@nusantara/core/components';
 import { IFlatPage } from '@nusantara/models';
-import { ProductClassService, ProductAttributeService } from '@nusantara/services';
+import { FlatPageService } from '@nusantara/services';
 
 @Component({
   selector: 'nus-flat-page',
@@ -59,9 +59,8 @@ import { ProductClassService, ProductAttributeService } from '@nusantara/service
 })
 export class FlatPageComponent extends AbstractDetailComponent<IFlatPage> implements OnInit {
 
-  constructor(public service: ProductClassService,
-              private attributeService: ProductAttributeService,
-              private fb: FormBuilder,
+  constructor(public service: FlatPageService,
+              public fb: FormBuilder,
               public toast: ToastService,
               public route: ActivatedRoute,
               public router: Router) {
@@ -83,6 +82,7 @@ export class FlatPageComponent extends AbstractDetailComponent<IFlatPage> implem
   }
 
   setOriginalEntityName(entity?: IFlatPage) {
+    // overridden because attribute is named 'title' and not 'name' as expected in base class.
     this.originalEntityName = entity.title;
   }
 }
