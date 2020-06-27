@@ -7,7 +7,7 @@ import { IVendor } from '@nusantara/models';
 import { VendorService } from '@nusantara/services';
 
 @Component({
-  selector: 'nus-vendor-detail',
+  selector: 'nus-vendor',
   template: `
     <nus-detail-title
       [originalName]="originalEntityName"
@@ -18,8 +18,7 @@ import { VendorService } from '@nusantara/services';
 
     <form [formGroup]="form" (ngSubmit)="saveAsForm()" #f>
 
-      <!-- required for non-JSON form posting -->
-      <input type="hidden" [formControl]="href" name="href">
+      <input type="hidden" [formControl]="href" name="href"> <!-- required for non-JSON form posting -->
 
       <label>
         <span>Name</span>

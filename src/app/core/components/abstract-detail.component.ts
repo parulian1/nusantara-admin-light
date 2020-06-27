@@ -1,20 +1,19 @@
-import { ElementRef, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { AfterViewInit, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ToastService } from '@nusantara/core';
 import { ToastLevelEnum } from '@nusantara/core/toast/toast-level.enum';
+import { AbstractEditingComponent } from './abstract-editing.component';
+import { IResultResponse } from '@nusantara/core/responses';
 
 /**
  * Base class for components that display a create/edit form
  * for a single entity.
  */
-export abstract class AbstractDetailComponent<T> implements OnInit {
+export abstract class AbstractDetailComponent<T> extends AbstractEditingComponent implements OnInit, AfterViewInit {
 
   route: ActivatedRoute;
   router: Router;
-
-  form: FormGroup;
   formView: ElementRef<HTMLFormElement>;
 
   service: any;
@@ -30,11 +29,10 @@ export abstract class AbstractDetailComponent<T> implements OnInit {
     });
   }
 
-  /**
-   * URL to be used for an image preview, when there is no image available.
-   */
-  get emptyImagePreviewURL(): string {
-    return '/assets/no-image_id.png';
+  ngAfterViewInit(): void {
+    this.route.data.subscribe((data: {entity: T}) => {
+      this.initializeSubViewForms(data.entity);
+    });
   }
 
   /**
@@ -43,6 +41,13 @@ export abstract class AbstractDetailComponent<T> implements OnInit {
    * @param entity Typically the object passed in data.entity key of route data.
    */
   abstract initializeForm(entity?: T);
+
+  /**
+   * If a view contains subviews that are resolved through @ViewChild or @ViewChildren,
+   * then this method can be overridden to initialize their data (similar
+   * to initializeForm, but ensuring that the queries have resolved.
+   */
+  initializeSubViewForms(entity?: T) { }
 
   /**
    * Sets the 'originalEntityName' property (typically used
@@ -74,10 +79,6 @@ export abstract class AbstractDetailComponent<T> implements OnInit {
     this.router.navigate(['../'], {relativeTo: this.route});
   }
 
-  get isNew(): boolean {
-    return !this.form?.get('href').value;
-  }
-
   getFormValue() {
     return this.form.value;
   }
@@ -86,9 +87,9 @@ export abstract class AbstractDetailComponent<T> implements OnInit {
     this.service.save(this.getFormValue()).subscribe(
       resp => {
         if (resp.success) {
-          this.onSaveSuccess();
+          this.onSaveSuccess(resp);
         } else {
-          this.onSaveError();
+          this.onSaveError(resp);
         }
       }
     );
@@ -110,9 +111,9 @@ export abstract class AbstractDetailComponent<T> implements OnInit {
     this.service.save(formData).subscribe(
       resp => {
         if (resp.success) {
-          this.onSaveSuccess();
+          this.onSaveSuccess(resp);
         } else {
-          this.onSaveError();
+          this.onSaveError(resp);
         }
     });
   }
@@ -122,15 +123,15 @@ export abstract class AbstractDetailComponent<T> implements OnInit {
    * By default, shows a toast notification to the user that their save was successful,
    * and navigates back to the parent component URL.
    */
-  protected onSaveSuccess() {
-    this.toast.addMessage(`"${this.form.get('name')?.value ?? 'data'}" was saved successfully.`, 'Saved', ToastLevelEnum.success);
+  protected onSaveSuccess(result: IResultResponse<T>) {
+    this.toast?.addMessage(`"${this.form.get('name')?.value ?? 'data'}" was saved successfully.`, 'Saved', ToastLevelEnum.success);
     this.navigateToParent(false);
   }
 
   /**
    * Called when a save fails.
    */
-  protected onSaveError() {
+  protected onSaveError(result: IResultResponse) {
     // todo: this should really be improved with data from the error response.
     alert('Failed to save');
   }
@@ -149,32 +150,11 @@ export abstract class AbstractDetailComponent<T> implements OnInit {
   }
 
   protected onDeleteSuccess() {
-    this.toast.addMessage(`"${this.form.get('name').value}" was deleted successfully.`, 'Deleted', ToastLevelEnum.success);
+    this.toast?.addMessage(`"${this.form.get('name').value}" was deleted successfully.`, 'Deleted', ToastLevelEnum.success);
     this.navigateToParent(false);
   }
 
   protected onDeleteError() {
     alert('Error deleting');
-  }
-
-
-  readFileURL(event: Event, callback: (dataAsURL: string) => void) {
-    const target = event.target as HTMLInputElement;
-    if (target.files.length > 0) {
-      const reader = new FileReader();
-      reader.onload = (ev) => callback(reader.result as string);
-      reader.readAsDataURL(target.files[0]);
-    }
-  }
-
-
-  setImagePreview(data: Event | string, setterFn: (dataAsUrl) => void) {
-    if (!data) {
-      setterFn(this.emptyImagePreviewURL);
-    } else if (data instanceof Event) {
-      this.readFileURL(data, setterFn);
-    } else {
-      setterFn(data);
-    }
   }
 }

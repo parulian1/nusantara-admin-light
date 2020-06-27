@@ -6,10 +6,9 @@ import { IChoiceFieldChoice, ToastService } from '@nusantara/core';
 import { IProductAttribute, IProductClass } from '@nusantara/models';
 import { ProductClassService, ProductAttributeService } from '@nusantara/services';
 import { AbstractDetailComponent } from '@nusantara/core/components';
-import { NgxSmartModalService } from 'ngx-smart-modal';
 
 @Component({
-  selector: 'nus-product-class-detail',
+  selector: 'nus-product-class',
   template: `
     <nus-detail-title
       [originalName]="originalEntityName"
@@ -99,7 +98,7 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
     'button.add-button { background: transparent; border: none; }',
   ]
 })
-export class ProductClassDetailComponent extends AbstractDetailComponent<IProductClass> implements OnInit {
+export class ProductClassComponent extends AbstractDetailComponent<IProductClass> implements OnInit {
 
   typeChoices: IChoiceFieldChoice[];
   attributeTypeChoices: IChoiceFieldChoice[];
@@ -107,7 +106,6 @@ export class ProductClassDetailComponent extends AbstractDetailComponent<IProduc
   constructor(public service: ProductClassService,
               private attributeService: ProductAttributeService,
               private fb: FormBuilder,
-              private modalService: NgxSmartModalService,
               public toast: ToastService,
               public route: ActivatedRoute,
               public router: Router) {
@@ -118,6 +116,8 @@ export class ProductClassDetailComponent extends AbstractDetailComponent<IProduc
   get type(): FormControl { return this.form.get('type') as FormControl; }
   get href(): FormControl { return this.form.get('href') as FormControl; }
   get attributes(): FormArray { return this.form.get('attributes') as FormArray; }
+
+
 
   get attributeForms(): FormGroup[] {
     return (this.form.controls.attributes as FormArray).controls as FormGroup[];
@@ -192,8 +192,9 @@ export class ProductClassDetailComponent extends AbstractDetailComponent<IProduc
     this.attributes.removeAt(index);
   }
 
+
   getFormValue(): any {
-    // in this case, we want to include the value of disabled components.
+    // overridden: in this case, we want to include the value of disabled components.
     return this.form.getRawValue();
   }
 

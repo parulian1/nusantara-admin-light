@@ -1,3 +1,9 @@
-export * from './product-detail.component';
+export * from './product.component';
 export * from './product-list.component';
-export * from './product-media-row.component';
+
+export * from './product-media.component';
+export * from './product-media-list.component';
+
+export * from './price-list-host.component';
+export * from './price-list.component';
+export * from './price-list-range.component';

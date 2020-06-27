@@ -6,8 +6,8 @@ import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { SharedModule } from '@nusantara/shared';
 import { CatalogRoutingModule } from './catalog-routing.module';
 import { CategoryListComponent, CategoryDetailComponent } from './category';
-import { ProductClassListComponent, ProductClassDetailComponent } from './product-class';
-import { ProductListComponent, ProductDetailComponent, ProductMediaRowComponent } from './product';
+import { ProductClassListComponent, ProductClassComponent } from './product-class';
+import * as product from './product';
 import { VendorListComponent, VendorComponent } from './vendor';
 
 @NgModule({
@@ -16,11 +16,15 @@ import { VendorListComponent, VendorComponent } from './vendor';
     CategoryDetailComponent,
 
     ProductClassListComponent,
-    ProductClassDetailComponent,
+    ProductClassComponent,
 
-    ProductListComponent,
-    ProductDetailComponent,
-    ProductMediaRowComponent,
+    product.ProductListComponent,
+    product.ProductComponent,
+    product.ProductMediaComponent,
+    product.ProductMediaListComponent,
+    product.PriceListHostComponent,
+    product.PriceListComponent,
+    product.PriceListRangeComponent,
 
     VendorListComponent,
     VendorComponent,

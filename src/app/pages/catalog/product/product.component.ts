@@ -1,23 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Validators, FormBuilder, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ICategory, IProduct, IProductAttribute, IProductClass, IProductMedia, IVendor } from '@nusantara/models';
 import { ProductService } from '@nusantara/services';
-import { IChoiceFieldChoice } from '@nusantara/core';
+import { IChoiceFieldChoice, ToastService } from '@nusantara/core';
 import { AbstractDetailComponent } from '@nusantara/core/components';
 import { PagedResponse } from '@nusantara/core/pagination';
+import { ProductMediaComponent } from '@nusantara/pages/catalog/product/product-media.component';
+
+import { zip } from 'rxjs/index';
+import { PriceListComponent } from '@nusantara/pages/catalog/product/price-list.component';
+import { PriceListHostComponent } from '@nusantara/pages/catalog/product/price-list-host.component';
 
 @Component({
-  selector: 'nus-product-detail',
+  selector: 'nus-product',
   template: `
     <nus-detail-title [originalName]="entityName" typeName="Product"></nus-detail-title>
+
+    <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
 
     <form [formGroup]="form" (ngSubmit)="save()" class="entity-detail-form">
 
       <label>
         <span>Name</span>
-        <input type="text" formControlName="name"></label>
+        <input type="text" formControlName="name">
+      </label>
 
       <label>
         <span>Product Class</span>
@@ -60,6 +68,9 @@ import { PagedResponse } from '@nusantara/core/pagination';
 
       <h2>Inventory</h2>
 
+      <h2>Pricing</h2>
+      <nus-price-list-host [form]="priceLists"></nus-price-list-host>
+
       <h2>Media
         <button (click)="addMedia()" type="button">Add</button>
       </h2>
@@ -72,12 +83,12 @@ import { PagedResponse } from '@nusantara/core/pagination';
         </tr>
         </thead>
         <tbody>
-        <nus-product-media-row
+        <nus-product-media
           *ngFor="let m of media.controls; let i=index"
           [form]="m"
           [mediaTypes]="mediaTypes"
           (remove)="removeMedia(i)">
-        </nus-product-media-row>
+        </nus-product-media>
         </tbody>
       </table>
 
@@ -99,7 +110,7 @@ import { PagedResponse } from '@nusantara/core/pagination';
   styles: [`
   `]
 })
-export class ProductDetailComponent extends AbstractDetailComponent<IProduct> implements OnInit {
+export class ProductComponent extends AbstractDetailComponent<IProduct> implements OnInit, AfterViewInit {
 
   public entityName: string;
 
@@ -109,15 +120,20 @@ export class ProductDetailComponent extends AbstractDetailComponent<IProduct> im
   attribute: Array<IProductAttribute>;
   mediaTypes: Array<IChoiceFieldChoice>;
 
+  @ViewChildren(ProductMediaComponent) viewMedia!: QueryList<ProductMediaComponent>;
+  @ViewChild(PriceListHostComponent) priceListHost!: PriceListHostComponent;
+
   constructor(public service: ProductService,
               private fb: FormBuilder,
               public route: ActivatedRoute,
+              public toast: ToastService,
               public router: Router) {
     super();
   }
 
-  get media(): FormArray { return this.form.get('media') as FormArray; }
   get productClass(): FormControl { return this.form.get('productClass') as FormControl; }
+  get media(): FormArray { return this.form.get('media') as FormArray; }
+  get priceLists(): FormArray { return this.form.get('priceLists') as FormArray; }
 
   ngOnInit(): void {
     super.ngOnInit();
@@ -143,7 +159,8 @@ export class ProductDetailComponent extends AbstractDetailComponent<IProduct> im
       category: [entity?.category, [Validators.required]],
       vendor: [entity?.vendor, [Validators.required]],
       media: this.fb.array([]),
-      attributes: this.fb.array([]),
+      attributes: [{}, ], // this.fb.array([]),
+      priceLists: this.fb.array([]),
       // related products
       // variants
     });
@@ -160,18 +177,56 @@ export class ProductDetailComponent extends AbstractDetailComponent<IProduct> im
     this.onProductClassChanged(this.form.get('productClass').value);
   }
 
+  initializeSubViewForms(entity?: IProduct) {
+    for (const priceList of entity?.priceLists ?? []) {
+      this.priceListHost.add(priceList);
+    }
+  }
+
+
   addMedia(media?: IProductMedia) {
     const f = this.fb.group({
       type: [media?.type || this.mediaTypes[0].value, []],
       href: [media?.href, []],
-      image: [media?.image, []],
-      youtubeVideoId: [media?.youtubeVideoId, []]
+      image: [],
+      _originalImageUrl: [media?.image, []],
+      youtubeVideoId: [media?.youtubeVideoId, [Validators.required, ]]
     });
+
     this.media.push(f);
   }
   removeMedia(index: number) {
     this.media.removeAt(index);
   }
+
+  getFormValue(): any {
+    const formValue = {};
+    Object.assign(formValue, this.form.value);
+    // todo: delete sub entities that shouldn't be saved on the primary object
+    // .. like price-lists, media, dll.
+    delete (formValue as IProduct).media;
+    return formValue;
+  }
+
+  save() {
+    this.service.save(this.getFormValue()).subscribe(
+      resp => {
+        if (resp.success) {
+          // todo: add all the sub entities that are saved indepentently..
+          // -- price lists
+          // -- variants??
+          zip(
+            ...this.viewMedia.map(m => m.save(resp.entity.href))
+          ).subscribe(r => {
+              this.onSaveSuccess(resp);
+          });
+        } else {
+          this.onSaveError(resp);
+        }
+      }
+    );
+  }
+
 
   /**
    * Disables irrelevant/invalid product values for certain classes

@@ -6,6 +6,7 @@ export * from './product.service';
 export * from './product-attribute.service';
 export * from './product-media.service';
 export * from './product-class.service';
+export * from './price-list.service';
 
 export * from './vendor.service';
 export * from './category.service';

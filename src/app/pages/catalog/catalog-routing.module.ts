@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { CategoryDetailComponent, CategoryListComponent } from './category';
-import { ProductClassListComponent, ProductClassDetailComponent } from './product-class';
-import { ProductListComponent, ProductDetailComponent } from './product';
+import { ProductClassListComponent, ProductClassComponent } from './product-class';
+import { ProductListComponent, ProductComponent } from './product';
 import { VendorComponent, VendorListComponent } from './vendor';
 import {
   CategoryResolver,
@@ -19,6 +19,7 @@ import {
   VendorResolver,
 } from '@nusantara/resolvers';
 import { MediaTypeResolver } from '@nusantara/pages/catalog/product/media-type.resolver';
+import { PriceListTypeResolver } from '@nusantara/pages/catalog/product/price-list-type.resolver';
 
 const routes: Routes = [
   {
@@ -63,24 +64,26 @@ const routes: Routes = [
       },
       {
         path: 'new',
-        component: ProductDetailComponent,
+        component: ProductComponent,
         resolve: {
           productClasses: ProductClassListResolver,
           vendors: VendorListResolver,
           categories: CategoryListResolver,
           mediaTypes: MediaTypeResolver,
+          priceListTypes: PriceListTypeResolver,
         },
         runGuardsAndResolvers: 'always',
       },
       {
         path: ':slug',
-        component: ProductDetailComponent,
+        component: ProductComponent,
         resolve: {
           entity: ProductResolver,
           productClasses: ProductClassListResolver,
           vendors: VendorListResolver,
           categories: CategoryListResolver,
           mediaTypes: MediaTypeResolver,
+          priceListTypes: PriceListTypeResolver,
         },
         runGuardsAndResolvers: 'always',
       }
@@ -97,7 +100,7 @@ const routes: Routes = [
       },
       {
         path: 'new',
-        component: ProductClassDetailComponent,
+        component: ProductClassComponent,
         resolve: {
           typeChoices: ProductClassTypeResolver,
           attributeTypeChoices: ProductAttributeTypeResolver
@@ -106,7 +109,7 @@ const routes: Routes = [
       },
       {
         path: ':slug',
-        component: ProductClassDetailComponent,
+        component: ProductClassComponent,
         resolve: {
           entity: ProductClassResolver,
           typeChoices: ProductClassTypeResolver,

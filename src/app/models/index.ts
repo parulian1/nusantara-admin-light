@@ -13,6 +13,9 @@ export * from './product-media';
 export * from './category';
 export * from './vendor';
 
+export * from './price-list';
+export * from './price-list-range';
+
 export * from './voucher';
 export * from './widget';
 export * from './warehouse';

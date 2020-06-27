@@ -1,4 +1,5 @@
 import { IProductMedia } from './product-media';
+import { IPriceList } from '@nusantara/models/price-list';
 
 /**
  * Anything that is available for sale.
@@ -13,6 +14,7 @@ export interface IProduct {
   media: IProductMedia[];
   weight: number;
   category: string;
+  priceLists: Array<IPriceList>;
   // related[]
   // attributes
 }

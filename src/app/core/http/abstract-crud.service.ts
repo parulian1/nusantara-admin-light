@@ -47,8 +47,13 @@ export abstract class AbstractCrudService<T extends {href: string}> {
    */
   create(entity: T|FormData): Observable<IResultResponse> {
     return this.httpClient
-      .post(`${this.baseUrl}/`, entity, {observe: 'response', responseType: 'json'})
-      .pipe(map(resp => resp.status === 201 ? new SuccessCreatedResult(resp.headers.get('Location')) : new ErrorResult()));
+      .post<T>(`${this.baseUrl}/`, entity, {observe: 'response', responseType: 'json'})
+      .pipe(map(resp => {
+        if (resp.status === 201) {
+          return new SuccessCreatedResult<T>(resp.headers.get('Location'), [], resp.body);
+        }
+        return new ErrorResult(resp.body, resp.status);
+      }));
   }
 
   /**
@@ -66,7 +71,12 @@ export abstract class AbstractCrudService<T extends {href: string}> {
 
     return this.httpClient
       .patch<T>(this.getEntityUrl(entity), entity, {observe: 'response', responseType: 'json'})
-      .pipe(map(resp => resp.status === 200 ? new SuccessResult() : new ErrorResult()));
+      .pipe(map(resp => {
+        if (resp.status === 200) {
+          return new SuccessResult([], resp.body);
+        }
+        return new ErrorResult(resp.body, resp.status);
+      }));
   }
 
   /**
@@ -79,7 +89,6 @@ export abstract class AbstractCrudService<T extends {href: string}> {
     const keysToRemove = [];
 
     formData.forEach((value, key, parent) => {
-      console.log(value, key, parent);
       if (value instanceof File) {
         if (!value.name) {
           keysToRemove.push(key);
@@ -103,7 +112,7 @@ export abstract class AbstractCrudService<T extends {href: string}> {
   delete(entity: T|{href: string}|FormData): Observable<IResultResponse> {
     return this.httpClient
       .delete(this.getEntityUrl(entity), {observe: 'response', responseType: 'json'})
-      .pipe(map(resp => resp.status === 204 ? new SuccessResult() : new ErrorResult()));
+      .pipe(map(resp => resp.status === 204 ? new SuccessResult() : new ErrorResult(resp.body, resp.status)));
   }
 
   private getEntityUrl(entity: T|{href: string}|FormData) {

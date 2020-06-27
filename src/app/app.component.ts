@@ -25,9 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.timer = setInterval(() => {
-      console.log('checking refresh');
       if (this.authService.shouldRefresh) {
-        console.log('should refresh');
         this.authService.refresh().subscribe((result) => {
           if (!result.success) {
             this.authService.logout();
