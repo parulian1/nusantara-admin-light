@@ -1,22 +1,25 @@
 import { AfterViewInit, Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Validators, FormBuilder, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { zip } from 'rxjs';
 
-import { ICategory, IProduct, IProductAttribute, IProductClass, IProductMedia, IVendor } from '@nusantara/models';
+import { ICategory, IProduct, IProductAttribute, IProductClass, IVendor } from '@nusantara/models';
 import { ProductService } from '@nusantara/services';
 import { IChoiceFieldChoice, ToastService } from '@nusantara/core';
 import { AbstractDetailComponent } from '@nusantara/core/components';
 import { PagedResponse } from '@nusantara/core/pagination';
-import { ProductMediaComponent } from '@nusantara/pages/catalog/product/product-media.component';
 
-import { zip } from 'rxjs/index';
-import { PriceListComponent } from '@nusantara/pages/catalog/product/price-list.component';
-import { PriceListHostComponent } from '@nusantara/pages/catalog/product/price-list-host.component';
+import { PriceListHostComponent } from './price-list-host.component';
+import { ProductMediaHostComponent } from './product-media-host.component';
+import { NgxSmartModalService } from 'ngx-smart-modal';
+import { NewProductImageComponent } from '@nusantara/pages/catalog/product/media';
 
 @Component({
   selector: 'nus-product',
   template: `
-    <nus-detail-title [originalName]="entityName" typeName="Product"></nus-detail-title>
+    <nus-detail-title
+      [originalName]="originalEntityName"
+      typeName="Product"></nus-detail-title>
 
     <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
 
@@ -66,31 +69,15 @@ import { PriceListHostComponent } from '@nusantara/pages/catalog/product/price-l
         <input type="number" formControlName="weight">
       </label>
 
-      <h2>Inventory</h2>
+      <div *ngIf="!isNew">
+        <h2>Inventory (Read-Only)</h2>
+      </div>
 
       <h2>Pricing</h2>
       <nus-price-list-host [form]="priceLists"></nus-price-list-host>
 
-      <h2>Media
-        <button (click)="addMedia()" type="button">Add</button>
-      </h2>
-      <table>
-        <thead>
-        <tr>
-          <th>Type</th>
-          <th>Value</th>
-          <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <nus-product-media
-          *ngFor="let m of media.controls; let i=index"
-          [form]="m"
-          [mediaTypes]="mediaTypes"
-          (remove)="removeMedia(i)">
-        </nus-product-media>
-        </tbody>
-      </table>
+      <nus-product-media-host [form]="media">
+      </nus-product-media-host>
 
       <h2>Attributes</h2>
 
@@ -107,12 +94,9 @@ import { PriceListHostComponent } from '@nusantara/pages/catalog/product/price-l
 
     </form>
   `,
-  styles: [`
-  `]
+  styles: []
 })
 export class ProductComponent extends AbstractDetailComponent<IProduct> implements OnInit, AfterViewInit {
-
-  public entityName: string;
 
   productClasses: Array<IProductClass>;
   categories: Array<ICategory>;
@@ -120,14 +104,15 @@ export class ProductComponent extends AbstractDetailComponent<IProduct> implemen
   attribute: Array<IProductAttribute>;
   mediaTypes: Array<IChoiceFieldChoice>;
 
-  @ViewChildren(ProductMediaComponent) viewMedia!: QueryList<ProductMediaComponent>;
+  @ViewChild(ProductMediaHostComponent) mediaHost!: ProductMediaHostComponent;
   @ViewChild(PriceListHostComponent) priceListHost!: PriceListHostComponent;
 
   constructor(public service: ProductService,
               private fb: FormBuilder,
               public route: ActivatedRoute,
               public toast: ToastService,
-              public router: Router) {
+              public router: Router,
+              public modal: NgxSmartModalService) {
     super();
   }
 
@@ -165,40 +150,25 @@ export class ProductComponent extends AbstractDetailComponent<IProduct> implemen
       // variants
     });
 
-    // todo: disable changing the product type
-    for (const media of entity?.media ?? []) {
-      this.addMedia(media);
-    }
-
     // listen for any changes to this so we can disable weight when appropriate
-    this.form.get('productClass').valueChanges.subscribe(
-      val => this.onProductClassChanged(val)
-    );
-    this.onProductClassChanged(this.form.get('productClass').value);
+    this.productClass.valueChanges.subscribe(val => this.onProductClassChanged(val));
+    this.onProductClassChanged(this.productClass.value);
   }
 
   initializeSubViewForms(entity?: IProduct) {
     for (const priceList of entity?.priceLists ?? []) {
       this.priceListHost.add(priceList);
     }
+    for (const media of entity?.media ?? []) {
+      this.mediaHost.add(media);
+    }
   }
 
-
-  addMedia(media?: IProductMedia) {
-    const f = this.fb.group({
-      type: [media?.type || this.mediaTypes[0].value, []],
-      href: [media?.href, []],
-      image: [],
-      _originalImageUrl: [media?.image, []],
-      youtubeVideoId: [media?.youtubeVideoId, [Validators.required, ]]
-    });
-
-    this.media.push(f);
-  }
-  removeMedia(index: number) {
-    this.media.removeAt(index);
-  }
-
+  /**
+   * Overridden implementation: This form hosts several sub-views, which must
+   * be saved separate of the main product:  Because of that, the data
+   * must be deleted from the data we pass to the product service.
+   */
   getFormValue(): any {
     const formValue = {};
     Object.assign(formValue, this.form.value);
@@ -215,11 +185,11 @@ export class ProductComponent extends AbstractDetailComponent<IProduct> implemen
           // todo: add all the sub entities that are saved indepentently..
           // -- price lists
           // -- variants??
-          zip(
-            ...this.viewMedia.map(m => m.save(resp.entity.href))
-          ).subscribe(r => {
-              this.onSaveSuccess(resp);
-          });
+          // zip(
+          //   ...this.viewMedia.map(m => m.save(resp.entity.href))
+          // ).subscribe(r => {
+          //     this.onSaveSuccess(resp);
+          // });
         } else {
           this.onSaveError(resp);
         }
@@ -228,11 +198,13 @@ export class ProductComponent extends AbstractDetailComponent<IProduct> implemen
   }
 
 
+
   /**
    * Disables irrelevant/invalid product values for certain classes
    * of product.
    */
   onProductClassChanged(newValue: string) {
+
     // protect against triggering during initialization
     if (!newValue || !this.productClasses) {
       return;

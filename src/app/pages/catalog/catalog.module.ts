@@ -8,6 +8,7 @@ import { CatalogRoutingModule } from './catalog-routing.module';
 import { CategoryListComponent, CategoryDetailComponent } from './category';
 import { ProductClassListComponent, ProductClassComponent } from './product-class';
 import * as product from './product';
+import * as media from './product/media';
 import { VendorListComponent, VendorComponent } from './vendor';
 
 @NgModule({
@@ -21,10 +22,13 @@ import { VendorListComponent, VendorComponent } from './vendor';
     product.ProductListComponent,
     product.ProductComponent,
     product.ProductMediaComponent,
-    product.ProductMediaListComponent,
+    product.ProductMediaHostComponent,
     product.PriceListHostComponent,
     product.PriceListComponent,
     product.PriceListRangeComponent,
+    product.NewProductImageComponent,
+
+    media.NewProductMediaComponent,
 
     VendorListComponent,
     VendorComponent,

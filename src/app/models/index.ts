@@ -10,6 +10,7 @@ export * from './product';
 export * from './product-attribute';
 export * from './product-class';
 export * from './product-media';
+export * from './media.type';
 export * from './category';
 export * from './vendor';
 

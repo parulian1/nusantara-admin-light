@@ -34,8 +34,6 @@ import { IPriceListRange } from '@nusantara/models';
         [form]="range">
       </nus-price-list-range>
 
-      <code><pre>{{ form.value | json }}</pre></code>
-
     </div>
   `,
   styles: []
