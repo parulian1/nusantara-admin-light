@@ -13,7 +13,7 @@ ENV PATH /root/node_modules/.bin:$PATH
 COPY package*.json /root/
 
 # install dependenciesll
-RUN npm install -q
+RUN npm --registry http://cache-server.lan:8081/repository/npm install -q
 
 COPY . /root
 
