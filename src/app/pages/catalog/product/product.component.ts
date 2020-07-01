@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Validators, FormBuilder, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgxSmartModalService } from 'ngx-smart-modal';
 import { zip } from 'rxjs';
 
 import { ICategory, IProduct, IProductAttribute, IProductClass, IVendor } from '@nusantara/models';
@@ -9,9 +10,8 @@ import { IChoiceFieldChoice, ToastService } from '@nusantara/core';
 import { AbstractDetailComponent } from '@nusantara/core/components';
 import { PagedResponse } from '@nusantara/core/pagination';
 
-import { PriceListHostComponent } from './price-list-host.component';
-import { ProductMediaHostComponent } from './product-media-host.component';
-import { NgxSmartModalService } from 'ngx-smart-modal';
+import { PriceListHostComponent } from './price';
+import { ProductMediaHostComponent } from './media';
 import { NewProductImageComponent } from '@nusantara/pages/catalog/product/media';
 
 @Component({
@@ -76,8 +76,7 @@ import { NewProductImageComponent } from '@nusantara/pages/catalog/product/media
       <h2>Pricing</h2>
       <nus-price-list-host [form]="priceLists"></nus-price-list-host>
 
-      <nus-product-media-host [form]="media">
-      </nus-product-media-host>
+      <nus-product-media-host [form]="media"></nus-product-media-host>
 
       <h2>Attributes</h2>
 

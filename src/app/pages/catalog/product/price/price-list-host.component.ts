@@ -5,8 +5,8 @@ import { AbstractEditingComponent, IChoiceFieldChoice } from '@nusantara/core';
 import { IPriceList, IPriceListRange } from '@nusantara/models';
 import { PriceListService } from '@nusantara/services';
 import { ActivatedRoute } from '@angular/router';
-import { ProductMediaComponent } from '@nusantara/pages/catalog/product/product-media.component';
-import { PriceListComponent } from '@nusantara/pages/catalog/product/price-list.component';
+
+import { PriceListComponent } from './price-list.component';
 
 /**
  * Shows the price lists configured for a given product.

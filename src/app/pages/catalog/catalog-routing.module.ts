@@ -18,8 +18,8 @@ import {
   VendorListResolver,
   VendorResolver,
 } from '@nusantara/resolvers';
-import { MediaTypeResolver } from '@nusantara/pages/catalog/product/media-type.resolver';
-import { PriceListTypeResolver } from '@nusantara/pages/catalog/product/price-list-type.resolver';
+import { MediaTypeResolver } from './product/media';
+import { PriceListTypeResolver } from './product/price';
 
 const routes: Routes = [
   {

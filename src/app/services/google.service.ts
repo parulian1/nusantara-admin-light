@@ -12,16 +12,13 @@ export class GoogleService {
 
   constructor(protected httpClient: HttpClient) { }
 
-  /**
-   * Calls the YouTube Video.
-   *
-   * @param videoId
-   */
   fetchYoutubeVideoMeta(videoId: string): Observable<youtube.IVideoList> {
 
-    const params = new HttpParams(
-      {fromObject: {key: environment.googleApiKey, id: videoId, part: 'snippet,contentDetails,player', }, }
-    );
+    const params = new HttpParams({ fromObject: {
+      key: environment.googleApiKey,
+      id: videoId,
+      part: 'snippet,contentDetails,player',
+    }});
 
     return this.httpClient.get<youtube.IVideoList>(
       'https://www.googleapis.com/youtube/v3/videos',

@@ -5,7 +5,7 @@ import { AbstractEditingComponent, DialogResult, IChoiceFieldChoice } from '@nus
 import { ProductMediaService } from '@nusantara/services';
 import { IProductMedia } from '@nusantara/models';
 import { ActivatedRoute } from '@angular/router';
-import { NewProductImageComponent } from '@nusantara/pages/catalog/product/media';
+import { NewProductImageComponent, NewProductYoutubeComponent } from '@nusantara/pages/catalog/product/media';
 
 /**
  * Container for all the media objects assigned to a single product.
@@ -18,8 +18,12 @@ import { NewProductImageComponent } from '@nusantara/pages/catalog/product/media
   selector: 'nus-product-media-host',
   template: `
     <h2>Media
-      <button (click)="addNewImage()" type="button">Add Image</button>
-      <button (click)="add()" type="button">Add Video</button>
+      <button (click)="addNewImage()" type="button">
+        <i class="material-icons">image</i>
+        ({{ imageCount }})</button>
+      <button (click)="addNewYoutube()" type="button">
+        <i class="material-icons">ondemand_video</i>
+        ({{ youtubeCount }})</button>
     </h2>
 
     <nus-product-media
@@ -28,7 +32,9 @@ import { NewProductImageComponent } from '@nusantara/pages/catalog/product/media
       (remove)="remove(i)">
     </nus-product-media>
 
+    <!-- Pop-ups for adding new media -->
     <nus-new-product-image></nus-new-product-image>
+    <nus-new-product-youtube></nus-new-product-youtube>
   `,
   styles: [':host { display: contents; }' ]
 })
@@ -37,6 +43,7 @@ export class ProductMediaHostComponent extends AbstractEditingComponent<FormArra
   mediaTypes: Array<IChoiceFieldChoice>;
   @Input() form: FormArray;
   @ViewChild(NewProductImageComponent) newImageModal: NewProductImageComponent;
+  @ViewChild(NewProductYoutubeComponent) newYoutubeModal: NewProductYoutubeComponent;
 
   entities: Array<IProductMedia> = [];
 
@@ -49,6 +56,10 @@ export class ProductMediaHostComponent extends AbstractEditingComponent<FormArra
               protected route: ActivatedRoute,
               protected fb: FormBuilder) { super(); }
 
+
+  get imageCount(): number { return 0; }
+  get youtubeCount(): number { return 0; }
+
   ngOnInit() {
     this.route.data.subscribe((data: {mediaTypes: IChoiceFieldChoice[]}) => {
       this.mediaTypes = data.mediaTypes;
@@ -57,6 +68,7 @@ export class ProductMediaHostComponent extends AbstractEditingComponent<FormArra
 
   ngAfterViewInit() {
     this.newImageModal.onClose.subscribe(() => this.onImageModalClosed());
+    this.newYoutubeModal.onClose.subscribe(() => this.onYoutubeModalClosed());
   }
 
   add(media?: IProductMedia) {
@@ -83,12 +95,33 @@ export class ProductMediaHostComponent extends AbstractEditingComponent<FormArra
     this.newImageModal.open();
   }
 
+  addNewYoutube() {
+    this.newYoutubeModal.open();
+  }
+
+  /**
+   * If the user completed selecting a new product image,
+   * add it's form data to a list of forms to save, and then save it's
+   * image data in the preview list
+   */
   onImageModalClosed() {
     if (this.newImageModal.result === DialogResult.OK) {
+      // data that will be saved to API
       this.newImages.push(this.newImageModal.getValue());
+
+      // preview data
       const viewModel = Object.assign({}, this.newImageModal.form.value);
       viewModel.image = this.newImageModal.imagePreviewUrl;
-      console.log('viewmodel', viewModel);
+      this.add(viewModel);
+    }
+  }
+
+  onYoutubeModalClosed() {
+    if (this.newYoutubeModal.result === DialogResult.OK) {
+      this.newVideos.push(this.newYoutubeModal.form.value);
+
+      const viewModel = Object.assign({}, this.newYoutubeModal.form.value);
+      viewModel.image = this.newYoutubeModal.imagePreviewUrl;
       this.add(viewModel);
     }
   }

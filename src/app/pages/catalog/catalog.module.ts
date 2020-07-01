@@ -9,6 +9,7 @@ import { CategoryListComponent, CategoryDetailComponent } from './category';
 import { ProductClassListComponent, ProductClassComponent } from './product-class';
 import * as product from './product';
 import * as media from './product/media';
+import * as price from './product/price';
 import { VendorListComponent, VendorComponent } from './vendor';
 
 @NgModule({
@@ -21,14 +22,17 @@ import { VendorListComponent, VendorComponent } from './vendor';
 
     product.ProductListComponent,
     product.ProductComponent,
-    product.ProductMediaComponent,
-    product.ProductMediaHostComponent,
-    product.PriceListHostComponent,
-    product.PriceListComponent,
-    product.PriceListRangeComponent,
-    product.NewProductImageComponent,
 
-    media.NewProductMediaComponent,
+    media.NewProductImageComponent,
+    media.NewProductYoutubeComponent,
+    media.ProductMediaComponent,
+    media.ProductMediaHostComponent,
+
+    price.PriceListHostComponent,
+    price.PriceListComponent,
+    price.PriceListRangeComponent,
+
+
 
     VendorListComponent,
     VendorComponent,
