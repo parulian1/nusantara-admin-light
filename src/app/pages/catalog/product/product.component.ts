@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { Validators, FormBuilder, FormArray, FormControl } from '@angular/forms';
+import { Validators, FormBuilder, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { zip } from 'rxjs';
@@ -77,18 +77,20 @@ import { NewProductImageComponent } from '@nusantara/pages/catalog/product/media
 
       <nus-product-media-host [form]="media"></nus-product-media-host>
 
-      <h2>Attributes</h2>
-
+      <nus-product-attribute-host
+        [form]="attributes"
+        [selectedProductClass]="productClass.value">
+      </nus-product-attribute-host>
 
       <h2>Variants</h2>
 
       <h2>Related Products</h2>
 
-      <div class="actions-container">
-        <button type="submit" [disabled]="!form.valid">Save</button>
-        <button (click)="navigateToParent(true)">Cancel</button>
-        <button (click)="delete()" *ngIf="!isNew">Delete</button>
-      </div>
+      <nus-detail-actions
+        [component]="this"
+        (cancel)="navigateToParent(true)"
+        (delete)="delete()">
+      </nus-detail-actions>
 
     </form>
   `,
@@ -117,16 +119,17 @@ export class ProductComponent extends AbstractDetailComponent<IProduct> implemen
   get productClass(): FormControl { return this.form.get('productClass') as FormControl; }
   get media(): FormArray { return this.form.get('media') as FormArray; }
   get priceLists(): FormArray { return this.form.get('priceLists') as FormArray; }
+  get attributes(): FormGroup { return this.form.get('attributes') as FormGroup; }
 
   ngOnInit(): void {
     super.ngOnInit();
     this.route.data.subscribe((data: { categories: ICategory[],
                                              vendors: PagedResponse<IVendor>,
-                                             productClasses: PagedResponse<IProductClass>,
+                                             productClasses: IProductClass[],
                                              mediaTypes: IChoiceFieldChoice[]}) => {
       this.vendors = data.vendors.entities;
       this.categories = data.categories;
-      this.productClasses = data.productClasses.entities;
+      this.productClasses = data.productClasses;
       this.mediaTypes = data.mediaTypes;
     });
   }
@@ -183,7 +186,7 @@ export class ProductComponent extends AbstractDetailComponent<IProduct> implemen
       resp => {
         if (resp.success) {
 
-          this.mediaHost.saveAll().subscribe(resp2 => {
+          this.mediaHost.saveAll(resp.entity).subscribe(resp2 => {
             this.onSaveSuccess(resp);
           });
           // todo: add all the sub entities that are saved indepentently..

@@ -1,14 +1,9 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { Observable, of } from 'rxjs';
-
-import { AbstractEditingComponent, DialogResult, IChoiceFieldChoice } from '@nusantara/core';
-import { ProductMediaService } from '@nusantara/services';
-import { MediaType } from '@nusantara/models';
-import { IResultResponse } from '@nusantara/core/responses';
-import { GoogleService } from '@nusantara/services/google.service';
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { FormControl, Validators, FormBuilder } from '@angular/forms';
 import { NgxSmartModalComponent } from 'ngx-smart-modal';
 
+import { AbstractEditingComponent, DialogResult } from '@nusantara/core';
+import { GoogleService } from '@nusantara/services';
 
 /**
  * Allows the user to enter the ID of a youtube video.
@@ -49,7 +44,6 @@ export class NewProductYoutubeComponent extends AbstractEditingComponent impleme
   timeoutId: any;
   reloadTimeout = 650;
 
-
   constructor(protected fb: FormBuilder,
               protected google: GoogleService) { super(); }
 
@@ -68,8 +62,8 @@ export class NewProductYoutubeComponent extends AbstractEditingComponent impleme
 
   private initializeForm(): void {
     this.form = this.fb.group({
-      href: ['', []],
-      image: ['', []],
+      href: [null, []],
+      image: [null, []],
       type: ['you_tube', [Validators.required, ]],
       youtubeVideoId: ['', [Validators.required, ]]
     });

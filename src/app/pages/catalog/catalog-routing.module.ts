@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { CategoryComponent, CategoryListComponent } from './category';
-import { ProductClassListComponent, ProductClassComponent } from './product-class';
-import { ProductListComponent, ProductComponent } from './product';
+import { CategoryComponent, CategoryListComponent, AllCategoryResolver } from './category';
+import { ProductClassListComponent, ProductClassComponent, AllProductClassResolver } from './product-class';
+import { ProductListComponent, ProductComponent  } from './product';
 import { VendorComponent, VendorListComponent } from './vendor';
 import {
   CategoryResolver,
@@ -20,7 +20,6 @@ import {
 } from '@nusantara/resolvers';
 import { MediaTypeResolver } from './product/media';
 import { PriceListTypeResolver } from './product/price';
-import { AllCategoriesResolver } from '@nusantara/pages/catalog/product/all-categories.resolver';
 
 const routes: Routes = [
   {
@@ -57,9 +56,9 @@ const routes: Routes = [
         component: ProductListComponent,
         resolve: {
           page: ProductListResolver,
-          productClasses: ProductClassListResolver,
+          productClasses: AllProductClassResolver,
           vendors: VendorListResolver,
-          categories: AllCategoriesResolver,
+          categories: AllCategoryResolver,
         },
         runGuardsAndResolvers: 'always',
       },
@@ -67,9 +66,9 @@ const routes: Routes = [
         path: 'new',
         component: ProductComponent,
         resolve: {
-          productClasses: ProductClassListResolver,
+          productClasses: AllProductClassResolver,
           vendors: VendorListResolver,
-          categories: AllCategoriesResolver,
+          categories: AllCategoryResolver,
           mediaTypes: MediaTypeResolver,
           priceListTypes: PriceListTypeResolver,
         },
@@ -80,9 +79,9 @@ const routes: Routes = [
         component: ProductComponent,
         resolve: {
           entity: ProductResolver,
-          productClasses: ProductClassListResolver,
+          productClasses: AllProductClassResolver,
           vendors: VendorListResolver,
-          categories: AllCategoriesResolver,
+          categories: AllCategoryResolver,
           mediaTypes: MediaTypeResolver,
           priceListTypes: PriceListTypeResolver,
         },

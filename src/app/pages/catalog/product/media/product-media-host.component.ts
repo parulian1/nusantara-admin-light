@@ -1,13 +1,15 @@
 import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Observable, zip } from 'rxjs';
 
 import { AbstractEditingComponent, DialogResult, IChoiceFieldChoice } from '@nusantara/core';
-import { ProductMediaService } from '@nusantara/services';
-import { IProductMedia } from '@nusantara/models';
-import { ActivatedRoute } from '@angular/router';
-import { NewProductImageComponent, NewProductYoutubeComponent } from '@nusantara/pages/catalog/product/media';
-import { Observable, zip } from 'rxjs';
 import { IResultResponse } from '@nusantara/core/responses';
+import { IProduct, IProductMedia } from '@nusantara/models';
+import { ProductMediaService } from '@nusantara/services';
+
+import { NewProductImageComponent } from './new-product-image.component';
+import { NewProductYoutubeComponent } from './new-product-youtube.component';
 
 /**
  * Container for all the media objects assigned to a single product.
@@ -38,7 +40,7 @@ import { IResultResponse } from '@nusantara/core/responses';
     <nus-new-product-image></nus-new-product-image>
     <nus-new-product-youtube></nus-new-product-youtube>
   `,
-  styles: [':host { display: contents; }' ]
+  styles: [ ]
 })
 export class ProductMediaHostComponent extends AbstractEditingComponent<FormArray> implements OnInit, AfterViewInit {
 
@@ -128,7 +130,17 @@ export class ProductMediaHostComponent extends AbstractEditingComponent<FormArra
   }
 
 
-  saveAll(): Observable<IResultResponse[]> {
+  /**
+   *
+   * @param product The parent product which should own all the images and videos.
+   */
+  saveAll(product: IProduct): Observable<IResultResponse[]> {
+
+    // make sure all new images and videos have the product href set
+    console.log('About to set all from this product', product);
+    this.newImages.forEach((value) => { value.set('product', product.href); });
+    this.newVideos.forEach((value) => { value.product = product.href; });
+
     return zip(
       ...this.newImages.map(img => this.service.save(img)),
       ...this.newVideos.map(vid => this.service.save(vid)),

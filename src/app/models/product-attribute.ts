@@ -1,3 +1,5 @@
+import { ProductAttributeType } from './product-attribute.type';
+
 /**
  * Defines an attribute which can be defined on a product.
  * This object **is not** the value of the attribute, it is purely
@@ -10,7 +12,7 @@
 export interface IProductAttribute {
   name: string;
   href: string;
-  type: string;
+  type: ProductAttributeType;
   productClasses?: string[];
   minValue: number;
   maxValue: number;

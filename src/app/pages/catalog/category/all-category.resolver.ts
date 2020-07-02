@@ -11,7 +11,7 @@ import { CategoryService } from '@nusantara/services';
 @Injectable({
   providedIn: 'root',
 })
-export class AllCategoriesResolver implements Resolve<ICategory[]> {
+export class AllCategoryResolver implements Resolve<ICategory[]> {
 
   constructor(private service: CategoryService) {}
 

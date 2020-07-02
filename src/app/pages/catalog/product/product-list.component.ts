@@ -66,10 +66,10 @@ export class ProductListComponent extends AbstractListComponent<IProduct> {
       (data: {
           categories: ICategory[],
           vendors: PagedResponse<IVendor>,
-          productClasses: PagedResponse<IProductClass>}) => {
+          productClasses: IProductClass[]}) => {
         this.categories = data.categories;
         this.vendors = data.vendors.entities;
-        this.productClasses = data.productClasses.entities;
+        this.productClasses = data.productClasses;
     });
     super.ngOnInit();
   }
