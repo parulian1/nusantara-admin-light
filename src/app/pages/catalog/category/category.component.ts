@@ -7,7 +7,7 @@ import { CategoryService } from '@nusantara/services';
 import { AbstractDetailComponent } from '@nusantara/core';
 
 @Component({
-  selector: 'nus-category-detail',
+  selector: 'nus-category',
   template: `
     <nus-detail-title [originalName]="originalEntityName" typeName="Category"></nus-detail-title>
 
@@ -61,8 +61,8 @@ import { AbstractDetailComponent } from '@nusantara/core';
 
       <div class="actions-container">
         <button type="submit" [disabled]="!form.valid">Save</button>
-        <button (click)="navigateToParent(true)">Cancel</button>
-        <button (click)="delete()" *ngIf="!isNew" class="danger">Delete</button>
+        <button type="button" (click)="navigateToParent(true)">Cancel</button>
+        <button type="button" (click)="delete()" *ngIf="!isNew" class="danger">Delete</button>
       </div>
     </form>
   `,
@@ -84,7 +84,7 @@ import { AbstractDetailComponent } from '@nusantara/core';
 
   `]
 })
-export class CategoryDetailComponent extends AbstractDetailComponent<ICategory> implements OnInit {
+export class CategoryComponent extends AbstractDetailComponent<ICategory> implements OnInit {
 
   public parentOptions: ICategory[] = [];
   originalImage: string;
@@ -167,10 +167,4 @@ export class CategoryDetailComponent extends AbstractDetailComponent<ICategory> 
       }
     );
   }
-
-  delete() {
-    // todo: confirm first
-    this.service.delete(this.form.value);
-  }
-
 }

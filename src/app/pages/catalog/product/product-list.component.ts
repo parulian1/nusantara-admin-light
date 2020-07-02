@@ -64,10 +64,10 @@ export class ProductListComponent extends AbstractListComponent<IProduct> {
   ngOnInit(): void {
     this.route.data.subscribe(
       (data: {
-          categories: PagedResponse<ICategory>,
+          categories: ICategory[],
           vendors: PagedResponse<IVendor>,
           productClasses: PagedResponse<IProductClass>}) => {
-        this.categories = data.categories.entities;
+        this.categories = data.categories;
         this.vendors = data.vendors.entities;
         this.productClasses = data.productClasses.entities;
     });

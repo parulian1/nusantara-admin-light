@@ -43,7 +43,7 @@ import { NewProductImageComponent } from '@nusantara/pages/catalog/product/media
         <span>Category</span>
         <select formControlName="category">
           <option *ngFor="let c of categories" [ngValue]="c.href">
-            {{ c.name }}
+            {{ c.pathName }}
           </option>
         </select>
       </label>
@@ -73,7 +73,6 @@ import { NewProductImageComponent } from '@nusantara/pages/catalog/product/media
         <h2>Inventory (Read-Only)</h2>
       </div>
 
-      <h2>Pricing</h2>
       <nus-price-list-host [form]="priceLists"></nus-price-list-host>
 
       <nus-product-media-host [form]="media"></nus-product-media-host>
@@ -121,12 +120,12 @@ export class ProductComponent extends AbstractDetailComponent<IProduct> implemen
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.route.data.subscribe((data: { categories: PagedResponse<ICategory>,
+    this.route.data.subscribe((data: { categories: ICategory[],
                                              vendors: PagedResponse<IVendor>,
                                              productClasses: PagedResponse<IProductClass>,
                                              mediaTypes: IChoiceFieldChoice[]}) => {
       this.vendors = data.vendors.entities;
-      this.categories = data.categories.entities;
+      this.categories = data.categories;
       this.productClasses = data.productClasses.entities;
       this.mediaTypes = data.mediaTypes;
     });
@@ -174,13 +173,19 @@ export class ProductComponent extends AbstractDetailComponent<IProduct> implemen
     // todo: delete sub entities that shouldn't be saved on the primary object
     // .. like price-lists, media, dll.
     delete (formValue as IProduct).media;
+    delete (formValue as IProduct).priceLists;
     return formValue;
   }
 
   save() {
+
     this.service.save(this.getFormValue()).subscribe(
       resp => {
         if (resp.success) {
+
+          this.mediaHost.saveAll().subscribe(resp2 => {
+            this.onSaveSuccess(resp);
+          });
           // todo: add all the sub entities that are saved indepentently..
           // -- price lists
           // -- variants??

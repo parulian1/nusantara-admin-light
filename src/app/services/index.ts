@@ -18,3 +18,5 @@ export * from './shipping-provider.service';
 
 export * from './flat-page.service';
 export * from './widget.service';
+
+export * from './google.service';

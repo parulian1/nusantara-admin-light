@@ -22,22 +22,23 @@ import { AbstractDetailComponent } from '@nusantara/core/components';
         <input type="text" formControlName="name">
       </label>
 
-      <label>Type
+      <label>
+        <span>Type</span>
         <select formControlName="type">
             <option *ngFor="let opt of typeChoices" [ngValue]="opt.value">
               {{opt.displayName}}
             </option>
         </select>
       </label>
-      <label [ngClass]="{'hidden': isDigitalProduct}">
+      <label [ngClass]="{'hidden': isDigitalProduct}" class="without-field-errors">
         <input type="checkbox" formControlName="requiresShipping">
         Requires Shipping?
       </label>
-      <label [ngClass]="{'hidden': isDigitalProduct}">
+      <label [ngClass]="{'hidden': isDigitalProduct}" class="without-field-errors">
         <input type="checkbox" formControlName="trackStock">
         Track Stock?
       </label>
-      <label [ngClass]="{'hidden': isDigitalProduct}">
+      <label [ngClass]="{'hidden': isDigitalProduct}" class="without-field-errors">
         <input type="checkbox" formControlName="isPerishable">
         Is Perishable?
       </label>
@@ -89,13 +90,16 @@ import { AbstractDetailComponent } from '@nusantara/core/components';
         </tbody>
       </table>
 
-      <div>
-        <button type="submit" [disabled]="!form.valid">Save</button>
-      </div>
+      <nus-detail-actions
+        [component]="this"
+        (cancel)="navigateToParent(true)"
+        (delete)="delete()">
+      </nus-detail-actions>
     </form>
   `,
   styles: [
     'button.add-button { background: transparent; border: none; }',
+    'label.without-field-errors { min-height: 0; }',
   ]
 })
 export class ProductClassComponent extends AbstractDetailComponent<IProductClass> implements OnInit {
@@ -116,8 +120,6 @@ export class ProductClassComponent extends AbstractDetailComponent<IProductClass
   get type(): FormControl { return this.form.get('type') as FormControl; }
   get href(): FormControl { return this.form.get('href') as FormControl; }
   get attributes(): FormArray { return this.form.get('attributes') as FormArray; }
-
-
 
   get attributeForms(): FormGroup[] {
     return (this.form.controls.attributes as FormArray).controls as FormGroup[];

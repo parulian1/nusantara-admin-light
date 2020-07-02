@@ -13,12 +13,14 @@ import { ICategory } from '@nusantara/models';
                    can discover something-something">
     </nus-list-header>
 
+    <nus-pagination [page]="page"></nus-pagination>
+
     <table>
       <thead>
         <tr>
           <th translate>Name</th>
           <th translate>Depth</th>
-          <th translate>Icon</th>
+          <th translate>Has Icon?</th>
           <th translate>Product Count</th>
         </tr>
       </thead>
@@ -26,14 +28,13 @@ import { ICategory } from '@nusantara/models';
         <tr *ngFor="let entity of page.entities">
           <td><a [routerLink]="[entity|entityToSlug]">{{ entity.pathName }}</a></td>
           <td>{{entity.depth}}</td>
-          <td>
-            <img [src]="entity.image" alt="icon" class="icon" *ngIf="entity.image">
-            <span *ngIf="!entity.image">---</span>
-          </td>
+          <td><nus-true-false [value]="!!entity.image" [showFalseIcon]="false"></nus-true-false></td>
           <td>{{ entity.productCount }}</td>
         </tr>
       </tbody>
     </table>
+
+    <nus-pagination [page]="page"></nus-pagination>
   `,
   styles: [
     'img.icon { background-color: gray; height: 16px; width: 16px; }',

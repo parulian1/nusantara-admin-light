@@ -1,2 +1,2 @@
-export * from './category-detail.component';
+export * from './category.component';
 export * from './category-list.component';

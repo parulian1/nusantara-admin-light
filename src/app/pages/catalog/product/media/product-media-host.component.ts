@@ -6,6 +6,8 @@ import { ProductMediaService } from '@nusantara/services';
 import { IProductMedia } from '@nusantara/models';
 import { ActivatedRoute } from '@angular/router';
 import { NewProductImageComponent, NewProductYoutubeComponent } from '@nusantara/pages/catalog/product/media';
+import { Observable, zip } from 'rxjs';
+import { IResultResponse } from '@nusantara/core/responses';
 
 /**
  * Container for all the media objects assigned to a single product.
@@ -18,10 +20,10 @@ import { NewProductImageComponent, NewProductYoutubeComponent } from '@nusantara
   selector: 'nus-product-media-host',
   template: `
     <h2>Media
-      <button (click)="addNewImage()" type="button">
+      <button (click)="newImageModal.open()" type="button">
         <i class="material-icons">image</i>
         ({{ imageCount }})</button>
-      <button (click)="addNewYoutube()" type="button">
+      <button (click)="newYoutubeModal.open()" type="button">
         <i class="material-icons">ondemand_video</i>
         ({{ youtubeCount }})</button>
     </h2>
@@ -41,6 +43,7 @@ import { NewProductImageComponent, NewProductYoutubeComponent } from '@nusantara
 export class ProductMediaHostComponent extends AbstractEditingComponent<FormArray> implements OnInit, AfterViewInit {
 
   mediaTypes: Array<IChoiceFieldChoice>;
+
   @Input() form: FormArray;
   @ViewChild(NewProductImageComponent) newImageModal: NewProductImageComponent;
   @ViewChild(NewProductYoutubeComponent) newYoutubeModal: NewProductYoutubeComponent;
@@ -49,7 +52,6 @@ export class ProductMediaHostComponent extends AbstractEditingComponent<FormArra
 
   newImages: Array<FormData> = [];
   newVideos: Array<IProductMedia> = [];
-
   deletedMedia: Array<IProductMedia> = [];
 
   constructor(protected service: ProductMediaService,
@@ -57,8 +59,8 @@ export class ProductMediaHostComponent extends AbstractEditingComponent<FormArra
               protected fb: FormBuilder) { super(); }
 
 
-  get imageCount(): number { return 0; }
-  get youtubeCount(): number { return 0; }
+  get imageCount(): number { return this.entities.filter(e => e.type === 'image').length; }
+  get youtubeCount(): number { return this.entities.filter(e => e.type === 'you_tube').length; }
 
   ngOnInit() {
     this.route.data.subscribe((data: {mediaTypes: IChoiceFieldChoice[]}) => {
@@ -88,15 +90,14 @@ export class ProductMediaHostComponent extends AbstractEditingComponent<FormArra
     }
   }
   remove(index: number) {
-    this.form.removeAt(index);
-  }
-
-  addNewImage() {
-    this.newImageModal.open();
-  }
-
-  addNewYoutube() {
-    this.newYoutubeModal.open();
+    const mediaToRemove = this.entities[index];
+    // media was already saved to API:  record it in deleted media
+    // so we can call DELETE on the API
+    if (!!mediaToRemove.href) {
+      this.deletedMedia.push(mediaToRemove);
+    }
+    // remove from displayed objects
+    this.entities.splice(index, 1);
   }
 
   /**
@@ -126,5 +127,13 @@ export class ProductMediaHostComponent extends AbstractEditingComponent<FormArra
     }
   }
 
+
+  saveAll(): Observable<IResultResponse[]> {
+    return zip(
+      ...this.newImages.map(img => this.service.save(img)),
+      ...this.newVideos.map(vid => this.service.save(vid)),
+      ...this.deletedMedia.map(m => this.service.delete(m))
+    );
+  }
 
 }

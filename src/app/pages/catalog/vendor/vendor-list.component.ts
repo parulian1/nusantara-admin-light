@@ -11,6 +11,9 @@ import { ActivatedRoute } from '@angular/router';
       title="Vendors"
       description="Principals or distributors that provides the products sold.">
     </nus-list-header>
+
+    <nus-pagination [page]="page"></nus-pagination>
+
     <table>
       <thead>
       <tr>
@@ -29,6 +32,8 @@ import { ActivatedRoute } from '@angular/router';
       </tr>
       </tbody>
     </table>
+
+    <nus-pagination [page]="page"></nus-pagination>
   `,
   styles: []
 })

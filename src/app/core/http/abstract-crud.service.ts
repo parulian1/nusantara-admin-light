@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { PagedResponse } from '@nusantara/core/pagination';
 import { IResultResponse, SuccessResult, ErrorResult, SuccessCreatedResult } from '../responses';
 import { IDrfOptionsResponse, IChoiceFieldChoice, IChoiceField } from '..';
+import { ICategory } from '@nusantara/models';
 
 export abstract class AbstractCrudService<T extends {href: string}> {
 
@@ -40,6 +41,22 @@ export abstract class AbstractCrudService<T extends {href: string}> {
     return this.httpClient
       .get<T[]>(`${this.baseUrl}/`, {observe: 'response', responseType: 'json', params})
       .pipe(map(resp => new PagedResponse(resp)));
+  }
+
+  /**
+   * Gets a **non-paginated** list of all objects from an API.
+   *
+   * @TODO: improve this to continue to crawl results if the number of objects is
+   *        greater than 250 (we're setting 250 here because this is the default
+   *        maximum page size configured API-side.
+   *
+   * **Use with caution!!**.
+   */
+  fetchAll(query?: string): Observable<T[]> {
+    const params = new HttpParams()
+      .append('per_page', '250');
+    return this.httpClient
+      .get<T[]>(`${this.baseUrl}/`, {observe: 'body', responseType: 'json', params});
   }
 
   /**
@@ -89,6 +106,8 @@ export abstract class AbstractCrudService<T extends {href: string}> {
     const keysToRemove = [];
 
     formData.forEach((value, key, parent) => {
+      // todo: there is a bug in firefox.  value is detected as 'string' and not 'File'
+      // works correctly in: chrome, safari, edge.
       if (value instanceof File) {
         if (!value.name) {
           keysToRemove.push(key);

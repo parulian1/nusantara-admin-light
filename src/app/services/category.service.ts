@@ -45,7 +45,7 @@ export class CategoryService extends AbstractCrudService<ICategory> {
   fetchAvailableParentCategories(): Observable<ICategory[]> {
 
     const params = new HttpParams()
-      .append('page_size', '999')
+      .append('per_page', '999')
       .append('depth__lte', '2');
 
     return this.httpClient
