@@ -44,6 +44,10 @@ const routes: Routes = [
         loadChildren: () => import('./pages/fulfillment').then(m => m.FulfillmentModule)
       },
       {
+        path: 'inventory',
+        loadChildren: () => import('./pages/inventory').then(m => m.InventoryModule)
+      },
+      {
         path: 'config',
         loadChildren: () => import('./pages/config/config.module').then(m => m.ConfigModule)
       },

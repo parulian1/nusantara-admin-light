@@ -12,7 +12,6 @@ import { PagedResponse } from '@nusantara/core/pagination';
 
 import { PriceListHostComponent } from './price';
 import { ProductMediaHostComponent } from './media';
-import { NewProductImageComponent } from '@nusantara/pages/catalog/product/media';
 
 @Component({
   selector: 'nus-product',

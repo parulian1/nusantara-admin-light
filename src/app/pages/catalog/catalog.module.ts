@@ -8,7 +8,6 @@ import { CatalogRoutingModule } from './catalog-routing.module';
 import { CategoryListComponent, CategoryComponent } from './category';
 import { ProductClassListComponent, ProductClassComponent } from './product-class';
 import * as product from './product';
-import * as inventory from './inventory';
 import { VendorListComponent, VendorComponent } from './vendor';
 
 @NgModule({
@@ -35,8 +34,6 @@ import { VendorListComponent, VendorComponent } from './vendor';
 
     VendorListComponent,
     VendorComponent,
-
-    inventory.ReceivingComponent,
   ],
   imports: [
     CommonModule,
