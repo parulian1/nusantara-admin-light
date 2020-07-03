@@ -1,8 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ToastService } from './toast.service';
-import { Status, ToastMessage } from './toast-messsage';
+import { ToastMessage } from './toast-messsage';
+import { Status } from './toast-status.enum';
 
+/**
+ * Component responsible for displaying messages to the user.
+ * This component should be included only once in the root component of your application.
+ * Adding messages dipslayed should be handled through the toast service
+ *
+ * @see ToastService
+ */
 @Component({
   selector: 'nus-toast',
   template: `

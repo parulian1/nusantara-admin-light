@@ -1,21 +1,22 @@
 import { Subject } from 'rxjs';
 
 import { ToastLevelEnum } from './toast-level.enum';
+import { Status } from './toast-status.enum';
 
-export enum Status {
-  adding = 'adding',
-  active = 'active',
-  removing = 'removing',
-  removed = 'removed'
-}
-
+/**
+ * A notification message that is temporarily to the user.
+ *
+ * These messages will automatically close themselves after a
+ * set period of time (15 seconds), if the user does not dismiss
+ * them.
+ */
 export class ToastMessage {
 
   private internalStatus = Status.adding;
   statusSubject = new Subject<Status>();
 
-  private transitionDelay = 400;
-  private ttl = 15_000;
+  private transitionDelay = 400; // delay between changing adding->active or removing->removed
+  private ttl = 15_000; // time (ms) before the message is automatically dismissed
 
   ttlTimerId: any;
 
@@ -39,6 +40,14 @@ export class ToastMessage {
     this.statusSubject.next(this.status);
   }
 
+  /**
+   * Begins the process of removing this message from the currently-displayed
+   * set of toast messages.
+   *
+   * There is a delay of 400ms from the time this method is called until
+   * the hosting component is notified that this object should be removed
+   * (to allow for some UI fade-out animation).
+   */
   dismiss() {
     if (this.ttlTimerId) {
       clearTimeout(this.ttlTimerId);
