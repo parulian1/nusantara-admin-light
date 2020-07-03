@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { WarehouseListResolver, WarehouseResolver } from '@nusantara/resolvers';
-import { WarehouseListComponent, WarehouseDetailComponent, SubLocationTypeResolver, WarehouseTypeResolver } from './warehouse';
+import { WarehouseListComponent, WarehouseComponent, SubLocationTypeResolver, WarehouseTypeResolver } from './warehouse';
 import { PaymentGatewayListComponent, PaymentGatewayListResolver } from './payment-gateways';
 import { ConfigHubComponent } from './config-hub.component';
 import {
@@ -29,7 +29,7 @@ const routes: Routes = [
       },
       {
         path: 'new',
-        component: WarehouseDetailComponent,
+        component: WarehouseComponent,
         resolve: {
           types: WarehouseTypeResolver,
           subLocationTypes: SubLocationTypeResolver,
@@ -39,7 +39,7 @@ const routes: Routes = [
       },
       {
         path: ':slug',
-        component: WarehouseDetailComponent,
+        component: WarehouseComponent,
         resolve: {
           entity: WarehouseResolver,
           types: WarehouseTypeResolver,

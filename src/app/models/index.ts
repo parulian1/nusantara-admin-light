@@ -33,7 +33,8 @@ export * from './inventory-receiving';
 export * from './inventory-receiving-status.type';
 export * from './stock-record';
 
+import * as google from './google';
 import * as base from './base';
 import * as drf from './drf';
 
-export { base, drf };
+export { base, drf, google };

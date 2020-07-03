@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { AbstractDetailComponent, ToastService } from '@nusantara/core';
+import { AbstractDetailComponent, ToastService, PagedResponse } from '@nusantara/core';
 import { ISubLocation, IWarehouse, drf } from '@nusantara/models';
 import { WarehouseService } from '@nusantara/services';
-import { PagedResponse } from '@nusantara/core/pagination';
 
 @Component({
   selector: 'nus-warehouse-detail',
@@ -53,55 +52,8 @@ import { PagedResponse } from '@nusantara/core/pagination';
         <textarea formControlName="internalNotes"></textarea>
       </label>
 
-
-<!--      <div formGroupName="address">-->
-        <nus-address [form]="form.get('address')" formGroupName="address">
-        </nus-address>
-<!--        <h2>Address</h2>-->
-<!--        <label>-->
-<!--          <span>Street</span>-->
-<!--          <input formControlName="street">-->
-<!--        </label>-->
-
-<!--        <label>-->
-<!--          <span>City</span>-->
-<!--          <input formControlName="city">-->
-<!--        </label>-->
-
-<!--        <label>-->
-<!--          <span>Province</span>-->
-<!--          <input formControlName="province">-->
-<!--        </label>-->
-
-<!--        <label>-->
-<!--          <span>District</span>-->
-<!--          <input formControlName="district">-->
-<!--        </label>-->
-
-<!--        <label>-->
-<!--          <span>Sub-District</span>-->
-<!--          <input formControlName="subDistrict">-->
-<!--        </label>-->
-
-<!--        <label>-->
-<!--          <span>Postal Code</span>-->
-<!--          <input formControlName="postalCode">-->
-<!--        </label>-->
-
-<!--        <label>-->
-<!--          <span>Country</span>-->
-<!--          <select formControlName="country">-->
-<!--            <option *ngFor="let c of countries" [ngValue]="c.value">-->
-<!--              {{c.displayName}}-->
-<!--            </option>-->
-<!--          </select>-->
-<!--        </label>-->
-
-<!--        <label>-->
-<!--          <span>Notes</span>-->
-<!--          <textarea formControlName="notes"></textarea>-->
-<!--        </label>-->
-<!--      </div>-->
+      <nus-address [form]="form.get('address')" formGroupName="address">
+      </nus-address>
 
       <div>
         <h2>
@@ -147,16 +99,12 @@ import { PagedResponse } from '@nusantara/core/pagination';
   `,
   styles: [``]
 })
-export class WarehouseDetailComponent extends AbstractDetailComponent<IWarehouse> implements OnInit {
+export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> implements OnInit {
 
   types: Array<drf.IChoice>;
   subLocationTypes: Array<drf.IChoice>;
-  warehouses: Array<{href: string, name: string, code: string}>;
 
-  // only supporting indonesia, so we're going to hardcode this.
-  countries: Array<{displayName: string, value: string}> = [
-    {displayName: 'Indonesia', value: 'id'},
-  ];
+  warehouses: Array<{href: string, name: string, code: string}>;
 
   constructor(public service: WarehouseService,
               public router: Router,

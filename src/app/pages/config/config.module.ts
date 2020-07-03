@@ -5,7 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '@nusantara/shared';
 import { ConfigRoutingModule } from './config-routing.module';
 import { ConfigHubComponent } from './config-hub.component';
-import { WarehouseListComponent, WarehouseDetailComponent } from './warehouse';
+import { WarehouseListComponent, WarehouseComponent } from './warehouse';
 import { PaymentGatewayListComponent } from './payment-gateways';
 import { ShippingMethodListComponent, ShippingProviderDetailComponent, ShippingServiceComponent} from './shipping';
 
@@ -13,7 +13,7 @@ import { ShippingMethodListComponent, ShippingProviderDetailComponent, ShippingS
   declarations: [
     ConfigHubComponent,
     WarehouseListComponent,
-    WarehouseDetailComponent,
+    WarehouseComponent,
     PaymentGatewayListComponent,
     ShippingMethodListComponent,
     ShippingProviderDetailComponent,
