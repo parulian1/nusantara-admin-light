@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { AbstractDetailComponent, IChoiceFieldChoice, ToastService } from '@nusantara/core';
-import { ISubLocation, IWarehouse } from '@nusantara/models';
+import { AbstractDetailComponent, ToastService } from '@nusantara/core';
+import { ISubLocation, IWarehouse, drf } from '@nusantara/models';
 import { WarehouseService } from '@nusantara/services';
 import { PagedResponse } from '@nusantara/core/pagination';
 
@@ -149,8 +149,8 @@ import { PagedResponse } from '@nusantara/core/pagination';
 })
 export class WarehouseDetailComponent extends AbstractDetailComponent<IWarehouse> implements OnInit {
 
-  types: Array<IChoiceFieldChoice>;
-  subLocationTypes: Array<IChoiceFieldChoice>;
+  types: Array<drf.IChoice>;
+  subLocationTypes: Array<drf.IChoice>;
   warehouses: Array<{href: string, name: string, code: string}>;
 
   // only supporting indonesia, so we're going to hardcode this.
@@ -168,8 +168,8 @@ export class WarehouseDetailComponent extends AbstractDetailComponent<IWarehouse
 
   ngOnInit() {
     super.ngOnInit();
-    this.route.data.subscribe((data: {types: IChoiceFieldChoice[],
-                                           subLocationTypes: IChoiceFieldChoice[],
+    this.route.data.subscribe((data: {types: drf.IChoice[],
+                                           subLocationTypes: drf.IChoice[],
                                            allWarehouses: PagedResponse<IWarehouse>}) => {
       this.types = data.types;
       this.subLocationTypes = data.subLocationTypes;

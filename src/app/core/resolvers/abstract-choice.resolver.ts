@@ -1,10 +1,10 @@
 import { Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { IChoiceFieldChoice } from '@nusantara/core';
+import { IChoice } from '@nusantara/models/drf';
 import { AbstractCrudService } from '@nusantara/core/http';
 
-export abstract class AbstractChoiceResolver implements Resolve<IChoiceFieldChoice[]> {
+export abstract class AbstractChoiceResolver implements Resolve<IChoice[]> {
 
   protected readonly service: AbstractCrudService<any>;
   protected readonly fieldName: string;
@@ -13,7 +13,7 @@ export abstract class AbstractChoiceResolver implements Resolve<IChoiceFieldChoi
     this.fieldName = fieldName;
   }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IChoiceFieldChoice[]> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IChoice[]> | Observable<never> {
     return this.service.getFieldChoices(this.fieldName);
   }
 }

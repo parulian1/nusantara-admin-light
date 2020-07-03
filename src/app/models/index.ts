@@ -32,3 +32,8 @@ export * from './flat-page';
 export * from './inventory-receiving';
 export * from './inventory-receiving-status.type';
 export * from './stock-record';
+
+import * as base from './base';
+import * as drf from './drf';
+
+export { base, drf };

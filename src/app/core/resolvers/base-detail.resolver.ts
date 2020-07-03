@@ -2,13 +2,13 @@ import { Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/r
 import { Observable } from 'rxjs';
 
 import { AbstractCrudService } from '@nusantara/core/http';
-import { IEntityHref } from '@nusantara/core';
+import { INamedHrefEntity } from '@nusantara/models/base';
 
 /**
  * Base class for single entity resolvers.  It assumes that a single URL parameter (slug)
  * will be passed in the route.
  */
-export abstract class BaseDetailResolver<T extends IEntityHref> implements Resolve<T> {
+export abstract class BaseDetailResolver<T extends INamedHrefEntity> implements Resolve<T> {
 
   protected service: AbstractCrudService<T>;
 

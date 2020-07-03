@@ -1,7 +1,7 @@
 import { Input, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { IEntityHref } from '@nusantara/core';
+import { INamedHrefEntity } from '@nusantara/models/base';
 import { AddressAutocompleteService } from './address-autocomplete.service';
 import { ICityPostalInfo } from './city-postal-info';
 import { IAddress } from './address';
@@ -65,8 +65,8 @@ export class AddressComponent implements OnInit {
 
   innerForm: FormGroup;
 
-  availableProvinces: IEntityHref[] = [];
-  availableCities: IEntityHref[] = [];
+  availableProvinces: INamedHrefEntity[] = [];
+  availableCities: INamedHrefEntity[] = [];
   availablePostals: ICityPostalInfo[] = [];
 
   constructor(public service: AddressAutocompleteService, public fb: FormBuilder) { }
@@ -114,7 +114,7 @@ export class AddressComponent implements OnInit {
     });
   }
 
-  private onProvinceChanged(newValue: IEntityHref) {
+  private onProvinceChanged(newValue: INamedHrefEntity) {
 
     // always clear cities and postals
     this.availableCities.length = 0;
@@ -129,14 +129,14 @@ export class AddressComponent implements OnInit {
 
       // populate cities
       this.service
-        .fetchCities((this.province.value as IEntityHref).href)
+        .fetchCities((this.province.value as INamedHrefEntity).href)
         .subscribe(data => {
           this.availableCities = data;
           this.city.enable();
         });
     }
   }
-  private onCityChanged(newValue: IEntityHref) {
+  private onCityChanged(newValue: INamedHrefEntity) {
 
     this.availablePostals.length = 0;
     this.postal.setValue(null);
@@ -144,7 +144,7 @@ export class AddressComponent implements OnInit {
 
     if (!!newValue) {
       this.service
-        .fetchPostalData((this.city.value as IEntityHref).href)
+        .fetchPostalData((this.city.value as INamedHrefEntity).href)
         .subscribe(data => {
           this.availablePostals = data;
           this.postal.enable();
@@ -180,7 +180,7 @@ export class AddressComponent implements OnInit {
 
     // step 2/3 -- initialize city
     this.service
-      .fetchCities((this.province.value as IEntityHref).href)
+      .fetchCities((this.province.value as INamedHrefEntity).href)
       .subscribe(cityList => {
         this.city.enable();
         this.availableCities = cityList;
@@ -194,7 +194,7 @@ export class AddressComponent implements OnInit {
 
         // step 3/3 -- initialize postal
         this.service
-          .fetchPostalData((this.city.value as IEntityHref).href)
+          .fetchPostalData((this.city.value as INamedHrefEntity).href)
           .subscribe(postalList => {
             this.postal.enable();
             this.availablePostals = postalList;
@@ -208,14 +208,14 @@ export class AddressComponent implements OnInit {
       });
   }
 
-  private getProvinceFromName(provinceName: string): IEntityHref {
+  private getProvinceFromName(provinceName: string): INamedHrefEntity {
     const matches = this.availableProvinces.filter(prov => prov.name === provinceName);
     if (!!matches.length) {
       return matches[0];
     }
     return null;
   }
-  private getCityFromName(cityName: string): IEntityHref {
+  private getCityFromName(cityName: string): INamedHrefEntity {
     const matches = this.availableCities.filter(city => city.name === cityName);
     if (!!matches.length) {
       return matches[0];

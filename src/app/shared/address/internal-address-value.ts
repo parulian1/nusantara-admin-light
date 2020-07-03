@@ -1,4 +1,4 @@
-import { IEntityHref } from '@nusantara/core';
+import { INamedHrefEntity } from '@nusantara/models/base';
 
 import { ICityPostalInfo } from './city-postal-info';
 
@@ -7,7 +7,7 @@ import { ICityPostalInfo } from './city-postal-info';
  */
 export interface InternalAddressValue {
   street: string;
-  province: IEntityHref;
-  city: IEntityHref;
+  province: INamedHrefEntity;
+  city: INamedHrefEntity;
   postal: ICityPostalInfo;
 }

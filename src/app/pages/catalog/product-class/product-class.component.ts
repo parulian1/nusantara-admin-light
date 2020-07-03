@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormArray, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { IChoiceFieldChoice, ToastService } from '@nusantara/core';
-import { IProductAttribute, IProductClass } from '@nusantara/models';
+import { ToastService } from '@nusantara/core';
+import { IProductAttribute, IProductClass, drf } from '@nusantara/models';
 import { ProductClassService, ProductAttributeService } from '@nusantara/services';
 import { AbstractDetailComponent } from '@nusantara/core/components';
 
@@ -104,8 +104,8 @@ import { AbstractDetailComponent } from '@nusantara/core/components';
 })
 export class ProductClassComponent extends AbstractDetailComponent<IProductClass> implements OnInit {
 
-  typeChoices: IChoiceFieldChoice[];
-  attributeTypeChoices: IChoiceFieldChoice[];
+  typeChoices: drf.IChoice[];
+  attributeTypeChoices: drf.IChoice[];
 
   constructor(public service: ProductClassService,
               private attributeService: ProductAttributeService,
@@ -131,7 +131,7 @@ export class ProductClassComponent extends AbstractDetailComponent<IProductClass
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.route.data.subscribe((data: { typeChoices: IChoiceFieldChoice[], attributeTypeChoices: IChoiceFieldChoice[] }) => {
+    this.route.data.subscribe((data: { typeChoices: drf.IChoice[], attributeTypeChoices: drf.IChoice[] }) => {
       this.attributeTypeChoices = data.attributeTypeChoices;
       this.typeChoices = data.typeChoices;
       this.type.valueChanges.subscribe((value) => this.onTypeChanged(value));

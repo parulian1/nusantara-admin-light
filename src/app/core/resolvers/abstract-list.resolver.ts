@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 
 import { PagedResponse } from '@nusantara/core/pagination';
 import { AbstractCrudService } from '@nusantara/core/http';
-import { IHyperlinkedEntity } from '@nusantara/models/base';
+import { IHrefEntity } from '@nusantara/models/base';
 
 /**
  * Standard resolver for displaying on list pages.
@@ -11,7 +11,7 @@ import { IHyperlinkedEntity } from '@nusantara/models/base';
  * Supports pagination via the page=n query parameter.
  * Supports keyword filtering via the 'q=some+text' query parameter.
  */
-export abstract class AbstractListResolver<T extends IHyperlinkedEntity> implements Resolve<PagedResponse<T>> {
+export abstract class AbstractListResolver<T extends IHrefEntity> implements Resolve<PagedResponse<T>> {
 
   protected readonly service: AbstractCrudService<T>;
 

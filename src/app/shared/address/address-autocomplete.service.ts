@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { IEntityHref } from '@nusantara/core';
+import { INamedHrefEntity } from '@nusantara/models/base';
 import { ICityPostalInfo } from './city-postal-info';
 
 /**
@@ -21,8 +21,8 @@ export class AddressAutocompleteService {
    *
    * @param countryCode The country code to fetch provinces for.
    */
-  fetchProvinces(countryCode = 'id'): Observable<IEntityHref[]> {
-    return this.httpClient.get<IEntityHref[]>(
+  fetchProvinces(countryCode = 'id'): Observable<INamedHrefEntity[]> {
+    return this.httpClient.get<INamedHrefEntity[]>(
       `/api/fulfillment/address/${countryCode}/`,
       { observe: 'body', responseType: 'json' }
     );
@@ -33,8 +33,8 @@ export class AddressAutocompleteService {
    *
    * @param provinceUrl One of the hrefs fetched from the results of fetchProvinces
    */
-  fetchCities(provinceUrl: string): Observable<IEntityHref[]> {
-    return this.httpClient.get<IEntityHref[]>(provinceUrl, { observe: 'body', responseType: 'json' });
+  fetchCities(provinceUrl: string): Observable<INamedHrefEntity[]> {
+    return this.httpClient.get<INamedHrefEntity[]>(provinceUrl, { observe: 'body', responseType: 'json' });
   }
 
   /**

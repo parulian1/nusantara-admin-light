@@ -3,7 +3,7 @@ import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@a
 import { Observable } from 'rxjs';
 
 import { ProductClassService } from '@nusantara/services';
-import { IChoiceFieldChoice } from '@nusantara/core';
+import { IChoice } from '@nusantara/models/drf';
 
 
 /**
@@ -12,11 +12,11 @@ import { IChoiceFieldChoice } from '@nusantara/core';
 @Injectable({
   providedIn: 'root',
 })
-export class ProductClassTypeResolver implements Resolve<IChoiceFieldChoice[]> {
+export class ProductClassTypeResolver implements Resolve<IChoice[]> {
 
   constructor(private service: ProductClassService, private router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IChoiceFieldChoice[]> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IChoice[]> | Observable<never> {
     return this.service.getFieldChoices('type');
   }
 }

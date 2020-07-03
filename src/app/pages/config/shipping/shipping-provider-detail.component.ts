@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { AbstractDetailComponent, IChoiceFieldChoice, ToastService } from '@nusantara/core';
-import { IShippingProvider, IShippingService } from '@nusantara/models';
+import { AbstractDetailComponent, ToastService } from '@nusantara/core';
+import { IShippingProvider, IShippingService, drf } from '@nusantara/models';
 import { ShippingProviderService } from '@nusantara/services';
 
 @Component({
@@ -74,7 +74,7 @@ import { ShippingProviderService } from '@nusantara/services';
 })
 export class ShippingProviderDetailComponent extends AbstractDetailComponent<IShippingProvider> implements OnInit {
 
-  types: IChoiceFieldChoice[] = [];
+  types: drf.IChoice[] = [];
 
   constructor(public service: ShippingProviderService,
               public route: ActivatedRoute,
@@ -86,7 +86,7 @@ export class ShippingProviderDetailComponent extends AbstractDetailComponent<ISh
 
   ngOnInit() {
     super.ngOnInit();
-    this.route.data.subscribe((data: {types: IChoiceFieldChoice[]}) => {
+    this.route.data.subscribe((data: {types: drf.IChoice[]}) => {
       this.types = data.types;
     });
   }

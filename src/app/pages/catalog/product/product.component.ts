@@ -1,12 +1,11 @@
-import { AfterViewInit, Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Validators, FormBuilder, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { zip } from 'rxjs';
 
-import { ICategory, IProduct, IProductAttribute, IProductClass, IVendor } from '@nusantara/models';
+import { ICategory, IProduct, IProductAttribute, IProductClass, IVendor, drf } from '@nusantara/models';
 import { ProductService } from '@nusantara/services';
-import { IChoiceFieldChoice, ToastService } from '@nusantara/core';
+import { ToastService } from '@nusantara/core';
 import { AbstractDetailComponent } from '@nusantara/core/components';
 import { PagedResponse } from '@nusantara/core/pagination';
 
@@ -101,7 +100,7 @@ export class ProductComponent extends AbstractDetailComponent<IProduct> implemen
   categories: Array<ICategory>;
   vendors: Array<IVendor>;
   attribute: Array<IProductAttribute>;
-  mediaTypes: Array<IChoiceFieldChoice>;
+  mediaTypes: Array<drf.IChoice>;
 
   @ViewChild(ProductMediaHostComponent) mediaHost!: ProductMediaHostComponent;
   @ViewChild(PriceListHostComponent) priceListHost!: PriceListHostComponent;
@@ -125,7 +124,7 @@ export class ProductComponent extends AbstractDetailComponent<IProduct> implemen
     this.route.data.subscribe((data: { categories: ICategory[],
                                              vendors: PagedResponse<IVendor>,
                                              productClasses: IProductClass[],
-                                             mediaTypes: IChoiceFieldChoice[]}) => {
+                                             mediaTypes: drf.IChoice[]}) => {
       this.vendors = data.vendors.entities;
       this.categories = data.categories;
       this.productClasses = data.productClasses;

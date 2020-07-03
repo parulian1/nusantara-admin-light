@@ -1,7 +1,7 @@
 import { Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { IHyperlinkedEntity } from '@nusantara/models/base';
+import { IHrefEntity } from '@nusantara/models/base';
 import { AbstractCrudService } from '@nusantara/core/http';
 
 /**
@@ -11,7 +11,7 @@ import { AbstractCrudService } from '@nusantara/core/http';
  * This resolver assumes there will be a single url parameter named /:slug which can be used
  * to fetch the desired object.
  */
-export abstract class AbstractDetailResolver<T extends IHyperlinkedEntity> implements Resolve<T> {
+export abstract class AbstractDetailResolver<T extends IHrefEntity> implements Resolve<T> {
 
   protected readonly service: AbstractCrudService<T>;
 

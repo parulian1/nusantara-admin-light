@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { Validators, FormBuilder, FormArray } from '@angular/forms';
+import { FormBuilder, FormArray } from '@angular/forms';
 
-import { AbstractEditingComponent, IChoiceFieldChoice } from '@nusantara/core';
-import { IPriceList, IPriceListRange } from '@nusantara/models';
+import { AbstractEditingComponent } from '@nusantara/core';
+import { IPriceList, IPriceListRange, drf } from '@nusantara/models';
 import { PriceListService } from '@nusantara/services';
 import { ActivatedRoute } from '@angular/router';
 
@@ -35,14 +35,14 @@ export class PriceListHostComponent extends AbstractEditingComponent<FormArray> 
   @Input() form: FormArray;
   @ViewChildren(PriceListComponent) priceLists!: QueryList<PriceListComponent>;
 
-  types: Array<IChoiceFieldChoice>;
+  types: Array<drf.IChoice>;
 
   constructor(protected service: PriceListService,
               protected route: ActivatedRoute,
               protected fb: FormBuilder) { super(); }
 
   ngOnInit() {
-    this.route.data.subscribe((data: {priceListTypes: IChoiceFieldChoice[]}) => {
+    this.route.data.subscribe((data: {priceListTypes: drf.IChoice[]}) => {
       this.types = data.priceListTypes;
     });
   }

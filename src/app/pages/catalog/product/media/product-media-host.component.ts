@@ -3,9 +3,9 @@ import { FormArray, FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, zip } from 'rxjs';
 
-import { AbstractEditingComponent, DialogResult, IChoiceFieldChoice } from '@nusantara/core';
+import { AbstractEditingComponent, DialogResult } from '@nusantara/core';
 import { IResultResponse } from '@nusantara/core/responses';
-import { IProduct, IProductMedia } from '@nusantara/models';
+import { IProduct, IProductMedia, drf } from '@nusantara/models';
 import { ProductMediaService } from '@nusantara/services';
 
 import { NewProductImageComponent } from './new-product-image.component';
@@ -44,7 +44,7 @@ import { NewProductYoutubeComponent } from './new-product-youtube.component';
 })
 export class ProductMediaHostComponent extends AbstractEditingComponent<FormArray> implements OnInit, AfterViewInit {
 
-  mediaTypes: Array<IChoiceFieldChoice>;
+  mediaTypes: Array<drf.IChoice>;
 
   @Input() form: FormArray;
   @ViewChild(NewProductImageComponent) newImageModal: NewProductImageComponent;
@@ -65,7 +65,7 @@ export class ProductMediaHostComponent extends AbstractEditingComponent<FormArra
   get youtubeCount(): number { return this.entities.filter(e => e.type === 'you_tube').length; }
 
   ngOnInit() {
-    this.route.data.subscribe((data: {mediaTypes: IChoiceFieldChoice[]}) => {
+    this.route.data.subscribe((data: {mediaTypes: drf.IChoice[]}) => {
       this.mediaTypes = data.mediaTypes;
     });
   }

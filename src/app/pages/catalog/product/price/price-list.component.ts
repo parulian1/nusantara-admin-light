@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormArray, FormGroup, FormControl } from '@angular/forms';
 
-import { AbstractEditingComponent, IChoiceFieldChoice } from '@nusantara/core';
+import { AbstractEditingComponent } from '@nusantara/core';
 import { ActivatedRoute } from '@angular/router';
-import { IPriceListRange } from '@nusantara/models';
+import { IPriceListRange, drf } from '@nusantara/models';
 
 /**
  * Shows the details for one price list assigned to a product.
@@ -42,7 +42,7 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
 
   @Input() form: FormGroup;
 
-  types: Array<IChoiceFieldChoice>;
+  types: Array<drf.IChoice>;
 
   constructor(protected route: ActivatedRoute,
               protected fb: FormBuilder) { super(); }
@@ -56,7 +56,7 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
   get locations(): FormArray { return this.form.get('locations') as FormArray; }
 
   ngOnInit() {
-    this.route.data.subscribe((data: {priceListTypes: IChoiceFieldChoice[]}) => {
+    this.route.data.subscribe((data: {priceListTypes: drf.IChoice[]}) => {
       this.types = data.priceListTypes;
     });
   }

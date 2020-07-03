@@ -1,4 +1,4 @@
-import { IHyperlinkedEntity } from '@nusantara/models/base';
+import { IHrefEntity } from '@nusantara/models/base';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { PagedResponse } from '@nusantara/core/pagination';
 import { AbstractCrudService } from '@nusantara/core/http';
@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
  * Supports pagination via the page=n query parameter.
  * Supports keyword filtering via the 'q=some+text' query parameter.
  */
-export abstract class AbstractNonPaginatedListResolver<T extends IHyperlinkedEntity> implements Resolve<PagedResponse<T>> {
+export abstract class AbstractNonPaginatedListResolver<T extends IHrefEntity> implements Resolve<PagedResponse<T>> {
 
   protected readonly service: AbstractCrudService<T>;
 

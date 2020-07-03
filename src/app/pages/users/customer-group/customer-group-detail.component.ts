@@ -3,8 +3,8 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { parse } from 'iso8601-duration';
 
-import { AbstractDetailComponent, IChoiceFieldChoice } from '@nusantara/core';
-import { ICustomerGroup, CustomerGroupType } from '@nusantara/models';
+import { AbstractDetailComponent } from '@nusantara/core';
+import { ICustomerGroup, CustomerGroupType, drf } from '@nusantara/models';
 import { CustomerGroupService } from '@nusantara/services';
 
 @Component({
@@ -58,7 +58,7 @@ import { CustomerGroupService } from '@nusantara/services';
 })
 export class CustomerGroupDetailComponent extends AbstractDetailComponent<ICustomerGroup> implements OnInit {
 
-  typeChoices: IChoiceFieldChoice[] = [];
+  typeChoices: drf.IChoice[] = [];
 
   groupsWithAmount = [CustomerGroupType.lifetimeValue, ];
   groupsWithTime = [CustomerGroupType.newCustomers, CustomerGroupType.existingCustomers, CustomerGroupType.churned, ];
@@ -74,7 +74,7 @@ export class CustomerGroupDetailComponent extends AbstractDetailComponent<ICusto
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.route.data.subscribe((data: {typeChoices: IChoiceFieldChoice[]}) => {
+    this.route.data.subscribe((data: {typeChoices: drf.IChoice[]}) => {
       this.typeChoices = data.typeChoices;
     });
   }

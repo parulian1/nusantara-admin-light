@@ -4,8 +4,7 @@ import { map } from 'rxjs/operators';
 
 import { PagedResponse } from '@nusantara/core/pagination';
 import { IResultResponse, SuccessResult, ErrorResult, SuccessCreatedResult } from '../responses';
-import { IDrfOptionsResponse, IChoiceFieldChoice, IChoiceField } from '..';
-import { ICategory } from '@nusantara/models';
+import { drf } from '@nusantara/models';
 
 export abstract class AbstractCrudService<T extends {href: string}> {
 
@@ -161,10 +160,10 @@ export abstract class AbstractCrudService<T extends {href: string}> {
    *
    * @param fieldName A field with choices.  This field **must** be at the top level of the object(s).
    */
-  getFieldChoices(fieldName: string): Observable<IChoiceFieldChoice[]> {
+  getFieldChoices(fieldName: string): Observable<drf.IChoice[]> {
     return this.httpClient
-      .options<IDrfOptionsResponse>(`${this.baseUrl}/`, {observe: 'body', responseType: 'json'})
-      .pipe(map(resp => (resp.actions.POST[fieldName] as IChoiceField).choices));
+      .options<drf.IOptionsResponse>(`${this.baseUrl}/`, {observe: 'body', responseType: 'json'})
+      .pipe(map(resp => (resp.actions.POST[fieldName] as drf.IChoiceField).choices));
   }
 
 }

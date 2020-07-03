@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { AbstractListComponent, IEntityHref } from '@nusantara/core';
+import { AbstractListComponent } from '@nusantara/core';
+import { INamedHrefEntity } from '@nusantara/models/base';
 
 @Component({
   selector: 'nus-employee-list',
@@ -25,6 +26,6 @@ import { AbstractListComponent, IEntityHref } from '@nusantara/core';
   `,
   styles: [ ]
 })
-export class EmployeeListComponent extends AbstractListComponent<IEntityHref> {
+export class EmployeeListComponent extends AbstractListComponent<INamedHrefEntity> {
   constructor(protected route: ActivatedRoute) { super(); }
 }

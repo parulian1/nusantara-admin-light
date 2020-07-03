@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { IChoiceFieldChoice } from '@nusantara/core';
+import { IChoice } from '@nusantara/models/drf';
 import { ProductAttributeService } from '@nusantara/services';
 
 /**
@@ -11,11 +11,11 @@ import { ProductAttributeService } from '@nusantara/services';
 @Injectable({
   providedIn: 'root'
 })
-export class ProductAttributeTypeResolver implements Resolve<IChoiceFieldChoice[]> {
+export class ProductAttributeTypeResolver implements Resolve<IChoice[]> {
 
   constructor(private service: ProductAttributeService, private router: Router) { }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IChoiceFieldChoice[]> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IChoice[]> | Observable<never> {
     return this.service.getFieldChoices('type');
   }
 }
