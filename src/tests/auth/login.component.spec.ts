@@ -9,6 +9,7 @@ import { AuthService } from '@nusantara/auth';
 import { MockActivatedRoute, MockJwtHelperService } from '../helpers/mocks';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ToastComponent } from '@nusantara/core';
 
 describe('LoginComponent', () => {
 
@@ -29,7 +30,8 @@ describe('LoginComponent', () => {
         RouterTestingModule,
       ],
       declarations: [
-        LoginComponent
+        LoginComponent,
+        ToastComponent,
       ],
       providers: [
         { provide: ActivatedRoute, useClass: MockActivatedRoute },

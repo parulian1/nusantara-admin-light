@@ -1,12 +1,17 @@
 import { TestBed } from '@angular/core/testing';
 
-import { WarehouseService } from '../app/services/warehouse.service';
+import { WarehouseService } from '@nusantara/services';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('WarehouseService', () => {
   let service: WarehouseService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule,
+      ]
+    });
     service = TestBed.inject(WarehouseService);
   });
 

@@ -7,9 +7,8 @@ import * as echarts from 'echarts';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 
-import { ApiPrefixInterceptor } from '@nusantara/core';
+import { ApiPrefixInterceptor, CoreModule } from '@nusantara/core';
 import { AnonWrapperComponent, MainWrapperComponent } from '@nusantara/view-wrappers';
-import { CoreModule } from '@nusantara/core/core.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 

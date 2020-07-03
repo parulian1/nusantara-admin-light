@@ -1,36 +1,46 @@
-import { TestBed, async } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 import { AppComponent } from '@nusantara/app.component';
+import { AuthService } from '@nusantara/auth';
+import { MockJwtHelperService } from './helpers/mocks';
 
 describe('AppComponent', () => {
+
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+
+  let authServiceSpy: jasmine.SpyObj<AuthService>;
+  let httpTestingController: HttpTestingController;
+
   beforeEach(async(() => {
+
+    authServiceSpy = jasmine.createSpyObj('AuthService', ['logout', 'shouldRefresh']);
+
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        HttpClientTestingModule,
+        RouterTestingModule,
       ],
       declarations: [
         AppComponent
       ],
+      providers: [
+        { provide: JwtHelperService, useClass: MockJwtHelperService },
+      ]
     }).compileComponents();
   }));
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  it(`should have as title 'nusantara-admin'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    // expect(app.title).toEqual('nusantara-admin');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+  beforeEach(() => {
+    httpTestingController = TestBed.inject(HttpTestingController);
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
     fixture.detectChanges();
-    const compiled = fixture.nativeElement;
-    // expect(compiled.querySelector('.content span').textContent).toContain('nusantara-admin app is running!');
+  });
+
+  it('should create the app', () => {
+    expect(component).toBeTruthy();
   });
 });
