@@ -1,8 +1,7 @@
 import { Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { PagedResponse } from '@nusantara/core/pagination';
-import { AbstractCrudService } from '@nusantara/core/http';
+import { PagedResponse, AbstractCrudService } from '@nusantara/core';
 import { IHrefEntity } from '@nusantara/models/base';
 
 /**

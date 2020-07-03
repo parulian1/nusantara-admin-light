@@ -1,5 +1,6 @@
-import { ToastLevelEnum } from './toast-level.enum';
 import { Subject } from 'rxjs';
+
+import { ToastLevelEnum } from './toast-level.enum';
 
 export enum Status {
   adding = 'adding',

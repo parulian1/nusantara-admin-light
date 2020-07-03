@@ -1,8 +1,8 @@
 import { Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
+import { AbstractCrudService } from '@nusantara/core';
 import { IHrefEntity } from '@nusantara/models/base';
-import { AbstractCrudService } from '@nusantara/core/http';
 
 /**
  * Standard resolver for detail pages (eg, any page where the user is editing an

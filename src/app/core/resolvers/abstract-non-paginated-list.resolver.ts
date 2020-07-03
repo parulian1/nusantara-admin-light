@@ -1,8 +1,8 @@
-import { IHrefEntity } from '@nusantara/models/base';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { PagedResponse } from '@nusantara/core/pagination';
-import { AbstractCrudService } from '@nusantara/core/http';
 import { Observable } from 'rxjs';
+
+import { PagedResponse, AbstractCrudService } from '@nusantara/core';
+import { IHrefEntity } from '@nusantara/models/base';
 
 /**
  * Standard resolver for displaying on list pages.

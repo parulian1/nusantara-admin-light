@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ToastService } from './toast.service';
-import { Status, ToastMessage } from '@nusantara/core/toast/toast-messsage';
+import { Status, ToastMessage } from './toast-messsage';
 
 @Component({
   selector: 'nus-toast',
