@@ -20,6 +20,8 @@ import {
 } from '@nusantara/resolvers';
 import { MediaTypeResolver } from './product/media';
 import { PriceListTypeResolver } from './product/price';
+import * as inventory from './inventory';
+import * as config from '@nusantara/pages/config';
 
 const routes: Routes = [
   {
@@ -138,6 +140,19 @@ const routes: Routes = [
         component: VendorComponent,
         resolve: { entity: VendorResolver },
         runGuardsAndResolvers: 'always',
+      }
+    ]
+  },
+  {
+    path: 'inventory',
+    children: [
+      {
+        path: 'receiving',
+        component: inventory.ReceivingComponent,
+        resolve: {
+          warehouses: config.warehouse.AllWarehouseResolver,
+        },
+        runGuardsAndResolvers: 'always'
       }
     ]
   }

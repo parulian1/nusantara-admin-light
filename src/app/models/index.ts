@@ -28,3 +28,7 @@ export * from './shipping-service';
 export * from './shipping-rate';
 
 export * from './flat-page';
+
+export * from './inventory-receiving';
+export * from './inventory-receiving-status.type';
+export * from './stock-record';

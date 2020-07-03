@@ -108,6 +108,10 @@ label {
   box-sizing: border-box;
   min-height: 61px;
 }
+
+/* A label which should leave no space for displaying field-errors */
+label.without-field-errors { min-height: 0; }
+
 label > span:first-child {
   font-size: .7em;
   font-weight: bold;
