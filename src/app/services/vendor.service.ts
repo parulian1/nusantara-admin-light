@@ -11,7 +11,7 @@ export class VendorService extends AbstractCrudService<IVendor> {
 
   baseUrl = '/api/catalog/vendor';
 
-  constructor(protected httpClient: HttpClient) {
-    super();
+  constructor(httpClient: HttpClient) {
+    super(httpClient);
   }
 }

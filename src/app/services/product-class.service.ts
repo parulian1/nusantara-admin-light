@@ -12,7 +12,9 @@ export class ProductClassService extends AbstractCrudService<products.IProductCl
 
   baseUrl = '/api/catalog/product-class';
 
-  constructor(protected httpClient: HttpClient) { super(); }
+  constructor(httpClient: HttpClient) {
+    super(httpClient);
+  }
 
   fetch(slug: string): Observable<products.IProductClass> {
     return this.httpClient.get<products.IProductClass>(

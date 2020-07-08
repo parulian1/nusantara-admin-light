@@ -11,7 +11,7 @@ export class SubLocationService extends AbstractCrudService<ISubLocation> {
 
   baseUrl = '/api/fulfillment/sub-location';
 
-  constructor(protected httpClient: HttpClient) {
-    super();
+  constructor(httpClient: HttpClient) {
+    super(httpClient);
   }
 }

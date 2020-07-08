@@ -11,16 +11,26 @@ import { AbstractEditingComponent } from '@nusantara/core';
   template: `
     <tr [formGroup]="form" class="immediate-error-display">
       <td>
-        <input type="number" [formControl]="price">
+        <input type="number"
+               [formControl]="price">
+      </td>
+      <td style="text-align: left;">
+        <input type="number"
+               [formControl]="minQuantity"
+               [readonly]="isInitialRange"
+               [hidden]="isInitialRange">
+        <span *ngIf="isInitialRange">{{ minQuantity.value }}</span>
       </td>
       <td>
-        <input type="number" [formControl]="minQuantity" [readonly]="isInitialRange">
+        <input type="number"
+               [formControl]="maxQuantity"
+               [readonly]="isTerminalRange"
+               [hidden]="isTerminalRange">
       </td>
       <td>
-        <input type="number" [formControl]="maxQuantity" [readonly]="isTerminalRange" [hidden]="isTerminalRange">
-      </td>
-      <td>
-        <button type="button" [disabled]="!canBeRemoved" (click)="remove.emit()">X</button>
+        <button type="button"
+                [disabled]="!canBeRemoved"
+                (click)="remove.emit()">X</button>
       </td>
     </tr>
   `,
@@ -41,7 +51,7 @@ export class PriceListRangeComponent extends AbstractEditingComponent implements
   @Output() remove = new EventEmitter();
 
   /**
-   * When true, changes to min/maxQuantity **should not** be emitted.
+   * When true, prevents emitting changed from min/maxQuantity.
    */
   suspendQuantityChangedEmitter = false;
 
@@ -51,10 +61,19 @@ export class PriceListRangeComponent extends AbstractEditingComponent implements
   get maxQuantity(): FormControl { return this.form.get('maxQuantity') as FormControl; }
   get minQuantity(): FormControl { return this.form.get('minQuantity') as FormControl; }
 
-  get canBeRemoved(): boolean { return !(this.isInitialRange || this.isTerminalRange); }
+  /**
+   * Indicates whether this price list may be removed.
+   * The first range inside of a price list **may not** be removed (as a price list always
+   * requires at least 1 price list starting at quantity 1).
+   */
+  get canBeRemoved(): boolean { return !this.isInitialRange; }
+
   get isInitialRange(): boolean { return this.index === 0; }
   get isTerminalRange(): boolean { return this.index + 1 === this.allRanges.length; }
 
+  /**
+   * Returns the price range immediately prior to this price range.
+   */
   get predecessorRange(): FormGroup {
     if (!this.isInitialRange) {
       return this.allRanges[this.index - 1];
@@ -87,6 +106,9 @@ export class PriceListRangeComponent extends AbstractEditingComponent implements
     this.maxQuantity.valueChanges.subscribe(() => this.onQuantityChanged());
     this.minQuantity.valueChanges.subscribe(() => this.onQuantityChanged());
     this.siblingQuantityChanged.subscribe((i) => this.onSiblingQuantityChanged(i));
+    this.priceList.valueChanges.subscribe((val) => {
+      console.log(this.index, 'List Value changed', val);
+    });
   }
 
   /**
@@ -126,6 +148,8 @@ export class PriceListRangeComponent extends AbstractEditingComponent implements
    *  the notification will be ignored.
    */
   onSiblingQuantityChanged(siblingIndex: number): void {
+    console.log('Got sibling index changed', siblingIndex, 'my own index is ', this.index, 'and my price is', this.price.value);
+
     this.suspendQuantityChangedEmitter = true;
     if (siblingIndex === (this.index - 1)) {
       this.minQuantity.setValue(this.minQuantityAllowed);
@@ -134,5 +158,4 @@ export class PriceListRangeComponent extends AbstractEditingComponent implements
     }
     this.suspendQuantityChangedEmitter = false;
   }
-
 }

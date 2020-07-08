@@ -11,7 +11,7 @@ export class ShippingProviderService extends AbstractCrudService<IShippingProvid
 
   baseUrl = '/api/fulfillment/provider';
 
-  constructor(protected httpClient: HttpClient) {
-    super();
+  constructor(httpClient: HttpClient) {
+    super(httpClient);
   }
 }

@@ -11,7 +11,7 @@ export class PaymentGatewayService extends AbstractCrudService<IPaymentGateway> 
 
   baseUrl = '/api/order/payment-gateway';
 
-  constructor(protected httpClient: HttpClient) {
-    super();
+  constructor(httpClient: HttpClient) {
+    super(httpClient);
   }
 }

@@ -11,7 +11,7 @@ export class ShippingRateService extends AbstractCrudService<IShippingRate> {
 
   baseUrl = '/api/fulfillment/rate';
 
-  constructor(protected httpClient: HttpClient) {
-    super();
+  constructor(httpClient: HttpClient) {
+    super(httpClient);
   }
 }

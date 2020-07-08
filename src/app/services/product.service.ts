@@ -1,5 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 import { AbstractCrudService } from '@nusantara/core';
 import { products } from '@nusantara/models';
@@ -14,7 +14,7 @@ export class ProductService extends AbstractCrudService<products.IProduct> {
 
   baseUrl = '/api/catalog/product';
 
-  constructor(protected httpClient: HttpClient) {
-    super();
-   }
+  constructor(httpClient: HttpClient) {
+    super(httpClient);
+  }
 }

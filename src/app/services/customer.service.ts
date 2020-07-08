@@ -11,7 +11,7 @@ export class CustomerService extends AbstractCrudService<ICustomer> {
 
   protected baseUrl = '/api/iam/customer';
 
-  constructor(protected httpClient: HttpClient) {
-    super();
+  constructor(httpClient: HttpClient) {
+    super(httpClient);
   }
 }

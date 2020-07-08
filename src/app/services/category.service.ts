@@ -13,8 +13,8 @@ export class CategoryService extends AbstractCrudService<ICategory> {
 
   baseUrl = '/api/catalog/category';
 
-  constructor(protected httpClient: HttpClient) {
-    super();
+  constructor(httpClient: HttpClient) {
+    super(httpClient);
   }
 
   create(entity: ICategory): Observable<IResultResponse> {

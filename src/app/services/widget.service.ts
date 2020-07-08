@@ -11,7 +11,7 @@ export class WidgetService extends AbstractCrudService<IWidget> {
 
   baseUrl = '/api/cms/widget';
 
-  constructor(protected httpClient: HttpClient) {
-    super();
+  constructor(httpClient: HttpClient) {
+    super(httpClient);
   }
 }

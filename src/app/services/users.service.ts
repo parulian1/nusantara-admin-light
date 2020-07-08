@@ -10,7 +10,7 @@ export class UserService extends AbstractCrudService<IUser> {
 
   protected baseUrl = '/api/iam/user';
 
-  constructor(protected httpClient: HttpClient) {
-    super();
+  constructor(httpClient: HttpClient) {
+    super(httpClient);
   }
 }

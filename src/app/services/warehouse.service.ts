@@ -11,7 +11,7 @@ export class WarehouseService extends AbstractCrudService<IWarehouse> {
 
   baseUrl = '/api/fulfillment/warehouse';
 
-  constructor(protected httpClient: HttpClient) {
-    super();
+  constructor(httpClient: HttpClient) {
+    super(httpClient);
   }
 }

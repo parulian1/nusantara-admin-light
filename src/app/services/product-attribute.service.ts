@@ -9,5 +9,7 @@ import { products } from '@nusantara/models';
 })
 export class ProductAttributeService extends AbstractCrudService<products.IProductAttribute> {
   baseUrl = '/api/catalog/product-attribute';
-  constructor(protected httpClient: HttpClient) { super(); }
+  constructor(httpClient: HttpClient) {
+    super(httpClient);
+  }
 }

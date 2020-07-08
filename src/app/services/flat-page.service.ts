@@ -11,7 +11,7 @@ export class FlatPageService extends AbstractCrudService<IFlatPage> {
 
   baseUrl = '/api/cms/page';
 
-  constructor(protected httpClient: HttpClient) {
-    super();
+  constructor(httpClient: HttpClient) {
+    super(httpClient);
   }
 }

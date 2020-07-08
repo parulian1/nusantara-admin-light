@@ -1,12 +1,14 @@
-import { Component, EventEmitter, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { AbstractEditingComponent } from '@nusantara/core';
 import { drf, products } from '@nusantara/models';
+import { PriceListRangeComponent } from '@nusantara/pages/catalog/product/price/price-list-range.component';
 
 /**
  * Shows the details for one price list assigned to a product.
+ * 'Details' are predominantly a set of 'ranges' that are assigned
  *
  * @see IProduct
  */
@@ -45,6 +47,7 @@ import { drf, products } from '@nusantara/models';
           [index]="i"
           [allRanges]="ranges.controls"
           (quantityChanged)="onRangeQuantityChanged(i)"
+          (remove)="removeRange(i)"
           [siblingQuantityChanged]="rangeQuantityChanged">
         </nus-price-list-range>
         </tbody>
@@ -56,9 +59,12 @@ import { drf, products } from '@nusantara/models';
   `,
   styles: []
 })
-export class PriceListComponent extends AbstractEditingComponent implements OnInit {
+export class PriceListComponent extends AbstractEditingComponent implements OnInit, AfterViewInit {
 
   @Input() form: FormGroup;
+
+  @ViewChildren(PriceListRangeComponent) rangeComponents: QueryList<PriceListRangeComponent>;
+
   rangeQuantityChanged = new EventEmitter<number>();
 
   types: Array<drf.IChoice>;
@@ -80,6 +86,16 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
     });
   }
 
+  ngAfterViewInit() {
+    this.rangeComponents.changes.subscribe((value) => {
+      this.rangeComponents.forEach((c) => c.updateValidators());
+    });
+    this.rangeComponents.notifyOnChanges();
+  }
+
+  /**
+   * Adds a new range to a pricelist.
+   */
   addRange(range?: products.IPriceListRange) {
     let f: FormGroup;
     if (!range) {
@@ -114,13 +130,34 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
     }
     this.ranges.push(f);
   }
-  removeRange() {
-    // need to adjust the min/max quantities of the surrounding ranges
-    // after removal.
+
+  /**
+   * Removes a range from the pricing table.
+   *
+   * @see IPriceListRange
+   */
+  removeRange(index: number): void {
+    // todo: want to save this into the list of ranges to remove.
+
+    this.ranges.removeAt(index);
+
+    // update the price range quantity for the range **after** the range we just
+    // removed.
+    const predecessorRange = this.ranges.controls[index - 1];
+    if (this.ranges.length >= index + 1) {
+      const successorRange = this.ranges.controls[index];
+      successorRange.get('minQuantity').setValue(predecessorRange.get('maxQuantity').value + 1);
+    }
   }
 
-  onRangeQuantityChanged(index: number) {
-
+  /**
+   * Raises notification whenever either quantity (min or max) on a price list range
+   * is changed, so that the neighboring price lists can adjust themselves.
+   *
+   * @param index The index of the price list range that was changed.
+   * @see IPriceListRange
+   */
+  onRangeQuantityChanged(index: number): void {
     this.rangeQuantityChanged.emit(index);
   }
 

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { PagedResponse } from '@nusantara/core/pagination';
-import { IResultResponse, SuccessResult, ErrorResult, SuccessCreatedResult } from '../responses';
+import { IResultResponse, SuccessResult, ErrorResult, SuccessCreatedResult } from '@nusantara/core/responses';
 import { drf, base } from '@nusantara/models';
 
 /**
@@ -12,8 +12,12 @@ import { drf, base } from '@nusantara/models';
 export abstract class AbstractCrudService<T extends base.IHrefEntity> {
 
   protected httpClient: HttpClient;
-  protected baseUrl: string;  // this would be best set from crawling the API root, but maybe later for that.
+  protected baseUrl: string;
   public readonly maxPageSize = 250;
+
+  protected constructor(httpClient: HttpClient) {
+    this.httpClient = httpClient;
+  }
 
   // retrieves a single object from the API based on it's slug
   fetch(slug: string): Observable<T> {

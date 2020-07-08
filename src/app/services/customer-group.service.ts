@@ -12,7 +12,7 @@ export class CustomerGroupService extends AbstractCrudService<ICustomerGroup> {
 
   baseUrl = '/api/iam/customer-group';
 
-  constructor(protected httpClient: HttpClient) {
-    super();
+  constructor(httpClient: HttpClient) {
+    super(httpClient);
   }
 }
