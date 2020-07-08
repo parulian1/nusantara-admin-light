@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { AbstractListResolver } from '@nusantara/core/resolvers';
+import { AbstractListResolver } from '@nusantara/core';
 import { IFlatPage } from '@nusantara/models';
 import { FlatPageService } from '@nusantara/services';
 
@@ -8,5 +8,5 @@ import { FlatPageService } from '@nusantara/services';
   providedIn: 'root'
 })
 export class FlatPageListResolver extends AbstractListResolver<IFlatPage> {
-  constructor(protected service: FlatPageService) { super(); }
+  constructor(service: FlatPageService) { super(service); }
 }

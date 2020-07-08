@@ -8,5 +8,5 @@ import { FlatPageService } from '@nusantara/services';
   providedIn: 'root',
 })
 export class FlatPageResolver extends AbstractDetailResolver<IFlatPage> {
-  constructor(protected service: FlatPageService) { super(); }
+  constructor(service: FlatPageService) { super(service); }
 }

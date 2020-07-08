@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { AbstractListResolver } from '@nusantara/core/resolvers';
+import { AbstractListResolver } from '@nusantara/core';
 import { IWidget } from '@nusantara/models';
 import { WidgetService } from '@nusantara/services';
 
@@ -8,5 +8,5 @@ import { WidgetService } from '@nusantara/services';
   providedIn: 'root'
 })
 export class WidgetListResolver extends AbstractListResolver<IWidget> {
-  constructor(protected service: WidgetService) { super(); }
+  constructor(service: WidgetService) { super(service); }
 }

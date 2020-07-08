@@ -14,6 +14,10 @@ export abstract class AbstractListResolver<T extends IHrefEntity> implements Res
 
   protected readonly service: AbstractCrudService<T>;
 
+  protected constructor(service: AbstractCrudService<T>) {
+    this.service = service;
+  }
+
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<PagedResponse<T>> | Observable<never> {
     const query = route.queryParamMap.get('q');
     const page = parseInt(route.queryParamMap.get('page') || '1', 10);

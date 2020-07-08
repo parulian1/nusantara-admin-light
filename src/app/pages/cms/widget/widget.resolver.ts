@@ -8,5 +8,5 @@ import { WidgetService } from '@nusantara/services';
   providedIn: 'root',
 })
 export class WidgetResolver extends AbstractDetailResolver<IWidget> {
-  constructor(protected service: WidgetService) { super(); }
+  constructor(service: WidgetService) { super(service); }
 }

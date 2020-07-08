@@ -15,6 +15,10 @@ export abstract class AbstractDetailResolver<T extends IHrefEntity> implements R
 
   protected readonly service: AbstractCrudService<T>;
 
+  protected constructor(service: AbstractCrudService<T>) {
+    this.service = service;
+  }
+
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<T> | Observable<never> {
     const slug = route.paramMap.get('slug');
     return this.service.fetch(slug);

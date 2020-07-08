@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
-import { Observable, of, EMPTY } from 'rxjs';
-import { mergeMap, take } from 'rxjs/operators';
 
+import { AbstractDetailResolver } from '@nusantara/core';
 import { ICategory } from '@nusantara/models';
 import { CategoryService } from '@nusantara/services';
 
@@ -12,20 +10,6 @@ import { CategoryService } from '@nusantara/services';
 @Injectable({
   providedIn: 'root',
 })
-export class CategoryResolver implements Resolve<ICategory> {
-  constructor(private service: CategoryService, private router: Router) {}
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ICategory> | Observable<never> {
-    const slug = route.paramMap.get('slug');
-    return this.service.fetch(slug).pipe(
-      take(1),
-      mergeMap(entity => {
-        if (entity) {
-          return of(entity);
-        } else {
-          this.router.navigate(['/pages/categories/']);
-          return EMPTY;
-        }
-      })
-    );
-  }
+export class CategoryResolver extends AbstractDetailResolver<ICategory> {
+  constructor(service: CategoryService) { super(service); }
 }
