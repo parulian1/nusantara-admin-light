@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { AbstractCrudService } from '@nusantara/core/http';
+import { AbstractCrudService } from '@nusantara/core';
 import { products } from '@nusantara/models';
 
 @Injectable({

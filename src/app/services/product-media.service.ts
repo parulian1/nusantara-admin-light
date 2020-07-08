@@ -8,7 +8,9 @@ import { products } from '@nusantara/models';
   providedIn: 'root'
 })
 export class ProductMediaService extends AbstractCrudService<products.IProductMedia> {
+
   baseUrl = '/api/catalog/product-media';
+
   constructor(httpClient: HttpClient) {
     super(httpClient);
   }

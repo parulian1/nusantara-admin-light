@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AbstractCrudService } from '@nusantara/core/http';
+
+import { AbstractCrudService } from '@nusantara/core';
 import { IUser } from '@nusantara/models';
 
 @Injectable({
