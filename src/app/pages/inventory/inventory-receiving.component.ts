@@ -2,12 +2,13 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { DialogResult, ToastService } from '@nusantara/core';
-import { AbstractDetailComponent } from '@nusantara/core/components';
+import { DialogResult, ToastService, AbstractDetailComponent } from '@nusantara/core';
 import { IInventoryReceiving, ISubLocation, IWarehouse } from '@nusantara/models';
-
 import { ProductSelectionModalComponent } from './product-selection-modal.component';
 
+/**
+ * Allows a user to receive a new batch of inventory.
+ */
 @Component({
   selector: 'nus-inventory-receiving',
   template: `
@@ -38,25 +39,16 @@ import { ProductSelectionModalComponent } from './product-selection-modal.compon
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let rec of stockRecords.controls; let i=index">
-            <td><input type="hidden"></td>
-            <td>
-              <select>
-                <option *ngFor="let loc of availableSubLocations" [ngValue]="loc.href">
-                  {{ loc.name }} ({{ loc.code }})
-                </option>
-              </select>
-            </td>
-            <td><input type="number"></td>
-            <td><input type="text"></td>
-            <td><input type="date"></td>
-            <td><input type="number"></td>
-            <td><button type="button" (click)="stockRecords.removeAt(i)">X</button></td>
-          </tr>
-          </tbody>
+
+          <nus-inventory-receiving-line
+            *ngFor="let rec of stockRecords.controls; let i=index"
+            [form]="rec"
+            [availableSubLocations]="availableSubLocations"
+            (remove)="stockRecords.removeAt(i)">
+          </nus-inventory-receiving-line>
         </table>
 
-        <button type="button" (click)="add()">Add Record</button>
+        <button type="button" (click)="addLine()">Add Record</button>
 
         <nus-detail-actions
           [component]="this"
@@ -110,7 +102,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<IInvent
     });
   }
 
-  add() {
+  addLine() {
     this.productSelectionModal.open();
   }
 
@@ -129,9 +121,10 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<IInvent
   onProductSelectionModalClosed() {
     if (this.productSelectionModal.result === DialogResult.OK) {
       // add a new child to the form group based on the modal
+
       const f = this.fb.group({
         inventoryReceiving: [null, []],
-        product: [null, [Validators.required]],
+        product: [this.productSelectionModal.product.value, [Validators.required]],
         href: [null, []],
         subLocation: [null, [Validators.required]],
         quantity: [1, [Validators.required, ]],

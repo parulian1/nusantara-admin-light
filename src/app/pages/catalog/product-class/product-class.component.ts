@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormArray, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ToastService } from '@nusantara/core';
-import { IProductAttribute, IProductClass, drf } from '@nusantara/models';
+import { AbstractDetailComponent, ToastService } from '@nusantara/core';
+import { drf, products } from '@nusantara/models';
 import { ProductClassService, ProductAttributeService } from '@nusantara/services';
-import { AbstractDetailComponent } from '@nusantara/core/components';
 
 @Component({
   selector: 'nus-product-class',
@@ -99,10 +98,9 @@ import { AbstractDetailComponent } from '@nusantara/core/components';
   `,
   styles: [
     'button.add-button { background: transparent; border: none; }',
-    'label.without-field-errors { min-height: 0; }',
   ]
 })
-export class ProductClassComponent extends AbstractDetailComponent<IProductClass> implements OnInit {
+export class ProductClassComponent extends AbstractDetailComponent<products.IProductClass> implements OnInit {
 
   typeChoices: drf.IChoice[];
   attributeTypeChoices: drf.IChoice[];
@@ -143,7 +141,7 @@ export class ProductClassComponent extends AbstractDetailComponent<IProductClass
    *
    * @param entity the product class that is being edited (or null)
    */
-  initializeForm(entity?: IProductClass) {
+  initializeForm(entity?: products.IProductClass) {
 
     this.form = this.fb.group({
       name: [entity?.name, [Validators.required]],
@@ -166,7 +164,7 @@ export class ProductClassComponent extends AbstractDetailComponent<IProductClass
     }
   }
 
-  addAttribute(attr?: IProductAttribute) {
+  addAttribute(attr?: products.IProductAttribute) {
     const attrGroup = this.fb.group({
       name: [attr?.name, [Validators.required, ]],
       href: [attr?.href, ],

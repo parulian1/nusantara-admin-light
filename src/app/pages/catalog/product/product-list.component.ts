@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { PagedResponse } from '@nusantara/core/pagination';
-import { ICategory, IProduct, IProductClass, IVendor } from '@nusantara/models';
+import { ICategory, IVendor, products } from '@nusantara/models';
 import { AbstractListComponent } from '@nusantara/core';
 
 /**
@@ -31,20 +31,32 @@ import { AbstractListComponent } from '@nusantara/core';
         <tr *ngFor="let entity of page.entities">
           <td><a [routerLink]="[entity|entityToSlug]">{{ entity.name }}</a></td>
           <td>{{ entity.upc }}</td>
-          <td>{{ getCategoryName(entity.category) }}</td>
-          <td>{{ getProductClassName(entity.productClass) }}</td>
-          <td>{{ getVendorName(entity.vendor) }}</td>
+          <td>
+            <a [routerLink]="['/catalog', 'categories', entity.category|entityToSlug]">
+              {{ getCategoryName(entity.category) }}
+            </a>
+          </td>
+          <td>
+            <a [routerLink]="['/catalog', 'product-classes', entity.productClass|entityToSlug]">
+              {{ getProductClassName(entity.productClass) }}
+            </a>
+          </td>
+          <td>
+            <a [routerLink]="['/catalog', 'vendors', entity.vendor|entityToSlug]">
+              {{ getVendorName(entity.vendor) }}
+            </a>
+          </td>
         </tr>
       </tbody>
     </table>
   `,
   styles: []
 })
-export class ProductListComponent extends AbstractListComponent<IProduct> {
+export class ProductListComponent extends AbstractListComponent<products.IProduct> {
 
   categories: Array<ICategory>;
   vendors: Array<IVendor>;
-  productClasses: Array<IProductClass>;
+  productClasses: Array<products.IProductClass>;
 
   constructor(protected route: ActivatedRoute) { super(); }
 
@@ -66,7 +78,7 @@ export class ProductListComponent extends AbstractListComponent<IProduct> {
       (data: {
           categories: ICategory[],
           vendors: PagedResponse<IVendor>,
-          productClasses: IProductClass[]}) => {
+          productClasses: products.IProductClass[]}) => {
         this.categories = data.categories;
         this.vendors = data.vendors.entities;
         this.productClasses = data.productClasses;

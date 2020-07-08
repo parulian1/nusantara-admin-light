@@ -4,17 +4,17 @@ import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap, take } from 'rxjs/operators';
 
 import { ProductClassService } from '@nusantara/services';
-import { IProductClass } from '@nusantara/models';
+import { products } from '@nusantara/models';
 
 
 @Injectable({
   providedIn: 'root',
 })
-export class ProductClassResolver implements Resolve<IProductClass> {
+export class ProductClassResolver implements Resolve<products.IProductClass> {
 
   constructor(private service: ProductClassService, private router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IProductClass> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<products.IProductClass> | Observable<never> {
     const slug = route.paramMap.get('slug');
     return this.service.fetch(slug).pipe(
       take(1),

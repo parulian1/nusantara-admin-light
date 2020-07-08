@@ -1,9 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormArray, FormGroup, FormControl } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 import { AbstractEditingComponent } from '@nusantara/core';
-import { ActivatedRoute } from '@angular/router';
-import { IPriceListRange, drf } from '@nusantara/models';
+import { drf, products } from '@nusantara/models';
 
 /**
  * Shows the details for one price list assigned to a product.
@@ -24,15 +24,33 @@ import { IPriceListRange, drf } from '@nusantara/models';
         </select>
       </label>
 
-      <label>
+      <label class="without-field-errors">
         <input type="checkbox" [formControl]="isProgressive">
-        <span>Is Progressive</span>
+        Is Progressive
       </label>
 
-      <nus-price-list-range
-        *ngFor="let range of ranges.controls"
-        [form]="range">
-      </nus-price-list-range>
+      <table>
+        <thead>
+        <tr>
+          <th>Price</th>
+          <th>Min</th>
+          <th>Max</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <nus-price-list-range
+          *ngFor="let range of ranges.controls; let i=index"
+          [form]="range"
+          [index]="i"
+          [allRanges]="ranges.controls"
+          (quantityChanged)="onRangeQuantityChanged(i)"
+          [siblingQuantityChanged]="rangeQuantityChanged">
+        </nus-price-list-range>
+        </tbody>
+      </table>
+
+      <button type="button" (click)="addRange()">Add Range</button>
 
     </div>
   `,
@@ -41,6 +59,7 @@ import { IPriceListRange, drf } from '@nusantara/models';
 export class PriceListComponent extends AbstractEditingComponent implements OnInit {
 
   @Input() form: FormGroup;
+  rangeQuantityChanged = new EventEmitter<number>();
 
   types: Array<drf.IChoice>;
 
@@ -61,15 +80,48 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
     });
   }
 
-  addRange(range?: IPriceListRange) {
-    const f = this.fb.group({
-      href: [range?.href, []],
-      priceList: [range?.priceList, []],
-      price: [range?.price, []],
-      maxQuantity: [range?.maxQuantity, []],
-      minQuantity: [range?.minQuantity, []]
-    });
+  addRange(range?: products.IPriceListRange) {
+    let f: FormGroup;
+    if (!range) {
+      // adding a new range
+
+      let minQuantity = 1;
+      let price = 1_000;
+
+      if (!!this.ranges.length) {
+        const terminalRange = this.ranges.controls[this.ranges.length - 1];
+        // set the previous terminal range's max quantity = it's min quantity
+        terminalRange.get('maxQuantity').setValue(terminalRange.get('minQuantity').value);
+        minQuantity = terminalRange.get('maxQuantity').value + 1;
+        price = terminalRange.get('price').value;
+      }
+      f = this.fb.group({
+        href: ['', []],
+        priceList: [this.href.value, []],
+        price: [price, [Validators.required, Validators.min(0)]],
+        maxQuantity: [null, []],
+        minQuantity: [minQuantity, [Validators.required, ]]
+      });
+    } else {
+      // this is either the first range .. or an existing range
+      f = this.fb.group({
+        href: [range?.href, []],
+        priceList: [range?.priceList, []],
+        price: [range?.price, []],
+        maxQuantity: [range?.maxQuantity, []],
+        minQuantity: [range?.minQuantity, []]
+      });
+    }
     this.ranges.push(f);
   }
-  removeRange() { }
+  removeRange() {
+    // need to adjust the min/max quantities of the surrounding ranges
+    // after removal.
+  }
+
+  onRangeQuantityChanged(index: number) {
+
+    this.rangeQuantityChanged.emit(index);
+  }
+
 }

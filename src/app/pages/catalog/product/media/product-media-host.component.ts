@@ -3,9 +3,8 @@ import { FormArray, FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, zip } from 'rxjs';
 
-import { AbstractEditingComponent, DialogResult } from '@nusantara/core';
-import { IResultResponse } from '@nusantara/core/responses';
-import { IProduct, IProductMedia, drf } from '@nusantara/models';
+import { AbstractEditingComponent, DialogResult, IResultResponse } from '@nusantara/core';
+import { drf, products } from '@nusantara/models';
 import { ProductMediaService } from '@nusantara/services';
 
 import { NewProductImageComponent } from './new-product-image.component';
@@ -50,11 +49,11 @@ export class ProductMediaHostComponent extends AbstractEditingComponent<FormArra
   @ViewChild(NewProductImageComponent) newImageModal: NewProductImageComponent;
   @ViewChild(NewProductYoutubeComponent) newYoutubeModal: NewProductYoutubeComponent;
 
-  entities: Array<IProductMedia> = [];
+  entities: Array<products.IProductMedia> = [];
 
   newImages: Array<FormData> = [];
-  newVideos: Array<IProductMedia> = [];
-  deletedMedia: Array<IProductMedia> = [];
+  newVideos: Array<products.IProductMedia> = [];
+  deletedMedia: Array<products.IProductMedia> = [];
 
   constructor(protected service: ProductMediaService,
               protected route: ActivatedRoute,
@@ -75,7 +74,7 @@ export class ProductMediaHostComponent extends AbstractEditingComponent<FormArra
     this.newYoutubeModal.onClose.subscribe(() => this.onYoutubeModalClosed());
   }
 
-  add(media?: IProductMedia) {
+  add(media?: products.IProductMedia) {
 
     if (!media) {
       // this.isAddingNewMedia = true;
@@ -134,7 +133,7 @@ export class ProductMediaHostComponent extends AbstractEditingComponent<FormArra
    *
    * @param product The parent product which should own all the images and videos.
    */
-  saveAll(product: IProduct): Observable<IResultResponse[]> {
+  saveAll(product: products.IProduct): Observable<IResultResponse[]> {
 
     // make sure all new images and videos have the product href set
     console.log('About to set all from this product', product);

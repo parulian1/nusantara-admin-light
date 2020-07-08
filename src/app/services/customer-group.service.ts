@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
+import { AbstractCrudService } from '@nusantara/core';
 import { ICustomerGroup } from '@nusantara/models';
-import { AbstractCrudService } from '@nusantara/core/http';
 
 
 @Injectable({

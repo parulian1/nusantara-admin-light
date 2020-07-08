@@ -13,7 +13,7 @@ import { InternalAddressValue } from './internal-address-value';
  *
  * Please pay attention!  This form is a little bit unique.. even though
  * you must bind a form group to this component, there is an inner form here
- * which is adapted to the outer adddress format.
+ * which is adapted to the outer address format.
  *
  * @example
  *  <nus-address [form]="myAddressFormGroup"></nus-address>
@@ -153,7 +153,8 @@ export class AddressComponent implements OnInit {
   }
 
   /**
-   * Takes whatever value is currently set
+   * Takes whatever value is currently set and converts it to the data format
+   * for this component.
    *
    * This is a very brutally-ugly callback-laden method.
    *

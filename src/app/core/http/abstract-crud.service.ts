@@ -4,9 +4,12 @@ import { map } from 'rxjs/operators';
 
 import { PagedResponse } from '@nusantara/core/pagination';
 import { IResultResponse, SuccessResult, ErrorResult, SuccessCreatedResult } from '../responses';
-import { drf } from '@nusantara/models';
+import { drf, base } from '@nusantara/models';
 
-export abstract class AbstractCrudService<T extends {href: string}> {
+/**
+ * Base class for services that implement Create-Update-Read-Delete logic.
+ */
+export abstract class AbstractCrudService<T extends base.IHrefEntity> {
 
   protected httpClient: HttpClient;
   protected baseUrl: string;  // this would be best set from crawling the API root, but maybe later for that.
@@ -52,10 +55,10 @@ export abstract class AbstractCrudService<T extends {href: string}> {
    * **Use with caution!!**.
    */
   fetchAll(query?: string): Observable<T[]> {
-    const params = new HttpParams()
-      .append('per_page', '250');
-    return this.httpClient
-      .get<T[]>(`${this.baseUrl}/`, {observe: 'body', responseType: 'json', params});
+    const params = new HttpParams({fromObject: {per_page: '250'}});
+    return this.httpClient.get<T[]>(
+      `${this.baseUrl}/`,
+      {observe: 'body', responseType: 'json', params});
   }
 
   /**
@@ -127,13 +130,13 @@ export abstract class AbstractCrudService<T extends {href: string}> {
     return (!!this.getEntityUrl(entity)) ? this.update(entity) : this.create(entity);
   }
 
-  delete(entity: T|{href: string}|FormData): Observable<IResultResponse> {
+  delete(entity: T|base.IHrefEntity|FormData): Observable<IResultResponse> {
     return this.httpClient
       .delete(this.getEntityUrl(entity), {observe: 'response', responseType: 'json'})
       .pipe(map(resp => resp.status === 204 ? new SuccessResult() : new ErrorResult(resp.body, resp.status)));
   }
 
-  private getEntityUrl(entity: T|{href: string}|FormData) {
+  private getEntityUrl(entity: T|base.IHrefEntity|FormData) {
     if (entity instanceof FormData) {
       return entity.get('href') as string;
     }

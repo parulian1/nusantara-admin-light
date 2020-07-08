@@ -74,6 +74,12 @@ input, select {
 input.ng-untouched {
   border: solid var(--input-border) 1px !important;
 }
+
+/* For input fields that should immediately show when they are invalid */
+.immediate-error-display input.ng-untouched.ng-invalid {
+  border-color: var(--error) !important;
+}
+
 input.ng-invalid {
   border-color: var(--error);
 }
@@ -109,7 +115,7 @@ label {
   min-height: 61px;
 }
 
-/* A label which should leave no space for displaying field-errors */
+/* A label which should leave **no** space for displaying field-errors */
 label.without-field-errors { min-height: 0; }
 
 label > span:first-child {

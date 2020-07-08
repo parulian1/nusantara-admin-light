@@ -3,16 +3,16 @@ import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@a
 import { Observable } from 'rxjs';
 
 import { ProductService } from '@nusantara/services';
-import { IProduct } from '@nusantara/models';
+import { products } from '@nusantara/models';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProductResolver implements Resolve<IProduct> {
+export class ProductResolver implements Resolve<products.IProduct> {
 
   constructor(private service: ProductService, private router: Router) { }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IProduct> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<products.IProduct> {
     const slug = route.paramMap.get('slug');
     return this.service.fetch(slug);
   }

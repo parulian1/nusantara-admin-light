@@ -3,11 +3,9 @@ import { Validators, FormBuilder, FormArray, FormControl, FormGroup } from '@ang
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 
-import { ICategory, IProduct, IProductAttribute, IProductClass, IVendor, drf } from '@nusantara/models';
+import { ICategory, IVendor, drf, products } from '@nusantara/models';
 import { ProductService } from '@nusantara/services';
-import { ToastService } from '@nusantara/core';
-import { AbstractDetailComponent } from '@nusantara/core/components';
-import { PagedResponse } from '@nusantara/core/pagination';
+import { ToastService, AbstractDetailComponent, PagedResponse } from '@nusantara/core';
 
 import { PriceListHostComponent } from './price';
 import { ProductMediaHostComponent } from './media';
@@ -67,10 +65,6 @@ import { ProductMediaHostComponent } from './media';
         <input type="number" formControlName="weight">
       </label>
 
-      <div *ngIf="!isNew">
-        <h2>Inventory (Read-Only)</h2>
-      </div>
-
       <nus-price-list-host [form]="priceLists"></nus-price-list-host>
 
       <nus-product-media-host [form]="media"></nus-product-media-host>
@@ -94,12 +88,12 @@ import { ProductMediaHostComponent } from './media';
   `,
   styles: []
 })
-export class ProductComponent extends AbstractDetailComponent<IProduct> implements OnInit, AfterViewInit {
+export class ProductComponent extends AbstractDetailComponent<products.IProduct> implements OnInit, AfterViewInit {
 
-  productClasses: Array<IProductClass>;
+  productClasses: Array<products.IProductClass>;
   categories: Array<ICategory>;
   vendors: Array<IVendor>;
-  attribute: Array<IProductAttribute>;
+  attribute: Array<products.IProductAttribute>;
   mediaTypes: Array<drf.IChoice>;
 
   @ViewChild(ProductMediaHostComponent) mediaHost!: ProductMediaHostComponent;
@@ -123,7 +117,7 @@ export class ProductComponent extends AbstractDetailComponent<IProduct> implemen
     super.ngOnInit();
     this.route.data.subscribe((data: { categories: ICategory[],
                                              vendors: PagedResponse<IVendor>,
-                                             productClasses: IProductClass[],
+                                             productClasses: products.IProductClass[],
                                              mediaTypes: drf.IChoice[]}) => {
       this.vendors = data.vendors.entities;
       this.categories = data.categories;
@@ -132,7 +126,7 @@ export class ProductComponent extends AbstractDetailComponent<IProduct> implemen
     });
   }
 
-  initializeForm(entity?: IProduct) {
+  initializeForm(entity?: products.IProduct) {
     this.form = this.fb.group({
       name: [entity?.name, [Validators.required, ]],
       href: [entity?.href],
@@ -154,7 +148,7 @@ export class ProductComponent extends AbstractDetailComponent<IProduct> implemen
     this.onProductClassChanged(this.productClass.value);
   }
 
-  initializeSubViewForms(entity?: IProduct) {
+  initializeSubViewForms(entity?: products.IProduct) {
     for (const priceList of entity?.priceLists ?? []) {
       this.priceListHost.add(priceList);
     }
@@ -173,8 +167,8 @@ export class ProductComponent extends AbstractDetailComponent<IProduct> implemen
     Object.assign(formValue, this.form.value);
     // todo: delete sub entities that shouldn't be saved on the primary object
     // .. like price-lists, media, dll.
-    delete (formValue as IProduct).media;
-    delete (formValue as IProduct).priceLists;
+    delete (formValue as products.IProduct).media;
+    delete (formValue as products.IProduct).priceLists;
     return formValue;
   }
 

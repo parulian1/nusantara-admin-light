@@ -6,17 +6,14 @@ export * from './customer-group-type.enum';
 
 export * from './payment-gateway';
 
-export * from './product';
-export * from './product-attribute';
-export * from './product-attribute.type';
-export * from './product-class';
-export * from './product-media';
-export * from './media.type';
+
 export * from './category';
 export * from './vendor';
 
-export * from './price-list';
-export * from './price-list-range';
+export * from './order';
+export * from './order.type';
+export * from './order-status.type';
+
 
 export * from './voucher';
 export * from './widget';
@@ -36,5 +33,7 @@ export * from './stock-record';
 import * as google from './google';
 import * as base from './base';
 import * as drf from './drf';
+import * as widgets from './widgets';
+import * as products from './products';
 
-export { base, drf, google };
+export { base, drf, google, widgets, products };

@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { WarehouseListResolver, WarehouseResolver } from '@nusantara/resolvers';
-import { WarehouseListComponent, WarehouseComponent, SubLocationTypeResolver, WarehouseTypeResolver } from './warehouse';
+import { WarehouseListComponent, WarehouseComponent, SubLocationTypeResolver,
+  WarehouseTypeResolver, WarehouseFullListResolver } from './warehouse';
 import { PaymentGatewayListComponent, PaymentGatewayListResolver } from './payment-gateways';
 import { ConfigHubComponent } from './config-hub.component';
 import {
@@ -12,7 +13,6 @@ import {
   ShippingProviderResolver,
   ShippingProviderTypeResolver,
 } from './shipping';
-import { WarehouseFullListResolver } from '@nusantara/pages/config/warehouse/warehouse-full-list.resolver';
 
 
 

@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
-import { IProductMedia } from '@nusantara/models';
+import { products } from '@nusantara/models';
 import { GoogleService } from '@nusantara/services';
 
 /**
@@ -40,7 +40,7 @@ import { GoogleService } from '@nusantara/services';
 export class ProductMediaComponent implements AfterViewInit {
 
   @Output() remove: EventEmitter<void> = new EventEmitter();
-  @Input() entity: IProductMedia;
+  @Input() entity: products.IProductMedia;
   @ViewChild('imageInput') imageInput: ElementRef;
 
   constructor(protected google: GoogleService) { }

@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { AbstractCrudService } from '@nusantara/core/http';
-import { IProduct } from '@nusantara/models';
+import { AbstractCrudService } from '@nusantara/core';
+import { products } from '@nusantara/models';
 
 /**
  * Service for product CRUD.
@@ -10,7 +10,7 @@ import { IProduct } from '@nusantara/models';
 @Injectable({
   providedIn: 'root'
 })
-export class ProductService extends AbstractCrudService<IProduct> {
+export class ProductService extends AbstractCrudService<products.IProduct> {
 
   baseUrl = '/api/catalog/product';
 

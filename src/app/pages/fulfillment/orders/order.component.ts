@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'nus-order-detail',
+  selector: 'nus-order',
   template: ``,
   styles: ['']
 })
-export class OrderDetailComponent implements OnInit {
+export class OrderComponent implements OnInit {
 
   constructor() { }
 

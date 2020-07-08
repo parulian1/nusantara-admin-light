@@ -120,7 +120,7 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'vendor',
+    path: 'vendors',
     children: [
       {
         path: '',

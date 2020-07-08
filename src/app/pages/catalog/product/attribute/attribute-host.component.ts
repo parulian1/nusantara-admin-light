@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 import { AbstractEditingComponent } from '@nusantara/core';
-import { IProductAttribute, IProductClass } from '@nusantara/models';
-import { ActivatedRoute } from '@angular/router';
+import { products } from '@nusantara/models';
 
 @Component({
   selector: 'nus-product-attribute-host',
@@ -37,14 +37,14 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ProductAttributeHostComponent extends AbstractEditingComponent implements OnInit, AfterViewInit {
 
-  productClasses: Array<IProductClass> = [];
+  productClasses: Array<products.IProductClass> = [];
 
   @Input() selectedProductClass: string;
 
   constructor(protected route: ActivatedRoute, protected fb: FormBuilder) { super(); }
 
   ngOnInit() {
-    this.route.data.subscribe((data: {productClasses: IProductClass[]}) => {
+    this.route.data.subscribe((data: {productClasses: products.IProductClass[]}) => {
       this.productClasses = data.productClasses;
     });
   }
@@ -53,7 +53,7 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
 
   }
 
-  get attributeDefinitions(): IProductAttribute[] {
+  get attributeDefinitions(): products.IProductAttribute[] {
     if (!this.selectedProductClass) {
       return [];
     }

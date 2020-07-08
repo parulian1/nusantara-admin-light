@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { IProductClass } from '@nusantara/models';
+import { products } from '@nusantara/models';
 import { AbstractListComponent } from '@nusantara/core/components/abstract-list.component';
 
 /**
@@ -34,6 +34,6 @@ import { AbstractListComponent } from '@nusantara/core/components/abstract-list.
   `,
   styles: [ ]
 })
-export class ProductClassListComponent extends AbstractListComponent<IProductClass> {
+export class ProductClassListComponent extends AbstractListComponent<products.IProductClass> {
   constructor(protected route: ActivatedRoute) { super(); }
 }

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { AbstractCrudService } from '@nusantara/core/http';
+import { AbstractCrudService } from '@nusantara/core';
 import { IFlatPage } from '@nusantara/models';
 
 @Injectable({

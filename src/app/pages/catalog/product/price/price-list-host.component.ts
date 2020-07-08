@@ -1,11 +1,10 @@
 import { Component, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormArray } from '@angular/forms';
-
-import { AbstractEditingComponent } from '@nusantara/core';
-import { IPriceList, IPriceListRange, drf } from '@nusantara/models';
-import { PriceListService } from '@nusantara/services';
 import { ActivatedRoute } from '@angular/router';
 
+import { AbstractEditingComponent } from '@nusantara/core';
+import { drf, products } from '@nusantara/models';
+import { PriceListService } from '@nusantara/services';
 import { PriceListComponent } from './price-list.component';
 
 /**
@@ -25,7 +24,8 @@ import { PriceListComponent } from './price-list.component';
     <div>
       <nus-price-list
         *ngFor="let priceList of form.controls"
-        [form]="priceList" ></nus-price-list>
+        [form]="priceList">
+      </nus-price-list>
     </div>
   `,
   styles: []
@@ -47,7 +47,7 @@ export class PriceListHostComponent extends AbstractEditingComponent<FormArray> 
     });
   }
 
-  add(entity?: IPriceList) {
+  add(entity?: products.IPriceList) {
     const f = this.fb.group({
       type: [entity?.type || this.types[0].value, []],
       href: [entity?.href, []],
@@ -60,7 +60,7 @@ export class PriceListHostComponent extends AbstractEditingComponent<FormArray> 
 
     const rangeArray = f.get('ranges') as FormArray;
     for (const r of entity?.ranges ?? []) {
-      const range: IPriceListRange = r;
+      const range: products.IPriceListRange = r;
       rangeArray.push(
         this.fb.group({
           href: [range.href, []],

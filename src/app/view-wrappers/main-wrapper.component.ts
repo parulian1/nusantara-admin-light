@@ -37,7 +37,7 @@ import { AuthService } from '@nusantara/auth';
         <li><a [routerLink]="['/catalog/products']" routerLinkActive="active" translate>Products</a></li>
         <li><a [routerLink]="['/catalog/categories']" routerLinkActive="active" translate>Categories</a></li>
         <li><a [routerLink]="['/catalog/product-classes']" routerLinkActive="active" translate>Product Classes</a></li>
-        <li><a [routerLink]="['/catalog/vendor']" routerLinkActive="active" translate>Vendors</a></li>
+        <li><a [routerLink]="['/catalog/vendors']" routerLinkActive="active" translate>Vendors</a></li>
 
         <li class="section-header">
           <i class="material-icons">assignment</i>
