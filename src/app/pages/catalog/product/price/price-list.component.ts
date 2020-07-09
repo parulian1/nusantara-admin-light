@@ -2,9 +2,12 @@ import { AfterViewInit, Component, EventEmitter, Input, OnInit, QueryList, ViewC
 import { FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import { AbstractEditingComponent } from '@nusantara/core';
+import { AbstractEditingComponent, IResultResponse } from '@nusantara/core';
 import { drf, products } from '@nusantara/models';
-import { PriceListRangeComponent } from '@nusantara/pages/catalog/product/price/price-list-range.component';
+import { RangeComponent } from '@nusantara/pages/catalog/product/price/range.component';
+import { PriceListRangeService } from '@nusantara/services';
+import { IPriceListRange } from '@nusantara/models/products';
+import { Observable, zip } from 'rxjs';
 
 /**
  * Shows the details for one price list assigned to a product.
@@ -47,11 +50,14 @@ import { PriceListRangeComponent } from '@nusantara/pages/catalog/product/price/
           [index]="i"
           [allRanges]="ranges.controls"
           (quantityChanged)="onRangeQuantityChanged(i)"
-          (remove)="removeRange(i)"
+          (remove)="removeRange($event, i)"
           [siblingQuantityChanged]="rangeQuantityChanged">
         </nus-price-list-range>
         </tbody>
       </table>
+
+      <h3>Removed Ranges</h3>
+      <code><pre>{{ removedRanges | json }}</pre></code>
 
       <button type="button" (click)="addRange()">Add Range</button>
 
@@ -61,15 +67,18 @@ import { PriceListRangeComponent } from '@nusantara/pages/catalog/product/price/
 })
 export class PriceListComponent extends AbstractEditingComponent implements OnInit, AfterViewInit {
 
+  private static readonly MINIMUM_QUANTITY  = 1;
+  private static readonly DEFAULT_PRICE = 10_000;
+
   @Input() form: FormGroup;
-
-  @ViewChildren(PriceListRangeComponent) rangeComponents: QueryList<PriceListRangeComponent>;
-
+  @ViewChildren(RangeComponent) rangeComponents: QueryList<RangeComponent>;
   rangeQuantityChanged = new EventEmitter<number>();
-
   types: Array<drf.IChoice>;
 
-  constructor(protected route: ActivatedRoute,
+  public removedRanges: Array<products.IPriceListRange> = [];
+
+  constructor(protected rangeService: PriceListRangeService,
+              protected route: ActivatedRoute,
               protected fb: FormBuilder) { super(); }
 
   get href(): FormControl { return this.form.get('href') as FormControl; }
@@ -94,15 +103,22 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
   }
 
   /**
+   * Gets this component's current value as the underlying entity
+   * type that is represents.
+   */
+  toEntity(): products.IPriceList {
+    return this.form.value as products.IPriceList;
+  }
+
+  /**
    * Adds a new range to a pricelist.
    */
   addRange(range?: products.IPriceListRange) {
     let f: FormGroup;
     if (!range) {
       // adding a new range
-
-      let minQuantity = 1;
-      let price = 1_000;
+      let minQuantity = PriceListComponent.MINIMUM_QUANTITY;
+      let price = PriceListComponent.DEFAULT_PRICE;
 
       if (!!this.ranges.length) {
         const terminalRange = this.ranges.controls[this.ranges.length - 1];
@@ -136,8 +152,13 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
    *
    * @see IPriceListRange
    */
-  removeRange(index: number): void {
-    // todo: want to save this into the list of ranges to remove.
+  removeRange(event: RangeComponent, index: number): void {
+
+    // if the object has an href, then it was already stored on the server
+    // so we have to remember to perform an HTTP DELETE later
+    if (!!event.href.value) {
+      this.removedRanges.push(event.form.value as IPriceListRange);
+    }
 
     this.ranges.removeAt(index);
 
@@ -159,6 +180,28 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
    */
   onRangeQuantityChanged(index: number): void {
     this.rangeQuantityChanged.emit(index);
+  }
+
+  /**
+   * Saves all the _price list ranges_ in this price list (not the price list itself).
+   *
+   * @param priceList The price list that owns this range.
+   */
+  saveRanges(priceList: products.IPriceList): Observable<IResultResponse<products.IPriceListRange>[]> {
+
+    // ensure ranges have their parent price list set
+    this.rangeComponents.forEach((component) => { component.priceList.setValue(priceList.href); });
+
+    return zip(
+      ...this.rangeComponents.map(component => this.rangeService.save(component.toEntity()))
+    );
+  }
+
+  deleteRanges(): Observable<any> {
+
+    // delete all the ranges
+
+    throw new Error('not implemented');
   }
 
 }

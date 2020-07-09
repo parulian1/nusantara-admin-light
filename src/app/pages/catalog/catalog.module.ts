@@ -28,7 +28,7 @@ import { VendorListComponent, VendorComponent } from './vendor';
 
     product.price.PriceListHostComponent,
     product.price.PriceListComponent,
-    product.price.PriceListRangeComponent,
+    product.price.RangeComponent,
 
     product.attribute.ProductAttributeHostComponent,
 

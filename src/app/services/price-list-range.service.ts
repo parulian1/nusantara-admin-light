@@ -7,7 +7,7 @@ import { products } from '@nusantara/models';
 @Injectable({
   providedIn: 'root'
 })
-export class PriceListService extends AbstractCrudService<products.IPriceList> {
+export class PriceListRangeService extends AbstractCrudService<products.IPriceListRange> {
 
   baseUrl = '/api/catalog/price-list-range';
 

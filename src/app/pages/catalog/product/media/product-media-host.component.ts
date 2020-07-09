@@ -136,10 +136,10 @@ export class ProductMediaHostComponent extends AbstractEditingComponent<FormArra
   saveAll(product: products.IProduct): Observable<IResultResponse[]> {
 
     // make sure all new images and videos have the product href set
-    console.log('About to set all from this product', product);
     this.newImages.forEach((value) => { value.set('product', product.href); });
     this.newVideos.forEach((value) => { value.product = product.href; });
 
+    // submit all changes to the API and an observable of all responses
     return zip(
       ...this.newImages.map(img => this.service.save(img)),
       ...this.newVideos.map(vid => this.service.save(vid)),

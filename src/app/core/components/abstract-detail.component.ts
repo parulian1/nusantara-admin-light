@@ -1,10 +1,9 @@
 import { AfterViewInit, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ToastService } from '@nusantara/core';
-import { ToastLevelEnum } from '@nusantara/core/toast/toast-level.enum';
-import { AbstractEditingComponent } from './abstract-editing.component';
+import { ToastLevelEnum, ToastService } from '@nusantara/core/toast';
 import { IResultResponse } from '@nusantara/core/responses';
+import { AbstractEditingComponent } from './abstract-editing.component';
 
 /**
  * Base class for components that display a create/edit form
@@ -131,11 +130,10 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
   /**
    * Called when a save fails.
    */
-  protected onSaveError(result: IResultResponse) {
-    // todo: this should really be improved with data from the error response.
-    alert('Failed to save');
+  protected onSaveError(error: any) {
+    console.log('Failed to save with error:', error);
+    this.toast?.addError(error.toString(), 'Failed to Save');
   }
-
 
   delete() {
     this.service.delete(this.form.value).subscribe(
@@ -143,9 +141,10 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
         if (resp.success) {
           this.onDeleteSuccess();
         } else {
-          this.onDeleteError();
+          this.onDeleteError(resp);
         }
-      }
+      },
+      (err) => this.onDeleteError(err)
     );
   }
 
@@ -154,7 +153,8 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
     this.navigateToParent(false);
   }
 
-  protected onDeleteError() {
-    alert('Error deleting');
+  protected onDeleteError(error: any) {
+    console.log('Failed to save with error:', error);
+    this.toast?.addError(error.toString(), 'Failed to Save');
   }
 }

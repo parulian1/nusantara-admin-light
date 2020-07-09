@@ -2,9 +2,15 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { AbstractEditingComponent } from '@nusantara/core';
+import { products } from '@nusantara/models';
 
 /**
  * A single price for a given number of products.
+ *
+ * This component does not communicate changes to a server, and only
+ * displays the current values for a price list range, however because
+ * its values are dependant on other ranges within a price list, there
+ * is quite a bit of complex logic here.
  */
 @Component({
   selector: 'nus-price-list-range',
@@ -29,14 +35,14 @@ import { AbstractEditingComponent } from '@nusantara/core';
       </td>
       <td>
         <button type="button"
-                [disabled]="!canBeRemoved"
-                (click)="remove.emit()">X</button>
+                [disabled]="isInitialRange"
+                (click)="remove.emit(this)">X</button>
       </td>
     </tr>
   `,
   styles: [':host { display: contents; }']
 })
-export class PriceListRangeComponent extends AbstractEditingComponent implements OnInit {
+export class RangeComponent extends AbstractEditingComponent implements OnInit {
 
   @Input() index: number;
   @Input() allRanges: Array<FormGroup>;
@@ -47,13 +53,39 @@ export class PriceListRangeComponent extends AbstractEditingComponent implements
    */
   @Input() siblingQuantityChanged: EventEmitter<number>;
 
+  /**
+   * Notifies host component that minQuantity or maxQuantity has changed,
+   * so that other list ranges may update themselves.
+   */
   @Output() quantityChanged = new EventEmitter<number>();
-  @Output() remove = new EventEmitter();
+
+  /**
+   * Notifies host component to remove this range from a price list.
+   */
+  @Output() remove = new EventEmitter<RangeComponent>();
 
   /**
    * When true, prevents emitting changed from min/maxQuantity.
    */
   suspendQuantityChangedEmitter = false;
+
+  ngOnInit() {
+    this.maxQuantity.valueChanges.subscribe(() => this.onQuantityChanged());
+    this.minQuantity.valueChanges.subscribe(() => this.onQuantityChanged());
+    this.siblingQuantityChanged.subscribe((i) => this.onSiblingQuantityChanged(i));
+
+    this.priceList.valueChanges.subscribe((val) => {
+      console.log(this.index, 'List Value changed', val);
+    });
+  }
+
+  /**
+   * Gets this component's current value as the underlying entity
+   * type that is represents.
+   */
+  toEntity(): products.IPriceListRange {
+    return this.form.value as products.IPriceListRange;
+  }
 
   get href(): FormControl { return this.form.get('href') as FormControl; }
   get priceList(): FormControl { return this.form.get('priceList') as FormControl; }
@@ -62,13 +94,15 @@ export class PriceListRangeComponent extends AbstractEditingComponent implements
   get minQuantity(): FormControl { return this.form.get('minQuantity') as FormControl; }
 
   /**
-   * Indicates whether this price list may be removed.
-   * The first range inside of a price list **may not** be removed (as a price list always
-   * requires at least 1 price list starting at quantity 1).
+   * Indicates if this range is the first within a price list.
+   * Initial ranges may not be removed from a price list and must have a minQuantity = 0.
    */
-  get canBeRemoved(): boolean { return !this.isInitialRange; }
-
   get isInitialRange(): boolean { return this.index === 0; }
+
+  /**
+   * Indicates if this is the last range within a price list.
+   * Terminal ranges must have a maxQuantity = null.
+   */
   get isTerminalRange(): boolean { return this.index + 1 === this.allRanges.length; }
 
   /**
@@ -100,15 +134,6 @@ export class PriceListRangeComponent extends AbstractEditingComponent implements
       return Number.MAX_VALUE;
     }
     return (this.successorRange.get('minQuantity').value as number) - 1;
-  }
-
-  ngOnInit() {
-    this.maxQuantity.valueChanges.subscribe(() => this.onQuantityChanged());
-    this.minQuantity.valueChanges.subscribe(() => this.onQuantityChanged());
-    this.siblingQuantityChanged.subscribe((i) => this.onSiblingQuantityChanged(i));
-    this.priceList.valueChanges.subscribe((val) => {
-      console.log(this.index, 'List Value changed', val);
-    });
   }
 
   /**
@@ -158,4 +183,5 @@ export class PriceListRangeComponent extends AbstractEditingComponent implements
     }
     this.suspendQuantityChangedEmitter = false;
   }
+
 }

@@ -1,27 +1,26 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AuthService } from '@nusantara/auth';
 import { Router } from '@angular/router';
 
+import { AuthService } from '@nusantara/auth';
 
 @Component({
   selector: 'nus-root',
-  template: '<router-outlet></router-outlet><nus-toast></nus-toast>',
+  template: `
+    <router-outlet></router-outlet>
+    <nus-toast></nus-toast>
+  `,
   styles: [
-    `nus-toast {
-      position: fixed;
-      right: 0;
-      bottom: 0
-    }`
+    'nus-toast { position: fixed; right: 0; bottom: 0 }',
   ]
 })
 export class AppComponent implements OnInit, OnDestroy {
 
+  private static TEN_SECONDS = 10_000;
+  private static LOGIN_URL = '/auth/login';
+
   private timer;
-  redirectOnFail = '/auth/login';
 
-  constructor(private authService: AuthService, private router: Router) {
-
-  }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
     this.timer = setInterval(() => {
@@ -29,11 +28,11 @@ export class AppComponent implements OnInit, OnDestroy {
         this.authService.refresh().subscribe((result) => {
           if (!result.success) {
             this.authService.logout();
-            this.router.navigate([this.redirectOnFail, ]);
+            this.router.navigate([AppComponent.LOGIN_URL, ]);
           }
         });
       }
-    }, 10000);
+    }, AppComponent.TEN_SECONDS);
   }
 
   ngOnDestroy() {

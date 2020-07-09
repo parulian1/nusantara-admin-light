@@ -2,11 +2,11 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Validators, FormBuilder, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSmartModalService } from 'ngx-smart-modal';
+import { zip } from 'rxjs';
 
+import { ToastService, AbstractDetailComponent, PagedResponse } from '@nusantara/core';
 import { ICategory, IVendor, drf, products } from '@nusantara/models';
 import { ProductService } from '@nusantara/services';
-import { ToastService, AbstractDetailComponent, PagedResponse } from '@nusantara/core';
-
 import { PriceListHostComponent } from './price';
 import { ProductMediaHostComponent } from './media';
 
@@ -15,7 +15,8 @@ import { ProductMediaHostComponent } from './media';
   template: `
     <nus-detail-title
       [originalName]="originalEntityName"
-      typeName="Product"></nus-detail-title>
+      typeName="Product">
+    </nus-detail-title>
 
     <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
 
@@ -74,9 +75,19 @@ import { ProductMediaHostComponent } from './media';
         [selectedProductClass]="productClass.value">
       </nus-product-attribute-host>
 
-      <h2>Variants</h2>
+      <div *ngIf="structure.value === 'parent'">
+        <h2>Variants</h2>
+        <table>
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </div>
 
-      <h2>Related Products</h2>
+      <h2>Recommended Products</h2>
+      <table>
+        <thead></thead>
+        <tbody></tbody>
+      </table>
 
       <nus-detail-actions
         [component]="this"
@@ -112,6 +123,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   get media(): FormArray { return this.form.get('media') as FormArray; }
   get priceLists(): FormArray { return this.form.get('priceLists') as FormArray; }
   get attributes(): FormGroup { return this.form.get('attributes') as FormGroup; }
+  get structure(): FormControl { return this.form.get('structure') as FormControl; }
 
   ngOnInit(): void {
     super.ngOnInit();
@@ -150,7 +162,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   initializeSubViewForms(entity?: products.IProduct) {
     for (const priceList of entity?.priceLists ?? []) {
-      this.priceListHost.add(priceList);
+      this.priceListHost.addPriceList(priceList);
     }
     for (const media of entity?.media ?? []) {
       this.mediaHost.add(media);
@@ -165,34 +177,25 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   getFormValue(): any {
     const formValue = {};
     Object.assign(formValue, this.form.value);
-    // todo: delete sub entities that shouldn't be saved on the primary object
-    // .. like price-lists, media, dll.
+    // delete sub entities that shouldn't be saved on the primary object
+    // like price-lists, media, dll.
     delete (formValue as products.IProduct).media;
     delete (formValue as products.IProduct).priceLists;
     return formValue;
   }
 
   save() {
-
-    this.service.save(this.getFormValue()).subscribe(
-      resp => {
-        if (resp.success) {
-
-          this.mediaHost.saveAll(resp.entity).subscribe(resp2 => {
-            this.onSaveSuccess(resp);
-          });
-          // todo: add all the sub entities that are saved indepentently..
-          // -- price lists
-          // -- variants??
-          // zip(
-          //   ...this.viewMedia.map(m => m.save(resp.entity.href))
-          // ).subscribe(r => {
-          //     this.onSaveSuccess(resp);
-          // });
-        } else {
-          this.onSaveError(resp);
-        }
-      }
+    this.service.save(this.getFormValue()).subscribe(resp => {
+        const dependentResponses = zip(
+          this.mediaHost.saveAll(resp.entity),
+          this.priceListHost.saveAll(resp.entity)
+        );
+        dependentResponses.subscribe(
+          () => { this.onSaveSuccess(resp); },
+          (err) => { this.onSaveError(err); }
+        );
+      },
+      (err) => this.onSaveError(err)
     );
   }
 
