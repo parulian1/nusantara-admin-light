@@ -19,8 +19,8 @@ import { AuthService } from '@nusantara/auth';
           <a [routerLink]="['/auth/logout']"><i class="material-icons">exit_to_app</i>Logout</a>
         </div>
       </div>
-
     </header>
+
     <nav>
       <ul>
         <li class="icon-button">

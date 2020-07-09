@@ -56,9 +56,6 @@ import { Observable, zip } from 'rxjs';
         </tbody>
       </table>
 
-      <h3>Removed Ranges</h3>
-      <code><pre>{{ removedRanges | json }}</pre></code>
-
       <button type="button" (click)="addRange()">Add Range</button>
 
     </div>

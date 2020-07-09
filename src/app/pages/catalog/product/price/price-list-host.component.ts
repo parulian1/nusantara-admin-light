@@ -35,15 +35,11 @@ import { PriceListComponent } from './price-list.component';
         *ngFor="let priceList of form.controls"
         [form]="priceList">
       </nus-price-list>
-
-      <code><pre>
-        {{ form.value | json }}
-      </pre>
-      </code>
     </div>
   `,
   styles: [
     'ul { list-style-type: none; padding: 0; }',
+
   ]
 })
 export class PriceListHostComponent extends AbstractEditingComponent<FormArray> implements OnInit {
@@ -120,10 +116,8 @@ export class PriceListHostComponent extends AbstractEditingComponent<FormArray> 
       component => this.service
         .save(component.toEntity())
         .pipe(map((priceListResult) => {
-          console.log('About to call save ranges?');
-
+          // todo: can we just remove this subscribe here?
           return component.saveRanges(priceListResult.entity).subscribe(() => {  });
-          // return priceListResult;
         }))
     );
 

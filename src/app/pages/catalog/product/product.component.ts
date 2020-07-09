@@ -56,11 +56,14 @@ import { ProductMediaHostComponent } from './media';
 
       <label>
         <span>UPC</span>
-        <input type="text" formControlName="upc"></label>
+        <input type="text" formControlName="upc">
+      </label>
+
       <label>
         <span>Description</span>
         <textarea formControlName="description"></textarea>
       </label>
+
       <label>
         <span>Weight (kg)</span>
         <input type="number" formControlName="weight">
@@ -77,6 +80,8 @@ import { ProductMediaHostComponent } from './media';
 
       <div *ngIf="structure.value === 'parent'">
         <h2>Variants</h2>
+        <button [disabled]="isNew">Add</button>
+        <p>Create product SKUs that are similar to this product.</p>
         <table>
           <thead></thead>
           <tbody></tbody>
@@ -143,6 +148,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       name: [entity?.name, [Validators.required, ]],
       href: [entity?.href],
       upc: [entity?.upc, [Validators.required, ]],
+      structure: [entity?.structure ?? 'parent', [Validators.required, ]],
       description: [entity?.description, [Validators.required, ]],
       weight: [entity?.weight, [Validators.required, ]],
       productClass: [entity?.productClass, [Validators.required, ]],

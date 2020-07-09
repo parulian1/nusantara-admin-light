@@ -15,27 +15,28 @@ import { GoogleService } from '@nusantara/services';
 @Component({
   selector: 'nus-product-media',
   template: `
+    <button type="button" (click)="remove.emit()" title="Remove"><i class="material-icons">remove_circle_outline</i></button>
+
+    <img [src]="previewImageUrl" alt="Media Preview">
+
     <div *ngIf="entity?.type === 'image'">
-      <span>Image</span>
-      <img [src]="previewImageUrl" alt="Product Image">
+      <span class="video-title">Image</span>
     </div>
     <div *ngIf="entity?.type === 'you_tube'">
-      <span>YouTube Embedded Video</span>
-      <img [src]="previewImageUrl" alt="Youtube Video Preview">
+      <a class="video-title" [href]="clickUrl" target="_blank">
+        <span *ngIf="title?.length > 19; then slicedTitle else fullTitle"></span>
+        <ng-template #slicedTitle>{{ title|slice:0:16 }}...</ng-template>
+        <ng-template #fullTitle>{{ title }}</ng-template>
+      </a>
     </div>
-    <button type="button" (click)="remove.emit()">Remove</button>
   `,
-  styles: [`
-    div {
-      display: inline-block;
-      max-width: 160px;
-    }
-    img {
-      height: 160px;
-      width: 160px;
-      object-fit: contain;
-    }
-  `]
+  styles: [
+    ':host { position: relative; text-align: center; }',
+    'button { position: absolute; right: 0; top: 0; border: 0; background: transparent; opacity: .3; }',
+    'button:hover, button:focus { color: var(--danger-color); transition: all .3s; opacity: 1; }',
+    'img { height: 120px; width: 120px; object-fit: contain; }',
+    '.video-title { font-size: .7em; }',
+  ]
 })
 export class ProductMediaComponent implements AfterViewInit {
 
@@ -46,11 +47,15 @@ export class ProductMediaComponent implements AfterViewInit {
   constructor(protected google: GoogleService) { }
 
   previewImageUrl: string;
+  title: string;
+  clickUrl: string;
 
   ngAfterViewInit() {
     if (this.entity.type === 'you_tube') {
       this.google.fetchYoutubeVideoMeta(this.entity.youtubeVideoId).subscribe(resp => {
         this.previewImageUrl = resp.items[0].snippet.thumbnails.default.url;
+        this.title = resp.items[0].snippet.title;
+        this.clickUrl = `https://youtube.com/watch?v=${resp.items[0].id}`;
       });
     } else {
       this.previewImageUrl = this.entity.image;
