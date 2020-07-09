@@ -21,3 +21,5 @@ export * from './flat-page.service';
 export * from './widget.service';
 
 export * from './google.service';
+
+export * from './order.service';

@@ -1,7 +1,7 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 
-import { OrderComponent, OrderListComponent } from './orders';
+import { OrderComponent, OrderListComponent, OrderListResolver } from './orders';
 
 const routes: Routes = [
   {
@@ -9,15 +9,17 @@ const routes: Routes = [
     children: [
       {
         component: OrderListComponent,
-        path: ''
+        path: '',
+        resolve: { page: OrderListResolver },
+        runGuardsAndResolvers: 'always',
       },
       {
         component: OrderComponent,
-        path: 'new'
+        path: 'new',
       },
       {
         component: OrderComponent,
-        path: ':slug'
+        path: ':slug',
       }
     ]
   }
