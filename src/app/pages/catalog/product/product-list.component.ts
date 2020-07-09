@@ -17,6 +17,8 @@ import { AbstractListComponent } from '@nusantara/core';
       title="Products">
     </nus-list-header>
 
+    <nus-pagination [page]="page"></nus-pagination>
+
     <table>
       <thead>
         <tr>
@@ -49,6 +51,8 @@ import { AbstractListComponent } from '@nusantara/core';
         </tr>
       </tbody>
     </table>
+
+    <nus-pagination [page]="page"></nus-pagination>
   `,
   styles: []
 })

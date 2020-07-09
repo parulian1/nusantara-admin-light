@@ -2,6 +2,9 @@ import { Input, Output, EventEmitter, Component } from '@angular/core';
 
 import { AbstractDetailComponent } from '@nusantara/core';
 
+/**
+ * Buttons to allow saving/cancelling or deleting an object (typically from a details page).
+ */
 @Component({
   selector: 'nus-detail-actions',
   template: `

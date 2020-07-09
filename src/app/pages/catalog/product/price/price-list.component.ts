@@ -53,10 +53,15 @@ import { Observable, zip } from 'rxjs';
           (remove)="removeRange($event, i)"
           [siblingQuantityChanged]="rangeQuantityChanged">
         </nus-price-list-range>
+        <tr>
+          <td colspan="4">
+            <button type="button" (click)="addRange()" class="add-button">
+              Add Range
+            </button>
+          </td>
+        </tr>
         </tbody>
       </table>
-
-      <button type="button" (click)="addRange()">Add Range</button>
 
     </div>
   `,

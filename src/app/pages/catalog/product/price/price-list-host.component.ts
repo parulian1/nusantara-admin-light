@@ -21,7 +21,7 @@ import { PriceListComponent } from './price-list.component';
   template: `
     <h2>
       Price Lists
-      <button (click)="addPriceList()" type="button">Add</button>
+      <button (click)="addPriceList()" type="button" class="add-button"><i class="material-icons">add_circle</i></button>
     </h2>
     <div>
       <ul>
@@ -39,7 +39,6 @@ import { PriceListComponent } from './price-list.component';
   `,
   styles: [
     'ul { list-style-type: none; padding: 0; }',
-
   ]
 })
 export class PriceListHostComponent extends AbstractEditingComponent<FormArray> implements OnInit {

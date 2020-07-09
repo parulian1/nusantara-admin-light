@@ -35,8 +35,11 @@ import { products } from '@nusantara/models';
       </td>
       <td>
         <button type="button"
+                class="remove-button"
                 [disabled]="isInitialRange"
-                (click)="remove.emit(this)">X</button>
+                (click)="remove.emit(this)">
+          <i class="material-icons">remove_circle_outline</i>
+        </button>
       </td>
     </tr>
   `,

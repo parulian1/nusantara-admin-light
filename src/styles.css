@@ -332,17 +332,52 @@ button.control:disabled, a.control:disabled {
 }
 
 
-/*.primary:hover:not([disabled]), .primary:focus:not([disabled]) {*/
-/*  color: white;*/
-/*  border-color: var(--primary-color);*/
-/*  background-color: var(--primary-color);*/
-/*}*/
 
-/*.danger:hover:not([disabled]), .danger:focus:not([disabled]) {*/
-/*  color: white;*/
-/*  border-color: var(--danger-color);*/
-/*  background-color: var(--danger-color);*/
-/*}*/
+.button {
+  font-weight: lighter;
+  font-size: 1em;
+  text-decoration: none;
+  height: 31px;
+  line-height: 31px;
+  padding: 0 15px;
+  box-sizing: border-box;
+  transition: all 0.2s;
+  border-radius: 2px;
+  border: none;
+  color: white;
+  background: var(--bhisma-orange);
+}
+.button:hover:not([disabled]) {
+  color: white;
+  background-color: var(--bhisma-orange-lighter);
+}
+.button:disabled {
+  color: var(--nav-background);
+  background-color: var(--lighter-nav-bg);
+}
+
+.add-button {
+  background: transparent;
+  border: none;
+  opacity: .3;
+  transition: all .5s;
+}
+.add-button:hover:not([disabled]), .add-button:focus:not([disabled]) {
+  opacity: 1;
+  color: var(--success);
+}
+
+.remove-button {
+  background: transparent;
+  border: none;
+  opacity: .3;
+  transition: all .5s;
+}
+.remove-button:hover:not([disabled]), .remove-button:focus:not([disabled]) {
+  opacity: 1;
+  color: var(--danger-color);
+}
+
 
 .shadow-box {
   box-shadow: 0 0 8px -1px var(--shadow-color);

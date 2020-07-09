@@ -21,12 +21,12 @@ import { NewProductYoutubeComponent } from './new-product-youtube.component';
   selector: 'nus-product-media-host',
   template: `
     <h2>Media
-      <button (click)="newImageModal.open()" type="button">
+      <button (click)="newImageModal.open()" type="button" title="Add new Image">
         <i class="material-icons">image</i>
-        ({{ imageCount }})</button>
-      <button (click)="newYoutubeModal.open()" type="button">
+      </button>
+      <button (click)="newYoutubeModal.open()" type="button" title="Add new YouTube video">
         <i class="material-icons">ondemand_video</i>
-        ({{ youtubeCount }})</button>
+      </button>
     </h2>
 
     <nus-product-media
@@ -40,13 +40,14 @@ import { NewProductYoutubeComponent } from './new-product-youtube.component';
     <nus-new-product-youtube></nus-new-product-youtube>
   `,
   styles: [
+    'h2>button { background: transparent; border: none; opacity: .3; transition: all .3s; }',
+    'h2>button:hover, h2>button:focus { opacity: 1; color: var(--success); } ',
     `nus-product-media {
       display: inline-block;
       height: 160px; width: 160px;
       box-shadow: 0 0 8px -1px var(--shadow-color);
       margin: 0 5px 5px 0;
-    }
-    `,
+    }`,
   ]
 })
 export class ProductMediaHostComponent extends AbstractEditingComponent<FormArray> implements OnInit, AfterViewInit {

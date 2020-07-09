@@ -37,6 +37,8 @@ import { AbstractListComponent } from '@nusantara/core';
       </tr>
       </tbody>
     </table>
+
+    <nus-pagination [page]="page"></nus-pagination>
   `,
   styles: [``]
 })

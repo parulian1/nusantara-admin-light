@@ -17,8 +17,6 @@ import { GoogleService } from '@nusantara/services';
   template: `
     <button type="button" (click)="remove.emit()" title="Remove"><i class="material-icons">remove_circle_outline</i></button>
 
-    <img [src]="previewImageUrl" alt="Media Preview">
-
     <div *ngIf="entity?.type === 'image'">
       <span class="video-title">Image</span>
     </div>
@@ -29,6 +27,9 @@ import { GoogleService } from '@nusantara/services';
         <ng-template #fullTitle>{{ title }}</ng-template>
       </a>
     </div>
+
+    <img [src]="previewImageUrl" alt="Media Preview">
+
   `,
   styles: [
     ':host { position: relative; text-align: center; }',

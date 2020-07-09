@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastLevelEnum, ToastService } from '@nusantara/core/toast';
 import { IResultResponse } from '@nusantara/core/responses';
 import { AbstractEditingComponent } from './abstract-editing.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 /**
  * Base class for components that display a create/edit form
@@ -132,7 +133,12 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
    */
   protected onSaveError(error: any) {
     console.log('Failed to save with error:', error);
-    this.toast?.addError(error.toString(), 'Failed to Save');
+
+    let errorMessage = error.toString();
+    if (error instanceof HttpErrorResponse) {
+      errorMessage = error.message;
+    }
+    this.toast?.addError(errorMessage, 'Failed to Save');
   }
 
   delete() {

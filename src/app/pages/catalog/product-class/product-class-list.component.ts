@@ -15,6 +15,9 @@ import { AbstractListComponent } from '@nusantara/core/components/abstract-list.
       title="Product Classes"
       description="Defines 'types' of products which are sold.">
     </nus-list-header>
+
+    <nus-pagination [page]="page"></nus-pagination>
+
     <table>
       <thead>
         <tr>
@@ -31,6 +34,8 @@ import { AbstractListComponent } from '@nusantara/core/components/abstract-list.
         </tr>
       </tbody>
     </table>
+
+    <nus-pagination [page]="page"></nus-pagination>
   `,
   styles: [ ]
 })
