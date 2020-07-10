@@ -85,11 +85,15 @@ input.ng-untouched {
 /* For input fields that should immediately show when they are invalid */
 .immediate-error-display input.ng-untouched.ng-invalid {
   border-color: var(--error) !important;
+  background: url('assets/warning-24px.svg') no-repeat scroll right 5px center;
 }
 
 input.ng-invalid {
   border-color: var(--error);
+  outline-color: var(--error);
+  background: url('assets/warning-24px.svg') no-repeat scroll right 5px center;
 }
+
 input[type=color] {
   padding: 0;
 }
