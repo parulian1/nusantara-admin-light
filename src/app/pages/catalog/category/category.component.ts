@@ -62,7 +62,7 @@ import { AbstractDetailComponent, IResultResponse } from '@nusantara/core';
         </thead>
         <tbody>
         <tr *ngFor="let control of sourceMappings.controls; let i=index">
-          <td><input [formControl]="control" class="immediate-error-display"></td>
+          <td class="immediate-error-display"><input [formControl]="control"></td>
           <td>
             <button (click)="removeMapping(i)" type="button" class="remove-button">
               <i class="material-icons">remove_circle_outline</i>

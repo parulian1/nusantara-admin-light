@@ -59,10 +59,10 @@ import { ProductClassService, ProductAttributeService } from '@nusantara/service
         </thead>
         <tbody>
         <tr *ngFor="let attrFormGroup of attributeForms; let i=index" [formGroup]="attrFormGroup">
-          <td>
+          <td class="immediate-error-display">
             <input type="text" formControlName="name">
           </td>
-          <td>
+          <td class="immediate-error-display">
             <select formControlName="type">
               <option *ngFor="let opt of this.attributeTypeChoices"
                       [ngValue]="opt.value">
