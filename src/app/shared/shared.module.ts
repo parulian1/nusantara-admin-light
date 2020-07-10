@@ -13,6 +13,7 @@ import { CamelToHumanizedPipe } from './camel-to-humanized.pipe';
 import { AddressComponent } from './address';
 import { FieldErrorsComponent } from './field-errors.component';
 import { NonFieldErrorsComponent } from './non-field-errors.component';
+import { SpinnerComponent } from './spinner.component';
 
 
 /**
@@ -31,6 +32,7 @@ import { NonFieldErrorsComponent } from './non-field-errors.component';
     AddressComponent,
     FieldErrorsComponent,
     NonFieldErrorsComponent,
+    SpinnerComponent,
   ],
   exports: [
     EntityToSlugPipe,
@@ -43,6 +45,7 @@ import { NonFieldErrorsComponent } from './non-field-errors.component';
     AddressComponent,
     FieldErrorsComponent,
     NonFieldErrorsComponent,
+    SpinnerComponent,
   ],
   imports: [
     CommonModule,

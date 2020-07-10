@@ -9,6 +9,7 @@ import { CategoryListComponent, CategoryComponent } from './category';
 import { ProductClassListComponent, ProductClassComponent } from './product-class';
 import * as product from './product';
 import { VendorListComponent, VendorComponent } from './vendor';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [

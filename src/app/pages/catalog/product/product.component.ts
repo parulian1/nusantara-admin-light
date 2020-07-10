@@ -192,14 +192,21 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   save() {
     this.service.save(this.getFormValue()).subscribe(resp => {
-        const dependentResponses = zip(
-          this.mediaHost.saveAll(resp.entity),
-          this.priceListHost.saveAll(resp.entity)
-        );
-        dependentResponses.subscribe(
-          () => { this.onSaveSuccess(resp); },
-          (err) => { this.onSaveError(err); }
-        );
+        // const dependentResponses = zip(
+        //     this.mediaHost.saveAll(resp.entity),
+        //     this.priceListHost.saveAll(resp.entity)
+        // );
+      // just throw away?
+      this.mediaHost.saveAll(resp.entity).subscribe(() => { });
+      this.priceListHost.saveAll(resp.entity).subscribe(
+        () => { this.onSaveSuccess(resp); },
+        (err) => { this.onSaveError(err); }
+      );
+        //
+        // dependentResponses.subscribe(
+        //   () => { this.onSaveSuccess(resp); },
+        //   (err) => { this.onSaveError(err); }
+        // );
       },
       (err) => this.onSaveError(err)
     );

@@ -30,12 +30,14 @@ const routes: Routes = [
         component: CategoryListComponent,
         resolve: { page: CategoryListResolver },
         runGuardsAndResolvers: 'always',
+        data: { animation: 'List', },
       },
       {
         path: 'new',
         component: CategoryComponent,
         resolve: { parentOptions: CategoryParentOptionsResolver },
         runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
       },
       {
         path: ':slug',
@@ -45,6 +47,7 @@ const routes: Routes = [
           parentOptions: CategoryParentOptionsResolver
         },
         runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
       },
     ]
   },
@@ -61,6 +64,7 @@ const routes: Routes = [
           categories: AllCategoryResolver,
         },
         runGuardsAndResolvers: 'always',
+        data: { animation: 'List', },
       },
       {
         path: 'new',
@@ -73,6 +77,7 @@ const routes: Routes = [
           priceListTypes: PriceListTypeResolver,
         },
         runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
       },
       {
         path: ':slug',
@@ -86,6 +91,7 @@ const routes: Routes = [
           priceListTypes: PriceListTypeResolver,
         },
         runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
       }
     ]
   },
@@ -97,6 +103,7 @@ const routes: Routes = [
         component: ProductClassListComponent,
         resolve: { page: ProductClassListResolver },
         runGuardsAndResolvers: 'always',
+        data: { animation: 'List' },
       },
       {
         path: 'new',
@@ -106,6 +113,7 @@ const routes: Routes = [
           attributeTypeChoices: ProductAttributeTypeResolver
         },
         runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail' },
       },
       {
         path: ':slug',
@@ -116,6 +124,7 @@ const routes: Routes = [
           attributeTypeChoices: ProductAttributeTypeResolver
         },
         runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
       },
     ]
   },
@@ -127,17 +136,20 @@ const routes: Routes = [
         component: VendorListComponent,
         resolve: { page: VendorListResolver },
         runGuardsAndResolvers: 'always',
+        data: { animation: 'List' },
       },
       {
         path: 'new',
         component: VendorComponent,
         runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
       },
       {
         path: ':slug',
         component: VendorComponent,
         resolve: { entity: VendorResolver },
         runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
       }
     ]
   }

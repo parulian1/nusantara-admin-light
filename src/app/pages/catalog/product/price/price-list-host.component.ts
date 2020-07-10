@@ -115,8 +115,7 @@ export class PriceListHostComponent extends AbstractEditingComponent<FormArray> 
       component => this.service
         .save(component.toEntity())
         .pipe(map((priceListResult) => {
-          // todo: can we just remove this subscribe here?
-          return component.saveRanges(priceListResult.entity).subscribe(() => {  });
+          return component.saveRanges(priceListResult.entity).subscribe();
         }))
     );
 

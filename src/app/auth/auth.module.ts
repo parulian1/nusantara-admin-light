@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { SharedModule } from '@nusantara/shared';
 import { AuthRoutingModule } from './auth-routing.module';
 import {
   LoginComponent,
@@ -10,6 +11,7 @@ import {
   ForgotPasswordSentComponent,
   ResetPasswordComponent,
 } from './pages';
+
 
 @NgModule({
   declarations: [
@@ -23,6 +25,7 @@ import {
     CommonModule,
     ReactiveFormsModule,
     AuthRoutingModule,
+    SharedModule,
   ]
 })
 export class AuthModule { }

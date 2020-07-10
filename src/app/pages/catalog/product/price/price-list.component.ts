@@ -1,13 +1,12 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Observable, zip } from 'rxjs';
 
 import { AbstractEditingComponent, IResultResponse } from '@nusantara/core';
 import { drf, products } from '@nusantara/models';
-import { RangeComponent } from '@nusantara/pages/catalog/product/price/range.component';
 import { PriceListRangeService } from '@nusantara/services';
-import { IPriceListRange } from '@nusantara/models/products';
-import { Observable, zip } from 'rxjs';
+import { RangeComponent } from './range.component';
 
 /**
  * Shows the details for one price list assigned to a product.
@@ -77,7 +76,7 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
   rangeQuantityChanged = new EventEmitter<number>();
   types: Array<drf.IChoice>;
 
-  public removedRanges: Array<products.IPriceListRange> = [];
+  public deletedRanges: Array<products.IPriceListRange> = [];
 
   constructor(protected rangeService: PriceListRangeService,
               protected route: ActivatedRoute,
@@ -159,7 +158,7 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
     // if the object has an href, then it was already stored on the server
     // so we have to remember to perform an HTTP DELETE later
     if (!!event.href.value) {
-      this.removedRanges.push(event.form.value as IPriceListRange);
+      this.deletedRanges.push(event.form.value as products.IPriceListRange);
     }
 
     this.ranges.removeAt(index);
@@ -186,6 +185,7 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
 
   /**
    * Saves all the _price list ranges_ in this price list (not the price list itself).
+   * This will also delete any removed ranges that have already been saved to the server.
    *
    * @param priceList The price list that owns this range.
    */
@@ -195,15 +195,8 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
     this.rangeComponents.forEach((component) => { component.priceList.setValue(priceList.href); });
 
     return zip(
-      ...this.rangeComponents.map(component => this.rangeService.save(component.toEntity()))
+      ...this.rangeComponents.map(component => this.rangeService.save(component.toEntity())),
+      ...this.deletedRanges.map(range => this.rangeService.delete(range))
     );
   }
-
-  deleteRanges(): Observable<any> {
-
-    // delete all the ranges
-
-    throw new Error('not implemented');
-  }
-
 }

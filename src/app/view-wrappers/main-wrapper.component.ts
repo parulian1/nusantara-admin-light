@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@nusantara/auth';
+import { slideInAnimation } from '@nusantara/route-animations';
 
 @Component({
   selector: 'nus-main-wrapper',
@@ -87,10 +88,22 @@ import { AuthService } from '@nusantara/auth';
     </nav>
 
     <div id="dashboard-content">
-      <router-outlet></router-outlet>
+<!--      <router-outlet></router-outlet>-->
+
+      <div [@routeAnimations]="o && o.activatedRouteData && o.activatedRouteData['animation']">
+        <router-outlet #o="outlet"></router-outlet>
+      </div>
     </div>
   `,
   styles: [
+
+    `
+
+
+    `,
+
+
+
     `
 
       /* Style The Dropdown Button */
@@ -277,6 +290,7 @@ import { AuthService } from '@nusantara/auth';
 
 
     `],
+  animations: [ slideInAnimation, ],
 })
 export class MainWrapperComponent implements OnInit {
 

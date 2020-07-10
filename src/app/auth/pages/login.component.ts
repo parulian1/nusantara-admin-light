@@ -28,7 +28,7 @@ import { ToastService } from '@nusantara/core/toast';
 
       <label>
         <span>Site Domain</span>
-        <input type="text" formControlName="siteDomain" placeholder="Ex, www.mysite.com">
+        <input type="text" formControlName="siteDomain" placeholder="Ex, www.mysite.com" [disabled]="isBusy">
         <div *ngIf="siteDomain.invalid && (siteDomain.dirty || siteDomain.touched)" class="error-detail">
           <div *ngIf="siteDomain.errors.required">Site Domain is required</div>
           <div *ngIf="siteDomain.errors.apiError">{{ siteDomain.getError('apiError') }}</div>
@@ -37,24 +37,20 @@ import { ToastService } from '@nusantara/core/toast';
 
       <label>
         <span>Email Address</span>
-        <input type="email" formControlName="email" placeholder="email@domain.com">
-        <div *ngIf="email.invalid && (email.dirty || email.touched)" class="error-detail">
-          <div *ngIf="email.errors.required">Email is required</div>
-          <div *ngIf="email.errors.apiError">{{ email.getError('apiError') }}</div>
-        </div>
+        <input type="email" [formControl]="email" placeholder="email@domain.com" [disabled]="isBusy">
+        <nus-field-errors [control]="email"></nus-field-errors>
       </label>
 
       <label>
         <span>Password</span>
-        <input type="password" formControlName="password">
-        <div *ngIf="password.invalid && (password.dirty || password.touched)" class="error-detail">
-          <div *ngIf="password.errors.required">Password is required</div>
-          <div *ngIf="password.errors.apiError">{{ password.getError('apiError') }}</div>
-        </div>
+        <input type="password" [formControl]="password" [disabled]="isBusy">
+        <nus-field-errors [control]="password"></nus-field-errors>
       </label>
 
       <div class="controls-container">
-        <button type="submit" [disabled]="!form.valid" class="control">Login</button>
+        <button type="submit" [disabled]="!form.valid || isBusy" class="control">
+          <span>Login</span>
+        </button>
       </div>
 
     </form>
@@ -84,6 +80,7 @@ export class LoginComponent implements OnInit {
   form: FormGroup;
   nonFieldErrors: Array<string> = [];
   afterLoginUrl: string;
+  isBusy = false;
 
   constructor(private fb: FormBuilder,
               private service: AuthService,
@@ -115,7 +112,7 @@ export class LoginComponent implements OnInit {
   login() {
 
     this.nonFieldErrors.length = 0;
-
+    this.isBusy = true;
     this.service
       .login(this.email.value, this.password.value, this.siteDomain.value)
       .pipe(catchError((err) => {
@@ -135,20 +132,20 @@ export class LoginComponent implements OnInit {
   }
 
   private onLoginSuccess() {
+    this.isBusy = false;
     this.toastService.addSuccess(`Welcome ${this.email.value}!`, 'Login Success');
     this.router.navigateByUrl(decodeURIComponent(this.afterLoginUrl));
   }
 
   private onLoginFail(errorDetails: ILoginFailure) {
-
+    this.isBusy = false;
     this.toastService.addError('Sorry!  Please check your email/password and try again');
-
     if (!!errorDetails.detail) {
       this.nonFieldErrors.push(errorDetails.detail);
     }
 
     errorDetails.nonFieldErrors?.forEach(
-      errMsg => this.nonFieldErrors.push(errMsg)
+      (errMsg) => { this.nonFieldErrors.push(errMsg); }
     );
 
     // form specific errors -- take the first error message and display.
