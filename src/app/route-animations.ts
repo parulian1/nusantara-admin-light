@@ -13,7 +13,7 @@ const SLIDE_IN_FROM_RIGHT_STEPS = [
   group([
     query(':enter', [
         style({opacity: '0', transform: 'translateX(10px)'}),
-        animate('.3s ease-in-out', style({opacity: '1', transform: 'translateX(0%)'}))
+        animate('.15s ease-in-out', style({opacity: '1', transform: 'translateX(0%)'}))
       ], {optional: true}
     ),
     query(':leave', [style({opacity: '0'}), ], {optional: true}),
@@ -25,7 +25,7 @@ const SLIDE_IN_FROM_LEFT_STEPS = [
   group([
     query(':enter', [
         style({opacity: '0', transform: 'translateX(-10px)'}),
-        animate('.3s ease-in-out', style({opacity: '1', transform: 'translateX(0%)'}))
+        animate('.15s ease-in-out', style({opacity: '1', transform: 'translateX(0%)'}))
       ], {optional: true}
     ),
     query(':leave', [style({opacity: '0'}), ], {optional: true}),

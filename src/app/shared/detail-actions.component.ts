@@ -8,13 +8,16 @@ import { AbstractDetailComponent } from '@nusantara/core';
 @Component({
   selector: 'nus-detail-actions',
   template: `
-    <div class="actions-container">
-      <button type="submit" [disabled]="!component.form.valid">Save</button>
-      <button type="button" (click)="cancel.emit()">Cancel</button>
-      <button type="button" (click)="delete.emit()" *ngIf="!component.isNew">Delete</button>
-    </div>
+    <button type="submit" [disabled]="!component.form.valid" class="control">Save</button>
+    <button type="button" (click)="cancel.emit()" class="control secondary">Cancel</button>
+    <button type="button" (click)="delete.emit()" *ngIf="!component.isNew" class="control danger">Delete</button>
   `,
-  styles: [ ]
+  styles: [
+    ':host { display: flex; margin-top: 1.5em; }',
+    ':not(:first-child) { margin-left: 5px; }',
+    'button.danger { margin-left: auto }',
+    'button { min-width: 105px; }',
+  ]
 })
 export class DetailActionsComponent {
   @Input() component: AbstractDetailComponent<any>;

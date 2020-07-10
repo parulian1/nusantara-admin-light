@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ToastService } from '@nusantara/core';
-import { AbstractDetailComponent } from '@nusantara/core/components';
+import { ToastService, AbstractDetailComponent } from '@nusantara/core';
 import { IFlatPage } from '@nusantara/models';
 import { FlatPageService } from '@nusantara/services';
 
@@ -15,44 +14,33 @@ import { FlatPageService } from '@nusantara/services';
       typeName="Page">
     </nus-detail-title>
 
-    <ul class="non-field-errors" *ngIf="!!nonFieldErrors.length">
-      <li *ngFor="let err of nonFieldErrors">{{ err }}</li>
-    </ul>
+    <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
 
     <form [formGroup]="form" (ngSubmit)="save()">
 
       <label>
         <span>Title</span>
         <input type="text" [formControl]="title">
-        <div *ngIf="title.invalid && (title.dirty || title.touched)" class="error-detail">
-          <div *ngIf="title.errors.required">Title is required</div>
-          <div *ngIf="title.errors.apiError">{{ title.getError('apiError') }}</div>
-        </div>
+        <nus-field-errors [control]="title"></nus-field-errors>
       </label>
 
       <label>
         <span>URL Path</span>
         <input type="text" [formControl]="url">
-        <div *ngIf="url.invalid && (url.dirty || url.touched)" class="error-detail">
-          <div *ngIf="url.errors.required">URL is required</div>
-          <div *ngIf="url.errors.apiError">{{ url.getError('apiError') }}</div>
-        </div>
+        <nus-field-errors [control]="url"></nus-field-errors>
       </label>
 
       <label>
         <span>Content</span>
         <textarea [formControl]="content"></textarea>
-        <div *ngIf="content.invalid && (content.dirty || content.touched)" class="error-detail">
-          <div *ngIf="content.errors.required">Content is required</div>
-          <div *ngIf="content.errors.apiError">{{ content.getError('apiError') }}</div>
-        </div>
+        <nus-field-errors [control]="content"></nus-field-errors>
       </label>
 
-      <div class="actions-container">
-        <button type="submit" [disabled]="!form.valid">Save</button>
-        <button type="button" (click)="navigateToParent(true)">Cancel</button>
-        <button type="button" (click)="delete()" *ngIf="!isNew">Delete</button>
-      </div>
+      <nus-detail-actions
+        [component]="this"
+        (cancel)="navigateToParent(true)"
+        (delete)="delete()">
+      </nus-detail-actions>
     </form>
   `,
   styles: [ ]

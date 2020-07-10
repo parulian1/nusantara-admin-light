@@ -34,7 +34,7 @@ import { VendorService } from '@nusantara/services';
 
       <label>
         <span>Icon Image</span>
-        <img [src]="iconImagePreviewUrl" id="icon-image-preview" alt="Icon Image">
+        <img [src]="iconImagePreviewUrl" id="icon-image-preview" alt="Icon Image" class="preview">
         <input type="file" [formControl]="iconImage" (change)="setIconImagePreview($event)" name="iconImage">
         <small>Recommended 120px x 120px (1:1)</small>
         <nus-field-errors [control]="iconImage"></nus-field-errors>
@@ -42,7 +42,7 @@ import { VendorService } from '@nusantara/services';
 
       <label>
         <span>Banner Image</span>
-        <img [src]="bannerImagePreviewUrl" id="banner-image-preview" alt="Banner Image">
+        <img [src]="bannerImagePreviewUrl" id="banner-image-preview" alt="Banner Image" class="preview">
         <input type="file" [formControl]="bannerImage" (change)="setBannerImagePreview($event)" name="bannerImage">
         <small>Recommended: 1152px x 350px (16:5)</small>
         <nus-field-errors [control]="bannerImage"></nus-field-errors>
@@ -54,24 +54,18 @@ import { VendorService } from '@nusantara/services';
         <nus-field-errors [control]="internalNotes"></nus-field-errors>
       </label>
 
-      <div class="actions-container">
-        <button type="submit" [disabled]="!form.valid">Save</button>
-        <button type="button" (click)="navigateToParent(true)">Cancel</button>
-        <button type="button" (click)="delete()" *ngIf="!isNew">Delete</button>
-      </div>
+      <nus-detail-actions
+        [component]="this"
+        (cancel)="navigateToParent(true)"
+        (delete)="delete()">
+      </nus-detail-actions>
     </form>
   `,
-  styles: [`
-    img { background-color: var(--nav-background); }
-    #icon-image-preview {
-      height:120px; width: 120px; object-fit: scale-down;
-    }
-    #banner-image-preview {
-      height:125px;
-      width: 400px;
-      object-fit: scale-down;
-    }
-  `]
+  styles: [
+    '#icon-image-preview { height:120px; width: 120px; }',
+    '#banner-image-preview { height:125px; width: 400px; }',
+    'input[type=file] { display: none }',
+  ]
 })
 export class VendorComponent extends AbstractDetailComponent<IVendor> {
 

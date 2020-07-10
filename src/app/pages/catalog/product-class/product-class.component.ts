@@ -14,78 +14,81 @@ import { ProductClassService, ProductAttributeService } from '@nusantara/service
       typeName="Product Class">
     </nus-detail-title>
 
+    <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
+
     <form [formGroup]="form" (ngSubmit)="save()">
 
       <label>
         <span>Name</span>
-        <input type="text" formControlName="name">
+        <input type="text" [formControl]="name">
+        <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
         <span>Type</span>
-        <select formControlName="type">
+        <select [formControl]="type">
             <option *ngFor="let opt of typeChoices" [ngValue]="opt.value">
               {{opt.displayName}}
             </option>
         </select>
       </label>
+
       <label [ngClass]="{'hidden': isDigitalProduct}" class="without-field-errors">
-        <input type="checkbox" formControlName="requiresShipping">
+        <input type="checkbox" [formControl]="requiresShipping">
         Requires Shipping?
       </label>
       <label [ngClass]="{'hidden': isDigitalProduct}" class="without-field-errors">
-        <input type="checkbox" formControlName="trackStock">
+        <input type="checkbox" [formControl]="trackStock">
         Track Stock?
       </label>
       <label [ngClass]="{'hidden': isDigitalProduct}" class="without-field-errors">
-        <input type="checkbox" formControlName="isPerishable">
+        <input type="checkbox" [formControl]="isPerishable">
         Is Perishable?
       </label>
 
-      <h2>
-        Attributes
-        <button type="button"
-                (click)="addAttribute()"
-                class="add-button">
-          <i class="material-icons">add_circle</i>
-        </button>
-      </h2>
-
+      <h2>Attributes</h2>
       <table>
         <thead>
-          <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Searchable</th>
-            <th>Filterable</th>
-            <th></th>
-          </tr>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Searchable</th>
+          <th>Filterable</th>
+          <th></th>
+        </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let attrFormGroup of attributeForms; let i=index" [formGroup]="attrFormGroup">
-            <td>
-              <input type="text" formControlName="name">
-            </td>
-            <td>
-              <select formControlName="type">
-                <option *ngFor="let opt of this.attributeTypeChoices"
-                        [ngValue]="opt.value">
-                  {{opt.displayName}}
-                </option>
-              </select>
-            </td>
-            <td>
-              <input type="checkbox" formControlName="isSearchable">
-            </td>
-            <td>
-              <input type="checkbox" formControlName="isFilterable">
-            </td>
-            <td>
-              <button type="button" (click)="removeAttribute(i)">
-                <i class="material-icons">delete_outline</i>
-              </button>
-            </td>
-          </tr>
+        <tr *ngFor="let attrFormGroup of attributeForms; let i=index" [formGroup]="attrFormGroup">
+          <td>
+            <input type="text" formControlName="name">
+          </td>
+          <td>
+            <select formControlName="type">
+              <option *ngFor="let opt of this.attributeTypeChoices"
+                      [ngValue]="opt.value">
+                {{opt.displayName}}
+              </option>
+            </select>
+          </td>
+          <td>
+            <input type="checkbox" formControlName="isSearchable">
+          </td>
+          <td>
+            <input type="checkbox" formControlName="isFilterable">
+          </td>
+          <td>
+            <button (click)="removeAttribute(i)" type="button" class="remove-button">
+              <i class="material-icons">remove_circle_outline</i>
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="5">
+            <button type="button" (click)="addAttribute()" class="add-button">
+              Add Attribute
+            </button>
+          </td>
+        </tr>
         </tbody>
       </table>
 
@@ -96,9 +99,7 @@ import { ProductClassService, ProductAttributeService } from '@nusantara/service
       </nus-detail-actions>
     </form>
   `,
-  styles: [
-    'button.add-button { background: transparent; border: none; }',
-  ]
+  styles: [ ]
 })
 export class ProductClassComponent extends AbstractDetailComponent<products.IProductClass> implements OnInit {
 
@@ -116,7 +117,9 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
 
   get name(): FormControl { return this.form.get('name') as FormControl; }
   get type(): FormControl { return this.form.get('type') as FormControl; }
-  get href(): FormControl { return this.form.get('href') as FormControl; }
+  get requiresShipping(): FormControl { return this.form.get('requiresShipping') as FormControl; }
+  get trackStock(): FormControl { return this.form.get('trackStock') as FormControl; }
+  get isPerishable(): FormControl { return this.form.get('isPerishable') as FormControl; }
   get attributes(): FormArray { return this.form.get('attributes') as FormArray; }
 
   get attributeForms(): FormGroup[] {
@@ -136,13 +139,7 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
     });
   }
 
-  /**
-   * Sets up the initial form state.
-   *
-   * @param entity the product class that is being edited (or null)
-   */
   initializeForm(entity?: products.IProductClass) {
-
     this.form = this.fb.group({
       name: [entity?.name, [Validators.required]],
       href: [entity?.href],
@@ -184,14 +181,9 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
     this.attributes.push(attrGroup);
   }
 
-  /**
-   * Flags an attribute for removal.
-   * @param attr A product attribute that would be removed
-   */
   removeAttribute(index: number) {
     this.attributes.removeAt(index);
   }
-
 
   getFormValue(): any {
     // overridden: in this case, we want to include the value of disabled components.
@@ -205,15 +197,13 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
    * products, otherwise, ensure they're enabled.
    */
   private onTypeChanged(value: string) {
-    [this.form.get('requiresShipping'), this.form.get('trackStock'), this.form.get('isPerishable')].forEach(
-      fc => {
-        if (value === 'digital') {
-          fc.setValue(false);
-          fc.disable();
-        } else {
-          fc.enable();
-        }
-      }
-    );
+    const typeDependantControls = [this.requiresShipping, this.trackStock, this.isPerishable, ];
+    typeDependantControls.forEach(fc => {
+      if (value === 'digital') {
+        fc.setValue(false);
+        fc.disable();
+      } else {
+        fc.enable();
+    }});
   }
 }

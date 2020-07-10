@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '@nusantara/auth';
 import { slideInAnimation } from '@nusantara/route-animations';
-import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Navigation, NavigationExtras, Router } from '@angular/router';
+import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
+import { SubscriptionLike } from 'rxjs';
 
 @Component({
   selector: 'nus-main-wrapper',
@@ -19,7 +20,6 @@ import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Navi
         </button>
         <div class="dropdown-content">
           <a [routerLink]="['/auth/logout']"><i class="material-icons">exit_to_app</i>Logout</a>
-          <button type="button" (click)="toggleAppBusy()">Toggle Busy</button>
         </div>
       </div>
     </header>
@@ -229,38 +229,36 @@ import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Navi
     `],
   animations: [ slideInAnimation, ],
 })
-export class MainWrapperComponent implements OnInit {
+export class MainWrapperComponent implements OnInit, OnDestroy {
 
+  private routerEventsSub: SubscriptionLike;
   isBusy = false;
-
-  toggleAppBusy() {
-    console.log('setting app busy to', !this.isBusy);
-    this.isBusy = !this.isBusy;
-  }
 
   constructor(public authService: AuthService, public router: Router) {
 
-    this.router.events.subscribe((e) => {
+  }
+
+  ngOnInit(): void {
+    this.routerEventsSub = this.router.events.subscribe((e) => {
       if (e instanceof NavigationStart) {
-        window.scrollTo(0, 0);
-        this.isBusy = true;
-      } else if (e instanceof NavigationEnd) {
-        this.isBusy = false;
-      } else if (e instanceof NavigationCancel) {
-        this.isBusy = false;
-      } else if (e instanceof NavigationError) {
-        this.isBusy = false;
+        this.onNavigationStarted();
+      } else if (e instanceof NavigationEnd || e instanceof NavigationCancel || e instanceof NavigationError) {
+        this.onNavigationEnded();
       }
     });
+  }
 
-
-
+  ngOnDestroy() {
+    if (!!this.routerEventsSub) {
+      this.routerEventsSub.unsubscribe();
+    }
   }
 
   /**
    * Returns the user's own name that should be displayed to them.
    */
   get userDisplayName(): string {
+    // todo: get this garbage out of here and do it through a pipe
     if (!!this.authService.tokenPayload.first_name) {
       return this.authService.tokenPayload.first_name;
     } else if (!!this.authService.tokenPayload.last_name) {
@@ -274,19 +272,18 @@ export class MainWrapperComponent implements OnInit {
     }
   }
 
-  /**
-   * Returns the profile image url
-   */
-  get profileImage(): string {
-    return '/assets/default-profile-img.svg';
+  get profileImage(): string { return '/assets/default-profile-img.svg'; }
+  get currentSiteName(): string { return 'marthatilaarshop.com'; }
+
+  onNavigationStarted() {
+    window.scrollTo(0, 0);
+    this.isBusy = true;
   }
 
-  get currentSiteName(): string {
-    return 'marthatilaarshop.com';
+  onNavigationEnded() {
+    this.isBusy = false;
   }
 
-  ngOnInit(): void {
-  }
 }
 
 

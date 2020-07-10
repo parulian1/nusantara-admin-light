@@ -1,94 +1,103 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormArray, Validators } from '@angular/forms';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ICategory } from '@nusantara/models';
 import { CategoryService } from '@nusantara/services';
-import { AbstractDetailComponent } from '@nusantara/core';
+import { AbstractDetailComponent, IResultResponse } from '@nusantara/core';
 
 @Component({
   selector: 'nus-category',
   template: `
-    <nus-detail-title [originalName]="originalEntityName" typeName="Category"></nus-detail-title>
+    <nus-detail-title
+      [originalName]="originalEntityName"
+      typeName="Category">
+    </nus-detail-title>
 
-    <form [formGroup]="form" (ngSubmit)="submit()">
+    <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
+
+    <form [formGroup]="form" (ngSubmit)="saveAsForm()" #f>
+
+      <input type="hidden" [formControl]="href" name="href"> <!-- required for non-JSON form posting -->
+
       <label>
         <span>Name</span>
-        <input type="text"
-               id="name"
-               formControlName="name"
-               [ngClass]="{'error': name.invalid && (name.dirty || name.touched)}">
+        <input type="text" [formControl]="name" name="name">
+        <nus-field-errors [control]="name"></nus-field-errors>
       </label>
-      <div *ngIf="name.invalid && (name.dirty || name.touched)" class="error-detail">
-        <div *ngIf="name.getError('required')">This field is required</div>
-      </div>
 
-      <label class="icon-input">
-        <span>Icon</span>
-        <div>
-          <img [src]="originalImage" *ngIf="!!originalImage">
-          <input type="file"
-                 formControlName="image"
-                 (change)="onFileChanged($event)"
-                 accept="image/*">
-          <span>Recommended: 65x65px</span>
-        </div>
-      </label>
       <label>
         <span>Parent</span>
-        <select formControlName="parent">
-          <option *ngFor="let parent of parentOptions" [ngValue]="parent.href">{{parent.pathName}}</option>
+        <select [formControl]="parent" name="parent">
+          <option *ngFor="let parent of parentOptions"
+                  [ngValue]="parent.href">
+            {{parent.pathName}}
+          </option>
         </select>
       </label>
 
-      <h2>
-        Source Mappings (optional)
-        <button type="button" class="add-button" (click)="addMapping()">
-          <i class="material-icons">add_circle</i>
-        </button>
-      </h2>
+      <label>
+        <span>Icon</span>
+        <img [src]="imagePreviewUrl" alt="Category Icon" class="preview">
+        <small>Recommended: 65x65</small>
+        <input type="file"
+               [formControl]="image"
+               (change)="setIconImagePreview($event)"
+               name="image"
+               accept="image/*">
+      </label>
+
+      <h2>Source Mappings (optional)</h2>
       <p>
         Maps a category in your source data (such as an ERP system) to
         to this category.  These mappings are only applied once, when
         importing new data.
       </p>
-      <label>
-        <div *ngFor="let control of sourceMappings.controls; let i=index">
-          <input [formControl]="control">
-          <button (click)="removeMapping(i)" type="button">Remove</button>
-        </div>
-      </label>
+      <table>
+        <thead>
+        <tr>
+          <th>Mapping</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let control of sourceMappings.controls; let i=index">
+          <td><input [formControl]="control" class="immediate-error-display"></td>
+          <td>
+            <button (click)="removeMapping(i)" type="button" class="remove-button">
+              <i class="material-icons">remove_circle_outline</i>
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <button type="button" (click)="addMapping()" class="add-button">
+              Add Mapping
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
 
-      <div class="actions-container">
-        <button type="submit" [disabled]="!form.valid">Save</button>
-        <button type="button" (click)="navigateToParent(true)">Cancel</button>
-        <button type="button" (click)="delete()" *ngIf="!isNew" class="danger">Delete</button>
-      </div>
+      <nus-detail-actions
+        [component]="this"
+        (cancel)="navigateToParent(true)"
+        (delete)="delete()">
+      </nus-detail-actions>
+
     </form>
   `,
-  styles: [`
-    label.icon-input { display: flex; }
-    label.icon-input img { max-width: 65px; }
-    label.icon-input input { display: inherit; }
-
-    button.add-button { background: transparent; border: none; }
-    label {
-      display: block;
-      margin-bottom: .5em;
-    }
-    label > span {
-      display: inline-block;
-      width: 65px;
-    }
-
-
-  `]
+  styles: [
+    'img { height: 65px; width: 65px; }',
+    'input[type=file] { display: none; }',
+  ]
 })
 export class CategoryComponent extends AbstractDetailComponent<ICategory> implements OnInit {
 
-  public parentOptions: ICategory[] = [];
-  originalImage: string;
-  private newImage: File;
+  @ViewChild('f') formView: ElementRef<HTMLFormElement>;
+
+  parentOptions: ICategory[] = [];
+  imagePreviewUrl: string;
 
   constructor(public service: CategoryService,
               public route: ActivatedRoute,
@@ -105,7 +114,6 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
   }
 
   initializeForm(entity?: ICategory) {
-    // setup form and data
     this.form = this.fb.group({
       name: [entity?.name, [Validators.required, ]],
       href: [entity?.href, []],
@@ -114,57 +122,40 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
       sourceMappings: this.fb.array([])
     });
 
-    this.originalImage = entity?.image;
+    this.setIconImagePreview(entity?.image);
 
     entity?.sourceMappings.forEach(
       (value) => { this.addMapping(value); }
     );
   }
 
-  get name() { return this.form.get('name'); }
+  get name(): FormControl { return this.form.get('name') as FormControl; }
+  get image(): FormControl { return this.form.get('image') as FormControl; }
+  get parent(): FormControl { return this.form.get('parent') as FormControl; }
+  get sourceMappings(): FormArray { return this.form.get('sourceMappings') as FormArray; }
 
-  get sourceMappings(): FormArray {
-    return this.form.get('sourceMappings') as FormArray;
+  setIconImagePreview(data?: Event|string) {
+    this.setImagePreview(data,  (dataAsUrl) => this.imagePreviewUrl = dataAsUrl);
   }
 
   addMapping(value?: string) {
-    this.sourceMappings.push(
-      this.fb.control(value ?? '', [Validators.required, ])
-    );
+    this.sourceMappings.push(this.fb.control(value ?? '', [Validators.required, ]));
   }
   removeMapping(index: number) {
     this.sourceMappings.removeAt(index);
   }
 
-  onFileChanged(event) {
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.newImage = file;
-    }
-  }
-
-  submit() {
-
-    this.form.get('image').setValue(null);
-
-    this.service.save(this.form.value).subscribe(
-      result => {
-        if (result.success) {
-
-          if (!!this.newImage) {
-            this.service.uploadImage(this.form.value, this.newImage).subscribe(
-              r2 => {
-                console.log('Upload image result', r2);
-              }
-            );
-
-          } else {
-            this.navigateToParent();
-          }
-        } else {
-          alert('There was an error');
-        }
-      }
+  /**
+   * After successfully saving the form data (with image) we must
+   * execute a second update (source mappings won't be included
+   * with the original form post, because DRF doesn't support
+   * arrays on form/multipart;
+   */
+  protected onSaveSuccess(result: IResultResponse<ICategory>) {
+    const data = {href: this.href.value, sourceMappings: this.sourceMappings.value} as ICategory;
+    this.service.save(data).subscribe(
+      rslt2 => super.onSaveSuccess(rslt2),
+      err => this.onSaveError(err)
     );
   }
 }
