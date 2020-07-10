@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterContentChecked, AfterViewChecked, AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from '@nusantara/auth';
@@ -13,7 +13,7 @@ import { AuthService } from '@nusantara/auth';
     'nus-toast { position: fixed; right: 0; bottom: 0 }',
   ]
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private static TEN_SECONDS = 10_000;
   private static LOGIN_URL = '/auth/login';
@@ -28,11 +28,24 @@ export class AppComponent implements OnInit, OnDestroy {
         this.authService.refresh().subscribe((result) => {
           if (!result.success) {
             this.authService.logout();
-            this.router.navigate([AppComponent.LOGIN_URL, ]);
+            this.router.navigate([AppComponent.LOGIN_URL,]);
           }
         });
       }
     }, AppComponent.TEN_SECONDS);
+
+  }
+
+  ngAfterViewInit() {
+
+    setTimeout(() => {
+      const preloader = document.getElementById('preload-animation');
+      preloader.classList.add('fadeout');
+      setTimeout(() => {
+        document.body.removeChild(preloader);
+      }, 750);
+    }, 750);
+
   }
 
   ngOnDestroy() {

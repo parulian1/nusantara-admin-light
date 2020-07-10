@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@nusantara/auth';
 import { slideInAnimation } from '@nusantara/route-animations';
+import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Navigation, NavigationExtras, Router } from '@angular/router';
 
 @Component({
   selector: 'nus-main-wrapper',
@@ -18,6 +19,7 @@ import { slideInAnimation } from '@nusantara/route-animations';
         </button>
         <div class="dropdown-content">
           <a [routerLink]="['/auth/logout']"><i class="material-icons">exit_to_app</i>Logout</a>
+          <button type="button" (click)="toggleAppBusy()">Toggle Busy</button>
         </div>
       </div>
     </header>
@@ -88,6 +90,9 @@ import { slideInAnimation } from '@nusantara/route-animations';
     </nav>
 
     <div id="dashboard-content">
+
+      <nus-spinner [appBusy]="isBusy"></nus-spinner>
+
 <!--      <router-outlet></router-outlet>-->
 
       <div [@routeAnimations]="o && o.activatedRouteData && o.activatedRouteData['animation']">
@@ -96,81 +101,7 @@ import { slideInAnimation } from '@nusantara/route-animations';
     </div>
   `,
   styles: [
-
     `
-
-
-    `,
-
-
-
-    `
-
-      /* Style The Dropdown Button */
-      .dropbtn {
-        /*background-color: #4CAF50;*/
-        background: transparent;
-        color: white;
-        /*padding: 16px;*/
-        padding: 0;
-        padding-left: 25px;
-        padding-right: 40px;
-        height: 65px;
-        /*font-size: 16px;*/
-        border: none;
-        font-size: 20px;
-        font-weight: lighter;
-        font-family: Roboto, "Helvetica Neue", sans-serif;
-        cursor: pointer;
-        display: flex;
-        line-height: 65px;
-      }
-      .dropbtn img {
-        height: 45px;
-        padding-top: 7px;
-        margin-right: 18px;
-      }
-
-      /* The container <div> - needed to position the dropdown content */
-      .dropdown {
-        position: relative;
-        display: inline-block;
-      }
-
-      /* Dropdown Content (Hidden by Default) */
-      .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f9f9f9;
-        min-width: 160px;
-        width: 100%;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        z-index: 1;
-      }
-
-      /* Links inside the dropdown */
-      .dropdown-content a {
-        color: black;
-        padding: 12px 16px;
-        text-decoration: none;
-        display: block;
-      }
-
-      /* Change color of dropdown links on hover */
-      .dropdown-content a:hover {background-color: #f1f1f1}
-
-      /* Show the dropdown menu on hover */
-      .dropdown:hover .dropdown-content {
-        display: block;
-      }
-
-      /* Change the background color of the dropdown button when the dropdown content is shown */
-      .dropdown:hover .dropbtn {
-        background-color: var(--lighter-nav-bg);
-      }
-
-
-
     /*
      * Main Page Layout
      */
@@ -218,7 +149,12 @@ import { slideInAnimation } from '@nusantara/route-animations';
       height: 45px;
       width: 45px;
     }
-
+    nus-spinner {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      margin: 0;
+    }
 
     nav {
       grid-row: 2;
@@ -228,6 +164,7 @@ import { slideInAnimation } from '@nusantara/route-animations';
     }
     #dashboard-content {
       margin: 15px;
+      position: relative;
     }
     #pages-content {
       grid-column: 2;
@@ -294,7 +231,31 @@ import { slideInAnimation } from '@nusantara/route-animations';
 })
 export class MainWrapperComponent implements OnInit {
 
-  constructor(public authService: AuthService) { }
+  isBusy = false;
+
+  toggleAppBusy() {
+    console.log('setting app busy to', !this.isBusy);
+    this.isBusy = !this.isBusy;
+  }
+
+  constructor(public authService: AuthService, public router: Router) {
+
+    this.router.events.subscribe((e) => {
+      if (e instanceof NavigationStart) {
+        window.scrollTo(0, 0);
+        this.isBusy = true;
+      } else if (e instanceof NavigationEnd) {
+        this.isBusy = false;
+      } else if (e instanceof NavigationCancel) {
+        this.isBusy = false;
+      } else if (e instanceof NavigationError) {
+        this.isBusy = false;
+      }
+    });
+
+
+
+  }
 
   /**
    * Returns the user's own name that should be displayed to them.

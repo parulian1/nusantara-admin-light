@@ -11,6 +11,7 @@ import { ApiPrefixInterceptor, CoreModule } from '@nusantara/core';
 import { AnonWrapperComponent, MainWrapperComponent } from '@nusantara/view-wrappers';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { SharedModule } from '@nusantara/shared';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { AppComponent } from './app.component';
     NgxEchartsModule.forRoot({ echarts }),
     NgxSmartModalModule.forRoot(),
     CoreModule,
+    SharedModule,
     AppRoutingModule,
     HttpClientModule,
     JwtModule.forRoot({

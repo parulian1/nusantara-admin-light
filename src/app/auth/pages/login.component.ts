@@ -29,10 +29,7 @@ import { ToastService } from '@nusantara/core/toast';
       <label>
         <span>Site Domain</span>
         <input type="text" formControlName="siteDomain" placeholder="Ex, www.mysite.com" [disabled]="isBusy">
-        <div *ngIf="siteDomain.invalid && (siteDomain.dirty || siteDomain.touched)" class="error-detail">
-          <div *ngIf="siteDomain.errors.required">Site Domain is required</div>
-          <div *ngIf="siteDomain.errors.apiError">{{ siteDomain.getError('apiError') }}</div>
-        </div>
+        <nus-field-errors [control]="siteDomain"></nus-field-errors>
       </label>
 
       <label>
