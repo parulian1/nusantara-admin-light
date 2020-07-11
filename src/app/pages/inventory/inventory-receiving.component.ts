@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DialogResult, ToastService, AbstractDetailComponent } from '@nusantara/core';
 import { IInventoryReceiving, ISubLocation, IWarehouse } from '@nusantara/models';
 import { ProductSelectionModalComponent } from './product-selection-modal.component';
+import { IProduct } from '@nusantara/models/products';
 
 /**
  * Allows a user to receive a new batch of inventory.
@@ -22,7 +23,10 @@ import { ProductSelectionModalComponent } from './product-selection-modal.compon
             {{ wh.name }}
           </option>
         </select>
-        <button (click)="confirmWarehouse()" type="button" [disabled]="warehouse.disabled">Confirm</button>
+        <button (click)="confirmWarehouse()"
+                type="button"
+                [disabled]="warehouse.disabled || !warehouse.value"
+                class="control">Confirm</button>
       </label>
 
       <div *ngIf="warehouse.disabled">
@@ -32,6 +36,7 @@ import { ProductSelectionModalComponent } from './product-selection-modal.compon
             <th>Product</th>
             <th>Location</th>
             <th>Quantity</th>
+            <th>SKU</th>
             <th>Batch</th>
             <th>Expiry Date</th>
             <th>Cost</th>
@@ -46,9 +51,16 @@ import { ProductSelectionModalComponent } from './product-selection-modal.compon
             [availableSubLocations]="availableSubLocations"
             (remove)="stockRecords.removeAt(i)">
           </nus-inventory-receiving-line>
-        </table>
 
-        <button type="button" (click)="addLine()">Add Record</button>
+          <tr>
+            <td colspan="8">
+              <button type="button" (click)="addLine()" class="add-button">
+                Add Record
+              </button>
+            </td>
+          </tr>
+
+        </table>
 
         <nus-detail-actions
           [component]="this"
@@ -61,7 +73,9 @@ import { ProductSelectionModalComponent } from './product-selection-modal.compon
     <!-- Modals -->
     <nus-product-selection-modal></nus-product-selection-modal>
   `,
-  styles: [ ]
+  styles: [
+    'form { width: 1200px; max-width: 100%; }',
+  ]
 })
 export class InventoryReceivingComponent extends AbstractDetailComponent<IInventoryReceiving> implements OnInit, AfterViewInit {
 
@@ -98,7 +112,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<IInvent
       status: ['pending', [Validators.required, ]],
       createdBy: [],
       approvedBy: [],
-      stockRecords: this.fb.array([])
+      stockRecords: this.fb.array([], [Validators.required, Validators.minLength(1)]),
     });
   }
 
@@ -122,12 +136,21 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<IInvent
     if (this.productSelectionModal.result === DialogResult.OK) {
       // add a new child to the form group based on the modal
 
+      const selectedProduct = this.productSelectionModal.product.value as IProduct;
+
+      // todo: see if the product class has an expiry date associated with it?
+      // if so, we need to add a required validator to that field.
+      // const expiryValidators = [];
+      // if (selectedProduct.productClass)
+      // disable digital products/subscription receiving.
+
       const f = this.fb.group({
         inventoryReceiving: [null, []],
-        product: [this.productSelectionModal.product.value, [Validators.required]],
+        product: [selectedProduct, [Validators.required]],
         href: [null, []],
         subLocation: [null, [Validators.required]],
-        quantity: [1, [Validators.required, ]],
+        sku: ['', [Validators.required, ]],
+        quantity: [1, [Validators.required, Validators.min(1), ]],
         batchNumber: ['', []],
         expiryDate: ['', []]
       });
