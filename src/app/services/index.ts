@@ -17,8 +17,10 @@ export * from './payment-gateway.service';
 
 export * from './shipping-provider.service';
 
+export * from './cms-content-types.service';
 export * from './flat-page.service';
 export * from './widget.service';
+export * from './widget-block.service';
 
 export * from './google.service';
 

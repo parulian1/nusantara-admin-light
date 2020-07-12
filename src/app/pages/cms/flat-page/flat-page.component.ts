@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 import { ToastService, AbstractDetailComponent } from '@nusantara/core';
 import { IFlatPage } from '@nusantara/models';
@@ -30,12 +31,12 @@ import { FlatPageService } from '@nusantara/services';
         <nus-field-errors [control]="url"></nus-field-errors>
       </label>
 
-      <label>
-        <span>Content</span>
-        <textarea [formControl]="content"></textarea>
+      <div>
+        <label for="content" class="external"><span>Content</span></label>
+        <ckeditor [editor]="Editor"
+                  [formControl]="content" id="content"></ckeditor>
         <nus-field-errors [control]="content"></nus-field-errors>
-      </label>
-
+      </div>
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
@@ -43,9 +44,13 @@ import { FlatPageService } from '@nusantara/services';
       </nus-detail-actions>
     </form>
   `,
-  styles: [ ]
+  styles: [
+    '.ck-editor__main { min-height: 150px; }',
+  ]
 })
 export class FlatPageComponent extends AbstractDetailComponent<IFlatPage> implements OnInit {
+
+  public Editor = ClassicEditor;
 
   constructor(public service: FlatPageService,
               public fb: FormBuilder,

@@ -1,5 +1,5 @@
-import { BannerType } from '@nusantara/models/widgets/banner.type';
+import { BannerGroupType } from '@nusantara/models/widgets/banner-group.type';
 
 export type ContainerType =
-  BannerType |
+  BannerGroupType |
   'page_links';

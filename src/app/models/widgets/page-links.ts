@@ -1,5 +1,7 @@
-import { IWidget } from './widget';
+import { INamedHrefEntity } from '@nusantara/models/base';
 
-export interface IPageLinks extends IWidget {
-  links: Array<string>;
+export interface IPageLinks extends INamedHrefEntity {
+  url: string;
+  icon: string;
+  children: Array<IPageLinks>;
 }

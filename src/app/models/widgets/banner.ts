@@ -1,5 +1,5 @@
 import { INamedHrefEntity } from '@nusantara/models/base';
-import { BannerType } from '@nusantara/models/widgets/banner.type';
+import { BannerGroupType } from '@nusantara/models/widgets/banner-group.type';
 
 /**
  * A large image displayed on a single web page.

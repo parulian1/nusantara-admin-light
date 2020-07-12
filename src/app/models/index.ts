@@ -26,14 +26,11 @@ export * from './shipping-rate';
 
 export * from './flat-page';
 
-export * from './inventory-receiving';
-export * from './inventory-receiving-status.type';
-export * from './stock-record';
-
 import * as google from './google';
 import * as base from './base';
 import * as drf from './drf';
 import * as widgets from './widgets';
 import * as products from './products';
+import * as inventory from './inventory';
 
-export { base, drf, google, widgets, products };
+export { base, drf, google, widgets, products, inventory };

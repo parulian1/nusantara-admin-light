@@ -18,6 +18,7 @@ import { products, ISubLocation } from '@nusantara/models';
       </td>
       <td><input type="number" min="1" [formControl]="quantity"></td>
       <td class="immediate-error-display"><input type="text" [formControl]="sku"></td>
+      <td><input type="text" [formControl]="locator"></td>
       <td><input type="text" [formControl]="batchNumber"></td>
       <td class="immediate-error-display"><input type="date" [formControl]="expiryDate"></td>
       <td><input type="number" [formControl]="cost"></td>
@@ -32,7 +33,7 @@ import { products, ISubLocation } from '@nusantara/models';
     ':host { display: contents; }',
     'td:nth-child(2) select { min-width: 115px; }', // location
     'td:nth-child(3) input { width: 70px; }', // quantity
-    'td:nth-child(7) input { width: 105px; }', // cost
+    'td:nth-child(8) input { width: 105px; }', // cost
   ]
 })
 export class LineItemComponent implements OnInit, AfterViewInit {
@@ -55,6 +56,7 @@ export class LineItemComponent implements OnInit, AfterViewInit {
   get subLocation(): FormControl { return this.form.get('subLocation') as FormControl; }
   get quantity(): FormControl { return this.form.get('quantity') as FormControl; }
   get sku(): FormControl { return this.form.get('sku') as FormControl; }
+  get locator(): FormControl { return this.form.get('locator') as FormControl; }
   get expiryDate(): FormControl { return this.form.get('expiryDate') as FormControl; }
   get batchNumber(): FormControl { return this.form.get('batchNumber') as FormControl; }
   get cost(): FormControl { return this.form.get('cost') as FormControl; }

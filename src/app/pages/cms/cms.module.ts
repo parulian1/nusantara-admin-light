@@ -1,17 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 import { SharedModule } from '@nusantara/shared';
 import { CmsRoutingModule } from './cms-routing.module';
 import { FlatPageComponent, FlatPageListComponent } from './flat-page';
-import { WidgetComponent, WidgetListComponent } from './widget';
+import { WidgetComponent, WidgetBlockListComponent } from './widget';
 
 @NgModule({
   declarations: [
     FlatPageListComponent,
     FlatPageComponent,
-    WidgetListComponent,
+    WidgetBlockListComponent,
     WidgetComponent,
   ],
   imports: [
@@ -19,6 +20,7 @@ import { WidgetComponent, WidgetListComponent } from './widget';
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
+    CKEditorModule,
     CmsRoutingModule,
   ],
 })

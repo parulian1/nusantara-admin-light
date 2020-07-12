@@ -22,6 +22,8 @@
     "@angular/platform-browser-dynamic": "~9.0.2",
     "@angular/router": "~9.0.2",
     "@auth0/angular-jwt": "^4.0.0",
+    "@ckeditor/ckeditor5-angular": "^1.2.3",
+    "@ckeditor/ckeditor5-build-classic": "^20.0.0",
     "echarts": "^4.8.0",
     "iso8601-duration": "^1.2.0",
     "ngx-echarts": "^5.0.0",

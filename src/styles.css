@@ -131,6 +131,11 @@ label {
   min-height: 61px;
 }
 
+label.external {
+  min-height: 0;
+  padding-bottom: 0;
+}
+
 /* A label which should leave **no** space for displaying field-errors */
 label.without-field-errors { min-height: 0; }
 

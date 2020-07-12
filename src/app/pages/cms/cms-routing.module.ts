@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { FlatPageComponent, FlatPageListComponent, FlatPageListResolver, FlatPageResolver } from './flat-page';
-import { WidgetComponent, WidgetListComponent, WidgetListResolver, WidgetResolver } from './widget';
+import { WidgetComponent, WidgetBlockListComponent, WidgetBlockListResolver, WidgetResolver } from './widget';
+import { ContentTypesResolver } from '@nusantara/pages/cms/widget/content-types.resolver';
 
 
 const dashboardRoutes: Routes = [
@@ -33,19 +34,20 @@ const dashboardRoutes: Routes = [
     children: [
       {
         path: '',
-        component: WidgetListComponent,
-        resolve: { page: WidgetListResolver },
+        component: WidgetBlockListComponent,
+        resolve: { page: WidgetBlockListResolver },
         runGuardsAndResolvers: 'always',
       },
       {
         path: 'new',
         component: WidgetComponent,
+        resolve: { contentTypes: ContentTypesResolver },
         runGuardsAndResolvers: 'always',
       },
       {
         path: ':slug',
         component: WidgetComponent,
-        resolve: { entity: WidgetResolver },
+        resolve: { entity: WidgetResolver, contentTypes: ContentTypesResolver },
         runGuardsAndResolvers: 'always',
       },
     ]

@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { DialogResult, ToastService, AbstractDetailComponent } from '@nusantara/core';
-import { IInventoryReceiving, ISubLocation, IWarehouse } from '@nusantara/models';
+import { inventory, ISubLocation, IWarehouse } from '@nusantara/models';
 import { ProductSelectionModalComponent } from './product-selection-modal.component';
 import { IProduct } from '@nusantara/models/products';
 
@@ -38,6 +38,7 @@ import { IProduct } from '@nusantara/models/products';
             <th>Quantity</th>
             <th>SKU</th>
             <th>Batch</th>
+            <th>Locator</th>
             <th>Expiry Date</th>
             <th>Cost</th>
             <th></th>
@@ -53,7 +54,7 @@ import { IProduct } from '@nusantara/models/products';
           </nus-inventory-receiving-line>
 
           <tr>
-            <td colspan="8">
+            <td colspan="9">
               <button type="button" (click)="addLine()" class="add-button">
                 Add Record
               </button>
@@ -77,7 +78,7 @@ import { IProduct } from '@nusantara/models/products';
     'form { width: 1200px; max-width: 100%; }',
   ]
 })
-export class InventoryReceivingComponent extends AbstractDetailComponent<IInventoryReceiving> implements OnInit, AfterViewInit {
+export class InventoryReceivingComponent extends AbstractDetailComponent<inventory.IReceivingOrder> implements OnInit, AfterViewInit {
 
   warehouses: IWarehouse[];
   availableSubLocations: ISubLocation[] = [];
@@ -105,13 +106,13 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<IInvent
     this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
   }
 
-  initializeForm(entity?: IInventoryReceiving) {
+  initializeForm(entity?: inventory.IReceivingOrder) {
     this.form = this.fb.group({
       href: [],
       warehouse: [],
       status: ['pending', [Validators.required, ]],
       createdBy: [],
-      approvedBy: [],
+      reviewedBy: [],
       stockRecords: this.fb.array([], [Validators.required, Validators.minLength(1)]),
     });
   }
@@ -152,6 +153,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<IInvent
         sku: ['', [Validators.required, ]],
         quantity: [1, [Validators.required, Validators.min(1), ]],
         batchNumber: ['', []],
+        locator: ['', []],
         expiryDate: ['', []]
       });
       this.stockRecords.push(f);
