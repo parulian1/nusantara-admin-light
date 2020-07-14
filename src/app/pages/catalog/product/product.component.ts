@@ -9,7 +9,11 @@ import { ICategory, IVendor, drf, products } from '@nusantara/models';
 import { ProductService } from '@nusantara/services';
 import { PriceListHostComponent } from './price';
 import { ProductMediaHostComponent } from './media';
+import { ProductAttributeHostComponent } from './attribute';
 
+/**
+ * Allows the user to edit/create a single product.
+ */
 @Component({
   selector: 'nus-product',
   template: `
@@ -114,6 +118,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   @ViewChild(ProductMediaHostComponent) mediaHost!: ProductMediaHostComponent;
   @ViewChild(PriceListHostComponent) priceListHost!: PriceListHostComponent;
+  @ViewChild(ProductAttributeHostComponent) attributeHost!: ProductAttributeHostComponent;
 
   constructor(public service: ProductService,
               private fb: FormBuilder,
@@ -129,6 +134,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   get priceLists(): FormArray { return this.form.get('priceLists') as FormArray; }
   get attributes(): FormGroup { return this.form.get('attributes') as FormGroup; }
   get structure(): FormControl { return this.form.get('structure') as FormControl; }
+  get weight(): FormControl { return this.form.get('weight') as FormControl; }
 
   ngOnInit(): void {
     super.ngOnInit();
@@ -173,6 +179,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     for (const media of entity?.media ?? []) {
       this.mediaHost.add(media);
     }
+    for (const [attrDefHref, attrVal] of Object.entries(entity?.attributes ?? {})) {
+      this.attributeHost.initializeAttributeValue(attrDefHref, attrVal);
+    }
   }
 
   /**
@@ -191,22 +200,17 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   save() {
+    // todo: these are basically ignoring the results of saving
+    // the child objects.  This shouldn't be -- see a clean way of preparing
+    // when calling zip(), it didn't seem to trigger the sub results from pricelist saving
+    // it also might be better from API-side to just implement returning of PKs
+    // so that drf nested serializers can work properly.
     this.service.save(this.getFormValue()).subscribe(resp => {
-        // const dependentResponses = zip(
-        //     this.mediaHost.saveAll(resp.entity),
-        //     this.priceListHost.saveAll(resp.entity)
-        // );
-      // just throw away?
       this.mediaHost.saveAll(resp.entity).subscribe(() => { });
       this.priceListHost.saveAll(resp.entity).subscribe(
         () => { this.onSaveSuccess(resp); },
         (err) => { this.onSaveError(err); }
       );
-        //
-        // dependentResponses.subscribe(
-        //   () => { this.onSaveSuccess(resp); },
-        //   (err) => { this.onSaveError(err); }
-        // );
       },
       (err) => this.onSaveError(err)
     );
@@ -215,25 +219,17 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
 
   /**
-   * Disables irrelevant/invalid product values for certain classes
-   * of product.
+   * Disables irrelevant/invalid product values for certain classes of product.
    */
   onProductClassChanged(newValue: string) {
-
     // protect against triggering during initialization
-    if (!newValue || !this.productClasses) {
-      return;
-    }
+    if (!newValue || !this.productClasses) { return; }
 
-    const matches = this.productClasses.filter(
-      e => e.href === newValue
-    );
-    const pc = (matches.length > 0) ? matches[0] : null;
-    if (pc?.type === 'physical') {
-      this.form.get('weight').enable();
+    const pc = this.productClasses.filter(e => e.href === newValue)[0];
+    if (pc.type === 'physical') {
+      this.weight.enable();
     } else {
-      this.form.get('weight').disable();
+      this.weight.disable();
     }
-
   }
 }

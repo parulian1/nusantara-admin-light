@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';  // todo: remove this unless route change ani needed
 
 import { RequireLoggedInGuard } from '@nusantara/auth';
 import { MainWrapperComponent, AnonWrapperComponent } from '@nusantara/view-wrappers';

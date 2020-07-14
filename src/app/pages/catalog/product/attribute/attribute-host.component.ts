@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { AbstractEditingComponent } from '@nusantara/core';
@@ -14,12 +14,14 @@ import { products } from '@nusantara/models';
       <thead>
       <tr>
         <th>Name</th>
+        <th>Enabled</th>
         <th>Value</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let attr of attributeDefinitions; let i=index">
         <td>{{ attr.name }}</td>
+        <td><input type="checkbox" [></td>
         <td>
           <input type="text" *ngIf="attr.type === 'text'">
           <textarea *ngIf="attr.type === 'markdown'"></textarea>
@@ -32,6 +34,7 @@ import { products } from '@nusantara/models';
       </tr>
       </tbody>
     </table>
+    <code><pre>{{ selectedProductClass | json }}</pre></code>
   `,
   styles: [ ]
 })
@@ -50,7 +53,18 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
   }
 
   initializeForm() {
+    // initially set all the attributes, with disabled
+    // form is gonna be have { 'href' -> 'value' }
 
+    // empty all the controls (if any exist)
+    const controlNames = Object.keys(this.form.controls);
+    for (const ctrlName of controlNames) {
+      this.form.removeControl(ctrlName);
+    }
+
+    for (const attr of this.attributeDefinitions) {
+      this.form.addControl(attr.href, new FormControl());
+    }
   }
 
   get attributeDefinitions(): products.IProductAttribute[] {
@@ -64,4 +78,12 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
   ngAfterViewInit() {
 
   }
+
+  initializeAttributeValue(attributeDefHref: string, attributeValue: any) {
+    const ctrl = this.form.get(attributeDefHref);
+    if (ctrl) {
+      ctrl.setValue(attributeValue);
+    }
+  }
+
 }

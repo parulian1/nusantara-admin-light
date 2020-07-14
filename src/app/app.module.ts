@@ -3,15 +3,12 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JwtModule } from '@auth0/angular-jwt';
-import * as echarts from 'echarts';
-import { NgxEchartsModule } from 'ngx-echarts';
-import { NgxSmartModalModule } from 'ngx-smart-modal';
 
 import { ApiPrefixInterceptor, CoreModule } from '@nusantara/core';
+import { SharedModule } from '@nusantara/shared';
 import { AnonWrapperComponent, MainWrapperComponent } from '@nusantara/view-wrappers';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SharedModule } from '@nusantara/shared';
 
 @NgModule({
   declarations: [
@@ -22,8 +19,6 @@ import { SharedModule } from '@nusantara/shared';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    NgxEchartsModule.forRoot({ echarts }),
-    NgxSmartModalModule.forRoot(),
     CoreModule,
     SharedModule,
     AppRoutingModule,

@@ -20,5 +20,5 @@ export interface IProduct {
   category: string;
   priceLists: Array<IPriceList>;
   related: Array<string>;
-  attributes: any;
+  attributes: {[key: string]: string|number|boolean};
 }

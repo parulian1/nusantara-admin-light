@@ -25,3 +25,5 @@ export * from './widget-block.service';
 export * from './google.service';
 
 export * from './order.service';
+
+export * from './reporting.service';
