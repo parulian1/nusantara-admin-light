@@ -1,6 +1,5 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 import { IProductAttribute } from '@nusantara/models/products';
 
@@ -11,38 +10,49 @@ import { IProductAttribute } from '@nusantara/models/products';
       <td>{{ attributeDefinition.name }}</td>
       <td><input type="checkbox" [checked]="control.enabled"></td>
 
-      <td>
-        <input type="text" *ngIf="attributeDefinition.type === 'text'">
+      <td [ngClass]="{'color-input': attributeDefinition.type === 'color'}">
+        <input type="text"
+               *ngIf="attributeDefinition.type === 'text'"
+               [formControl]="control">
 
-        <textarea *ngIf="attributeDefinition.type === 'markdown'"></textarea>
+        <textarea *ngIf="attributeDefinition.type === 'markdown'"
+                  [formControl]="control"></textarea>
 
-        <input type="color" *ngIf="attributeDefinition.type === 'color'">
+        <input type="color" *ngIf="attributeDefinition.type === 'color'"
+               [formControl]="control">
 
         <input type="number"
                *ngIf="attributeDefinition.type === 'decimal'"
                [min]="attributeDefinition.minValue"
-               [max]="attributeDefinition.maxValue">
+               [max]="attributeDefinition.maxValue"
+               [formControl]="control">
 
         <input type="number"
                *ngIf="attributeDefinition.type === 'integer'"
                [min]="attributeDefinition.minValue"
                [max]="attributeDefinition.maxValue"
-               step="1">
+               step="1"
+               [formControl]="control">
 
         <input type="file"
-               *ngIf="attributeDefinition.type === 'image'">
+               *ngIf="attributeDefinition.type === 'image'"
+               [formControl]="control">
 
         <input type="checkbox"
-               *ngIf="attributeDefinition.type === 'boolean'">
+               *ngIf="attributeDefinition.type === 'boolean'"
+               [formControl]="control">
       </td>
     </tr>
   `,
-  styles: [ ]
+  styles: [
+    ':host { display: contents; }',
+    '.color-input { text-align: left; }',
+    '.color-input input { width: 23px }',
+  ]
 })
 export class AttributeValueComponent {
 
   @Input() attributeDefinition: IProductAttribute;
-  @Input() attributeValue: string|number|boolean;
   @Input() control: FormControl;
 
   constructor() {  }

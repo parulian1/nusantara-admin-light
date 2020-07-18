@@ -19,22 +19,13 @@ import { products } from '@nusantara/models';
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let attr of attributeDefinitions; let i=index">
-        <td>{{ attr.name }}</td>
-        <td><input type="checkbox" [></td>
-        <td>
-          <input type="text" *ngIf="attr.type === 'text'">
-          <textarea *ngIf="attr.type === 'markdown'"></textarea>
-          <input type="color" *ngIf="attr.type === 'color'">
-          <input type="number" *ngIf="attr.type === 'decimal'" [min]="attr.minValue" [max]="attr.maxValue">
-          <input type="number" *ngIf="attr.type === 'integer'" [min]="attr.minValue" [max]="attr.maxValue" step="1">
-          <input type="file" *ngIf="attr.type === 'image'">
-          <input type="checkbox" *ngIf="attr.type === 'boolean'">
-        </td>
-      </tr>
+        <nus-product-attribute-value
+          *ngFor="let attr of attributeDefinitions; let i=index"
+          [attributeDefinition]="attr"
+          [control]="getFormControlForAttribute(attr)">
+        </nus-product-attribute-value>
       </tbody>
     </table>
-    <code><pre>{{ selectedProductClass | json }}</pre></code>
   `,
   styles: [ ]
 })
@@ -42,7 +33,7 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
 
   productClasses: Array<products.IProductClass> = [];
 
-  @Input() selectedProductClass: string;
+  @Input() productClass: FormControl; // href
 
   constructor(protected route: ActivatedRoute, protected fb: FormBuilder) { super(); }
 
@@ -50,40 +41,46 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
     this.route.data.subscribe((data: {productClasses: products.IProductClass[]}) => {
       this.productClasses = data.productClasses;
     });
+    this.initializeForm();
+  }
+
+  getFormControlForAttribute(attrDefinition: products.IProductAttribute): FormControl {
+    if (!this.form.contains(attrDefinition.href)) {
+      this.form.addControl(attrDefinition.href, new FormControl());
+    }
+    return this.form.controls[attrDefinition.href] as FormControl;
   }
 
   initializeForm() {
-    // initially set all the attributes, with disabled
-    // form is gonna be have { 'href' -> 'value' }
 
-    // empty all the controls (if any exist)
-    const controlNames = Object.keys(this.form.controls);
-    for (const ctrlName of controlNames) {
-      this.form.removeControl(ctrlName);
-    }
+    // add (re-add) all the possible attribute definitions
+    // console.log('current attr defs', this.attributeDefinitions);
+    // for (const attr of this.attributeDefinitions) {
+    //
+    //   if (this.form.contains(attr.href)) {
+    //     console.log('Form has the attribute def', attr.href);
+    //     console.log('... with value', this.form.controls[attr.href]);
+    //
+    //   } else {
+    //     console.log('Form did not have the attribute def.. adding');
+    //     this.form.addControl(attr.href, new FormControl());
+    //   }
+    // }
 
-    for (const attr of this.attributeDefinitions) {
-      this.form.addControl(attr.href, new FormControl());
-    }
+    // todo: look for attributes not in attrdefs and remove
+    // todo: look for attrdefs missing frrom attributes and add
   }
 
   get attributeDefinitions(): products.IProductAttribute[] {
-    if (!this.selectedProductClass) {
+    if (!this.productClass.value) {
       return [];
     }
-    const productClass = this.productClasses.filter(e => e.href === this.selectedProductClass)[0];
+    const productClass = this.productClasses.filter(e => e.href === this.productClass.value)[0];
     return productClass.attributes;
   }
 
   ngAfterViewInit() {
 
-  }
-
-  initializeAttributeValue(attributeDefHref: string, attributeValue: any) {
-    const ctrl = this.form.get(attributeDefHref);
-    if (ctrl) {
-      ctrl.setValue(attributeValue);
-    }
   }
 
 }

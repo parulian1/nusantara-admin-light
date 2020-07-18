@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { CategoryComponent, CategoryListComponent, AllCategoryResolver } from './category';
 import { ProductClassListComponent, ProductClassComponent, AllProductClassResolver } from './product-class';
-import { ProductListComponent, ProductComponent  } from './product';
+import { ProductListComponent, ProductComponent, ProductListResolver, ProductResolver, ParentProductResolver  } from './product';
 import { VendorComponent, VendorListComponent } from './vendor';
 import {
   CategoryResolver,
@@ -13,8 +13,6 @@ import {
   ProductClassResolver,
   ProductClassListResolver,
   ProductClassTypeResolver,
-  ProductListResolver,
-  ProductResolver,
   VendorListResolver,
   VendorResolver,
 } from '@nusantara/resolvers';
@@ -89,6 +87,34 @@ const routes: Routes = [
           categories: AllCategoryResolver,
           mediaTypes: MediaTypeResolver,
           priceListTypes: PriceListTypeResolver,
+        },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+      {
+        path: ':parent-slug/variants/new',
+        component: ProductComponent,
+        resolve: {
+          productClasses: AllProductClassResolver,
+          vendors: VendorListResolver,
+          categories: AllCategoryResolver,
+          mediaTypes: MediaTypeResolver,
+          priceListTypes: PriceListTypeResolver,
+          parent: ParentProductResolver,
+        },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+      {
+        path: ':parent-slug/variants/:slug',
+        component: ProductComponent,
+        resolve: {
+          productClasses: AllProductClassResolver,
+          vendors: VendorListResolver,
+          categories: AllCategoryResolver,
+          mediaTypes: MediaTypeResolver,
+          priceListTypes: PriceListTypeResolver,
+          parent: ParentProductResolver,
         },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },

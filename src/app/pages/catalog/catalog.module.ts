@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 
 import { SharedModule } from '@nusantara/shared';
@@ -42,6 +43,7 @@ import { VendorListComponent, VendorComponent } from './vendor';
     NgxSmartModalModule.forChild(),
     FormsModule,
     ReactiveFormsModule,
+    CKEditorModule,
     CatalogRoutingModule,
   ],
 })

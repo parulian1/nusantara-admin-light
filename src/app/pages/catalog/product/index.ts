@@ -1,6 +1,10 @@
 export * from './product.component';
 export * from './product-list.component';
 
+export * from './product.resolver';
+export * from './product-list.resolver';
+export * from './parent-product.resolver';
+
 import * as attribute from './attribute';
 import * as price from './price';
 import * as media from './media';

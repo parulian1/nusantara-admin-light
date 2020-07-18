@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Validators, FormBuilder, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { zip } from 'rxjs';
 
@@ -28,59 +29,67 @@ import { ProductAttributeHostComponent } from './attribute';
 
       <label>
         <span>Name</span>
-        <input type="text" formControlName="name">
+        <input type="text" [formControl]="name">
+        <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
         <span>Product Class</span>
-        <select formControlName="productClass">
+        <select [formControl]="productClass">
           <option *ngFor="let pc of productClasses" [ngValue]="pc.href">
             {{ pc.name }}
           </option>
         </select>
+        <nus-field-errors [control]="productClass"></nus-field-errors>
       </label>
 
       <label>
         <span>Category</span>
-        <select formControlName="category">
+        <select [formControl]="category">
           <option *ngFor="let c of categories" [ngValue]="c.href">
             {{ c.pathName }}
           </option>
         </select>
+        <nus-field-errors [control]="category"></nus-field-errors>
       </label>
 
       <label>
         <span>Vendor</span>
-        <select formControlName="vendor">
+        <select [formControl]="vendor">
           <option *ngFor="let v of vendors" [ngValue]="v.href">
             {{ v.name }}
           </option>
         </select>
+        <nus-field-errors [control]="vendor"></nus-field-errors>
       </label>
 
       <label>
         <span>UPC</span>
-        <input type="text" formControlName="upc">
+        <input type="text" [formControl]="upc">
+        <nus-field-errors [control]="upc"></nus-field-errors>
       </label>
 
-      <label>
-        <span>Description</span>
-        <textarea formControlName="description"></textarea>
-      </label>
+      <div class="rich-text-container">
+        <label for="content" class="external"><span>Description</span></label>
+        <ckeditor [editor]="Editor"
+                  [formControl]="description" id="description"></ckeditor>
+        <nus-field-errors [control]="description"></nus-field-errors>
+      </div>
 
       <label>
         <span>Weight (kg)</span>
-        <input type="number" formControlName="weight">
+        <input type="number" [formControl]="weight">
+        <nus-field-errors [control]="weight"></nus-field-errors>
       </label>
+
+      <nus-product-attribute-host
+        [form]="attributes"
+        [productClass]="productClass">
+      </nus-product-attribute-host>
 
       <nus-price-list-host [form]="priceLists"></nus-price-list-host>
 
       <nus-product-media-host [form]="media"></nus-product-media-host>
-
-      <nus-product-attribute-host
-        [form]="attributes"
-        [selectedProductClass]="productClass.value">
-      </nus-product-attribute-host>
 
       <div *ngIf="structure.value === 'parent'">
         <h2>Variants</h2>
@@ -106,7 +115,9 @@ import { ProductAttributeHostComponent } from './attribute';
 
     </form>
   `,
-  styles: []
+  styles: [
+    '.rich-text-container { padding-bottom: 14px; }', // double standard label padding
+  ]
 })
 export class ProductComponent extends AbstractDetailComponent<products.IProduct> implements OnInit, AfterViewInit {
 
@@ -115,6 +126,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   vendors: Array<IVendor>;
   attribute: Array<products.IProductAttribute>;
   mediaTypes: Array<drf.IChoice>;
+
+  Editor = ClassicEditor;
 
   @ViewChild(ProductMediaHostComponent) mediaHost!: ProductMediaHostComponent;
   @ViewChild(PriceListHostComponent) priceListHost!: PriceListHostComponent;
@@ -129,7 +142,12 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     super();
   }
 
+  get name(): FormControl { return this.form.get('name') as FormControl; }
+  get upc(): FormControl { return this.form.get('upc') as FormControl; }
   get productClass(): FormControl { return this.form.get('productClass') as FormControl; }
+  get category(): FormControl { return this.form.get('category') as FormControl; }
+  get vendor(): FormControl { return this.form.get('vendor') as FormControl; }
+  get description(): FormControl { return this.form.get('description') as FormControl; }
   get media(): FormArray { return this.form.get('media') as FormArray; }
   get priceLists(): FormArray { return this.form.get('priceLists') as FormArray; }
   get attributes(): FormGroup { return this.form.get('attributes') as FormGroup; }
@@ -161,11 +179,16 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       category: [entity?.category, [Validators.required]],
       vendor: [entity?.vendor, [Validators.required]],
       media: this.fb.array([]),
-      attributes: [{}, ], // this.fb.array([]),
+      attributes: this.fb.group({}, []),
       priceLists: this.fb.array([]),
       // related products
       // variants
     });
+
+    // initialize the attribute controls
+    for (const [attrDefHref, attrVal] of Object.entries(entity.attributes)) {
+      this.attributes.addControl(attrDefHref, new FormControl(attrVal));
+    }
 
     // listen for any changes to this so we can disable weight when appropriate
     this.productClass.valueChanges.subscribe(val => this.onProductClassChanged(val));
@@ -179,9 +202,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     for (const media of entity?.media ?? []) {
       this.mediaHost.add(media);
     }
-    for (const [attrDefHref, attrVal] of Object.entries(entity?.attributes ?? {})) {
-      this.attributeHost.initializeAttributeValue(attrDefHref, attrVal);
-    }
+    // for (const [attrDefHref, attrVal] of Object.entries(entity?.attributes ?? {})) {
+    //   this.attributeHost.initializeAttributeValue(attrDefHref, attrVal);
+    // }
   }
 
   /**

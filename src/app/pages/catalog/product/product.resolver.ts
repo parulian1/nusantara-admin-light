@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
+import { Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { ProductService } from '@nusantara/services';
@@ -10,7 +10,7 @@ import { products } from '@nusantara/models';
 })
 export class ProductResolver implements Resolve<products.IProduct> {
 
-  constructor(private service: ProductService, private router: Router) { }
+  constructor(private service: ProductService) { }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<products.IProduct> {
     const slug = route.paramMap.get('slug');

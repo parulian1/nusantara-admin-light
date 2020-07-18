@@ -1,10 +1,10 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ToastLevelEnum, ToastService } from '@nusantara/core/toast';
 import { IResultResponse } from '@nusantara/core/responses';
 import { AbstractEditingComponent } from './abstract-editing.component';
-import { HttpErrorResponse } from '@angular/common/http';
 
 /**
  * Base class for components that display a create/edit form
