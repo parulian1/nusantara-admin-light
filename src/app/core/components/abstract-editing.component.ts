@@ -1,5 +1,5 @@
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 
 /**
  * Base class for all controls which implement form editing of an
@@ -10,6 +10,7 @@ import { Input } from '@angular/core';
  *
  * @see AbstractDetailControl
  */
+@Directive()
 export abstract class AbstractEditingComponent<TForm extends AbstractControl = FormGroup> {
 
   @Input() form: TForm;

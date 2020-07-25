@@ -36,5 +36,5 @@ import { AbstractListComponent } from '@nusantara/core';
   styles: [ ]
 })
 export class CustomerGroupListComponent extends AbstractListComponent<ICustomerGroup> {
-  constructor(protected route: ActivatedRoute) { super(); }
+  constructor(route: ActivatedRoute) { super(route); }
 }

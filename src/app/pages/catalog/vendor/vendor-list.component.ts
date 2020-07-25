@@ -38,5 +38,5 @@ import { ActivatedRoute } from '@angular/router';
   styles: []
 })
 export class VendorListComponent extends AbstractListComponent<IVendor> {
-  constructor(protected route: ActivatedRoute) { super(); }
+  constructor(route: ActivatedRoute) { super(route); }
 }

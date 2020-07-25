@@ -25,5 +25,5 @@ import { ActivatedRoute } from '@angular/router';
   styles: []
 })
 export class PromotionListComponent extends AbstractListComponent<any> {
-  constructor(protected route: ActivatedRoute) { super(); }
+  constructor(route: ActivatedRoute) { super(route); }
 }

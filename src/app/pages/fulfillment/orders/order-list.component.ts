@@ -40,5 +40,5 @@ import { IOrder } from '@nusantara/models';
   styles: []
 })
 export class OrderListComponent extends AbstractListComponent<IOrder> {
-  constructor(protected route: ActivatedRoute) { super(); }
+  constructor(route: ActivatedRoute) { super(route); }
 }

@@ -27,5 +27,5 @@ import { AbstractListComponent } from '@nusantara/core';
   styles: [ ]
 })
 export class VoucherListComponent extends AbstractListComponent<IVoucher> {
-  constructor(protected route: ActivatedRoute) { super(); }
+  constructor(route: ActivatedRoute) { super(route); }
 }

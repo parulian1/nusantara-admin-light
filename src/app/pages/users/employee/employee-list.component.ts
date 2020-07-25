@@ -27,5 +27,5 @@ import { INamedHrefEntity } from '@nusantara/models/base';
   styles: [ ]
 })
 export class EmployeeListComponent extends AbstractListComponent<INamedHrefEntity> {
-  constructor(protected route: ActivatedRoute) { super(); }
+  constructor(route: ActivatedRoute) { super(route); }
 }

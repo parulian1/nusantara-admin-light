@@ -38,5 +38,5 @@ import { IWarehouse } from '@nusantara/models';
   styles: [],
 })
 export class WarehouseListComponent extends AbstractListComponent<IWarehouse> {
-  constructor(protected route: ActivatedRoute) { super(); }
+  constructor(route: ActivatedRoute) { super(route); }
 }

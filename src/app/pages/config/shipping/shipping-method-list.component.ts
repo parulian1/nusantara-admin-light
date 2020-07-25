@@ -29,5 +29,5 @@ import { AbstractListComponent } from '@nusantara/core';
   styles: [],
 })
 export class ShippingMethodListComponent extends AbstractListComponent<any> {
-  constructor(protected route: ActivatedRoute) { super(); }
+  constructor(route: ActivatedRoute) { super(route); }
 }

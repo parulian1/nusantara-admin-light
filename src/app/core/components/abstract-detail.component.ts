@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { AfterViewInit, ElementRef, OnInit } from '@angular/core';
+import { AfterViewInit, ElementRef, OnInit, Directive } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ToastLevelEnum, ToastService } from '@nusantara/core/toast';
@@ -10,6 +10,7 @@ import { AbstractEditingComponent } from './abstract-editing.component';
  * Base class for components that display a create/edit form
  * for a single entity.
  */
+@Directive()
 export abstract class AbstractDetailComponent<T> extends AbstractEditingComponent implements OnInit, AfterViewInit {
 
   route: ActivatedRoute;

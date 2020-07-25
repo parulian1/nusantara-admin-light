@@ -40,5 +40,5 @@ import { AbstractListComponent } from '@nusantara/core/components/abstract-list.
   styles: [ ]
 })
 export class ProductClassListComponent extends AbstractListComponent<products.IProductClass> {
-  constructor(protected route: ActivatedRoute) { super(); }
+  constructor(route: ActivatedRoute) { super(route); }
 }

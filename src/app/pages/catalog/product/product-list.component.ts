@@ -66,7 +66,7 @@ export class ProductListComponent extends AbstractListComponent<products.IProduc
   vendors: Array<IVendor>;
   productClasses: Array<products.IProductClass>;
 
-  constructor(protected route: ActivatedRoute) { super(); }
+  constructor(route: ActivatedRoute) { super(route); }
 
   getCategoryName(href: string): string {
     return this.categories.filter(e => e.href === href)[0]?.name;

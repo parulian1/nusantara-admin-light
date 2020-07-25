@@ -32,5 +32,5 @@ import { IPaymentGateway } from '@nusantara/models';
   styles: [],
 })
 export class PaymentGatewayListComponent extends AbstractListComponent<IPaymentGateway> {
-  constructor(protected route: ActivatedRoute) { super(); }
+  constructor(route: ActivatedRoute) { super(route); }
 }

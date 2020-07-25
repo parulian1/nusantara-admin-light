@@ -41,5 +41,5 @@ import { ICategory } from '@nusantara/models';
   ]
 })
 export class CategoryListComponent extends AbstractListComponent<ICategory> {
-  constructor(protected route: ActivatedRoute) { super(); }
+  constructor(route: ActivatedRoute) { super(route); }
 }

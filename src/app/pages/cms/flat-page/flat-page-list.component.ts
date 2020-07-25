@@ -34,5 +34,5 @@ import { IFlatPage } from '@nusantara/models';
   styles: [],
 })
 export class FlatPageListComponent extends AbstractListComponent<IFlatPage> {
-  constructor(protected route: ActivatedRoute) { super(); }
+  constructor(route: ActivatedRoute) { super(route); }
 }
