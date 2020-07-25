@@ -109,6 +109,7 @@ const routes: Routes = [
         path: ':parent-slug/variants/:slug',
         component: ProductComponent,
         resolve: {
+          entity: ProductResolver,
           productClasses: AllProductClassResolver,
           vendors: VendorListResolver,
           categories: AllCategoryResolver,

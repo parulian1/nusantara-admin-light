@@ -23,19 +23,27 @@ import { PriceListComponent } from './price-list.component';
       Price Lists
       <button (click)="addPriceList()" type="button" class="add-button"><i class="material-icons">add_circle</i></button>
     </h2>
-    <div>
-      <ul>
-        <li *ngFor="let priceList of priceLists">
-          <button type="button">
-            {{ priceList.type.value }}
-          </button>
-        </li>
-      </ul>
+
+    <table>
+      <thead>
+      <tr>
+        <th>Type/Name</th>
+        <th>Ranges</th>
+        <th>Starting</th>
+        <th>Ending</th>
+      </tr>
+      </thead>
+      <tbody>
       <nus-price-list
         *ngFor="let priceList of form.controls"
         [form]="priceList">
       </nus-price-list>
-    </div>
+
+      <tr>
+        <td colspan="4"><button (click)="addPriceList()" type="button" class="add-button">Add Price List</button></td>
+      </tr>
+      </tbody>
+    </table>
   `,
   styles: [
     'ul { list-style-type: none; padding: 0; }',

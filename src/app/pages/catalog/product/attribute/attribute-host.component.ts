@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
@@ -18,7 +18,7 @@ import { products } from '@nusantara/models';
         <th>Value</th>
       </tr>
       </thead>
-      <tbody>
+      <tbody *ngIf="!!originalAttributeValues">
         <nus-product-attribute-value
           *ngFor="let attr of attributeDefinitions; let i=index"
           [attributeDefinition]="attr"
@@ -29,11 +29,12 @@ import { products } from '@nusantara/models';
   `,
   styles: [ ]
 })
-export class ProductAttributeHostComponent extends AbstractEditingComponent implements OnInit, AfterViewInit {
+export class ProductAttributeHostComponent extends AbstractEditingComponent implements OnInit {
 
   productClasses: Array<products.IProductClass> = [];
 
   @Input() productClass: FormControl; // href
+  @Input() originalAttributeValues: {[key: string]: string|number|boolean};
 
   constructor(protected route: ActivatedRoute, protected fb: FormBuilder) { super(); }
 
@@ -41,34 +42,17 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
     this.route.data.subscribe((data: {productClasses: products.IProductClass[]}) => {
       this.productClasses = data.productClasses;
     });
-    this.initializeForm();
   }
 
   getFormControlForAttribute(attrDefinition: products.IProductAttribute): FormControl {
+    // if the control hasn't yet been created, create it with the values from the original object
     if (!this.form.contains(attrDefinition.href)) {
-      this.form.addControl(attrDefinition.href, new FormControl());
+      this.form.addControl(
+        attrDefinition.href,
+        new FormControl(this.originalAttributeValues[attrDefinition.href])
+      );
     }
     return this.form.controls[attrDefinition.href] as FormControl;
-  }
-
-  initializeForm() {
-
-    // add (re-add) all the possible attribute definitions
-    // console.log('current attr defs', this.attributeDefinitions);
-    // for (const attr of this.attributeDefinitions) {
-    //
-    //   if (this.form.contains(attr.href)) {
-    //     console.log('Form has the attribute def', attr.href);
-    //     console.log('... with value', this.form.controls[attr.href]);
-    //
-    //   } else {
-    //     console.log('Form did not have the attribute def.. adding');
-    //     this.form.addControl(attr.href, new FormControl());
-    //   }
-    // }
-
-    // todo: look for attributes not in attrdefs and remove
-    // todo: look for attrdefs missing frrom attributes and add
   }
 
   get attributeDefinitions(): products.IProductAttribute[] {
@@ -78,9 +62,4 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
     const productClass = this.productClasses.filter(e => e.href === this.productClass.value)[0];
     return productClass.attributes;
   }
-
-  ngAfterViewInit() {
-
-  }
-
 }

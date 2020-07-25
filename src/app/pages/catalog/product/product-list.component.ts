@@ -24,6 +24,8 @@ import { AbstractListComponent } from '@nusantara/core';
         <tr>
           <th translate>Name</th>
           <th>UPC</th>
+          <th>Variants</th>
+          <th>Has Image</th>
           <th>Category</th>
           <th>Product Class</th>
           <th>Vendor</th>
@@ -33,6 +35,8 @@ import { AbstractListComponent } from '@nusantara/core';
         <tr *ngFor="let entity of page.entities">
           <td><a [routerLink]="[entity|entityToSlug]">{{ entity.name }}</a></td>
           <td>{{ entity.upc }}</td>
+          <td><span *ngIf="entity.variants.length">{{ entity.variants.length }}</span></td>
+          <td><nus-true-false [value]="entity.media.length > 0"></nus-true-false></td>
           <td>
             <a [routerLink]="['/catalog', 'categories', entity.category|entityToSlug]">
               {{ getCategoryName(entity.category) }}

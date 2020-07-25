@@ -11,6 +11,7 @@ import { ProductService } from '@nusantara/services';
 import { PriceListHostComponent } from './price';
 import { ProductMediaHostComponent } from './media';
 import { ProductAttributeHostComponent } from './attribute';
+import { getSlugFromHref } from '@nusantara/shared/helpers';
 
 /**
  * Allows the user to edit/create a single product.
@@ -33,7 +34,7 @@ import { ProductAttributeHostComponent } from './attribute';
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
-      <label>
+      <label *ngIf="structure.value === 'parent'">
         <span>Product Class</span>
         <select [formControl]="productClass">
           <option *ngFor="let pc of productClasses" [ngValue]="pc.href">
@@ -43,7 +44,7 @@ import { ProductAttributeHostComponent } from './attribute';
         <nus-field-errors [control]="productClass"></nus-field-errors>
       </label>
 
-      <label>
+      <label *ngIf="structure.value === 'parent'">
         <span>Category</span>
         <select [formControl]="category">
           <option *ngFor="let c of categories" [ngValue]="c.href">
@@ -53,7 +54,7 @@ import { ProductAttributeHostComponent } from './attribute';
         <nus-field-errors [control]="category"></nus-field-errors>
       </label>
 
-      <label>
+      <label *ngIf="structure.value === 'parent'">
         <span>Vendor</span>
         <select [formControl]="vendor">
           <option *ngFor="let v of vendors" [ngValue]="v.href">
@@ -84,7 +85,9 @@ import { ProductAttributeHostComponent } from './attribute';
 
       <nus-product-attribute-host
         [form]="attributes"
-        [productClass]="productClass">
+        [productClass]="productClass"
+        [originalAttributeValues]="originalAttributeValues"
+        *ngIf="originalAttributeValues">
       </nus-product-attribute-host>
 
       <nus-price-list-host [form]="priceLists"></nus-price-list-host>
@@ -93,18 +96,29 @@ import { ProductAttributeHostComponent } from './attribute';
 
       <div *ngIf="structure.value === 'parent'">
         <h2>Variants</h2>
-        <button [disabled]="isNew">Add</button>
         <p>Create product SKUs that are similar to this product.</p>
         <table>
-          <thead></thead>
-          <tbody></tbody>
+          <thead>
+          <tr>
+            <th>Name</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let v of variants">
+            <td><a [routerLink]="['variants', v.href|entityToSlug]">{{ v.name }}</a></td>
+          </tr>
+          <tr>
+            <td><button [disabled]="isNew" (click)="addVariant()" type="button" class="add-button">Add</button></td>
+          </tr>
+          </tbody>
         </table>
       </div>
 
       <h2>Recommended Products</h2>
       <table>
         <thead></thead>
-        <tbody></tbody>
+        <tbody>
+        </tbody>
       </table>
 
       <nus-detail-actions
@@ -126,6 +140,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   vendors: Array<IVendor>;
   attribute: Array<products.IProductAttribute>;
   mediaTypes: Array<drf.IChoice>;
+  parentProduct: products.IProduct;
+  variants: Array<products.IVariantSummary> = [];
+  originalAttributeValues: {[key: string]: string|number|boolean};
 
   Editor = ClassicEditor;
 
@@ -151,25 +168,38 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   get media(): FormArray { return this.form.get('media') as FormArray; }
   get priceLists(): FormArray { return this.form.get('priceLists') as FormArray; }
   get attributes(): FormGroup { return this.form.get('attributes') as FormGroup; }
-  get structure(): FormControl { return this.form.get('structure') as FormControl; }
+
   get weight(): FormControl { return this.form.get('weight') as FormControl; }
 
+  get parent(): FormControl { return this.form.get('parent') as FormControl; }
+  get structure(): FormControl { return this.form.get('structure') as FormControl; }
+
   ngOnInit(): void {
-    super.ngOnInit();
-    this.route.data.subscribe((data: { categories: ICategory[],
-                                             vendors: PagedResponse<IVendor>,
-                                             productClasses: products.IProductClass[],
-                                             mediaTypes: drf.IChoice[]}) => {
+    this.route.data.subscribe((
+      data: { categories: ICategory[], parent: products.IProduct, vendors: PagedResponse<IVendor>,
+        productClasses: products.IProductClass[], mediaTypes: drf.IChoice[]}) => {
+      this.parentProduct = data.parent;
       this.vendors = data.vendors.entities;
       this.categories = data.categories;
       this.productClasses = data.productClasses;
       this.mediaTypes = data.mediaTypes;
     });
+
+    super.ngOnInit();
   }
 
+  /**
+   * Configures the form that is edited in this component.
+   *
+   * Special notes related to the ProductComponent:
+   * 1. There is differing logic depending on whether we're initializing a parent or a child (variant)
+   * 2. From a parent, the variants array is READ-ONLY at the API, so we DO NOT set it on this form.
+   */
   initializeForm(entity?: products.IProduct) {
+
     this.form = this.fb.group({
-      name: [entity?.name, [Validators.required, ]],
+      name: [entity?.name, [Validators.required, Validators.maxLength(50), ]],
+      parent: [entity?.parent ],
       href: [entity?.href],
       upc: [entity?.upc, [Validators.required, ]],
       structure: [entity?.structure ?? 'parent', [Validators.required, ]],
@@ -182,13 +212,26 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       attributes: this.fb.group({}, []),
       priceLists: this.fb.array([]),
       // related products
-      // variants
     });
 
-    // initialize the attribute controls
-    for (const [attrDefHref, attrVal] of Object.entries(entity.attributes)) {
-      this.attributes.addControl(attrDefHref, new FormControl(attrVal));
+    // new product variant
+    if (!entity && !!this.parentProduct) {
+      this.parent.setValue(this.parentProduct.href);
+      this.structure.setValue('child');
+
+      // manditory inheritance from parent
+      this.productClass.setValue(this.parentProduct.productClass);
+      this.category.setValue(this.parentProduct.category);
+      this.vendor.setValue(this.parentProduct.vendor);
+
+      // optional inheritance from parent
+      this.description.setValue(this.parentProduct.description);
     }
+
+    // todo: if new product, create an initial pricelist
+
+    this.variants = entity?.variants ?? [];
+    this.originalAttributeValues = entity?.attributes ?? {};
 
     // listen for any changes to this so we can disable weight when appropriate
     this.productClass.valueChanges.subscribe(val => this.onProductClassChanged(val));
@@ -199,12 +242,24 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     for (const priceList of entity?.priceLists ?? []) {
       this.priceListHost.addPriceList(priceList);
     }
+    // if the product doesn't have a pricelist, we automatically add one.
+    if (!entity?.priceLists.length) {
+      this.priceListHost.addPriceList({
+        href: null,
+        product: this.href.value,
+        type: 'default',
+        platforms: [],
+        locations: [],
+        isProgressive: false,
+        ranges: [
+          { href: null, priceList: null, price: null, minQuantity: 1, maxQuantity: null },
+        ]
+      });
+    }
+
     for (const media of entity?.media ?? []) {
       this.mediaHost.add(media);
     }
-    // for (const [attrDefHref, attrVal] of Object.entries(entity?.attributes ?? {})) {
-    //   this.attributeHost.initializeAttributeValue(attrDefHref, attrVal);
-    // }
   }
 
   /**
@@ -239,7 +294,17 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     );
   }
 
+  addVariant() {
+    this.router.navigate(['./variants/new'], {relativeTo: this.route});
+  }
 
+  navigateToParent(warnOnDirty: boolean = false) {
+    if (this.structure.value === 'parent') {
+      super.navigateToParent(warnOnDirty);
+    } else {
+      this.router.navigate([`/catalog/products/${getSlugFromHref(this.parentProduct.href)}`]);
+    }
+  }
 
   /**
    * Disables irrelevant/invalid product values for certain classes of product.

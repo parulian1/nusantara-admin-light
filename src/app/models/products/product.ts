@@ -1,6 +1,7 @@
 import { IProductMedia } from './media';
 import { IPriceList } from './price-list';
 import { StructureType } from './structure.type';
+import { IVariantSummary } from './variant-summary';
 
 /**
  * Anything that is available for sale.
@@ -21,4 +22,5 @@ export interface IProduct {
   priceLists: Array<IPriceList>;
   related: Array<string>;
   attributes: {[key: string]: string|number|boolean};
+  variants: Array<IVariantSummary>;
 }

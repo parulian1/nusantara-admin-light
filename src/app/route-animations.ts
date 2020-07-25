@@ -12,8 +12,8 @@ const SLIDE_IN_FROM_RIGHT_STEPS = [
   query(':enter, :leave',  style({position: 'absolute', width: '100%' }),  {optional: true}),
   group([
     query(':enter', [
-        style({opacity: '0', transform: 'translateX(10px)'}),
-        animate('.15s ease-in-out', style({opacity: '1', transform: 'translateX(0%)'}))
+        style({opacity: '.5', transform: 'translateX(15px)'}),
+        animate('.2s ease-in-out', style({opacity: '1', transform: 'translateX(0%)'}))
       ], {optional: true}
     ),
     query(':leave', [style({opacity: '0'}), ], {optional: true}),
@@ -24,8 +24,8 @@ const SLIDE_IN_FROM_LEFT_STEPS = [
   query(':enter, :leave',  style({position: 'absolute', width: '100%' }),  {optional: true}),
   group([
     query(':enter', [
-        style({opacity: '0', transform: 'translateX(-10px)'}),
-        animate('.15s ease-in-out', style({opacity: '1', transform: 'translateX(0%)'}))
+        style({opacity: '.5', transform: 'translateX(-15px)'}),
+        animate('.2s ease-in-out', style({opacity: '1', transform: 'translateX(0%)'}))
       ], {optional: true}
     ),
     query(':leave', [style({opacity: '0'}), ], {optional: true}),

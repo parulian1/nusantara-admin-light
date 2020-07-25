@@ -16,7 +16,7 @@ import { products } from '@nusantara/models';
   selector: 'nus-price-list-range',
   template: `
     <tr [formGroup]="form" class="immediate-error-display">
-      <td>
+      <td class="immediate-error-display">
         <input type="number"
                [formControl]="price">
       </td>
