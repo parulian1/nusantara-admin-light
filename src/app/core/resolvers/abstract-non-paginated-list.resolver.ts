@@ -10,12 +10,12 @@ import { IHrefEntity } from '@nusantara/models/base';
  * Supports pagination via the page=n query parameter.
  * Supports keyword filtering via the 'q=some+text' query parameter.
  */
-export abstract class AbstractNonPaginatedListResolver<T extends IHrefEntity> implements Resolve<PagedResponse<T>> {
+export abstract class AbstractNonPaginatedListResolver<T extends IHrefEntity> implements Resolve<T[]> {
 
   protected readonly service: AbstractCrudService<T>;
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<PagedResponse<T>> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<T[]> | Observable<never> {
     const query = route.queryParamMap.get('q');
-    return this.service.fetchList(query, 1, this.service.maxPageSize);
+    return this.service.fetchAll(query);
   }
 }

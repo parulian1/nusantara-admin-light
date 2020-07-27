@@ -118,11 +118,11 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
     super.ngOnInit();
     this.route.data.subscribe((data: {types: drf.IChoice[],
                                            subLocationTypes: drf.IChoice[],
-                                           allWarehouses: PagedResponse<IWarehouse>}) => {
+                                           allWarehouses: IWarehouse[]}) => {
       this.types = data.types;
       this.subLocationTypes = data.subLocationTypes;
 
-      this.warehouses = data.allWarehouses.entities;
+      this.warehouses = data.allWarehouses;
       this.warehouses.unshift({href: null, name: '---', code: ''});
     });
   }

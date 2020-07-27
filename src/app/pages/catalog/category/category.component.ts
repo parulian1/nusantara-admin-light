@@ -135,7 +135,7 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
   get sourceMappings(): FormArray { return this.form.get('sourceMappings') as FormArray; }
 
   setIconImagePreview(data?: Event|string) {
-    this.setImagePreview(data,  (dataAsUrl) => this.imagePreviewUrl = dataAsUrl);
+    super.setImagePreview(data,  (dataAsUrl) => this.imagePreviewUrl = dataAsUrl);
   }
 
   addMapping(value?: string) {

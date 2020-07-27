@@ -7,11 +7,16 @@ import { SharedModule } from '@nusantara/shared';
 import { CmsRoutingModule } from './cms-routing.module';
 import { FlatPageComponent, FlatPageListComponent } from './flat-page';
 import { WidgetComponent, WidgetBlockListComponent } from './widget';
+import { TestimonialComponent, TestimonialListComponent } from './testimonial';
 
 @NgModule({
   declarations: [
     FlatPageListComponent,
     FlatPageComponent,
+
+    TestimonialComponent,
+    TestimonialListComponent,
+
     WidgetBlockListComponent,
     WidgetComponent,
   ],

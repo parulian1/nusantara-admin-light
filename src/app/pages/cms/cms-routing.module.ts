@@ -3,7 +3,10 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { FlatPageComponent, FlatPageListComponent, FlatPageListResolver, FlatPageResolver } from './flat-page';
 import { WidgetComponent, WidgetBlockListComponent, WidgetBlockListResolver, WidgetResolver } from './widget';
-import { ContentTypesResolver } from '@nusantara/pages/cms/widget/content-types.resolver';
+import { ContentTypesResolver } from './widget/content-types.resolver';
+import { TestimonialComponent, TestimonialListComponent, TestimonialListResolver, TestimonialResolver } from './testimonial';
+import { VendorFullListResolver } from '@nusantara/pages/catalog/vendor';
+import { ProductFullListResolver } from '@nusantara/pages/catalog/product';
 
 
 const dashboardRoutes: Routes = [
@@ -15,20 +18,51 @@ const dashboardRoutes: Routes = [
         component: FlatPageListComponent,
         resolve: { page: FlatPageListResolver },
         runGuardsAndResolvers: 'always',
+        data: { animation: 'List', },
       },
       {
         path: 'new',
         component: FlatPageComponent,
         runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
       },
       {
         path: ':slug',
         component: FlatPageComponent,
         resolve: { entity: FlatPageResolver },
         runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
       },
     ]
   },
+
+  {
+    path: 'testimonials',
+    children: [
+      {
+        path: '',
+        component: TestimonialListComponent,
+        resolve: { page: TestimonialListResolver },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'List', },
+      },
+      {
+        path: 'new',
+        component: TestimonialComponent,
+        resolve: { vendors: VendorFullListResolver, products: ProductFullListResolver },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+      {
+        path: ':slug',
+        component: TestimonialComponent,
+        resolve: { entity: TestimonialResolver, vendors: VendorFullListResolver, products: ProductFullListResolver },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+    ]
+  },
+
   {
     path: 'widgets',
     children: [
@@ -37,18 +71,21 @@ const dashboardRoutes: Routes = [
         component: WidgetBlockListComponent,
         resolve: { page: WidgetBlockListResolver },
         runGuardsAndResolvers: 'always',
+        data: { animation: 'List', },
       },
       {
         path: 'new',
         component: WidgetComponent,
         resolve: { contentTypes: ContentTypesResolver },
         runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
       },
       {
         path: ':slug',
         component: WidgetComponent,
         resolve: { entity: WidgetResolver, contentTypes: ContentTypesResolver },
         runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
       },
     ]
   }

@@ -19,6 +19,7 @@ export * from './shipping-provider.service';
 
 export * from './cms-content-types.service';
 export * from './flat-page.service';
+export * from './testimonial.service';
 export * from './widget.service';
 export * from './widget-block.service';
 
