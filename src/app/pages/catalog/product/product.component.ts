@@ -116,8 +116,30 @@ import { getSlugFromHref } from '@nusantara/shared/helpers';
 
       <h2>Recommended Products</h2>
       <table>
-        <thead></thead>
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th></th>
+        </tr>
+        </thead>
         <tbody>
+        <tr *ngFor="let r of related.controls; let i = index">
+          <td>{{ r.get('name').value }}</td>
+          <td>
+            <button type="button"
+                    class="remove-button"
+                    (click)="related.removeAt(i)">
+              <i class="material-icons">remove_circle_outline</i>
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <button type="button" (click)="addRelatedProduct()" class="add-button">
+              Add Related Product
+            </button>
+          </td>
+        </tr>
         </tbody>
       </table>
 
@@ -168,6 +190,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   get media(): FormArray { return this.form.get('media') as FormArray; }
   get priceLists(): FormArray { return this.form.get('priceLists') as FormArray; }
   get attributes(): FormGroup { return this.form.get('attributes') as FormGroup; }
+  get related(): FormArray { return this.form.get('related') as FormArray; }
 
   get weight(): FormControl { return this.form.get('weight') as FormControl; }
 
@@ -211,7 +234,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       media: this.fb.array([]),
       attributes: this.fb.group({}, []),
       priceLists: this.fb.array([]),
-      // related products
+      related: this.fb.array([]),
     });
 
     // new product variant
@@ -228,10 +251,19 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       this.description.setValue(this.parentProduct.description);
     }
 
-    // todo: if new product, create an initial pricelist
-
     this.variants = entity?.variants ?? [];
     this.originalAttributeValues = entity?.attributes ?? {};
+
+    for (const relatedProduct of entity?.related ?? []) {
+      this.related.push(
+        this.fb.control({
+          name: [relatedProduct.name],
+          href: [relatedProduct.href],
+          image: [relatedProduct.image],
+          vendor: [relatedProduct.vendor],
+        })
+      );
+    }
 
     // listen for any changes to this so we can disable weight when appropriate
     this.productClass.valueChanges.subscribe(val => this.onProductClassChanged(val));
@@ -298,6 +330,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   addVariant() {
     this.router.navigate(['./variants/new'], {relativeTo: this.route});
+  }
+
+  addRelatedProduct() {
+    throw Error('Not Implemented');
   }
 
   navigateToParent(warnOnDirty: boolean = false) {

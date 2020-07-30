@@ -1,6 +1,7 @@
 export * from './product';
 export * from './structure.type';
 export * from './variant-summary';
+export * from './related-product-summary';
 
 export * from './media';
 export * from './media.type';

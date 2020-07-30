@@ -1,14 +1,14 @@
+import { INamedHrefEntity } from '@nusantara/models/base';
 import { IProductMedia } from './media';
 import { IPriceList } from './price-list';
 import { StructureType } from './structure.type';
 import { IVariantSummary } from './variant-summary';
+import { IRelatedProductSummary } from './related-product-summary';
 
 /**
  * Anything that is available for sale.
  */
-export interface IProduct {
-  href: string;
-  name: string;
+export interface IProduct extends INamedHrefEntity {
   upc: string;
   description: string;
   structure: StructureType;
@@ -20,7 +20,7 @@ export interface IProduct {
   weight: number;
   category: string;
   priceLists: Array<IPriceList>;
-  related: Array<string>;
+  related: Array<IRelatedProductSummary>;
   attributes: {[key: string]: string|number|boolean};
   variants: Array<IVariantSummary>;
 }
