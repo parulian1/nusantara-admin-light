@@ -10,6 +10,7 @@ import { MockActivatedRoute, MockJwtHelperService } from '../helpers/mocks';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ToastComponent } from '@nusantara/core';
+import { SharedModule } from '@nusantara/shared';
 
 describe('LoginComponent', () => {
 
@@ -28,6 +29,7 @@ describe('LoginComponent', () => {
         HttpClientTestingModule,
         ReactiveFormsModule,
         RouterTestingModule,
+        SharedModule,
       ],
       declarations: [
         LoginComponent,

@@ -6,6 +6,8 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { AppComponent } from '@nusantara/app.component';
 import { AuthService } from '@nusantara/auth';
 import { MockJwtHelperService } from './helpers/mocks';
+import { SharedModule } from '@nusantara/shared';
+import { CoreModule } from '@nusantara/core';
 
 describe('AppComponent', () => {
 
@@ -23,6 +25,8 @@ describe('AppComponent', () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
+        SharedModule,
+        CoreModule,
       ],
       declarations: [
         AppComponent

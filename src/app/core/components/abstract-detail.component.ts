@@ -85,6 +85,7 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
   }
 
   save() {
+    this.form.disable();
     this.service.save(this.getFormValue()).subscribe(
       resp => {
         if (resp.success) {
@@ -101,11 +102,11 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
    * to this API.
    */
   saveAsForm() {
-
     if (!this.formView) {
-      console.log('formView attribute **must** be set when using this method.');
       throw Error('formView is null');
     }
+
+    this.form.disable();
 
     const formData = new FormData(this.formView.nativeElement);
 
@@ -125,6 +126,7 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
    * and navigates back to the parent component URL.
    */
   protected onSaveSuccess(result: IResultResponse<T>) {
+    this.form.enable();
     this.toast?.addMessage(`"${this.form.get('name')?.value ?? 'data'}" was saved successfully.`, 'Saved', ToastLevelEnum.success);
     this.navigateToParent(false);
   }
@@ -133,8 +135,7 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
    * Called when a save fails.
    */
   protected onSaveError(error: any) {
-    console.log('Failed to save with error:', error);
-
+    this.form.enable();
     let errorMessage = error.toString();
     if (error instanceof HttpErrorResponse) {
       errorMessage = error.message;
@@ -153,15 +154,17 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
       },
       (err) => this.onDeleteError(err)
     );
+    this.form.disable();
   }
 
   protected onDeleteSuccess() {
+    this.form.enable();
     this.toast?.addMessage(`"${this.form.get('name').value}" was deleted successfully.`, 'Deleted', ToastLevelEnum.success);
     this.navigateToParent(false);
   }
 
   protected onDeleteError(error: any) {
-    console.log('Failed to save with error:', error);
+    this.form.enable();
     this.toast?.addError(error.toString(), 'Failed to Save');
   }
 }

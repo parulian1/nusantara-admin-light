@@ -28,19 +28,19 @@ import { ToastService } from '@nusantara/core/toast';
 
       <label>
         <span>Site Domain</span>
-        <input type="text" formControlName="siteDomain" placeholder="Ex, www.mysite.com" [disabled]="isBusy">
+        <input type="text" formControlName="siteDomain" placeholder="Ex, www.mysite.com">
         <nus-field-errors [control]="siteDomain"></nus-field-errors>
       </label>
 
       <label>
         <span>Email Address</span>
-        <input type="email" [formControl]="email" placeholder="email@domain.com" [disabled]="isBusy">
+        <input type="email" [formControl]="email" placeholder="email@domain.com">
         <nus-field-errors [control]="email"></nus-field-errors>
       </label>
 
       <label>
         <span>Password</span>
-        <input type="password" [formControl]="password" [disabled]="isBusy">
+        <input type="password" [formControl]="password">
         <nus-field-errors [control]="password"></nus-field-errors>
       </label>
 
@@ -110,6 +110,7 @@ export class LoginComponent implements OnInit {
 
     this.nonFieldErrors.length = 0;
     this.isBusy = true;
+
     this.service
       .login(this.email.value, this.password.value, this.siteDomain.value)
       .pipe(catchError((err) => {
@@ -126,16 +127,18 @@ export class LoginComponent implements OnInit {
          this.onLoginSuccess();
        }
     });
+
+    this.form.disable();
   }
 
   private onLoginSuccess() {
-    this.isBusy = false;
+    this.form.enable();
     this.toastService.addSuccess(`Welcome ${this.email.value}!`, 'Login Success');
     this.router.navigateByUrl(decodeURIComponent(this.afterLoginUrl));
   }
 
   private onLoginFail(errorDetails: ILoginFailure) {
-    this.isBusy = false;
+    this.form.enable();
     this.toastService.addError('Sorry!  Please check your email/password and try again');
     if (!!errorDetails.detail) {
       this.nonFieldErrors.push(errorDetails.detail);

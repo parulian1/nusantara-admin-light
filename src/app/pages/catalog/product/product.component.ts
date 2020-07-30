@@ -292,6 +292,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       },
       (err) => this.onSaveError(err)
     );
+
+    this.form.disable();
   }
 
   addVariant() {

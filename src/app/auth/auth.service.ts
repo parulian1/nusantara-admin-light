@@ -117,7 +117,6 @@ export class AuthService {
     return window.localStorage.getItem('site_domain');
   }
   public set siteDomain(value: string) {
-    console.log('setting site domain to ', value);
     if (value === null) {
       window.localStorage.removeItem('site_domain');
     } else {

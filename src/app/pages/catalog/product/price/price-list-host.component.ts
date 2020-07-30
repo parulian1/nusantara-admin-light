@@ -19,10 +19,7 @@ import { PriceListComponent } from './price-list.component';
 @Component({
   selector: 'nus-price-list-host',
   template: `
-    <h2>
-      Price Lists
-      <button (click)="addPriceList()" type="button" class="add-button"><i class="material-icons">add_circle</i></button>
-    </h2>
+    <h2>Price Lists</h2>
 
     <table>
       <thead>
