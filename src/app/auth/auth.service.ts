@@ -29,7 +29,9 @@ export class AuthService {
   constructor(public httpClient: HttpClient,
               public jwtHelper: JwtHelperService) { }
 
-
+  /**
+   * The user's primary JWT auth token, from the browser's localStorage.
+   */
   get token(): string {
     return localStorage.getItem(AuthService.TOKEN_KEY);
   }
@@ -47,7 +49,7 @@ export class AuthService {
 
   /**
    * If the user is authenticated, returns the claims present in their JWT
-   * payload.
+   * payload, otherwise returns null.
    */
   get tokenPayload(): IJwtClaims {
     if (this.isAuthenticated) {
@@ -58,6 +60,9 @@ export class AuthService {
     }
   }
 
+  /**
+   * The user's refresh token saved in localStorage.
+   */
   get refreshToken(): string {
     return localStorage.getItem(AuthService.TOKEN_REFRESH_KEY);
   }
@@ -73,10 +78,16 @@ export class AuthService {
     }
   }
 
+  /**
+   * Indicates if the user's JWT is expired.
+   */
   get isTokenExpired(): boolean {
     return this.jwtHelper.isTokenExpired(this.token);
   }
 
+  /**
+   * Indicates if the user has a JWT **and** that JWT is not expired.
+   */
   public get isAuthenticated(): boolean {
     return (this.token && !this.isTokenExpired);
   }
@@ -110,9 +121,14 @@ export class AuthService {
    * 10-30 minutes of inactivity.
    */
   public get canRefresh(): boolean {
-    return !(!this.refreshToken || this.isTokenExpired);
+    return !!this.refreshToken && !this.isTokenExpired;
   }
 
+  /**
+   * The domain (without protocol) the user is currently logged in to.
+   * **ESSENTIAL** for knowing the base-url for backend API services the user
+   * is currently able to access.
+   */
   public get siteDomain(): string {
     return window.localStorage.getItem('site_domain');
   }
@@ -186,6 +202,11 @@ export class AuthService {
     );
   }
 
+  /**
+   * Writes the token and refresh token for the user to localStorage.
+   * @param tokenPair token data (returned from the auth api)
+   * @private
+   */
   private saveToken(tokenPair: ITokenPair): void {
     this.token = tokenPair.access;
     this.refreshToken = tokenPair.refresh;

@@ -1,3 +1,7 @@
+/**
+ * The expected format for claims that should be present
+ * in JWTs returned from the IAM auth API.
+ */
 export interface IJwtClaims {
   token_type: string;
   exp: number;
