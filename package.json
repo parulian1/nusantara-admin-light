@@ -21,7 +21,7 @@
     "@angular/platform-browser": "~10.0.5",
     "@angular/platform-browser-dynamic": "~10.0.5",
     "@angular/router": "~10.0.5",
-    "@auth0/angular-jwt": "^4.0.0",
+    "@auth0/angular-jwt": "^5.0.1",
     "@ckeditor/ckeditor5-angular": "^1.2.3",
     "@ckeditor/ckeditor5-build-classic": "^20.0.0",
     "iso8601-duration": "^1.2.0",

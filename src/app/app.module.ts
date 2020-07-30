@@ -27,14 +27,14 @@ import { AppComponent } from './app.component';
       config: {
         tokenGetter: () => localStorage.getItem('token'),
         authScheme: 'Bearer ',
-        whitelistedDomains: [
+        allowedDomains: [
           'localhost:8080',
           'localhost:4200',
           'localhost:4201',
           'bhisma.cloud',
           'marthatilaarshop.com',
         ],
-        blacklistedRoutes: [
+        disallowedRoutes: [
           'localhost:8080/api/iam/login/',
           'localhost:8080/api/iam/reset-password/',
         ]
