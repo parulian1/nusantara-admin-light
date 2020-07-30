@@ -8,51 +8,6 @@ import { drf, products } from '@nusantara/models';
 import { PriceListRangeService } from '@nusantara/services';
 import { RangeComponent } from './range.component';
 
-
-// expandedIndexes = [];
-// isExpanded(priceListIndex: number): boolean {
-//   return !!this.expandedIndexes.filter(v => v === priceListIndex).length;
-// }
-// toggleExpansion(priceListIndex: number): void {
-//   if (this.isExpanded(priceListIndex)) {
-//   this.expandedIndexes = this.expandedIndexes.filter(v => v !== priceListIndex);
-// } else {
-//   this.expandedIndexes.push(priceListIndex);
-// }
-// }
-
-// <table>
-//   <thead>
-//     <tr>
-//       <th>Type/Name</th>
-// <th>Ranges</th>
-// <th>Starting</th>
-// <th>Ending</th>
-// </tr>
-// </thead>
-// <tbody>
-// <ng-container  *ngFor="let priceList of priceLists; let i = index">
-// <tr>
-//   <ng-container>
-// <td> <button type="button" (click)="toggleExpansion(i)">{{ priceList.type.value }}</button></td>
-// <td>{{ priceList.ranges.length }}</td>
-// <td>{{ priceList.ranges.controls[0].value.price }}</td>
-// <td>{{ priceList.ranges.controls[priceList.ranges.length - 1].value.price }}</td>
-// </ng-container>
-//
-// </tr>
-// <tr [ngClass]="{'hidden': !isExpanded(i)}">
-// <td colspan="4">
-// <nus-price-list
-//   [form]="priceList.form">
-//   </nus-price-list>
-//   </td>
-//
-//   </tr>
-//   </ng-container>
-//   </tbody>
-
-
 /**
  * Shows the details for one price list assigned to a product.
  * 'Details' are predominantly a set of 'ranges' that are assigned
@@ -70,11 +25,9 @@ import { RangeComponent } from './range.component';
       <td>{{ ranges.controls[0].value.price }}</td>
       <td>{{ ranges.controls[ranges.length - 1].value.price }}</td>
 
-
     </tr>
       <tr *ngIf="isExpanded">
         <td colspan="4">
-
 
           <label>
             <span>Type</span>
@@ -119,64 +72,9 @@ import { RangeComponent } from './range.component';
             </tr>
             </tbody>
           </table>
-
-
-
-
         </td>
       </tr>
     </ng-container>
-
-
-
-
-<!--    -->
-<!--    <div [formGroup]="form">-->
-<!--      <label>-->
-<!--        <span>Type</span>-->
-<!--        <select [formControl]="type">-->
-<!--          <option-->
-<!--            *ngFor="let opt of types"-->
-<!--            [ngValue]="opt.value">{{ opt.displayName }}-->
-<!--          </option>-->
-<!--        </select>-->
-<!--      </label>-->
-
-<!--      <label class="without-field-errors">-->
-<!--        <input type="checkbox" [formControl]="isProgressive">-->
-<!--        Is Progressive-->
-<!--      </label>-->
-
-<!--      <table>-->
-<!--        <thead>-->
-<!--        <tr>-->
-<!--          <th>Price</th>-->
-<!--          <th>Min</th>-->
-<!--          <th>Max</th>-->
-<!--          <th></th>-->
-<!--        </tr>-->
-<!--        </thead>-->
-<!--        <tbody>-->
-<!--        <nus-price-list-range-->
-<!--          *ngFor="let range of ranges.controls; let i=index"-->
-<!--          [form]="range"-->
-<!--          [index]="i"-->
-<!--          [allRanges]="ranges.controls"-->
-<!--          (quantityChanged)="onRangeQuantityChanged(i)"-->
-<!--          (remove)="removeRange($event, i)"-->
-<!--          [siblingQuantityChanged]="rangeQuantityChanged">-->
-<!--        </nus-price-list-range>-->
-<!--        <tr>-->
-<!--          <td colspan="4">-->
-<!--            <button type="button" (click)="addRange()" class="add-button">-->
-<!--              Add Range-->
-<!--            </button>-->
-<!--          </td>-->
-<!--        </tr>-->
-<!--        </tbody>-->
-<!--      </table>-->
-
-<!--    </div>-->
   `,
   styles: [':host { display: contents; }', ]
 })

@@ -8,10 +8,10 @@ import { zip } from 'rxjs';
 import { ToastService, AbstractDetailComponent, PagedResponse } from '@nusantara/core';
 import { ICategory, IVendor, drf, products } from '@nusantara/models';
 import { ProductService } from '@nusantara/services';
+import { getSlugFromHref } from '@nusantara/shared/helpers';
 import { PriceListHostComponent } from './price';
 import { ProductMediaHostComponent } from './media';
 import { ProductAttributeHostComponent } from './attribute';
-import { getSlugFromHref } from '@nusantara/shared/helpers';
 
 /**
  * Allows the user to edit/create a single product.
