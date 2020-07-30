@@ -108,7 +108,7 @@ import { ProductAttributeHostComponent } from './attribute';
             <td><a [routerLink]="['variants', v.href|entityToSlug]">{{ v.name }}</a></td>
           </tr>
           <tr>
-            <td><button [disabled]="isNew" (click)="addVariant()" type="button" class="add-button">Add</button></td>
+            <td><button [disabled]="isNew" (click)="addVariant()" type="button" class="add-button">Add Variant</button></td>
           </tr>
           </tbody>
         </table>
@@ -242,7 +242,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       this.parent.setValue(this.parentProduct.href);
       this.structure.setValue('child');
 
-      // manditory inheritance from parent
+      // mandatory inheritance from parent
       this.productClass.setValue(this.parentProduct.productClass);
       this.category.setValue(this.parentProduct.category);
       this.vendor.setValue(this.parentProduct.vendor);
