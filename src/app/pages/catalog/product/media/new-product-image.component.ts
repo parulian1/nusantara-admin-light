@@ -21,12 +21,13 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
         <input type="hidden" [formControl]="type" name="type">
         <input type="hidden" [formControl]="youtubeVideoId" name="youtubeVideoId">
         <input type="file" [formControl]="image" (change)="setMediaImage($event)" #imageInput name="image">
-        <button [disabled]="form.invalid" (click)="close()" type="button">Save</button>
-        <button (click)="cancel()" type="button">Cancel</button>
+
+        <button [disabled]="form.invalid" (click)="close()" type="button" class="control">Save</button>
+        <button (click)="cancel()" type="button" class="control secondary">Cancel</button>
       </form>
     </ngx-smart-modal>
   `,
-  styles: [ ]
+  styles: [ 'img { max-width: 100%; }' ]
 })
 export class NewProductImageComponent extends AbstractEditingComponent implements OnInit, AfterViewInit {
 

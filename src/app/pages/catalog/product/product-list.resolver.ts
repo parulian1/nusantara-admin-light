@@ -6,6 +6,11 @@ import { ProductService } from '@nusantara/services';
 import { PagedResponse } from '@nusantara/core/pagination';
 import { products } from '@nusantara/models';
 
+/**
+ * Resolves a paginated list of products.
+ *
+ * @see PagedResponse
+ */
 @Injectable({
   providedIn: 'root'
 })
