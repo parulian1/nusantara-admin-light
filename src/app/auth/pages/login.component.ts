@@ -8,7 +8,6 @@ import { catchError } from 'rxjs/operators';
 import { ILoginFailure } from '@nusantara/auth/models';
 import { AuthService } from '@nusantara/auth/auth.service';
 import { ErrorResult } from '@nusantara/core/responses';
-import { ToastService } from '@nusantara/core/toast';
 
 /**
  * Allows the user to authenticate with an email address and password.
@@ -82,8 +81,7 @@ export class LoginComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private service: AuthService,
               private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private toastService: ToastService) { }
+              private activatedRoute: ActivatedRoute) { }
 
   get email(): FormControl { return this.form?.get('email') as FormControl; }
   get password(): FormControl { return this.form?.get('password') as FormControl; }
@@ -133,16 +131,11 @@ export class LoginComponent implements OnInit {
 
   private onLoginSuccess() {
     this.form.enable();
-    this.toastService.addSuccess(`Welcome ${this.email.value}!`, 'Login Success');
     this.router.navigateByUrl(decodeURIComponent(this.afterLoginUrl));
   }
 
   private onLoginFail(errorDetails: ILoginFailure) {
     this.form.enable();
-    this.toastService.addError('Sorry!  Please check your email/password and try again');
-    if (!!errorDetails.detail) {
-      this.nonFieldErrors.push(errorDetails.detail);
-    }
 
     errorDetails.nonFieldErrors?.forEach(
       (errMsg) => { this.nonFieldErrors.push(errMsg); }
