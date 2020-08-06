@@ -13,6 +13,7 @@ export class MockActivatedRoute {
   private subjectParamMap = new BehaviorSubject(convertToParamMap(this.testParamMap));
   paramMap = this.subjectParamMap.asObservable();
 
+  // tslint:disable-next-line:variable-name
   private _testParamMap: ParamMap;
   get testParamMap() {
     return this._testParamMap;
@@ -26,6 +27,7 @@ export class MockActivatedRoute {
   private subjectQueryParamMap = new BehaviorSubject(convertToParamMap(this.testParamMap));
   queryParamMap = this.subjectQueryParamMap.asObservable();
 
+  // tslint:disable-next-line:variable-name
   private _testQueryParamMap: ParamMap;
   get testQueryParamMap() {
     return this._testQueryParamMap;
@@ -39,7 +41,7 @@ export class MockActivatedRoute {
     return {
       paramMap: this.testParamMap,
       queryParamMap: this.testQueryParamMap
-    }
+    };
   }
 
 }

@@ -8,9 +8,10 @@ import { products, ISubLocation } from '@nusantara/models';
   selector: 'nus-inventory-receiving-line',
   template: `
     <tr [formGroup]="form">
-      <td>{{ displayedProductName }}</td>
+      <td><a>{{ displayedProductName }}</a></td>
       <td class="immediate-error-display">
         <select [formControl]="subLocation">
+          <option [ngValue]="null">---</option>
           <option *ngFor="let loc of availableSubLocations" [ngValue]="loc.href">
             {{ loc.name }} ({{ loc.code }})
           </option>

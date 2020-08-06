@@ -3,6 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 import * as config from '@nusantara/pages/config';
 import { InventoryReceivingComponent } from './inventory-receiving.component';
+import { InventoryOrderListComponent } from './inventory-order-list.component';
+import { InventoryOrderListResolver } from './inventory-order-list.resolver';
 
 const routes: Routes = [
   {
@@ -13,8 +15,15 @@ const routes: Routes = [
     },
     runGuardsAndResolvers: 'always'
   },
-
-
+  {
+    path: 'orders-list',
+    component: InventoryOrderListComponent,
+    resolve: { page: InventoryOrderListResolver },
+    runGuardsAndResolvers: 'always'
+  },
+  {
+    path: 'adjustment',
+  }
 ];
 
 @NgModule({

@@ -46,6 +46,7 @@ import { SubscriptionLike } from 'rxjs';
           <i class="material-icons">assignment</i>
           <span>Inventory Management</span>
         </li>
+        <li><a [routerLink]="['/inventory/orders-list']" routerLinkActive="active" translate>Pending Orders</a></li>
         <li><a [routerLink]="['/inventory/receiving']" routerLinkActive="active" translate>Receiving</a></li>
         <li><a [routerLink]="['/inventory/adjustment']" routerLinkActive="active" translate>Adjustment</a></li>
 

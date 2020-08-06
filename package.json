@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "start:local-proxy": "ng serve --proxy-config proxy.conf.js",
-    "start:prod": "ng serve --prod",
+    "start": "ng serve --port=4201",
+    "start:local-proxy": "ng serve --port=4201 --proxy-config proxy.conf.js",
+    "start:prod": "ng serve --port=4201 --prod",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

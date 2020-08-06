@@ -4,8 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { DialogResult, ToastService, AbstractDetailComponent } from '@nusantara/core';
 import { inventory, ISubLocation, IWarehouse } from '@nusantara/models';
-import { ProductSelectionModalComponent } from './product-selection-modal.component';
 import { IProduct } from '@nusantara/models/products';
+import { AuthService } from '@nusantara/auth';
+import { ProductSelectionModalComponent } from './product-selection-modal.component';
 
 /**
  * Allows a user to receive a new batch of inventory.
@@ -13,27 +14,49 @@ import { IProduct } from '@nusantara/models/products';
 @Component({
   selector: 'nus-inventory-receiving',
   template: `
-    <h1>Receive Inventory</h1>
+    <h1>Receiving Inventory Order</h1>
 
     <form [formGroup]="form" (ngSubmit)="save()">
-      <label>
-        <span>Warehouse</span>
-        <select [formControl]="warehouse">
-          <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
-            {{ wh.name }}
-          </option>
-        </select>
-        <button (click)="confirmWarehouse()"
-                type="button"
-                [disabled]="warehouse.disabled || !warehouse.value"
-                class="control">Confirm</button>
-      </label>
+
+      <table class="inventory-order-meta">
+        <tbody>
+        <tr>
+          <th>Received By</th><td colspan="2">{{ userDisplayName }}</td>
+        </tr>
+        <tr>
+          <th>Approved By</th><td colspan="2">---</td>
+        </tr>
+        <tr>
+          <th>Receiving Date</th><td colspan="2"></td>
+        </tr>
+        <tr>
+          <th>Status</th><td colspan="2">Pending</td>
+        </tr>
+        <tr>
+          <th>Warehouse</th>
+          <td>
+            <select [formControl]="warehouse">
+              <option [ngValue]="null">---</option>
+              <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
+                {{ wh.name }}
+              </option>
+            </select>
+          </td>
+          <td>
+            <button (click)="confirmWarehouse()"
+                    type="button"
+                    [disabled]="warehouse.disabled || !warehouse.value"
+                    class="control">Confirm</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
 
       <div *ngIf="warehouse.disabled">
         <table>
           <thead>
           <tr>
-            <th>Product</th>
+            <th>Product (UPC)</th>
             <th>Location</th>
             <th>Quantity</th>
             <th>SKU</th>
@@ -74,8 +97,15 @@ import { IProduct } from '@nusantara/models/products';
     <!-- Modals -->
     <nus-product-selection-modal></nus-product-selection-modal>
   `,
-  styles: [
-    'form { width: 1200px; max-width: 100%; }',
+  styles: [`
+    form { width: 1200px; max-width: 100%; }
+    .inventory-order-meta {
+      width: auto;
+    }
+    .inventory-order-meta th {
+      text-align: left;
+    }
+  `
   ]
 })
 export class InventoryReceivingComponent extends AbstractDetailComponent<inventory.IReceivingOrder> implements OnInit, AfterViewInit {
@@ -86,6 +116,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
 
   constructor(private fb: FormBuilder,
               public toast: ToastService,
+              public authService: AuthService,
               public route: ActivatedRoute,
               public router: Router) {
     super();
@@ -158,5 +189,13 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
       });
       this.stockRecords.push(f);
     }
+  }
+
+  get userDisplayName(): string {
+    return [
+      this.authService.tokenPayload.last_name,
+      this.authService.tokenPayload.first_name,
+      `(${this.authService.tokenPayload.email})`,
+    ].join(', ').trim();
   }
 }

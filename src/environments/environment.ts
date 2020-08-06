@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiBaseUrl: 'https://bhisma.cloud',
+  apiBaseUrl: 'https://staging.bhisma.cloud',
   googleApiKey: 'AIzaSyDCywCcZt3Z27gvzMg6ZvQUL3EMEiVtvRU'
 };
 

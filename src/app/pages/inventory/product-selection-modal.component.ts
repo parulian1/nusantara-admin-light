@@ -7,27 +7,40 @@ import { DialogResult, PagedResponse } from '@nusantara/core';
 import { ProductService } from '@nusantara/services';
 import { products } from '@nusantara/models';
 
+/**
+ * Shows the user a list of products they can select from.
+ *
+ * Note: Currently this does not allow the user to navigate
+ * paginated data -- it assumes they're going to be searching
+ * mostly based on SKUs.
+ */
 @Component({
   selector: 'nus-product-selection-modal',
   template: `
     <ngx-smart-modal [identifier]="'selectProduct'" #modal [formGroup]="form">
       <h1>Select Product</h1>
       <form #modalForm>
-        <input type="search" [formControl]="searchText">
+        <label>
+          <span>Search</span>
+          <input type="text" [formControl]="searchText" placeholder="ex, BR0591020041S or 'Hand Sanitizer'">
+        </label>
         <input type="hidden" [formControl]="product">
 
         <div>
           <table>
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>SKU</th>
+            </tr>
+            </thead>
             <tbody>
             <tr *ngFor="let p of displayedResults?.entities">
-              <td><a href="#" (click)="selectProduct(p)">{{ p.name }} ({{ p.upc }})</a></td>
+              <td><a href="#" (click)="selectProduct(p)">{{ p.name }}</a></td>
+              <td>{{ p.upc }}</td>
             </tr>
             </tbody>
           </table>
-        </div>
-
-        <div>
-          <button (click)="cancel()" type="button">Cancel</button>
         </div>
       </form>
     </ngx-smart-modal>
@@ -77,6 +90,9 @@ export class ProductSelectionModalComponent implements OnInit, AfterViewInit {
         this.searchTextChanged$.unsubscribe();
       }
     });
+
+    // trigger initial loading of products
+    this.onSearchTextChanged('');
   }
 
   /**
@@ -97,6 +113,13 @@ export class ProductSelectionModalComponent implements OnInit, AfterViewInit {
     return new FormData(this.formView.nativeElement);
   }
 
+  /**
+   * Whenever the user changes the search text, reload
+   * the currently-displayed products (after a slight delay
+   * to ensure they're not still typing; 650ms)
+   *
+   * @param newValue The new value the user has typed.
+   */
   onSearchTextChanged(newValue: string) {
     if (!!this.timeoutId) {
       clearTimeout(this.timeoutId);
@@ -109,12 +132,9 @@ export class ProductSelectionModalComponent implements OnInit, AfterViewInit {
 
     // wait to see if the user is still typing, before we reload
     this.timeoutId = setTimeout(() => {
-      this.service.fetchList(this.searchText.value).subscribe(
-        (page) => {
-          console.log('Got this page back', page);
-          this.displayedResults = page;
-        }
-      );
+      this.service.fetchList(this.searchText.value, 1, 10).subscribe((page) => {
+        this.displayedResults = page;
+      });
     }, this.reloadTimeout);
 
   }
@@ -142,6 +162,3 @@ export class ProductSelectionModalComponent implements OnInit, AfterViewInit {
     this.modal.close();
   }
 }
-
-
-

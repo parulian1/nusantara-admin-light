@@ -6,7 +6,6 @@ import { IHrefEntity } from '@nusantara/models/base';
 @Component({
   selector: 'nus-dashboard',
   template: `
-    <h1>Dashboard</h1>
     <iframe
       #metabase
       frameborder="0"
