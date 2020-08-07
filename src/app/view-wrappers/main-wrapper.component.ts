@@ -78,8 +78,11 @@ import { SubscriptionLike } from 'rxjs';
         <li><a [routerLink]="['/users/customer']" routerLinkActive="active" translate>Customers</a></li>
         <li><a [routerLink]="['/users/customer-groups']" routerLinkActive="active" translate>Customer Groups</a></li>
 
-<!--        <li class="section-header" translate><i class="material-icons">assessment</i>Reports</li>-->
-<!--        <li><a [routerLink]="[]"></a></li>-->
+        <li class="icon-button" translate>
+          <a href="https://reports.bhisma.cloud" target="_blank">
+            <i class="material-icons">assessment</i>Reports
+          </a>
+        </li>
 
         <li class="icon-button">
           <a [routerLink]="['/config']" routerLinkActive="active">
