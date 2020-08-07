@@ -9,7 +9,7 @@ export interface IReceivingOrder extends IHrefEntity {
   reviewedBy: string;
   warehouse: INamedHrefEntity;
   created: string;
-  type: ReceivingOrderType; // actual thing
+  type: ReceivingOrderType;
   notes: string;
   stockRecords: Array<IStockRecord>;
 }

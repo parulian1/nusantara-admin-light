@@ -6,8 +6,14 @@ export * from './product.service';
 export * from './product-attribute.service';
 export * from './product-media.service';
 export * from './product-class.service';
+
 export * from './price-list.service';
 export * from './price-list-range.service';
+
+export * from './product-promotion.service';
+
+export * from './inventory-order.service';
+export * from './inventory-receiving.service';
 
 export * from './vendor.service';
 export * from './category.service';
@@ -26,7 +32,5 @@ export * from './widget-block.service';
 export * from './google.service';
 
 export * from './order.service';
-
-export * from './inventory-order.service';
 
 export * from './reporting.service';

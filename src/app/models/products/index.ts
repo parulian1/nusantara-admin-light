@@ -13,3 +13,6 @@ export * from './price-list-range';
 export * from './product-class';
 export * from './product-attribute';
 export * from './product-attribute.type';
+
+export * from './product-promotion';
+export * from './product-promotion.type';

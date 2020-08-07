@@ -6,7 +6,7 @@ export interface IJwtClaims {
   token_type: string;
   exp: number;
   jti: string;
-  user_id: number;
+  user_id: string; // actually username field from db
   is_staff: boolean;
   first_name: string;
   last_name: string;

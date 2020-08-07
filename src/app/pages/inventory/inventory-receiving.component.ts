@@ -1,11 +1,12 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { AuthService } from '@nusantara/auth';
 import { DialogResult, ToastService, AbstractDetailComponent } from '@nusantara/core';
 import { inventory, ISubLocation, IWarehouse } from '@nusantara/models';
+import { InventoryReceivingService } from '@nusantara/services';
 import { IProduct } from '@nusantara/models/products';
-import { AuthService } from '@nusantara/auth';
 import { ProductSelectionModalComponent } from './product-selection-modal.component';
 
 /**
@@ -27,15 +28,15 @@ import { ProductSelectionModalComponent } from './product-selection-modal.compon
           <th>Approved By</th><td colspan="2">---</td>
         </tr>
         <tr>
-          <th>Receiving Date</th><td colspan="2"></td>
+          <th>Receiving Date</th><td colspan="2">{{ currentDate|date }}</td>
         </tr>
         <tr>
           <th>Status</th><td colspan="2">Pending</td>
         </tr>
         <tr>
           <th>Warehouse</th>
-          <td>
-            <select [formControl]="warehouse">
+          <td [formGroup]="warehouse">
+            <select formControlName="href">
               <option [ngValue]="null">---</option>
               <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
                 {{ wh.name }}
@@ -45,7 +46,7 @@ import { ProductSelectionModalComponent } from './product-selection-modal.compon
           <td>
             <button (click)="confirmWarehouse()"
                     type="button"
-                    [disabled]="warehouse.disabled || !warehouse.value"
+                    [disabled]="warehouse.disabled || !warehouse.valid"
                     class="control">Confirm</button>
           </td>
         </tr>
@@ -53,7 +54,7 @@ import { ProductSelectionModalComponent } from './product-selection-modal.compon
       </table>
 
       <div *ngIf="warehouse.disabled">
-        <table>
+        <table class="line-items">
           <thead>
           <tr>
             <th>Product (UPC)</th>
@@ -94,6 +95,8 @@ import { ProductSelectionModalComponent } from './product-selection-modal.compon
       </div>
     </form>
 
+    <code><pre>{{ form.getRawValue() | json }}</pre></code>
+
     <!-- Modals -->
     <nus-product-selection-modal></nus-product-selection-modal>
   `,
@@ -105,6 +108,9 @@ import { ProductSelectionModalComponent } from './product-selection-modal.compon
     .inventory-order-meta th {
       text-align: left;
     }
+    .line-items {
+      margin-top: 25px;
+    }
   `
   ]
 })
@@ -113,16 +119,18 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
   warehouses: IWarehouse[];
   availableSubLocations: ISubLocation[] = [];
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
+  currentDate: Date;
 
   constructor(private fb: FormBuilder,
               public toast: ToastService,
               public authService: AuthService,
+              public service: InventoryReceivingService,
               public route: ActivatedRoute,
               public router: Router) {
     super();
   }
 
-  get warehouse(): FormControl { return this.form.get('warehouse') as FormControl; }
+  get warehouse(): FormGroup { return this.form.get('warehouse') as FormGroup; }
   get stockRecords(): FormArray { return this.form.get('stockRecords') as FormArray; }
 
   ngOnInit() {
@@ -130,6 +138,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     this.route.data.subscribe((data: { warehouses: IWarehouse[]}) => {
       this.warehouses = data.warehouses;
     });
+    this.currentDate = new Date();
   }
 
   ngAfterViewInit() {
@@ -140,10 +149,15 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
   initializeForm(entity?: inventory.IReceivingOrder) {
     this.form = this.fb.group({
       href: [],
-      warehouse: [],
+      warehouse: this.fb.group({
+        href: [null, Validators.required],
+        name: ['', ],
+      }),
       status: ['pending', [Validators.required, ]],
-      createdBy: [],
-      reviewedBy: [],
+      createdBy: this.fb.group({
+        href: `https://bhisma.cloud/api/iam/${this.authService.tokenPayload.user_id}/` // TODO: replace this! maybe embed href identity in token claims?
+      }),
+      reviewedBy: [null, ],
       stockRecords: this.fb.array([], [Validators.required, Validators.minLength(1)]),
     });
   }
@@ -158,7 +172,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
       return;
     }
 
-    const wh = this.warehouses.filter(e => e.href === this.warehouse.value)[0];
+    const wh = this.warehouses.filter(e => e.href === this.warehouse.get('href').value)[0];
     this.availableSubLocations = wh.subLocations;
 
     this.warehouse.disable();
@@ -197,5 +211,9 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
       this.authService.tokenPayload.first_name,
       `(${this.authService.tokenPayload.email})`,
     ].join(', ').trim();
+  }
+
+  getFormValue() {
+    return this.form.getRawValue();
   }
 }

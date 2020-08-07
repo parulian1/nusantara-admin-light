@@ -1,8 +1,9 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { products, ISubLocation } from '@nusantara/models';
+import { products, ISubLocation, IWarehouse } from '@nusantara/models';
+import { IProductClass } from '../../../models/products';
 
 @Component({
   selector: 'nus-inventory-receiving-line',
@@ -21,7 +22,7 @@ import { products, ISubLocation } from '@nusantara/models';
       <td class="immediate-error-display"><input type="text" [formControl]="sku"></td>
       <td><input type="text" [formControl]="locator"></td>
       <td><input type="text" [formControl]="batchNumber"></td>
-      <td class="immediate-error-display"><input type="date" [formControl]="expiryDate"></td>
+      <td class="immediate-error-display"><input *ngIf="isPerishable" type="date" [formControl]="expiryDate"></td>
       <td><input type="number" [formControl]="cost"></td>
       <td>
         <button (click)="remove.emit()" type="button" class="remove-button">
@@ -43,6 +44,8 @@ export class LineItemComponent implements OnInit, AfterViewInit {
   @Input() form: FormGroup;
   @Output() remove = new EventEmitter<void>();
 
+  productClasses: IProductClass[];
+
   constructor(private fb: FormBuilder,
               public route: ActivatedRoute,
               public router: Router) {
@@ -51,6 +54,16 @@ export class LineItemComponent implements OnInit, AfterViewInit {
   get displayedProductName(): string {
     const p = this.product.value as products.IProduct;
     return `${p.name} (${p.upc})`;
+  }
+
+  get isPerishable(): boolean {
+    const p = this.product.value as products.IProduct;
+    const currentPc = this.productClasses.filter(pc => pc.href === p.productClass);
+    if (currentPc.length > 0) {
+      return currentPc[0].isPerishable;
+    } else {
+      return false;
+    }
   }
 
   get product(): FormControl { return this.form.get('product') as FormControl; }
@@ -63,16 +76,16 @@ export class LineItemComponent implements OnInit, AfterViewInit {
   get cost(): FormControl { return this.form.get('cost') as FormControl; }
 
   ngOnInit() {
-
-
-    // super.ngOnInit();
-    // this.route.data.subscribe((data: { warehouses: IWarehouse[]}) => {
-    //   this.warehouses = data.warehouses;
-    // });
+    this.route.data.subscribe((data: { productClasses: IProductClass[]}) => {
+      this.productClasses = data.productClasses;
+    });
   }
 
   ngAfterViewInit() {
-    // wire-up modal closed callback
-    // this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
+    if (this.isPerishable) {
+      this.expiryDate.setValidators([Validators.required, ]);
+    } else {
+      this.expiryDate.clearValidators();
+    }
   }
 }
