@@ -65,13 +65,13 @@ import { ProductSelectionModalComponent } from '../../../shared/product-selectio
 
       <label>
         <span>Valid From</span>
-        <input type="date" [formControl]="validFrom">
+        <input type="datetime-local" [formControl]="validFrom">
         <nus-field-errors [control]="validFrom"></nus-field-errors>
       </label>
 
       <label>
         <span>Valid To</span>
-        <input type="date" [formControl]="validTo">
+        <input type="datetime-local" [formControl]="validTo">
         <nus-field-errors [control]="validTo"></nus-field-errors>
       </label>
 
@@ -86,16 +86,16 @@ import { ProductSelectionModalComponent } from '../../../shared/product-selectio
         <tr *ngFor="let control of products.controls; let i=index">
           <td>{{ control.get('name').value }}</td>
           <td>
-            <button (click)="removeProduct(i)" type="button" class="remove-button">
+            <button (click)="products.removeAt(i)" type="button" class="remove-button">
               <i class="material-icons">remove_circle_outline</i>
             </button>
           </td>
         </tr>
         <tr>
           <td colspan="2">
-<!--            <button type="button" (click)="selectProduct()" class="add-button">-->
-<!--              Add Product-->
-<!--            </button>-->
+            <button type="button" (click)="selectProduct()" class="add-button">
+              Add Product
+            </button>
           </td>
         </tr>
         </tbody>
@@ -108,7 +108,7 @@ import { ProductSelectionModalComponent } from '../../../shared/product-selectio
       </nus-detail-actions>
 
       <!-- Modals -->
-<!--      <nus-product-selection-modal></nus-product-selection-modal>-->
+      <nus-product-selection-modal></nus-product-selection-modal>
 
     </form>
   `,
@@ -117,7 +117,7 @@ import { ProductSelectionModalComponent } from '../../../shared/product-selectio
 export class ProductPromotionComponent extends AbstractDetailComponent<IProductPromotion> implements OnInit, AfterViewInit {
 
   types: Array<ProductPromotionType> = ['percentage', 'amount_off', 'override_price'];
-  // @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
+  @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
 
   constructor(public service: ProductPromotionService,
               public route: ActivatedRoute,
@@ -144,11 +144,10 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     for (const prod of entity?.products ?? []) {
       this.addProduct(prod);
     }
-
   }
 
   ngAfterViewInit() {
-    // this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
+    this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
   }
 
   get name(): FormControl { return this.form.get('name') as FormControl; }
@@ -170,39 +169,21 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
       }));
   }
 
-  // selectProduct() {
-  //   this.productSelectionModal.open();
-  // }
-
-  removeProduct(index: number) {
-
+  selectProduct() {
+    this.productSelectionModal.open();
   }
 
-  // onProductSelectionModalClosed() {
-  //   if (this.productSelectionModal.result === DialogResult.OK) {
-  //     // add a new child to the form group based on the modal
-  //
-  //     const selectedProduct = this.productSelectionModal.product.value as IProduct;
-  //
-  //     // todo: see if the product class has an expiry date associated with it?
-  //     // if so, we need to add a required validator to that field.
-  //     // const expiryValidators = [];
-  //     // if (selectedProduct.productClass)
-  //     // disable digital products/subscription receiving.
-  //
-  //     const f = this.fb.group({
-  //       inventoryReceiving: [null, []],
-  //       product: [selectedProduct, [Validators.required]],
-  //       href: [null, []],
-  //       subLocation: [null, [Validators.required]],
-  //       sku: ['', [Validators.required, ]],
-  //       quantity: [1, [Validators.required, Validators.min(1), ]],
-  //       batchNumber: ['', []],
-  //       locator: ['', []],
-  //       expiryDate: ['', []]
-  //     });
-  //     // this.stockRecords.push(f);
-  //   }
-  // }
+  onProductSelectionModalClosed() {
+    if (this.productSelectionModal.result === DialogResult.OK) {
+
+      const selectedProduct = this.productSelectionModal.product.value as IProduct;
+
+      const f = this.fb.group({
+        name: [selectedProduct.name, []],
+        href: [selectedProduct.href, []]
+      });
+      this.products.push(f);
+    }
+  }
 
 }

@@ -95,8 +95,6 @@ import { ProductSelectionModalComponent } from '../../shared/product-selection-m
       </div>
     </form>
 
-    <code><pre>{{ form.getRawValue() | json }}</pre></code>
-
     <!-- Modals -->
     <nus-product-selection-modal></nus-product-selection-modal>
   `,
@@ -147,6 +145,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
   }
 
   initializeForm(entity?: inventory.IReceivingOrder) {
+    // TODO: replace this! maybe embed href identity in token claims?
     this.form = this.fb.group({
       href: [],
       warehouse: this.fb.group({
@@ -155,7 +154,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
       }),
       status: ['pending', [Validators.required, ]],
       createdBy: this.fb.group({
-        href: `https://bhisma.cloud/api/iam/${this.authService.tokenPayload.user_id}/` // TODO: replace this! maybe embed href identity in token claims?
+        href: `https://bhisma.cloud/api/iam/${this.authService.tokenPayload.user_id}/`
       }),
       reviewedBy: [null, ],
       stockRecords: this.fb.array([], [Validators.required, Validators.minLength(1)]),
