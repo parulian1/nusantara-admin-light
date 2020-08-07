@@ -5,11 +5,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '@nusantara/shared';
 import { PromotionRoutingModule } from './promotion-routing.module';
 
-import { PromotionListComponent } from './promotion';
+import { ProductPromotionComponent, PromotionListComponent } from './promotion';
 import { VoucherListComponent} from './voucher';
 
 @NgModule({
   declarations: [
+    ProductPromotionComponent,
     PromotionListComponent,
     VoucherListComponent,
   ],

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { PromotionListComponent } from './promotion';
+import { ProductPromotionComponent, ProductPromotionListResolver, ProductPromotionResolver, PromotionListComponent } from './promotion';
 import { VoucherListComponent} from './voucher';
 
 const routes: Routes = [
@@ -11,6 +11,21 @@ const routes: Routes = [
       {
         path: '',
         component: PromotionListComponent,
+        resolve: { page: ProductPromotionListResolver, },
+        data: { animation: 'List' },
+      },
+      {
+        path: 'new',
+        component: ProductPromotionComponent,
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+      {
+        path: ':slug',
+        component: ProductPromotionComponent,
+        resolve: { entity: ProductPromotionResolver, },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
       },
     ]
   },
