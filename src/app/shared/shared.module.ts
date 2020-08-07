@@ -14,6 +14,8 @@ import { AddressComponent } from './address';
 import { FieldErrorsComponent } from './field-errors.component';
 import { NonFieldErrorsComponent } from './non-field-errors.component';
 import { SpinnerComponent } from './spinner.component';
+import { ProductSelectionModalComponent } from '@nusantara/shared/product-selection-modal.component';
+import { NgxSmartModalModule } from 'ngx-smart-modal';
 
 
 /**
@@ -33,6 +35,7 @@ import { SpinnerComponent } from './spinner.component';
     FieldErrorsComponent,
     NonFieldErrorsComponent,
     SpinnerComponent,
+    ProductSelectionModalComponent,
   ],
   exports: [
     EntityToSlugPipe,
@@ -46,10 +49,13 @@ import { SpinnerComponent } from './spinner.component';
     FieldErrorsComponent,
     NonFieldErrorsComponent,
     SpinnerComponent,
+    ProductSelectionModalComponent,
   ],
   imports: [
     CommonModule,
     RouterModule,
+    NgxSmartModalModule.forChild(),
+    FormsModule,
     ReactiveFormsModule,
     FormsModule,
   ],

@@ -7,7 +7,7 @@ import { DialogResult, ToastService, AbstractDetailComponent } from '@nusantara/
 import { inventory, ISubLocation, IWarehouse } from '@nusantara/models';
 import { InventoryReceivingService } from '@nusantara/services';
 import { IProduct } from '@nusantara/models/products';
-import { ProductSelectionModalComponent } from './product-selection-modal.component';
+import { ProductSelectionModalComponent } from '../../shared/product-selection-modal.component';
 
 /**
  * Allows a user to receive a new batch of inventory.

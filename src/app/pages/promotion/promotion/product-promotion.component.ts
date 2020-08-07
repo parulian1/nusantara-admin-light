@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ProductPromotionService } from '@nusantara/services';
-import { AbstractDetailComponent } from '@nusantara/core';
-import { IProductPromotion, ProductPromotionType } from '@nusantara/models/products';
+import { AbstractDetailComponent, DialogResult } from '@nusantara/core';
+import { IProduct, IProductPromotion, ProductPromotionType } from '@nusantara/models/products';
 import { INamedHrefEntity } from '../../../models/base';
+import { ProductSelectionModalComponent } from '../../../shared/product-selection-modal.component';
 
 @Component({
   selector: 'nus-category',
@@ -92,9 +93,9 @@ import { INamedHrefEntity } from '../../../models/base';
         </tr>
         <tr>
           <td colspan="2">
-            <button type="button" (click)="selectProduct()" class="add-button">
-              Add Product
-            </button>
+<!--            <button type="button" (click)="selectProduct()" class="add-button">-->
+<!--              Add Product-->
+<!--            </button>-->
           </td>
         </tr>
         </tbody>
@@ -113,9 +114,10 @@ import { INamedHrefEntity } from '../../../models/base';
   `,
   styles: [ ]
 })
-export class ProductPromotionComponent extends AbstractDetailComponent<IProductPromotion> implements OnInit {
+export class ProductPromotionComponent extends AbstractDetailComponent<IProductPromotion> implements OnInit, AfterViewInit {
 
   types: Array<ProductPromotionType> = ['percentage', 'amount_off', 'override_price'];
+  // @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
 
   constructor(public service: ProductPromotionService,
               public route: ActivatedRoute,
@@ -145,6 +147,10 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
 
   }
 
+  ngAfterViewInit() {
+    // this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
+  }
+
   get name(): FormControl { return this.form.get('name') as FormControl; }
   get products(): FormArray { return this.form.get('products') as FormArray; }
   get type(): FormControl { return this.form.get('type') as FormControl; }
@@ -164,12 +170,39 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
       }));
   }
 
-  selectProduct() {
+  // selectProduct() {
+  //   this.productSelectionModal.open();
+  // }
+
+  removeProduct(index: number) {
 
   }
 
-  removeProduct(index: number): {
-
-  }
+  // onProductSelectionModalClosed() {
+  //   if (this.productSelectionModal.result === DialogResult.OK) {
+  //     // add a new child to the form group based on the modal
+  //
+  //     const selectedProduct = this.productSelectionModal.product.value as IProduct;
+  //
+  //     // todo: see if the product class has an expiry date associated with it?
+  //     // if so, we need to add a required validator to that field.
+  //     // const expiryValidators = [];
+  //     // if (selectedProduct.productClass)
+  //     // disable digital products/subscription receiving.
+  //
+  //     const f = this.fb.group({
+  //       inventoryReceiving: [null, []],
+  //       product: [selectedProduct, [Validators.required]],
+  //       href: [null, []],
+  //       subLocation: [null, [Validators.required]],
+  //       sku: ['', [Validators.required, ]],
+  //       quantity: [1, [Validators.required, Validators.min(1), ]],
+  //       batchNumber: ['', []],
+  //       locator: ['', []],
+  //       expiryDate: ['', []]
+  //     });
+  //     // this.stockRecords.push(f);
+  //   }
+  // }
 
 }

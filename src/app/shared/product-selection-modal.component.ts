@@ -3,9 +3,9 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { NgxSmartModalComponent } from 'ngx-smart-modal';
 import { Subscription } from 'rxjs';
 
-import { DialogResult, PagedResponse } from '@nusantara/core';
-import { ProductService } from '@nusantara/services';
-import { products } from '@nusantara/models';
+import { DialogResult, PagedResponse } from '../core';
+import { ProductService } from '../services';
+import { products } from '../models';
 
 /**
  * Shows the user a list of products they can select from.
