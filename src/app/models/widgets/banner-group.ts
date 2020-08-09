@@ -5,4 +5,5 @@ import { IBanner } from '@nusantara/models/widgets/banner';
 export interface IBannerGroup extends INamedHrefEntity {
   type: BannerGroupType;
   banners: Array<IBanner>;
+  pk: number;
 }

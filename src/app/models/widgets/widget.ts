@@ -1,13 +1,14 @@
 import { INamedHrefEntity, IContentType } from '@nusantara/models/base';
+import { IBannerGroup } from './banner-group';
 
 /**
  * @see IContainer
  */
 export interface IWidget extends INamedHrefEntity {
-  container: string;
+  block: string;
   contentType: IContentType;
-  contentObject: {
-
-  }
+  contentObject: IBannerGroup;
   objectId: number;
+  isActive: boolean;
+  sortPriority: number;
 }

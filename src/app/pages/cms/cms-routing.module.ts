@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { FlatPageComponent, FlatPageListComponent, FlatPageListResolver, FlatPageResolver } from './flat-page';
-import { WidgetComponent, WidgetBlockListComponent, WidgetBlockListResolver, WidgetResolver } from './widget';
+import { WidgetBlockComponent, WidgetBlockListComponent, WidgetBlockListResolver, WidgetBlockResolver, BannerComponent } from './widget';
 import { ContentTypesResolver } from './widget/content-types.resolver';
 import { TestimonialComponent, TestimonialListComponent, TestimonialListResolver, TestimonialResolver } from './testimonial';
 import { VendorFullListResolver } from '@nusantara/pages/catalog/vendor';
@@ -73,20 +73,39 @@ const dashboardRoutes: Routes = [
         runGuardsAndResolvers: 'always',
         data: { animation: 'List', },
       },
+
+
+      {
+        path: 'banners/new',
+        component: BannerComponent,
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', }
+      },
+      {
+        path: 'banners/:slug',
+        component: BannerComponent,
+        resolve: { },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', }
+      },
+
       {
         path: 'new',
-        component: WidgetComponent,
+        component: WidgetBlockComponent,
         resolve: { contentTypes: ContentTypesResolver },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },
       },
       {
         path: ':slug',
-        component: WidgetComponent,
-        resolve: { entity: WidgetResolver, contentTypes: ContentTypesResolver },
+        component: WidgetBlockComponent,
+        resolve: { entity: WidgetBlockResolver, contentTypes: ContentTypesResolver },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },
       },
+
+
+
     ]
   }
 ];

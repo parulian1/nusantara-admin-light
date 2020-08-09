@@ -6,28 +6,33 @@ import { ToastService } from '@nusantara/core';
 import { AbstractDetailComponent } from '@nusantara/core/components';
 import { IWidget } from '@nusantara/models';
 import { WidgetService } from '@nusantara/services';
+import { BannerGroupType } from '../../../models/widgets/banner-group.type';
+import { IChoice } from '../../../models/drf';
 
 @Component({
   selector: 'nus-flat-page',
   template: `
     <nus-detail-title
       [originalName]="originalEntityName"
-      typeName="Widget">
+      typeName="Banner Group">
     </nus-detail-title>
 
-    <ul class="non-field-errors" *ngIf="!!nonFieldErrors.length">
-      <li *ngFor="let err of nonFieldErrors">{{ err }}</li>
-    </ul>
+    <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
 
     <form [formGroup]="form" (ngSubmit)="save()">
 
       <label>
         <span>Name</span>
         <input type="text" [formControl]="name">
-        <div *ngIf="name.invalid && (name.dirty || name.touched)" class="error-detail">
-          <div *ngIf="name.errors.required">Name is required</div>
-          <div *ngIf="name.errors.apiError">{{ name.getError('apiError') }}</div>
-        </div>
+        <nus-field-errors [control]="name"></nus-field-errors>
+      </label>
+
+      <label>
+        <span>Type</span>
+        <select [formControl]="type">
+          <option [ngValue]="null">---</option>
+          <option *ngFor="let t of bannerGroupTypes" [ngValue]="t.value">{{ t.displayName }}</option>
+        </select>
       </label>
 
 
@@ -40,7 +45,14 @@ import { WidgetService } from '@nusantara/services';
   `,
   styles: [ ]
 })
-export class WidgetComponent extends AbstractDetailComponent<IWidget> implements OnInit {
+export class BannerComponent extends AbstractDetailComponent<IWidget> implements OnInit {
+
+  // todo: this should be refactored to fetch from API later.
+  bannerGroupTypes: Array<IChoice> = [
+    { value: 'standard', displayName: 'Standard' },
+    { value: 'up_next', displayName: 'Up-Next' },
+    { value: 'standard_with_mini', displayName: 'Standard with Mini' },
+  ];
 
   constructor(public service: WidgetService,
               public fb: FormBuilder,
@@ -52,6 +64,7 @@ export class WidgetComponent extends AbstractDetailComponent<IWidget> implements
 
   get name(): FormControl { return this.form.get('name') as FormControl; }
   get href(): FormControl { return this.form.get('href') as FormControl; }
+  get type(): FormControl { return this.form.get('type') as FormControl; }
 
   initializeForm(entity?: IWidget) {
     this.form = this.fb.group({

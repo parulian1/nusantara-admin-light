@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { AbstractListComponent } from '@nusantara/core';
 import { IOrder } from '@nusantara/models';
 
-
 @Component({
   selector: 'nus-order-list',
   template: `
@@ -20,7 +19,7 @@ import { IOrder } from '@nusantara/models';
         <th>Order Number</th>
         <th>Customer</th>
         <th>Status</th>
-        <th>Total</th>
+<!--        <th>Total</th>-->
         <th>Created</th>
       </tr>
       </thead>
@@ -29,7 +28,7 @@ import { IOrder } from '@nusantara/models';
         <td><a [routerLink]="[entity|entityToSlug]">{{ entity.orderNumber }}</a></td>
         <td></td>
         <td>{{ entity.status }}</td>
-        <td>{{ entity.cartTotals.grandTotal|currency:"IDR" }}</td>
+<!--        <td>{{ entity.cartTotals.grandTotal|currency:"IDR" }}</td>-->
         <td>{{ entity.created | date }}</td>
       </tr>
       </tbody>

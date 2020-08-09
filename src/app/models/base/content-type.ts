@@ -1,3 +1,7 @@
+import { IHrefEntity } from './href-entity';
+import { AppLabelType } from './app-label.type';
+import { ModelType } from './model.type';
+
 /**
  * A django content-type model.
  *
@@ -5,8 +9,7 @@
  * due to their use of a generic foreign key for returning widget
  * data.
  */
-export interface IContentType {
-  href: string;
-  appLabel: string;
-  model: string;
+export interface IContentType extends IHrefEntity {
+  appLabel: AppLabelType;
+  model: ModelType;
 }

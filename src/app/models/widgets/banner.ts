@@ -10,4 +10,7 @@ export interface IBanner extends INamedHrefEntity {
   clickUrl: string;
   isActive: boolean;
   sortPriority: number;
+  pk: number;
+
+  group: INamedHrefEntity;
 }

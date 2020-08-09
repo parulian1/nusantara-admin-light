@@ -1,4 +1,6 @@
 import { INamedHrefEntity } from '@nusantara/models/base';
+import { ShellSectionType } from './shell-section.type';
+import { IWidget } from './widget';
 
 /**
  * This is the primary widget grouping.
@@ -6,5 +8,6 @@ import { INamedHrefEntity } from '@nusantara/models/base';
 export interface IWidgetBlock extends INamedHrefEntity {
   sortPriority: number;
   urlPath: string;
-  widgets: Array<string>;
+  shellSection: ShellSectionType;
+  widgets: Array<IWidget>;
 }
