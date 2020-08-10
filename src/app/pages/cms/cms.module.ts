@@ -6,7 +6,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { SharedModule } from '@nusantara/shared';
 import { CmsRoutingModule } from './cms-routing.module';
 import { FlatPageComponent, FlatPageListComponent } from './flat-page';
-import { WidgetBlockComponent, WidgetBlockListComponent, BannerComponent, WidgetSummaryRowComponent } from './widget';
+import { WidgetBlockComponent, WidgetBlockListComponent, BannerGroupComponent, WidgetSummaryRowComponent } from './widget';
 import { TestimonialComponent, TestimonialListComponent } from './testimonial';
 
 @NgModule({
@@ -21,7 +21,7 @@ import { TestimonialComponent, TestimonialListComponent } from './testimonial';
     WidgetBlockComponent,
     WidgetSummaryRowComponent,
 
-    BannerComponent,
+    BannerGroupComponent,
   ],
   imports: [
     CommonModule,

@@ -55,12 +55,7 @@ const routes: Routes = [
       {
         path: '',
         component: ProductListComponent,
-        resolve: {
-          page: ProductListResolver,
-          productClasses: AllProductClassResolver,
-          vendors: VendorListResolver,
-          categories: AllCategoryResolver,
-        },
+        resolve: { page: ProductListResolver, },
         runGuardsAndResolvers: 'always',
         data: { animation: 'List', },
       },

@@ -61,7 +61,7 @@ import { SubscriptionLike } from 'rxjs';
           <i class="material-icons">edit</i>
           <span>CMS</span>
         </li>
-        <li><a [routerLink]="['/cms/widgets']" routerLinkActive="active" translate>Widgets</a></li>
+<!--        <li><a [routerLink]="['/cms/widgets']" routerLinkActive="active" translate>Widgets</a></li>-->
         <li><a [routerLink]="['/cms/testimonials']" routerLinkActive="active">Testimonials</a></li>
         <li><a [routerLink]="['/cms/flat-pages']" routerLinkActive="active">Pages</a></li>
 

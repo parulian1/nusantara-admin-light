@@ -14,11 +14,11 @@ export interface IProduct extends INamedHrefEntity {
   structure: StructureType;
   parent?: string;
   children: Array<string>;
-  vendor: string;
-  productClass: string;
+  vendor: INamedHrefEntity;
+  productClass: INamedHrefEntity;
   media: IProductMedia[];
   weight: number;
-  category: string;
+  category: INamedHrefEntity;
   priceLists: Array<IPriceList>;
   related: Array<IRelatedProductSummary>;
   attributes: {[key: string]: string|number|boolean};

@@ -58,7 +58,7 @@ export class LineItemComponent implements OnInit, AfterViewInit {
 
   get isPerishable(): boolean {
     const p = this.product.value as products.IProduct;
-    const currentPc = this.productClasses.filter(pc => pc.href === p.productClass);
+    const currentPc = this.productClasses.filter(pc => pc.href === p.productClass.href);
     if (currentPc.length > 0) {
       return currentPc[0].isPerishable;
     } else {

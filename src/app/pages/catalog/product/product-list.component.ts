@@ -39,17 +39,17 @@ import { AbstractListComponent } from '@nusantara/core';
           <td><nus-true-false [value]="entity.media.length > 0"></nus-true-false></td>
           <td>
             <a [routerLink]="['/catalog', 'categories', entity.category|entityToSlug]">
-              {{ getCategoryName(entity.category) }}
+              {{ entity.category.name }}
             </a>
           </td>
           <td>
             <a [routerLink]="['/catalog', 'product-classes', entity.productClass|entityToSlug]">
-              {{ getProductClassName(entity.productClass) }}
+              {{ entity.productClass.name }}
             </a>
           </td>
           <td>
             <a [routerLink]="['/catalog', 'vendors', entity.vendor|entityToSlug]">
-              {{ getVendorName(entity.vendor) }}
+              {{ entity.vendor.name }}
             </a>
           </td>
         </tr>
@@ -62,35 +62,6 @@ import { AbstractListComponent } from '@nusantara/core';
 })
 export class ProductListComponent extends AbstractListComponent<products.IProduct> {
 
-  categories: Array<ICategory>;
-  vendors: Array<IVendor>;
-  productClasses: Array<products.IProductClass>;
-
   constructor(route: ActivatedRoute) { super(route); }
 
-  getCategoryName(href: string): string {
-    return this.categories.filter(e => e.href === href)[0]?.name;
-  }
-
-  getVendorName(href: string): string {
-    return this.vendors.filter(e => e.href === href)[0]?.name;
-  }
-
-  getProductClassName(href: string): string {
-    return this.productClasses.filter(e => e.href === href)[0]?.name;
-  }
-
-  // tslint:disable-next-line:use-lifecycle-interface
-  ngOnInit(): void {
-    this.route.data.subscribe(
-      (data: {
-          categories: ICategory[],
-          vendors: PagedResponse<IVendor>,
-          productClasses: products.IProductClass[]}) => {
-        this.categories = data.categories;
-        this.vendors = data.vendors.entities;
-        this.productClasses = data.productClasses;
-    });
-    super.ngOnInit();
-  }
 }

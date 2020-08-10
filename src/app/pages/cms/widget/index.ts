@@ -6,4 +6,4 @@ export * from './widget-block.resolver';
 
 export * from './widget-summary-row.component';
 
-export * from './banner.component';
+export * from './banner-group.component';

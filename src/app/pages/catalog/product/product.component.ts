@@ -183,9 +183,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   get name(): FormControl { return this.form.get('name') as FormControl; }
   get upc(): FormControl { return this.form.get('upc') as FormControl; }
-  get productClass(): FormControl { return this.form.get('productClass') as FormControl; }
-  get category(): FormControl { return this.form.get('category') as FormControl; }
-  get vendor(): FormControl { return this.form.get('vendor') as FormControl; }
+  get productClass(): FormControl { return this.form.get('productClass').get('href') as FormControl; }
+  get category(): FormControl { return this.form.get('category').get('href') as FormControl; }
+  get vendor(): FormControl { return this.form.get('vendor').get('href') as FormControl; }
   get description(): FormControl { return this.form.get('description') as FormControl; }
   get media(): FormArray { return this.form.get('media') as FormArray; }
   get priceLists(): FormArray { return this.form.get('priceLists') as FormArray; }
@@ -228,9 +228,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       structure: [entity?.structure ?? 'parent', [Validators.required, ]],
       description: [entity?.description, [Validators.required, ]],
       weight: [entity?.weight, [Validators.required, ]],
-      productClass: [entity?.productClass, [Validators.required, ]],
-      category: [entity?.category, [Validators.required]],
-      vendor: [entity?.vendor, [Validators.required]],
+      productClass: this.fb.group({href: [entity?.productClass.href, [Validators.required]]}),
+      category: this.fb.group({href: [entity?.category.href, [Validators.required]]}),
+      vendor: this.fb.group({href: [entity?.vendor.href, [Validators.required]]}),
       media: this.fb.array([]),
       attributes: this.fb.group({}, []),
       priceLists: this.fb.array([]),

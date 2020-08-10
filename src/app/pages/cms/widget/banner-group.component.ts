@@ -45,7 +45,7 @@ import { IChoice } from '../../../models/drf';
   `,
   styles: [ ]
 })
-export class BannerComponent extends AbstractDetailComponent<IWidget> implements OnInit {
+export class BannerGroupComponent extends AbstractDetailComponent<IWidget> implements OnInit {
 
   // todo: this should be refactored to fetch from API later.
   bannerGroupTypes: Array<IChoice> = [

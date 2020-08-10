@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { FlatPageComponent, FlatPageListComponent, FlatPageListResolver, FlatPageResolver } from './flat-page';
-import { WidgetBlockComponent, WidgetBlockListComponent, WidgetBlockListResolver, WidgetBlockResolver, BannerComponent } from './widget';
+import { WidgetBlockComponent, WidgetBlockListComponent, WidgetBlockListResolver, WidgetBlockResolver, BannerGroupComponent } from './widget';
 import { ContentTypesResolver } from './widget/content-types.resolver';
 import { TestimonialComponent, TestimonialListComponent, TestimonialListResolver, TestimonialResolver } from './testimonial';
 import { VendorFullListResolver } from '@nusantara/pages/catalog/vendor';
@@ -77,13 +77,13 @@ const dashboardRoutes: Routes = [
 
       {
         path: 'banners/new',
-        component: BannerComponent,
+        component: BannerGroupComponent,
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', }
       },
       {
         path: 'banners/:slug',
-        component: BannerComponent,
+        component: BannerGroupComponent,
         resolve: { },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', }

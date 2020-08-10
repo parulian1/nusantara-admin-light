@@ -8,6 +8,6 @@ import { IBannerGroup } from '../../../models/widgets/banner-group';
 @Injectable({
   providedIn: 'root',
 })
-export class BannerResolver extends AbstractDetailResolver<IBannerGroup> {
+export class BannerGroupResolver extends AbstractDetailResolver<IBannerGroup> {
   // constructor(service: BannerService) { super(service); }
 }
