@@ -5,7 +5,11 @@ import { OrderStatusType } from './order-status.type';
 
 export interface IOrder extends IHrefEntity {
   orderNumber: string;
-  customer: string;
+  customer: {
+    name: string;
+    href: string;
+  };
+
   created: string;
 
   type: OrderType;

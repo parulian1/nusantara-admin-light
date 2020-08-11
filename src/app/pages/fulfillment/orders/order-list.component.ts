@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { AbstractListComponent } from '@nusantara/core';
 import { IOrder } from '@nusantara/models';
+import { UserService } from '@nusantara/services';
 
 @Component({
   selector: 'nus-order-list',
@@ -18,17 +19,19 @@ import { IOrder } from '@nusantara/models';
       <tr>
         <th>Order Number</th>
         <th>Customer</th>
+        <th>Shipments</th>
         <th>Status</th>
-<!--        <th>Total</th>-->
+        <th>Total</th>
         <th>Created</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let entity of page.entities">
         <td><a [routerLink]="[entity|entityToSlug]">{{ entity.orderNumber }}</a></td>
-        <td></td>
+        <td>{{getCustomerDetail(entity.customer.href|entityToSlug)}}</td>
+        <td>{{ entity.children.length }}</td>
         <td>{{ entity.status }}</td>
-<!--        <td>{{ entity.cartTotals.grandTotal|currency:"IDR" }}</td>-->
+        <td>{{ entity.orderPayment.amount|currency:"IDR" }}</td>
         <td>{{ entity.created | date }}</td>
       </tr>
       </tbody>
@@ -39,5 +42,16 @@ import { IOrder } from '@nusantara/models';
   styles: []
 })
 export class OrderListComponent extends AbstractListComponent<IOrder> {
-  constructor(route: ActivatedRoute) { super(route); }
+  constructor(route: ActivatedRoute,
+              public service: UserService) { super(route); }
+
+    getCustomerDetail(slug: string) {
+      this.service.fetch(slug).subscribe(
+        resp => {
+          return resp.email;
+          console.log(resp);
+        }
+      );
+      // console.log(slug);
+    }
 }
