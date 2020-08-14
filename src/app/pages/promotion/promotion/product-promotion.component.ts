@@ -133,7 +133,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
       type: [entity?.type, [Validators.required]],
       amount: [entity?.amount, [Validators.required]],
       minimumOrderAmount: [entity?.minimumOrderAmount ?? 0, [Validators.required, Validators.min(0)]],
-      maxAmount: [entity?.maxAmount, []],
+      maxAmount: [entity?.maxAmount, [Validators.required, Validators.pattern('^\\d{1,8}([\\.]\\d{1,4})?$')]],
       isExclusive: [entity?.isExclusive ?? false, [Validators.required]],
       isActive: [entity?.isActive ?? true, [Validators.required]],
       validFrom: [entity?.validFrom, [Validators.required]],
