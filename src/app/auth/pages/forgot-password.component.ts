@@ -1,9 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
-import { ToastService } from '@nusantara/core';
+import {ErrorResult, ToastService} from '@nusantara/core';
 import { AuthService } from '../auth.service';
+import {catchError} from 'rxjs/operators';
+import {HttpErrorResponse} from '@angular/common/http';
+import {of} from 'rxjs';
+import {IForgotPasswordFailure} from '@nusantara/auth/models/forgot-password-failure';
 
 @Component({
   selector: 'nus-forgot-password',
@@ -58,11 +62,13 @@ export class ForgotPasswordComponent implements OnInit {
 
   form: FormGroup;
   nonFieldErrors: Array<string> = [];
+  afterForgotPasswordUrl: string;
 
   constructor(private fb: FormBuilder,
               private service: AuthService,
               private router: Router,
-              private toastService: ToastService) { }
+              private toastService: ToastService,
+              private activatedRoute: ActivatedRoute) { }
 
   get email(): FormControl { return this.form?.get('email') as FormControl; }
   get siteDomain(): FormControl { return this.form?.get('siteDomain') as FormControl; }
@@ -72,19 +78,49 @@ export class ForgotPasswordComponent implements OnInit {
       email: ['', [Validators.required]],
       siteDomain: ['', [Validators.required]],
     });
+
+    this.activatedRoute.queryParamMap.subscribe(paramMap => {
+      this.afterForgotPasswordUrl = paramMap.get('next') ?? '/auth/forgot-password-sent';
+    });
   }
 
   submitPasswordReset() {
+    this.nonFieldErrors.length = 0;
 
+    this.service
+      .forgotPassword(this.email.value, this.siteDomain.value)
+      .pipe(catchError(err => {
+        if (err instanceof HttpErrorResponse) {
+          return of(new ErrorResult<IForgotPasswordFailure>(err.error, err.status));
+        } else {
+          return of(new ErrorResult<IForgotPasswordFailure>({detail: 'Network error.. probably?'}, err.status));
+        }
+      }))
+      .subscribe(result => {
+        if (result instanceof ErrorResult) {
+          this.onSubmitFail(result.errorDetails);
+        } else {
+          this.onSubmitSuccess();
+        }
+      });
+    this.form.disable();
   }
 
   onSubmitSuccess() {
-
+    this.form.enable();
+    this.router.navigateByUrl(decodeURIComponent(this.afterForgotPasswordUrl));
   }
 
   onSubmitFail(errorDetails: any) {
+    this.form.enable();
 
+    errorDetails.nonFieldErrors?.forEach(
+      (errMsg) => { this.nonFieldErrors.push(errMsg); }
+    );
+
+    // form specific errors -- take the first error message and display.
+    if (errorDetails?.email?.length) {
+      this.email.setErrors({apiError: errorDetails.email[0]});
+    }
   }
-
-
 }

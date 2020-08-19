@@ -8,6 +8,7 @@ import { ILoginFailure, ITokenPair, IAccessToken } from './models';
 import { ErrorResult, IResultResponse, SuccessResult } from '@nusantara/core/responses';
 import { HttpStatusCode } from '@nusantara/core/http';
 import { IJwtClaims } from '@nusantara/auth/models/jwt-claims';
+import {IForgotPasswordFailure} from "@nusantara/auth/models/forgot-password-failure";
 
 
 /**
@@ -210,5 +211,33 @@ export class AuthService {
   private saveToken(tokenPair: ITokenPair): void {
     this.token = tokenPair.access;
     this.refreshToken = tokenPair.refresh;
+  }
+
+  /**
+   * Attempts to submit forgot password with their email.
+   *
+   * @param email the user's email address.
+   * @param authDomain the registered site domain the user will be authenticating for.
+   */
+  public forgotPassword(email: string, authDomain: string): Observable<IResultResponse> {
+
+    this.siteDomain = authDomain;
+
+    return this.httpClient.post<IForgotPasswordFailure>(
+      '/api/iam/auth/password-reset/',
+      { email },
+      { responseType: 'json', observe: 'response' }
+      ).pipe(
+        map(
+          (response) => {
+            if (response.status === HttpStatusCode.ACCEPTED) {
+              return new SuccessResult([], response.body);
+            } else {
+              this.siteDomain = null;
+              return new ErrorResult<IForgotPasswordFailure>(response.body as IForgotPasswordFailure, response.status);
+            }
+          }
+        )
+    );
   }
 }
