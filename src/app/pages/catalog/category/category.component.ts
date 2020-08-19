@@ -134,7 +134,12 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
   get parent(): FormControl { return this.form.get('parent') as FormControl; }
   get sourceMappings(): FormArray { return this.form.get('sourceMappings') as FormArray; }
 
-  setIconImagePreview(data?: Event|string) {
+  setIconImagePreview(data?: Event|any) {
+    if (data) {
+      const file = (data.target as HTMLInputElement).files[0];
+      this.form.get('image').setValue(file, {emitModelToViewChange: false});
+    }
+    // https://www.positronx.io/how-to-use-angular-8-httpclient-to-post-formdata/
     super.setImagePreview(data,  (dataAsUrl) => this.imagePreviewUrl = dataAsUrl);
   }
 
