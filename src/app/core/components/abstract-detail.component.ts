@@ -107,8 +107,8 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
     }
 
     this.form.disable();
-
-    const formData = new FormData(this.formView.nativeElement);
+    // const formData = new FormData(this.formView.nativeElement);
+    const formData = this.transformToFormData(this.form.value);
 
     this.service.save(formData).subscribe(
       resp => {
@@ -118,6 +118,24 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
           this.onSaveError(resp);
         }
     });
+  }
+
+  /**
+   * Transform form (FormGroup) value to FormData instance
+   */
+  transformToFormData(result: any): FormData {
+    const formData = new FormData();
+    Object.keys(result).forEach(key => {
+      if (result[key]) {
+        if (Array.isArray(result[key]) && result[key].length === 0) {
+          // ignore it
+          // todo: handling like this because `sourceMappings`, ([]) cannot handling properly
+        } else {
+          formData.append(key, result[key]);
+        }
+      }
+    });
+    return formData;
   }
 
   /**
