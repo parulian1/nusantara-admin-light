@@ -1,5 +1,22 @@
 # Nusantara Admin
 
+## Quickstart
+
+Ensure you have a recent version of NodeJS installed, and preferrably a copy of the Angular CLI installed globally.
+
+```
+npm i g @angular/cli
+```
+
+After that, cd from the cli into the angular project directory and install dependencies, then launch the app
+using ng run
+
+```
+npm i
+ng run
+```
+
+This will launch the app on http://localhost:4200
 
 
 ## Project Structure
