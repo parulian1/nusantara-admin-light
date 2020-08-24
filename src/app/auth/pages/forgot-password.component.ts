@@ -1,13 +1,13 @@
-import {Component, OnInit} from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
-import {ErrorResult, ToastService} from '@nusantara/core';
-import { AuthService } from '../auth.service';
-import {catchError} from 'rxjs/operators';
-import {HttpErrorResponse} from '@angular/common/http';
-import {of} from 'rxjs';
-import {IForgotPasswordFailure} from '@nusantara/auth/models/forgot-password-failure';
+import { AuthService } from '@nusantara/auth';
+import { IForgotPasswordFailure } from '@nusantara/auth/models';
+import { ErrorResult, ToastService } from '@nusantara/core';
 
 @Component({
   selector: 'nus-forgot-password',
@@ -49,13 +49,20 @@ import {IForgotPasswordFailure} from '@nusantara/auth/models/forgot-password-fai
       padding-right: 33px;
       display: block;
     }
-    h1 { display: none; }
+
+    h1 {
+      display: none;
+    }
+
     nav {
       padding-top: 50px;
       padding-bottom: 5px;
       text-align: center;
     }
-    a { text-decoration: none; }
+
+    a {
+      text-decoration: none;
+    }
   `]
 })
 export class ForgotPasswordComponent implements OnInit {
@@ -68,14 +75,15 @@ export class ForgotPasswordComponent implements OnInit {
               private service: AuthService,
               private router: Router,
               private toastService: ToastService,
-              private activatedRoute: ActivatedRoute) { }
+              private activatedRoute: ActivatedRoute) {
+  }
 
-  get email(): FormControl { return this.form?.get('email') as FormControl; }
-  get siteDomain(): FormControl { return this.form?.get('siteDomain') as FormControl; }
+  get email(): FormControl { return this.form.get('email') as FormControl; }
+  get siteDomain(): FormControl { return this.form.get('siteDomain') as FormControl; }
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      email: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
       siteDomain: ['', [Validators.required]],
     });
 
@@ -97,12 +105,13 @@ export class ForgotPasswordComponent implements OnInit {
         }
       }))
       .subscribe(result => {
-        if (result instanceof ErrorResult) {
-          this.onSubmitFail(result.errorDetails);
-        } else {
-          this.onSubmitSuccess();
-        }
-      });
+          if (result instanceof ErrorResult) {
+            this.onSubmitFail(result.errorDetails);
+          } else {
+            this.onSubmitSuccess();
+          }
+        },
+        (error) => this.onSubmitFail(error));
     this.form.disable();
   }
 
@@ -115,7 +124,9 @@ export class ForgotPasswordComponent implements OnInit {
     this.form.enable();
 
     errorDetails.nonFieldErrors?.forEach(
-      (errMsg) => { this.nonFieldErrors.push(errMsg); }
+      (errMsg) => {
+        this.nonFieldErrors.push(errMsg);
+      }
     );
 
     // form specific errors -- take the first error message and display.
