@@ -85,7 +85,6 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
   }
 
   save() {
-    this.form.disable();
     this.service.save(this.getFormValue()).subscribe(
       resp => {
         if (resp.success) {
@@ -95,6 +94,7 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
         }
       }
     );
+    this.form.disable();
   }
 
   /**
@@ -106,9 +106,9 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
       throw Error('formView is null');
     }
 
-    this.form.disable();
     // const formData = new FormData(this.formView.nativeElement);
     const formData = this.transformToFormData(this.form.value);
+    this.form.disable();
 
     this.service.save(formData).subscribe(
       resp => {

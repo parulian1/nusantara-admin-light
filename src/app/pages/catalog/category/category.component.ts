@@ -135,7 +135,7 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
   get sourceMappings(): FormArray { return this.form.get('sourceMappings') as FormArray; }
 
   setIconImagePreview(data?: Event|any) {
-    if (data) {
+    if (data instanceof Event) {
       const file = (data.target as HTMLInputElement).files[0];
       this.form.get('image').setValue(file, {emitModelToViewChange: false});
     }
@@ -148,19 +148,5 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
   }
   removeMapping(index: number) {
     this.sourceMappings.removeAt(index);
-  }
-
-  /**
-   * After successfully saving the form data (with image) we must
-   * execute a second update (source mappings won't be included
-   * with the original form post, because DRF doesn't support
-   * arrays on form/multipart;
-   */
-  protected onSaveSuccess(result: IResultResponse<ICategory>) {
-    const data = {href: this.href.value, sourceMappings: this.sourceMappings.value} as ICategory;
-    this.service.save(data).subscribe(
-      rslt2 => super.onSaveSuccess(rslt2),
-      err => this.onSaveError(err)
-    );
   }
 }
