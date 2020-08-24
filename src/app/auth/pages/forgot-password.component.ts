@@ -69,14 +69,11 @@ export class ForgotPasswordComponent implements OnInit {
 
   form: FormGroup;
   nonFieldErrors: Array<string> = [];
-  afterForgotPasswordUrl: string;
+  readonly afterForgotPasswordUrl = '/auth/forgot-password-sent';
 
   constructor(private fb: FormBuilder,
               private service: AuthService,
-              private router: Router,
-              private toastService: ToastService,
-              private activatedRoute: ActivatedRoute) {
-  }
+              private router: Router) { }
 
   get email(): FormControl { return this.form.get('email') as FormControl; }
   get siteDomain(): FormControl { return this.form.get('siteDomain') as FormControl; }
@@ -85,10 +82,6 @@ export class ForgotPasswordComponent implements OnInit {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       siteDomain: ['', [Validators.required]],
-    });
-
-    this.activatedRoute.queryParamMap.subscribe(paramMap => {
-      this.afterForgotPasswordUrl = paramMap.get('next') ?? '/auth/forgot-password-sent';
     });
   }
 
