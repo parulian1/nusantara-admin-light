@@ -106,9 +106,9 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
       throw Error('formView is null');
     }
 
-    // const formData = new FormData(this.formView.nativeElement);
-    const formData = this.transformToFormData(this.form.value);
-    this.form.disable();
+    const formData = new FormData(this.formView.nativeElement);
+    // const formData = this.transformToFormData(this.form.value);
+
 
     this.service.save(formData).subscribe(
       resp => {
@@ -118,6 +118,7 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
           this.onSaveError(resp);
         }
     });
+    this.form.disable();
   }
 
   /**

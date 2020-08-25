@@ -30,7 +30,7 @@ import { AbstractDetailComponent, IResultResponse } from '@nusantara/core';
         <span>Parent</span>
         <select [formControl]="parent" name="parent">
           <option *ngFor="let parent of parentOptions"
-                  [ngValue]="parent.href">
+                  [value]="parent.href">
             {{parent.pathName}}
           </option>
         </select>
@@ -135,10 +135,10 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
   get sourceMappings(): FormArray { return this.form.get('sourceMappings') as FormArray; }
 
   setIconImagePreview(data?: Event|any) {
-    if (data instanceof Event) {
-      const file = (data.target as HTMLInputElement).files[0];
-      this.form.get('image').setValue(file, {emitModelToViewChange: false});
-    }
+    // if (data instanceof Event) {
+    //   const file = (data.target as HTMLInputElement).files[0];
+    //   this.form.get('image').setValue(file, {emitModelToViewChange: false});
+    // }
     // https://www.positronx.io/how-to-use-angular-8-httpclient-to-post-formdata/
     super.setImagePreview(data,  (dataAsUrl) => this.imagePreviewUrl = dataAsUrl);
   }
