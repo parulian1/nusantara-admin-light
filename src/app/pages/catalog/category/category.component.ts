@@ -62,7 +62,7 @@ import { AbstractDetailComponent, IResultResponse } from '@nusantara/core';
         </thead>
         <tbody>
         <tr *ngFor="let control of sourceMappings.controls; let i=index">
-          <td class="immediate-error-display"><input [formControl]="control"></td>
+          <td class="immediate-error-display"><input [formControl]="control" name="sourceMappings"></td>
           <td>
             <button (click)="removeMapping(i)" type="button" class="remove-button">
               <i class="material-icons">remove_circle_outline</i>
@@ -148,5 +148,8 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
   }
   removeMapping(index: number) {
     this.sourceMappings.removeAt(index);
+    if (0 === this.sourceMappings.length) {
+      this.sourceMappings.setValue([]);
+    }
   }
 }
