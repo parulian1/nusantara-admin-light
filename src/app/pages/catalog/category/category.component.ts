@@ -135,11 +135,6 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
   get sourceMappings(): FormArray { return this.form.get('sourceMappings') as FormArray; }
 
   setIconImagePreview(data?: Event|any) {
-    // if (data instanceof Event) {
-    //   const file = (data.target as HTMLInputElement).files[0];
-    //   this.form.get('image').setValue(file, {emitModelToViewChange: false});
-    // }
-    // https://www.positronx.io/how-to-use-angular-8-httpclient-to-post-formdata/
     super.setImagePreview(data,  (dataAsUrl) => this.imagePreviewUrl = dataAsUrl);
   }
 
@@ -148,8 +143,5 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
   }
   removeMapping(index: number) {
     this.sourceMappings.removeAt(index);
-    if (0 === this.sourceMappings.length) {
-      this.sourceMappings.setValue([]);
-    }
   }
 }
