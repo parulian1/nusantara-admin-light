@@ -134,7 +134,7 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
   get parent(): FormControl { return this.form.get('parent') as FormControl; }
   get sourceMappings(): FormArray { return this.form.get('sourceMappings') as FormArray; }
 
-  setIconImagePreview(data?: Event|any) {
+  setIconImagePreview(data?: Event|string) {
     super.setImagePreview(data,  (dataAsUrl) => this.imagePreviewUrl = dataAsUrl);
   }
 
