@@ -12,11 +12,18 @@ describe('CategoryComponent', () => {
 
   let httpTestingController: HttpTestingController;
 
+  const categoryResp = {
+    name: 'test add category',
+    pathName: 'can you delete meh 24k',
+    productCount: 0,
+    depth: 1,
+    sourceMappings: [],
+    href: 'https://staging.bhisma.cloud/api/catalog/category/test-add-category/',
+    image: 'https://cdn.bhisma.cloud/catalog/category/avener-icon.png',
+    parent: null
+  };
+
   beforeEach(async(() => {
-
-    // // Create a fake CategoryService object with a `fetchAvailableParentCategories()` spy
-    // const CategoryService = jasmine.createSpyObj('CategoryService', ['fetchAvailableParentCategories']);
-
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
@@ -27,8 +34,7 @@ describe('CategoryComponent', () => {
       declarations: [
         CategoryComponent,
       ],
-      providers: [
-      ]
+      providers: []
     })
       .compileComponents();
   }));
@@ -48,17 +54,24 @@ describe('CategoryComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('form invalid when empty', () => {
+    component.form.controls.name.setValue('');
+    component.form.controls.href.setValue('');
+    component.form.controls.image.setValue('');
+    component.form.controls.parent.setValue('');
+    component.form.controls.sourceMappings.setValue([]);
+    expect(component.form.valid).toBeFalsy();
+  });
+
+  it('name field validity', () => {
+    const name = component.form.controls.name;
+    expect(name.valid).toBeFalsy();
+
+    name.setValue('');
+    expect(name.hasError('required')).toBeTruthy();
+  });
+
   it('can create a new category', () => {
-    const categoryResp = {
-      name: 'test add category',
-      pathName: 'can you delete meh 24k',
-      productCount: 0,
-      depth: 1,
-      sourceMappings: [],
-      href: 'https://staging.bhisma.cloud/api/catalog/category/can-you-delete-meh-24k/',
-      image: 'https://cdn.bhisma.cloud/catalog/category/avener-icon.png',
-      parent: null
-    };
 
     component.name.setValue('test add category');
     component.saveAsForm();
@@ -66,6 +79,18 @@ describe('CategoryComponent', () => {
     const mock = httpTestingController.expectOne('/api/catalog/category/');
     expect(mock.request.method).toEqual('POST');
     expect(component.form.controls.name.value).toBe('test add category');
+    mock.flush(categoryResp);
+  });
+
+  it('can edit a category', () => {
+
+    component.href.setValue(categoryResp.href);
+    component.name.setValue('test add category edited');
+    component.saveAsForm();
+
+    const mock = httpTestingController.expectOne(categoryResp.href);
+    expect(mock.request.method).toEqual('PATCH');
+    expect(component.form.controls.name.value).toBe('test add category edited');
     mock.flush(categoryResp);
   });
 });
