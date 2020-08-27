@@ -135,8 +135,12 @@ export class LoginComponent implements OnInit {
   }
 
   private onLoginFail(errorDetails: ILoginFailure) {
+    this.isBusy = false;
     this.form.enable();
 
+    if (errorDetails.detail) {
+      this.nonFieldErrors.push(errorDetails.detail);
+    }
     errorDetails.nonFieldErrors?.forEach(
       (errMsg) => { this.nonFieldErrors.push(errMsg); }
     );
