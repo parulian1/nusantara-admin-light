@@ -19,7 +19,7 @@ describe('CategoryComponent', () => {
     depth: 1,
     sourceMappings: [],
     href: 'https://staging.bhisma.cloud/api/catalog/category/test-add-category/',
-    image: 'https://cdn.bhisma.cloud/catalog/category/avener-icon.png',
+    image: null,
     parent: null
   };
 
@@ -74,12 +74,16 @@ describe('CategoryComponent', () => {
   it('can create a new category', () => {
 
     component.name.setValue('test add category');
+
+    // let imageElement = fixture.debugElement.nativeElement.querySelector('input[type=file]');
+    // const fileList = {0: {name: 'foo', size: 50001}};
+    // // imageElement.value = {target: {files: fileList}};
+    // // component.setIconImagePreview(new Event('change'));
     component.saveAsForm();
 
     const mock = httpTestingController.expectOne('/api/catalog/category/');
     expect(mock.request.method).toEqual('POST');
     expect(component.form.controls.name.value).toBe('test add category');
-    mock.flush(categoryResp);
   });
 
   it('can edit a category', () => {
@@ -91,6 +95,15 @@ describe('CategoryComponent', () => {
     const mock = httpTestingController.expectOne(categoryResp.href);
     expect(mock.request.method).toEqual('PATCH');
     expect(component.form.controls.name.value).toBe('test add category edited');
-    mock.flush(categoryResp);
+  });
+
+  it('should call delete method', () => {
+    spyOn(component, 'delete');
+    component.href.setValue(categoryResp.href);
+    fixture.detectChanges();
+    const deleteButton = fixture.debugElement.nativeElement.querySelector('.danger');
+    deleteButton.click();
+
+    expect(component.delete).toHaveBeenCalledTimes(1);
   });
 });
