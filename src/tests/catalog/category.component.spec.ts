@@ -1,10 +1,10 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {ReactiveFormsModule} from '@angular/forms';
-import {RouterTestingModule} from '@angular/router/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
 
-import {CategoryComponent} from '@nusantara/pages/catalog/category';
-import {SharedModule} from '@nusantara/shared';
+import { SharedModule } from '@nusantara/shared';
+import { CategoryComponent } from '@nusantara/pages/catalog/category';
 
 describe('CategoryComponent', () => {
   let component: CategoryComponent;
