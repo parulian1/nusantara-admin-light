@@ -121,5 +121,8 @@
       }
     }
   },
-  "defaultProject": "nusantara-admin"
+  "defaultProject": "nusantara-admin",
+  "cli": {
+    "analytics": false
+  }
 }

@@ -46,10 +46,6 @@ describe('CategoryComponent', () => {
     fixture.detectChanges();
   });
 
-  afterEach(() => {
-    httpTestingController.verify();
-  });
-
   it('should create', () => {
     expect(component).toBeTruthy();
   });
@@ -74,16 +70,13 @@ describe('CategoryComponent', () => {
   it('can create a new category', () => {
 
     component.name.setValue('test add category');
-
-    // let imageElement = fixture.debugElement.nativeElement.querySelector('input[type=file]');
-    // const fileList = {0: {name: 'foo', size: 50001}};
-    // // imageElement.value = {target: {files: fileList}};
-    // // component.setIconImagePreview(new Event('change'));
     component.saveAsForm();
 
     const mock = httpTestingController.expectOne('/api/catalog/category/');
     expect(mock.request.method).toEqual('POST');
     expect(component.form.controls.name.value).toBe('test add category');
+    mock.flush(categoryResp);
+    httpTestingController.verify();
   });
 
   it('can edit a category', () => {
@@ -95,6 +88,8 @@ describe('CategoryComponent', () => {
     const mock = httpTestingController.expectOne(categoryResp.href);
     expect(mock.request.method).toEqual('PATCH');
     expect(component.form.controls.name.value).toBe('test add category edited');
+    mock.flush(categoryResp);
+    httpTestingController.verify();
   });
 
   it('should call delete method', () => {
