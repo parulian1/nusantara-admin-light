@@ -144,9 +144,9 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
       name: [entity?.name, [Validators.required]],
       href: [entity?.href],
       type: [entity?.type, [Validators.required]],
-      requiresShipping: [entity?.requiresShipping, [Validators.required]],
-      trackStock: [entity?.trackStock, [Validators.required]],
-      isPerishable: [entity?.isPerishable, [Validators.required]],
+      requiresShipping: [entity?.requiresShipping ?? true],
+      trackStock: [entity?.trackStock ?? true],
+      isPerishable: [entity?.isPerishable ?? false],
       attributes: this.fb.array([]),
     });
 
@@ -201,9 +201,6 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
     typeDependantControls.forEach(fc => {
       if (value === 'digital') {
         fc.setValue(false);
-        fc.disable();
-      } else {
-        fc.enable();
     }});
   }
 }
