@@ -74,7 +74,7 @@ describe('CategoryComponent', () => {
 
     const mock = httpTestingController.expectOne('/api/catalog/category/');
     expect(mock.request.method).toEqual('POST');
-    expect(component.form.controls.name.value).toBe('test add category');
+    expect(mock.request.body.get('name')).toBe('test add category');
     mock.flush(categoryResp);
     httpTestingController.verify();
   });
@@ -87,18 +87,18 @@ describe('CategoryComponent', () => {
 
     const mock = httpTestingController.expectOne(categoryResp.href);
     expect(mock.request.method).toEqual('PATCH');
-    expect(component.form.controls.name.value).toBe('test add category edited');
+    expect(mock.request.body.get('name')).toBe('test add category edited');
     mock.flush(categoryResp);
     httpTestingController.verify();
   });
 
-  it('should call delete method', () => {
-    spyOn(component, 'delete');
+  it('can delete category', () => {
     component.href.setValue(categoryResp.href);
-    fixture.detectChanges();
-    const deleteButton = fixture.debugElement.nativeElement.querySelector('.danger');
-    deleteButton.click();
+    component.delete();
 
-    expect(component.delete).toHaveBeenCalledTimes(1);
+    const mock = httpTestingController.expectOne(categoryResp.href);
+    expect(mock.request.method).toEqual('DELETE');
+    mock.flush(null, {status: 204, statusText: 'No Content'});
+    httpTestingController.verify();
   });
 });
