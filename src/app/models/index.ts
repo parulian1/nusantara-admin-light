@@ -26,6 +26,9 @@ export * from './shipping-rate';
 
 export * from './flat-page';
 
+export * from './content-footer';
+export * from './relative-choices';
+
 import * as google from './google';
 import * as base from './base';
 import * as drf from './drf';

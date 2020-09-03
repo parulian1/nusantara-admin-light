@@ -1,7 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { FlatPageComponent, FlatPageListComponent, FlatPageListResolver, FlatPageResolver } from './flat-page';
+import { FlatPageComponent, FlatPageListComponent, FlatPageListResolver, FlatPageResolver, AllFlatPageListResolver } from './flat-page';
+import {
+  ContentFooterComponent,
+  ContentFooterResolver,
+  ContentFooterListComponent,
+  ContentFooterListResolver,
+  RelativeChoicesResolver
+} from './content-footer';
 import { WidgetBlockComponent, WidgetBlockListComponent, WidgetBlockListResolver, WidgetBlockResolver, BannerGroupComponent } from './widget';
 import { ContentTypesResolver } from './widget/content-types.resolver';
 import { TestimonialComponent, TestimonialListComponent, TestimonialListResolver, TestimonialResolver } from './testimonial';
@@ -30,6 +37,40 @@ const dashboardRoutes: Routes = [
         path: ':slug',
         component: FlatPageComponent,
         resolve: { entity: FlatPageResolver },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+    ]
+  },
+
+  {
+    path: 'content-footers',
+    children: [
+      {
+        path: '',
+        component: ContentFooterListComponent,
+        resolve: { page: ContentFooterListResolver },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'List', }
+      },
+      {
+        path: 'new',
+        component: ContentFooterComponent,
+        resolve: {
+          flatPages: AllFlatPageListResolver,
+          relativeChoices: RelativeChoicesResolver,
+        },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+      {
+        path: ':slug',
+        component: ContentFooterComponent,
+        resolve: {
+          entity: ContentFooterResolver,
+          flatPages: AllFlatPageListResolver,
+          relativeChoices: RelativeChoicesResolver,
+        },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },
       },

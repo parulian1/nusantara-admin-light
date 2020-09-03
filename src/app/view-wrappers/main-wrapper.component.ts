@@ -64,6 +64,8 @@ import { SubscriptionLike } from 'rxjs';
 <!--        <li><a [routerLink]="['/cms/widgets']" routerLinkActive="active" translate>Widgets</a></li>-->
         <li><a [routerLink]="['/cms/testimonials']" routerLinkActive="active">Testimonials</a></li>
         <li><a [routerLink]="['/cms/flat-pages']" routerLinkActive="active">Pages</a></li>
+        <li><a [routerLink]="['/cms/content-footers']" routerLinkActive="active">Content Footers</a></li>
+
 
         <li class="section-header">
           <i class="material-icons">shopping_cart</i>

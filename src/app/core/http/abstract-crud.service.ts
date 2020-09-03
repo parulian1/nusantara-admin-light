@@ -44,6 +44,7 @@ export abstract class AbstractCrudService<T extends base.IHrefEntity> {
       params = params.set('q', query);
     }
 
+
     return this.httpClient
       .get<T[]>(`${this.baseUrl}/`, {observe: 'response', responseType: 'json', params})
       .pipe(map(resp => new PagedResponse(resp)));
