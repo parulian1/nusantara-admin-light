@@ -22,7 +22,7 @@ import { VendorService } from '@nusantara/services';
 
       <label>
         <span>Name</span>
-        <input type="text" [formControl]="name" name="name">
+        <input type="text" [formControl]="name" name="name" maxlength="50">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
@@ -35,7 +35,11 @@ import { VendorService } from '@nusantara/services';
       <label>
         <span>Icon Image</span>
         <img [src]="iconImagePreviewUrl" id="icon-image-preview" alt="Icon Image" class="preview">
-        <input type="file" [formControl]="iconImage" (change)="setIconImagePreview($event)" name="iconImage">
+        <input type="file"
+               [formControl]="iconImage"
+               (change)="setIconImagePreview($event)"
+               name="iconImage"
+               accept="image/*">
         <small>Recommended 120px x 120px (1:1)</small>
         <nus-field-errors [control]="iconImage"></nus-field-errors>
       </label>
@@ -43,7 +47,11 @@ import { VendorService } from '@nusantara/services';
       <label>
         <span>Banner Image</span>
         <img [src]="bannerImagePreviewUrl" id="banner-image-preview" alt="Banner Image" class="preview">
-        <input type="file" [formControl]="bannerImage" (change)="setBannerImagePreview($event)" name="bannerImage">
+        <input type="file"
+               [formControl]="bannerImage"
+               (change)="setBannerImagePreview($event)"
+               name="bannerImage"
+                accept="image/*">
         <small>Recommended: 1152px x 350px (16:5)</small>
         <nus-field-errors [control]="bannerImage"></nus-field-errors>
       </label>
