@@ -244,7 +244,7 @@ export class CustomerDetailComponent extends AbstractDetailComponent<ICustomer> 
     });
 
     this.dateJoined = new Date(entity?.dateJoined);
-    this.lastLogin = new Date(entity?.lastLogin);
+    this.lastLogin = entity?.lastLogin ? new Date(entity.lastLogin) : null;
     this.registrationCampaign = entity.profile?.registrationCampaign;
     this.profile = entity.profile;
     this.customerGroups = entity.customerGroups;
