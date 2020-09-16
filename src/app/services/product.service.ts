@@ -27,7 +27,6 @@ export class ProductService extends AbstractCrudService<products.IProduct> {
 
     let params = new HttpParams({fromObject: {
       page: page.toFixed(0).toString(),
-      structure: 'parent'
     }});
 
     if (perPage) {
