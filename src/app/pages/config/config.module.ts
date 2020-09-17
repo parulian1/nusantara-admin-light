@@ -6,7 +6,7 @@ import { SharedModule } from '@nusantara/shared';
 import { ConfigRoutingModule } from './config-routing.module';
 import { ConfigHubComponent } from './config-hub.component';
 import { WarehouseListComponent, WarehouseComponent } from './warehouse';
-import { PaymentGatewayListComponent } from './payment-gateways';
+import { PaymentGatewayListComponent, PaymentGatewayDetailComponent } from './payment-gateways';
 import { ShippingMethodListComponent, ShippingProviderDetailComponent, ShippingServiceComponent} from './shipping';
 
 @NgModule({
@@ -15,6 +15,7 @@ import { ShippingMethodListComponent, ShippingProviderDetailComponent, ShippingS
     WarehouseListComponent,
     WarehouseComponent,
     PaymentGatewayListComponent,
+    PaymentGatewayDetailComponent,
     ShippingMethodListComponent,
     ShippingProviderDetailComponent,
     ShippingServiceComponent,

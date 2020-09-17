@@ -1,10 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { WarehouseListResolver, WarehouseResolver } from '@nusantara/resolvers';
-import { WarehouseListComponent, WarehouseComponent, SubLocationTypeResolver,
-  WarehouseTypeResolver, WarehouseFullListResolver } from './warehouse';
-import { PaymentGatewayListComponent, PaymentGatewayListResolver } from './payment-gateways';
+import { WarehouseListResolver, WarehouseResolver, PaymentGatewayTypeResolver, PaymentGatewayResolver } from '@nusantara/resolvers';
+import { WarehouseListComponent, WarehouseComponent, SubLocationTypeResolver, WarehouseTypeResolver, WarehouseFullListResolver } from './warehouse';
+import { PaymentGatewayDetailComponent, PaymentGatewayListComponent, PaymentGatewayListResolver, } from './payment-gateways';
 import { ConfigHubComponent } from './config-hub.component';
 import {
   ShippingMethodListComponent,
@@ -13,7 +12,6 @@ import {
   ShippingProviderResolver,
   ShippingProviderTypeResolver,
 } from './shipping';
-
 
 
 const routes: Routes = [
@@ -58,7 +56,21 @@ const routes: Routes = [
         component: PaymentGatewayListComponent,
         resolve: { page: PaymentGatewayListResolver },
         runGuardsAndResolvers: 'always',
-      }
+      },
+      {
+        path: 'new',
+        component: PaymentGatewayDetailComponent,
+        resolve: { typeChoices: PaymentGatewayTypeResolver },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+      {
+        path: ':slug',
+        component: PaymentGatewayDetailComponent,
+        resolve: { entity: PaymentGatewayResolver, typeChoices: PaymentGatewayTypeResolver },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
     ]
   },
   {
