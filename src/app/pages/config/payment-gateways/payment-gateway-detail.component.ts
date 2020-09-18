@@ -28,14 +28,13 @@ import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
       <label>
         <span>Logo</span>
         <img [src]="logoPreviewUrl" alt="Payment Gateway Logo" class="preview">
-        <small>Recommended: A size</small>
+        <small>Recommended: 120x120</small>
         <input type="file"
                [formControl]="logo"
                (change)="setLogoPreview($event)"
                name="logo"
                accept="image/*">
       </label>
-
 
       <label>
         <span>Type</span>
@@ -73,6 +72,7 @@ import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
     </form>
   `,
   styles: [
+    'img { height: 120px; width: 120px; }',
     '.ck-editor__main { min-height: 150px; }',
   ]
 })
@@ -137,10 +137,13 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
   }
 
   setLogoPreview(data?: Event | string) {
-    super.setImagePreview(data, (dataAsUrl) => {
-        this.logoPreviewUrl = dataAsUrl;
-        this.form.value.logo = dataAsUrl;
-      }
-    );
+    super.setImagePreview(data, (dataAsUrl) => this.logoPreviewUrl = dataAsUrl);
+  }
+
+  save() {
+    if (this.logoPreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
+     this.form.value.logo = this.logoPreviewUrl;
+    }
+    super.save();
   }
 }
