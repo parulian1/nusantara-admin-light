@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 import { ToastService, AbstractDetailComponent } from '@nusantara/core';
 import { INamedHrefEntity } from '@nusantara/models/base';
-import { IPaymentGateway } from '../../../models';
-import { PaymentGatewayService, TestimonialService } from '@nusantara/services';
+import { drf, IPaymentGateway } from '@nusantara/models';
+import { PaymentGatewayService } from '@nusantara/services';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 @Component({
   selector: 'nus-payment-gateway',
@@ -36,10 +36,13 @@ import { PaymentGatewayService, TestimonialService } from '@nusantara/services';
                accept="image/*">
       </label>
 
+
       <label>
         <span>Type</span>
-        <select [formControl]="type" name="type">
-          <option *ngFor="let p of typeChoices" [value]="p.href">{{ p.name }}</option>
+        <select [formControl]="type">
+          <option *ngFor="let opt of typeChoices" [value]="opt.value">
+            {{opt.displayName}}
+          </option>
         </select>
         <nus-field-errors [control]="type"></nus-field-errors>
       </label>
@@ -78,7 +81,7 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
   public Editor = ClassicEditor;
 
   logoPreviewUrl: string;
-  typeChoices: Array<INamedHrefEntity> = [];
+  typeChoices: drf.IChoice[];
 
   constructor(public service: PaymentGatewayService,
               public fb: FormBuilder,
@@ -88,16 +91,33 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     super();
   }
 
-  get name(): FormControl { return this.form.get('name') as FormControl; }
-  get logo(): FormControl { return this.form.get('logo') as FormControl; }
-  get type(): FormControl { return this.form.get('type') as FormControl; }
-  get clientKey(): FormControl { return this.form.get('clientKey') as FormControl; }
-  get serverKey(): FormControl { return this.form.get('serverKey') as FormControl; }
-  get description(): FormControl { return this.form.get('description') as FormControl; }
+  get name(): FormControl {
+    return this.form.get('name') as FormControl;
+  }
+
+  get logo(): FormControl {
+    return this.form.get('logo') as FormControl;
+  }
+
+  get type(): FormControl {
+    return this.form.get('type') as FormControl;
+  }
+
+  get clientKey(): FormControl {
+    return this.form.get('clientKey') as FormControl;
+  }
+
+  get serverKey(): FormControl {
+    return this.form.get('serverKey') as FormControl;
+  }
+
+  get description(): FormControl {
+    return this.form.get('description') as FormControl;
+  }
 
   ngOnInit(): void {
-    this.route.data.subscribe((data: { types: INamedHrefEntity[]}) => {
-      this.typeChoices = data.types;
+    this.route.data.subscribe((data: { typeChoices: drf.IChoice[] }) => {
+      this.typeChoices = data.typeChoices;
     });
     super.ngOnInit();
   }
@@ -116,8 +136,8 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     this.setLogoPreview(entity?.logo);
   }
 
-  setLogoPreview(data?: Event|string) {
-    super.setImagePreview(data,  (dataAsUrl) => {
+  setLogoPreview(data?: Event | string) {
+    super.setImagePreview(data, (dataAsUrl) => {
         this.logoPreviewUrl = dataAsUrl;
         this.form.value.logo = dataAsUrl;
       }

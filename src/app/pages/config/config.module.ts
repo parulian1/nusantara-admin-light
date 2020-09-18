@@ -8,6 +8,7 @@ import { ConfigHubComponent } from './config-hub.component';
 import { WarehouseListComponent, WarehouseComponent } from './warehouse';
 import { PaymentGatewayListComponent, PaymentGatewayDetailComponent } from './payment-gateways';
 import { ShippingMethodListComponent, ShippingProviderDetailComponent, ShippingServiceComponent} from './shipping';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 @NgModule({
   declarations: [
@@ -20,11 +21,12 @@ import { ShippingMethodListComponent, ShippingProviderDetailComponent, ShippingS
     ShippingProviderDetailComponent,
     ShippingServiceComponent,
   ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    ReactiveFormsModule,
-    ConfigRoutingModule,
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        ReactiveFormsModule,
+        ConfigRoutingModule,
+        CKEditorModule,
+    ],
 })
 export class ConfigModule { }
