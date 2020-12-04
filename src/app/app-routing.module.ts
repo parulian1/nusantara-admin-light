@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { RequireLoggedInGuard } from '@nusantara/auth';
+import {RequireLoggedInGuard, RequireIsStaffGuard, RequireSiteMatchGuard} from '@nusantara/auth';
 import { MainWrapperComponent, AnonWrapperComponent } from '@nusantara/view-wrappers';
-
 
 const routes: Routes = [
   {
@@ -15,7 +14,7 @@ const routes: Routes = [
   {
     path: '',
     component: MainWrapperComponent,
-    canActivate: [RequireLoggedInGuard, ],
+    canActivate: [RequireLoggedInGuard, RequireIsStaffGuard, RequireSiteMatchGuard],
     runGuardsAndResolvers: 'always',
     children: [
       {
@@ -49,6 +48,10 @@ const routes: Routes = [
       {
         path: 'config',
         loadChildren: () => import('./pages/config/config.module').then(m => m.ConfigModule)
+      },
+      {
+        path: 'theme',
+        loadChildren: () => import('./pages/theme/theme.module').then(m => m.ThemeModule)
       },
 
       { path: '',   redirectTo: '/dashboard', pathMatch: 'full' }

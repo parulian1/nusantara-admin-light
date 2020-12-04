@@ -21,7 +21,7 @@ describe('ProductClassComponent', () => {
     isPerishable: false,
     attributes: [],
     productCount: 0
-};
+  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -60,7 +60,7 @@ describe('ProductClassComponent', () => {
     expect(component.form.valid).toBeFalsy();
   });
 
-  it('name field validity', () => {
+  it('name field validity', async(() => {
     const name = component.form.controls.name;
     const type = component.form.controls.type;
     expect(name.valid).toBeFalsy();
@@ -70,7 +70,7 @@ describe('ProductClassComponent', () => {
     type.setValue('');
     expect(name.hasError('required')).toBeTruthy();
     expect(type.hasError('required')).toBeTruthy();
-  });
+  }));
 
   it('can create a new product class', () => {
 
@@ -144,6 +144,12 @@ describe('ProductClassComponent', () => {
     expect(mock.request.body.attributes).toEqual(productClassResponse.attributes);
     mock.flush(productClassResponse);
     httpTestingController.verify();
+  });
+
+  it('field cant input more than 50 character', () => {
+    component.name.setValue('123456789012345678901234567890123456789012345678901');
+
+    expect(component.name.errors.maxlength).toBeTruthy();
   });
 
 });

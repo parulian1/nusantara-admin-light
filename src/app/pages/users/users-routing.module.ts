@@ -11,6 +11,7 @@ import {
 
 import { CustomerListComponent, CustomerDetailComponent } from './customer';
 import { CustomerGroupListComponent, CustomerGroupDetailComponent } from './customer-group';
+import { EmployeeListComponent, EmployeeComponent, EmployeeListResolver, EmployeeResolver } from './employee';
 
 
 const dashboardRoutes: Routes = [
@@ -63,7 +64,29 @@ const dashboardRoutes: Routes = [
         runGuardsAndResolvers: 'always'
       }
     ]
-  }
+  },
+  {
+    path: 'employee',
+    children: [
+      {
+        path: '',
+        component: EmployeeListComponent,
+        resolve: { page: EmployeeListResolver },
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'new',
+        component: EmployeeComponent,
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: ':username',
+        component: EmployeeComponent,
+        resolve: { entity: EmployeeResolver },
+        runGuardsAndResolvers: 'always',
+      },
+    ]
+  },
 ];
 
 @NgModule({

@@ -16,6 +16,9 @@ import { NonFieldErrorsComponent } from './non-field-errors.component';
 import { SpinnerComponent } from './spinner.component';
 import { ProductSelectionModalComponent } from '@nusantara/shared/product-selection-modal.component';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
+import { PaginationChildComponent } from "@nusantara/shared/pagination-child.component";
+import { UserSelectionModalComponent } from "@nusantara/shared/user-selection-modal.component";
+import { IncludeDeletedComponent } from './filters/include-deleted.component';
 
 
 /**
@@ -36,6 +39,9 @@ import { NgxSmartModalModule } from 'ngx-smart-modal';
     NonFieldErrorsComponent,
     SpinnerComponent,
     ProductSelectionModalComponent,
+    PaginationChildComponent,
+    UserSelectionModalComponent,
+    IncludeDeletedComponent,
   ],
   exports: [
     EntityToSlugPipe,
@@ -50,6 +56,9 @@ import { NgxSmartModalModule } from 'ngx-smart-modal';
     NonFieldErrorsComponent,
     SpinnerComponent,
     ProductSelectionModalComponent,
+    PaginationChildComponent,
+    UserSelectionModalComponent,
+    IncludeDeletedComponent,
   ],
   imports: [
     CommonModule,

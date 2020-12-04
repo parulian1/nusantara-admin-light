@@ -3,6 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+import { CopyrightNoticeComponent } from './components/footer';
 import { ToastComponent } from './toast';
 
 @NgModule({
@@ -12,9 +13,11 @@ import { ToastComponent } from './toast';
     RouterModule,
   ],
   declarations: [
+    CopyrightNoticeComponent,
     ToastComponent,
   ],
   exports: [
+    CopyrightNoticeComponent,
     ToastComponent,
   ],
   providers: [ ],

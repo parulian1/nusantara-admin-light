@@ -1,11 +1,20 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  QueryList,
+  ViewChildren
+} from '@angular/core';
 import { FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, zip } from 'rxjs';
 
 import { AbstractEditingComponent, IResultResponse } from '@nusantara/core';
 import { drf, products } from '@nusantara/models';
-import { PriceListRangeService } from '@nusantara/services';
+import { PriceListRangeService, PriceListService } from '@nusantara/services';
 import { RangeComponent } from './range.component';
 
 /**
@@ -20,11 +29,23 @@ import { RangeComponent } from './range.component';
     <ng-container [formGroup]="form">
     <tr>
 
-      <td> <button type="button" (click)="toggleExpansion()">{{ type.value }}</button></td>
-      <td>{{ ranges.length }}</td>
-      <td>{{ ranges.controls[0].value.price }}</td>
-      <td>{{ ranges.controls[ranges.length - 1].value.price }}</td>
-
+      <td>
+        <button type="button" (click)="toggleExpansion()">
+          {{ type.value }}
+        </button>
+      </td>
+      <td>
+        {{ ranges.length }}
+      </td>
+      <td>
+        {{ ranges.controls.length ? ranges.controls[0].value.price : 0 }}
+      </td>
+      <td>
+        {{ ranges.controls.length ? ranges.controls[ranges.length - 1].value.price : 0 }}
+        <button type="button" class="remove-button" (click)="removePriceList.emit()">
+          <i class="material-icons">remove_circle_outline</i>
+        </button>
+      </td>
     </tr>
       <tr *ngIf="isExpanded">
         <td colspan="4">
@@ -92,9 +113,12 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
 
   public deletedRanges: Array<products.IPriceListRange> = [];
 
+  @Output() removePriceList:EventEmitter<any> = new EventEmitter<any>();
+
   constructor(protected rangeService: PriceListRangeService,
               protected route: ActivatedRoute,
-              protected fb: FormBuilder) { super(); }
+              protected fb: FormBuilder,
+              protected priceListService: PriceListService) { super(); }
 
   get href(): FormControl { return this.form.get('href') as FormControl; }
   get type(): FormControl { return this.form.get('type') as FormControl; }
@@ -209,6 +233,7 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
    */
   saveRanges(priceList: products.IPriceList): Observable<IResultResponse<products.IPriceListRange>[]> {
 
+    console.log('rangeComponents', this.rangeComponents);
     // ensure ranges have their parent price list set
     this.rangeComponents.forEach((component) => { component.priceList.setValue(priceList.href); });
 

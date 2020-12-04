@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
-import { AuthService } from '../auth.service';
+import { AuthService } from '@nusantara/auth/auth.service';
 
 /**
  * Requires that the user be authenticated with a valid token.

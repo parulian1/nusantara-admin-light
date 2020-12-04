@@ -15,9 +15,14 @@ import {
   ProductClassTypeResolver,
   VendorListResolver,
   VendorResolver,
+  ProductOptionResolver,
+  ProductOptionTypeResolver,
+  ActiveProductOptionResolver,
 } from '@nusantara/resolvers';
 import { MediaTypeResolver } from './product/media';
 import { PriceListTypeResolver } from './product/price';
+import { ProductOptionListComponent, AllProductOptionResolver, ProductOptionComponent  } from "./product-options";
+import { DurationListResolver, LengthListResolver, PacketListResolver } from './product/subscription';
 
 const routes: Routes = [
   {
@@ -68,6 +73,9 @@ const routes: Routes = [
           categories: AllCategoryResolver,
           mediaTypes: MediaTypeResolver,
           priceListTypes: PriceListTypeResolver,
+          subscriptionPacket: PacketListResolver,
+          subscriptionDuration: DurationListResolver,
+          subscriptionLength: LengthListResolver,
         },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },
@@ -82,6 +90,9 @@ const routes: Routes = [
           categories: AllCategoryResolver,
           mediaTypes: MediaTypeResolver,
           priceListTypes: PriceListTypeResolver,
+          subscriptionPacket: PacketListResolver,
+          subscriptionDuration: DurationListResolver,
+          subscriptionLength: LengthListResolver,
         },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },
@@ -132,7 +143,8 @@ const routes: Routes = [
         component: ProductClassComponent,
         resolve: {
           typeChoices: ProductClassTypeResolver,
-          attributeTypeChoices: ProductAttributeTypeResolver
+          attributeTypeChoices: ProductAttributeTypeResolver,
+          optionChoices: ActiveProductOptionResolver,
         },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail' },
@@ -143,7 +155,8 @@ const routes: Routes = [
         resolve: {
           entity: ProductClassResolver,
           typeChoices: ProductClassTypeResolver,
-          attributeTypeChoices: ProductAttributeTypeResolver
+          attributeTypeChoices: ProductAttributeTypeResolver,
+          optionChoices: ActiveProductOptionResolver,
         },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },
@@ -170,6 +183,34 @@ const routes: Routes = [
         path: ':slug',
         component: VendorComponent,
         resolve: { entity: VendorResolver },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      }
+    ]
+  },
+  {
+    path: 'product-options',
+    children: [
+      {
+        path: '',
+        component: ProductOptionListComponent,
+        resolve: { page: AllProductOptionResolver },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'List' },
+      },
+      {
+        path: 'new',
+        component: ProductOptionComponent,
+        resolve: {
+          typeChoices: ProductOptionTypeResolver,
+        },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+      {
+        path: ':slug',
+        component: ProductOptionComponent,
+        resolve: { entity: ProductOptionResolver, typeChoices: ProductOptionTypeResolver },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },
       }

@@ -1,45 +1,58 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 
-import { AbstractListComponent } from '@nusantara/core';
-import { IOrder } from '@nusantara/models';
+import {AbstractListComponent, PagedResponse} from '@nusantara/core';
+import {drf, ICategory, IOrder, IVendor, products} from '@nusantara/models';
+import {FormControl, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'nus-order-list',
-  template: `
-    <nus-list-header
-      title="Products">
-    </nus-list-header>
-
-    <nus-pagination [page]="page"></nus-pagination>
-
-    <table>
-      <thead>
-      <tr>
-        <th>Order Number</th>
-        <th>Customer</th>
-        <th>Shipments</th>
-        <th>Status</th>
-        <th>Total</th>
-        <th>Created</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let entity of page.entities">
-        <td><a [routerLink]="[entity|entityToSlug]">{{ entity.orderNumber }}</a></td>
-        <td><a [routerLink]="['/users/customer/', entity.customer.href|entityToSlug]">{{ entity.customer.name ? entity.customer.name : "no name" }}</a></td>
-        <td>{{ entity.children.length }}</td>
-        <td>{{ entity.status }}</td>
-        <td>{{ entity.orderPayment.amount|currency:"IDR" }}</td>
-        <td>{{ entity.created | date }}</td>
-      </tr>
-      </tbody>
-    </table>
-
-    <nus-pagination [page]="page"></nus-pagination>
-  `,
+  templateUrl: './order-list.html',
   styles: []
 })
-export class OrderListComponent extends AbstractListComponent<IOrder> {
-  constructor(route: ActivatedRoute) { super(route); }
+export class OrderListComponent extends AbstractListComponent<IOrder> implements OnInit{
+
+  orderStatuses: Array<drf.IChoice>;
+  form: FormGroup;
+  timeoutId: any;
+  reloadTimeout = 650;
+  filterParams: {
+    status: string,
+  } = {
+    status: ''
+  };
+
+  constructor(public route: ActivatedRoute, public router: Router) { super(route); }
+
+  ngOnInit(): void {
+    this.route.data.subscribe((
+      data: { page: PagedResponse<IOrder>, orderType: drf.IChoice[], orderStatus: drf.IChoice[]}) => {
+      this.page = data.page;
+      this.orderStatuses = data.orderStatus;
+      const theQuery = this.route.queryParams;
+    });
+
+    this.route.queryParams.subscribe((queryParam: any) => {
+      this.filterParams.status = queryParam.status || '';
+
+    });
+
+    super.ngOnInit();
+  }
+
+  public onStatusChanged(event) {
+
+    this.timeoutId = setTimeout(() => {
+      // wait to see if the user is still typing more before navigating
+      const params = {status: event.target.value};
+      this.router.navigate(
+        ['.'],
+        {
+          queryParams: params,
+          relativeTo: this.route
+        }
+      );
+    }, this.reloadTimeout);
+
+  }
 }

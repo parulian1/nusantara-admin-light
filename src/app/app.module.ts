@@ -1,8 +1,11 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, Inject, NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { Router } from '@angular/router';
 import { JwtModule } from '@auth0/angular-jwt';
+import { ApmService, ApmErrorHandler } from '@elastic/apm-rum-angular';
+import { environment } from '@env/environment';
 
 import { ApiPrefixInterceptor, CoreModule } from '@nusantara/core';
 import { SharedModule } from '@nusantara/shared';
@@ -28,11 +31,10 @@ import { AppComponent } from './app.component';
         tokenGetter: () => localStorage.getItem('token'),
         authScheme: 'Bearer ',
         allowedDomains: [
-          'localhost:8080',
-          'localhost:4200',
-          'localhost:4201',
-          'bhisma.cloud',
+          new RegExp('localhost(:(\\d+))?'),
+          new RegExp('([\\w\\-\\.]+).bhisma.([\\w\\-\\.]+)?'),
           'marthatilaarshop.com',
+          'ez-shop.co.id',
         ],
         disallowedRoutes: [
           'localhost:8080/api/iam/login/',
@@ -46,8 +48,21 @@ import { AppComponent } from './app.component';
       provide: HTTP_INTERCEPTORS,
       useClass: ApiPrefixInterceptor,
       multi: true
-    }
+    },
+    {
+      provide: ApmService,
+      useClass: ApmService,
+      deps: [Router]
+    },
+    {
+      provide: ErrorHandler,
+      useClass: ApmErrorHandler
+    },
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(@Inject(ApmService) apm: ApmService) {
+    apm.init(environment.elasticAPM);
+  }
+}

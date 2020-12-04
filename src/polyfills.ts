@@ -51,6 +51,9 @@
  *  (window as any).__Zone_enable_cross_context_check = true;
  *
  */
+// needed for Elastic APM
+import 'core-js/proposals/reflect-metadata';
+
 
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.

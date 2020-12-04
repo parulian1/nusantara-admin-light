@@ -54,12 +54,12 @@ export class BannerGroupComponent extends AbstractDetailComponent<IWidget> imple
     { value: 'standard_with_mini', displayName: 'Standard with Mini' },
   ];
 
-  constructor(public service: WidgetService,
+  constructor(service: WidgetService,
               public fb: FormBuilder,
-              public toast: ToastService,
-              public route: ActivatedRoute,
-              public router: Router) {
-    super();
+              toast: ToastService,
+              route: ActivatedRoute,
+              router: Router) {
+    super(route, router, toast, service);
   }
 
   get name(): FormControl { return this.form.get('name') as FormControl; }

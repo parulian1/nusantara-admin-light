@@ -96,12 +96,12 @@ export class ContentFooterComponent extends AbstractDetailComponent<IContentFoot
   ];
   relativeToChoices: IRelativeChoices[] = [];
 
-  constructor(public service: ContentFooterService,
+  constructor(service: ContentFooterService,
               public fb: FormBuilder,
-              public toast: ToastService,
-              public route: ActivatedRoute,
-              public router: Router) {
-    super();
+              toast: ToastService,
+              route: ActivatedRoute,
+              router: Router) {
+    super(route, router, toast, service);
   }
 
   ngOnInit(): void {

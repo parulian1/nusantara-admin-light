@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -18,9 +18,7 @@ import { TestimonialService } from '@nusantara/services';
 
     <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
 
-    <form [formGroup]="form" (ngSubmit)="saveAsForm()" #f>
-
-      <input type="hidden" [formControl]="href" name="href"> <!-- required for non-JSON form posting -->
+    <form [formGroup]="form" (ngSubmit)="save()" #f>
 
       <label>
         <span>Name</span>
@@ -35,14 +33,14 @@ import { TestimonialService } from '@nusantara/services';
         <input type="file"
                [formControl]="photo"
                (change)="setPhotoPreview($event)"
-               name="image"
+               name="photo"
                accept="image/*">
       </label>
 
       <label>
         <span>Product</span>
         <select [formControl]="product" name="product">
-          <option *ngFor="let p of productChoices" [ngValue]="p.href">{{ p.name }}</option>
+          <option *ngFor="let p of productChoices" [value]="p.href">{{ p.name }}</option>
         </select>
         <nus-field-errors [control]="product"></nus-field-errors>
       </label>
@@ -50,7 +48,7 @@ import { TestimonialService } from '@nusantara/services';
       <label>
         <span>Vendor</span>
         <select [formControl]="vendor" name="vendor">
-          <option *ngFor="let v of vendorChoices" [ngValue]="v.href">{{ v.name }}</option>
+          <option *ngFor="let v of vendorChoices" [value]="v.href">{{ v.name }}</option>
         </select>
         <nus-field-errors [control]="vendor"></nus-field-errors>
       </label>
@@ -80,7 +78,7 @@ import { TestimonialService } from '@nusantara/services';
       <div>
         <label for="content" class="external"><span>Content</span></label>
         <ckeditor [editor]="Editor"
-                  [formControl]="content" id="content"></ckeditor>
+                  [formControl]="content" id="content" name="content"></ckeditor>
         <nus-field-errors [control]="content"></nus-field-errors>
       </div>
       <nus-detail-actions
@@ -92,40 +90,69 @@ import { TestimonialService } from '@nusantara/services';
   `,
   styles: [
     '.ck-editor__main { min-height: 150px; }',
+    'img { max-height: 240px; max-width: 240px; }'
   ]
 })
 export class TestimonialComponent extends AbstractDetailComponent<ITestimonial> implements OnInit {
 
+  @ViewChild('f') formView: ElementRef<HTMLFormElement>;
+
   public Editor = ClassicEditor;
 
+  entity?: ITestimonial;
   photoPreviewUrl: string;
   productChoices: Array<INamedHrefEntity> = [];
   vendorChoices: Array<INamedHrefEntity> = [];
 
-  constructor(public service: TestimonialService,
+  constructor(service: TestimonialService,
               public fb: FormBuilder,
-              public toast: ToastService,
-              public route: ActivatedRoute,
-              public router: Router) {
-    super();
+              toast: ToastService,
+              route: ActivatedRoute,
+              router: Router) {
+    super(route, router, toast, service);
   }
 
-  get name(): FormControl { return this.form.get('name') as FormControl; }
-  get photo(): FormControl { return this.form.get('photo') as FormControl; }
-  get content(): FormControl { return this.form.get('content') as FormControl; }
-  get vendor(): FormControl { return this.form.get('vendor') as FormControl; }
-  get product(): FormControl { return this.form.get('product') as FormControl; }
-  get reviewerName(): FormControl { return this.form.get('reviewerName') as FormControl; }
-  get reviewerJobTitle(): FormControl { return this.form.get('reviewerJobTitle') as FormControl; }
-  get sortPriority(): FormControl { return this.form.get('sortPriority') as FormControl; }
-  get isActive(): FormControl { return this.form.get('isActive') as FormControl; }
+  get name(): FormControl {
+    return this.form.get('name') as FormControl;
+  }
+
+  get photo(): FormControl {
+    return this.form.get('photo') as FormControl;
+  }
+
+  get content(): FormControl {
+    return this.form.get('content') as FormControl;
+  }
+
+  get vendor(): FormControl {
+    return this.form.get('vendor') as FormControl;
+  }
+
+  get product(): FormControl {
+    return this.form.get('product') as FormControl;
+  }
+
+  get reviewerName(): FormControl {
+    return this.form.get('reviewerName') as FormControl;
+  }
+
+  get reviewerJobTitle(): FormControl {
+    return this.form.get('reviewerJobTitle') as FormControl;
+  }
+
+  get sortPriority(): FormControl {
+    return this.form.get('sortPriority') as FormControl;
+  }
+
+  get isActive(): FormControl {
+    return this.form.get('isActive') as FormControl;
+  }
 
   ngOnInit(): void {
-    this.route.data.subscribe((data: { products: INamedHrefEntity[], vendors: INamedHrefEntity[]}) => {
+    this.route.data.subscribe((data: { products: INamedHrefEntity[], vendors: INamedHrefEntity[] }) => {
       this.vendorChoices = data.vendors;
       this.productChoices = data.products;
 
-      console.log('vendor data was', data.vendors);
     });
     super.ngOnInit();
   }
@@ -134,21 +161,32 @@ export class TestimonialComponent extends AbstractDetailComponent<ITestimonial> 
     this.form = this.fb.group({
       name: [entity?.name, [Validators.required]],
       href: [entity?.href],
-      photo: ['', [Validators.required]],
+      photo: ['', entity?.photo ? [] : [Validators.required]],
       content: [entity?.content, [Validators.required]],
-      vendor: [entity?.vendor, ],
-      product: [entity?.product, ],
+      vendor: [entity?.vendor?.href, ],
+      product: [entity?.product?.href, ],
       reviewerJobTitle: [entity?.reviewerJobTitle, [Validators.required, ]],
       reviewerName: [entity?.reviewerName, [Validators.required, ]],
       sortPriority: [entity?.sortPriority ?? 0, [Validators.required, Validators.min(0)]],
       isActive: [entity?.isActive ?? true, [Validators.required, ]]
     });
 
+    this.entity = entity;
+
     this.setPhotoPreview(entity?.photo);
   }
 
+  setPhotoPreview(data?: Event | string) {
+    super.setImagePreview(data, (dataAsUrl) => this.photoPreviewUrl = dataAsUrl);
+  }
 
-  setPhotoPreview(data?: Event|string) {
-    super.setImagePreview(data,  (dataAsUrl) => this.photoPreviewUrl = dataAsUrl);
+  save() {
+    if (!!this.entity?.href && !!this.entity?.photo && !this.form.get('photo').value) {
+      this.form.removeControl('photo');
+    }
+    if (!!this.photo && this.photoPreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
+      this.form.value.photo = this.photoPreviewUrl;
+    }
+    super.save();
   }
 }

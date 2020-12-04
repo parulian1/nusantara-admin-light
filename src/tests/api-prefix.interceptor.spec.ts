@@ -3,12 +3,14 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 
-import { environment } from '@env/environment';
-import { ApiPrefixInterceptor } from '@nusantara/core/http/api-prefix.interceptor';
+import { ApiPrefixInterceptor } from '@nusantara/core';
 
 describe('ApiPrefixInterceptor', () => {
   let http: HttpClient;
   let httpMock: HttpTestingController;
+
+  const siteDomainKey = 'site_domain';
+  const fakeSiteDomain = 'not-a-real-client.bhisma.cloud';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -22,10 +24,15 @@ describe('ApiPrefixInterceptor', () => {
 
     http = TestBed.get(HttpClient);
     httpMock = TestBed.get(HttpTestingController as Type<HttpTestingController>);
+
+    window.localStorage.setItem(siteDomainKey, fakeSiteDomain);
+
   });
 
   afterEach(() => {
     httpMock.verify();
+
+    window.localStorage.removeItem(siteDomainKey);
   });
 
   it('should prepend environment.serverUrl to the request url', () => {
@@ -33,7 +40,7 @@ describe('ApiPrefixInterceptor', () => {
     http.get('/toto').subscribe();
 
     // Assert
-    httpMock.expectOne({ url: environment.apiBaseUrl + '/toto' });
+    httpMock.expectOne({ url: `https://${fakeSiteDomain}/toto` });
   });
 
   it('should not prepend environment.serverUrl to request url', () => {

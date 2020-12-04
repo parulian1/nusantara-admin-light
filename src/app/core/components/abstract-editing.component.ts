@@ -62,6 +62,9 @@ export abstract class AbstractEditingComponent<TForm extends AbstractControl = F
       reader.onload = (ev) => callback(reader.result as string);
       reader.readAsDataURL(target.files[0]);
     }
+    else {
+      callback(this.emptyImagePreviewURL);
+    }
   }
 
   /**

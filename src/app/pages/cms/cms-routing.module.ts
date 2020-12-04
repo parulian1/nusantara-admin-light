@@ -1,7 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { FlatPageComponent, FlatPageListComponent, FlatPageListResolver, FlatPageResolver, AllFlatPageListResolver } from './flat-page';
+import {
+  FlatPageComponent,
+  FlatPageListComponent,
+  FlatPageListResolver,
+  FlatPageResolver,
+  AllFlatPageListResolver
+} from './flat-page';
 import {
   ContentFooterComponent,
   ContentFooterResolver,
@@ -9,11 +15,30 @@ import {
   ContentFooterListResolver,
   RelativeChoicesResolver
 } from './content-footer';
-import { WidgetBlockComponent, WidgetBlockListComponent, WidgetBlockListResolver, WidgetBlockResolver, BannerGroupComponent } from './widget';
-import { ContentTypesResolver } from './widget/content-types.resolver';
-import { TestimonialComponent, TestimonialListComponent, TestimonialListResolver, TestimonialResolver } from './testimonial';
 import { VendorFullListResolver } from '@nusantara/pages/catalog/vendor';
 import { ProductFullListResolver } from '@nusantara/pages/catalog/product';
+import {
+  WidgetBlockComponent,
+  WidgetBlockListComponent,
+  WidgetBlockListResolver,
+  WidgetBlockResolver,
+  BannerGroupComponent
+} from './widget';
+import { ContentTypesResolver } from './widget/content-types.resolver';
+import { BannerComponent, BannerListComponent } from './banner';
+import { BannerListResolver, BannerTypeResolver, BannerResolver } from '@nusantara/resolvers';
+import {
+  TestimonialComponent,
+  TestimonialListComponent,
+  TestimonialListResolver,
+  TestimonialResolver
+} from './testimonial';
+import { HighlightListResolver, HighlightListComponent, HighlightComponent } from './highlight';
+import { HighlightResolver } from './highlight/highlight.resolver';
+import { SlaListComponent, SlaListResolver, SlaComponent, SlaResolver } from './sla';
+import {NavigationComponent, NavigationListComponent, NavigationResolver} from './navigation';
+import {NavigationListResolver} from './navigation/navigation-list/navigation-list-resolver';
+import {NavigationRelativeChoicesResolver} from './navigation/navigation-relative-choices-resolver';
 
 
 const dashboardRoutes: Routes = [
@@ -42,7 +67,39 @@ const dashboardRoutes: Routes = [
       },
     ]
   },
-
+  {
+    path: 'navigation',
+    children: [
+      {
+        path: '',
+        component: NavigationListComponent,
+        resolve: { page: NavigationListResolver },
+        runGuardsAndResolvers: 'always',
+        data: { animationn: 'List', }
+      },
+      {
+        path: 'new',
+        component: NavigationComponent,
+        resolve: {
+          flatPages: AllFlatPageListResolver,
+          relativeChoices: NavigationRelativeChoicesResolver,
+        },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+      {
+        path: ':slug',
+        component: NavigationComponent,
+        resolve: {
+          entity: NavigationResolver,
+          flatPages: AllFlatPageListResolver,
+          relativeChoices: NavigationRelativeChoicesResolver,
+        },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+    ]
+  },
   {
     path: 'content-footers',
     children: [
@@ -144,11 +201,92 @@ const dashboardRoutes: Routes = [
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },
       },
-
-
-
     ]
-  }
+  },
+
+  {
+    path: 'banners',
+    children: [
+      {
+        path: '',
+        component: BannerListComponent,
+        resolve: { page: BannerListResolver },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'List', },
+      },
+      {
+        path: 'new',
+        component: BannerComponent,
+        resolve: {
+          typeChoices: BannerTypeResolver
+        },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+      {
+        path: ':slug',
+        component: BannerComponent,
+        resolve: {
+          entity: BannerResolver,
+          typeChoices: BannerTypeResolver
+        },
+        runGuardsAndResolvers: 'always',
+        data: {animation: 'Detail'}
+      }
+    ]
+  },
+  {
+    path: 'highlights',
+    children: [
+      {
+        path: '',
+        component: HighlightListComponent,
+        resolve: {page: HighlightListResolver},
+        runGuardsAndResolvers: 'always',
+        data: {animation: 'List'}
+      },
+      {
+        path: 'new',
+        component: HighlightComponent,
+        resolve: {vendors: VendorFullListResolver},
+        runGuardsAndResolvers: 'always',
+        data: {animation: 'Detail'}
+      },
+      {
+        path: ':slug',
+        component: HighlightComponent,
+        resolve: {entity: HighlightResolver, vendors: VendorFullListResolver},
+        runGuardsAndResolvers: 'always',
+        data: {animation: 'Detail'}
+      }
+    ]
+  },
+
+  {
+    path: 'sla',
+    children: [
+      {
+        path: '',
+        component: SlaListComponent,
+        resolve: { page: SlaListResolver },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'List', },
+      },
+      {
+        path: 'new',
+        component: SlaComponent,
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+      {
+        path: ':slug',
+        component: SlaComponent,
+        resolve: { entity: SlaResolver },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+    ]
+  },
 ];
 
 @NgModule({

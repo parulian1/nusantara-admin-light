@@ -7,14 +7,14 @@ import { UsersRoutingModule } from './users-routing.module';
 
 import { CustomerListComponent, CustomerDetailComponent } from './customer';
 import { CustomerGroupListComponent, CustomerGroupDetailComponent } from './customer-group';
-import { EmployeeDetailComponent, EmployeeListComponent } from './employee';
+import { EmployeeComponent, EmployeeListComponent } from './employee';
 
 @NgModule({
   declarations: [
     CustomerListComponent,
     CustomerDetailComponent,
 
-    EmployeeDetailComponent,
+    EmployeeComponent,
     EmployeeListComponent,
 
     CustomerGroupListComponent,

@@ -59,7 +59,8 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
     if (!this.productClass.value) {
       return [];
     }
-    const productClass = this.productClasses.filter(e => e.href === this.productClass.value)[0];
+    let productClassHref = this.productClass.value?.href ?? this.productClass.value;
+    const productClass = this.productClasses.filter(e => e.href === productClassHref)[0];
     return productClass.attributes;
   }
 }

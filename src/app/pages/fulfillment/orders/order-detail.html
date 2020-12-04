@@ -1,0 +1,183 @@
+
+<h1>
+  Order {{ orderDetailData.orderNumber }}
+</h1>
+<table class="table-50 order-customer-detail">
+  <tr>
+    <td>Customer</td>
+    <td>{{ orderDetailData.customer.name }}</td>
+  </tr>
+  <tr>
+    <td>Email</td>
+    <td>{{ orderDetailData.customer.email }}</td>
+  </tr>
+  <tr>
+    <td>Order Total</td>
+    <td>{{ orderDetailData.orderPayment.amount | currency:"IDR"}}</td>
+  </tr>
+  <tr>
+    <td>Date of Purchase</td>
+    <td>{{ orderDetailData.created | date }}</td>
+  </tr>
+  <tr>
+    <td>Payment</td>
+    <td>{{ orderDetailData.orderPayment.paymentGateway.name }}</td>
+  </tr>
+  <tr>
+    <td>Status</td>
+    <td>{{ orderDetailData.orderPayment.status }}</td>
+  </tr>
+  <tr>
+    <td>Address</td>
+    <td>
+      <address [innerHTML]="getOrderAddress()"></address>
+    </td>
+  </tr>
+</table>
+
+<ul class="non-field-errors">
+  <li *ngFor="let err of nonFieldErrors">{{ err }}</li>
+</ul>
+
+<form [formGroup]="form" (ngSubmit)="submit()" style="max-width:100%">
+  <div class="tab-header">
+    <label [ngClass]="{'active': currentTab.value === 'orderDetail'}">
+      <i class="material-icons">
+        analytics
+      </i>
+      <input type="radio" id="tab_summary" value="summary"/> Order Detail
+    </label>
+
+    <!--        <label [ngClass]="{'active': currentTab === 'shipping'}">-->
+    <!--          <i class="material-icons">face</i>-->
+    <!--          <input type="radio" id="tab_profile" value="profile" formControlName="currentTab">-->
+    <!--          Shipping-->
+    <!--        </label>-->
+
+    <!--        <label [ngClass]="{'active': currentTab === 'history'}">-->
+    <!--          <i class="material-icons">receipt_long</i>-->
+    <!--          <input type="radio" id="tab_profile" value="orders" formControlName="currentTab">-->
+    <!--          History-->
+    <!--        </label>-->
+  </div>
+
+  <!-- CurrentTab: Order Detail -->
+  <div *ngIf="currentTab.value === 'orderDetail'" id="orderDetail" style="margin-bottom: 20px">
+    <br>
+    <ng-container *ngFor="let children of orderDetailData.children">
+      <b style="margin-right: 10px">Warehouse: {{ children.warehouse.name }}</b>
+      <br>
+      <div class="shipment-action">
+        <button type="button" (click)="updateOrder(children.data[0], 'ready')"
+                class="control" [disabled]="getIsDisabledForReady(children.data[0])">
+          Ready
+        </button>
+        <button type="button" (click)="requestShipmentAndUpdateOrder(children.data[0])"
+                class="control" [disabled]="getIsDisabledForShipment(children.data[0])">
+          Kirim
+        </button>
+        <button type="button" (click)="updateOrder(children.data[0], 'complete')"
+                class="control" [disabled]="getIsDisabledForComplete(children.data[0])">
+          Complete
+        </button>
+        <div *ngIf="getConnote(children.data[0])">
+            <span>
+              Connote: {{ getConnote(children.data[0]) }} - {{ children.data[0].shippingMethod }}
+            </span>
+          <button type="button" (click)="printConnote(children.data[0].shipmentHistory.shippingLabelUrl)">Print connote</button>
+        </div>
+        <div>{{ this.getShipmentMessageInfo(children.data[0].href) }}</div>
+      </div>
+      <br>
+      <table style="margin-bottom: 20px">
+        <thead>
+        <tr>
+          <th>Invoice Id</th>
+          <th>UPC</th>
+          <th>Product Name</th>
+          <th>Quantity</th>
+          <th>Channel</th>
+          <th>Vendor</th>
+          <th>Price</th>
+          <th>Status</th>
+          <th>Notes</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let data of children.data">
+          <tr *ngFor="let lineItems of data.lineItems">
+            <td>
+              {{ data.href | entityToSlug }}
+            </td>
+            <td>
+              {{ lineItems.product.upc }}
+            </td>
+            <td>
+              <a [routerLink]="['/catalog/products/', lineItems.product.href|entityToSlug]">
+                {{ lineItems.product.name }}
+              </a>
+            </td>
+            <td>
+              {{ lineItems.quantity }}
+            </td>
+            <td></td>
+            <td>
+              <a [routerLink]="['/catalog/vendors/', lineItems.vendor.href|entityToSlug]">
+                {{ lineItems.vendor.name }}
+              </a>
+            </td>
+            <td>{{ lineItems.price }}</td>
+            <td>{{ data.status }}</td>
+            <td>{{ lineItems.notes }}</td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </table>
+    </ng-container>
+
+    <b style="margin-right: 10px">Summary Order</b>
+    <br><br>
+    <table>
+      <tbody>
+      <tr>
+        <td>Total amount cart (before Disc)</td>
+        <td class="summary-order-value">{{ orderDetailData.subtotalCost | currency: "IDR" }}</td>
+      </tr>
+      <tr>
+        <td>Discount Total</td>
+        <td class="summary-order-value">-{{ orderDetailData.discount | currency: "IDR" }}</td>
+      </tr>
+      <!--          <tr>-->
+      <!--            <td>Promo</td>-->
+      <!--            <td></td>-->
+      <!--          </tr>-->
+      <tr>
+        <td>Total amount cart (after Disc)</td>
+        <td class="summary-order-value">
+          {{ orderDetailData.subtotalCost - orderDetailData.discount | currency: "IDR" }}
+        </td>
+      </tr>
+      <tr>
+        <td>Shipping total</td>
+        <td class="summary-order-value">{{ orderDetailData.shippingCost | currency: "IDR" }}</td>
+      </tr>
+      <tr>
+        <td>Order total</td>
+        <td class="summary-order-value">{{ orderDetailData.orderPayment.amount | currency: "IDR" }}</td>
+      </tr>
+      </tbody>
+    </table>
+    <!--        <span style="margin-right: 10px">Ubah Status</span>-->
+    <!--        <select>-->
+    <!--          <option value="">Paid</option>-->
+    <!--        </select>-->
+  </div>
+
+  <div class="actions-container">
+    <!--        <button type="submit" disabled>Save</button>-->
+    <button type="button" (click)="navigateToParent(true)" class="control secondary">Close</button>
+    <!--        <button (click)="delete()" *ngIf="!isNew">Delete</button>-->
+  </div>
+</form>
+
+

@@ -24,34 +24,38 @@ import { InternalAddressValue } from './internal-address-value';
     <div [formGroup]="innerForm">
       <label>
         <span>Street</span>
-        <input [formControl]="street">
+        <input [formControl]="street" name="street">
+        <nus-field-errors [control]="form.get('street')"></nus-field-errors>
       </label>
 
       <label>
         <span>Province</span>
-        <select [formControl]="province">
+        <select [formControl]="province" name="province">
           <option *ngFor="let prov of availableProvinces" [ngValue]="prov">
             {{ prov.name }}
           </option>
         </select>
+        <nus-field-errors [control]="form.get('province')"></nus-field-errors>
       </label>
 
       <label>
         <span>City</span>
-        <select [formControl]="city">
+        <select [formControl]="city" name="city">
           <option *ngFor="let city of availableCities" [ngValue]="city">
             {{ city.name }}
           </option>
         </select>
+        <nus-field-errors [control]="form.get('city')"></nus-field-errors>
       </label>
 
       <label>
         <span>Postal Code</span>
-        <select [formControl]="postal">
+        <select [formControl]="postal" name="postal">
           <option *ngFor="let postalInfo of availablePostals" [ngValue]="postalInfo">
             {{ postalInfo.district }} / {{ postalInfo.subDistrict }} ({{ postalInfo.postalCode }})
           </option>
         </select>
+        <nus-field-errors [control]="form.get('postalCode')"></nus-field-errors>
       </label>
     </div>
   `,
@@ -79,7 +83,7 @@ export class AddressComponent implements OnInit {
   ngOnInit(): void {
     // setup initial form state
     this.innerForm = this.fb.group({
-      street: ['', [Validators.required, ]],
+      street: ['', [Validators.required, Validators.maxLength(255) ]],
       province: [null, [Validators.required, ]],
       city: [{value: null, disabled: true}, [Validators.required, ]],
       postal: [{value: null, disabled: true}, [Validators.required, ]],

@@ -82,6 +82,10 @@ describe('PaymentGatewayDetailComponent', () => {
       type: PaymentGatewayResp.type,
       clientKey: PaymentGatewayResp.clientKey,
       serverKey: PaymentGatewayResp.serverKey,
+      accountNumber: '123456',
+      accountHoldNumber: '23456',
+      code: '3456',
+      isActive: true,
     });
     component.form.value.logo = image64;
     component.save();
@@ -106,7 +110,10 @@ describe('PaymentGatewayDetailComponent', () => {
       logo: 'https://cdn.bhisma.cloud/cms/testimonial/sot.jpg',
       type: 'credit_card',
       clientKey: '123cc',
-      serverKey: 'def'
+      serverKey: 'def',
+      accountNumber: 'abcd',
+      accountHoldNumber: 'defgh',
+      code: '2345'
     };
 
     component.form.setValue({
@@ -117,6 +124,10 @@ describe('PaymentGatewayDetailComponent', () => {
       type: UpdatePaymentGateway.type,
       clientKey: UpdatePaymentGateway.clientKey,
       serverKey: UpdatePaymentGateway.serverKey,
+      accountNumber: UpdatePaymentGateway.accountNumber,
+      accountHoldNumber: UpdatePaymentGateway.accountHoldNumber,
+      code: UpdatePaymentGateway.code,
+      isActive: true
     });
     component.form.value.logo = image64;
     component.save();

@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 
 import { PagedResponse } from '@nusantara/core/pagination';
 import { IResultResponse, SuccessResult, ErrorResult, SuccessCreatedResult } from '@nusantara/core/responses';
-import { drf, base } from '@nusantara/models';
+import {drf, base, IOrder} from '@nusantara/models';
 
 /**
  * Base class for services that implement Create-Update-Read-Delete logic.
@@ -69,7 +69,7 @@ export abstract class AbstractCrudService<T extends base.IHrefEntity> {
   /**
    * Sends JSON or FormData to this service's list endpoint using HTTP POST.
    */
-  create(entity: T|FormData): Observable<IResultResponse> {
+  create(entity: T | FormData): Observable<IResultResponse> {
     return this.httpClient
       .post<T>(`${this.baseUrl}/`, entity, {observe: 'response', responseType: 'json'})
       .pipe(map(resp => {
@@ -86,7 +86,7 @@ export abstract class AbstractCrudService<T extends base.IHrefEntity> {
    * @param entity The form or JSON object to update
    * @param removeEmptyFiles Only used if entity is FormData;  Prevents unchanged file fields from being deleted.
    */
-  update(entity: T|FormData, removeEmptyFiles = true): Observable<IResultResponse> {
+  update(entity: T | FormData, removeEmptyFiles = true): Observable<IResultResponse> {
 
     // prevent unchanged files from being deleted on form data.
     if (entity instanceof FormData && removeEmptyFiles) {
@@ -131,17 +131,17 @@ export abstract class AbstractCrudService<T extends base.IHrefEntity> {
    * Shortcut method; either creates or updates an object based on whether the .href
    * attribute is already set.  If not set, assumes that the object must be created.
    */
-  save(entity: T|FormData): Observable<IResultResponse> {
+  save(entity: T | FormData): Observable<IResultResponse> {
     return (!!this.getEntityUrl(entity)) ? this.update(entity) : this.create(entity);
   }
 
-  delete(entity: T|base.IHrefEntity|FormData): Observable<IResultResponse> {
+  delete(entity: T | base.IHrefEntity | FormData): Observable<IResultResponse> {
     return this.httpClient
       .delete(this.getEntityUrl(entity), {observe: 'response', responseType: 'json'})
       .pipe(map(resp => resp.status === 204 ? new SuccessResult() : new ErrorResult(resp.body, resp.status)));
   }
 
-  private getEntityUrl(entity: T|base.IHrefEntity|FormData) {
+  private getEntityUrl(entity: T | base.IHrefEntity | FormData) {
     if (entity instanceof FormData) {
       return entity.get('href') as string;
     }
@@ -172,6 +172,31 @@ export abstract class AbstractCrudService<T extends base.IHrefEntity> {
     return this.httpClient
       .options<drf.IOptionsResponse>(`${this.baseUrl}/`, {observe: 'body', responseType: 'json'})
       .pipe(map(resp => (resp.actions.POST[fieldName] as drf.IChoiceField).choices));
+  }
+
+  public fetchParams(params: HttpParams) {
+    let page = params.get('page');
+    let per_page = params.get('per_page');
+    if (!page) {
+      page = '1';
+    }
+
+    if (!per_page) {
+      per_page = '20';
+    }
+
+    params = params.set('page', page);
+    params = params.set('per_page', per_page);
+
+    return this.httpClient
+      .get<T[]>(
+        `${this.baseUrl}/`,
+        {
+          observe: 'response',
+          responseType: 'json',
+          params
+        }
+      ).pipe(map(resp => new PagedResponse(resp)));
   }
 
 }

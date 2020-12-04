@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { UserService } from '@nusantara/services';
-import { AbstractDetailComponent } from '@nusantara/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { ICustomer, ICustomerGroup } from '@nusantara/models';
+import { OrderService, UserService } from '@nusantara/services';
+import { AbstractDetailComponent, PagedResponse, ToastService } from '@nusantara/core';
+import { ICustomer, ICustomerGroup, IOrder } from '@nusantara/models';
 
 /**
  * Displays basic information about a customer, their profile, purchase history,
@@ -20,7 +20,7 @@ import { ICustomer, ICustomerGroup } from '@nusantara/models';
       <li *ngFor="let err of nonFieldErrors">{{ err }}</li>
     </ul>
 
-    <form [formGroup]="form" (ngSubmit)="submit()">
+    <form [formGroup]="form" (ngSubmit)="save()">
 
       <label>
         <span>First Name</span>
@@ -80,7 +80,7 @@ import { ICustomer, ICustomerGroup } from '@nusantara/models';
             <dt>Registration Date</dt>
             <dd>{{ dateJoined|date }}</dd>
             <dt>Campaign</dt>
-            <dd>{{ profile.registrationCampaign || 'None' }}</dd>
+            <dd>{{ registrationCampaign || 'None' }}</dd>
             <dt>Channel</dt>
             <dd>{{ profile.registrationChannel }}</dd>
             <dt>Last Login</dt>
@@ -124,14 +124,27 @@ import { ICustomer, ICustomerGroup } from '@nusantara/models';
       <div *ngIf="currentTab === 'orders'" id="orders">
         <table>
           <thead>
-          <th>Number</th>
-          <th>Date</th>
-          <th>Channel</th>
-          <th>Type</th>
-          <th>Status</th>
-          <th>Grand Total</th>
+            <th>Number</th>
+            <th>Date</th>
+            <th>Channel</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Grand Total</th>
           </thead>
+          <tbody>
+            <tr *ngFor="let order of orders">
+              <td>{{ order.orderNumber }}</td>
+              <td>{{ order.created | date }}</td>
+              <td>-</td>
+              <td>{{ order.type }}</td>
+              <td>{{ order.status }}</td>
+              <td>{{ order.orderPayment.amount | currency:"IDR" }}</td>
+            </tr>
+          </tbody>
         </table>
+        <div *ngIf="!!page">
+            <nus-pagination-child [page]="page" (fetchPageNumber)="fetchOrders($event)"></nus-pagination-child>
+        </div>
       </div>
 
       <div *ngIf="currentTab === 'groups'" id="groups">
@@ -142,18 +155,18 @@ import { ICustomer, ICustomerGroup } from '@nusantara/models';
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let cg of customerGroups">
-            <td>{{ cg.name }}</td>
+          <tr *ngFor="let customergroup of customerGroups">
+            <td>{{ customergroup.name }}</td>
           </tr>
           </tbody>
         </table>
       </div>
 
-      <div class="actions-container">
-        <button type="submit" [disabled]="!form.valid">Save</button>
-        <button (click)="navigateToParent(true)">Cancel</button>
-        <button (click)="delete()" *ngIf="!isNew">Delete</button>
-      </div>
+      <nus-detail-actions
+        [component]="this"
+        (cancel)="navigateToParent(true)"
+        (delete)="delete()">
+      </nus-detail-actions>
 
     </form>
 
@@ -220,16 +233,36 @@ export class CustomerDetailComponent extends AbstractDetailComponent<ICustomer> 
   lastLogin: Date;
   profile: any;
   customerGroups: ICustomerGroup[];
+  orders: IOrder[];
+
+  page: PagedResponse<any>;
+
+  private userEmail: string;
 
   get currentTab(): string {
     return this.form.get('currentTab').value;
   }
 
-  constructor(public service: UserService,
-              public route: ActivatedRoute,
-              public router: Router,
-              private fb: FormBuilder) {
-    super();
+  constructor(service: UserService,
+              route: ActivatedRoute,
+              router: Router,
+              toast: ToastService,
+              private fb: FormBuilder,
+              private orderService: OrderService) {
+    super(route, router, toast, service);
+  }
+
+  ngOnInit() {
+    super.ngOnInit();
+    this.fetchOrders();
+  }
+
+  fetchOrders(pageNumber?: number) {
+
+    this.orderService.fetchWithParam(pageNumber || 1, this.userEmail).subscribe((page) => {
+      this.orders = page.entities;
+      this.page = page;
+    });
   }
 
   initializeForm(entity?: ICustomer) {
@@ -248,6 +281,7 @@ export class CustomerDetailComponent extends AbstractDetailComponent<ICustomer> 
     this.registrationCampaign = entity.profile?.registrationCampaign;
     this.profile = entity.profile;
     this.customerGroups = entity.customerGroups;
+    this.userEmail = entity.email;
   }
 
   submit() {

@@ -82,12 +82,12 @@ export class WidgetBlockComponent extends AbstractDetailComponent<IWidgetBlock> 
     { value: 'footer', displayName: 'Footer' },
   ];
 
-  constructor(public service: WidgetService,
+  constructor(service: WidgetService,
               public fb: FormBuilder,
-              public toast: ToastService,
-              public route: ActivatedRoute,
-              public router: Router) {
-    super();
+              toast: ToastService,
+              route: ActivatedRoute,
+              router: Router) {
+    super(route, router, toast, service);
   }
 
   get name(): FormControl { return this.form.get('name') as FormControl; }

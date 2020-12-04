@@ -8,4 +8,6 @@ export interface IShippingProvider {
   isActive: boolean;
   icon: string;
   services: IShippingService[];
+  authUser?: string;
+  authPass?: string;
 }

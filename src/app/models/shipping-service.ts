@@ -3,10 +3,10 @@
  *
  * @see IShippingProvider
  */
-export interface IShippingService {
-  href: string;
+import { INamedHrefEntity } from "@nusantara/models/base";
+
+export interface IShippingService extends INamedHrefEntity {
   isActive: boolean;
-  name: string;
   icon: string;
   minimumWeight: number;
   handlingFee: number;

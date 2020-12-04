@@ -176,7 +176,6 @@ export class RangeComponent extends AbstractEditingComponent implements OnInit {
    *  the notification will be ignored.
    */
   onSiblingQuantityChanged(siblingIndex: number): void {
-    console.log('Got sibling index changed', siblingIndex, 'my own index is ', this.index, 'and my price is', this.price.value);
 
     this.suspendQuantityChangedEmitter = true;
     if (siblingIndex === (this.index - 1)) {

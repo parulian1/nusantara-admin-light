@@ -1,10 +1,16 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, ElementRef, OnInit, Directive } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import { ToastLevelEnum, ToastService } from '@nusantara/core/toast';
-import { IResultResponse } from '@nusantara/core/responses';
+import { ErrorResult, IResultResponse } from '@nusantara/core/responses';
+import { IHttpFailure } from '@nusantara/models';
 import { AbstractEditingComponent } from './abstract-editing.component';
+import { convertStringToObject, keysToCamel } from "@nusantara/shared/helpers";
+import { isObject } from "rxjs/internal-compatibility";
+
 
 /**
  * Base class for components that display a create/edit form
@@ -13,25 +19,25 @@ import { AbstractEditingComponent } from './abstract-editing.component';
 @Directive()
 export abstract class AbstractDetailComponent<T> extends AbstractEditingComponent implements OnInit, AfterViewInit {
 
-  route: ActivatedRoute;
-  router: Router;
   formView: ElementRef<HTMLFormElement>;
-
-  service: any;
-  toast: ToastService;
-  originalEntityName: string;
+  originalEntityName = 'Object';
   entityTypeName: string;
   nonFieldErrors: Array<string> = [];
 
+  protected constructor(public route: ActivatedRoute, public router: Router,
+                        public toast: ToastService, public service: any) {
+    super();
+  }
+
   ngOnInit() {
-    this.route.data.subscribe((data: {entity: T}) => {
+    this.route.data.subscribe((data: { entity: T }) => {
       this.initializeForm(data.entity);
       this.setOriginalEntityName(data.entity);
     });
   }
 
   ngAfterViewInit(): void {
-    this.route.data.subscribe((data: {entity: T}) => {
+    this.route.data.subscribe((data: { entity: T }) => {
       this.initializeSubViewForms(data.entity);
     });
   }
@@ -48,7 +54,8 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
    * then this method can be overridden to initialize their data (similar
    * to initializeForm, but ensuring that the queries have resolved.
    */
-  initializeSubViewForms(entity?: T) { }
+  initializeSubViewForms(entity?: T) {
+  }
 
   /**
    * Sets the 'originalEntityName' property (typically used
@@ -85,7 +92,13 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
   }
 
   save() {
-    this.service.save(this.getFormValue()).subscribe(
+    this.service.save(this.getFormValue()).pipe(catchError(err => {
+      if (err instanceof HttpErrorResponse) {
+        return of(new ErrorResult<IHttpFailure>(err.error, err.status));
+      } else {
+        return of(new ErrorResult<IHttpFailure>({detail: 'Network error.. probably?'}, err.status));
+      }
+    })).subscribe(
       resp => {
         if (resp.success) {
           this.onSaveSuccess(resp);
@@ -135,10 +148,23 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
    */
   protected onSaveError(error: any) {
     this.form.enable();
-    let errorMessage = error.toString();
-    if (error instanceof HttpErrorResponse) {
-      errorMessage = error.message;
+    let errorMessage = '';
+    let errorMessages: string[] = [];
+
+    if (error.errorDetails.errors) {
+      this.setFormErrors(error.errorDetails.errors);
+    } else if (error.errorDetails.detail) {
+      errorMessage = error.errorDetails.detail;
+    } else if (isObject(error.errorDetails)) {
+      Object.keys(error.errorDetails).forEach((field) => {
+        errorMessages.push(`${field}: ${error.errorDetails[field][0]}`);
+      });
+      errorMessage = errorMessages.length > 0 ? errorMessages[0]: 'Please check your input again.';
+      this.setFormErrors(error.errorDetails);
+    } else {
+      errorMessage = 'Please check your input again.';
     }
+
     this.toast?.addError(errorMessage, 'Failed to Save');
   }
 
@@ -164,6 +190,28 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
 
   protected onDeleteError(error: any) {
     this.form.enable();
-    this.toast?.addError(error.toString(), 'Failed to Save');
+    this.toast?.addError(error.toString(), 'Failed to Delete');
+  }
+
+  /**
+   * Handle multiple fields errors
+   */
+  setFormErrors(error: any) {
+    let errorMessage: any;
+    if (typeof error !== "object") {
+      const errorsString = error.join('\n');
+      const errorObject = convertStringToObject(errorsString);
+      errorMessage = keysToCamel(errorObject);
+    } else {
+      errorMessage = error;
+    }
+
+    if (isObject(errorMessage)) {
+      for (const prop in errorMessage) {
+        if (errorMessage.hasOwnProperty(prop)) {
+          this.form.controls[prop].setErrors({apiError: errorMessage[prop]});
+        }
+      }
+    }
   }
 }

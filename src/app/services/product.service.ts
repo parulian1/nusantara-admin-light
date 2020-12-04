@@ -37,9 +37,18 @@ export class ProductService extends AbstractCrudService<products.IProduct> {
       params = params.set('q', query);
     }
 
+    params = params.set('include_deleted', 'true');
+
     return this.httpClient
       .get<products.IProduct[]>(`${this.baseUrl}/`, {observe: 'response', responseType: 'json', params})
       .pipe(map(resp => new PagedResponse(resp)));
   }
 
+  fetch(slug: string): Observable<products.IProduct> {
+    let params = new HttpParams({fromObject: {
+        include_deleted: 'true',
+      }});
+    return this.httpClient
+      .get<products.IProduct>(`${this.baseUrl}/${slug}/`, {observe: 'body', responseType: 'json', params});
+  }
 }

@@ -16,7 +16,7 @@ import { VendorService } from '@nusantara/services';
 
     <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
 
-    <form [formGroup]="form" (ngSubmit)="saveAsForm()" #f>
+    <form [formGroup]="form" (ngSubmit)="save()" #f>
 
       <input type="hidden" [formControl]="href" name="href"> <!-- required for non-JSON form posting -->
 
@@ -82,12 +82,14 @@ export class VendorComponent extends AbstractDetailComponent<IVendor> {
   iconImagePreviewUrl: string;
   bannerImagePreviewUrl: string;
 
-  constructor(public service: VendorService,
-              public route: ActivatedRoute,
-              public router: Router,
+  entity?: IVendor;
+
+  constructor(service: VendorService,
+              route: ActivatedRoute,
+              router: Router,
               private fb: FormBuilder,
-              public toast: ToastService) {
-    super();
+              toast: ToastService) {
+    super(route, router, toast, service);
   }
 
   get name(): FormControl { return this.form.get('name') as FormControl; }
@@ -98,13 +100,14 @@ export class VendorComponent extends AbstractDetailComponent<IVendor> {
   get bannerImage(): FormControl { return this.form.get('bannerImage') as FormControl; }
 
   initializeForm(entity?: IVendor) {
+    this.entity = entity;
     this.form = this.fb.group({
       name: [entity?.name, [Validators.required, ]],
       href: [entity?.href, []],
       description: [entity?.description ?? '', []],
       internalNotes: [entity?.internalNotes ?? '', []],
-      iconImage: [],
-      bannerImage: [],
+      iconImage: ['', entity?.iconImage ? [] : [Validators.required, ]],
+      bannerImage: ['', []],
     });
 
     this.setBannerImagePreview(entity?.bannerImage);
@@ -117,5 +120,21 @@ export class VendorComponent extends AbstractDetailComponent<IVendor> {
 
   setBannerImagePreview(data?: Event|string) {
     this.setImagePreview(data, (dataAsUrl) => this.bannerImagePreviewUrl = dataAsUrl);
+  }
+
+  save() {
+    if (!!this.entity?.href && !!this.entity?.iconImage && !this.iconImage.value) {
+      this.form.removeControl('iconImage');
+    }
+    if (!!this.entity?.href && !!this.entity?.iconImage && !this.bannerImage.value) {
+      this.form.removeControl('bannerImage');
+    }
+    if (!!this.iconImage && this.iconImagePreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
+      this.form.value.iconImage = this.iconImagePreviewUrl;
+    }
+    if (!!this.bannerImage && this.bannerImagePreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
+      this.form.value.bannerImage = this.bannerImagePreviewUrl;
+    }
+    super.save();
   }
 }

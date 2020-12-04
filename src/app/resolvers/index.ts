@@ -19,8 +19,12 @@ export * from './product-class-type.resolver';
 export * from './vendor-list.resolver';
 export * from './vendor.resolver';
 
-export * from './warehouse-list.resolver';
-export * from './warehouse.resolver';
+export * from './theme-list.resolver';
+export * from './theme.resolver';
+export * from './theme-subscription-type-option.resolver';
 
-export * from './payment-gateway.resolver';
-export * from './payment-gateway-type.resolver';
+export * from './banner';
+
+export * from './product-option.resolver';
+export * from './product-option-type.resolver';
+export * from './active-product-option.resolver';

@@ -7,8 +7,19 @@ import { SharedModule } from '@nusantara/shared';
 import { CmsRoutingModule } from './cms-routing.module';
 import { FlatPageComponent, FlatPageListComponent } from './flat-page';
 import { ContentFooterListComponent, ContentFooterComponent, ContentFooterChildrenComponent } from './content-footer';
-import { WidgetBlockComponent, WidgetBlockListComponent, BannerGroupComponent, WidgetSummaryRowComponent } from './widget';
+import {
+  WidgetBlockComponent,
+  WidgetBlockListComponent,
+  BannerGroupComponent,
+  WidgetSummaryRowComponent
+} from './widget';
 import { TestimonialComponent, TestimonialListComponent } from './testimonial';
+import { BannerListComponent, BannerComponent } from './banner';
+import { HighlightComponent, HighlightListComponent } from './highlight';
+import { SlaListComponent, SlaComponent } from './sla';
+import { NavigationComponent } from './navigation/detail/navigation.component';
+import { NavigationListComponent } from './navigation/navigation-list/navigation-list.component';
+import { NavigationChildrenComponent } from './navigation/navigation-children/navigation-children.component';
 
 
 @NgModule({
@@ -24,10 +35,21 @@ import { TestimonialComponent, TestimonialListComponent } from './testimonial';
     WidgetSummaryRowComponent,
 
     BannerGroupComponent,
+    BannerListComponent,
+    BannerComponent,
 
     ContentFooterComponent,
     ContentFooterListComponent,
     ContentFooterChildrenComponent,
+
+    HighlightListComponent,
+    HighlightComponent,
+
+    SlaComponent,
+    SlaListComponent,
+    NavigationComponent,
+    NavigationListComponent,
+    NavigationChildrenComponent,
   ],
   imports: [
     CommonModule,

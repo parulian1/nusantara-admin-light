@@ -11,4 +11,5 @@ export class IWarehouse {
   subLocations: ISubLocation[];
   financialReportingAs?: string;
   allowReassignmentFrom?: string[];
+  isActive: boolean;
 }

@@ -1,4 +1,5 @@
 import { IProductAttribute } from './product-attribute';
+import { IProductOption } from './product-option';
 
 export interface IProductClass {
   name: string;
@@ -9,4 +10,5 @@ export interface IProductClass {
   type: string;
   productCount?: number;
   attributes: IProductAttribute[];
+  option?: IProductOption;
 }

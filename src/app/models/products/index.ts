@@ -14,5 +14,7 @@ export * from './product-class';
 export * from './product-attribute';
 export * from './product-attribute.type';
 
-export * from './product-promotion';
-export * from './product-promotion.type';
+export * from './product-option';
+export * from './product-option-type.enum';
+
+export * from './product-subscription';

@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { products, ISubLocation, IWarehouse } from '@nusantara/models';
+import { products, ISubLocation } from '@nusantara/models';
 import { IProductClass } from '../../../models/products';
 
 @Component({
@@ -10,18 +10,26 @@ import { IProductClass } from '../../../models/products';
   template: `
     <tr [formGroup]="form">
       <td><a>{{ displayedProductName }}</a></td>
-      <td class="immediate-error-display">
-        <select [formControl]="subLocation">
+      <td class="immediate-error-display" [formGroup]="location">
+        <select formControlName="href">
           <option [ngValue]="null">---</option>
           <option *ngFor="let loc of availableSubLocations" [ngValue]="loc.href">
             {{ loc.name }} ({{ loc.code }})
           </option>
         </select>
       </td>
-      <td><input type="number" min="1" [formControl]="quantity"></td>
+      <td><input type="number" min="1" [formControl]="originalQuantity"></td>
       <td class="immediate-error-display"><input type="text" [formControl]="sku"></td>
-      <td><input type="text" [formControl]="locator"></td>
       <td><input type="text" [formControl]="batchNumber"></td>
+      <td>
+        <div *ngFor="let control of locator.controls; index as ctr">
+          <input [formControl]="control" name="locator">
+          <button (click)="locator.removeAt(ctr)" type="button" class="remove-button">
+            <i class="material-icons">remove_circle_outline</i>
+          </button>
+        </div>
+        <button (click)="addLocator()" type="button">Add</button>
+      </td>
       <td class="immediate-error-display"><input *ngIf="isPerishable" type="date" [formControl]="expiryDate"></td>
       <td><input type="number" [formControl]="cost"></td>
       <td>
@@ -36,18 +44,18 @@ import { IProductClass } from '../../../models/products';
     'td:nth-child(2) select { min-width: 115px; }', // location
     'td:nth-child(3) input { width: 70px; }', // quantity
     'td:nth-child(8) input { width: 105px; }', // cost
+    'td>div>input {float: left; width: 80%;}',
+    'td>div>button {float: left; width: 20%;}'
   ]
 })
 export class LineItemComponent implements OnInit, AfterViewInit {
 
   @Input() availableSubLocations: ISubLocation[] = [];
+  @Input() productClasses: IProductClass[];
   @Input() form: FormGroup;
   @Output() remove = new EventEmitter<void>();
 
-  productClasses: IProductClass[];
-
-  constructor(private fb: FormBuilder,
-              public route: ActivatedRoute,
+  constructor(public route: ActivatedRoute,
               public router: Router) {
   }
 
@@ -58,7 +66,11 @@ export class LineItemComponent implements OnInit, AfterViewInit {
 
   get isPerishable(): boolean {
     const p = this.product.value as products.IProduct;
-    const currentPc = this.productClasses.filter(pc => pc.href === p.productClass.href);
+    let currentPc = [];
+    if (!!this.productClasses) {
+      currentPc = this.productClasses.filter(pc => pc.href === p.productClass.href);
+    }
+
     if (currentPc.length > 0) {
       return currentPc[0].isPerishable;
     } else {
@@ -67,18 +79,16 @@ export class LineItemComponent implements OnInit, AfterViewInit {
   }
 
   get product(): FormControl { return this.form.get('product') as FormControl; }
-  get subLocation(): FormControl { return this.form.get('subLocation') as FormControl; }
-  get quantity(): FormControl { return this.form.get('quantity') as FormControl; }
+  get location(): FormGroup { return this.form.get('location') as FormGroup; }
+  get originalQuantity(): FormControl { return this.form.get('originalQuantity') as FormControl; }
   get sku(): FormControl { return this.form.get('sku') as FormControl; }
-  get locator(): FormControl { return this.form.get('locator') as FormControl; }
+  get locator(): FormArray { return this.form.get('locator') as FormArray; }
   get expiryDate(): FormControl { return this.form.get('expiryDate') as FormControl; }
   get batchNumber(): FormControl { return this.form.get('batchNumber') as FormControl; }
   get cost(): FormControl { return this.form.get('cost') as FormControl; }
 
   ngOnInit() {
-    this.route.data.subscribe((data: { productClasses: IProductClass[]}) => {
-      this.productClasses = data.productClasses;
-    });
+    this.addLocator();
   }
 
   ngAfterViewInit() {
@@ -87,5 +97,9 @@ export class LineItemComponent implements OnInit, AfterViewInit {
     } else {
       this.expiryDate.clearValidators();
     }
+  }
+
+  addLocator() {
+    this.locator.push(new FormControl(''));
   }
 }

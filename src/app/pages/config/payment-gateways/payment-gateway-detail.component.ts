@@ -3,10 +3,10 @@ import { FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ToastService, AbstractDetailComponent } from '@nusantara/core';
-import { INamedHrefEntity } from '@nusantara/models/base';
 import { drf, IPaymentGateway } from '@nusantara/models';
 import { PaymentGatewayService } from '@nusantara/services';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { setAndClearValidators } from './utils';
 
 @Component({
   selector: 'nus-payment-gateway',
@@ -46,16 +46,45 @@ import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
         <nus-field-errors [control]="type"></nus-field-errors>
       </label>
 
-      <label>
-        <span>Client Key</span>
-        <input type="text" [formControl]="clientKey" name="clientKey">
-        <nus-field-errors [control]="clientKey"></nus-field-errors>
-      </label>
+      <!-- Show when type of payment other than manual transfer -->
+      <ng-template [ngIf]="currentType && (currentType !== 'manual_transfer')">
+        <label>
+          <span>Client Key</span>
+          <input type="text" [formControl]="clientKey" name="clientKey">
+          <nus-field-errors [control]="clientKey"></nus-field-errors>
+        </label>
+
+        <label>
+          <span>Server Key</span>
+          <input type="text" [formControl]="serverKey" name="serverKey">
+          <nus-field-errors [control]="serverKey"></nus-field-errors>
+        </label>
+
+        <label>
+          <span>Code</span>
+          <input type="text" [formControl]="code" name="code">
+          <nus-field-errors [control]="code"></nus-field-errors>
+        </label>
+      </ng-template>
+
+      <!-- Show when type of payment is manual_transfer -->
+      <ng-template [ngIf]="currentType && (currentType === 'manual_transfer')">
+        <label>
+          <span>Account Number</span>
+          <input type="text" [formControl]="accountNumber" name="accountNumber">
+          <nus-field-errors [control]="clientKey"></nus-field-errors>
+        </label>
+
+        <label>
+          <span>Account Hold Number</span>
+          <input type="text" [formControl]="accountHoldNumber" name="accountHoldNumber">
+          <nus-field-errors [control]="serverKey"></nus-field-errors>
+        </label>
+      </ng-template>
 
       <label>
-        <span>Server Key</span>
-        <input type="text" [formControl]="serverKey" name="serverKey">
-        <nus-field-errors [control]="serverKey"></nus-field-errors>
+        <span>Is Active</span>
+        <input type="checkbox" [formControl]="isActive" name="isActive">
       </label>
 
       <div>
@@ -80,15 +109,17 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
 
   public Editor = ClassicEditor;
 
+  entity?: IPaymentGateway;
   logoPreviewUrl: string;
+  currentType: string;
   typeChoices: drf.IChoice[];
 
-  constructor(public service: PaymentGatewayService,
+  constructor(service: PaymentGatewayService,
               public fb: FormBuilder,
-              public toast: ToastService,
-              public route: ActivatedRoute,
-              public router: Router) {
-    super();
+              toast: ToastService,
+              route: ActivatedRoute,
+              router: Router) {
+    super(route, router, toast, service);
   }
 
   get name(): FormControl {
@@ -111,8 +142,24 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     return this.form.get('serverKey') as FormControl;
   }
 
+  get accountNumber(): FormControl {
+    return this.form.get('accountNumber') as FormControl;
+  }
+
+  get accountHoldNumber(): FormControl {
+    return this.form.get('accountHoldNumber') as FormControl;
+  }
+
+  get isActive(): FormControl {
+    return this.form.get('isActive') as FormControl;
+  }
+
   get description(): FormControl {
     return this.form.get('description') as FormControl;
+  }
+
+  get code(): FormControl {
+    return this.form.get('code') as FormControl;
   }
 
   ngOnInit(): void {
@@ -120,6 +167,10 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
       this.typeChoices = data.typeChoices;
     });
     super.ngOnInit();
+
+    this.type.valueChanges.subscribe(change => {
+      this.setCurrentTypeAndValidatorFields(change);
+    });
   }
 
   initializeForm(entity?: IPaymentGateway) {
@@ -128,12 +179,24 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
       href: [entity?.href],
       logo: [''],
       type: [entity?.type, [Validators.required]],
-      clientKey: [entity?.clientKey],
-      serverKey: [entity?.serverKey],
-      description: [entity?.description]
+      clientKey: [entity?.clientKey ?? ''],
+      serverKey: [entity?.serverKey ?? ''],
+      accountNumber: [entity?.accountNumber ?? ''],
+      accountHoldNumber: [entity?.accountHoldNumber ?? ''],
+      isActive: [entity?.isActive ?? true],
+      description: [entity?.description ?? ''],
+      code: [entity?.code],
     });
 
+    this.entity = entity;
+
     this.setLogoPreview(entity?.logo);
+    this.setCurrentTypeAndValidatorFields(entity?.type);
+  }
+
+  setCurrentTypeAndValidatorFields(value = null): void {
+    this.currentType = value;
+    setAndClearValidators(value, this.form, this.logoPreviewUrl);
   }
 
   setLogoPreview(data?: Event | string) {
@@ -141,8 +204,11 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
   }
 
   save() {
-    if (this.logoPreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
-     this.form.value.logo = this.logoPreviewUrl;
+    if (!!this.entity?.href && !!this.entity?.logo && !this.form.get('logo').value) {
+      this.form.removeControl('logo');
+    }
+    if (!!this.logo && this.logoPreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
+      this.form.value.logo = this.logoPreviewUrl;
     }
     super.save();
   }

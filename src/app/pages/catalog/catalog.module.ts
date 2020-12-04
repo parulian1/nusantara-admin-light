@@ -10,6 +10,8 @@ import { CategoryListComponent, CategoryComponent } from './category';
 import { ProductClassListComponent, ProductClassComponent } from './product-class';
 import * as product from './product';
 import { VendorListComponent, VendorComponent } from './vendor';
+import {ProductOptionListComponent} from "./product-options/product-option-list.component";
+import {ProductOptionComponent} from "./product-options/product-option.component";
 
 @NgModule({
   declarations: [
@@ -34,8 +36,13 @@ import { VendorListComponent, VendorComponent } from './vendor';
     product.attribute.ProductAttributeHostComponent,
     product.attribute.AttributeValueComponent,
 
+    product.subscription.ProductSubscriptonHostComponent,
+
     VendorListComponent,
     VendorComponent,
+
+    ProductOptionListComponent,
+    ProductOptionComponent,
   ],
   imports: [
     CommonModule,

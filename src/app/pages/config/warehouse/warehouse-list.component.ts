@@ -22,6 +22,7 @@ import { IWarehouse } from '@nusantara/models';
           <th>City</th>
           <th>Type</th>
           <th>Stock Locations</th>
+          <th>Is Active</th>
         </tr>
       </thead>
       <tbody>
@@ -31,6 +32,7 @@ import { IWarehouse } from '@nusantara/models';
         <td>{{ entity.address?.city }}</td>
         <td>{{ entity.type }}</td>
         <td>{{ entity.subLocations.length }}</td>
+        <td><nus-true-false [value]="entity.isActive"></nus-true-false></td>
       </tr>
       </tbody>
     </table>

@@ -52,12 +52,12 @@ export class FlatPageComponent extends AbstractDetailComponent<IFlatPage> implem
 
   public Editor = ClassicEditor;
 
-  constructor(public service: FlatPageService,
+  constructor(service: FlatPageService,
               public fb: FormBuilder,
-              public toast: ToastService,
-              public route: ActivatedRoute,
-              public router: Router) {
-    super();
+              toast: ToastService,
+              route: ActivatedRoute,
+              router: Router) {
+    super(route, router, toast, service);
   }
 
   get url(): FormControl { return this.form.get('url') as FormControl; }
@@ -76,6 +76,8 @@ export class FlatPageComponent extends AbstractDetailComponent<IFlatPage> implem
 
   setOriginalEntityName(entity?: IFlatPage) {
     // overridden because attribute is named 'title' and not 'name' as expected in base class.
-    this.originalEntityName = entity.title;
+    if (entity) {
+      this.originalEntityName = entity.title;
+    }
   }
 }

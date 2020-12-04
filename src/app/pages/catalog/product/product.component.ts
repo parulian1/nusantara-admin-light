@@ -1,17 +1,20 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Validators, FormBuilder, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { zip } from 'rxjs';
+import { of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
-import { ToastService, AbstractDetailComponent, PagedResponse } from '@nusantara/core';
+import { ToastService, AbstractDetailComponent, PagedResponse, getSlugFromHref, NusantaraValidators, ErrorResult } from '@nusantara/core';
 import { ICategory, IVendor, drf, products } from '@nusantara/models';
+import { IError } from '@nusantara/models/base/error';
 import { ProductService } from '@nusantara/services';
-import { getSlugFromHref } from '@nusantara/shared/helpers';
 import { PriceListHostComponent } from './price';
 import { ProductMediaHostComponent } from './media';
 import { ProductAttributeHostComponent } from './attribute';
+import { ProductSubscriptonHostComponent } from './subscription';
 
 /**
  * Allows the user to edit/create a single product.
@@ -30,13 +33,13 @@ import { ProductAttributeHostComponent } from './attribute';
 
       <label>
         <span>Name</span>
-        <input type="text" [formControl]="name">
+        <input type="text" [formControl]="name" name="name">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label *ngIf="structure.value === 'parent'">
         <span>Product Class</span>
-        <select [formControl]="productClass">
+        <select [formControl]="productClass" name="product-class">
           <option *ngFor="let pc of productClasses" [ngValue]="pc.href">
             {{ pc.name }}
           </option>
@@ -46,7 +49,7 @@ import { ProductAttributeHostComponent } from './attribute';
 
       <label *ngIf="structure.value === 'parent'">
         <span>Category</span>
-        <select [formControl]="category">
+        <select [formControl]="category" name="category">
           <option *ngFor="let c of categories" [ngValue]="c.href">
             {{ c.pathName }}
           </option>
@@ -56,7 +59,7 @@ import { ProductAttributeHostComponent } from './attribute';
 
       <label *ngIf="structure.value === 'parent'">
         <span>Vendor</span>
-        <select [formControl]="vendor">
+        <select [formControl]="vendor" name="vendor">
           <option *ngFor="let v of vendors" [ngValue]="v.href">
             {{ v.name }}
           </option>
@@ -66,7 +69,7 @@ import { ProductAttributeHostComponent } from './attribute';
 
       <label>
         <span>UPC</span>
-        <input type="text" [formControl]="upc">
+        <input type="text" [formControl]="upc" name="upc">
         <nus-field-errors [control]="upc"></nus-field-errors>
       </label>
 
@@ -79,7 +82,7 @@ import { ProductAttributeHostComponent } from './attribute';
 
       <label>
         <span>Weight (kg)</span>
-        <input type="number" [formControl]="weight">
+        <input type="number" [formControl]="weight" name="weight">
         <nus-field-errors [control]="weight"></nus-field-errors>
       </label>
 
@@ -91,6 +94,8 @@ import { ProductAttributeHostComponent } from './attribute';
       </nus-product-attribute-host>
 
       <nus-price-list-host [form]="priceLists"></nus-price-list-host>
+
+      <nus-product-subscription [form]="subscription" *ngIf="isProductOptionDomain"></nus-product-subscription>
 
       <nus-product-media-host [form]="media"></nus-product-media-host>
 
@@ -114,6 +119,30 @@ import { ProductAttributeHostComponent } from './attribute';
         </table>
       </div>
 
+      <h2>Tags</h2>
+      <table>
+        <thead>
+        <tr><th>Tag</th><th></th></tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let t of tags.controls; let i = index">
+          <td>
+            <input type="text" [formControl]="t">
+          </td>
+          <td>
+            <button type="button"
+                    class="remove-button"
+                    (click)="tags.removeAt(i)">
+              <i class="material-icons">remove_circle_outline</i>
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2"><button (click)="addTag()" type="button" class="add-button">Add Tag</button></td>
+        </tr>
+        </tbody>
+      </table>
+
       <h2>Recommended Products</h2>
       <table>
         <thead>
@@ -126,9 +155,7 @@ import { ProductAttributeHostComponent } from './attribute';
         <tr *ngFor="let r of related.controls; let i = index">
           <td>{{ r.get('name').value }}</td>
           <td>
-            <button type="button"
-                    class="remove-button"
-                    (click)="related.removeAt(i)">
+            <button type="button" class="remove-button" (click)="related.removeAt(i)">
               <i class="material-icons">remove_circle_outline</i>
             </button>
           </td>
@@ -142,6 +169,19 @@ import { ProductAttributeHostComponent } from './attribute';
         </tr>
         </tbody>
       </table>
+
+      <h2>SEO</h2>
+      <label>
+        <span>Meta Keywords</span>
+        <input type="text" [formControl]="seoMeta" name="seoMeta">
+        <nus-field-errors [control]="seoMeta"></nus-field-errors>
+      </label>
+
+      <label>
+        <span>Description</span>
+        <input type="text" [formControl]="seoDescription" name="seoDescription">
+        <nus-field-errors [control]="seoDescription"></nus-field-errors>
+      </label>
 
       <nus-detail-actions
         [component]="this"
@@ -171,14 +211,15 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   @ViewChild(ProductMediaHostComponent) mediaHost!: ProductMediaHostComponent;
   @ViewChild(PriceListHostComponent) priceListHost!: PriceListHostComponent;
   @ViewChild(ProductAttributeHostComponent) attributeHost!: ProductAttributeHostComponent;
+  @ViewChild(ProductSubscriptonHostComponent) subscriptionHost!: ProductSubscriptonHostComponent;
 
-  constructor(public service: ProductService,
+  constructor(service: ProductService,
               private fb: FormBuilder,
-              public route: ActivatedRoute,
-              public toast: ToastService,
-              public router: Router,
+              route: ActivatedRoute,
+              toast: ToastService,
+              router: Router,
               public modal: NgxSmartModalService) {
-    super();
+    super(route, router, toast, service);
   }
 
   get name(): FormControl { return this.form.get('name') as FormControl; }
@@ -196,6 +237,20 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   get parent(): FormControl { return this.form.get('parent') as FormControl; }
   get structure(): FormControl { return this.form.get('structure') as FormControl; }
+
+  get tags(): FormArray { return this.form.get('tags') as FormArray; }
+  get seoMeta(): FormControl { return this.form.get('seoMeta') as FormControl; }
+  get seoDescription(): FormControl { return this.form.get('seoDescription') as FormControl; }
+
+  get subscription(): FormControl { return this.form.get('subscription') as FormControl; }
+
+  get isProductOptionDomain(): boolean {
+    const pc = this.productClasses.filter(e => e.href === (this.form.get('productClass').get('href') as FormControl)?.value)[0];
+    if (pc && (pc.type === 'subscription' && pc.option)) {
+      return true;
+    }
+    return false;
+  }
 
   ngOnInit(): void {
     this.route.data.subscribe((
@@ -221,7 +276,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   initializeForm(entity?: products.IProduct) {
 
     this.form = this.fb.group({
-      name: [entity?.name, [Validators.required, Validators.maxLength(50), ]],
+      name: [entity?.name, [Validators.required, Validators.maxLength(120), ]],
       parent: [entity?.parent ],
       href: [entity?.href],
       upc: [entity?.upc, [Validators.required, ]],
@@ -235,6 +290,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       attributes: this.fb.group({}, []),
       priceLists: this.fb.array([]),
       related: this.fb.array([]),
+      seoMeta: [entity?.seoMeta, []],
+      seoDescription: [entity?.seoDescription, []],
+      tags: this.fb.array([], [NusantaraValidators.preventArrayDuplicates(), ]),
+      subscription: this.fb.group({}, []),
     });
 
     // new product variant
@@ -243,9 +302,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       this.structure.setValue('child');
 
       // mandatory inheritance from parent
-      this.productClass.setValue(this.parentProduct.productClass);
-      this.category.setValue(this.parentProduct.category);
-      this.vendor.setValue(this.parentProduct.vendor);
+      this.productClass.setValue(this.parentProduct.productClass.href);
+      this.category.setValue(this.parentProduct.category.href);
+      this.vendor.setValue(this.parentProduct.vendor.href);
 
       // optional inheritance from parent
       this.description.setValue(this.parentProduct.description);
@@ -265,9 +324,13 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       );
     }
 
+    for (const t of entity?.tags ?? []) {
+      this.addTag(t);
+    }
+
     // listen for any changes to this so we can disable weight when appropriate
     this.productClass.valueChanges.subscribe(val => this.onProductClassChanged(val));
-    this.onProductClassChanged(this.productClass.value);
+    this.onProductClassChanged(this.productClass.value?.href ?? this.productClass.value );
   }
 
   initializeSubViewForms(entity?: products.IProduct) {
@@ -292,6 +355,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     for (const media of entity?.media ?? []) {
       this.mediaHost.add(media);
     }
+
+    if (entity?.subscription) {
+      this.subscriptionHost.add(entity?.subscription);
+    }
   }
 
   /**
@@ -310,26 +377,49 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   save() {
-    // todo: these are basically ignoring the results of saving
-    // the child objects.  This shouldn't be -- see a clean way of preparing
-    // when calling zip(), it didn't seem to trigger the sub results from pricelist saving
-    // it also might be better from API-side to just implement returning of PKs
-    // so that drf nested serializers can work properly.
-    this.service.save(this.getFormValue()).subscribe(resp => {
-      this.mediaHost.saveAll(resp.entity).subscribe(() => { });
-      this.priceListHost.saveAll(resp.entity).subscribe(
-        () => { this.onSaveSuccess(resp); },
-        (err) => { this.onSaveError(err); }
-      );
-      },
-      (err) => this.onSaveError(err)
-    );
 
+    this.service.save(this.getFormValue()).pipe(catchError(err => {
+      if (err instanceof HttpErrorResponse) {
+        return of(new ErrorResult<IError>(err.error, err.status));
+      } else {
+        return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, err.status));
+      }
+    })).subscribe(resp => {
+        if (resp instanceof ErrorResult) {
+          this.onSaveError(resp);
+        } else {
+          if (this.isProductOptionDomain) this.subscriptionHost.save(resp.entity).subscribe(() => { });
+
+          this.mediaHost.saveAll(resp.entity).subscribe(() => { });
+          this.priceListHost.saveAll(resp.entity).pipe(catchError(child_err => {
+            if (child_err instanceof HttpErrorResponse) {
+              return of(new ErrorResult<IError>(child_err.error, child_err.status));
+            } else {
+              return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, child_err.status));
+            }
+          })).subscribe( (child_resp) => {
+              if (child_resp instanceof ErrorResult) {
+                this.onSaveError(child_resp);
+              } else {
+                this.onSaveSuccess(resp);
+              }
+            }
+          );
+        }
+      }
+    );
     this.form.disable();
   }
 
   addVariant() {
     this.router.navigate(['./variants/new'], {relativeTo: this.route});
+  }
+
+
+  addTag(value?: string) {
+    this.tags.push(
+      this.fb.control(value, [Validators.required, ])
+    );
   }
 
   addRelatedProduct() {
@@ -347,7 +437,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   /**
    * Disables irrelevant/invalid product values for certain classes of product.
    */
-  onProductClassChanged(newValue: string) {
+  onProductClassChanged(newValue: any) {
     // protect against triggering during initialization
     if (!newValue || !this.productClasses) { return; }
 

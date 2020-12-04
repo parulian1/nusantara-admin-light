@@ -32,8 +32,8 @@ import { PriceListComponent } from './price-list.component';
       </thead>
       <tbody>
       <nus-price-list
-        *ngFor="let priceList of form.controls"
-        [form]="priceList">
+        *ngFor="let priceList of form.controls; let i=index;"
+        [form]="priceList" (removePriceList)="removePriceList(i)">
       </nus-price-list>
 
       <tr>

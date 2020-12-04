@@ -8,9 +8,9 @@ import { AbstractDetailComponent } from '@nusantara/core';
 @Component({
   selector: 'nus-detail-actions',
   template: `
-    <button type="submit" [disabled]="!component.form.valid" class="control">Save</button>
+    <button type="submit" [disabled]="!component.form.valid" class="control" *ngIf="!hideSave">Save</button>
     <button type="button" (click)="cancel.emit()" class="control secondary">Cancel</button>
-    <button type="button" (click)="delete.emit()" *ngIf="!component.isNew" class="control danger">Delete</button>
+    <button type="button" (click)="delete.emit()" *ngIf="!component.isNew && !hideDelete" class="control danger">Delete</button>
   `,
   styles: [
     ':host { display: flex; margin-top: 1.5em; }',
@@ -21,6 +21,9 @@ import { AbstractDetailComponent } from '@nusantara/core';
 })
 export class DetailActionsComponent {
   @Input() component: AbstractDetailComponent<any>;
+  @Input() hideSave = false;
+  @Input() hideDelete = false;
+  @Output() save = new EventEmitter<void>();
   @Output() cancel = new EventEmitter<void>();
   @Output() delete = new EventEmitter<void>();
 }

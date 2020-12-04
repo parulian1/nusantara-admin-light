@@ -12,4 +12,7 @@ export interface IJwtClaims {
   last_name: string;
   email: string;
   iss: string;
+  site: string;
+  can_use_pos: string;
+  identity_number: string;
 }

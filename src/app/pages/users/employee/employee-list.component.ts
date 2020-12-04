@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { AbstractListComponent } from '@nusantara/core';
 import { INamedHrefEntity } from '@nusantara/models/base';
+import { IEmployee } from '../../../models/user';
 
 @Component({
   selector: 'nus-employee-list',
@@ -14,18 +15,22 @@ import { INamedHrefEntity } from '@nusantara/models/base';
     <table>
       <thead>
         <tr>
-          <th translate>Name</th>
+          <th>Email</th>
+          <th>First Name</th>
+          <th>Last Name</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let entity of page.entities">
-          <td><a [routerLink]="[entity|entityToSlug]">{{ entity.name }}</a></td>
+          <td><a [routerLink]="[entity|entityToSlug]">{{ entity.email }}</a></td>
+          <td>{{ entity.firstName }}</td>
+          <td>{{ entity.lastName }}</td>
         </tr>
       </tbody>
     </table>
   `,
   styles: [ ]
 })
-export class EmployeeListComponent extends AbstractListComponent<INamedHrefEntity> {
+export class EmployeeListComponent extends AbstractListComponent<IEmployee> {
   constructor(route: ActivatedRoute) { super(route); }
 }

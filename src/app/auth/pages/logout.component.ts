@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AuthService } from '../auth.service';
+import { AuthService } from '@nusantara/auth/auth.service';
 import { ToastService } from '@nusantara/core';
 
 /**

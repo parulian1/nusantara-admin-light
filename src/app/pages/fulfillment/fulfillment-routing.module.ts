@@ -1,7 +1,9 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 
-import { OrderComponent, OrderListComponent, OrderListResolver } from './orders';
+import { OrderComponent, OrderListComponent, OrderListResolver, OrderResolver } from './orders';
+import {OrderTypeResolver} from '../../resolvers/order-type.resolver';
+import {OrderStatusResolver} from '../../resolvers/order-status.resolver';
 
 const routes: Routes = [
   {
@@ -10,7 +12,11 @@ const routes: Routes = [
       {
         component: OrderListComponent,
         path: '',
-        resolve: { page: OrderListResolver },
+        resolve: {
+          page: OrderListResolver,
+          orderType: OrderTypeResolver,
+          orderStatus: OrderStatusResolver,
+        },
         runGuardsAndResolvers: 'always',
       },
       {
@@ -20,7 +26,12 @@ const routes: Routes = [
       {
         component: OrderComponent,
         path: ':slug',
-      }
+        resolve: {
+          entity: OrderResolver
+        },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
     ]
   }
 ];

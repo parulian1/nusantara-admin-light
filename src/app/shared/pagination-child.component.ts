@@ -1,0 +1,44 @@
+import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import {PagedResponse} from "../core/pagination";
+import {PaginationComponent} from "@nusantara/shared/pagination.component";
+
+
+@Component({
+  selector: 'nus-pagination-child',
+  template: `
+    <div class="pagination-container">
+      <div class="pg-info">
+        <p *ngIf="page?.totalResults > 0 && showLabels">
+          Showing <strong>{{ startingIndex }}-{{ endingIndex }}</strong>
+          of
+          <strong>{{ page?.totalResults }}</strong>
+        </p>
+      </div>
+      <div class="pg-button">
+        <button (click)="goBack()"><i class="material-icons">arrow_back_ios</i></button>
+        <span>{{ page?.pageNumber }} / {{ page.maximumPageCount }}</span>
+        <button (click)="goNext()"><i class="material-icons">arrow_forward_ios</i></button>
+      </div>
+    </div>
+  `,
+  styles: [
+    '.pagination-container { display: flex; justify-content: space-between; }',
+    '.pg-info { color: #464646; text-align: left; width: 60%; }',
+    '.pg-button button { border: none; background: none; height: 50px; }',
+    '.pg-button { line-height: 50px; }',
+    '.pg-button span { line-height: 50px; }',
+    '.pg-button i { font-size: 1em; }'
+  ]
+})
+export class PaginationChildComponent extends PaginationComponent {
+
+  @Input() showLabels = true;
+  @Input() page: PagedResponse<any>;
+  @Output() fetchPageNumber = new EventEmitter<number>();
+
+  changePage(value: number) {
+    if (value !== this.currentPage) {
+      this.fetchPageNumber.emit(value);
+    }
+  }
+}

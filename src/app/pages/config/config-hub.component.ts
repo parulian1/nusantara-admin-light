@@ -15,6 +15,8 @@ import { Component } from '@angular/core';
       <a id="warehouse-config" [routerLink]="['./warehouses']"><i class="material-icons">domain</i> Warehouses</a>
       <a id="pg-config" [routerLink]="['./payment-gateways']">Payment Gateways</a>
       <a id="shipping-method-config" [routerLink]="['./shipping-methods']">Shipping Methods</a>
+      <a id="device-config" [routerLink]="['./devices']">Device</a>
+      <a id="device-config" [routerLink]="['./groups']">Groups</a>
 
     </div>
   `,

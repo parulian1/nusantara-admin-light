@@ -7,7 +7,7 @@ import { SubscriptionLike } from 'rxjs';
 @Component({
   selector: 'nus-main-wrapper',
   template: `
-    <header>
+    <header class="main-header">
       <div id="branding">
         <img src="/assets/bhisma-logo.png" alt="logo" id="brand-icon">
         <div>{{ authService.siteDomain }}</div>
@@ -24,7 +24,7 @@ import { SubscriptionLike } from 'rxjs';
       </div>
     </header>
 
-    <nav>
+    <nav class="side-nav">
       <ul>
         <li class="icon-button">
           <a [routerLink]="['/dashboard']" routerLinkActive="active">
@@ -39,6 +39,7 @@ import { SubscriptionLike } from 'rxjs';
         </li>
         <li><a [routerLink]="['/catalog/products']" routerLinkActive="active" translate>Products</a></li>
         <li><a [routerLink]="['/catalog/categories']" routerLinkActive="active" translate>Categories</a></li>
+        <li><a [routerLink]="['/catalog/product-options']" routerLinkActive="active" translate>Product Options</a></li>
         <li><a [routerLink]="['/catalog/product-classes']" routerLinkActive="active" translate>Product Classes</a></li>
         <li><a [routerLink]="['/catalog/vendors']" routerLinkActive="active" translate>Vendors</a></li>
 
@@ -48,6 +49,7 @@ import { SubscriptionLike } from 'rxjs';
         </li>
         <li><a [routerLink]="['/inventory/orders-list']" routerLinkActive="active" translate>Pending Orders</a></li>
         <li><a [routerLink]="['/inventory/receiving']" routerLinkActive="active" translate>Receiving</a></li>
+        <li><a [routerLink]="['/inventory/transfer-order']" routerLinkActive="active" translate>Transfer</a></li>
 <!--        <li><a [routerLink]="['/inventory/adjustment']" routerLinkActive="active" translate>Adjustment</a></li>-->
 
         <li class="section-header">
@@ -55,16 +57,20 @@ import { SubscriptionLike } from 'rxjs';
           <span>Promotion Management</span>
         </li>
         <li><a [routerLink]="['/promotion/promos']" routerLinkActive="active" translate>Promos</a></li>
-<!--        <li><a [routerLink]="['/promotion/vouchers']" routerLinkActive="active" translate>Vouchers</a></li>-->
+        <li><a [routerLink]="['/promotion/vouchers']" routerLinkActive="active" translate>Vouchers</a></li>
 
         <li class="section-header">
           <i class="material-icons">edit</i>
           <span>CMS</span>
         </li>
 <!--        <li><a [routerLink]="['/cms/widgets']" routerLinkActive="active" translate>Widgets</a></li>-->
+        <li><a [routerLink]="['/cms/banners']" routerLinkActive="active">Banners</a></li>
         <li><a [routerLink]="['/cms/testimonials']" routerLinkActive="active">Testimonials</a></li>
         <li><a [routerLink]="['/cms/flat-pages']" routerLinkActive="active">Pages</a></li>
+        <li><a [routerLink]="['/cms/navigation']" routerLinkActive="active">Header Navigation</a></li>
         <li><a [routerLink]="['/cms/content-footers']" routerLinkActive="active">Content Footers</a></li>
+        <li><a [routerLink]="['/cms/highlights']" routerLinkActive="active">Highlights</a></li>
+        <li><a [routerLink]="['/cms/sla']" routerLinkActive="active">SLA</a></li>
 
 
         <li class="section-header">
@@ -79,6 +85,7 @@ import { SubscriptionLike } from 'rxjs';
         </li>
         <li><a [routerLink]="['/users/customer']" routerLinkActive="active" translate>Customers</a></li>
         <li><a [routerLink]="['/users/customer-groups']" routerLinkActive="active" translate>Customer Groups</a></li>
+        <li><a [routerLink]="['/users/employee']" routerLinkActive="active" translate>Employees</a></li>
 
         <li class="icon-button" translate>
           <a href="https://reports.bhisma.cloud" target="_blank">
@@ -93,6 +100,12 @@ import { SubscriptionLike } from 'rxjs';
           </a>
         </li>
 
+        <!-- <li class="section-header">
+          <i class="material-icons">palette</i>
+          <span>Theme Management</span>
+        </li>
+        <li><a [routerLink]="['/theme']" routerLinkActive="active" translate>Theme</a></li> -->
+
       </ul>
     </nav>
 
@@ -100,11 +113,13 @@ import { SubscriptionLike } from 'rxjs';
 
       <nus-spinner [appBusy]="isBusy"></nus-spinner>
 
-<!--      <router-outlet></router-outlet>-->
-
       <div [@routeAnimations]="o && o.activatedRouteData && o.activatedRouteData['animation']">
         <router-outlet #o="outlet"></router-outlet>
       </div>
+
+      <footer class="main-footer">
+        <nus-copyright-notice></nus-copyright-notice>
+      </footer>
     </div>
   `,
   styles: [
@@ -170,8 +185,9 @@ import { SubscriptionLike } from 'rxjs';
       color: white;
     }
     #dashboard-content {
-      margin: 15px;
+      padding: 15px;
       position: relative;
+      box-shadow: inset 4px 4px 8px -4px var(--shadow-color);
     }
     #pages-content {
       grid-column: 2;
@@ -187,24 +203,20 @@ import { SubscriptionLike } from 'rxjs';
         list-style-type: none;
         margin: 0;
       }
-
       nav li {
         height: 35px;
         line-height: 35px;
       }
-
       nav li.section-header {
         font-weight: 900;
         padding-left: 0;
         display: flex;
       }
-
       nav li.section-header i {
         line-height: 35px;
         height: 35px;
         margin-right: 5px;
       }
-
       nav li.icon-button a {
         padding-left: 0;
         display: flex;
@@ -219,12 +231,10 @@ import { SubscriptionLike } from 'rxjs';
         padding-left: 25px;
         text-decoration: none;
       }
-
       nav > ul a.active {
         background-color: #7B869B;
         border-left: 6px solid var(--bhisma-orange);
       }
-
       nav > ul a:hover,
       nav > ul a:focus {
         transition: all .3s;
@@ -232,7 +242,25 @@ import { SubscriptionLike } from 'rxjs';
         background-color: #7B869B; /*var(--accent-lighter-color);*/
       }
 
+      footer { margin-top: 45px; }
 
+      @media print {
+        :host {
+          display: block;
+          width: 100%;
+        }
+        header.main-header {
+          display: none;
+        }
+        footer.main-footer {
+          display: none;
+        }
+        #dashboard-content {
+          width: 100%;
+          box-shadow: none;
+        }
+
+      }
     `],
   animations: [ slideInAnimation, ],
 })

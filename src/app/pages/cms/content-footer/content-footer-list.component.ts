@@ -18,12 +18,14 @@ import {ActivatedRoute} from '@angular/router';
       <tr>
         <th>Title</th>
         <th>Number of Child</th>
+        <th>Is Active</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let entity of page.entities">
         <td><a [routerLink]="[entity|entityToSlug]">{{ entity.title }}</a></td>
         <td>{{ entity.children.length }}</td>
+        <td><nus-true-false [value]="entity.isActive"></nus-true-false></td>
       </tr>
       </tbody>
     </table>

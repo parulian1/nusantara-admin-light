@@ -1,14 +1,15 @@
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, map, mergeMapTo } from 'rxjs/operators';
 
-import { ILoginFailure, ITokenPair, IAccessToken } from './models';
+import { ITokenPair, IAccessToken } from './models';
 import { ErrorResult, IResultResponse, SuccessResult } from '@nusantara/core/responses';
 import { HttpStatusCode } from '@nusantara/core/http';
 import { IJwtClaims } from '@nusantara/auth/models/jwt-claims';
-import {IForgotPasswordFailure} from "@nusantara/auth/models/forgot-password-failure";
+import { IError } from '@nusantara/models/base/error';
+import { environment } from '@env/environment';
 
 
 /**
@@ -142,6 +143,30 @@ export class AuthService {
   }
 
   /**
+   * Check domain is exist or not.
+   */
+  public checkDomain(domain: string): Observable<any> {
+    return this.httpClient.post(`${environment.apiBaseUrl}/api/iam/domain-verification/`, {
+      domain
+    });
+  }
+
+  /**
+   * Used for checking domain first than log in user with username / email and password.
+   */
+  public loginWithDomainValidation(email: string, password: string, domain: string): Observable<IResultResponse> {
+    return this.checkDomain(domain).pipe(
+      mergeMapTo(this.login(email, password, domain)),
+      catchError((err) => {
+        const message = err.status === 404 ? 'Incorrect Site Domain' : err.error.detail;
+        return of(
+          new ErrorResult({ details: [], message }, err.status)
+        );
+      })
+    );
+  }
+
+  /**
    * Attempts to log an employee is with their username + password.
    *
    * @param email the user's email address.
@@ -149,26 +174,32 @@ export class AuthService {
    * @param authDomain the registered site domain the user will be authenticating for.
    */
   public login(email: string, rawPassword: string, authDomain: string): Observable<IResultResponse> {
-
     this.siteDomain = authDomain;
 
-    return this.httpClient.post<ITokenPair|ILoginFailure>(
-      '/api/iam/auth/login/',
-      { email, password: rawPassword },
-      { responseType: 'json', observe: 'response' }
-      ).pipe(
-        map(
-          (response) => {
-            if (response.status === HttpStatusCode.OK) {
-              this.saveToken(response.body as ITokenPair);
-              return new SuccessResult();
-            } else {
-              this.siteDomain = null;
-              return new ErrorResult<ILoginFailure>(response.body as ILoginFailure, response.status);
+    // first check domain, and to login action
+    return this.httpClient.post<ITokenPair|IError>(
+          '/api/iam/auth/login/',
+          { email, password: rawPassword },
+          { responseType: 'json', observe: 'response' }
+        ).pipe(
+          map(
+            (response) => {
+              if (response.status === HttpStatusCode.OK) {
+                this.saveToken(response.body as ITokenPair);
+                return new SuccessResult();
+              } else {
+                this.siteDomain = null;
+                return new ErrorResult<IError>(response.body as IError, response.status);
+              }
             }
-          }
-        )
-    );
+          ),
+          catchError((err) => {
+            const message = err.status === 0 ? 'Incorrect Site Domain' : err.error.detail;
+            return of(
+              new ErrorResult({ details: [], message }, err.status)
+            );
+          })
+        );
   }
 
   /**
@@ -187,7 +218,7 @@ export class AuthService {
    * the user to eventually be logged out when this token expires.
    */
   public refresh(): Observable<IResultResponse> {
-    return this.httpClient.post<IAccessToken|ILoginFailure>(
+    return this.httpClient.post<IAccessToken|IError>(
       '/api/iam/auth/refresh/',
       { refresh: this.refreshToken },
       {responseType: 'json', observe: 'response'}
@@ -197,7 +228,7 @@ export class AuthService {
           this.token = (response.body as IAccessToken).access;
           return new SuccessResult();
         } else {
-          return new ErrorResult<ILoginFailure>(response.body as ILoginFailure, response.status);
+          return new ErrorResult<IError>(response.body as IError, response.status);
         }
       })
     );
@@ -223,7 +254,7 @@ export class AuthService {
 
     this.siteDomain = authDomain;
 
-    return this.httpClient.post<IForgotPasswordFailure>(
+    return this.httpClient.post<IError>(
       '/api/iam/auth/password-reset/',
       { email },
       { responseType: 'json', observe: 'response' }
@@ -234,7 +265,7 @@ export class AuthService {
               return new SuccessResult([], response.body);
             } else {
               this.siteDomain = null;
-              return new ErrorResult<IForgotPasswordFailure>(response.body as IForgotPasswordFailure, response.status);
+              return new ErrorResult<IError>(response.body as IError, response.status);
             }
           }
         )

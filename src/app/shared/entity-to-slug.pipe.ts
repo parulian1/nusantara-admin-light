@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 import { IHrefEntity } from '@nusantara/models/base';
-import { getSlugFromHref } from './helpers';
+import { getSlugFromHref } from '@nusantara/core';
 
 /**
  * Given either an object containing an attribute named 'href' or a string,

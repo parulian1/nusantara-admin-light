@@ -1,13 +1,10 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
 
-import { ILoginFailure } from '@nusantara/auth/models';
 import { AuthService } from '@nusantara/auth/auth.service';
 import { ErrorResult } from '@nusantara/core/responses';
+import { IError } from '@nusantara/models/base/error';
 
 /**
  * Allows the user to authenticate with an email address and password.
@@ -111,13 +108,6 @@ export class LoginComponent implements OnInit {
 
     this.service
       .login(this.email.value, this.password.value, this.siteDomain.value)
-      .pipe(catchError((err) => {
-        if (err instanceof HttpErrorResponse) {
-          return of(new ErrorResult<ILoginFailure>(err.error, err.status));
-        } else {
-          return of(new ErrorResult<ILoginFailure>({detail: 'Network error.. probably?'}, err.status));
-        }
-      }))
       .subscribe(result => {
        if (result instanceof ErrorResult) {
          this.onLoginFail(result.errorDetails);
@@ -134,23 +124,15 @@ export class LoginComponent implements OnInit {
     this.router.navigateByUrl(decodeURIComponent(this.afterLoginUrl));
   }
 
-  private onLoginFail(errorDetails: ILoginFailure) {
+  private onLoginFail(errorDetails: IError) {
     this.isBusy = false;
     this.form.enable();
 
-    if (errorDetails.detail) {
-      this.nonFieldErrors.push(errorDetails.detail);
-    }
-    errorDetails.nonFieldErrors?.forEach(
-      (errMsg) => { this.nonFieldErrors.push(errMsg); }
-    );
-
-    // form specific errors -- take the first error message and display.
-    if (!!errorDetails?.email?.length) {
-      this.email.setErrors({apiError: errorDetails.email[0]});
-    }
-    if (!!errorDetails?.password?.length) {
-      this.password.setErrors({apiError: errorDetails.password[0]});
-    }
+    errorDetails.details.forEach((error) => {
+      this.form.controls[error.field].setErrors({
+        apiError: error.message
+      });
+    });
+    this.nonFieldErrors.push(errorDetails.message);
   }
 }

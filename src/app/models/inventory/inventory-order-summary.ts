@@ -1,12 +1,6 @@
-import { IHrefEntity, INamedHrefEntity } from '@nusantara/models/base';
-import { InventoryOrderStatusType } from './inventory-order-status.type';
 import { InventoryOrderType } from './inventory-order.type';
+import { IBaseInventoryOrder } from "@nusantara/models/inventory/base-inventory-order";
 
-export interface IInventoryOrderSummary extends IHrefEntity {
-  status: InventoryOrderStatusType;
+export interface IInventoryOrderSummary extends IBaseInventoryOrder {
   type: InventoryOrderType;
-  createdBy: INamedHrefEntity;
-  reviewedBy: INamedHrefEntity;
-  warehouse: INamedHrefEntity;
-  created: string;
 }

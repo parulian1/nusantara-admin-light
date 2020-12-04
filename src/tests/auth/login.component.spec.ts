@@ -4,7 +4,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { LoginComponent } from '@nusantara/auth/pages/login.component';
-import { AuthService } from '@nusantara/auth';
+import { AuthModule, AuthService } from '@nusantara/auth';
 
 import { MockActivatedRoute, MockJwtHelperService } from '../helpers/mocks';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -29,6 +29,7 @@ describe('LoginComponent', () => {
         HttpClientTestingModule,
         ReactiveFormsModule,
         RouterTestingModule,
+        AuthModule,
         SharedModule,
       ],
       declarations: [

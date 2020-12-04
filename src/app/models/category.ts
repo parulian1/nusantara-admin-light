@@ -1,8 +1,8 @@
-export interface ICategory {
-  name: string;
+import { INamedHrefEntity } from '@nusantara/models/base';
+
+export interface ICategory extends INamedHrefEntity {
   pathName: string;
   productCount?: number;
-  href: string;
   depth: number;
   image: string;
   parent: string;

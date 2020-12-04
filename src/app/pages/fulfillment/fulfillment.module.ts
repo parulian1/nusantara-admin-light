@@ -4,11 +4,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { SharedModule } from '@nusantara/shared';
 import { FulfillmentRoutingModule } from './fulfillment-routing.module';
-import { OrderListComponent } from './orders/order-list.component';
+import { OrderListComponent, OrderComponent } from './orders';
 
 @NgModule({
   declarations: [
-    OrderListComponent
+    OrderListComponent,
+    OrderComponent,
   ],
   imports: [
     CommonModule,

@@ -1,17 +1,18 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { WarehouseListResolver, WarehouseResolver, PaymentGatewayTypeResolver, PaymentGatewayResolver } from '@nusantara/resolvers';
-import { WarehouseListComponent, WarehouseComponent, SubLocationTypeResolver, WarehouseTypeResolver, WarehouseFullListResolver } from './warehouse';
-import { PaymentGatewayDetailComponent, PaymentGatewayListComponent, PaymentGatewayListResolver, } from './payment-gateways';
+import * as wh from './warehouse';
+import * as pg from './payment-gateways';
 import { ConfigHubComponent } from './config-hub.component';
 import {
   ShippingMethodListComponent,
   ShippingProviderDetailComponent,
   ShippingProviderListResolver,
   ShippingProviderResolver,
-  ShippingProviderTypeResolver,
+  ShippingProviderTypeResolver
 } from './shipping';
+import { DeviceComponent, DeviceListComponent, DeviceListResolver, DeviceResolver } from './device';
+import { GroupComponent, GroupListComponent, GroupListResolver, GroupProviderResolver } from './group';
 
 
 const routes: Routes = [
@@ -21,28 +22,28 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: WarehouseListComponent,
-        resolve: { page: WarehouseListResolver },
+        component: wh.WarehouseListComponent,
+        resolve: { page: wh.WarehouseListResolver },
         runGuardsAndResolvers: 'always'
       },
       {
         path: 'new',
-        component: WarehouseComponent,
+        component: wh.WarehouseComponent,
         resolve: {
-          types: WarehouseTypeResolver,
-          subLocationTypes: SubLocationTypeResolver,
-          allWarehouses: WarehouseFullListResolver,
+          types: wh.WarehouseTypeResolver,
+          subLocationTypes: wh.SubLocationTypeResolver,
+          allWarehouses: wh.WarehouseFullListResolver,
         },
         runGuardsAndResolvers: 'always',
       },
       {
         path: ':slug',
-        component: WarehouseComponent,
+        component: wh.WarehouseComponent,
         resolve: {
-          entity: WarehouseResolver,
-          types: WarehouseTypeResolver,
-          subLocationTypes: SubLocationTypeResolver,
-          allWarehouses: WarehouseFullListResolver,
+          entity: wh.WarehouseResolver,
+          types: wh.WarehouseTypeResolver,
+          subLocationTypes: wh.SubLocationTypeResolver,
+          allWarehouses: wh.WarehouseFullListResolver,
         },
         runGuardsAndResolvers: 'always',
       }
@@ -53,21 +54,21 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: PaymentGatewayListComponent,
-        resolve: { page: PaymentGatewayListResolver },
+        component: pg.PaymentGatewayListComponent,
+        resolve: { page: pg.PaymentGatewayListResolver },
         runGuardsAndResolvers: 'always',
       },
       {
         path: 'new',
-        component: PaymentGatewayDetailComponent,
-        resolve: { typeChoices: PaymentGatewayTypeResolver },
+        component: pg.PaymentGatewayDetailComponent,
+        resolve: { typeChoices: pg.PaymentGatewayTypeResolver },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },
       },
       {
         path: ':slug',
-        component: PaymentGatewayDetailComponent,
-        resolve: { entity: PaymentGatewayResolver, typeChoices: PaymentGatewayTypeResolver },
+        component: pg.PaymentGatewayDetailComponent,
+        resolve: { entity: pg.PaymentGatewayResolver, typeChoices: pg.PaymentGatewayTypeResolver },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },
       },
@@ -100,7 +101,43 @@ const routes: Routes = [
         }
       }
     ]
-  }
+  },
+  {
+    path: 'devices',
+    children: [
+      {
+        path: '',
+        component: DeviceListComponent,
+        resolve: { page: DeviceListResolver },
+        runGuardsAndResolvers: 'always'
+      },
+      {
+        path: ':slug',
+        component: DeviceComponent,
+        resolve: { entity: DeviceResolver },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+    ]
+  },
+  {
+    path: 'groups',
+    children: [
+      {
+        path: '',
+        component: GroupListComponent,
+        resolve: { page: GroupListResolver },
+        runGuardsAndResolvers: 'always'
+      },
+      {
+        path: ':slug',
+        component: GroupComponent,
+        resolve: { entity: GroupProviderResolver },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+    ]
+  },
 ];
 
 @NgModule({

@@ -13,6 +13,7 @@ import { Component, OnInit } from '@angular/core';
     <div id="auth-container">
       <img src="/assets/bhisma-logo.png" alt="Logo">
       <router-outlet></router-outlet>
+      <nus-copyright-notice></nus-copyright-notice>
     </div>
   `,
   styles: [`
@@ -36,6 +37,10 @@ import { Component, OnInit } from '@angular/core';
       grid-column: 1/3;
       display: inherit;
       margin: 60px auto 20px;
+    }
+    nus-copyright-notice {
+      display: block;
+      margin-top: 15px;
     }
   `]
 })

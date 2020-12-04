@@ -1,3 +1,4 @@
+import { isObject } from 'rxjs/internal-compatibility';
 
 
 export function getSlugFromHref(href: string): string {
@@ -7,6 +8,50 @@ export function getSlugFromHref(href: string): string {
   }
   return null;
 }
+
+/**
+ * convert object key snake case to camel case
+ */
+export function toCamel(key) {
+  return key.replace(/([-_][a-z])/ig, (k) => {
+    return k.toUpperCase()
+      .replace('-', '')
+      .replace('_', '');
+  });
+}
+
+/**
+ * convert snake case to camel case
+ */
+export function keysToCamel(param) {
+  if (isObject(param)) {
+    const n = {};
+
+    Object.keys(param)
+      .forEach((k) => {
+        n[toCamel(k)] = param[k];
+      });
+
+    return n;
+  }
+  return param;
+}
+
+/**
+ * convert string with '\n' separator to object
+ */
+export function convertStringToObject(param: string) {
+  const obj = {};
+  const paramArray = param.split('\n');
+  for (const value of paramArray) {
+    const strParts = value.split(':');
+    if (strParts[0] && strParts[1]) { // <-- Make sure the key & value are not undefined
+      obj[strParts[0].replace(/\s+/g, '')] = strParts[1].trim(); // <-- Get rid of extra spaces at beginning of value strings
+    }
+  }
+  return obj;
+}
+
 //
 // export function getCategorySlugFromHref(href: string): string {
 //   return href.split("value=\"")[1].replace("\"", "");

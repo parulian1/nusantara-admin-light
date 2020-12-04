@@ -5,7 +5,6 @@ import {
   style,
   animate,
   group,
-  animateChild
 } from '@angular/animations';
 
 const SLIDE_IN_FROM_RIGHT_STEPS = [

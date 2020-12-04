@@ -8,21 +8,24 @@ import { AbstractListComponent } from '@nusantara/core';
   selector: 'nus-voucher-list',
   template: `
     <nus-list-header
-      title="Voucher"
-      description="Vouchers are things">
+      title="Voucher">
     </nus-list-header>
+    <nus-pagination [page]="page"></nus-pagination>
     <table>
       <thead>
         <tr>
           <th translate>Name</th>
+          <th translate>Type</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let entity of page.entities">
           <td><a [routerLink]="[entity|entityToSlug]">{{ entity.name }}</a></td>
+          <td>{{ entity.type }}</td>
         </tr>
       </tbody>
     </table>
+    <nus-pagination [page]="page"></nus-pagination>
   `,
   styles: [ ]
 })

@@ -1,11 +1,24 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
+import { version } from '../../package.json';
 
 export const environment = {
   production: false,
   apiBaseUrl: 'https://staging.bhisma.cloud',
-  googleApiKey: 'AIzaSyDCywCcZt3Z27gvzMg6ZvQUL3EMEiVtvRU'
+  googleApiKey: 'b1f7b0Jrp33kiYM3Xk',
+  appVersion: version,
+  elasticAPM: {
+    serviceName: 'nusantara-admin',
+    serverUrl: 'https://7586e6a80fa145ce9f1ba48b8f246e1d.apm.ap-southeast-1.aws.cloud.es.io:443',
+    serviceVersion: version,
+    debug: true,
+    active: true,
+    environment: 'development',
+    breakdownMetrics: true,
+    distributedTracingOrigins: [ ],
+    ignoreTransactions: [],
+  }
 };
 
 /*

@@ -1,14 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 import { SharedModule } from '@nusantara/shared';
 import { ConfigRoutingModule } from './config-routing.module';
 import { ConfigHubComponent } from './config-hub.component';
 import { WarehouseListComponent, WarehouseComponent } from './warehouse';
 import { PaymentGatewayListComponent, PaymentGatewayDetailComponent } from './payment-gateways';
-import { ShippingMethodListComponent, ShippingProviderDetailComponent, ShippingServiceComponent} from './shipping';
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { ShippingMethodListComponent, ShippingProviderDetailComponent, ShippingServiceComponent } from './shipping';
+import { DeviceListComponent, DeviceComponent } from './device';
+import { GroupComponent, GroupListComponent, UserGroupComponent } from './group';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,11 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
     ShippingMethodListComponent,
     ShippingProviderDetailComponent,
     ShippingServiceComponent,
+    DeviceListComponent,
+    DeviceComponent,
+    GroupListComponent,
+    GroupComponent,
+    UserGroupComponent,
   ],
     imports: [
         CommonModule,

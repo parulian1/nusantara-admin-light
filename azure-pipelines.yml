@@ -1,0 +1,116 @@
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  system.debug: false
+  NpmCacheFeed: e09e6f3d-7f3b-43d4-8f43-f50424bd8131
+  FEED_ID: 61101818-286e-47e5-b86b-ef800ee02eea
+
+jobs:
+  - job: unit_test
+    displayName: Run Unit Test
+    steps:
+      - task: SonarCloudPrepare@1
+        displayName: Prepare analysis on SonarCloud
+        inputs:
+          SonarCloud: GDN SonarCloud
+          organization: gdn-ecommerce
+          scannerMode: CLI
+      - task: NodeTool@0
+        displayName: Use Node 12.x
+        inputs:
+          versionSpec: 12.x
+      - task: Npm@1
+        displayName: npm install
+        inputs:
+          verbose: false
+          customRegistry: useFeed
+          customFeed: $(FEED_ID)
+      - task: CmdLine@2
+        displayName: Run Unit Tests
+        continueOnError: true
+        inputs:
+          script: |
+            npm run env -s
+            npm run lint -s
+            npm run ng -- test --configuration=ci
+            export TEST_EXIT_CODE=$?
+            test $TEST_EXIT_CODE -eq 0 || exit 1
+      - task: PublishTestResults@2
+        displayName: Publish test report to Azure DevOps
+        inputs:
+          testRunTitle: node
+      - task: SonarCloudAnalyze@1
+        displayName: Perform SonarCloud analysis
+      - task: SonarCloudPublish@1
+        displayName: Publish results to SonarCloud
+        
+  - job: sonar_cloud_job
+    displayName: SonarCloud Analysis
+    steps:
+      - task: NodeTool@0
+        displayName: Use Node 12.x
+        inputs:
+          versionSpec: 12.x
+      - task: 1ESLighthouseEng.PipelineArtifactCaching.RestoreAndSaveCacheV1.RestoreAndSaveCache@1
+        displayName: Restore and save cache from Azure Artifact
+        inputs:
+          keyfile: '**/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json'
+          targetfolder: '**/node_modules, !**/node_modules/**/node_modules'
+          vstsFeed: '$(NpmCacheFeed)'
+          platformIndependent: true
+          alias: nusantara-admin
+      - task: Npm@1
+        displayName: Install App Dependencies
+        inputs:
+          verbose: false
+      - task: SonarSource.sonarcloud.14d9cde6-c1da-4d55-aa01-2965cd301255.SonarCloudPrepare@1
+        displayName: Prepare analysis on SonarCloud
+        inputs:
+          SonarCloud: SonarCloud
+          organization: gdn-ecommerce
+          scannerMode: CLI
+      - task: SonarSource.sonarcloud.ce096e50-6155-4de8-8800-4221aaeed4a1.SonarCloudAnalyze@1
+      - task: SonarSource.sonarcloud.38b27399-a642-40af-bb7d-9971f69712e8.SonarCloudPublish@1
+
+  - job: build_job
+    displayName: Angular Build
+    steps:
+      - task: NodeTool@0
+        displayName: Use Node 12.x
+        inputs:
+          versionSpec: 12.x
+      - task: 1ESLighthouseEng.PipelineArtifactCaching.RestoreAndSaveCacheV1.RestoreAndSaveCache@1
+        displayName: Restore and save cache from Azure Artifact
+        inputs:
+          keyfile: '**/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json'
+          targetfolder: '**/node_modules, !**/node_modules/**/node_modules'
+          vstsFeed: '$(NpmCacheFeed)'
+          platformIndependent: true
+          alias: nusantara-admin
+      - task: Npm@1
+        displayName: Install App Dependencies
+        inputs:
+          verbose: false
+        condition: ne(variables['CacheRestored-nusantara-admin'], 'true')
+      - task: Npm@1
+        displayName: Build Angular
+        inputs:
+          command: custom
+          verbose: false
+          customCommand: run ng -- build --prod
+      - script: |
+          ls -lah
+      - task: ArchiveFiles@2
+        displayName: Archive dist folder as Artifact
+        inputs:
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist' 
+          includeRootFolder: true
+          archiveFile: '$(System.DefaultWorkingDirectory)/artifact.tar.bz2'
+          archiveType: tar
+          tarCompression: bz2
+      - task: PublishBuildArtifacts@1
+        displayName: Publish Artifact
+        inputs:
+          PathtoPublish: '$(System.DefaultWorkingDirectory)/artifact.tar.bz2'
+          ArtifactName: dist

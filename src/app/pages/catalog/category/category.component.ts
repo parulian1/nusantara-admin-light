@@ -1,10 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ICategory } from '@nusantara/models';
 import { CategoryService } from '@nusantara/services';
-import { AbstractDetailComponent, IResultResponse } from '@nusantara/core';
+import { AbstractDetailComponent, ToastService } from '@nusantara/core';
 
 @Component({
   selector: 'nus-category',
@@ -16,9 +16,9 @@ import { AbstractDetailComponent, IResultResponse } from '@nusantara/core';
 
     <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
 
-    <form [formGroup]="form" (ngSubmit)="saveAsForm()" #f>
+    <form [formGroup]="form" (ngSubmit)="save()" #f>
 
-      <input type="hidden" [formControl]="href" name="href"> <!-- required for non-JSON form posting -->
+<!--      <input type="hidden" [formControl]="href" name="href"> &lt;!&ndash; required for non-JSON form posting &ndash;&gt;-->
 
       <label>
         <span>Name</span>
@@ -31,7 +31,7 @@ import { AbstractDetailComponent, IResultResponse } from '@nusantara/core';
         <select [formControl]="parent" name="parent">
           <option *ngFor="let parent of parentOptions"
                   [value]="parent.href">
-            {{parent.pathName}}
+            {{ parent.pathName }}
           </option>
         </select>
       </label>
@@ -62,7 +62,9 @@ import { AbstractDetailComponent, IResultResponse } from '@nusantara/core';
         </thead>
         <tbody>
         <tr *ngFor="let control of sourceMappings.controls; let i=index">
-          <td class="immediate-error-display"><input [formControl]="control" name="sourceMappings"></td>
+          <td class="immediate-error-display">
+            <input [formControl]="control" name="sourceMappings">
+          </td>
           <td>
             <button (click)="removeMapping(i)" type="button" class="remove-button">
               <i class="material-icons">remove_circle_outline</i>
@@ -94,16 +96,16 @@ import { AbstractDetailComponent, IResultResponse } from '@nusantara/core';
 })
 export class CategoryComponent extends AbstractDetailComponent<ICategory> implements OnInit {
 
-  @ViewChild('f') formView: ElementRef<HTMLFormElement>;
-
   parentOptions: ICategory[] = [];
   imagePreviewUrl: string;
+  entity?: ICategory;
 
-  constructor(public service: CategoryService,
-              public route: ActivatedRoute,
-              public router: Router,
+  constructor(service: CategoryService,
+              route: ActivatedRoute,
+              router: Router,
+              toast: ToastService,
               private fb: FormBuilder) {
-    super();
+    super(route, router, toast, service);
   }
 
   ngOnInit(): void {
@@ -115,12 +117,14 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
 
   initializeForm(entity?: ICategory) {
     this.form = this.fb.group({
-      name: [entity?.name, [Validators.required, ]],
+      name: [entity?.name, [Validators.required, Validators.maxLength(50)]],
       href: [entity?.href, []],
       image: ['', []],
       parent: [{value: entity?.parent, disabled: !!entity?.href }, []],
       sourceMappings: this.fb.array([])
     });
+
+    this.entity = entity;
 
     this.setIconImagePreview(entity?.image);
 
@@ -139,9 +143,21 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
   }
 
   addMapping(value?: string) {
-    this.sourceMappings.push(this.fb.control(value ?? '', [Validators.required, ]));
+    this.sourceMappings.push(
+      this.fb.control(value ?? '', [Validators.required, Validators.maxLength(255)])
+    );
   }
   removeMapping(index: number) {
     this.sourceMappings.removeAt(index);
+  }
+
+  save() {
+    if (!!this.entity?.href && !!this.entity?.image && !this.image?.value) {
+      this.form.removeControl('image');
+    }
+    if (!!this.image && this.imagePreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
+      this.form.value.image = this.imagePreviewUrl;
+    }
+    super.save();
   }
 }

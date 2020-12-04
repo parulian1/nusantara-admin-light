@@ -52,6 +52,7 @@ import { AbstractListComponent } from '@nusantara/core';
               {{ entity.vendor.name }}
             </a>
           </td>
+          <td><nus-true-false [value]="entity.isActive"></nus-true-false></td>
         </tr>
       </tbody>
     </table>

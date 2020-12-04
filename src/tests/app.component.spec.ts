@@ -3,11 +3,11 @@ import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
+import { AuthModule, AuthService } from '@nusantara/auth';
 import { AppComponent } from '@nusantara/app.component';
-import { AuthService } from '@nusantara/auth';
-import { MockJwtHelperService } from './helpers/mocks';
 import { SharedModule } from '@nusantara/shared';
 import { CoreModule } from '@nusantara/core';
+import { MockJwtHelperService } from './helpers/mocks';
 
 describe('AppComponent', () => {
 
@@ -25,6 +25,7 @@ describe('AppComponent', () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
+        AuthModule,
         SharedModule,
         CoreModule,
       ],

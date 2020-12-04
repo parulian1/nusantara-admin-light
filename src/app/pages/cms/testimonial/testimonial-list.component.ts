@@ -11,7 +11,9 @@ import { widgets } from '@nusantara/models';
       title="Testimonials"
       description="Customer reviews of Products/Vendors">
     </nus-list-header>
-
+    <div class="filtering">
+      <nus-include-deleted></nus-include-deleted>
+    </div>
     <nus-pagination [page]="page"></nus-pagination>
 
     <table>

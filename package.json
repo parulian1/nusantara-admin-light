@@ -1,6 +1,6 @@
 {
   "name": "nusantara-admin",
-  "version": "0.1.0",
+  "version": "2.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port=4201",
@@ -24,10 +24,13 @@
     "@auth0/angular-jwt": "^5.0.1",
     "@ckeditor/ckeditor5-angular": "^1.2.3",
     "@ckeditor/ckeditor5-build-classic": "^20.0.0",
+    "@elastic/apm-rum-angular": "^1.1.9",
+    "core-js": "^3.6.5",
     "iso8601-duration": "^1.2.0",
     "ngx-smart-modal": "^7.4.1",
     "rxjs": "~6.5.4",
     "tslib": "^2.0.0",
+    "xlsx": "^0.16.8",
     "zone.js": "~0.10.3"
   },
   "devDependencies": {

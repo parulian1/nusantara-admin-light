@@ -4,6 +4,7 @@ import { IPriceList } from './price-list';
 import { StructureType } from './structure.type';
 import { IVariantSummary } from './variant-summary';
 import { IRelatedProductSummary } from './related-product-summary';
+import { IProductSubscription } from './product-subscription';
 
 /**
  * Anything that is available for sale.
@@ -23,4 +24,9 @@ export interface IProduct extends INamedHrefEntity {
   related: Array<IRelatedProductSummary>;
   attributes: {[key: string]: string|number|boolean};
   variants: Array<IVariantSummary>;
+  tags: Array<string>;
+  seoMeta: string;
+  seoDescription: string;
+  subscription: IProductSubscription;
+  isActive?: boolean;
 }

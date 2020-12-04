@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthService } from '@nusantara/auth';
@@ -150,7 +150,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
       href: [],
       warehouse: this.fb.group({
         href: [null, Validators.required],
-        name: ['', ],
+        // name: ['', ],
       }),
       status: ['pending', [Validators.required, ]],
       createdBy: this.fb.group({
@@ -172,9 +172,10 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     }
 
     const wh = this.warehouses.filter(e => e.href === this.warehouse.get('href').value)[0];
-    this.availableSubLocations = wh.subLocations;
-
-    this.warehouse.disable();
+    if (wh) {
+      this.availableSubLocations = wh.subLocations;
+      this.warehouse.disable();
+    }
   }
 
   onProductSelectionModalClosed() {
@@ -193,12 +194,15 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
         inventoryReceiving: [null, []],
         product: [selectedProduct, [Validators.required]],
         href: [null, []],
-        subLocation: [null, [Validators.required]],
+        location:  this.fb.group({
+          href: [null, Validators.required],
+          // name: ['', ],
+        }),
         sku: ['', [Validators.required, ]],
         quantity: [1, [Validators.required, Validators.min(1), ]],
         batchNumber: ['', []],
-        locator: ['', []],
-        expiryDate: ['', []]
+        locator: this.fb.array([], [Validators.required, Validators.minLength(1)]),
+        expiryDate: [null, []]
       });
       this.stockRecords.push(f);
     }

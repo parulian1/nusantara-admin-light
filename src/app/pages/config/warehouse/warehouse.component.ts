@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { AbstractDetailComponent, ToastService, PagedResponse } from '@nusantara/core';
+import { AbstractDetailComponent, ToastService } from '@nusantara/core';
 import { ISubLocation, IWarehouse, drf } from '@nusantara/models';
 import { WarehouseService } from '@nusantara/services';
 
@@ -10,8 +10,8 @@ import { WarehouseService } from '@nusantara/services';
   selector: 'nus-warehouse-detail',
   template: `
     <nus-detail-title
-        [originalName]="originalEntityName"
-        [typeName]="entityTypeName">
+      [originalName]="originalEntityName"
+      [typeName]="entityTypeName">
     </nus-detail-title>
 
     <ul class="non-field-errors" *ngIf="!!nonFieldErrors.length">
@@ -22,38 +22,48 @@ import { WarehouseService } from '@nusantara/services';
 
       <label>
         <span>Name</span>
-        <input type="text" formControlName="name">
+        <input type="text" formControlName="name" name="name">
+        <nus-field-errors [control]="form.get('name')"></nus-field-errors>
       </label>
 
       <label>
         <span>Code</span>
-        <input type="text" formControlName="code">
+        <input type="text" formControlName="code" name="code">
+        <nus-field-errors [control]="form.get('code')"></nus-field-errors>
       </label>
 
       <label>Type
-        <select formControlName="type">
+        <select formControlName="type" name="type">
           <option *ngFor="let opt of types" [ngValue]="opt.value">
             {{opt.displayName}}
           </option>
         </select>
+        <nus-field-errors [control]="form.get('type')"></nus-field-errors>
       </label>
 
       <label>
         <span>Financial Reporting As</span>
-        <select formControlName="internalNotes">
+        <select formControlName="financialReportingAs" name="financialReportingAs">
           <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
             {{ wh.name }}
           </option>
         </select>
+        <nus-field-errors [control]="form.get('financialReportingAs')"></nus-field-errors>
       </label>
 
       <label>
         <span>Internal Notes</span>
-        <textarea formControlName="internalNotes"></textarea>
+        <textarea formControlName="internalNotes" name="internalNotes"></textarea>
+        <nus-field-errors [control]="form.get('internalNotes')"></nus-field-errors>
       </label>
 
       <nus-address [form]="form.get('address')" formGroupName="address">
       </nus-address>
+
+      <label>
+        <input type="checkbox" formControlName="isActive" name="isActive"> Is Active
+        <nus-field-errors [control]="form.get('isActive')"></nus-field-errors>
+      </label>
 
       <div>
         <h2>
@@ -74,8 +84,8 @@ import { WarehouseService } from '@nusantara/services';
           </thead>
           <tbody>
           <tr *ngFor="let subLoc of subLocations.controls; let i=index" [formGroup]="subLoc">
-            <td><input type="text" formControlName="name"></td>
-            <td><input type="text" formControlName="code"></td>
+            <td><input type="text" formControlName="name" maxlength="255"></td>
+            <td><input type="text" formControlName="code" maxlength="255"></td>
             <td>
               <select formControlName="type">
                 <option *ngFor="let opt of subLocationTypes" [ngValue]="opt.value">
@@ -83,18 +93,19 @@ import { WarehouseService } from '@nusantara/services';
                 </option>
               </select>
             </td>
-            <td><button (click)="removeSubLocation(i)">Remove</button></td>
+            <td>
+              <button (click)="removeSubLocation(i)">Remove</button>
+            </td>
           </tr>
           </tbody>
         </table>
-
       </div>
 
-      <div class="actions-container">
-        <button type="submit" [disabled]="!form.valid">Save</button>
-        <button type="button" (click)="navigateToParent(true)">Cancel</button>
-        <button type="button" (click)="delete()" *ngIf="!isNew">Delete</button>
-      </div>
+      <nus-detail-actions
+        [component]="this"
+        [hideDelete]=true
+        (cancel)="navigateToParent(true)">
+      </nus-detail-actions>
     </form>
   `,
   styles: [``]
@@ -104,21 +115,27 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
   types: Array<drf.IChoice>;
   subLocationTypes: Array<drf.IChoice>;
 
-  warehouses: Array<{href: string, name: string, code: string}>;
+  warehouses: Array<{ href: string, name: string, code: string }>;
 
-  constructor(public service: WarehouseService,
-              public router: Router,
-              public route: ActivatedRoute,
+  constructor(service: WarehouseService,
+              router: Router,
+              route: ActivatedRoute,
               public fb: FormBuilder,
-              public toast: ToastService) { super(); }
+              toast: ToastService) {
+    super(route, router, toast, service);
+  }
 
-  get subLocations(): FormArray { return this.form.get('subLocations') as FormArray; }
+  get subLocations(): FormArray {
+    return this.form.get('subLocations') as FormArray;
+  }
 
   ngOnInit() {
     super.ngOnInit();
-    this.route.data.subscribe((data: {types: drf.IChoice[],
-                                           subLocationTypes: drf.IChoice[],
-                                           allWarehouses: IWarehouse[]}) => {
+    this.route.data.subscribe((data: {
+      types: drf.IChoice[],
+      subLocationTypes: drf.IChoice[],
+      allWarehouses: IWarehouse[]
+    }) => {
       this.types = data.types;
       this.subLocationTypes = data.subLocationTypes;
 
@@ -129,14 +146,15 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
 
   initializeForm(entity?: IWarehouse) {
     this.form = this.fb.group({
-      name: [entity?.name, [Validators.required, ]],
-      code: [entity?.code, [Validators.required, ]],
+      name: [entity?.name, [Validators.required, Validators.maxLength(50), ]],
+      code: [entity?.code, [Validators.required, Validators.maxLength(255), ]],
       href: [entity?.href, []],
-      type: [entity?.type, []],
+      type: [entity?.type, [Validators.required]],
       internalNotes: [entity?.internalNotes || '', []],
       financialReportingAs: [entity?.financialReportingAs, []],
       allowReassignmentFrom: this.fb.array([]),
       subLocations: this.fb.array([]),
+      isActive: [entity?.isActive ?? true],
       address: this.fb.group({
         country: [entity?.address?.street || 'id', [Validators.required, ]],
         province: [entity?.address?.province, [Validators.required, ]],
@@ -172,6 +190,7 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
     });
     this.subLocations.push(arr);
   }
+
   removeSubLocation(index: number) {
     this.subLocations.removeAt(index);
   }

@@ -67,6 +67,7 @@ describe('VendorComponent', () => {
     const name = component.form.controls.name;
 
     name.setValue('');
+    fixture.detectChanges();
 
     expect(name.hasError('required')).toBeTruthy();
   });
@@ -77,6 +78,7 @@ describe('VendorComponent', () => {
     component.iconImage.setValue(vendorResponse.iconImage);
     component.bannerImage.setValue(vendorResponse.bannerImage);
     component.internalNotes.setValue(vendorResponse.internalNotes);
+
     component.save();
 
     const mock = httpTestingController.expectOne('/api/catalog/vendor/');
@@ -97,7 +99,9 @@ describe('VendorComponent', () => {
     component.iconImage.setValue(vendorUpdatedResponse.iconImage);
     component.bannerImage.setValue(vendorUpdatedResponse.bannerImage);
     component.internalNotes.setValue(vendorUpdatedResponse.internalNotes);
+
     component.save();
+
     const mock = httpTestingController.expectOne(vendorResponse.href);
     expect(mock.request.method).toEqual('PATCH');
     expect(mock.request.body.name).toBe(vendorUpdatedResponse.name);

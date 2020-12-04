@@ -23,7 +23,7 @@ import { IPaymentGateway } from '@nusantara/models';
       </thead>
       <tbody>
       <tr *ngFor="let entity of page.entities">
-        <td><a [routerLink]="[entity|entityToSlug]">{{ entity.name }})</a></td>
+        <td><a [routerLink]="[entity|entityToSlug]">{{ entity.name }}</a></td>
         <td>{{ entity.type }}</td>
       </tr>
       </tbody>

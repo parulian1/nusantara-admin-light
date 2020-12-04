@@ -1,9 +1,13 @@
-export interface IPaymentGateway {
+import { INamedHrefEntity } from "@nusantara/models/base";
+
+export interface IPaymentGateway extends INamedHrefEntity{
   description: string;
-  href: string;
   logo: string;
   type: string;
-  name: string;
   clientKey: string;
   serverKey: string;
+  code?: string;
+  accountNumber?: string;
+  accountHoldNumber?: string;
+  isActive: boolean;
 }

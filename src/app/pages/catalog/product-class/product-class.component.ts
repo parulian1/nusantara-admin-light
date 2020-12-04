@@ -20,13 +20,13 @@ import { ProductClassService, ProductAttributeService } from '@nusantara/service
 
       <label>
         <span>Name</span>
-        <input type="text" [formControl]="name">
+        <input type="text" [formControl]="name" name="name">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
         <span>Type</span>
-        <select [formControl]="type">
+        <select [formControl]="type" name="type">
             <option *ngFor="let opt of typeChoices" [ngValue]="opt.value">
               {{opt.displayName}}
             </option>
@@ -34,15 +34,15 @@ import { ProductClassService, ProductAttributeService } from '@nusantara/service
       </label>
 
       <label [ngClass]="{'hidden': isDigitalProduct}" class="without-field-errors">
-        <input type="checkbox" [formControl]="requiresShipping">
+        <input type="checkbox" [formControl]="requiresShipping" name="requiresShipping">
         Requires Shipping?
       </label>
       <label [ngClass]="{'hidden': isDigitalProduct}" class="without-field-errors">
-        <input type="checkbox" [formControl]="trackStock">
+        <input type="checkbox" [formControl]="trackStock" name="trackStock">
         Track Stock?
       </label>
       <label [ngClass]="{'hidden': isDigitalProduct}" class="without-field-errors">
-        <input type="checkbox" [formControl]="isPerishable">
+        <input type="checkbox" [formControl]="isPerishable" name="isPerishable">
         Is Perishable?
       </label>
 
@@ -60,7 +60,7 @@ import { ProductClassService, ProductAttributeService } from '@nusantara/service
         <tbody>
         <tr *ngFor="let attrFormGroup of attributeForms; let i=index" [formGroup]="attrFormGroup">
           <td class="immediate-error-display">
-            <input type="text" formControlName="name">
+            <input type="text" formControlName="name" maxlength="50">
           </td>
           <td class="immediate-error-display">
             <select formControlName="type">
@@ -91,6 +91,23 @@ import { ProductClassService, ProductAttributeService } from '@nusantara/service
         </tr>
         </tbody>
       </table>
+      <br/>
+      <table>
+        <tr>
+          <td class="immediate-error-display">
+            <h2>Product Options</h2>
+          </td>
+          <td class="immediate-error-display">
+            <select [formControl]="option" name="option">
+              <option [ngValue]=""></option>
+              <option *ngFor="let optionChoice of optionChoices"
+                      [ngValue]="optionChoice.href">
+                {{ optionChoice.name }}
+              </option>
+            </select>
+          </td>
+        </tr>
+      </table>
 
       <nus-detail-actions
         [component]="this"
@@ -105,14 +122,15 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
 
   typeChoices: drf.IChoice[];
   attributeTypeChoices: drf.IChoice[];
+  optionChoices: Array<products.IProductOption>;
 
-  constructor(public service: ProductClassService,
+  constructor(service: ProductClassService,
               private attributeService: ProductAttributeService,
               private fb: FormBuilder,
-              public toast: ToastService,
-              public route: ActivatedRoute,
-              public router: Router) {
-    super();
+              toast: ToastService,
+              route: ActivatedRoute,
+              router: Router) {
+    super(route, router, toast, service);
   }
 
   get name(): FormControl { return this.form.get('name') as FormControl; }
@@ -121,6 +139,7 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
   get trackStock(): FormControl { return this.form.get('trackStock') as FormControl; }
   get isPerishable(): FormControl { return this.form.get('isPerishable') as FormControl; }
   get attributes(): FormArray { return this.form.get('attributes') as FormArray; }
+  get option(): FormControl { return this.form.get('option').get('href') as FormControl; }
 
   get attributeForms(): FormGroup[] {
     return (this.form.controls.attributes as FormArray).controls as FormGroup[];
@@ -132,22 +151,26 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.route.data.subscribe((data: { typeChoices: drf.IChoice[], attributeTypeChoices: drf.IChoice[] }) => {
+    this.route.data.subscribe((data: { typeChoices: drf.IChoice[],
+                                            attributeTypeChoices: drf.IChoice[],
+                                            optionChoices: products.IProductOption[]}) => {
       this.attributeTypeChoices = data.attributeTypeChoices;
       this.typeChoices = data.typeChoices;
       this.type.valueChanges.subscribe((value) => this.onTypeChanged(value));
+      this.optionChoices = data.optionChoices;
     });
   }
 
   initializeForm(entity?: products.IProductClass) {
     this.form = this.fb.group({
-      name: [entity?.name, [Validators.required]],
+      name: [entity?.name, [Validators.required, Validators.maxLength(50)]],
       href: [entity?.href],
       type: [entity?.type, [Validators.required]],
       requiresShipping: [entity?.requiresShipping ?? true],
       trackStock: [entity?.trackStock ?? true],
       isPerishable: [entity?.isPerishable ?? false],
       attributes: this.fb.array([]),
+      option: this.fb.group({href: [entity?.option?.href, []]}),
     });
 
     // attributes are added separately from the primary loop because they're require substational authentication logic
@@ -163,7 +186,7 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
 
   addAttribute(attr?: products.IProductAttribute) {
     const attrGroup = this.fb.group({
-      name: [attr?.name, [Validators.required, ]],
+      name: [attr?.name, [Validators.required, Validators.maxLength(50)]],
       href: [attr?.href, ],
       type: [attr?.type, [Validators.required, ]],
       minValue: [attr?.minValue, ],

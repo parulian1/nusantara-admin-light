@@ -1,0 +1,41 @@
+<nus-list-header
+  title="Products">
+</nus-list-header>
+<div>
+
+  <label>
+    <span>Order Status</span>
+    <select name="orderStatus" (change)="onStatusChanged($event)" [value]="filterParams.status">
+      <option value=""></option>
+      <option *ngFor="let opt of orderStatuses" [value]="opt.value" [selected]="opt.value==filterParams.status">
+        {{opt.displayName}}
+      </option>
+    </select>
+  </label>
+</div>
+<nus-pagination [page]="page"></nus-pagination>
+
+<table>
+  <thead>
+  <tr>
+    <th>Order Number</th>
+    <th>Customer</th>
+    <th>Shipments</th>
+    <th>Status</th>
+    <th>Total</th>
+    <th>Created</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let entity of page.entities">
+    <td><a [routerLink]="[entity|entityToSlug]">{{ entity.orderNumber }}</a></td>
+    <td><a [routerLink]="['/users/customer/', entity.customer.href|entityToSlug]">{{ entity.customer.name ? entity.customer.name : "no name" }}</a></td>
+    <td>{{ entity.children.length }}</td>
+    <td>{{ entity.status }}</td>
+    <td>{{ (entity.orderPayment?.amount || 0)|currency:"IDR" }}</td>
+    <td>{{ entity.created | date }}</td>
+  </tr>
+  </tbody>
+</table>
+
+<nus-pagination [page]="page"></nus-pagination>
