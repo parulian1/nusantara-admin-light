@@ -138,7 +138,7 @@ import { ICustomer, ICustomerGroup, IOrder } from '@nusantara/models';
               <td>-</td>
               <td>{{ order.type }}</td>
               <td>{{ order.status }}</td>
-              <td>{{ order.orderPayment.amount | currency:"IDR" }}</td>
+              <td>{{ order.orderPayment ? order.orderPayment.amount : 0 | currency:"IDR" }}</td>
             </tr>
           </tbody>
         </table>
@@ -282,10 +282,6 @@ export class CustomerDetailComponent extends AbstractDetailComponent<ICustomer> 
     this.profile = entity.profile;
     this.customerGroups = entity.customerGroups;
     this.userEmail = entity.email;
-  }
-
-  submit() {
-
   }
 
 }
