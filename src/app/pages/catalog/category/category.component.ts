@@ -37,6 +37,11 @@ import { AbstractDetailComponent, ToastService } from '@nusantara/core';
       </label>
 
       <label>
+        <input type="checkbox" [formControl]="isActive" name="isActive"> Is Active
+        <nus-field-errors [control]="isActive"></nus-field-errors>
+      </label>
+
+      <label>
         <span>Icon</span>
         <img [src]="imagePreviewUrl" alt="Category Icon" class="preview">
         <small>Recommended: 65x65</small>
@@ -118,6 +123,7 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
   initializeForm(entity?: ICategory) {
     this.form = this.fb.group({
       name: [entity?.name, [Validators.required, Validators.maxLength(50)]],
+      isActive: [entity?.isActive, []],
       href: [entity?.href, []],
       image: ['', []],
       parent: [{value: entity?.parent, disabled: !!entity?.href }, []],
@@ -134,6 +140,7 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
   }
 
   get name(): FormControl { return this.form.get('name') as FormControl; }
+  get isActive(): FormControl { return this.form.get('isActive') as FormControl; }
   get image(): FormControl { return this.form.get('image') as FormControl; }
   get parent(): FormControl { return this.form.get('parent') as FormControl; }
   get sourceMappings(): FormArray { return this.form.get('sourceMappings') as FormArray; }
