@@ -7,4 +7,5 @@ export interface ICategory extends INamedHrefEntity {
   image: string;
   parent: string;
   sourceMappings: Array<string>;
+  isActive: boolean;
 }
