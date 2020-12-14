@@ -3,5 +3,5 @@ import { IResellerType } from "./reseller-type";
 
 export interface IReseller extends IHrefEntity {
   type?: IResellerType;
-  groups?: INamedHrefEntity[];
+  resellerGroups?: INamedHrefEntity[];
 }

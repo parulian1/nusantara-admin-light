@@ -32,12 +32,12 @@ import { ResellerComponent } from "./reseller";
     ResellerComponent,
     SiteConfigComponent,
   ],
-    imports: [
-        CommonModule,
-        SharedModule,
-        ReactiveFormsModule,
-        ConfigRoutingModule,
-        CKEditorModule,
-    ],
+  imports: [
+    CommonModule,
+    SharedModule,
+    ReactiveFormsModule,
+    ConfigRoutingModule,
+    CKEditorModule,
+  ],
 })
 export class ConfigModule { }

@@ -21,20 +21,23 @@ import { ResellerService } from "@nusantara/services";
     </ul>
 
     <form [formGroup]="form" (ngSubmit)="save()">
-      <label>
-        <ng-container *ngFor="let option of options">
-          <mat-radio-group></mat-radio-group>
-          <input type="radio" id="option" name="types" [ngValue]="option">
-          <label>{{ option }}</label><br>
-        </ng-container>
+      <label *ngFor="let option of options" class="types">
+        <span>
+          <input type="radio" id="option" name="types" [value]="option.value" [formControl]="type"
+          (change)="optionChange($event)">
+        </span>
+        <div>
+          {{ option.displayName }}
+        </div>
+        <nus-field-errors [control]="type"></nus-field-errors>
       </label>
 
-      <table>
+      <table [hidden]="!showGroups">
         <tbody>
-        <tr *ngFor="let control of groups.controls; let i=index">
+        <tr *ngFor="let control of resellerGroups.controls; let i=index">
           <td>{{ control.get('name').value }}</td>
           <td>
-            <button (click)="groups.removeAt(i)" type="button" class="remove-button">
+            <button (click)="resellerGroups.removeAt(i)" type="button" class="remove-button">
               <i class="material-icons">remove_circle_outline</i>
             </button>
           </td>
@@ -48,18 +51,26 @@ import { ResellerService } from "@nusantara/services";
         </tr>
         </tbody>
       </table>
-
-
+      <nus-customer-group-selection-modal [selectedGroups]="entity?.resellerGroups" >
+      </nus-customer-group-selection-modal>
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
         (delete)="delete()" [hideDelete]="true">
       </nus-detail-actions>
-
-      <nus-customer-group-selection-modal [selectedGroups]="entity?.groups"></nus-customer-group-selection-modal>
     </form>
   `,
-  styles: [``]
+  styles: [`
+    .types > span {
+      float: left;
+      width: 10%;
+    }
+    .types > div {
+      float: left;
+      width: 90%;
+    }
+
+  `]
 })
 export class ResellerComponent extends AbstractDetailComponent<IReseller> implements OnInit, AfterViewInit {
 
@@ -67,6 +78,7 @@ export class ResellerComponent extends AbstractDetailComponent<IReseller> implem
 
   entity?: IReseller;
   options: drf.IChoice[] = [];
+  showGroups: boolean = false;
 
   constructor(service: ResellerService,
               public fb: FormBuilder,
@@ -77,16 +89,16 @@ export class ResellerComponent extends AbstractDetailComponent<IReseller> implem
   }
 
   get type(): FormControl { return this.form.get('type') as FormControl; }
-  get groups(): FormArray { return this.form.get('groups') as FormArray; }
+  get resellerGroups(): FormArray { return this.form.get('resellerGroups') as FormArray; }
 
   ngOnInit() {
     super.ngOnInit();
     this.route.data.subscribe((data: { entity: IReseller, types: drf.IChoice[]}) => {
       this.entity = data.entity;
       this.options = data.types;
+      this.updateShowGroups(this.entity.type);
     });
     this.originalEntityName = "Reseller Config";
-    console.log('options', this.options);
   }
 
   initializeForm(entity?: IReseller) {
@@ -94,9 +106,9 @@ export class ResellerComponent extends AbstractDetailComponent<IReseller> implem
     this.form = this.fb.group({
       href: [this.service.apiBaseUrl],
       type: [entity?.type, [Validators.required]],
-      groups: this.fb.array([]),
+      resellerGroups: this.fb.array([]),
     });
-    for (const group of entity?.groups ?? []) {
+    for (const group of entity?.resellerGroups ?? []) {
       this.addGroup(group);
     }
   }
@@ -106,7 +118,7 @@ export class ResellerComponent extends AbstractDetailComponent<IReseller> implem
   }
 
   addGroup(group: INamedHrefEntity) {
-    this.groups.push(
+    this.resellerGroups.push(
       this.fb.group({
         href: [group.href],
         name: [group.name]
@@ -126,11 +138,26 @@ export class ResellerComponent extends AbstractDetailComponent<IReseller> implem
         href: [selectedGroup.href, []],
         name: [selectedGroup.name, []]
       });
-      this.groups.push(f);
+      this.resellerGroups.push(f);
     }
   }
 
-  optionChange(event: Event| String) {
+  optionChange(event: any) {
+    this.updateShowGroups(event.target.attributes[5].value);
+    this.resetResellerGroups();
   }
+
+  updateShowGroups(value: string) {
+    if (value === IResellerType.groups) {
+      this.showGroups = true;
+    } else {
+      this.showGroups = false;
+    }
+  }
+
+  resetResellerGroups() {
+    this.resellerGroups.clear();
+  }
+
 }
 

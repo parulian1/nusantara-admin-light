@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 
 import { DialogResult, PagedResponse } from '@nusantara/core';
 import { INamedHrefEntity } from "@nusantara/models";
-import {CustomerGroupService, GroupService} from '@nusantara/services';
+import { CustomerGroupService } from '@nusantara/services';
 
 /**
  * Shows the user a list of user they can select from.
