@@ -9,7 +9,7 @@ import { ResellerService } from "@nusantara/services";
 
 
 @Component({
-  selector: 'nus-group-detail',
+  selector: 'nus-reseller-config',
   template: `
     <nus-detail-title
       [originalName]="originalEntityName"
