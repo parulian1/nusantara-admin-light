@@ -17,6 +17,7 @@ import { Component } from '@angular/core';
       <a id="shipping-method-config" [routerLink]="['./shipping-methods']">Shipping Methods</a>
       <a id="device-config" [routerLink]="['./devices']">Device</a>
       <a id="device-config" [routerLink]="['./groups']">Groups</a>
+      <a id="device-config" [routerLink]="['./reseller']">Reseller</a>
       <a id="device-config" [routerLink]="['./settings']">General Settings</a>
 
     </div>

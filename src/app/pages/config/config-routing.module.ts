@@ -13,7 +13,9 @@ import {
 } from './shipping';
 import { DeviceComponent, DeviceListComponent, DeviceListResolver, DeviceResolver } from './device';
 import { GroupComponent, GroupListComponent, GroupListResolver, GroupProviderResolver } from './group';
-import {SiteConfigComponent, SiteConfigResolver} from "./site-config";
+import { ResellerComponent, ResellerProviderTypeResolver } from "./reseller";
+import { ResellerProviderResolver } from "./reseller/resolvers/reseller-provider.resolver";
+import { SiteConfigComponent, SiteConfigResolver } from "./site-config";
 
 
 const routes: Routes = [
@@ -145,6 +147,19 @@ const routes: Routes = [
     resolve: { entity: SiteConfigResolver },
     runGuardsAndResolvers: "always"
   },
+  {
+    path: 'reseller',
+    children: [
+      {
+        path: '',
+        component: ResellerComponent,
+        resolve: {
+          entity: ResellerProviderResolver,
+          types: ResellerProviderTypeResolver,
+        }
+      }
+    ]
+  }
 ];
 
 @NgModule({
