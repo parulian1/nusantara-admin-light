@@ -183,6 +183,8 @@ import { ProductSubscriptonHostComponent } from './subscription';
         <nus-field-errors [control]="seoDescription"></nus-field-errors>
       </label>
 
+      <nus-stock-search [productHref]="entity.href" *ngIf="!!entity"></nus-stock-search>
+
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
@@ -205,6 +207,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   parentProduct: products.IProduct;
   variants: Array<products.IVariantSummary> = [];
   originalAttributeValues: {[key: string]: string|number|boolean};
+  entity: products.IProduct;
 
   Editor = ClassicEditor;
 
@@ -254,13 +257,14 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   ngOnInit(): void {
     this.route.data.subscribe((
-      data: { categories: ICategory[], parent: products.IProduct, vendors: PagedResponse<IVendor>,
+      data: { entity: products.IProduct, categories: ICategory[], parent: products.IProduct, vendors: PagedResponse<IVendor>,
         productClasses: products.IProductClass[], mediaTypes: drf.IChoice[]}) => {
       this.parentProduct = data.parent;
       this.vendors = data.vendors.entities;
       this.categories = data.categories;
       this.productClasses = data.productClasses;
       this.mediaTypes = data.mediaTypes;
+      this.entity = data.entity;
     });
 
     super.ngOnInit();
