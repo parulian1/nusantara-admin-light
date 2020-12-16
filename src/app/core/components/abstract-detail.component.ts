@@ -190,7 +190,12 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
 
   protected onDeleteError(error: any) {
     this.form.enable();
-    this.toast?.addError(error.toString(), 'Failed to Delete');
+    if (error.status !== 400) {
+      // else than 400 status code i hope using detail attribute as error message
+      this.toast?.addError(error.error.detail, 'Failed to Delete');
+    } else {
+      this.setFormErrors(error.error);
+    }
   }
 
   /**
