@@ -41,11 +41,18 @@
 
 <form [formGroup]="form" (ngSubmit)="submit()" style="max-width:100%">
   <div class="tab-header">
-    <label [ngClass]="{'active': currentTab === 'orderDetail'}">
-      <i class="material-icons">
-        analytics
-      </i>
-      <input type="radio" id="tab_summary" value="summary"/> Order Detail
+    <label [ngClass]="{'active': currentTab === 'orderDetail'}" (click)="currentTab = 'orderDetail'">
+      <i class="material-icons">analytics</i>
+      <input type="radio" id="tab_summary" value="summary"/>
+      Order Detail
+    </label>
+
+    <label *ngIf="isManualTransfer(orderDetailData)"
+           [ngClass]="{'active': currentTab === 'paymentConfirm'}"
+           (click)="currentTab = 'paymentConfirm'">
+      <i class="material-icons">assignment</i>
+      <input type="radio" id="tab_assignment" value="assignment"/>
+      Order Confirm
     </label>
 
     <!--        <label [ngClass]="{'active': currentTab === 'shipping'}">-->
@@ -171,6 +178,11 @@
     <!--        <select>-->
     <!--          <option value="">Paid</option>-->
     <!--        </select>-->
+  </div>
+
+  <!-- CurrentTab: Order Confirm -->
+  <div *ngIf="currentTab === 'paymentConfirm'" id="paymentConfirm" style="margin-bottom: 20px">
+    <nus-order-confirm [order]="orderDetailData"></nus-order-confirm>
   </div>
 
   <div class="actions-container">

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractDetailComponent, ErrorResult, getSlugFromHref, ToastService } from '@nusantara/core';
 import { UserService, ShipmentService, OrderService } from '@nusantara/services';
-import { order, OrderStatusType } from '@nusantara/models';
+import { drf, order, OrderStatusType } from '@nusantara/models';
 
 
 @Component({
@@ -17,6 +17,7 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
   orderDetailData: order.IOrderDetail;
   shipmentMessageInfo: Array<order.IOrderShipmentInfo> = [];
   currentTab: 'orderDetail' | 'shipping' | 'history' | 'paymentConfirm' = 'orderDetail';
+  orderStatusChoices: Array<drf.IChoice>;
 
   constructor(public service: OrderService,
               public route: ActivatedRoute,
@@ -31,8 +32,9 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
   ngOnInit(): void {
     super.ngOnInit();
     this.route.data.subscribe((
-      data: { entity: order.IOrderDetail }) => {
+      data: { entity: order.IOrderDetail, orderStatus: Array<drf.IChoice> }) => {
       this.orderDetailData = data.entity;
+      this.orderStatusChoices = data.orderStatus;
     });
     this.fetchAwbUrl();
   }
@@ -188,6 +190,32 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
       return true;
     }
     return false;
+  }
+
+  /**
+   * Check manual transfer or not
+   */
+  isManualTransfer(orderData: order.IOrderDetail): boolean {
+    return orderData?.orderPayment?.paymentGateway.type === 'manual_transfer';
+  }
+
+  /**
+   * return status that can `changed`
+   */
+  statusCanUpdateChoices(): Array<drf.IChoice> {
+    const statusCanUpdate = ['unpaid', 'waiting', 'paid', 'cancelled'];
+    return this.orderStatusChoices.filter(status => statusCanUpdate.includes(status.value));
+  }
+
+  /**
+   * check current order status can update or not
+   */
+  canUpdateOrder(): boolean {
+    const statusCanUpdate = ['unpaid', 'waiting', 'paid', 'cancelled'];
+    return (
+      this.isManualTransfer(this.orderDetailData) &&
+      statusCanUpdate.includes(this.orderDetailData.status)
+    );
   }
 }
 

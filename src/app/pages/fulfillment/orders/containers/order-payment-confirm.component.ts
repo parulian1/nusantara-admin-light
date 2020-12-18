@@ -32,6 +32,10 @@ import { takeUntil } from 'rxjs/operators';
           </tr>
         </thead>
         <tbody>
+          <tr *ngIf="paymentConfirms?.length == 0">
+            <td rowspan="6"><i>Belum ada Payment Konfirmasi</i></td>
+          </tr>
+
           <tr *ngFor="let paymentConfirm of paymentConfirms">
             <td>
               {{ paymentConfirm.orderDate | date: "dd/MM/yyyy HH:mm:ss" }}
@@ -93,7 +97,7 @@ export class OrderPaymentConfirmComponent implements OnInit, OnDestroy {
 
   private unsubscribe$ = new Subject<void>();
 
-  paymentConfirms: order.IOrderPaymentConfirm[];
+  paymentConfirms: order.IOrderPaymentConfirm[] = [];
   paymentGateways: IPaymentGateway[];
 
   currentPaymentConfirm?: order.IOrderPaymentConfirm;
