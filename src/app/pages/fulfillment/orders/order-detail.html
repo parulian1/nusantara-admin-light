@@ -41,7 +41,7 @@
 
 <form [formGroup]="form" (ngSubmit)="submit()" style="max-width:100%">
   <div class="tab-header">
-    <label [ngClass]="{'active': currentTab.value === 'orderDetail'}">
+    <label [ngClass]="{'active': currentTab === 'orderDetail'}">
       <i class="material-icons">
         analytics
       </i>
@@ -62,7 +62,7 @@
   </div>
 
   <!-- CurrentTab: Order Detail -->
-  <div *ngIf="currentTab.value === 'orderDetail'" id="orderDetail" style="margin-bottom: 20px">
+  <div *ngIf="currentTab === 'orderDetail'" id="orderDetail" style="margin-bottom: 20px">
     <br>
     <ng-container *ngFor="let children of orderDetailData.children">
       <b style="margin-right: 10px">Warehouse: {{ children.warehouse.name }}</b>

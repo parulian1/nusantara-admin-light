@@ -16,6 +16,7 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
 
   orderDetailData: order.IOrderDetail;
   shipmentMessageInfo: Array<order.IOrderShipmentInfo> = [];
+  currentTab: 'orderDetail' | 'shipping' | 'history' | 'paymentConfirm' = 'orderDetail';
 
   constructor(public service: OrderService,
               public route: ActivatedRoute,
@@ -37,14 +38,7 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
   }
 
   initializeForm(entity?: order.IOrderDetail) {
-    this.form = this.fb.group({
-      currentTab: ['orderDetail', []],
-      status: [entity?.status, []],
-    });
-  }
-
-  get currentTab(): FormControl {
-    return this.form.get('currentTab') as FormControl;
+    // todo: generate form that used for update order
   }
 
   submit() {
