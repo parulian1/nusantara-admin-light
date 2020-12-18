@@ -13,6 +13,7 @@ import {
 } from './shipping';
 import { DeviceComponent, DeviceListComponent, DeviceListResolver, DeviceResolver } from './device';
 import { GroupComponent, GroupListComponent, GroupListResolver, GroupProviderResolver } from './group';
+import {SiteConfigComponent, SiteConfigResolver} from "./site-config";
 
 
 const routes: Routes = [
@@ -137,6 +138,12 @@ const routes: Routes = [
         data: { animation: 'Detail', },
       },
     ]
+  },
+  {
+    path: 'settings',
+    component: SiteConfigComponent,
+    resolve: { entity: SiteConfigResolver },
+    runGuardsAndResolvers: "always"
   },
 ];
 

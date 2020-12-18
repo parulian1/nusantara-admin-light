@@ -11,6 +11,7 @@ import { PaymentGatewayListComponent, PaymentGatewayDetailComponent } from './pa
 import { ShippingMethodListComponent, ShippingProviderDetailComponent, ShippingServiceComponent } from './shipping';
 import { DeviceListComponent, DeviceComponent } from './device';
 import { GroupComponent, GroupListComponent, UserGroupComponent } from './group';
+import { SiteConfigComponent } from "./site-config";
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { GroupComponent, GroupListComponent, UserGroupComponent } from './group'
     GroupListComponent,
     GroupComponent,
     UserGroupComponent,
+    SiteConfigComponent,
   ],
     imports: [
         CommonModule,

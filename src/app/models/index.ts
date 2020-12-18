@@ -33,6 +33,8 @@ export * from './email-href-user-entity';
 
 export * from './base';
 
+export * from './site';
+
 import * as google from './google';
 import * as base from './base';
 import * as drf from './drf';
