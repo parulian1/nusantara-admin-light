@@ -5,17 +5,23 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '@nusantara/shared';
 import { FulfillmentRoutingModule } from './fulfillment-routing.module';
 import { OrderListComponent, OrderComponent } from './orders';
+import { OrderPaymentConfirmComponent } from './orders/containers';
+import { OrderPaymentConfirmDialogComponent } from './orders/components';
+import { NgxSmartModalModule } from 'ngx-smart-modal';
 
 @NgModule({
   declarations: [
     OrderListComponent,
     OrderComponent,
+    OrderPaymentConfirmComponent,
+    OrderPaymentConfirmDialogComponent,
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     SharedModule,
     FulfillmentRoutingModule,
+    NgxSmartModalModule,
   ]
 })
 export class FulfillmentModule { }
