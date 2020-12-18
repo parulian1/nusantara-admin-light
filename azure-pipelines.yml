@@ -10,12 +10,6 @@ jobs:
   - job: unit_test
     displayName: Run Unit Test
     steps:
-      - task: SonarCloudPrepare@1
-        displayName: Prepare analysis on SonarCloud
-        inputs:
-          SonarCloud: GDN SonarCloud
-          organization: gdn-ecommerce
-          scannerMode: CLI
       - task: NodeTool@0
         displayName: Use Node 12.x
         inputs:
@@ -40,10 +34,6 @@ jobs:
         displayName: Publish test report to Azure DevOps
         inputs:
           testRunTitle: node
-      - task: SonarCloudAnalyze@1
-        displayName: Perform SonarCloud analysis
-      - task: SonarCloudPublish@1
-        displayName: Publish results to SonarCloud
         
   - job: sonar_cloud_job
     displayName: SonarCloud Analysis
