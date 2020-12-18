@@ -17,10 +17,10 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
   orderDetailData: order.IOrderDetail;
   shipmentMessageInfo: Array<order.IOrderShipmentInfo> = [];
 
-  constructor(service: OrderService,
-              route: ActivatedRoute,
-              router: Router,
-              toast: ToastService,
+  constructor(public service: OrderService,
+              public route: ActivatedRoute,
+              public router: Router,
+              public toast: ToastService,
               public userService: UserService,
               public shipmentService: ShipmentService,
               private fb: FormBuilder) {
@@ -145,7 +145,7 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
   }
 
   updateOrder(childrenData: any, status: OrderStatusType) {
-    let children: Array<string> = [];
+    const children: Array<string> = [];
     if (status === 'ready' && childrenData.status !== 'paid') {
       alert('Cannot change unpaid order');
     } else if (status === 'shipped' && childrenData.status !== 'ready') {
@@ -153,16 +153,17 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
     } else if (status === 'complete' && childrenData.status !== 'shipped') {
       alert(`Cannot change order that wasn't shipped`);
     } else {
-      let entity = {
+      const entity = {
         orderNumber: childrenData.orderNumber,
-        status: status,
+        status,
         href: childrenData.href
       };
 
-      this.service.update(entity).subscribe((resp) => {
+      this.service.update(entity as any).subscribe((resp) => {
           this.service.fetch(this.orderDetailData.orderNumber).subscribe(
-            (resp) => {
-              this.orderDetailData = resp;
+            (response) => {
+              // its not correct, IOrder not same as IOrderDetail
+              this.orderDetailData = response as any;
             },
             (error) => {
               console.log('Error', error);
