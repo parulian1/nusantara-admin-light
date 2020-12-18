@@ -36,6 +36,12 @@ import { ProductSubscriptonHostComponent } from './subscription';
         <input type="text" [formControl]="name" name="name">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
+      <label>
+        <span>Is Active</span>
+        <input type="checkbox" [formControl]="isActive">
+        <nus-field-errors [control]="isActive"></nus-field-errors>
+      </label>
+
 
       <label *ngIf="structure.value === 'parent'">
         <span>Product Class</span>
@@ -188,7 +194,9 @@ import { ProductSubscriptonHostComponent } from './subscription';
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
-        (delete)="delete()">
+        (delete)="delete()"
+        [hideDelete]="!entity.isActive"
+      >
       </nus-detail-actions>
 
     </form>
@@ -226,6 +234,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   get name(): FormControl { return this.form.get('name') as FormControl; }
+  get isActive(): FormControl { return this.form.get('isActive') as FormControl; }
   get upc(): FormControl { return this.form.get('upc') as FormControl; }
   get productClass(): FormControl { return this.form.get('productClass').get('href') as FormControl; }
   get category(): FormControl { return this.form.get('category').get('href') as FormControl; }
@@ -281,6 +290,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
     this.form = this.fb.group({
       name: [entity?.name, [Validators.required, Validators.maxLength(120), ]],
+      isActive: [entity?.isActive, []],
       parent: [entity?.parent ],
       href: [entity?.href],
       upc: [entity?.upc, [Validators.required, ]],
