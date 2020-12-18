@@ -18,6 +18,7 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
   shipmentMessageInfo: Array<order.IOrderShipmentInfo> = [];
   currentTab: 'orderDetail' | 'shipping' | 'history' | 'paymentConfirm' = 'orderDetail';
   orderStatusChoices: Array<drf.IChoice>;
+  entity: order.IOrderDetail;
 
   constructor(public service: OrderService,
               public route: ActivatedRoute,
@@ -40,10 +41,35 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
   }
 
   initializeForm(entity?: order.IOrderDetail) {
-    // todo: generate form that used for update order
+    this.form = this.fb.group({
+      status: [entity?.status ?? 'unpaid', []],
+    });
+    this.entity = entity;
   }
 
-  submit() {
+  get status(): FormControl { return this.form.get('status') as FormControl; }
+
+  onSubmit(): void {
+    if (this.form.valid) {
+      this.service.updateByOrderNumber(this.entity.orderNumber, this.form.value).subscribe(() => {
+        alert('success update order');
+        this.router.navigate([]);
+      }, error => this._handleError(error));
+    }
+  }
+
+  _handleError(error: any) {
+    if (error.status === 400) {
+      this.setErrorsMessage(error.error);
+    }
+  }
+
+  setErrorsMessage(error: any) {
+    Object.keys(error).forEach((fieldName: any) => {
+      if (this.form.controls[fieldName]) {
+        this.form.controls[fieldName].setErrors({server: error[fieldName]});
+      }
+    });
   }
 
   showKirim(orderDetailData: any) {
