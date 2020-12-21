@@ -58,4 +58,6 @@ export * from './product-subscription.service';
 
 export * from './group.service';
 
+export * from './reseller';
+
 export * from './site-config.service';

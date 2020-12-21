@@ -12,6 +12,7 @@ import { ShippingMethodListComponent, ShippingProviderDetailComponent, ShippingS
 import { DeviceListComponent, DeviceComponent } from './device';
 import { GroupComponent, GroupListComponent, UserGroupComponent } from './group';
 import { SiteConfigComponent } from "./site-config";
+import { ResellerComponent } from "./reseller";
 
 @NgModule({
   declarations: [
@@ -28,14 +29,15 @@ import { SiteConfigComponent } from "./site-config";
     GroupListComponent,
     GroupComponent,
     UserGroupComponent,
+    ResellerComponent,
     SiteConfigComponent,
   ],
-    imports: [
-        CommonModule,
-        SharedModule,
-        ReactiveFormsModule,
-        ConfigRoutingModule,
-        CKEditorModule,
-    ],
+  imports: [
+    CommonModule,
+    SharedModule,
+    ReactiveFormsModule,
+    ConfigRoutingModule,
+    CKEditorModule,
+  ],
 })
 export class ConfigModule { }

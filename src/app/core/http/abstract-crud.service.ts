@@ -22,7 +22,7 @@ export abstract class AbstractCrudService<T extends base.IHrefEntity> {
   // retrieves a single object from the API based on it's slug
   fetch(slug?: string): Observable<T> {
     let url = `${this.baseUrl}/`;
-    if (slug) {
+    if (!!slug) {
       url += `${slug}/`;
     }
     return this.httpClient

@@ -18,6 +18,7 @@ import { ProductSelectionModalComponent } from '@nusantara/shared/product-select
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { PaginationChildComponent } from "@nusantara/shared/pagination-child.component";
 import { UserSelectionModalComponent } from "@nusantara/shared/user-selection-modal.component";
+import { CustomerGroupModalComponent } from "@nusantara/shared/customer-group-modal.component";
 import { IncludeDeletedComponent } from './filters/include-deleted.component';
 
 
@@ -42,6 +43,7 @@ import { IncludeDeletedComponent } from './filters/include-deleted.component';
     PaginationChildComponent,
     UserSelectionModalComponent,
     IncludeDeletedComponent,
+    CustomerGroupModalComponent,
   ],
   exports: [
     EntityToSlugPipe,
@@ -59,6 +61,7 @@ import { IncludeDeletedComponent } from './filters/include-deleted.component';
     PaginationChildComponent,
     UserSelectionModalComponent,
     IncludeDeletedComponent,
+    CustomerGroupModalComponent,
   ],
   imports: [
     CommonModule,
