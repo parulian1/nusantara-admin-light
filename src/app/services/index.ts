@@ -57,3 +57,5 @@ export * from './product-option.service';
 export * from './product-subscription.service';
 
 export * from './group.service';
+
+export * from './site-config.service';

@@ -20,9 +20,13 @@ export abstract class AbstractCrudService<T extends base.IHrefEntity> {
   }
 
   // retrieves a single object from the API based on it's slug
-  fetch(slug: string): Observable<T> {
+  fetch(slug?: string): Observable<T> {
+    let url = `${this.baseUrl}/`;
+    if (slug) {
+      url += `${slug}/`;
+    }
     return this.httpClient
-      .get<T>(`${this.baseUrl}/${slug}/`, {observe: 'body', responseType: 'json'});
+      .get<T>(`${url}`, {observe: 'body', responseType: 'json'});
   }
 
   /**
