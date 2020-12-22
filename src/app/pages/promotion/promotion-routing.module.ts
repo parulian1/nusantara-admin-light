@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ProductPromotionComponent, ProductPromotionListResolver, ProductPromotionResolver, PromotionListComponent } from './promotion';
 import { VoucherComponent, VoucherListComponent } from './voucher';
 import { VoucherListResolver } from './voucher/voucher-list.resolver';
+import { VoucherResolver } from './voucher/voucher.resolver';
 
 const routes: Routes = [
   {
@@ -43,14 +44,14 @@ const routes: Routes = [
       },
       {
         path: 'new',
-        component: VoucherListComponent,
+        component: VoucherComponent,
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },
       },
       {
         path: ':slug',
         component: VoucherComponent,
-        resolve: { entity: ProductPromotionResolver, },
+        resolve: { entity: VoucherResolver, },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },
       },

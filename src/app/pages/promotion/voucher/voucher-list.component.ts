@@ -10,6 +10,10 @@ import { AbstractListComponent } from '@nusantara/core';
     <nus-list-header
       title="Voucher">
     </nus-list-header>
+    <div class="filtering">
+      <nus-include-deleted></nus-include-deleted>
+      <nus-include-inactive></nus-include-inactive>
+    </div>
     <nus-pagination [page]="page"></nus-pagination>
     <table>
       <thead>
@@ -27,7 +31,9 @@ import { AbstractListComponent } from '@nusantara/core';
     </table>
     <nus-pagination [page]="page"></nus-pagination>
   `,
-  styles: [ ]
+  styles: [`.filtering {
+    display: flex;
+  }` ]
 })
 export class VoucherListComponent extends AbstractListComponent<IVoucher> {
   constructor(route: ActivatedRoute) { super(route); }

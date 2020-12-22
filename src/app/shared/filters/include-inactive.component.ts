@@ -1,14 +1,17 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
-  selector: 'nus-include-deleted',
-  template: `<label>Show SoftDeleted<input type="checkbox" (click)="applyFilter($event)"></label>`,
+  selector: 'nus-include-inactive',
+  template: `
+    <label>Show InActive<input type="checkbox" (click)="applyFilter($event)"></label>
+  `,
   styles: [`label {
     min-height: auto;
-  }`]
+  }`
+  ]
 })
-export class IncludeDeletedComponent implements OnInit {
+export class IncludeInactiveComponent implements OnInit {
   public applied = false;
 
   constructor(private router: Router,
@@ -17,13 +20,13 @@ export class IncludeDeletedComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((queryParam: any) => {
-      this.applied = !!queryParam.include_deleted && queryParam.include_deleted === true  || false;
+      this.applied = !!queryParam.include_inactive && queryParam.include_inactive === true  || false;
     });
 
   }
 
   applyFilter(event: any) {
-    const params = {include_deleted: event.target.checked };
+    const params = {include_inactive: event.target.checked };
     this.router.navigate(
       ['./'],
       {

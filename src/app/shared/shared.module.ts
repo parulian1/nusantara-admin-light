@@ -16,10 +16,11 @@ import { NonFieldErrorsComponent } from './non-field-errors.component';
 import { SpinnerComponent } from './spinner.component';
 import { ProductSelectionModalComponent } from '@nusantara/shared/product-selection-modal.component';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
-import { PaginationChildComponent } from "@nusantara/shared/pagination-child.component";
-import { UserSelectionModalComponent } from "@nusantara/shared/user-selection-modal.component";
-import { CustomerGroupModalComponent } from "@nusantara/shared/customer-group-modal.component";
+import { PaginationChildComponent } from '@nusantara/shared/pagination-child.component';
+import { UserSelectionModalComponent } from '@nusantara/shared/user-selection-modal.component';
+import { CustomerGroupModalComponent } from '@nusantara/shared/customer-group-modal.component';
 import { IncludeDeletedComponent } from './filters/include-deleted.component';
+import { IncludeInactiveComponent } from './filters/include-inactive.component';
 
 
 /**
@@ -44,6 +45,7 @@ import { IncludeDeletedComponent } from './filters/include-deleted.component';
     UserSelectionModalComponent,
     IncludeDeletedComponent,
     CustomerGroupModalComponent,
+    IncludeInactiveComponent,
   ],
   exports: [
     EntityToSlugPipe,
@@ -62,6 +64,7 @@ import { IncludeDeletedComponent } from './filters/include-deleted.component';
     UserSelectionModalComponent,
     IncludeDeletedComponent,
     CustomerGroupModalComponent,
+    IncludeInactiveComponent
   ],
   imports: [
     CommonModule,

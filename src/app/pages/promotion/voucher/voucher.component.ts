@@ -3,7 +3,7 @@ import { FormControl, Validators, FormBuilder, FormArray } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractDetailComponent, DialogResult, ToastService } from '@nusantara/core';
-import { drf, INamedHrefEntity, IProductPromotion, IVoucher } from '@nusantara/models';
+import { drf, INamedHrefEntity, IVoucher } from '@nusantara/models';
 import { ProductService, VoucherService } from '@nusantara/services';
 import { IProduct } from '../../../models/products';
 import * as XLSX from 'xlsx';
@@ -41,27 +41,37 @@ import { ProductSelectionModalComponent } from '../../../shared';
       </label>
 
       <label>
-        <span>Amount</span>
+        <span>Discount Amount</span>
         <input type="number" [formControl]="amount" placeholder="Ex, 10000000">
         <nus-field-errors [control]="amount"></nus-field-errors>
       </label>
 
       <label>
-        <span>Minimum Order Amount</span>
-        <input type="number" [formControl]="maxAmount" placeholder="Ex, 10000000">
-        <nus-field-errors [control]="maxAmount"></nus-field-errors>
-      </label>
-
-      <label>
-        <span>Max Amount</span>
+        <span>Max Discount Amount</span>
         <input type="text" [formControl]="maxAmount" placeholder="Ex, 10000000">
         <nus-field-errors [control]="maxAmount"></nus-field-errors>
       </label>
 
       <label>
+        <span>Discount Based On</span>
+        <select [formControl]="discountBase">
+          <option *ngFor="let t of discountBaseChoices" [ngValue]="t.value">{{ t.displayName }}</option>
+        </select>
+      </label>
+      <label>
+        <span>Minimum Order Amount</span>
+        <input type="number" [formControl]="minimumOrderAmount" placeholder="Ex, 10000000">
+        <nus-field-errors [control]="minimumOrderAmount"></nus-field-errors>
+      </label>
+
+
+      <label>
         <span>Maximum Usage</span>
-        <input type="number" [formControl]="maxUsed" placeholder="Ex, 10000000">
-        <nus-field-errors [control]="maxUsed"></nus-field-errors>
+        <select [formControl]="maxUsed">
+          <option *ngFor="let t of maxUsedChoices" [ngValue]="t.value">{{ t.displayName }}</option>
+        </select>
+<!--        <input type="number" [formControl]="maxUsed" placeholder="Ex, 10000000">-->
+<!--        <nus-field-errors [control]="maxUsed"></nus-field-errors>-->
       </label>
 
       <label>
@@ -135,6 +145,17 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
     { displayName: 'Amount Off', value: 'amount_off' },
     { displayName: 'Override Price', value: 'override_price'},
   ];
+
+  discountBaseChoices: drf.IChoice[] = [
+    { displayName: 'Quantity on Cart', value: 'quantity'},
+    { displayName: 'Total Amount on Cart', value: 'total_amount'}
+  ];
+
+  maxUsedChoices: drf.IChoice[] = [
+    { displayName: 'Only One Time', value: 'one_time'},
+    { displayName: 'More Than Once', value: 'more_than_once'},
+  ];
+
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
 
   constructor(service: VoucherService,
@@ -150,6 +171,7 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
   get type(): FormControl { return this.form.get('type') as FormControl; }
   get code(): FormControl { return this.form.get('code') as FormControl; }
   get amount(): FormControl { return this.form.get('amount') as FormControl; }
+  get minimumOrderAmount(): FormControl { return this.form.get('minimumOrderAmount') as FormControl; }
   get discountBase(): FormControl { return this.form.get('discountBase') as FormControl; }
   get maxUsed(): FormControl { return this.form.get('maxUsed') as FormControl; }
   get maxAmount(): FormControl { return this.form.get('maxAmount') as FormControl; }
@@ -162,9 +184,12 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
       name: [entity?.name, [Validators.required, Validators.maxLength(50)]],
       href: [entity?.href],
       type: [entity?.type, [Validators.required]],
+      discountBase: [entity?.discountBase, [Validators.required]],
       code: [entity?.code, [Validators.required, Validators.maxLength(50)]],
       amount: [entity?.amount, [Validators.required, Validators.min(1)]],
+      minimumOrderAmount: [entity?.minimumOrderAmount, [Validators.required, Validators.min(1)]],
       maxAmount: [entity?.maxAmount, [Validators.required, Validators.min(1)]],
+      maxUsed: [entity?.maxUsed, [Validators.required, Validators.min(1)]],
       validFrom: [entity?.validFrom, [Validators.required, ]],
       validTo: [entity?.validTo, [Validators.required, ]],
       products: this.fb.array([]),
@@ -236,7 +261,6 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
     const o = Math.abs(offset);
     return (offset < 0 ? '+' : '-') + ('00' + Math.floor(o / 60)).slice(-2) + ':' + ('00' + (o % 60)).slice(-2);
   }
-
 
   uploadProductXLSX(): void {
     const input: HTMLInputElement = document.createElement('input');
