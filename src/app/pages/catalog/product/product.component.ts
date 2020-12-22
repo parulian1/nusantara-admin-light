@@ -188,14 +188,15 @@ import { ProductSubscriptonHostComponent } from './subscription';
         <input type="text" [formControl]="seoDescription" name="seoDescription">
         <nus-field-errors [control]="seoDescription"></nus-field-errors>
       </label>
-
-      <nus-stock-search [productHref]="entity.href" *ngIf="!!entity"></nus-stock-search>
+        <ng-container *ngIf="!!entity">
+          <nus-stock-search [productHref]="entity?.href" ></nus-stock-search>
+        </ng-container>
 
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
         (delete)="delete()"
-        [hideDelete]="!entity.isActive"
+        [hideDelete]="!entity || !(entity.isActive)"
       >
       </nus-detail-actions>
 
