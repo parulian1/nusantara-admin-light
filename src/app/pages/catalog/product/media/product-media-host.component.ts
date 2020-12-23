@@ -29,11 +29,13 @@ import { NewProductYoutubeComponent } from './new-product-youtube.component';
       </button>
     </h2>
 
-    <nus-product-media
-      *ngFor="let media of entities; let i=index"
-      [entity]="media"
-      (remove)="remove(i)">
-    </nus-product-media>
+    <div class="product-media-wrapper">
+      <nus-product-media
+        *ngFor="let media of entities; let i=index"
+        [entity]="media"
+        (remove)="remove(i)">
+      </nus-product-media>
+    </div>
 
     <!-- Pop-ups for adding new media -->
     <nus-new-product-image></nus-new-product-image>
@@ -42,12 +44,19 @@ import { NewProductYoutubeComponent } from './new-product-youtube.component';
   styles: [
     'h2>button { background: transparent; border: none; opacity: .3; transition: all .3s; }',
     'h2>button:hover, h2>button:focus { opacity: 1; color: var(--success); } ',
-    `nus-product-media {
-      display: inline-block;
-      height: 160px; width: 160px;
-      box-shadow: 0 0 8px -1px var(--shadow-color);
-      margin: 0 5px 5px 0;
-    }`,
+    `
+      .product-media-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      nus-product-media {
+        height: 160px;
+        box-shadow: 0 0 8px -1px var(--shadow-color);
+        margin: 0 5px 5px 0;
+        width: 32%;
+      }
+    `,
   ]
 })
 export class ProductMediaHostComponent extends AbstractEditingComponent<FormArray> implements OnInit, AfterViewInit {

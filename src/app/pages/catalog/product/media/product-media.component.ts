@@ -15,21 +15,22 @@ import { GoogleService } from '@nusantara/services';
 @Component({
   selector: 'nus-product-media',
   template: `
-    <button type="button" (click)="remove.emit()" title="Remove"><i class="material-icons">remove_circle_outline</i></button>
+    <div>
+      <button type="button" (click)="remove.emit()" title="Remove"><i class="material-icons">remove_circle_outline</i></button>
 
-    <div *ngIf="entity?.type === 'image'">
-      <span class="video-title">Image</span>
+      <div *ngIf="entity?.type === 'image'">
+        <span class="video-title">Image</span>
+      </div>
+      <div *ngIf="entity?.type === 'you_tube'">
+        <a class="video-title" [href]="clickUrl" target="_blank">
+          <span *ngIf="title?.length > 19; then slicedTitle else fullTitle"></span>
+          <ng-template #slicedTitle>{{ title|slice:0:16 }}...</ng-template>
+          <ng-template #fullTitle>{{ title }}</ng-template>
+        </a>
+      </div>
+
+      <img [src]="previewImageUrl" alt="Media Preview">
     </div>
-    <div *ngIf="entity?.type === 'you_tube'">
-      <a class="video-title" [href]="clickUrl" target="_blank">
-        <span *ngIf="title?.length > 19; then slicedTitle else fullTitle"></span>
-        <ng-template #slicedTitle>{{ title|slice:0:16 }}...</ng-template>
-        <ng-template #fullTitle>{{ title }}</ng-template>
-      </a>
-    </div>
-
-    <img [src]="previewImageUrl" alt="Media Preview">
-
   `,
   styles: [
     ':host { position: relative; text-align: center; }',
