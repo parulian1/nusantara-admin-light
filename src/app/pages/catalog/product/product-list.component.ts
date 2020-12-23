@@ -50,8 +50,8 @@ import { AbstractListComponent } from '@nusantara/core';
             </a>
           </td>
           <td>
-            <a [routerLink]="['/catalog', 'vendors', entity.vendor|entityToSlug]">
-              {{ entity.vendor.name }}
+            <a *ngIf="entity?.vendor?.name" [routerLink]="['/catalog', 'vendors', entity.vendor|entityToSlug]">
+              {{ entity?.vendor?.name }}
             </a>
           </td>
           <td><nus-true-false [value]="entity.isActive"></nus-true-false></td>
