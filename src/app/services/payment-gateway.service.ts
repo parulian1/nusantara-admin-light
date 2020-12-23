@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { AbstractCrudService } from '@nusantara/core';
-import { IPaymentGateway } from '@nusantara/models';
+import { IPaymentGateway, PaymentTypeChoices } from '@nusantara/models';
 import { Observable } from 'rxjs';
 import {map} from 'rxjs/operators';
 
@@ -24,9 +24,9 @@ export class PaymentGatewayService extends AbstractCrudService<IPaymentGateway> 
     );
   }
 
-  fetchAllByType(type: string): Observable<IPaymentGateway[]> {
+  fetchAllByType(type: PaymentTypeChoices): Observable<IPaymentGateway[]> {
     return this.fetchAll().pipe(
-      map(result => result.filter(r => r.type === 'manual_transfer'))
+      map(result => result.filter(r => r.type === type))
     );
   }
 }

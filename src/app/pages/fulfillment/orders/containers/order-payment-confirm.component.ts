@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import {
   IOrderPaymentConfirm,
   IPaymentGateway,
-  order,
+  order, PaymentTypeChoices,
 } from '@nusantara/models';
 import {
   OrderPaymentConfirmService,
@@ -119,7 +119,7 @@ export class OrderPaymentConfirmComponent implements OnInit, OnDestroy {
         this.paymentConfirms = paymentConfirms;
       });
     this.paymentGatewayService
-      .fetchAllByType('manual_transfer')
+      .fetchAllByType(PaymentTypeChoices.MANUAL_TRANSFER)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((paymentGateways) => {
         this.paymentGateways = paymentGateways;
@@ -141,7 +141,7 @@ export class OrderPaymentConfirmComponent implements OnInit, OnDestroy {
         alert('success delete payment confirm');
         this.reFetch();
       },
-      (error) => this.handleError(error)
+      (error) => this.handleError(`error to delete a payment confirm`)
     );
   }
 
@@ -155,9 +155,10 @@ export class OrderPaymentConfirmComponent implements OnInit, OnDestroy {
       });
   }
 
-  handleError(error): void {
-    alert('error');
-    console.log('error', error);
+  handleError(error: any): void {
+    if (typeof error === 'string') {
+      alert(error);
+    }
   }
 
   ngOnDestroy(): void {
