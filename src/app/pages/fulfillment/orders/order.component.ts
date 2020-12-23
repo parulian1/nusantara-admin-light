@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractDetailComponent, ErrorResult, getSlugFromHref, ToastService } from '@nusantara/core';
 import { UserService, ShipmentService, OrderService } from '@nusantara/services';
-import { order, OrderStatusType } from '@nusantara/models';
+import { drf, order, OrderStatusType } from '@nusantara/models';
 
 
 @Component({
@@ -16,11 +16,14 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
 
   orderDetailData: order.IOrderDetail;
   shipmentMessageInfo: Array<order.IOrderShipmentInfo> = [];
+  currentTab: 'orderDetail' | 'shipping' | 'history' | 'paymentConfirm' = 'orderDetail';
+  orderStatusChoices: Array<drf.IChoice>;
+  entity: order.IOrderDetail;
 
-  constructor(service: OrderService,
-              route: ActivatedRoute,
-              router: Router,
-              toast: ToastService,
+  constructor(public service: OrderService,
+              public route: ActivatedRoute,
+              public router: Router,
+              public toast: ToastService,
               public userService: UserService,
               public shipmentService: ShipmentService,
               private fb: FormBuilder) {
@@ -30,24 +33,43 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
   ngOnInit(): void {
     super.ngOnInit();
     this.route.data.subscribe((
-      data: { entity: order.IOrderDetail }) => {
+      data: { entity: order.IOrderDetail, orderStatus: Array<drf.IChoice> }) => {
       this.orderDetailData = data.entity;
+      this.orderStatusChoices = data.orderStatus;
     });
     this.fetchAwbUrl();
   }
 
   initializeForm(entity?: order.IOrderDetail) {
     this.form = this.fb.group({
-      currentTab: ['orderDetail', []],
-      status: [entity?.status, []],
+      status: [entity?.status ?? 'unpaid', []],
     });
+    this.entity = entity;
   }
 
-  get currentTab(): FormControl {
-    return this.form.get('currentTab') as FormControl;
+  get status(): FormControl { return this.form.get('status') as FormControl; }
+
+  onSubmit(): void {
+    if (this.form.valid) {
+      this.service.updateByOrderNumber(this.entity.orderNumber, this.form.value).subscribe(() => {
+        alert('success update order');
+        this.router.navigate([]);
+      }, error => this._handleError(error));
+    }
   }
 
-  submit() {
+  _handleError(error: any) {
+    if (error.status === 400) {
+      this.setErrorsMessage(error.error);
+    }
+  }
+
+  setErrorsMessage(error: any) {
+    Object.keys(error).forEach((fieldName: any) => {
+      if (this.form.controls[fieldName]) {
+        this.form.controls[fieldName].setErrors({server: error[fieldName]});
+      }
+    });
   }
 
   showKirim(orderDetailData: any) {
@@ -145,7 +167,7 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
   }
 
   updateOrder(childrenData: any, status: OrderStatusType) {
-    let children: Array<string> = [];
+    const children: Array<string> = [];
     if (status === 'ready' && childrenData.status !== 'paid') {
       alert('Cannot change unpaid order');
     } else if (status === 'shipped' && childrenData.status !== 'ready') {
@@ -153,16 +175,17 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
     } else if (status === 'complete' && childrenData.status !== 'shipped') {
       alert(`Cannot change order that wasn't shipped`);
     } else {
-      let entity = {
+      const entity = {
         orderNumber: childrenData.orderNumber,
-        status: status,
+        status,
         href: childrenData.href
       };
 
-      this.service.update(entity).subscribe((resp) => {
+      this.service.update(entity as any).subscribe((resp) => {
           this.service.fetch(this.orderDetailData.orderNumber).subscribe(
-            (resp) => {
-              this.orderDetailData = resp;
+            (response) => {
+              // its not correct, IOrder not same as IOrderDetail
+              this.orderDetailData = response as any;
             },
             (error) => {
               console.log('Error', error);
@@ -193,6 +216,32 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
       return true;
     }
     return false;
+  }
+
+  /**
+   * Check manual transfer or not
+   */
+  isManualTransfer(orderData: order.IOrderDetail): boolean {
+    return orderData?.orderPayment?.paymentGateway.type === 'manual_transfer';
+  }
+
+  /**
+   * return status that can `changed`
+   */
+  statusCanUpdateChoices(): Array<drf.IChoice> {
+    const statusCanUpdate = ['unpaid', 'waiting', 'paid', 'cancelled'];
+    return this.orderStatusChoices.filter(status => statusCanUpdate.includes(status.value));
+  }
+
+  /**
+   * check current order status can update or not
+   */
+  canUpdateOrder(): boolean {
+    const statusCanUpdate = ['unpaid', 'waiting', 'paid', 'cancelled'];
+    return (
+      this.isManualTransfer(this.orderDetailData) &&
+      statusCanUpdate.includes(this.orderDetailData.status)
+    );
   }
 }
 

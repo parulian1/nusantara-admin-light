@@ -27,7 +27,8 @@ const routes: Routes = [
         component: OrderComponent,
         path: ':slug',
         resolve: {
-          entity: OrderResolver
+          entity: OrderResolver,
+          orderStatus: OrderStatusResolver,
         },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },

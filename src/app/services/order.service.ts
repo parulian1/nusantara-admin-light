@@ -61,4 +61,8 @@ export class OrderService extends AbstractCrudService<IOrder> {
         }
       ).pipe(map(resp => new PagedResponse(resp)));
   }
+
+  updateByOrderNumber(orderNumber: string, data: any = {}): Observable<void> {
+    return this.httpClient.patch<void>(`${this.baseUrl}/${orderNumber}/`, data);
+  }
 }
