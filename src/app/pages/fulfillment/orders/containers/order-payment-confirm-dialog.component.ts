@@ -3,6 +3,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnInit,
   Output,
   SimpleChanges,
   ViewChild,
@@ -18,6 +19,8 @@ import {
   IPaymentGateway,
   order,
 } from '@nusantara/models';
+import { OrderPaymentConfirmService } from '@nusantara/services';
+import { HttpErrorResponse } from '@angular/common/http';
 
 interface IPaymentConfirmDialog {
   action: 'create' | 'update';
@@ -34,6 +37,7 @@ interface IPaymentConfirmDialog {
         }}
       </h1>
 
+      <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
       <form [formGroup]="form" (ngSubmit)="save()">
         <label>
           <span>Sender Name</span>
@@ -58,25 +62,20 @@ interface IPaymentConfirmDialog {
         <label>
           <span>Transfer To</span>
           <select
+            class="select-wrapper"
             [class.is-error]="transferTo.invalid && (transferTo.touched || transferTo.dirty)"
             [formControl]="transferTo">
             <option
               *ngFor="let paymentGateway of paymentGateways"
               [value]="paymentGateway.href"
             >
-              {{ paymentGateway.name | slice:0:15 }}
-              <span *ngIf="paymentGateway.name.length > 15">...</span> -
-
-              {{ paymentGateway.accountHoldNumber | slice:0:15 }}
-              <span *ngIf="paymentGateway.accountHoldNumber.length > 15">...</span> -
-
-              {{ paymentGateway.accountNumber }}
+              {{ paymentGateway.name }} - {{ paymentGateway.accountHoldNumber}} - {{ paymentGateway.accountNumber }}
             </option>
           </select>
 
           <div *ngIf="transferTo.invalid && (transferTo.touched || transferTo.dirty)" class="error-detail">
             <div *ngIf="transferTo.hasError('required')">Required</div>
-            <div *ngIf="transferTo.hasError('apiError')">{{ transferTo.errors['apiError'][0] }}</div>
+            <div *ngIf="transferTo.hasError('apiError')">{{ transferTo.errors.apiError }}</div>
           </div>
         </label>
 
@@ -99,7 +98,7 @@ interface IPaymentConfirmDialog {
           />
           <div *ngIf="proofImage.invalid && (proofImage.touched || proofImage.dirty)" class="error-detail">
             <div *ngIf="proofImage.hasError('required')">Required</div>
-            <div *ngIf="proofImage.hasError('apiError')">{{ proofImage.errors['apiError'][0] }}</div>
+            <div *ngIf="proofImage.hasError('apiError')">{{ transferTo.errors.apiError }}</div>
           </div>
         </label>
 
@@ -113,14 +112,24 @@ interface IPaymentConfirmDialog {
     .is-error {
       border: 1px solid #af3b6e;
     }
+
+    .select-wrapper {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 250px;
+    }
   `],
 })
-export class OrderPaymentConfirmDialogComponent implements OnChanges {
+export class OrderPaymentConfirmDialogComponent implements OnChanges, OnInit {
   @ViewChild('myModal') myModal: any;
   @Input() paymentConfirm: order.IOrderPaymentConfirm;
   @Input() paymentGateways: IPaymentGateway[];
+  @Input() order: order.IOrderDetail;
   @Output()
   action: EventEmitter<IPaymentConfirmDialog> = new EventEmitter<IPaymentConfirmDialog>();
+
+  nonFieldErrors: Array<any> = [];
 
   form: FormGroup;
   proofImageHelpers: {
@@ -129,7 +138,14 @@ export class OrderPaymentConfirmDialogComponent implements OnChanges {
     url: string;
   } = { base64: null, nameImage: null, url: null };
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private service: OrderPaymentConfirmService,
+  ) {}
+
+  ngOnInit(): void {
+    this.service.baseUrl = `/api/order/order/${this.order.orderNumber}/payment-confirm`;
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.paymentConfirm) {
@@ -178,12 +194,19 @@ export class OrderPaymentConfirmDialogComponent implements OnChanges {
 
   save(): void {
     if (this.form.valid) {
-      this.action.emit({
-        action: this.isUpdate() ? 'update' : 'create',
-        data: this.getFormValue() as IOrderPaymentConfirm,
-      });
-      this.resetProofImage();
-      this.myModal.close();
+      const formValue = this.getFormValue();
+      if (this.isUpdate()) {
+        this.service.update(formValue).subscribe(
+          () => this.handleSuccess(),
+          (error) => this.handleError(error)
+        );
+      } else {
+        delete formValue.href;
+        this.service.create(formValue).subscribe(
+          () => this.handleSuccess(),
+          (error) => this.handleError(error)
+        );
+      }
     } else {
       this.form.markAllAsTouched();
     }
@@ -213,5 +236,35 @@ export class OrderPaymentConfirmDialogComponent implements OnChanges {
 
   isUpdate(): boolean {
     return !!this.paymentConfirm;
+  }
+
+  handleSuccess(): void {
+    alert(`success ${this.isUpdate() ? 'update' : 'create'} payment confirm`);
+
+    this.action.emit({
+      action: this.isUpdate() ? 'update' : 'create',
+      data: this.getFormValue() as IOrderPaymentConfirm,
+    });
+
+    this.resetProofImage();
+    this.myModal.close();
+  }
+
+  handleError(error: any): void {
+    if (error instanceof HttpErrorResponse) {
+      if (error.error.status === 400) {
+        Object.values(error.error).forEach((field: any) => {
+          if (this.form.controls[field]) {
+            this.form.controls[field].setErrors({ apiError: error.error[field][0] });
+          }
+        });
+
+        if (error.error?.nonFieldErrors) {
+          this.nonFieldErrors = [...this.nonFieldErrors, ...error.error.nonFieldErrors];
+        }
+      } else {
+        this.nonFieldErrors.push(error.error.detail);
+      }
+    }
   }
 }

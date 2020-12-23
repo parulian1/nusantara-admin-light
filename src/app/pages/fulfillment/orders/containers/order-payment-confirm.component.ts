@@ -74,6 +74,7 @@ import { takeUntil } from 'rxjs/operators';
     <!-- Dialog to used for create / update payment confirm -->
     <nus-order-payment-confirm-dialog
       (action)="onSubmit($event)"
+      [order]="order"
       [paymentConfirm]="currentPaymentConfirm"
       [paymentGateways]="paymentGateways"
     >
@@ -131,24 +132,7 @@ export class OrderPaymentConfirmComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(event: any): void {
-    if (event.action === 'create') {
-      delete event.data.href;
-      this.service.create(event.data).subscribe(
-        () => {
-          alert('success create new payment confirmation');
-          this.reFetch();
-        },
-        (error) => this.handleError(error)
-      );
-    } else {
-      this.service.update(event.data).subscribe(
-        () => {
-          alert('success update payment confirmation');
-          this.reFetch();
-        },
-        (error) => this.handleError(error)
-      );
-    }
+    this.reFetch();
   }
 
   onDelete(orderPaymentConfirm: IOrderPaymentConfirm) {

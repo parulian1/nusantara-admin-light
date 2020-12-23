@@ -5,8 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '@nusantara/shared';
 import { FulfillmentRoutingModule } from './fulfillment-routing.module';
 import { OrderListComponent, OrderComponent } from './orders';
-import { OrderPaymentConfirmComponent } from './orders/containers';
-import { OrderPaymentConfirmDialogComponent } from './orders/components';
+import { OrderPaymentConfirmComponent, OrderPaymentConfirmDialogComponent } from './orders/containers';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 
 @NgModule({
