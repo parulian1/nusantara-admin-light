@@ -79,7 +79,7 @@ import { ProductSelectionModalComponent } from '@nusantara/shared';
 
       <label>
         <span>Priority</span>
-        <input type="number" [formControl]="validTo">
+        <input type="number" [formControl]="priority">
         <nus-field-errors [control]="priority"></nus-field-errors>
       </label>
 
