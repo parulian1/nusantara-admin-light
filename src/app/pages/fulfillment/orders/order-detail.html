@@ -2,50 +2,83 @@
 <h1>
   Order {{ orderDetailData.orderNumber }}
 </h1>
-<table class="table-50 order-customer-detail">
-  <tr>
-    <td>Customer</td>
-    <td>{{ orderDetailData.customer.name }}</td>
-  </tr>
-  <tr>
-    <td>Email</td>
-    <td>{{ orderDetailData.customer.email }}</td>
-  </tr>
-  <tr>
-    <td>Order Total</td>
-    <td>{{ orderDetailData.orderPayment.amount | currency:"IDR"}}</td>
-  </tr>
-  <tr>
-    <td>Date of Purchase</td>
-    <td>{{ orderDetailData.created | date }}</td>
-  </tr>
-  <tr>
-    <td>Payment</td>
-    <td>{{ orderDetailData.orderPayment.paymentGateway.name }}</td>
-  </tr>
-  <tr>
-    <td>Status</td>
-    <td>{{ orderDetailData.orderPayment.status }}</td>
-  </tr>
-  <tr>
-    <td>Address</td>
-    <td>
-      <address [innerHTML]="getOrderAddress()"></address>
-    </td>
-  </tr>
-</table>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <table class="table-70 order-customer-detail">
+    <tr>
+      <td>Customer</td>
+      <td>{{ orderDetailData.customer.name }}</td>
+    </tr>
+    <tr>
+      <td>Email</td>
+      <td>{{ orderDetailData.customer.email }}</td>
+    </tr>
+    <tr>
+      <td>Order Total</td>
+      <td>{{ orderDetailData.orderPayment.amount | currency:"IDR"}}</td>
+    </tr>
+    <tr>
+      <td>Date of Purchase</td>
+      <td>{{ orderDetailData.created | date }}</td>
+    </tr>
+    <tr>
+      <td>Payment</td>
+      <td>{{ orderDetailData.orderPayment.paymentGateway.name }}</td>
+    </tr>
+    <tr>
+      <td>Status</td>
+      <td *ngIf="!canUpdateOrder()">{{ orderDetailData.orderPayment.status }}</td>
+      <td *ngIf="canUpdateOrder()">
+        <div>
+          <select name="status" id="status" [formControl]="status">
+            <option *ngFor="let orderStatus of statusCanUpdateChoices()"
+                    [ngValue]="orderStatus.value">
+              {{ orderStatus.displayName }}
+            </option>
+          </select>
+          <p *ngIf="status.invalid && (status.touched || status.dirty)"
+             style="margin: 0; color: red; max-width: 200px;">
+            <span *ngIf="status.hasError('server')">{{ status.errors['server'] }}</span>
+            <!-- todo: handle other error need to think again  -->
+          </p>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>Address</td>
+      <td>
+        <address [innerHTML]="getOrderAddress()"></address>
+      </td>
+    </tr>
+
+    <tr *ngIf="canUpdateOrder()">
+      <td></td>
+      <td>
+        <button type="submit" class="control">
+          update
+        </button>
+      </td>
+    </tr>
+  </table>
+</form>
 
 <ul class="non-field-errors">
   <li *ngFor="let err of nonFieldErrors">{{ err }}</li>
 </ul>
 
-<form [formGroup]="form" (ngSubmit)="submit()" style="max-width:100%">
+<div style="max-width:100%">
   <div class="tab-header">
-    <label [ngClass]="{'active': currentTab.value === 'orderDetail'}">
-      <i class="material-icons">
-        analytics
-      </i>
-      <input type="radio" id="tab_summary" value="summary"/> Order Detail
+    <label [ngClass]="{'active': currentTab === 'orderDetail'}" (click)="currentTab = 'orderDetail'">
+      <i class="material-icons">analytics</i>
+      <input type="radio" id="tab_summary" value="summary"/>
+      Order Detail
+    </label>
+
+    <label *ngIf="isManualTransfer(orderDetailData)"
+           [ngClass]="{'active': currentTab === 'paymentConfirm'}"
+           (click)="currentTab = 'paymentConfirm'">
+      <i class="material-icons">assignment</i>
+      <input type="radio" id="tab_assignment" value="assignment"/>
+      Order Confirm
     </label>
 
     <!--        <label [ngClass]="{'active': currentTab === 'shipping'}">-->
@@ -62,7 +95,7 @@
   </div>
 
   <!-- CurrentTab: Order Detail -->
-  <div *ngIf="currentTab.value === 'orderDetail'" id="orderDetail" style="margin-bottom: 20px">
+  <div *ngIf="currentTab === 'orderDetail'" id="orderDetail" style="margin-bottom: 20px">
     <br>
     <ng-container *ngFor="let children of orderDetailData.children">
       <b style="margin-right: 10px">Warehouse: {{ children.warehouse.name }}</b>
@@ -173,11 +206,16 @@
     <!--        </select>-->
   </div>
 
+  <!-- CurrentTab: Order Confirm -->
+  <div *ngIf="currentTab === 'paymentConfirm'" id="paymentConfirm" style="margin-bottom: 20px">
+    <nus-order-confirm [order]="orderDetailData"></nus-order-confirm>
+  </div>
+
   <div class="actions-container">
     <!--        <button type="submit" disabled>Save</button>-->
     <button type="button" (click)="navigateToParent(true)" class="control secondary">Close</button>
     <!--        <button (click)="delete()" *ngIf="!isNew">Delete</button>-->
   </div>
-</form>
+</div>
 
 

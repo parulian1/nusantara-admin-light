@@ -37,6 +37,7 @@ export * from './sla.service';
 export * from './google.service';
 
 export * from './order.service';
+export * from './order-payment-confirm.service';
 export * from './review.service';
 
 export * from './reporting.service';
