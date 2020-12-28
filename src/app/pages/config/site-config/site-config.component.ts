@@ -26,7 +26,7 @@ import { SiteConfigService } from "@nusantara/services";
 
       <label>
         <span>Logo</span>
-        <img [src]="logoPreviewUrl" alt="Shop Logo" class="preview">
+        <img [src]="logoPreviewUrl" alt="Shop Logo" class="preview" id="logo">
         <small>Recommended: 120x120</small>
         <input type="file"
                [formControl]="logo"
@@ -41,6 +41,17 @@ import { SiteConfigService } from "@nusantara/services";
         <nus-field-errors [control]="gaAccountId"></nus-field-errors>
       </label>
 
+      <label>
+        <span>Favicon</span>
+        <img [src]="faviconPreviewUrl" alt="Favicon Logo" class="preview" id="favicon">
+        <small>Recommended: 48x48</small>
+        <input type="file"
+               [formControl]="favicon"
+               (change)="setFaviconPreview($event)"
+               name="favicon"
+               accept="image/*">
+      </label>
+
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
@@ -49,8 +60,10 @@ import { SiteConfigService } from "@nusantara/services";
     </form>
   `,
   styles: [
-    'img { height: 120px; width: 120px; }',
+    'img#logo { max-height: 120px; max-width: 120px; }',
     '.ck-editor__main { min-height: 150px; }',
+    'input[type=file] { display: none; }',
+    'img#favicon { max-height: 48px; max-width: 48px; }',
   ]
 })
 export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> implements OnInit {
@@ -59,6 +72,7 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
 
   entity?: ISiteConfig;
   logoPreviewUrl: string;
+  faviconPreviewUrl: string;
 
   constructor(service: SiteConfigService,
               public fb: FormBuilder,
@@ -80,6 +94,10 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
     return this.form.get('gaAccountId') as FormControl;
   }
 
+  get favicon(): FormControl {
+    return this.form.get('favicon') as FormControl;
+  }
+
   ngOnInit(): void {
     super.ngOnInit();
     this.originalEntityName = "General Settings";
@@ -91,17 +109,21 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
       href: [entity?.href],
       logo: [],
       gaAccountId: [entity?.gaAccountId, [Validators.required]],
+      favicon: []
     });
 
     this.entity = entity;
-    console.log('entity', this.entity);
-
     this.setLogoPreview(entity?.logo);
+    this.setFaviconPreview(entity?.favicon);
 
   }
 
-  setLogoPreview(data?: Event | string) {
-    super.setImagePreview(data, (dataAsUrl) => this.logoPreviewUrl = dataAsUrl);
+  setLogoPreview(dataLogo?: Event | string) {
+    super.setImagePreview(dataLogo, (dataLogoAsUrl) => this.logoPreviewUrl = dataLogoAsUrl);
+  }
+
+  setFaviconPreview(dataFavicon?: Event | string) {
+    super.setImagePreview(dataFavicon, (dataFaviconAsUrl) => this.faviconPreviewUrl = dataFaviconAsUrl);
   }
 
   save() {
@@ -110,6 +132,12 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
     }
     if (!!this.logo && this.logoPreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
       this.form.value.logo = this.logoPreviewUrl;
+    }
+    if (!!this.entity?.href && !!this.entity?.favicon && !this.form.get('favicon').value) {
+      this.form.removeControl('favicon');
+    }
+    if (!!this.favicon && this.faviconPreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
+      this.form.value.favicon = this.faviconPreviewUrl;
     }
     super.save();
   }
