@@ -300,7 +300,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       weight: [entity?.weight, [Validators.required, ]],
       productClass: this.fb.group({href: [entity?.productClass.href, [Validators.required]]}),
       category: this.fb.group({href: [entity?.category.href, [Validators.required]]}),
-      vendor: this.fb.group({href: [entity?.vendor.href, [Validators.required]]}),
+      vendor: this.fb.group({href: [entity?.vendor?.href, [Validators.required]]}),
       media: this.fb.array([]),
       attributes: this.fb.group({}, []),
       priceLists: this.fb.array([]),
