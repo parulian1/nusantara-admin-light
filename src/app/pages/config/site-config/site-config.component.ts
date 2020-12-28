@@ -60,10 +60,10 @@ import { SiteConfigService } from "@nusantara/services";
     </form>
   `,
   styles: [
-    'img#logo { height: 120px; width: 120px; border: 1px solid; }',
+    'img#logo { max-height: 120px; max-width: 120px; }',
     '.ck-editor__main { min-height: 150px; }',
     'input[type=file] { display: none; }',
-    'img#favicon { height: 48px; width: 48px; }',
+    'img#favicon { max-height: 48px; max-width: 48px; }',
   ]
 })
 export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> implements OnInit {
