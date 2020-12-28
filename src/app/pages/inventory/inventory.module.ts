@@ -4,19 +4,22 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 
 import { SharedModule } from '@nusantara/shared';
-import * as receiving from './receiving';
+import {
+  InventoryReceivingComponent,
+  InventoryReceivingDetailComponent,
+  LineItemComponent,
+} from './receiving';
 import { InventoryRoutingModule } from './inventory-routing.module';
-import { InventoryReceivingComponent} from './receiving/inventory-receiving.component';
-import { InventoryOrderListComponent } from './pending-order/inventory-order-list.component';
-import { InventoryReceivingDetailComponent } from "./receiving/inventory-receiving-detail.component";
-import {InventoryTransferOrderComponent} from "./transfer-order/inventory-transfer-order.component";
+import { InventoryOrderListComponent } from './pending-order';
+import {InventoryTransferOrderComponent} from './transfer-order';
 
 @NgModule({
   declarations: [
     InventoryReceivingComponent,
-    receiving.LineItemComponent,
-    InventoryOrderListComponent,
     InventoryReceivingDetailComponent,
+    LineItemComponent,
+
+    InventoryOrderListComponent,
     InventoryTransferOrderComponent,
   ],
   imports: [

@@ -3,13 +3,16 @@ import { Routes, RouterModule } from '@angular/router';
 
 import * as config from '@nusantara/pages/config';
 import { AllProductClassResolver } from '@nusantara/pages/catalog/product-class';
-import { InventoryReceivingComponent } from './receiving/inventory-receiving.component';
-import { InventoryOrderListComponent } from './pending-order/inventory-order-list.component';
+
+import { InventoryReceivingComponent, InventoryReceivingDetailComponent } from './receiving';
+import { InventoryReceivingOrderDetailResolver } from './receiving/inventory-receiving-order-detail.resolver';
+
+import { InventoryOrderListComponent } from './pending-order';
 import { InventoryOrderListResolver } from './pending-order/inventory-order-list.resolver';
-import { InventoryReceivingDetailComponent } from "./receiving/inventory-receiving-detail.component";
-import { InventoryReceivingOrderDetailResolver } from "./receiving/inventory-receiving-order-detail.resolver";
-import {InventoryTransferOrderComponent} from "./transfer-order/inventory-transfer-order.component";
-import {InventoryTransferOrderDetailResolver} from "./transfer-order/inventory-transfer-order-detail.resolver";
+
+import { InventoryTransferOrderComponent } from './transfer-order';
+import { InventoryTransferOrderDetailResolver } from './transfer-order/inventory-transfer-order-detail.resolver';
+
 
 const routes: Routes = [
   {
