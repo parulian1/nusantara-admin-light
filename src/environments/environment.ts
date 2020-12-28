@@ -6,7 +6,7 @@ import { version } from '../../package.json';
 export const environment = {
   production: false,
   apiBaseUrl: 'https://staging.bhisma.cloud',
-  googleApiKey: 'b1f7b0Jrp33kiYM3Xk',
+  googleApiKey: 'AIzaSyDCywCcZt3Z27gvzMg6ZvQUL3EMEiVtvRU',
   appVersion: version,
   elasticAPM: {
     serviceName: 'nusantara-admin',
