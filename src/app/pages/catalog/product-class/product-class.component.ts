@@ -47,51 +47,15 @@ import { ProductClassService, ProductAttributeService } from '@nusantara/service
       </label>
 
       <h2>Attributes</h2>
-      <table>
-        <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Searchable</th>
-          <th>Filterable</th>
-          <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let attrFormGroup of attributeForms; let i=index" [formGroup]="attrFormGroup">
-          <td class="immediate-error-display">
-            <input type="text" formControlName="name" maxlength="50">
-          </td>
-          <td class="immediate-error-display">
-            <select formControlName="type">
-              <option *ngFor="let opt of this.attributeTypeChoices"
-                      [ngValue]="opt.value">
-                {{opt.displayName}}
-              </option>
-            </select>
-          </td>
-          <td>
-            <input type="checkbox" formControlName="isSearchable">
-          </td>
-          <td>
-            <input type="checkbox" formControlName="isFilterable">
-          </td>
-          <td>
-            <button (click)="removeAttribute(i)" type="button" class="remove-button">
-              <i class="material-icons">remove_circle_outline</i>
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="5">
-            <button type="button" (click)="addAttribute()" class="add-button">
-              Add Attribute
-            </button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <nus-product-class-attributes
+        [attributes]="entity?.attributes"
+        [choices]="attributeTypeChoices"
+        [form]="attributes"
+      >
+      </nus-product-class-attributes>
+
       <br/>
+
       <table>
         <tr>
           <td class="immediate-error-display">
@@ -119,6 +83,7 @@ import { ProductClassService, ProductAttributeService } from '@nusantara/service
   styles: [ ]
 })
 export class ProductClassComponent extends AbstractDetailComponent<products.IProductClass> implements OnInit {
+  entity: products.IProductClass;
 
   typeChoices: drf.IChoice[];
   attributeTypeChoices: drf.IChoice[];
@@ -141,9 +106,6 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
   get attributes(): FormArray { return this.form.get('attributes') as FormArray; }
   get option(): FormControl { return this.form.get('option').get('href') as FormControl; }
 
-  get attributeForms(): FormGroup[] {
-    return (this.form.controls.attributes as FormArray).controls as FormGroup[];
-  }
 
   get isDigitalProduct(): boolean {
     return (this.form.get('type') as FormControl)?.value === 'digital';
@@ -153,11 +115,15 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
     super.ngOnInit();
     this.route.data.subscribe((data: { typeChoices: drf.IChoice[],
                                             attributeTypeChoices: drf.IChoice[],
+                                            entity: products.IProductClass,
                                             optionChoices: products.IProductOption[]}) => {
+
+      this.entity = data.entity;
       this.attributeTypeChoices = data.attributeTypeChoices;
       this.typeChoices = data.typeChoices;
-      this.type.valueChanges.subscribe((value) => this.onTypeChanged(value));
       this.optionChoices = data.optionChoices;
+
+      this.type.valueChanges.subscribe((value) => this.onTypeChanged(value));
     });
   }
 
@@ -173,39 +139,10 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
       option: this.fb.group({href: [entity?.option?.href, []]}),
     });
 
-    // attributes are added separately from the primary loop because they're require substational authentication logic
-    for (const attr of entity?.attributes ?? []) {
-      this.addAttribute(attr);
-    }
-
     // users cannot change 'type' of product class once it has been created.
     if (!this.isNew) {
       this.type.disable();
     }
-  }
-
-  addAttribute(attr?: products.IProductAttribute) {
-    const attrGroup = this.fb.group({
-      name: [attr?.name, [Validators.required, Validators.maxLength(50)]],
-      href: [attr?.href, ],
-      type: [attr?.type, [Validators.required, ]],
-      minValue: [attr?.minValue, ],
-      maxValue: [attr?.maxValue, ],
-      isSearchable: [attr?.isSearchable ?? false, []],
-      isFilterable: [attr?.isFilterable ?? false, []],
-    });
-
-    // if the attr already has an href (it exists in the database)
-    // then the name and type may not be changed.
-    if (!!attrGroup.get('href').value) {
-      attrGroup.get('type').disable();
-    }
-
-    this.attributes.push(attrGroup);
-  }
-
-  removeAttribute(index: number) {
-    this.attributes.removeAt(index);
   }
 
   getFormValue(): any {
