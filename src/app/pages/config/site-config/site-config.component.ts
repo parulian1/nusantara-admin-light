@@ -55,7 +55,7 @@ import { SiteConfigService } from "@nusantara/services";
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
-        (delete)="delete()">
+        (delete)="delete()" [hideDelete]="true">
       </nus-detail-actions>
     </form>
   `,
