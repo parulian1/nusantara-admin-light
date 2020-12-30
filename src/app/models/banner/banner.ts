@@ -13,5 +13,6 @@ export interface IBanner extends INamedHrefEntity{
   displayHomepage: boolean;
   description?: string;
   group?: string;
+  sortPriority?: number;
 }
 
