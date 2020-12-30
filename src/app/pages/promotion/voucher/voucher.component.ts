@@ -190,8 +190,8 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
       minimumOrderAmount: [entity?.minimumOrderAmount, [Validators.required, Validators.min(1)]],
       maxAmount: [entity?.maxAmount, [Validators.required, Validators.min(1)]],
       maxUsed: [entity?.maxUsed, [Validators.required, Validators.min(1)]],
-      validFrom: [entity?.validFrom, [Validators.required, ]],
-      validTo: [entity?.validTo, [Validators.required, ]],
+      validFrom: [this.convertDateTime(entity?.validFrom), [Validators.required, ]],
+      validTo: [this.convertDateTime(entity?.validTo), [Validators.required, ]],
       products: this.fb.array([]),
     });
 
