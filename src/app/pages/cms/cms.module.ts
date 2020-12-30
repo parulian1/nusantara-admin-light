@@ -20,6 +20,8 @@ import { SlaListComponent, SlaComponent } from './sla';
 import { NavigationComponent } from './navigation/detail/navigation.component';
 import { NavigationListComponent } from './navigation/navigation-list/navigation-list.component';
 import { NavigationChildrenComponent } from './navigation/navigation-children/navigation-children.component';
+import { OnboardingComponent } from './onboarding/onboarding.component';
+import { OnboardingListComponent } from './onboarding/onboarding-list.component';
 
 
 @NgModule({
@@ -50,6 +52,8 @@ import { NavigationChildrenComponent } from './navigation/navigation-children/na
     NavigationComponent,
     NavigationListComponent,
     NavigationChildrenComponent,
+    OnboardingComponent,
+    OnboardingListComponent,
   ],
   imports: [
     CommonModule,
@@ -59,5 +63,6 @@ import { NavigationChildrenComponent } from './navigation/navigation-children/na
     CKEditorModule,
     CmsRoutingModule,
   ],
+  exports: [],
 })
 export class CmsModule { }

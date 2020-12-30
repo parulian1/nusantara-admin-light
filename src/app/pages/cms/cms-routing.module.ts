@@ -39,6 +39,8 @@ import { SlaListComponent, SlaListResolver, SlaComponent, SlaResolver } from './
 import {NavigationComponent, NavigationListComponent, NavigationResolver} from './navigation';
 import {NavigationListResolver} from './navigation/navigation-list/navigation-list-resolver';
 import {NavigationRelativeChoicesResolver} from './navigation/navigation-relative-choices-resolver';
+import {OnboardingListComponent} from './onboarding';
+import {OnboardingComponent, OnboardingContentListResolver, OnboardingContentResolver} from './onboarding';
 
 
 const dashboardRoutes: Routes = [
@@ -256,6 +258,32 @@ const dashboardRoutes: Routes = [
         path: ':slug',
         component: HighlightComponent,
         resolve: {entity: HighlightResolver, vendors: VendorFullListResolver},
+        runGuardsAndResolvers: 'always',
+        data: {animation: 'Detail'}
+      }
+    ]
+  },
+  {
+    path: 'onboardingcontent',
+    children: [
+      {
+        path: '',
+        component: OnboardingListComponent,
+        resolve: {page: OnboardingContentListResolver},
+        runGuardsAndResolvers: 'always',
+        data: {animation: 'List'}
+      },
+      {
+        path: 'new',
+        component: OnboardingComponent,
+        resolve: {},
+        runGuardsAndResolvers: 'always',
+        data: {animation: 'Detail'}
+      },
+      {
+        path: ':slug',
+        component: OnboardingComponent,
+        resolve: {entity: OnboardingContentResolver, },
         runGuardsAndResolvers: 'always',
         data: {animation: 'Detail'}
       }
