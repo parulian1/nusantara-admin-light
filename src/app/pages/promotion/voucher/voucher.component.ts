@@ -1,13 +1,29 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, Validators, FormBuilder, FormArray } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {FormControl, Validators, FormBuilder, FormArray, ValidatorFn, FormGroup} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
 
-import { AbstractDetailComponent, DialogResult, ToastService } from '@nusantara/core';
-import { drf, INamedHrefEntity, IVoucher } from '@nusantara/models';
-import { ProductService, VoucherService } from '@nusantara/services';
-import { IProduct } from '../../../models/products';
+import {AbstractDetailComponent, DialogResult, ToastService} from '@nusantara/core';
+import {drf, INamedHrefEntity, IVoucher} from '@nusantara/models';
+import {ProductService, VoucherService} from '@nusantara/services';
+import {IProduct} from '../../../models/products';
 import * as XLSX from 'xlsx';
-import { ProductSelectionModalComponent } from '../../../shared';
+import {ProductSelectionModalComponent} from '../../../shared';
+
+
+const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
+  const discAmount = fg.get('amount').value;
+  const discType = fg.get('type').value;
+
+  if (discType === 'percentage') {
+    if (((discAmount > 0) && (discAmount < 100))) {
+      return null;
+    } else {
+      return { discAmount: true};
+    }
+
+  }
+  return null;
+};
 
 @Component({
   selector: 'nus-voucher',
@@ -70,8 +86,8 @@ import { ProductSelectionModalComponent } from '../../../shared';
         <select [formControl]="maxUsed">
           <option *ngFor="let t of maxUsedChoices" [ngValue]="t.value">{{ t.displayName }}</option>
         </select>
-<!--        <input type="number" [formControl]="maxUsed" placeholder="Ex, 10000000">-->
-<!--        <nus-field-errors [control]="maxUsed"></nus-field-errors>-->
+        <!--        <input type="number" [formControl]="maxUsed" placeholder="Ex, 10000000">-->
+        <!--        <nus-field-errors [control]="maxUsed"></nus-field-errors>-->
       </label>
 
       <label>
@@ -132,29 +148,29 @@ import { ProductSelectionModalComponent } from '../../../shared';
       </nus-detail-actions>
     </form>
 
-      <!-- Modals -->
-      <nus-product-selection-modal></nus-product-selection-modal>
+    <!-- Modals -->
+    <nus-product-selection-modal></nus-product-selection-modal>
 
   `,
-  styles: [ ]
+  styles: []
 })
 export class VoucherComponent extends AbstractDetailComponent<IVoucher> implements OnInit, AfterViewInit {
 
   typeChoices: drf.IChoice[] = [
-    { displayName: 'Percentage', value: 'percentage' },
-    { displayName: 'Amount Off', value: 'amount_off' },
-    { displayName: 'Override Price', value: 'override_price'},
+    {displayName: 'Percentage', value: 'percentage'},
+    {displayName: 'Amount Off', value: 'amount_off'},
   ];
 
   discountBaseChoices: drf.IChoice[] = [
-    { displayName: 'Quantity on Cart', value: 'quantity'},
-    { displayName: 'Total Amount on Cart', value: 'total_amount'}
+    {displayName: 'Quantity on Cart', value: 'quantity'},
+    {displayName: 'Total Amount on Cart', value: 'total_amount'}
   ];
 
   maxUsedChoices: drf.IChoice[] = [
-    { displayName: 'Only One Time', value: 'one_time'},
-    { displayName: 'More Than Once', value: 'more_than_once'},
+    {displayName: 'Only One Time', value: 'one_time'},
+    {displayName: 'More Than Once', value: 'more_than_once'},
   ];
+
 
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
 
@@ -167,17 +183,49 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
     super(route, router, toast, service);
   }
 
-  get name(): FormControl { return this.form.get('name') as FormControl; }
-  get type(): FormControl { return this.form.get('type') as FormControl; }
-  get code(): FormControl { return this.form.get('code') as FormControl; }
-  get amount(): FormControl { return this.form.get('amount') as FormControl; }
-  get minimumOrderAmount(): FormControl { return this.form.get('minimumOrderAmount') as FormControl; }
-  get discountBase(): FormControl { return this.form.get('discountBase') as FormControl; }
-  get maxUsed(): FormControl { return this.form.get('maxUsed') as FormControl; }
-  get maxAmount(): FormControl { return this.form.get('maxAmount') as FormControl; }
-  get validFrom(): FormControl { return this.form.get('validFrom') as FormControl; }
-  get validTo(): FormControl { return this.form.get('validTo') as FormControl; }
-  get products(): FormArray { return this.form.get('products') as FormArray; }
+  get name(): FormControl {
+    return this.form.get('name') as FormControl;
+  }
+
+  get type(): FormControl {
+    return this.form.get('type') as FormControl;
+  }
+
+  get code(): FormControl {
+    return this.form.get('code') as FormControl;
+  }
+
+  get amount(): FormControl {
+    return this.form.get('amount') as FormControl;
+  }
+
+  get minimumOrderAmount(): FormControl {
+    return this.form.get('minimumOrderAmount') as FormControl;
+  }
+
+  get discountBase(): FormControl {
+    return this.form.get('discountBase') as FormControl;
+  }
+
+  get maxUsed(): FormControl {
+    return this.form.get('maxUsed') as FormControl;
+  }
+
+  get maxAmount(): FormControl {
+    return this.form.get('maxAmount') as FormControl;
+  }
+
+  get validFrom(): FormControl {
+    return this.form.get('validFrom') as FormControl;
+  }
+
+  get validTo(): FormControl {
+    return this.form.get('validTo') as FormControl;
+  }
+
+  get products(): FormArray {
+    return this.form.get('products') as FormArray;
+  }
 
   initializeForm(entity?: IVoucher) {
     this.form = this.fb.group({
@@ -190,9 +238,11 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
       minimumOrderAmount: [entity?.minimumOrderAmount, [Validators.required, Validators.min(1)]],
       maxAmount: [entity?.maxAmount, [Validators.required, Validators.min(1)]],
       maxUsed: [entity?.maxUsed, [Validators.required, Validators.min(1)]],
-      validFrom: [this.convertDateTime(entity?.validFrom), [Validators.required, ]],
-      validTo: [this.convertDateTime(entity?.validTo), [Validators.required, ]],
+      validFrom: [this.convertDateTime(entity?.validFrom), [Validators.required,]],
+      validTo: [this.convertDateTime(entity?.validTo), [Validators.required,]],
       products: this.fb.array([]),
+    }, {
+      validator: DiscAmountValidator
     });
 
     for (const prod of entity?.products ?? []) {
@@ -281,8 +331,11 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
 
           const slug = sheetAsJson[i][1];
           this.productService.fetch(slug).subscribe(
-            (product) => { this.addProduct(product); },
-              error => { console.log(`Failed to add product: ${sheetAsJson[i][0]}`);
+            (product) => {
+              this.addProduct(product);
+            },
+            error => {
+              console.log(`Failed to add product: ${sheetAsJson[i][0]}`);
             }
           );
         }
@@ -291,6 +344,7 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
     };
     input.click();
   }
+
   save() {
     this.form.value.validFrom = this.form.value.validFrom + this.getTimeZone();
     this.form.value.validTo = this.form.value.validTo + this.getTimeZone();
