@@ -1,6 +1,6 @@
 import { INamedHrefEntity } from '@nusantara/models/base';
-import { EmailHrefUserEntity } from '@nusantara/models';
+import { IEmailHrefUserEntity } from '@nusantara/models';
 
 export interface IAccessGroup extends INamedHrefEntity {
-  users?: EmailHrefUserEntity[];
+  users?: IEmailHrefUserEntity[];
 }

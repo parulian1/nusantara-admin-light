@@ -4,7 +4,7 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
 import { Subscription } from 'rxjs';
 
 import { DialogResult, PagedResponse } from '@nusantara/core';
-import {ICustomer, EmailHrefUserEntity} from "@nusantara/models";
+import { ICustomer, IEmailHrefUserEntity } from "@nusantara/models";
 import { CustomerService } from '@nusantara/services';
 
 /**
@@ -37,7 +37,7 @@ import { CustomerService } from '@nusantara/services';
             <tbody>
             <tr *ngFor="let user of displayedResults?.entities">
               <td><a href="#" (click)="selectUser(user)">{{ user.email }}</a></td>
-              <td>{{ user.username }}</td>
+              <td>{{ user.username | entityToSlug }}</td>
             </tr>
             </tbody>
           </table>
@@ -53,7 +53,7 @@ export class UserSelectionModalComponent implements OnInit, AfterViewInit {
   @ViewChild('modalForm') formView: ElementRef<HTMLFormElement>;
   @ViewChild('modal') modal: NgxSmartModalComponent;
 
-  @Input() selectedUsers: EmailHrefUserEntity[];
+  @Input() selectedUsers: IEmailHrefUserEntity[];
 
   form: FormGroup;
   result: DialogResult = DialogResult.Cancelled;

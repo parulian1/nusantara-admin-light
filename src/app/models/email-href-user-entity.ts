@@ -1,5 +1,5 @@
-import { IHrefEntity } from "./base";
+import { IHrefEntity } from "@nusantara/models/base";
 
-export interface EmailHrefUserEntity extends IHrefEntity {
+export interface IEmailHrefUserEntity extends IHrefEntity {
   email: string;
 }
