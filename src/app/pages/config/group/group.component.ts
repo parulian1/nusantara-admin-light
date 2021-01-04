@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractDetailComponent, DialogResult, ToastService } from '@nusantara/core';
-import { EmailHrefUserEntity, IAccessGroup, ICustomer } from '@nusantara/models';
+import { IEmailHrefUserEntity, IAccessGroup, ICustomer } from '@nusantara/models';
 import { GroupService } from "@nusantara/services";
 import { UserSelectionModalComponent } from "@nusantara/shared";
 
@@ -58,14 +58,14 @@ import { UserSelectionModalComponent } from "@nusantara/shared";
         </tbody>
       </table>
 
+      <nus-user-selection-modal [selectedUsers]="entity?.users"></nus-user-selection-modal>
 
       <nus-detail-actions
-        [component]="this"
-        (cancel)="navigateToParent(true)"
-        (delete)="delete()" [hideDelete]="true">
+      [component]="this"
+      (cancel)="navigateToParent(true)"
+      (delete)="delete()" [hideDelete]="true">
       </nus-detail-actions>
 
-      <nus-user-selection-modal [selectedUsers]="entity?.users"></nus-user-selection-modal>
     </form>
   `,
   styles: [``]
@@ -107,7 +107,7 @@ export class GroupComponent extends AbstractDetailComponent<IAccessGroup> implem
     this.userSelectionModal.open();
   }
 
-  addUser(user: EmailHrefUserEntity) {
+  addUser(user: IEmailHrefUserEntity) {
     this.users.push(
       this.fb.group({
         href: [user.href],

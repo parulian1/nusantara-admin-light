@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { parse } from 'iso8601-duration';
 
-import { AbstractDetailComponent, ErrorResult, IResultResponse, ToastLevelEnum, ToastService } from '@nusantara/core';
-import { ICustomerGroup, CustomerGroupType, drf } from '@nusantara/models';
+import {
+  AbstractDetailComponent,
+  DialogResult,
+  ToastService
+} from '@nusantara/core';
+import { ICustomerGroup, CustomerGroupType, drf, IEmailHrefUserEntity, ICustomer } from '@nusantara/models';
 import { CustomerGroupService } from '@nusantara/services';
-
-import { IError } from '@nusantara/models/base/error';
-import { of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { HttpErrorResponse } from '@angular/common/http';
+import { UserSelectionModalComponent } from "@nusantara/shared";
 
 @Component({
   selector: 'nus-customer-group-detail',
@@ -24,7 +24,7 @@ import { HttpErrorResponse } from '@angular/common/http';
       <li *ngFor="let err of nonFieldErrors">{{ err }}</li>
     </ul>
 
-    <form [formGroup]="form" (ngSubmit)="submit()">
+    <form [formGroup]="form" (ngSubmit)="save()">
       <label>
         <span>Name</span>
         <input type="text" formControlName="name">
@@ -35,21 +35,49 @@ import { HttpErrorResponse } from '@angular/common/http';
         <span>Type</span>
         <select [formControl]="type">
           <option *ngFor="let opt of typeChoices" [ngValue]="opt.value">
-            {{opt.displayName}}
+            {{ opt.displayName }}
           </option>
         </select>
         <nus-field-errors [control]="type"></nus-field-errors>
       </label>
 
-      <label [ngClass]="{'hidden': form.get('timeThreshold').disabled}">
+      <label [ngClass]="{ 'hidden': form.get('timeThreshold').disabled }">
         <span>{{ timeThresholdLabel }}</span>
         <input type="number" formControlName="timeThreshold">
       </label>
 
-      <label [ngClass]="{'hidden': form.get('amountThreshold').disabled}">
+      <label [ngClass]="{ 'hidden': form.get('amountThreshold').disabled }">
         <span>{{ amountThresholdLabel }}</span>
         <input type="number" formControlName="amountThreshold">
       </label>
+
+      <table *ngIf="type.value === manual">
+        <thead>
+        <tr>
+          <th>User</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let control of customers.controls; let i=index">
+          <td>{{ control.get('email').value }}</td>
+          <td>
+            <button (click)="customers.removeAt(i)" type="button" class="remove-button">
+              <i class="material-icons">remove_circle_outline</i>
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <button type="button" (click)="selectUser()" class="add-button">
+              Add User
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <nus-user-selection-modal [selectedUsers]="entity?.customers"></nus-user-selection-modal>
 
       <div class="actions-container">
         <button type="submit" [disabled]="!form.valid">Save</button>
@@ -64,10 +92,16 @@ import { HttpErrorResponse } from '@angular/common/http';
   ]
 })
 export class CustomerGroupDetailComponent extends AbstractDetailComponent<ICustomerGroup> implements OnInit {
+
+  @ViewChild(UserSelectionModalComponent) userSelectionModal: UserSelectionModalComponent;
+
   typeChoices: drf.IChoice[] = [];
 
   groupsWithAmount = [CustomerGroupType.lifetimeValue, ];
   groupsWithTime = [CustomerGroupType.newCustomers, CustomerGroupType.existingCustomers, CustomerGroupType.churned, ];
+
+  entity?: ICustomerGroup;
+  manual: string =  CustomerGroupType.manual;
 
   constructor(service: CustomerGroupService,
               route: ActivatedRoute,
@@ -82,6 +116,7 @@ export class CustomerGroupDetailComponent extends AbstractDetailComponent<ICusto
   get type(): FormControl { return this.form.get('type') as FormControl; }
   get amountThreshold(): FormControl { return this.form.get('amountThreshold') as FormControl; }
   get timeThreshold(): FormControl { return this.form.get('timeThreshold') as FormControl; }
+  get customers(): FormArray { return this.form.get('customers') as FormArray; }
 
   ngOnInit(): void {
     super.ngOnInit();
@@ -91,12 +126,14 @@ export class CustomerGroupDetailComponent extends AbstractDetailComponent<ICusto
   }
 
   initializeForm(entity?: ICustomerGroup) {
+    this.entity = entity;
     this.form = this.fb.group({
       name: [entity?.name, [Validators.required, ]],
       href: [entity?.href, []],
       type: [entity?.type, [Validators.required]],
       amountThreshold: [entity?.amountThreshold, [Validators.required, Validators.min(0)]],
       timeThreshold: [parse(entity?.timeThreshold ?? 'P0D').days, [Validators.required, Validators.min(0)]],
+      customers: this.fb.array([]),
     });
 
     // wire up event handlers
@@ -105,6 +142,10 @@ export class CustomerGroupDetailComponent extends AbstractDetailComponent<ICusto
     );
     // trigger manually so initial state of the form is accurate.
     this.onTypeChanged(this.type.value);
+
+    this.entity.customers.forEach((customer) => {
+      this.addUser(customer);
+    })
   }
 
   get currentType(): CustomerGroupType {
@@ -148,68 +189,32 @@ export class CustomerGroupDetailComponent extends AbstractDetailComponent<ICusto
     }
   }
 
-  submit() {
-    // convert this to the proper type.  find a better solution here.
-    const formValue = this.form.value as ICustomerGroup;
-    // @ts-ignore
-    if (formValue.timeThreshold >= 0) {
-      formValue.timeThreshold = `P${formValue.timeThreshold}D`;
-    }
-
-    this.service.save(formValue).pipe(catchError((err) => {
-      if (err instanceof HttpErrorResponse) {
-        return of(new ErrorResult<IError>(err.error, err.status));
-      } else {
-        return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, err.status));
-      }
-    })).subscribe(
-      result => {
-        if (result instanceof ErrorResult) {
-          this.onSaveFail(result.errorDetails);
-        } else {
-          this.onSaveSuccess(result);
-          this.navigateToParent(false);
-        }
-      }
-    );
+  selectUser() {
+    this.userSelectionModal.open();
   }
 
-  delete() {
-    this.service.delete(this.form.value).subscribe(
-      resp => {
-        if (resp.success) {
-          this.onDeleteSuccess();
-        } else {
-          this.onDeleteError(resp);
-        }
-      },
-      (err) => this.onDeleteError(err)
-    );
+  addUser(customer: IEmailHrefUserEntity) {
+    this.customers.push(
+      this.fb.group({
+        href: [customer.href],
+        email: [customer.email]
+      }));
   }
 
-  protected onSaveSuccess(result: IResultResponse<ICustomerGroup>) {
-    this.toast?.addMessage(`"${this.form.get('name')?.value ?? 'data'}" was saved successfully.`, 'Saved', ToastLevelEnum.success);
-    this.navigateToParent(false);
+  ngAfterViewInit() {
+    this.userSelectionModal.onClose.subscribe(() => this.onUserSelectionModalClosed());
   }
 
-  private onSaveFail(errorDetails: IError) {
-    errorDetails.details.forEach((error) => {
-      this.form.controls[error.field].setErrors({
-        apiError: error.message,
+  onUserSelectionModalClosed() {
+    if (this.userSelectionModal.result === DialogResult.OK) {
+
+      const selectedUser = this.userSelectionModal.user.value as ICustomer;
+
+      const f = this.fb.group({
+        href: [selectedUser.href, []],
+        email: [selectedUser.email, []]
       });
-    });
-    if (this.nonFieldErrors.length) {
-      this.nonFieldErrors = [];
+      this.customers.push(f);
     }
-    this.nonFieldErrors.push(errorDetails.message);
-  }
-
-  protected onDeleteSuccess() {
-    this.toast?.addMessage(
-      `"${this.form.get('name')?.value || this.form.get('title').value}" was deleted successfully.`,
-      'Deleted',
-      ToastLevelEnum.success
-    );
-    this.navigateToParent(false);
   }
 }
