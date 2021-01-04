@@ -24,14 +24,14 @@ import { products } from '@nusantara/models';
         <input type="number"
                [formControl]="minQuantity"
                [readonly]="isInitialRange"
-               [hidden]="isInitialRange">
+               [hidden]="isInitialRange" [min]="minQuantity.value">
         <span *ngIf="isInitialRange">{{ minQuantity.value }}</span>
       </td>
       <td>
         <input type="number"
                [formControl]="maxQuantity"
                [readonly]="isTerminalRange"
-               [hidden]="isTerminalRange">
+               [hidden]="isTerminalRange" [min]="minQuantity.value">
       </td>
       <td>
         <button type="button"

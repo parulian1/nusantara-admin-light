@@ -1,6 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {WarehouseService} from '@nusantara/services';
-import {IStockSearch} from '@nusantara/models/products/stock-search';
+import { Component, Input, OnInit } from '@angular/core';
+import { WarehouseService } from '@nusantara/services';
+import { IStockSearch } from '@nusantara/models/products/stock-search';
 
 @Component({
   selector: 'nus-stock-search',
@@ -12,8 +12,8 @@ import {IStockSearch} from '@nusantara/models/products/stock-search';
         <td>Quantity</td>
       </tr>
       <tr *ngFor="let ent of entity">
-        <td>{{ent.name}}</td>
-        <td>{{ent.quantity}}</td>
+        <td>{{ ent.name }}</td>
+        <td data-qa="quantity">{{ ent.quantity }}</td>
       </tr>
     </table>
 
