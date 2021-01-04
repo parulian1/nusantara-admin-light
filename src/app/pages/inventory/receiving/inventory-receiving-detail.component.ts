@@ -4,8 +4,8 @@ import { AbstractDetailComponent } from "@nusantara/core/components";
 import { IReceivingOrder } from "@nusantara/models/inventory";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FormBuilder } from "@angular/forms";
-import { InventoryReceivingOrderService } from "@nusantara/services/inventory-receiving-order.service";
-import { ToastService } from '../../../core';
+import { InventoryReceivingOrderService } from "@nusantara/services";
+import { ToastService } from '@nusantara/core';
 
 
 @Component({
@@ -76,7 +76,7 @@ import { ToastService } from '../../../core';
       </thead>
       <tbody>
       <tr *ngFor="let stock_record of entity.stockRecords">
-        <td>
+        <td data-qa="product">
           {{ stock_record.product.name }}
         </td>
         <td>
@@ -88,7 +88,7 @@ import { ToastService } from '../../../core';
         <td>
           {{ stock_record.locator }}
         </td>
-        <td>
+        <td data-qa="original-quantity">
           {{ stock_record.originalQuantity }}
         </td>
         <td>
