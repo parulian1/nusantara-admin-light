@@ -33,6 +33,7 @@ import { SiteConfigService } from "@nusantara/services";
                (change)="setLogoPreview($event)"
                name="logo"
                accept="image/*">
+        <nus-field-errors [control]="logo"></nus-field-errors>
       </label>
 
       <label>
@@ -50,6 +51,7 @@ import { SiteConfigService } from "@nusantara/services";
                (change)="setFaviconPreview($event)"
                name="favicon"
                accept="image/*">
+        <nus-field-errors [control]="favicon"></nus-field-errors>
       </label>
 
       <nus-detail-actions
@@ -108,7 +110,7 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
       name: [entity?.name, [Validators.required]],
       href: [entity?.href],
       logo: [],
-      gaAccountId: [entity?.gaAccountId, [Validators.required]],
+      gaAccountId: [entity?.gaAccountId, []],
       favicon: []
     });
 
@@ -118,26 +120,27 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
 
   }
 
-  setLogoPreview(dataLogo?: Event | string) {
-    super.setImagePreview(dataLogo, (dataLogoAsUrl) => this.logoPreviewUrl = dataLogoAsUrl);
+  setLogoPreview(data?: Event | string) {
+    super.setImagePreview(data, (dataAsUrl) => this.logoPreviewUrl = dataAsUrl);
   }
 
-  setFaviconPreview(dataFavicon?: Event | string) {
-    super.setImagePreview(dataFavicon, (dataFaviconAsUrl) => this.faviconPreviewUrl = dataFaviconAsUrl);
+  setFaviconPreview(data?: Event | string) {
+    super.setImagePreview(data, (dataAsUrl) => this.faviconPreviewUrl = dataAsUrl);
   }
 
   save() {
-    if (!!this.entity?.href && !!this.entity?.logo && !this.form.get('logo').value) {
-      this.form.removeControl('logo');
-    }
-    if (!!this.logo && this.logoPreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
-      this.form.value.logo = this.logoPreviewUrl;
-    }
     if (!!this.entity?.href && !!this.entity?.favicon && !this.form.get('favicon').value) {
       this.form.removeControl('favicon');
     }
     if (!!this.favicon && this.faviconPreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
       this.form.value.favicon = this.faviconPreviewUrl;
+    }
+
+    if (!!this.entity?.href && !!this.entity?.logo && !this.form.get('logo').value) {
+      this.form.removeControl('logo');
+    }
+    if (!!this.logo && this.logoPreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
+      this.form.value.logo = this.logoPreviewUrl;
     }
     super.save();
   }
