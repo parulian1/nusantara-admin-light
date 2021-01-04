@@ -21,7 +21,7 @@ import { FormControl } from '@angular/forms';
 @Component({
   selector: 'nus-field-errors',
   template: `
-    <div *ngIf="control?.getError('apiError')" class="error-detail">
+    <div *ngIf="control?.hasError('apiError')" class="error-detail">
       <div *ngIf="control.errors.required">Required</div>
       <div *ngIf="control.errors.maxlength">Maximum length {{ control.getError('maxlength')?.requiredLength }} characters</div>
       <div *ngIf="control.errors.apiError">{{ control.getError('apiError') }}</div>
