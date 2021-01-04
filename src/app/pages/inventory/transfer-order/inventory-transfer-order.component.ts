@@ -36,7 +36,7 @@ import { IProductClass } from '@nusantara/models/products';
         <tr>
           <th>From Warehouse</th>
           <td [formGroup]="warehouse">
-            <select formControlName="href" (change)="updateDestinationWarehouses($event)">
+            <select formControlName="href" (change)="updateDestinationWarehouses($event)" data-qa="from-warehouse">
               <option [ngValue]="null">---</option>
               <option *ngFor="let wh of warehouses" [value]="wh.href">
                 {{ wh.name }}
@@ -48,7 +48,7 @@ import { IProductClass } from '@nusantara/models/products';
         <tr>
           <th>Destination Warehouse</th>
           <td [formGroup]="destinationWarehouse">
-            <select formControlName="href">
+            <select formControlName="href" data-qa="destination-warehouse">
               <option [ngValue]="null">---</option>
               <option *ngFor="let wh of destinationWarehouses" [value]="wh.href">
                 {{ wh.name }}

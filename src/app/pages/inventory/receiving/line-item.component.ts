@@ -11,29 +11,39 @@ import { IProductClass } from '../../../models/products';
     <tr [formGroup]="form">
       <td><a>{{ displayedProductName }}</a></td>
       <td class="immediate-error-display" [formGroup]="location">
-        <select formControlName="href">
+        <select formControlName="href" data-qa="location">
           <option [ngValue]="null">---</option>
           <option *ngFor="let loc of availableSubLocations" [ngValue]="loc.href">
             {{ loc.name }} ({{ loc.code }})
           </option>
         </select>
       </td>
-      <td><input type="number" min="1" [formControl]="originalQuantity"></td>
-      <td class="immediate-error-display"><input type="text" [formControl]="sku"></td>
-      <td><input type="text" [formControl]="batchNumber"></td>
+      <td>
+        <input type="number" min="1" [formControl]="originalQuantity" data-qa="original-quantity">
+      </td>
+      <td class="immediate-error-display">
+        <input type="text" [formControl]="sku" data-qa="sku">
+      </td>
+      <td>
+        <input type="text" [formControl]="batchNumber" data-qa="batch-number">
+      </td>
       <td>
         <div *ngFor="let control of locator.controls; index as ctr">
-          <input [formControl]="control" name="locator">
-          <button (click)="locator.removeAt(ctr)" type="button" class="remove-button">
+          <input [formControl]="control" name="locator" data-qa="locator">
+          <button (click)="locator.removeAt(ctr)" type="button" class="remove-button" data-qa="remove-locator-button">
             <i class="material-icons">remove_circle_outline</i>
           </button>
         </div>
-        <button (click)="addLocator()" type="button">Add</button>
+        <button (click)="addLocator()" type="button" data-qa="add-locator-button">Add</button>
       </td>
-      <td class="immediate-error-display"><input *ngIf="isPerishable" type="date" [formControl]="expiryDate"></td>
-      <td><input type="number" [formControl]="cost"></td>
+      <td class="immediate-error-display">
+        <input *ngIf="isPerishable" type="date" [formControl]="expiryDate" data-qa="expiry-date">
+      </td>
       <td>
-        <button (click)="remove.emit()" type="button" class="remove-button">
+        <input type="number" [formControl]="cost" data-qa="cost">
+      </td>
+      <td>
+        <button (click)="remove.emit()" type="button" class="remove-button" data-qa="remove-button">
           <i class="material-icons">remove_circle_outline</i>
         </button>
       </td>
