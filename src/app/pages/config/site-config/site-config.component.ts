@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators, FormBuilder } from '@angular/forms';
+import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ToastService, AbstractDetailComponent } from '@nusantara/core';
 import { drf, ISiteConfig} from '@nusantara/models';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { SiteConfigService } from "@nusantara/services";
 
 @Component({
@@ -12,7 +11,7 @@ import { SiteConfigService } from "@nusantara/services";
   template: `
     <nus-detail-title
       [originalName]="originalEntityName"
-      typeName="general_settings">
+      [typeName]="entityTypeName">
     </nus-detail-title>
 
     <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
@@ -56,13 +55,13 @@ import { SiteConfigService } from "@nusantara/services";
 
       <label>
         <span>Tagline</span>
-        <input type="text" [formControl]="tagLine" name="tagLine">
+        <input type="text" [formControl]="tagLine">
         <nus-field-errors [control]="tagLine"></nus-field-errors>
       </label>
 
       <label>
         <span>Description</span>
-        <input type="text" [formControl]="description" name="description">
+        <textarea [formControl]="description"></textarea>
         <nus-field-errors [control]="description"></nus-field-errors>
       </label>
 
@@ -75,24 +74,21 @@ import { SiteConfigService } from "@nusantara/services";
   `,
   styles: [
     'img#logo { max-height: 120px; max-width: 120px; }',
-    '.ck-editor__main { min-height: 150px; }',
     'input[type=file] { display: none; }',
     'img#favicon { max-height: 48px; max-width: 48px; }',
   ]
 })
 export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> implements OnInit {
 
-  public Editor = ClassicEditor;
-
   entity?: ISiteConfig;
   logoPreviewUrl: string;
   faviconPreviewUrl: string;
 
   constructor(service: SiteConfigService,
-              public fb: FormBuilder,
-              toast: ToastService,
               route: ActivatedRoute,
-              router: Router) {
+              router: Router,
+              private fb: FormBuilder,
+              toast: ToastService) {
     super(route, router, toast, service);
   }
 
@@ -116,8 +112,12 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
     return this.form.get('tagLine') as FormControl;
   }
 
+  get extraConfig(): FormGroup {
+    return this.form.get('extraConfig') as FormGroup;
+  }
+
   get description(): FormControl {
-    return this.form.get('description') as FormControl;
+    return this.extraConfig.get('description') as FormControl;
   }
 
   ngOnInit(): void {
@@ -130,16 +130,17 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
       name: [entity?.name, [Validators.required]],
       href: [entity?.href],
       logo: [],
-      gaAccountId: [entity?.gaAccountId, []],
+      gaAccountId: [entity?.gaAccountId ?? '', []],
       favicon: [],
-      tagline: [entity?.tagLine, [Validators.maxLength(50)]],
-      description: [entity?.description, []]
+      tagLine: [entity?.tagLine ?? '', [Validators.maxLength(50)]],
+      extraConfig: this.fb.group({
+        description: [entity?.extraConfig?.description, [Validators.maxLength(255)]]
+      })
     });
 
     this.entity = entity;
     this.setLogoPreview(entity?.logo);
     this.setFaviconPreview(entity?.favicon);
-
   }
 
   setLogoPreview(data?: Event | string) {
@@ -151,15 +152,19 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
   }
 
   save() {
-    if (!!this.entity?.href && !!this.entity?.favicon && !this.form.get('favicon').value) {
-      this.form.removeControl('favicon');
+    if (!!this.entity?.href && !!this.entity?.favicon && !!this.form.get('favicon')) {
+      if ( !this.form.get('favicon').value) {
+        this.form.removeControl('favicon');
+      }
     }
     if (!!this.favicon && this.faviconPreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
       this.form.value.favicon = this.faviconPreviewUrl;
     }
 
-    if (!!this.entity?.href && !!this.entity?.logo && !this.form.get('logo').value) {
-      this.form.removeControl('logo');
+    if (!!this.entity?.href && !!this.entity?.logo && !!this.form.get('logo')) {
+      if (!this.form.get('logo').value) {
+        this.form.removeControl('logo');
+      }
     }
     if (!!this.logo && this.logoPreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
       this.form.value.logo = this.logoPreviewUrl;
