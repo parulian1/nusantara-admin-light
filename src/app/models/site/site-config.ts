@@ -5,4 +5,5 @@ export interface ISiteConfig extends INamedHrefEntity {
   gaAccountId?: string;
   favicon?: string;
   tagLine?: string;
+  description?: string;
 }

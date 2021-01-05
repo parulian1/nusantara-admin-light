@@ -60,6 +60,12 @@ import { SiteConfigService } from "@nusantara/services";
         <nus-field-errors [control]="tagLine"></nus-field-errors>
       </label>
 
+      <label>
+        <span>Description</span>
+        <input type="text" [formControl]="description" name="description">
+        <nus-field-errors [control]="description"></nus-field-errors>
+      </label>
+
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
@@ -110,6 +116,10 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
     return this.form.get('tagLine') as FormControl;
   }
 
+  get description(): FormControl {
+    return this.form.get('description') as FormControl;
+  }
+
   ngOnInit(): void {
     super.ngOnInit();
     this.originalEntityName = "General Settings";
@@ -123,6 +133,7 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
       gaAccountId: [entity?.gaAccountId, []],
       favicon: [],
       tagline: [entity?.tagLine, [Validators.maxLength(50)]],
+      description: [entity?.description, []]
     });
 
     this.entity = entity;
