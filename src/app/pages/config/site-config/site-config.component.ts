@@ -65,6 +65,12 @@ import { SiteConfigService } from "@nusantara/services";
         <nus-field-errors [control]="description"></nus-field-errors>
       </label>
 
+      <label>
+        <span>Keywords</span>
+        <input type="text" [formControl]="keywords">
+        <nus-field-errors [control]="keywords"></nus-field-errors>
+      </label>
+
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
@@ -120,6 +126,10 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
     return this.extraConfig.get('description') as FormControl;
   }
 
+  get keywords(): FormControl {
+    return this.extraConfig.get('keywords') as FormControl;
+  }
+
   ngOnInit(): void {
     super.ngOnInit();
     this.originalEntityName = "General Settings";
@@ -134,7 +144,8 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
       favicon: [],
       tagLine: [entity?.tagLine ?? '', [Validators.maxLength(50)]],
       extraConfig: this.fb.group({
-        description: [entity?.extraConfig?.description, [Validators.maxLength(255)]]
+        description: [entity?.extraConfig?.description, [Validators.maxLength(255)]],
+        keywords: [entity?.extraConfig?.keywords, [Validators.maxLength(100)]]
       })
     });
 
