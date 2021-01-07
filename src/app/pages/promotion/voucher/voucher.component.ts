@@ -145,7 +145,7 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
         </tbody>
       </table>
 
-      <a href="{{ service.productListDownloadUrl }}" target="_blank">Download Product List</a>
+<!--      <a href="{{ service.productListDownloadUrl }}" target="_blank">Download Product List</a>-->
 
       <nus-detail-actions
         [component]="this"
