@@ -110,7 +110,7 @@ import { ProductSelectionModalComponent } from '@nusantara/shared';
         </thead>
         <tbody>
         <tr *ngFor="let control of products.controls; let i=index">
-          <th>{{ i }}</th>
+          <th>{{ i + 1 }}</th>
           <td>{{ control.get('name').value }}</td>
           <td>
             <button (click)="products.removeAt(i)" type="button" class="remove-button">

@@ -10,6 +10,10 @@ import { IProductPromotion } from '@nusantara/models';
     <nus-list-header
       title="Promotions">
     </nus-list-header>
+    <div class="filtering">
+      <nus-include-deleted></nus-include-deleted>
+      <nus-include-inactive></nus-include-inactive>
+    </div>
     <nus-pagination [page]="page"></nus-pagination>
     <table>
       <thead>
