@@ -155,7 +155,10 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
       this.setFormErrors(error.errorDetails.errors);
     } else if (error.errorDetails.detail) {
       errorMessage = error.errorDetails.detail;
-    } else if (isObject(error.errorDetails)) {
+    } else if (error.errorDetails.message) {
+      errorMessage = error.errorDetails.message;
+    }
+      else if (isObject(error.errorDetails)) {
       Object.keys(error.errorDetails).forEach((field) => {
         errorMessages.push(`${field}: ${error.errorDetails[field][0]}`);
       });
