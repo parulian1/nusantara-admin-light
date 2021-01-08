@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { CustomerService } from '@nusantara/services';
+import { EmployeeService } from '@nusantara/services';
 import { AbstractDetailComponent, ToastService } from '@nusantara/core';
 import { IEmployee } from '@nusantara/models';
 
@@ -47,7 +47,7 @@ import { IEmployee } from '@nusantara/models';
 })
 export class EmployeeComponent extends AbstractDetailComponent<IEmployee> implements OnInit {
 
-  constructor(service: CustomerService,
+  constructor(service: EmployeeService,
               route: ActivatedRoute,
               router: Router,
               toast: ToastService,
