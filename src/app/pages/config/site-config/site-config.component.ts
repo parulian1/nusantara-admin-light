@@ -144,8 +144,8 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
       favicon: [],
       tagLine: [entity?.tagLine ?? '', [Validators.maxLength(50)]],
       extraConfig: this.fb.group({
-        description: [entity?.extraConfig?.description, [Validators.maxLength(255)]],
-        keywords: [entity?.extraConfig?.keywords, [Validators.maxLength(100)]]
+        description: [entity?.extraConfig?.description, [Validators.maxLength(160)]],
+        keywords: [entity?.extraConfig?.keywords, [Validators.maxLength(160)]]
       })
     });
 
