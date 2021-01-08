@@ -149,7 +149,7 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
 
       <nus-detail-actions
         [component]="this"
-        [hideDelete]="entity.href && !entity.isActive"
+        [hideDelete]="!!entity && entity?.href && !entity?.isActive"
         (cancel)="navigateToParent(true)"
         (delete)="delete()">
       </nus-detail-actions>
