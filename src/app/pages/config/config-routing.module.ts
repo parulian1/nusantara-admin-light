@@ -16,6 +16,8 @@ import { GroupComponent, GroupListComponent, GroupListResolver, GroupProviderRes
 import { ResellerComponent, ResellerProviderTypeResolver } from "./reseller";
 import { ResellerProviderResolver } from "./reseller/resolvers/reseller-provider.resolver";
 import { SiteConfigComponent, SiteConfigResolver } from "./site-config";
+import {AuthSocialComponent, AuthSocialListComponent, AuthSocialListResolver, AuthSocialResolver} from './auth-social';
+import {AuthSocialTypeResolver} from './auth-social/auth-social-type.resolver';
 
 
 const routes: Routes = [
@@ -157,6 +159,29 @@ const routes: Routes = [
           entity: ResellerProviderResolver,
           types: ResellerProviderTypeResolver,
         }
+      }
+    ]
+  },
+  {
+    path: 'auth-social',
+    children: [
+      {
+        path: '',
+        component: AuthSocialListComponent,
+        resolve: {
+          page: AuthSocialListResolver
+        },
+        runGuardsAndResolvers: 'always'
+      },
+      {
+        path: ':slug',
+        component: AuthSocialComponent,
+        resolve: {
+          entity: AuthSocialResolver,
+          authType: AuthSocialTypeResolver,
+        },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
       }
     ]
   }

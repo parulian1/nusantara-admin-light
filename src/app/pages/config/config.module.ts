@@ -13,6 +13,8 @@ import { DeviceListComponent, DeviceComponent } from './device';
 import { GroupComponent, GroupListComponent, UserGroupComponent } from './group';
 import { SiteConfigComponent } from "./site-config";
 import { ResellerComponent } from "./reseller";
+import { AuthSocialComponent } from './auth-social/auth-social.component';
+import { AuthSocialListComponent } from './auth-social/auth-social-list.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,8 @@ import { ResellerComponent } from "./reseller";
     UserGroupComponent,
     ResellerComponent,
     SiteConfigComponent,
+    AuthSocialComponent,
+    AuthSocialListComponent,
   ],
   imports: [
     CommonModule,
