@@ -6,4 +6,5 @@ export class IAuthSocial implements IHrefEntity{
   appSecret: string;
   href: string;
   isActive?: boolean;
+  redirectUrl?: string;
 }

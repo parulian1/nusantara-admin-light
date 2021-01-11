@@ -13,9 +13,9 @@ import {
 } from './shipping';
 import { DeviceComponent, DeviceListComponent, DeviceListResolver, DeviceResolver } from './device';
 import { GroupComponent, GroupListComponent, GroupListResolver, GroupProviderResolver } from './group';
-import { ResellerComponent, ResellerProviderTypeResolver } from "./reseller";
-import { ResellerProviderResolver } from "./reseller/resolvers/reseller-provider.resolver";
-import { SiteConfigComponent, SiteConfigResolver } from "./site-config";
+import { ResellerComponent, ResellerProviderTypeResolver } from './reseller';
+import { ResellerProviderResolver } from './reseller/resolvers/reseller-provider.resolver';
+import { SiteConfigComponent, SiteConfigResolver } from './site-config';
 import {AuthSocialComponent, AuthSocialListComponent, AuthSocialListResolver, AuthSocialResolver} from './auth-social';
 import {AuthSocialTypeResolver} from './auth-social/auth-social-type.resolver';
 
@@ -147,7 +147,7 @@ const routes: Routes = [
     path: 'settings',
     component: SiteConfigComponent,
     resolve: { entity: SiteConfigResolver },
-    runGuardsAndResolvers: "always"
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'reseller',
@@ -156,7 +156,7 @@ const routes: Routes = [
       entity: ResellerProviderResolver,
       types: ResellerProviderTypeResolver,
     },
-    runGuardsAndResolvers: "always"
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'auth-social',

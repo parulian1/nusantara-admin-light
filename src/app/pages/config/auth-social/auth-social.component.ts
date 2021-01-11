@@ -38,6 +38,11 @@ import {drf} from '../../../models';
         <nus-field-errors [control]="appSecret"></nus-field-errors>
       </label>
       <label>
+        <span>Redirect URL</span>
+        <input type="text" [formControl]="redirectUrl" name="redirectUrl">
+        <nus-field-errors [control]="redirectUrl"></nus-field-errors>
+      </label>
+      <label>
         <span>Is Active</span>
         <input type="checkbox" [formControl]="isActive" name="isActive">
       </label>
@@ -89,13 +94,18 @@ export class AuthSocialComponent extends AbstractDetailComponent<IAuthSocial> im
     return this.form.get('isActive') as FormControl;
   }
 
+  get redirectUrl(): FormControl {
+    return this.form.get('redirectUrl') as FormControl;
+  }
+
   initializeForm(entity: IAuthSocial) {
     this.form = this.fb.group({
       authType: [entity?.authType, [Validators.required, ]],
       href: [entity?.href, []],
       appKey: [entity?.appKey, [Validators.required, ]],
       appSecret: [entity?.appSecret, []],
-      isActive: [entity?.isActive, []]
+      isActive: [entity?.isActive, []],
+      redirectUrl: [entity?.redirectUrl, []],
     });
 
     this.entity = entity;
