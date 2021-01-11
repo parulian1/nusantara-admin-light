@@ -17,37 +17,39 @@ import { FormArray, FormBuilder, Validators } from '@angular/forms';
             <th></th>
           </tr>
         </thead>
-        <tbody *ngIf="form.value?.length > 0">
-          <tr
-            *ngFor="let attribute of form.controls; let i = index"
-            [formGroup]="attribute"
-          >
-            <td class="immediate-error-display">
-              <input type="text" formControlName="name" maxlength="50" />
-            </td>
-            <td class="immediate-error-display">
-              <select formControlName="type">
-                <option *ngFor="let opt of choices" [ngValue]="opt.value">
-                  {{ opt.displayName }}
-                </option>
-              </select>
-            </td>
-            <td>
-              <input type="checkbox" formControlName="isSearchable" />
-            </td>
-            <td>
-              <input type="checkbox" formControlName="isFilterable" />
-            </td>
-            <td>
-              <button
-                (click)="removeAttribute(i)"
-                type="button"
-                class="remove-button"
-              >
-                <i class="material-icons">remove_circle_outline</i>
-              </button>
-            </td>
-          </tr>
+        <tbody>
+          <ng-container *ngIf="form.value?.length > 0">
+            <tr
+              *ngFor="let attribute of form.controls; let i = index"
+              [formGroup]="attribute"
+            >
+              <td class="immediate-error-display">
+                <input type="text" formControlName="name" maxlength="50" />
+              </td>
+              <td class="immediate-error-display">
+                <select formControlName="type">
+                  <option *ngFor="let opt of choices" [ngValue]="opt.value">
+                    {{ opt.displayName }}
+                  </option>
+                </select>
+              </td>
+              <td>
+                <input type="checkbox" formControlName="isSearchable" />
+              </td>
+              <td>
+                <input type="checkbox" formControlName="isFilterable" />
+              </td>
+              <td>
+                <button
+                  (click)="removeAttribute(i)"
+                  type="button"
+                  class="remove-button"
+                >
+                  <i class="material-icons">remove_circle_outline</i>
+                </button>
+              </td>
+            </tr>
+          </ng-container>
           <tr>
             <td colspan="5">
               <button type="button" (click)="addAttribute()" class="add-button">
@@ -72,9 +74,11 @@ export class ProductClassAttributesComponent implements OnInit {
   }
 
   initialFormValue(): void {
-    this.attributes.forEach((attribute) => {
-      this.addAttribute(attribute);
-    });
+    if (this.attributes) {
+      this.attributes.forEach((attribute) => {
+        this.addAttribute(attribute);
+      });
+    }
   }
 
   removeAttribute(index: number) {
