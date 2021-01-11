@@ -145,6 +145,7 @@ export class ResellerComponent extends AbstractDetailComponent<IReseller> implem
   optionChange(value: string) {
     this.updateShowGroups(value);
     this.resetResellerGroups();
+    this.form.removeControl('valid');
   }
 
   updateShowGroups(value: string) {
