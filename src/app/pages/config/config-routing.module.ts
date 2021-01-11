@@ -15,9 +15,9 @@ import { DeviceComponent, DeviceListComponent, DeviceListResolver, DeviceResolve
 import { GroupComponent, GroupListComponent, GroupListResolver, GroupProviderResolver } from './group';
 import { ResellerComponent, ResellerProviderTypeResolver } from "./reseller";
 import { ResellerProviderResolver } from "./reseller/resolvers/reseller-provider.resolver";
-import { SiteConfigComponent, SiteConfigResolver } from "./site-config";
-import {BlogFeedComponent} from './blog-feed/blog-feed.component';
-import {BlogFeedResolver} from './blog-feed';
+import { SiteConfigComponent, SiteConfigResolver, SocialMediaTypeResolver } from "./site-config";
+import { BlogFeedComponent } from './blog-feed/blog-feed.component';
+import { BlogFeedResolver } from './blog-feed';
 
 
 const routes: Routes = [
@@ -162,7 +162,7 @@ const routes: Routes = [
   {
     path: 'settings',
     component: SiteConfigComponent,
-    resolve: { entity: SiteConfigResolver },
+    resolve: { entity: SiteConfigResolver, typeChoices: SocialMediaTypeResolver },
     runGuardsAndResolvers: "always"
   },
   {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
+import {FormControl, Validators, FormBuilder, FormGroup, FormArray} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ToastService, AbstractDetailComponent } from '@nusantara/core';
@@ -70,7 +70,38 @@ import { SiteConfigService } from "@nusantara/services";
         <input type="text" [formControl]="keywords">
         <nus-field-errors [control]="keywords"></nus-field-errors>
       </label>
+      <table class="line-items">
+        <thead>
+        <tr>
+          <th>Product (UPC)</th>
+          <th>Location</th>
+          <th>Quantity</th>
+          <th>SKU</th>
+          <th>Batch</th>
+          <th>Locator</th>
+          <th>Expiry Date</th>
+          <th>Cost</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
 
+        <nus-social-media-host
+          *ngFor="let rec of socialMedia.controls; let i=index"
+          [form]="rec"
+          [socialMediaTypes]="availableSubLocations"
+          (remove)="stockRecords.removeAt(i)">
+        </nus-social-media-host>
+
+        <tr>
+          <td colspan="9">
+            <button type="button" (click)="addLine()" class="add-button">
+              Add Record
+            </button>
+          </td>
+        </tr>
+
+      </table>
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
@@ -130,6 +161,8 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
     return this.extraConfig.get('keywords') as FormControl;
   }
 
+  get socialMedia(): FormArray { return this.form.get('socialMedia') as FormArray; }
+
   ngOnInit(): void {
     super.ngOnInit();
     this.originalEntityName = "General Settings";
@@ -146,7 +179,8 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
       extraConfig: this.fb.group({
         description: [entity?.extraConfig?.description, [Validators.maxLength(160)]],
         keywords: [entity?.extraConfig?.keywords, [Validators.maxLength(160)]]
-      })
+      }),
+      socialMedia: this.fb.array([], []),
     });
 
     this.entity = entity;
