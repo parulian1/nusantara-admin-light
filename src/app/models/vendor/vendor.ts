@@ -1,4 +1,4 @@
-import {INamedHrefEntity} from "@nusantara/models/base";
+import { INamedHrefEntity, IVendorExtra } from "@nusantara/models";
 
 export interface IVendor extends INamedHrefEntity {
   description: string;
@@ -6,4 +6,5 @@ export interface IVendor extends INamedHrefEntity {
   internalNotes: string;
   iconImage: string;
   bannerImage: string;
+  extra?: IVendorExtra;
 }

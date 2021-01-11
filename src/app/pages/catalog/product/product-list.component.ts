@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { PagedResponse } from '@nusantara/core/pagination';
-import { ICategory, IVendor, products } from '@nusantara/models';
+import { products } from '@nusantara/models';
 import { AbstractListComponent } from '@nusantara/core';
 
 /**

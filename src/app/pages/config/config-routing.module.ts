@@ -151,16 +151,12 @@ const routes: Routes = [
   },
   {
     path: 'reseller',
-    children: [
-      {
-        path: '',
-        component: ResellerComponent,
-        resolve: {
-          entity: ResellerProviderResolver,
-          types: ResellerProviderTypeResolver,
-        }
-      }
-    ]
+    component: ResellerComponent,
+    resolve: {
+      entity: ResellerProviderResolver,
+      types: ResellerProviderTypeResolver,
+    },
+    runGuardsAndResolvers: "always"
   },
   {
     path: 'auth-social',
