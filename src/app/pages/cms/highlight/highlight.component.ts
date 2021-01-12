@@ -251,7 +251,7 @@ export class HighlightComponent extends AbstractDetailComponent<IHighlight> impl
     if (!!this.entity?.href && !!this.entity?.banner && !this.form.get('banner').value) {
       this.form.removeControl('banner');
     }
-    if (!!this.entity?.href && !!this.entity?.banner && !this.form.get('banner').value) {
+    if (!!this.entity?.href && !!this.entity?.background && !this.form.get('background').value) {
       this.form.removeControl('background');
     }
 
