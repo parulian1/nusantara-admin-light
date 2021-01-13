@@ -45,7 +45,7 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
 
       <label>
         <span>Code</span>
-        <input type="text" [formControl]="code" maxlength="50">
+        <input type="text" [formControl]="code" maxlength="10">
         <nus-field-errors [control]="code"></nus-field-errors>
       </label>
 
@@ -74,6 +74,7 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
           <option *ngFor="let t of discountBaseChoices" [ngValue]="t.value">{{ t.displayName }}</option>
         </select>
       </label>
+
       <label>
         <span>Minimum Order Amount</span>
         <input type="number" [formControl]="minimumOrderAmount" placeholder="Ex, 10000000">
@@ -102,6 +103,11 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
         <nus-field-errors [control]="validTo"></nus-field-errors>
       </label>
 
+      <label>
+        <span>Is Active</span>
+        <input type="checkbox" [formControl]="isActive">
+        <nus-field-errors [control]="isActive"></nus-field-errors>
+      </label>
 
       <h2>
         Voucher Eligible Products
@@ -121,7 +127,7 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
         </thead>
         <tbody>
         <tr *ngFor="let control of products.controls; let i=index">
-          <th>{{ i }}</th>
+          <th>{{ i + 1 }}</th>
           <td>{{ control.get('name').value }}</td>
           <td>
             <button (click)="products.removeAt(i)" type="button" class="remove-button">
@@ -139,10 +145,11 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
         </tbody>
       </table>
 
-      <a href="{{ service.productListDownloadUrl }}" target="_blank">Download Product List</a>
+<!--      <a href="{{ service.productListDownloadUrl }}" target="_blank">Download Product List</a>-->
 
       <nus-detail-actions
         [component]="this"
+        [hideDelete]="!!entity && entity?.href && !entity?.isActive"
         (cancel)="navigateToParent(true)"
         (delete)="delete()">
       </nus-detail-actions>
@@ -171,6 +178,7 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
     {displayName: 'More Than Once', value: 'more_than_once'},
   ];
 
+  public entity: IVoucher;
 
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
 
@@ -227,19 +235,25 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
     return this.form.get('products') as FormArray;
   }
 
+  get isActive(): FormControl {
+    return this.form.get('isActive') as FormControl;
+  }
+
   initializeForm(entity?: IVoucher) {
+    this.entity = entity;
     this.form = this.fb.group({
       name: [entity?.name, [Validators.required, Validators.maxLength(50)]],
       href: [entity?.href],
       type: [entity?.type, [Validators.required]],
       discountBase: [entity?.discountBase, [Validators.required]],
-      code: [entity?.code, [Validators.required, Validators.maxLength(50)]],
+      code: [entity?.code, [Validators.required, Validators.maxLength(10)]],
       amount: [entity?.amount, [Validators.required, Validators.min(1)]],
       minimumOrderAmount: [entity?.minimumOrderAmount, [Validators.required, Validators.min(1)]],
       maxAmount: [entity?.maxAmount, [Validators.required, Validators.min(1)]],
       maxUsed: [entity?.maxUsed, [Validators.required, Validators.min(1)]],
       validFrom: [this.convertDateTime(entity?.validFrom), [Validators.required,]],
       validTo: [this.convertDateTime(entity?.validTo), [Validators.required,]],
+      isActive: [entity?.isActive, []],
       products: this.fb.array([]),
     }, {
       validator: DiscAmountValidator

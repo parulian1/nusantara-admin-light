@@ -188,9 +188,10 @@ import { ProductSubscriptonHostComponent } from './subscription';
         <input type="text" [formControl]="seoDescription" name="seoDescription">
         <nus-field-errors [control]="seoDescription"></nus-field-errors>
       </label>
-        <ng-container *ngIf="!!entity">
-          <nus-stock-search [productHref]="entity?.href" ></nus-stock-search>
-        </ng-container>
+
+      <ng-container *ngIf="!!entity">
+        <nus-stock-search [productHref]="entity?.href" ></nus-stock-search>
+      </ng-container>
 
       <nus-detail-actions
         [component]="this"

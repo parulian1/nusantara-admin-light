@@ -6,6 +6,7 @@ import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { ToastService, AbstractDetailComponent } from '@nusantara/core';
 import { IFlatPage } from '@nusantara/models';
 import { FlatPageService } from '@nusantara/services';
+import { getLastUrlString } from '@nusantara/core/helpers';
 
 @Component({
   selector: 'nus-flat-page',
@@ -40,15 +41,18 @@ import { FlatPageService } from '@nusantara/services';
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
-        (delete)="delete()">
+        (delete)="delete()"
+        [hideDelete]=hideDelete>
       </nus-detail-actions>
     </form>
   `,
   styles: [
-    '.ck-editor__main { min-height: 150px; }',
+    '.ck-editor__main { min-height: 150px; }'
   ]
 })
 export class FlatPageComponent extends AbstractDetailComponent<IFlatPage> implements OnInit {
+  public DEFAULT_PAGES_PATH = ['kebijakan-privasi', 'syarat-dan-ketentuan'];
+  public hideDelete = false;
 
   public Editor = ClassicEditor;
 
@@ -60,24 +64,52 @@ export class FlatPageComponent extends AbstractDetailComponent<IFlatPage> implem
     super(route, router, toast, service);
   }
 
-  get url(): FormControl { return this.form.get('url') as FormControl; }
-  get href(): FormControl { return this.form.get('href') as FormControl; }
-  get title(): FormControl { return this.form.get('title') as FormControl; }
-  get content(): FormControl { return this.form.get('content') as FormControl; }
+  get url(): FormControl {
+    return this.form.get('url') as FormControl;
+  }
+
+  get href(): FormControl {
+    return this.form.get('href') as FormControl;
+  }
+
+  get title(): FormControl {
+    return this.form.get('title') as FormControl;
+  }
+
+  get content(): FormControl {
+    return this.form.get('content') as FormControl;
+  }
 
   initializeForm(entity?: IFlatPage) {
     this.form = this.fb.group({
       title: [entity?.title, [Validators.required]],
       href: [entity?.href],
       url: [entity?.url, [Validators.required]],
-      content: [entity?.content, [Validators.required]],
+      content: [entity?.content, [Validators.required]]
     });
+
+    this.disableDeleteBtn();
+    this.disableUrlInput();
   }
 
   setOriginalEntityName(entity?: IFlatPage) {
     // overridden because attribute is named 'title' and not 'name' as expected in base class.
     if (entity) {
       this.originalEntityName = entity.title;
+    }
+  }
+
+  disableDeleteBtn() {
+    const url = getLastUrlString(this.router.url);
+    if (this.DEFAULT_PAGES_PATH.includes(url)) {
+      this.hideDelete = true;
+    }
+  }
+
+  disableUrlInput() {
+    const url = getLastUrlString(this.router.url);
+    if (this.DEFAULT_PAGES_PATH.includes(url)) {
+      this.form.get('url').disable();
     }
   }
 }

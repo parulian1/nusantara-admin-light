@@ -23,8 +23,8 @@ import { ResellerService } from "@nusantara/services";
     <form [formGroup]="form" (ngSubmit)="save()">
       <label *ngFor="let option of options" class="types">
         <span>
-          <input type="radio" id="option" name="types" [value]="option.value" [formControl]="type"
-          (change)="optionChange($event)">
+          <input type="radio" name="types" [value]="option.value" [formControl]="type"
+          (change)="optionChange(option.value)">
         </span>
         <div>
           {{ option.displayName }}
@@ -142,9 +142,10 @@ export class ResellerComponent extends AbstractDetailComponent<IReseller> implem
     }
   }
 
-  optionChange(event: any) {
-    this.updateShowGroups(event.target.attributes[5].value);
+  optionChange(value: string) {
+    this.updateShowGroups(value);
     this.resetResellerGroups();
+    this.form.removeControl('valid');
   }
 
   updateShowGroups(value: string) {

@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractDetailComponent, ToastService } from '@nusantara/core';
@@ -22,7 +22,7 @@ import { VendorService } from '@nusantara/services';
 
       <label>
         <span>Name</span>
-        <input type="text" [formControl]="name" name="name" maxlength="50">
+        <input type="text" [formControl]="name" name="name">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
@@ -62,6 +62,20 @@ import { VendorService } from '@nusantara/services';
         <nus-field-errors [control]="internalNotes"></nus-field-errors>
       </label>
 
+      <label>
+        <span>Seo Description</span>
+        <textarea [formControl]="seoDescription" name="seoDescription"></textarea>
+        <nus-field-errors [control]="seoDescription"></nus-field-errors>
+      </label>
+
+      <label>
+        <span>Seo Keywords</span>
+        <input type="text" [formControl]="seoKeywords" name="seoKeywords">
+        <nus-field-errors [control]="seoKeywords"></nus-field-errors>
+      </label>
+
+
+
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
@@ -98,16 +112,29 @@ export class VendorComponent extends AbstractDetailComponent<IVendor> {
   get internalNotes(): FormControl { return this.form.get('internalNotes') as FormControl; }
   get iconImage(): FormControl { return this.form.get('iconImage') as FormControl; }
   get bannerImage(): FormControl { return this.form.get('bannerImage') as FormControl; }
+  get extra(): FormGroup {
+    return this.form.get('extra') as FormGroup;
+  }
+  get seoDescription(): FormControl {
+    return this.extra.get('seoDescription') as FormControl;
+  }
+  get seoKeywords(): FormControl {
+    return this.extra.get('seoKeywords') as FormControl;
+  }
 
   initializeForm(entity?: IVendor) {
     this.entity = entity;
     this.form = this.fb.group({
-      name: [entity?.name, [Validators.required, ]],
+      name: [entity?.name, [Validators.required, Validators.maxLength(50)]],
       href: [entity?.href, []],
       description: [entity?.description ?? '', []],
       internalNotes: [entity?.internalNotes ?? '', []],
       iconImage: ['', entity?.iconImage ? [] : [Validators.required, ]],
       bannerImage: ['', []],
+      extra: this.fb.group({
+        seoDescription: [entity?.extra?.seoDescription ?? '', [Validators.maxLength(160)]],
+        seoKeywords: [entity?.extra?.seoKeywords ?? '', [Validators.maxLength(160)]]
+      })
     });
 
     this.setBannerImagePreview(entity?.bannerImage);

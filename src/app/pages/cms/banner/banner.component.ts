@@ -85,6 +85,11 @@ import {IBannerGroup} from "../../../models/widgets/banner-group";
         <span>Is Display at Homepage</span>
         <input type="checkbox" [formControl]="displayHomepage" name="displayHomepage">
       </label>
+      <label>
+        <span>Sort Priority</span>
+        <input type="text" [formControl]="sortPriority" name="sortPriority">
+        <nus-field-errors [control]="sortPriority"></nus-field-errors>
+      </label>
 
       <label>
         <span>Description</span>
@@ -133,6 +138,7 @@ export class BannerComponent extends AbstractDetailComponent<banner.IBanner> imp
   get displayHomepage(): FormControl { return this.form.get('displayHomepage') as FormControl; }
   get description(): FormControl { return this.form.get('description') as FormControl; }
   get group(): FormControl { return this.form.get('group') as FormControl; }
+  get sortPriority(): FormControl { return this.form.get('sortPriority') as FormControl; }
 
   ngOnInit() {
     super.ngOnInit();
@@ -157,6 +163,7 @@ export class BannerComponent extends AbstractDetailComponent<banner.IBanner> imp
       displayHomepage: [entity?.displayHomepage ?? false, []],
       description: [entity?.description ?? '', []],
       group: [entity?.group ?? '', []],
+      sortPriority: [entity?.sortPriority ?? '', []],
     });
 
     this.setImagePreview(entity?.image);

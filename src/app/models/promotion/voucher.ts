@@ -12,4 +12,5 @@ export interface IVoucher extends INamedHrefEntity {
   maxAmount: number;
   validTo: string;
   validFrom: string;
+  isActive?: boolean;
 }
