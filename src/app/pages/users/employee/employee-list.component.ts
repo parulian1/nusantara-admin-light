@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { AbstractListComponent } from '@nusantara/core';
-import { INamedHrefEntity } from '@nusantara/models/base';
-import { IEmployee } from '../../../models/user';
+import { IEmployee } from '@nusantara/models/user';
 
 @Component({
   selector: 'nus-employee-list',
@@ -12,6 +11,9 @@ import { IEmployee } from '../../../models/user';
       title="Employees"
       description="Users who can actually meh">
     </nus-list-header>
+
+    <nus-pagination [page]="page"></nus-pagination>
+
     <table>
       <thead>
         <tr>
