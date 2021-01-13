@@ -9,7 +9,7 @@ import { drf } from "@nusantara/models";
   template: `
     <tr [formGroup]="form">
       <td>
-        <select formControlName="href" data-qa="types">
+        <select formControlName="href" data-qa="types" [formControl]="type">
           <option [ngValue]="null">---</option>
           <option *ngFor="let type of socialMediaTypes" [ngValue]="type.value">
             {{ type.displayName }}

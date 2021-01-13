@@ -3,7 +3,7 @@ import {FormControl, Validators, FormBuilder, FormGroup, FormArray} from '@angul
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ToastService, AbstractDetailComponent } from '@nusantara/core';
-import { drf, ISiteConfig} from '@nusantara/models';
+import {drf, ISiteConfig, ISocialMedia} from '@nusantara/models';
 import { SiteConfigService } from "@nusantara/services";
 
 @Component({
@@ -73,24 +73,18 @@ import { SiteConfigService } from "@nusantara/services";
       <table class="line-items">
         <thead>
         <tr>
-          <th>Product (UPC)</th>
-          <th>Location</th>
-          <th>Quantity</th>
-          <th>SKU</th>
-          <th>Batch</th>
-          <th>Locator</th>
-          <th>Expiry Date</th>
-          <th>Cost</th>
+          <th>Type</th>
+          <th>URL</th>
           <th></th>
         </tr>
         </thead>
         <tbody>
 
         <nus-social-media-host
-          *ngFor="let rec of socialMedia.controls; let i=index"
+          *ngFor="let rec of socialMedias.controls; let i=index"
           [form]="rec"
           [socialMediaTypes]="socialMediaTypes"
-          (remove)="socialMedia.removeAt(i)">
+          (remove)="socialMedias.removeAt(i)">
         </nus-social-media-host>
 
         <tr>
@@ -162,7 +156,7 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
     return this.extraConfig.get('keywords') as FormControl;
   }
 
-  get socialMedia(): FormArray { return this.form.get('socialMedia') as FormArray; }
+  get socialMedias(): FormArray { return this.form.get('socialMedias') as FormArray; }
 
   ngOnInit(): void {
     super.ngOnInit();
@@ -185,12 +179,16 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
         description: [entity?.extraConfig?.description, [Validators.maxLength(160)]],
         keywords: [entity?.extraConfig?.keywords, [Validators.maxLength(160)]]
       }),
-      socialMedia: this.fb.array([], []),
+      socialMedias: this.fb.array([], []),
     });
 
     this.entity = entity;
     this.setLogoPreview(entity?.logo);
     this.setFaviconPreview(entity?.favicon);
+
+    for (const socialMedia of entity?.socialMedias ?? []) {
+      this.addLine(socialMedia);
+    }
   }
 
   setLogoPreview(data?: Event | string) {
@@ -222,11 +220,11 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
     super.save();
   }
 
-  addLine() {
+  addLine(socialMedia?: ISocialMedia) {
     const form = this.fb.group({
-      type: ['', [Validators.required]],
-      url: ['', [Validators.required, Validators.maxLength(50)]]
+      type: [socialMedia?.type ?? '', [Validators.required]],
+      url: [socialMedia?.url, [Validators.required, Validators.maxLength(50)]]
     });
-    this.socialMedia.push(form);
+    this.socialMedias.push(form);
   }
 }
