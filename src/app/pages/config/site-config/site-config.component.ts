@@ -89,8 +89,8 @@ import { SiteConfigService } from "@nusantara/services";
         <nus-social-media-host
           *ngFor="let rec of socialMedia.controls; let i=index"
           [form]="rec"
-          [socialMediaTypes]="availableSubLocations"
-          (remove)="stockRecords.removeAt(i)">
+          [socialMediaTypes]="socialMediaTypes"
+          (remove)="socialMedia.removeAt(i)">
         </nus-social-media-host>
 
         <tr>
@@ -120,6 +120,7 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
   entity?: ISiteConfig;
   logoPreviewUrl: string;
   faviconPreviewUrl: string;
+  socialMediaTypes: drf.IChoice[] = [];
 
   constructor(service: SiteConfigService,
               route: ActivatedRoute,
@@ -165,6 +166,10 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
 
   ngOnInit(): void {
     super.ngOnInit();
+    this.route.data.subscribe((data: { entity: ISiteConfig, typeChoices: drf.IChoice[]}) => {
+      this.entity = data.entity;
+      this.socialMediaTypes = data.typeChoices;
+    });
     this.originalEntityName = "General Settings";
   }
 
@@ -215,5 +220,13 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
       this.form.value.logo = this.logoPreviewUrl;
     }
     super.save();
+  }
+
+  addLine() {
+    const form = this.fb.group({
+      type: ['', [Validators.required]],
+      url: ['', [Validators.required, Validators.maxLength(50)]]
+    });
+    this.socialMedia.push(form);
   }
 }
