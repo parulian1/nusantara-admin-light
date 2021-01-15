@@ -160,7 +160,12 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
     }
       else if (isObject(error.errorDetails)) {
       Object.keys(error.errorDetails).forEach((field) => {
-        errorMessages.push(`${field}: ${error.errorDetails[field][0]}`);
+        if (error.errorDetails instanceof Array) {
+          errorMessages.push(`${field}: ${error.errorDetails[field]}`);
+        }
+        else {
+          errorMessages.push(`${field}: ${error.errorDetails[field][0]}`);
+        }
       });
       errorMessage = errorMessages.length > 0 ? errorMessages[0]: 'Please check your input again.';
       this.setFormErrors(error.errorDetails);
@@ -217,7 +222,9 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
     if (isObject(errorMessage)) {
       for (const prop in errorMessage) {
         if (errorMessage.hasOwnProperty(prop)) {
-          this.form.controls[prop].setErrors({apiError: errorMessage[prop]});
+          if (this.form.controls.hasOwnProperty(prop)) {
+            this.form.controls[prop].setErrors({apiError: errorMessage[prop]});
+          }
         }
       }
     }
