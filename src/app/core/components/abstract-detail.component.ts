@@ -221,10 +221,8 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
 
     if (isObject(errorMessage)) {
       for (const prop in errorMessage) {
-        if (errorMessage.hasOwnProperty(prop)) {
-          if (this.form.controls.hasOwnProperty(prop)) {
+        if (errorMessage.hasOwnProperty(prop) && this.form.controls.hasOwnProperty(prop)) {
             this.form.controls[prop].setErrors({apiError: errorMessage[prop]});
-          }
         }
       }
     }
