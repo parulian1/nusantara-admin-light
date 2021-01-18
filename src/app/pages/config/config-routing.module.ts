@@ -170,6 +170,15 @@ const routes: Routes = [
         runGuardsAndResolvers: 'always'
       },
       {
+        path: 'new',
+        component: AuthSocialComponent,
+        resolve: {
+          authType: AuthSocialTypeResolver,
+        },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+      {
         path: ':slug',
         component: AuthSocialComponent,
         resolve: {
