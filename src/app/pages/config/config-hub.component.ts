@@ -13,13 +13,18 @@ import { Component } from '@angular/core';
     <h1>Config Hub</h1>
     <div>
       <a id="warehouse-config" [routerLink]="['./warehouses']"><i class="material-icons">domain</i> Warehouses</a>
-      <a id="pg-config" [routerLink]="['./payment-gateways']">Payment Gateways</a>
-      <a id="shipping-method-config" [routerLink]="['./shipping-methods']">Shipping Methods</a>
-      <a id="device-config" [routerLink]="['./devices']">Device</a>
-      <a id="device-config" [routerLink]="['./groups']">Groups</a>
-      <a id="device-config" [routerLink]="['./reseller']">Reseller</a>
-      <a id="device-config" [routerLink]="['./settings']">General Settings</a>
+      <a id="pg-config" [routerLink]="['./payment-gateways']"><i class="material-icons">payment</i> Payment Gateways</a>
+      <a id="shipping-method-config" [routerLink]="['./shipping-methods']"><i class="material-icons">local_shipping</i> Shipping Methods</a>
 
+      <a id="group-config" [routerLink]="['./groups']"><i class="material-icons">group</i> Groups</a>
+      <a id="reseller-config" [routerLink]="['./reseller']"><i class="material-icons">supervised_user_circle</i> Reseller</a>
+    </div>
+    <div>
+      <a id="device-config" [routerLink]="['./devices']"><i class="material-icons">point_of_sale</i> Device</a>
+    </div>
+    <div>
+      <a id="general-config" [routerLink]="['./settings']"><i class="material-icons">settings</i> General Settings</a>
+      <a id="blog-feed-config" [routerLink]="['./blog-feed/settings']"><i class="material-icons">rss_feed</i> Blog Feed Settings</a>
     </div>
   `,
   styles: [

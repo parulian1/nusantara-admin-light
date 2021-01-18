@@ -13,6 +13,7 @@ import { DeviceListComponent, DeviceComponent } from './device';
 import { GroupComponent, GroupListComponent, UserGroupComponent } from './group';
 import { SiteConfigComponent } from "./site-config";
 import { ResellerComponent } from "./reseller";
+import { BlogFeedComponent } from './blog-feed/blog-feed.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { ResellerComponent } from "./reseller";
     UserGroupComponent,
     ResellerComponent,
     SiteConfigComponent,
+    BlogFeedComponent,
   ],
   imports: [
     CommonModule,

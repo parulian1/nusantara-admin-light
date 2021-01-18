@@ -16,6 +16,8 @@ import { GroupComponent, GroupListComponent, GroupListResolver, GroupProviderRes
 import { ResellerComponent, ResellerProviderTypeResolver } from "./reseller";
 import { ResellerProviderResolver } from "./reseller/resolvers/reseller-provider.resolver";
 import { SiteConfigComponent, SiteConfigResolver } from "./site-config";
+import {BlogFeedComponent} from './blog-feed/blog-feed.component';
+import {BlogFeedResolver} from './blog-feed';
 
 
 const routes: Routes = [
@@ -102,6 +104,22 @@ const routes: Routes = [
           entity: ShippingProviderResolver,
           types: ShippingProviderTypeResolver,
         }
+      }
+    ]
+  },
+  {
+    path: 'blog-feed',
+    children: [
+      {
+        path: '',
+        redirectTo: 'settings',
+      },
+      {
+        path: 'settings',
+        component: BlogFeedComponent,
+        resolve: { entity: BlogFeedResolver },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
       }
     ]
   },
