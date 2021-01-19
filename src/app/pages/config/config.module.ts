@@ -14,6 +14,8 @@ import { GroupComponent, GroupListComponent, UserGroupComponent } from './group'
 import { SiteConfigComponent, SocialMediaHostComponent } from "./site-config";
 import { ResellerComponent } from "./reseller";
 import { BlogFeedComponent } from './blog-feed/blog-feed.component';
+import { AuthSocialComponent } from './auth-social/auth-social.component';
+import { AuthSocialListComponent } from './auth-social/auth-social-list.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import { BlogFeedComponent } from './blog-feed/blog-feed.component';
     SiteConfigComponent,
     BlogFeedComponent,
     SocialMediaHostComponent,
+    AuthSocialComponent,
+    AuthSocialListComponent,
   ],
   imports: [
     CommonModule,

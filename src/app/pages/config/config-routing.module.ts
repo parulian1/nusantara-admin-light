@@ -13,9 +13,11 @@ import {
 } from './shipping';
 import { DeviceComponent, DeviceListComponent, DeviceListResolver, DeviceResolver } from './device';
 import { GroupComponent, GroupListComponent, GroupListResolver, GroupProviderResolver } from './group';
-import { ResellerComponent, ResellerProviderTypeResolver } from "./reseller";
-import { ResellerProviderResolver } from "./reseller/resolvers/reseller-provider.resolver";
-import { SiteConfigComponent, SiteConfigResolver, SocialMediaTypeResolver } from "./site-config";
+import { ResellerComponent, ResellerProviderTypeResolver } from './reseller';
+import { ResellerProviderResolver } from './reseller/resolvers/reseller-provider.resolver';
+import { SiteConfigComponent, SiteConfigResolver, SocialMediaTypeResolver } from './site-config';
+import {AuthSocialComponent, AuthSocialListComponent, AuthSocialListResolver, AuthSocialResolver} from './auth-social';
+import {AuthSocialTypeResolver} from './auth-social/auth-social-type.resolver';
 import { BlogFeedComponent } from './blog-feed/blog-feed.component';
 import { BlogFeedResolver } from './blog-feed';
 
@@ -172,7 +174,39 @@ const routes: Routes = [
       entity: ResellerProviderResolver,
       types: ResellerProviderTypeResolver,
     },
-    runGuardsAndResolvers: "always"
+    runGuardsAndResolvers: 'always'
+  },
+  {
+    path: 'auth-social',
+    children: [
+      {
+        path: '',
+        component: AuthSocialListComponent,
+        resolve: {
+          page: AuthSocialListResolver
+        },
+        runGuardsAndResolvers: 'always'
+      },
+      {
+        path: 'new',
+        component: AuthSocialComponent,
+        resolve: {
+          authType: AuthSocialTypeResolver,
+        },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+      {
+        path: ':slug',
+        component: AuthSocialComponent,
+        resolve: {
+          entity: AuthSocialResolver,
+          authType: AuthSocialTypeResolver,
+        },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      }
+    ]
   }
 ];
 
