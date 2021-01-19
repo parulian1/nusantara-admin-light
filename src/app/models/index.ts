@@ -55,4 +55,4 @@ export { base, drf, google, widgets, products, inventory, device, banner, shipme
 
 export * from './reseller';
 
-export * from './onboarding-content';
+export * from './onboarding';

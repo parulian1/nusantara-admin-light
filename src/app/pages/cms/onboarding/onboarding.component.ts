@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {AbstractDetailComponent, ToastService} from '@nusantara/core';
-import {IFlatPage, IOnboardingContent} from '@nusantara/models';
-import {OnboardingContentService} from '@nusantara/services/onboarding-content.service';
-import {FormBuilder, FormControl, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { AbstractDetailComponent, moveItemInFormArray, ToastService } from '@nusantara/core';
+import { IOnBoarding, IOnboardingContent } from '@nusantara/models';
+import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { IOnboardingService } from "@nusantara/services";
+import { CdkDragDrop } from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'nus-onboarding',
@@ -15,15 +16,6 @@ import {ActivatedRoute, Router} from '@angular/router';
     <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
 
     <form [formGroup]="form" (ngSubmit)="save()">
-
-      <label>
-        <span>Image</span>
-        <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Banner Image" class="preview">
-        <input type="file" [formControl]="image" (change)="setImagePreview($event)"
-               name="icon" accept="image/*">
-        <nus-field-errors [control]="image"></nus-field-errors>
-      </label>
-
       <label>
         <span>Title</span>
         <input type="text" [formControl]="name">
@@ -31,30 +23,25 @@ import {ActivatedRoute, Router} from '@angular/router';
       </label>
 
       <label>
-        <span>Description</span>
-        <textarea [formControl]="description"></textarea>
-        <nus-field-errors [control]="description"></nus-field-errors>
-      </label>
-      <hr/>
-
-      <label>
-        <span>Button Status</span>
-        <input type="checkbox" [formControl]="buttonStatus">
+        <span>Display At</span>
+        <input type="text" [formControl]="type">
+        <nus-field-errors [control]="type"></nus-field-errors>
       </label>
 
       <label>
-        <span>Button Text</span>
-        <input type="url" [formControl]="buttonText">
-        <nus-field-errors [control]="buttonText"></nus-field-errors>
+        <span>Display On/Off</span>
+        <input type="checkbox" [formControl]="isActive">
+        <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
-
-      <label>
-        <span>Button Url</span>
-        <input type="url" [formControl]="buttonUrl">
-        <nus-field-errors [control]="buttonUrl"></nus-field-errors>
-      </label>
-
+      <ng-container cdkDropList [cdkDropListData]="entity?.contents" class="example-list"
+                    (cdkDropListDropped)="drop($event)">
+        <nus-onboarding-content
+          *ngFor="let content_control of contents.controls; let i=index"
+          [form]="content_control"
+          (remove)="contents.removeAt(i)">
+        </nus-onboarding-content>
+      </ng-container>
 
 
       <nus-detail-actions
@@ -66,11 +53,11 @@ import {ActivatedRoute, Router} from '@angular/router';
   `,
   styles: ['']
 })
-export class OnboardingComponent extends AbstractDetailComponent<IOnboardingContent> implements OnInit {
+export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> implements OnInit {
   imagePreviewUrl: string;
-  entity: IOnboardingContent;
+  entity: IOnBoarding;
 
-  constructor(service: OnboardingContentService,
+  constructor(service: IOnboardingService,
               public fb: FormBuilder,
               toast: ToastService,
               route: ActivatedRoute,
@@ -79,43 +66,50 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnboardingCont
   }
 
 
-  get buttonText(): FormControl { return this.form.get('buttonText') as FormControl; }
-  get buttonUrl(): FormControl { return this.form.get('buttonUrl') as FormControl; }
-  get buttonStatus(): FormControl { return this.form.get('buttonStatus') as FormControl; }
+  get name(): FormControl { return this.form.get('buttonText') as FormControl; }
+  get type(): FormControl { return this.form.get('buttonUrl') as FormControl; }
+  get isActive(): FormControl { return this.form.get('buttonStatus') as FormControl; }
   get href(): FormControl { return this.form.get('href') as FormControl; }
-  get name(): FormControl { return this.form.get('name') as FormControl; }
-  get description(): FormControl { return this.form.get('description') as FormControl; }
-  get image(): FormControl { return this.form.get('image') as FormControl; }
-  get sortPriority(): FormControl { return this.form.get('sortPriority') as FormControl; }
+  get contents(): FormArray { return this.form.get('contents') as FormArray; }
 
-  initializeForm(entity?: IOnboardingContent) {
+  initializeForm(entity?: IOnBoarding) {
     this.entity = entity;
     this.form = this.fb.group({
       name: [entity?.name, [Validators.required]],
       href: [entity?.href],
-      image: [entity?.image],
-      sortPriority: [entity?.sortPriority],
-      description: [entity?.description, []],
-      buttonText: [entity?.buttonText, []],
-      buttonUrl: [entity?.buttonUrl, []],
-      buttonStatus: [entity?.buttonStatus, []],
+      type: [entity?.type],
+      isActive: [entity?.isActive ?? true],
+      contents: this.fb.array([], [Validators.required]),
     });
-    this.setImagePreview(entity?.image);
+    for (const content of entity?.contents ?? []) {
+      this.addContent(content);
+    }
   }
 
+  addContent(content?: IOnboardingContent) {
+    const form = this.fb.group({
+      href: [content?.href ?? '', [Validators.required]],
+      image: [content?.image, [Validators.required]],
+      name: [content?.name, [Validators.required, Validators.maxLength(50)]],
+      description: [content?.description, [Validators.maxLength(255)]],
+      buttonStatus: [content?.buttonStatus ?? false, []],
+      buttonText: [content?.buttonText ?? '', []],
+      buttonUrl: [content.buttonUrl ?? '', []],
+      sortPriority: [content?.sortPriority, []],
 
-  setImagePreview(data: Event | string) {
-    super.setImagePreview(data, (dataAsUrl) => this.imagePreviewUrl = dataAsUrl);
+    });
+    this.contents.push(form);
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInFormArray(
+      this.contents,
+      event.previousIndex,
+      event.currentIndex
+    );
   }
 
   save() {
-    if (!!this.entity?.href && !!this.entity?.image && !!this.image.value) {
-      this.form.removeControl('image');
-    }
-
-    if (this.imagePreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
-      this.form.value.image = this.imagePreviewUrl;
-    }
     super.save();
   }
 }

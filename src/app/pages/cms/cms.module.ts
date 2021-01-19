@@ -22,39 +22,42 @@ import { NavigationListComponent } from './navigation/navigation-list/navigation
 import { NavigationChildrenComponent } from './navigation/navigation-children/navigation-children.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
 import { OnboardingListComponent } from './onboarding/onboarding-list.component';
+import {OnboardingContentComponent} from "./onboarding/onboarding-content.component";
+import {DragDropModule} from "@angular/cdk/drag-drop";
 
 
 @NgModule({
-  declarations: [
-    FlatPageListComponent,
-    FlatPageComponent,
+    declarations: [
+        FlatPageListComponent,
+        FlatPageComponent,
 
-    TestimonialComponent,
-    TestimonialListComponent,
+        TestimonialComponent,
+        TestimonialListComponent,
 
-    WidgetBlockListComponent,
-    WidgetBlockComponent,
-    WidgetSummaryRowComponent,
+        WidgetBlockListComponent,
+        WidgetBlockComponent,
+        WidgetSummaryRowComponent,
 
-    BannerGroupComponent,
-    BannerListComponent,
-    BannerComponent,
+        BannerGroupComponent,
+        BannerListComponent,
+        BannerComponent,
 
-    ContentFooterComponent,
-    ContentFooterListComponent,
-    ContentFooterChildrenComponent,
+        ContentFooterComponent,
+        ContentFooterListComponent,
+        ContentFooterChildrenComponent,
 
-    HighlightListComponent,
-    HighlightComponent,
+        HighlightListComponent,
+        HighlightComponent,
 
-    SlaComponent,
-    SlaListComponent,
-    NavigationComponent,
-    NavigationListComponent,
-    NavigationChildrenComponent,
-    OnboardingComponent,
-    OnboardingListComponent,
-  ],
+        SlaComponent,
+        SlaListComponent,
+        NavigationComponent,
+        NavigationListComponent,
+        NavigationChildrenComponent,
+        OnboardingComponent,
+        OnboardingListComponent,
+        OnboardingContentComponent,
+    ],
   imports: [
     CommonModule,
     SharedModule,
@@ -62,6 +65,7 @@ import { OnboardingListComponent } from './onboarding/onboarding-list.component'
     ReactiveFormsModule,
     CKEditorModule,
     CmsRoutingModule,
+    DragDropModule,
   ],
   exports: [],
 })
