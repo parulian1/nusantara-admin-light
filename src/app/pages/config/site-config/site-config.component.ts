@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
+import {FormControl, Validators, FormBuilder, FormGroup, FormArray} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ToastService, AbstractDetailComponent } from '@nusantara/core';
-import { drf, ISiteConfig} from '@nusantara/models';
+import {drf, ISiteConfig, ISocialMedia} from '@nusantara/models';
 import { SiteConfigService } from "@nusantara/services";
 
 @Component({
@@ -70,7 +70,32 @@ import { SiteConfigService } from "@nusantara/services";
         <input type="text" [formControl]="keywords">
         <nus-field-errors [control]="keywords"></nus-field-errors>
       </label>
+      <table class="line-items">
+        <thead>
+        <tr>
+          <th>Type</th>
+          <th>URL</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
 
+        <nus-social-media-host
+          *ngFor="let rec of socialMedias.controls; let i=index"
+          [form]="rec"
+          [socialMediaTypes]="socialMediaTypes"
+          (remove)="socialMedias.removeAt(i)">
+        </nus-social-media-host>
+
+        <tr>
+          <td colspan="9">
+            <button type="button" (click)="addLine()" class="add-button">
+              Add Record
+            </button>
+          </td>
+        </tr>
+
+      </table>
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
@@ -89,6 +114,7 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
   entity?: ISiteConfig;
   logoPreviewUrl: string;
   faviconPreviewUrl: string;
+  socialMediaTypes: drf.IChoice[] = [];
 
   constructor(service: SiteConfigService,
               route: ActivatedRoute,
@@ -130,8 +156,14 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
     return this.extraConfig.get('keywords') as FormControl;
   }
 
+  get socialMedias(): FormArray { return this.form.get('socialMedias') as FormArray; }
+
   ngOnInit(): void {
     super.ngOnInit();
+    this.route.data.subscribe((data: { entity: ISiteConfig, typeChoices: drf.IChoice[]}) => {
+      this.entity = data.entity;
+      this.socialMediaTypes = data.typeChoices;
+    });
     this.originalEntityName = "General Settings";
   }
 
@@ -146,12 +178,17 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
       extraConfig: this.fb.group({
         description: [entity?.extraConfig?.description, [Validators.maxLength(160)]],
         keywords: [entity?.extraConfig?.keywords, [Validators.maxLength(160)]]
-      })
+      }),
+      socialMedias: this.fb.array([], []),
     });
 
     this.entity = entity;
     this.setLogoPreview(entity?.logo);
     this.setFaviconPreview(entity?.favicon);
+
+    for (const socialMedia of entity?.socialMedias ?? []) {
+      this.addLine(socialMedia);
+    }
   }
 
   setLogoPreview(data?: Event | string) {
@@ -181,5 +218,13 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
       this.form.value.logo = this.logoPreviewUrl;
     }
     super.save();
+  }
+
+  addLine(socialMedia?: ISocialMedia) {
+    const form = this.fb.group({
+      type: [socialMedia?.type ?? '', [Validators.required]],
+      url: [socialMedia?.url, [Validators.required, Validators.maxLength(50)]]
+    });
+    this.socialMedias.push(form);
   }
 }

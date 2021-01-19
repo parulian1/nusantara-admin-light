@@ -11,7 +11,7 @@ import { PaymentGatewayListComponent, PaymentGatewayDetailComponent } from './pa
 import { ShippingMethodListComponent, ShippingProviderDetailComponent, ShippingServiceComponent } from './shipping';
 import { DeviceListComponent, DeviceComponent } from './device';
 import { GroupComponent, GroupListComponent, UserGroupComponent } from './group';
-import { SiteConfigComponent } from "./site-config";
+import { SiteConfigComponent, SocialMediaHostComponent } from "./site-config";
 import { ResellerComponent } from "./reseller";
 import { BlogFeedComponent } from './blog-feed/blog-feed.component';
 
@@ -33,6 +33,7 @@ import { BlogFeedComponent } from './blog-feed/blog-feed.component';
     ResellerComponent,
     SiteConfigComponent,
     BlogFeedComponent,
+    SocialMediaHostComponent,
   ],
   imports: [
     CommonModule,

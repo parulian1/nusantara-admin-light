@@ -62,3 +62,5 @@ export * from './group.service';
 export * from './reseller';
 
 export * from './site-config.service';
+
+export * from './social-media.service';
