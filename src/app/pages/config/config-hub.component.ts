@@ -24,6 +24,7 @@ import { Component } from '@angular/core';
     </div>
     <div>
       <a id="general-config" [routerLink]="['./settings']"><i class="material-icons">settings</i> General Settings</a>
+      <a id="blog-feed-config" [routerLink]="['./blog-feed/settings']"><i class="material-icons">rss_feed</i> Blog Feed Settings</a>
       <a id="blog-feed-config" [routerLink]="['./auth-social']"><i class="material-icons">account_circle</i> Social Auth</a>
     </div>
   `,

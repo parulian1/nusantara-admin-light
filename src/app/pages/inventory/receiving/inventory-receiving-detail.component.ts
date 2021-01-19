@@ -70,6 +70,7 @@ import { ToastService } from '@nusantara/core';
         <th>sku</th>
         <th>Locator</th>
         <th>Original Quantity</th>
+        <th>Stock Requested</th>
         <th>Batch Number</th>
         <th>Expiry Date</th>
       </tr>
@@ -90,6 +91,9 @@ import { ToastService } from '@nusantara/core';
         </td>
         <td data-qa="original-quantity">
           {{ stock_record.originalQuantity }}
+        </td>
+        <td data-qa="stock-requested">
+          {{ stock_record.requestingStock }}
         </td>
         <td>
           {{ stock_record.batchNumber }}
