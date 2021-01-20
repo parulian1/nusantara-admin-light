@@ -192,7 +192,8 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
 
   protected onDeleteSuccess() {
     this.form.enable();
-    this.toast?.addMessage(`"${this.form.get('name').value}" was deleted successfully.`, 'Deleted', ToastLevelEnum.success);
+    const message = this.form.get('name')?.value ?? this.form.get('title').value;
+    this.toast?.addMessage(`"${message}" was deleted successfully.`, 'Deleted', ToastLevelEnum.success);
     this.navigateToParent(false);
   }
 
