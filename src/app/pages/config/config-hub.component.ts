@@ -15,7 +15,7 @@ import { Component } from '@angular/core';
       <a id="warehouse-config" [routerLink]="['./warehouses']"><i class="material-icons">domain</i> Warehouses</a>
       <a id="pg-config" [routerLink]="['./payment-gateways']"><i class="material-icons">payment</i> Payment Gateways</a>
       <a id="shipping-method-config" [routerLink]="['./shipping-methods']"><i class="material-icons">local_shipping</i> Shipping Methods</a>
-
+      <a id="marketplace-config" [routerLink]="['./marketplace-integration']">Marketplace Intergrations</a>
       <a id="group-config" [routerLink]="['./groups']"><i class="material-icons">group</i> Groups</a>
       <a id="reseller-config" [routerLink]="['./reseller']"><i class="material-icons">supervised_user_circle</i> Reseller</a>
     </div>
@@ -29,7 +29,7 @@ import { Component } from '@angular/core';
     </div>
   `,
   styles: [
-    ':host > div { display: grid; grid-template-columns: auto auto auto; grid-template-rows: 65px; }',
+    ':host > div { display: grid; grid-template-columns: 25% 25% 25% 25%; grid-template-rows: 65px; }',
     '#warehouse-config { grid-column: 1; grid-row: 1 }',
     '#pg-config { grid-column: 2; grid-row: 1 }',
   ]

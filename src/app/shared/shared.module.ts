@@ -15,6 +15,7 @@ import { FieldErrorsComponent } from './field-errors.component';
 import { NonFieldErrorsComponent } from './non-field-errors.component';
 import { SpinnerComponent } from './spinner.component';
 import { ProductSelectionModalComponent } from '@nusantara/shared/product-selection-modal.component';
+
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { PaginationChildComponent } from '@nusantara/shared/pagination-child.component';
 import { UserSelectionModalComponent } from '@nusantara/shared/user-selection-modal.component';
@@ -22,6 +23,18 @@ import { CustomerGroupModalComponent } from '@nusantara/shared/customer-group-mo
 import { IncludeDeletedComponent } from './filters/include-deleted.component';
 import { IncludeInactiveComponent } from './filters/include-inactive.component';
 
+import { FieldErrorsMarketplaceComponent } from '@nusantara/shared/field-errors-marketplace.component';
+import { ListHeaderMarketplaceComponent } from '@nusantara/shared/list-header-marketplace.component';
+import { ConfirmModalComponent } from './confirm-modal.component';
+import { TabComponent } from './tab.component';
+import { TabsComponent } from './tabs.component';
+import { EmptyListCOmponent } from './empty-list.component';
+import { MarketplaceInfoDetailProductPageComponent } from "@nusantara/shared/marketplace-info-detail-product-page.component";
+import { MarketplaceInfoShippingModalComponent } from '@nusantara/shared/marketplace-info-shipping-modal.component';
+import { MarketplaceInfoDetailModalComponent } from '@nusantara/shared/marketplace-info-detail-modal.component';
+import { ConfirmModalReceivingOrderComponent } from '@nusantara/shared/confirm-modal-receiving-order.component';
+import { ConfirmModalPendingOrderComponent } from '@nusantara/shared/confirm-modal-pending-order.component';
+import { DetailActionsMpComponent } from '@nusantara/shared/detail-actions-mp.component';
 
 /**
  * The purpose of this module is to make common code (like pipes)
@@ -46,6 +59,18 @@ import { IncludeInactiveComponent } from './filters/include-inactive.component';
     IncludeDeletedComponent,
     CustomerGroupModalComponent,
     IncludeInactiveComponent,
+    FieldErrorsMarketplaceComponent,
+    ListHeaderMarketplaceComponent,
+    ConfirmModalComponent,
+    TabComponent,
+    TabsComponent,
+    EmptyListCOmponent,
+    MarketplaceInfoShippingModalComponent,
+    ConfirmModalReceivingOrderComponent,
+    DetailActionsMpComponent,
+    ConfirmModalPendingOrderComponent,
+    MarketplaceInfoDetailModalComponent,
+    MarketplaceInfoDetailProductPageComponent
   ],
   exports: [
     EntityToSlugPipe,
@@ -64,7 +89,19 @@ import { IncludeInactiveComponent } from './filters/include-inactive.component';
     UserSelectionModalComponent,
     IncludeDeletedComponent,
     CustomerGroupModalComponent,
-    IncludeInactiveComponent
+    IncludeInactiveComponent,
+    FieldErrorsMarketplaceComponent,
+    ListHeaderMarketplaceComponent,
+    ConfirmModalComponent,
+    TabComponent,
+    TabsComponent,
+    EmptyListCOmponent,
+    MarketplaceInfoShippingModalComponent,
+    ConfirmModalReceivingOrderComponent,
+    DetailActionsMpComponent,
+    ConfirmModalPendingOrderComponent,
+    MarketplaceInfoDetailModalComponent,
+    MarketplaceInfoDetailProductPageComponent
   ],
   imports: [
     CommonModule,
@@ -74,6 +111,5 @@ import { IncludeInactiveComponent } from './filters/include-inactive.component';
     ReactiveFormsModule,
     FormsModule,
   ],
-
 })
-export class SharedModule { }
+export class SharedModule {}

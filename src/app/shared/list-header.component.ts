@@ -9,7 +9,7 @@ import { FormControl } from '@angular/forms';
       <h1>{{ title }}</h1>
       <p *ngIf="!!description">{{ description }}</p>
       <div>
-        <div class="search control">
+         <div class="search control" *ngIf="canSearch">
           <i class="material-icons">search</i>
           <input type="search" placeholder="Search" [formControl]="queryText">
         </div>
@@ -50,6 +50,7 @@ export class ListHeaderComponent implements OnInit {
   @Input() title: string;
   @Input() description: string;
   @Input() canAddNew = true;
+  @Input() canSearch = true;
 
   timeoutId: any;
   reloadTimeout = 650;

@@ -1,4 +1,10 @@
-import { Component, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  QueryList,
+  ViewChildren,
+} from '@angular/core';
 import { FormBuilder, FormArray } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, zip } from 'rxjs';
@@ -19,35 +25,58 @@ import { PriceListComponent } from './price-list.component';
 @Component({
   selector: 'nus-price-list-host',
   template: `
-    <h2>Price Lists</h2>
+    <h3>Price Lists</h3>
 
-    <table>
-      <thead>
-      <tr>
-        <th>Type/Name</th>
-        <th>Ranges</th>
-        <th>Starting</th>
-        <th>Ending</th>
-      </tr>
-      </thead>
-      <tbody>
-      <nus-price-list
-        *ngFor="let priceList of form.controls; let i=index;"
-        [form]="priceList" (removePriceList)="removePriceList(i)">
-      </nus-price-list>
-
-      <tr>
-        <td colspan="4"><button (click)="addPriceList()" type="button" class="add-button">Add Price List</button></td>
-      </tr>
-      </tbody>
-    </table>
+    <nus-price-list *ngFor="let priceList of form.controls" [form]="priceList">
+    </nus-price-list>
+    <div class="container">
+      <button (click)="addPriceList()" type="button" class="add-button">
+        <i class="material-icons">add</i> Add Price List
+      </button>
+    </div>
   `,
   styles: [
     'ul { list-style-type: none; padding: 0; }',
-  ]
-})
-export class PriceListHostComponent extends AbstractEditingComponent<FormArray> implements OnInit {
+    'h3 {font-size: 16px; font-weight: normal; margin-bottom: 5px; }',
+    `.add-button {
+        border: 2px solid #5a5a5a;
+        border-radius: 4px;
+        display: block;
+        color: #5a5a5a;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        height: 40px;
+        opacity: 1;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
+      .add-button:hover:not([disabled]), .add-button:focus:not([disabled]) {
+        color: #5a5a5a;
+      }
+
+      .material-icons {
+        font-size: 18px;
+        padding-right: 2px;
+      }
+      
+      div {
+        border: 1px solid #E7E7E7;
+        border-top: none;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        padding: 24px;
+      }
+    `
+  ],
+})
+export class PriceListHostComponent
+  extends AbstractEditingComponent<FormArray>
+  implements OnInit {
   @Input() form: FormArray;
   @ViewChildren(PriceListComponent) priceLists!: QueryList<PriceListComponent>;
 
@@ -55,12 +84,16 @@ export class PriceListHostComponent extends AbstractEditingComponent<FormArray> 
 
   protected deletedPriceLists: Array<products.IPriceList> = [];
 
-  constructor(protected service: PriceListService,
-              protected route: ActivatedRoute,
-              protected fb: FormBuilder) { super(); }
+  constructor(
+    protected service: PriceListService,
+    protected route: ActivatedRoute,
+    protected fb: FormBuilder
+  ) {
+    super();
+  }
 
   ngOnInit() {
-    this.route.data.subscribe((data: {priceListTypes: drf.IChoice[]}) => {
+    this.route.data.subscribe((data: { priceListTypes: drf.IChoice[] }) => {
       this.types = data.priceListTypes;
     });
   }
@@ -85,13 +118,12 @@ export class PriceListHostComponent extends AbstractEditingComponent<FormArray> 
           priceList: [range.priceList, []],
           price: [range.price, []],
           maxQuantity: [range.maxQuantity, []],
-          minQuantity: [range.minQuantity, []]
+          minQuantity: [range.minQuantity, []],
         })
       );
     }
 
     this.form.push(f);
-
   }
 
   /**
@@ -111,23 +143,23 @@ export class PriceListHostComponent extends AbstractEditingComponent<FormArray> 
   }
 
   saveAll(product: products.IProduct): Observable<IResultResponse[]> {
-
     // make sure all price lists have the correct product set
-    this.priceLists.forEach(value => value.product.setValue(product.href));
+    this.priceLists.forEach((value) => value.product.setValue(product.href));
 
     // save all the ranges
-    const saveResults = this.priceLists.map(
-      component => this.service
-        .save(component.toEntity())
-        .pipe(map((priceListResult) => {
+    const saveResults = this.priceLists.map((component) =>
+      this.service.save(component.toEntity()).pipe(
+        map((priceListResult) => {
           return component.saveRanges(priceListResult.entity).subscribe();
-        }))
+        })
+      )
     );
 
     return zip(
       ...saveResults,
-      ...this.deletedPriceLists.map(priceList => this.service.delete(priceList))
+      ...this.deletedPriceLists.map((priceList) =>
+        this.service.delete(priceList)
+      )
     );
   }
-
 }

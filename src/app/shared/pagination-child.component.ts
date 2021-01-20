@@ -16,13 +16,13 @@ import {PaginationComponent} from "@nusantara/shared/pagination.component";
       </div>
       <div class="pg-button">
         <button (click)="goBack()" type="button"><i class="material-icons">arrow_back_ios</i></button>
-        <span>{{ page?.pageNumber }} / {{ page.maximumPageCount }}</span>
+        <span>{{ page?.pageNumber }} / {{ page?.maximumPageCount }}</span>
         <button (click)="goNext()" type="button"><i class="material-icons">arrow_forward_ios</i></button>
       </div>
     </div>
   `,
   styles: [
-    '.pagination-container { display: flex; justify-content: space-between; }',
+    '.pagination-container { display: flex; justify-content: space-between; align-items: center; }',
     '.pg-info { color: #464646; text-align: left; width: 60%; }',
     '.pg-button button { border: none; background: none; height: 50px; }',
     '.pg-button { line-height: 50px; }',

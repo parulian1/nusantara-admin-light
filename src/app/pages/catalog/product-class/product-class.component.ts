@@ -72,6 +72,22 @@ import { ProductClassService, ProductAttributeService } from '@nusantara/service
           </td>
         </tr>
       </table>
+      <br/>
+      <table>
+        <tr>
+          <td class="immediate-error-display">
+            <h2>Product Options</h2>
+          </td>
+          <td class="immediate-error-display">
+            <select [formControl]="option" name="option">
+              <option *ngFor="let optionChoice of optionChoices"
+                      [ngValue]="optionChoice.href">
+                {{ optionChoice.name }}
+              </option>
+            </select>
+          </td>
+        </tr>
+      </table>
 
       <nus-detail-actions
         [component]="this"
@@ -124,6 +140,7 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
       this.optionChoices = data.optionChoices;
 
       this.type.valueChanges.subscribe((value) => this.onTypeChanged(value));
+      this.optionChoices = data.optionChoices;
     });
   }
 

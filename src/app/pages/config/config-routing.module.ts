@@ -53,8 +53,8 @@ const routes: Routes = [
           allWarehouses: wh.WarehouseFullListResolver,
         },
         runGuardsAndResolvers: 'always',
-      }
-    ]
+      },
+    ],
   },
   {
     path: 'payment-gateways',
@@ -70,16 +70,16 @@ const routes: Routes = [
         component: pg.PaymentGatewayDetailComponent,
         resolve: { typeChoices: pg.PaymentGatewayTypeResolver },
         runGuardsAndResolvers: 'always',
-        data: { animation: 'Detail', },
+        data: { animation: 'Detail' },
       },
       {
         path: ':slug',
         component: pg.PaymentGatewayDetailComponent,
         resolve: { entity: pg.PaymentGatewayResolver, typeChoices: pg.PaymentGatewayTypeResolver },
         runGuardsAndResolvers: 'always',
-        data: { animation: 'Detail', },
+        data: { animation: 'Detail' },
       },
-    ]
+    ],
   },
   {
     path: 'shipping-methods',
@@ -88,7 +88,7 @@ const routes: Routes = [
         path: '',
         component: ShippingMethodListComponent,
         resolve: { page: ShippingProviderListResolver },
-        runGuardsAndResolvers: 'always'
+        runGuardsAndResolvers: 'always',
       },
       {
         path: 'new',
@@ -96,7 +96,7 @@ const routes: Routes = [
         runGuardsAndResolvers: 'always',
         resolve: {
           types: ShippingProviderTypeResolver,
-        }
+        },
       },
       {
         path: ':slug',
@@ -207,11 +207,18 @@ const routes: Routes = [
         data: { animation: 'Detail', },
       }
     ]
+  },
+  {
+    path: 'marketplace-integration',
+    loadChildren: () =>
+      import('./marketplace-integration/marketplace-integration.module').then(
+        (m) => m.MarketplaceIntegrationModule
+      ),
   }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class ConfigRoutingModule { }
+export class ConfigRoutingModule {}

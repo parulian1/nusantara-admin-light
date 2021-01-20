@@ -17,12 +17,13 @@ import {
   VendorResolver,
   ProductOptionResolver,
   ProductOptionTypeResolver,
-  ActiveProductOptionResolver,
+  ActiveProductOptionResolver, MarketplaceLogisticListResolver,
 } from '@nusantara/resolvers';
 import { MediaTypeResolver } from './product/media';
 import { PriceListTypeResolver } from './product/price';
 import { ProductOptionListComponent, AllProductOptionResolver, ProductOptionComponent  } from "./product-options";
 import { DurationListResolver, LengthListResolver, PacketListResolver } from './product/subscription';
+import {EditShippingComponent} from "../config/marketplace-integration";
 
 const routes: Routes = [
   {
@@ -215,7 +216,13 @@ const routes: Routes = [
         data: { animation: 'Detail', },
       }
     ]
-  }
+  },
+  {
+    path: 'edit-shipping/:shop-slug',
+    component: EditShippingComponent,
+    resolve: { logistics: MarketplaceLogisticListResolver },
+    runGuardsAndResolvers: 'always',
+  },
 ];
 
 @NgModule({

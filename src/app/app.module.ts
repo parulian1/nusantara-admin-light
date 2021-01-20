@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { JwtModule } from '@auth0/angular-jwt';
 import { ApmService, ApmErrorHandler } from '@elastic/apm-rum-angular';
 import { environment } from '@env/environment';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreModule } from '@ngrx/store';
 
 import { ApiPrefixInterceptor, CoreModule } from '@nusantara/core';
 import { SharedModule } from '@nusantara/shared';
@@ -42,6 +44,8 @@ import { AppComponent } from './app.component';
         ]
       }
     }),
+    StoreModule.forRoot([]),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
   ],
   providers: [
     {

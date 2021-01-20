@@ -15,35 +15,70 @@ import { products } from '@nusantara/models';
 @Component({
   selector: 'nus-price-list-range',
   template: `
-    <tr [formGroup]="form" class="immediate-error-display">
-      <td class="immediate-error-display">
-        <input type="number"
-               [formControl]="price">
-      </td>
-      <td style="text-align: left;">
+    <div [formGroup]="form" class="wrapper immediate-error-display">
+      <div style="text-align: left;">
         <input type="number"
                [formControl]="minQuantity"
-               [readonly]="isInitialRange"
-               [hidden]="isInitialRange" [min]="minQuantity.value">
-        <span *ngIf="isInitialRange">{{ minQuantity.value }}</span>
-      </td>
-      <td>
+               [readonly]="isInitialRange">
+      </div>
+      <div><strong>To</strong></div>
+      <div>
         <input type="number"
                [formControl]="maxQuantity"
-               [readonly]="isTerminalRange"
-               [hidden]="isTerminalRange" [min]="minQuantity.value">
-      </td>
-      <td>
+               [readonly]="isTerminalRange">
+      </div>
+      <div class="immediate-error-display">
+        <span class="currency">
+          <input type="number" [formControl]="price">
+        </span>  
+      </div>
+      <div>
         <button type="button"
                 class="remove-button"
                 [disabled]="isInitialRange"
                 (click)="remove.emit(this)">
-          <i class="material-icons">remove_circle_outline</i>
+          <i class="material-icons">delete_outline</i>
         </button>
-      </td>
-    </tr>
+      </div>
+    </div>
   `,
-  styles: [':host { display: contents; }']
+  styles: [':host { display: contents; }',
+  `    
+    .wrapper {
+      display: grid;
+      grid-template-columns: 1fr 20px 1fr 1fr 30px;
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    input,select {
+      height: 40px;
+      border-radius: 4px;
+      background: #ffffff;
+    }
+
+    .currency {
+      display: inline-block;
+      position: relative;
+      width: 100%;
+    }
+    
+    .currency::before {
+      content: "Rp";
+      position: absolute;
+      font-weight: bold;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .currency input {
+      padding-left: 35px;
+    }
+
+  `
+]
 })
 export class RangeComponent extends AbstractEditingComponent implements OnInit {
 

@@ -28,3 +28,7 @@ export * from './banner';
 export * from './product-option.resolver';
 export * from './product-option-type.resolver';
 export * from './active-product-option.resolver';
+
+export * from './marketplace-shop-list.resolver';
+export * from './marketplace-product-class-list.resolver';
+export * from './marketplace-logistic-list.resolver';
