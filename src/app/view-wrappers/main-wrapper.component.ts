@@ -242,8 +242,6 @@ import { SubscriptionLike } from 'rxjs';
         background-color: #7B869B; /*var(--accent-lighter-color);*/
       }
 
-      footer { margin-top: 45px; }
-
       @media print {
         :host {
           display: block;
@@ -261,6 +259,7 @@ import { SubscriptionLike } from 'rxjs';
         }
 
       }
+      footer { margin-top: 45px; width: 80%; bottom: 0;position: absolute;}
     `],
   animations: [ slideInAnimation, ],
 })

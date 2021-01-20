@@ -1,4 +1,4 @@
-import { INamedHrefEntity } from '@nusantara/models/base';
+import { INamedHrefEntity, INamedHrefEntityWarehouse } from '@nusantara/models/base';
 import { IStockRecord } from './stock-record';
 import { ReceivingOrderStatusType } from './receiving-order-status.type';
 import { ReceivingOrderType } from './receiving-order.type';
@@ -8,7 +8,7 @@ export interface IReceivingOrder extends IBaseInventoryOrder {
   status: ReceivingOrderStatusType;
   createdBy?: INamedHrefEntity;
   reviewedBy?: INamedHrefEntity;
-  warehouse: INamedHrefEntity;
+  warehouse: INamedHrefEntityWarehouse;
   created: string;
   type: ReceivingOrderType;
   notes: string;

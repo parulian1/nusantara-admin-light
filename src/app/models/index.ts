@@ -1,3 +1,5 @@
+export * from './base';
+
 export * from './user';
 
 export * from './payment-gateway';
@@ -31,9 +33,11 @@ export * from './highlight';
 
 export * from './email-href-user-entity';
 
-export * from './base';
+
 
 export * from './site';
+
+export * from './marketplace';
 
 import * as google from './google';
 import * as base from './base';

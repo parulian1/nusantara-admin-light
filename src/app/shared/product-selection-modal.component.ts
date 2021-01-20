@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { NgxSmartModalComponent } from 'ngx-smart-modal';
 import { Subscription } from 'rxjs';
 
@@ -18,25 +18,24 @@ import { products } from '../models';
   selector: 'nus-product-selection-modal',
   template: `
     <ngx-smart-modal [identifier]="'selectProduct'" #modal [formGroup]="form">
-      <h1>Select Product</h1>
+      <h1 style="font-weight: 700;">Select Product</h1>
       <form #modalForm>
-        <label>
-          <span>Search</span>
-          <input type="text" [formControl]="searchText" placeholder="ex, BR0591020041S or 'Hand Sanitizer'">
-        </label>
+          <label>
+            <input type="text" id="search_box" [formControl]="searchText" placeholder="Search Product Name or SKU">
+          </label>
         <input type="hidden" [formControl]="product">
 
         <div>
           <table>
             <thead>
-            <tr>
-              <th>Name</th>
+            <tr style="background-color: #F4F4F4;">
+              <th>Product Name</th>
               <th>SKU</th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let p of displayedResults?.entities">
-              <td><a href="#" (click)="selectProduct(p)">{{ p.name }}</a></td>
+              <td><div><a href="#" (click)="selectProduct(p)" >{{ p.name }}</a></div></td>
               <td>{{ p.upc }}</td>
             </tr>
             </tbody>
@@ -45,7 +44,16 @@ import { products } from '../models';
       </form>
     </ngx-smart-modal>
   `,
-  styles: [ ]
+  styles: [
+    '#search_box{border-radius: 4px}',
+    '.mp-button{width: 50%;margin-top: 30px;height: 40px;font-weight: 700;}',
+    '.mp-white{background-color: white;color: #365DC3}',
+    '.mp-blue{background-color: #365DC3}',
+    'table{table-layout: fixed;}',
+    'td{height: 56px;}',
+    'td div{white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}',
+    '.item-value {white-space: nowrap;width: 200px;overflow: hidden;text-overflow: ellipsis}',
+  ]
 })
 export class ProductSelectionModalComponent implements OnInit, AfterViewInit {
 

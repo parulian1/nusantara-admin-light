@@ -2,6 +2,11 @@
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @import url("~ngx-smart-modal/ngx-smart-modal.css");
 
+/* set ngx-smart-modal width to 100% */
+.nsm-content{
+  width: 100%;
+}
+
 /**
  *  Table of Contents
  *  =================
