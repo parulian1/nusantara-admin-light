@@ -126,7 +126,7 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
       isActive: [entity?.isActive, []],
       href: [entity?.href, []],
       image: ['', []],
-      parent: [{value: entity?.parent, disabled: !!entity?.href }, []],
+      parent: [{value: entity?.parent ?? null, disabled: !!entity?.href }, []],
       sourceMappings: this.fb.array([])
     });
 
