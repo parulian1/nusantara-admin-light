@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractDetailComponent, moveItemInFormArray, ToastService } from '@nusantara/core';
-import { IOnBoarding, IOnboardingContent } from '@nusantara/models';
+import { drf, IOnBoarding, IOnboardingContent, OnBoardingTypeEnum } from '@nusantara/models';
 import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IOnboardingService } from "@nusantara/services";
-import { CdkDragDrop } from "@angular/cdk/drag-drop";
+import { OnboardingService } from "@nusantara/services";
+import { OnboardingContentHostComponent } from "@nusantara/pages/cms/onboarding";
 
 @Component({
   selector: 'nus-onboarding',
@@ -24,7 +24,12 @@ import { CdkDragDrop } from "@angular/cdk/drag-drop";
 
       <label>
         <span>Display At</span>
-        <input type="text" [formControl]="type">
+        <select formControlName="type">
+          <option [ngValue]="null">---</option>
+          <option *ngFor="let typeChoice of typeChoices" [ngValue]="typeChoice.value">
+            {{ typeChoice.displayName }}
+          </option>
+        </select>
         <nus-field-errors [control]="type"></nus-field-errors>
       </label>
 
@@ -34,14 +39,8 @@ import { CdkDragDrop } from "@angular/cdk/drag-drop";
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
-      <ng-container cdkDropList [cdkDropListData]="entity?.contents" class="example-list"
-                    (cdkDropListDropped)="drop($event)">
-        <nus-onboarding-content
-          *ngFor="let content_control of contents.controls; let i=index"
-          [form]="content_control"
-          (remove)="contents.removeAt(i)">
-        </nus-onboarding-content>
-      </ng-container>
+
+      <nus-onboarding-content-host [form]="contents" [entity]="entity"></nus-onboarding-content-host>
 
 
       <nus-detail-actions
@@ -50,14 +49,17 @@ import { CdkDragDrop } from "@angular/cdk/drag-drop";
         (delete)="delete()">
       </nus-detail-actions>
     </form>
+
   `,
-  styles: ['']
 })
 export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> implements OnInit {
-  imagePreviewUrl: string;
   entity: IOnBoarding;
+  typeChoices: drf.IChoice[] = [];
+  contentsValue: IOnboardingContent[];
 
-  constructor(service: IOnboardingService,
+  @ViewChild(OnboardingContentHostComponent) contentHost!: OnboardingContentHostComponent;
+
+  constructor(service: OnboardingService,
               public fb: FormBuilder,
               toast: ToastService,
               route: ActivatedRoute,
@@ -66,50 +68,42 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> im
   }
 
 
-  get name(): FormControl { return this.form.get('buttonText') as FormControl; }
-  get type(): FormControl { return this.form.get('buttonUrl') as FormControl; }
-  get isActive(): FormControl { return this.form.get('buttonStatus') as FormControl; }
+  get name(): FormControl { return this.form.get('name') as FormControl; }
+  get type(): FormControl { return this.form.get('type') as FormControl; }
+  get isActive(): FormControl { return this.form.get('isActive') as FormControl; }
   get href(): FormControl { return this.form.get('href') as FormControl; }
   get contents(): FormArray { return this.form.get('contents') as FormArray; }
+
+  ngOnInit() {
+    this.route.data.subscribe((data: { entity: IOnBoarding, typeChoices: drf.IChoice[] }) => {
+      this.typeChoices = data.typeChoices;
+    });
+    super.ngOnInit();
+  }
 
   initializeForm(entity?: IOnBoarding) {
     this.entity = entity;
     this.form = this.fb.group({
       name: [entity?.name, [Validators.required]],
-      href: [entity?.href],
-      type: [entity?.type],
-      isActive: [entity?.isActive ?? true],
+      href: [entity?.href, []],
+      type: [entity?.type ?? OnBoardingTypeEnum.reseller, [Validators.required]],
+      isActive: [entity?.isActive ?? true, []],
       contents: this.fb.array([], [Validators.required]),
     });
+  }
+
+  initializeSubViewForms(entity?: IOnBoarding) {
     for (const content of entity?.contents ?? []) {
-      this.addContent(content);
+      this.contentHost.addContent(content);
     }
-  }
 
-  addContent(content?: IOnboardingContent) {
-    const form = this.fb.group({
-      href: [content?.href ?? '', [Validators.required]],
-      image: [content?.image, [Validators.required]],
-      name: [content?.name, [Validators.required, Validators.maxLength(50)]],
-      description: [content?.description, [Validators.maxLength(255)]],
-      buttonStatus: [content?.buttonStatus ?? false, []],
-      buttonText: [content?.buttonText ?? '', []],
-      buttonUrl: [content.buttonUrl ?? '', []],
-      sortPriority: [content?.sortPriority, []],
-
-    });
-    this.contents.push(form);
-  }
-
-  drop(event: CdkDragDrop<string[]>) {
-    moveItemInFormArray(
-      this.contents,
-      event.previousIndex,
-      event.currentIndex
-    );
   }
 
   save() {
+    console.log(`contentHost Value`, this.contentHost.getValue());
+    // this.contents.patchValue(this.contentHost.getValue());
     super.save();
   }
+
+
 }

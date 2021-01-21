@@ -6,7 +6,7 @@ import {IOnBoarding} from "@nusantara/models";
 @Injectable({
   providedIn: 'root'
 })
-export class IOnboardingService extends AbstractCrudService<IOnBoarding> {
+export class OnboardingService extends AbstractCrudService<IOnBoarding> {
 
   baseUrl = '/api/cms/onboarding';
 

@@ -36,11 +36,11 @@ import {
 import { HighlightListResolver, HighlightListComponent, HighlightComponent } from './highlight';
 import { HighlightResolver } from './highlight/highlight.resolver';
 import { SlaListComponent, SlaListResolver, SlaComponent, SlaResolver } from './sla';
-import {NavigationComponent, NavigationListComponent, NavigationResolver} from './navigation';
-import {NavigationListResolver} from './navigation/navigation-list/navigation-list-resolver';
-import {NavigationRelativeChoicesResolver} from './navigation/navigation-relative-choices-resolver';
-import {OnboardingListComponent} from './onboarding';
-import {OnboardingComponent, OnboardingContentListResolver, OnboardingContentResolver} from './onboarding';
+import { NavigationComponent, NavigationListComponent, NavigationResolver} from './navigation';
+import { NavigationListResolver} from './navigation/navigation-list/navigation-list-resolver';
+import { NavigationRelativeChoicesResolver} from './navigation/navigation-relative-choices-resolver';
+import { OnboardingListComponent, OnboardingTypeResolver } from './onboarding';
+import { OnboardingComponent, OnboardingContentListResolver, OnboardingResolver } from './onboarding';
 
 
 const dashboardRoutes: Routes = [
@@ -276,14 +276,14 @@ const dashboardRoutes: Routes = [
       {
         path: 'new',
         component: OnboardingComponent,
-        resolve: {},
+        resolve: { typeChoices: OnboardingTypeResolver },
         runGuardsAndResolvers: 'always',
         data: {animation: 'Detail'}
       },
       {
         path: ':slug',
         component: OnboardingComponent,
-        resolve: {entity: OnboardingContentResolver, },
+        resolve: {entity: OnboardingResolver, typeChoices: OnboardingTypeResolver},
         runGuardsAndResolvers: 'always',
         data: {animation: 'Detail'}
       }

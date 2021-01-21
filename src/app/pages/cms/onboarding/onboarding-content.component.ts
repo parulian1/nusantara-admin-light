@@ -1,18 +1,23 @@
-import {AfterViewInit, Component, OnInit, EventEmitter, Input, Output} from '@angular/core';
-import {AbstractEditingComponent} from '@nusantara/core';
+import {AfterViewInit, Component, OnInit, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {AbstractEditingComponent, DialogResult} from '@nusantara/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
+import {IOnboardingContent} from "@nusantara/models";
+import {NewProductImageComponent} from "@nusantara/pages/catalog/product/media";
+import {OnboardingContentImageComponent} from "@nusantara/pages/cms/onboarding/onboarding-content-image.component";
 
 @Component({
   selector: 'nus-onboarding-content',
   template: `
-      <div [formGroup]="form">
+    <form [formGroup]="form" #f>
+      <div  class="onboarding-content">
         <label>
           <span>Image</span>
           <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Banner Image" class="preview">
-          <input type="file" [formControl]="image" (change)="setImagePreview($event)"
-                 name="icon" accept="image/*">
-          <nus-field-errors [control]="image"></nus-field-errors>
+          <button (click)="onboardingContentImageModal.open()" type="button" title="Upload Image">
+            <i class="material-icons">image</i>
+          </button>
+          <nus-onboarding-content-image></nus-onboarding-content-image>
         </label>
 
         <label>
@@ -30,7 +35,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 
         <label>
           <span>Button Status</span>
-          <input type="checkbox" [formControl]="buttonStatus">
+          <input type="checkbox" [formControl]="buttonStatus" (change)="setAvailabilityAndClearValueButtonProp()">
         </label>
 
         <label>
@@ -44,17 +49,29 @@ import {ActivatedRoute, Router} from '@angular/router';
           <input type="url" [formControl]="buttonUrl">
           <nus-field-errors [control]="buttonUrl"></nus-field-errors>
         </label>
+        <input type="number" hidden [formControl]="sortPriority" min="0">
         <button (click)="remove.emit()" type="button" class="remove-button" data-qa="remove-button">
           <i class="material-icons">remove_circle_outline</i>
         </button>
       </div>
+    </form>
   `,
-  styles: ['']
+  styles: [
+    `
+      .onboarding-content {
+        border: 1px solid black;
+        padding: 10px;
+      }
+    `
+  ]
 })
 export class OnboardingContentComponent extends AbstractEditingComponent implements OnInit, AfterViewInit {
   @Input() form: FormGroup;
+  @Input() entity: IOnboardingContent;
   @Output() remove = new EventEmitter<void>();
   imagePreviewUrl: string;
+
+  @ViewChild(OnboardingContentImageComponent) onboardingContentImageModal: OnboardingContentImageComponent;
 
   constructor(public route: ActivatedRoute,
               public router: Router) {
@@ -62,9 +79,12 @@ export class OnboardingContentComponent extends AbstractEditingComponent impleme
   }
 
   ngOnInit() {
+    this.setImagePreview(this.entity?.image);
+    this.setAvailabilityAndClearValueButtonProp();
   }
 
   ngAfterViewInit() {
+    this.onboardingContentImageModal.onClose.subscribe(() => this.onImageModalClosed());
   }
 
   get buttonText(): FormControl { return this.form.get('buttonText') as FormControl; }
@@ -77,7 +97,34 @@ export class OnboardingContentComponent extends AbstractEditingComponent impleme
   get sortPriority(): FormControl { return this.form.get('sortPriority') as FormControl; }
 
   setImagePreview(data: Event | string) {
-    super.setImagePreview(data, (dataAsUrl) => this.imagePreviewUrl = dataAsUrl);
+    super.setImagePreview(data, (dataAsUrl) => {
+      this.imagePreviewUrl = dataAsUrl;
+    });
+  }
+
+  setAvailabilityAndClearValueButtonProp() {
+    if (this.buttonStatus.value === true) {
+      this.buttonText.enable();
+      this.buttonUrl.enable();
+    } else {
+      this.buttonText.patchValue(null);
+      this.buttonUrl.patchValue(null);
+      this.buttonText.disable();
+      this.buttonUrl.disable();
+    }
+  }
+
+  onImageModalClosed() {
+    if (this.onboardingContentImageModal.result === DialogResult.OK) {
+      this.image.setValue(this.onboardingContentImageModal.imagePreviewUrl);
+    }
+  }
+
+  getValue() {
+    if (!!this.href && !!this.image && !this.image?.value) {
+      this.form.removeControl('image');
+    }
+    return this.form.value;
   }
 
 }

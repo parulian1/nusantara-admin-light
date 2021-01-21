@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { NgxSmartModalModule } from 'ngx-smart-modal';
 
 import { SharedModule } from '@nusantara/shared';
 import { CmsRoutingModule } from './cms-routing.module';
@@ -20,9 +21,12 @@ import { SlaListComponent, SlaComponent } from './sla';
 import { NavigationComponent } from './navigation/detail/navigation.component';
 import { NavigationListComponent } from './navigation/navigation-list/navigation-list.component';
 import { NavigationChildrenComponent } from './navigation/navigation-children/navigation-children.component';
-import { OnboardingComponent } from './onboarding/onboarding.component';
-import { OnboardingListComponent } from './onboarding/onboarding-list.component';
-import {OnboardingContentComponent} from "./onboarding/onboarding-content.component";
+import {
+  OnboardingComponent,
+  OnboardingListComponent,
+  OnboardingContentComponent,
+  OnboardingContentHostComponent, OnboardingContentImageComponent
+} from './onboarding';
 import {DragDropModule} from "@angular/cdk/drag-drop";
 
 
@@ -57,6 +61,8 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
         OnboardingComponent,
         OnboardingListComponent,
         OnboardingContentComponent,
+        OnboardingContentHostComponent,
+        OnboardingContentImageComponent,
     ],
   imports: [
     CommonModule,
@@ -66,6 +72,7 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
     CKEditorModule,
     CmsRoutingModule,
     DragDropModule,
+    NgxSmartModalModule.forChild(),
   ],
   exports: [],
 })
