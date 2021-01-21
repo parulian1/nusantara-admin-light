@@ -55,6 +55,11 @@ import {MarketplaceItemService} from "../../../services/marketplace-item.service
               <input type="text" [formControl]="name" />
               <nus-field-errors [control]="name"></nus-field-errors>
             </label>
+            <label>
+              <span>Is Active</span>
+              <input type="checkbox" [formControl]="isActive">
+              <nus-field-errors [control]="isActive"></nus-field-errors>
+            </label>
 
             <label *ngIf="structure.value === 'parent'">
               <span>Category</span>
@@ -621,7 +626,7 @@ import {MarketplaceItemService} from "../../../services/marketplace-item.service
         color: #282828;
       }
 
-      .wrapper input,
+      .wrapper input[type="text"],
       select {
         height: 40px;
         border-radius: 4px;
