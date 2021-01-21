@@ -7,12 +7,14 @@ import { environment } from '@env/environment';
 import { AuthService } from '@nusantara/auth';
 import { WarehouseService } from '@nusantara/services';
 import { IEmployee, IWarehouse } from '@nusantara/models';
+
 import { getSlugFromHref } from '@nusantara/shared/helpers';
+import { parseJwt } from '@nusantara/pages/users/utils';
 
 @Component({
   selector: 'nus-employee-warehouse-host',
   template: `
-    <h2>Employee</h2>
+    <h4>Employee</h4>
     <table>
       <thead>
         <tr>
@@ -42,7 +44,7 @@ export class EmployeeWarehouseHostComponent implements OnInit {
   @Input() form: FormArray;
   @Input() choices: IWarehouse[] = [];
 
-  currentUser: { user_id?: string; href?: string }; // user_id is username
+  currentUser: { user_id?: string; href?: string, email?: string, site?: string }; // user_id is username
   deletedWarehouse: IWarehouse[] = [];
 
   get token(): any {
@@ -61,7 +63,7 @@ export class EmployeeWarehouseHostComponent implements OnInit {
   }
 
   handleCurrentUser(): void {
-    this.currentUser = this.parseJwt(this.authService.token);
+    this.currentUser = parseJwt(this.authService.token);
     this.currentUser = {
       ...this.currentUser,
       href: `${environment.apiBaseUrl}/api/iam/user/${this.currentUser.user_id}/`,
@@ -115,25 +117,5 @@ export class EmployeeWarehouseHostComponent implements OnInit {
     );
 
     return zip(savedJoin$, deletedJoin$);
-  }
-
-  /**
-   * Parse the JWT,
-   * so that we can get detail of user
-   * especially user_id aka. username
-   */
-  parseJwt(token): any {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split('')
-        .map((c) => {
-          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join('')
-    );
-
-    return JSON.parse(jsonPayload);
   }
 }

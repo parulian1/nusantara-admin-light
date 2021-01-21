@@ -11,6 +11,7 @@ import {
   EmployeeComponent, EmployeeListComponent,
   EmployeeWarehouseHostComponent, EmployeeWarehouseListComponent,
 } from './employee';
+import { EmptyDataPipe } from './empty-data.pipe';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,9 @@ import {
     CustomerGroupListComponent,
     CustomerGroupDetailComponent,
     EmployeeWarehouseListComponent,
+
+    // pipes
+    EmptyDataPipe,
   ],
   imports: [
     CommonModule,
