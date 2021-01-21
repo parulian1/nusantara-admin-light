@@ -124,10 +124,9 @@ export class OnboardingContentComponent extends AbstractEditingComponent impleme
     }
   }
 
+
+
   getValue() {
-    if (!!this.href && !!this.image && !this.image?.value) {
-      this.form.removeControl('image');
-    }
     return this.form.value;
   }
 
