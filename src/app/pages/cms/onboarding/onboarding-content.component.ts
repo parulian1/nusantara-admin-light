@@ -14,7 +14,7 @@ import {OnboardingContentImageComponent} from "@nusantara/pages/cms/onboarding/o
         <label>
           <span>Image</span>
           <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Banner Image" class="preview">
-          <button (click)="onboardingContentImageModal.open()" type="button" title="Upload Image">
+          <button hidden (click)="onboardingContentImageModal.open()" type="button" title="Upload Image">
             <i class="material-icons">image</i>
           </button>
           <nus-onboarding-content-image></nus-onboarding-content-image>
@@ -116,7 +116,11 @@ export class OnboardingContentComponent extends AbstractEditingComponent impleme
 
   onImageModalClosed() {
     if (this.onboardingContentImageModal.result === DialogResult.OK) {
-      this.image.setValue(this.onboardingContentImageModal.imagePreviewUrl);
+      if (!!this.onboardingContentImageModal?.imagePreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
+        this.imagePreviewUrl = this.onboardingContentImageModal.imagePreviewUrl;
+        this.image.setValue(this.onboardingContentImageModal.imagePreviewUrl);
+      }
+      this.getValue();
     }
   }
 

@@ -8,7 +8,7 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
  * Dialog component that allows the user to select a single image
  * from their local machine for uploading.
  *
- * @see IProduct
+ *
  */
 @Component({
   selector: 'nus-onboarding-content-image',
