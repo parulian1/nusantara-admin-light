@@ -96,7 +96,7 @@ import {
               </p>
             </div>
             <div>
-              <button routerLink="{{ entity.encryptId }}" class="control mp-control">
+              <button routerLink="{{ entity.encryptId }}" class="control">
                 Detail
               </button>
             </div>
@@ -154,7 +154,7 @@ import {
               </p>
             </div>
             <div>
-              <button routerLink="{{ entity.encryptId }}" class="control mp-control">
+              <button routerLink="{{ entity.encryptId }}" class="control">
                 Detail
               </button>
             </div>
@@ -212,13 +212,6 @@ import {
 
       .published {
         color: #21a656;
-      }
-
-      button {
-        background: #365dc3;
-        border-radius: 4px;
-        padding: 0 40px;
-        height: 40px;
       }
     `,
   ],

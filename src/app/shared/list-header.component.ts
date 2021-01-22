@@ -22,7 +22,7 @@ import { FormControl } from '@angular/forms';
     'h1 { font-weight: normal; font-size: 1.5em; }',
     'header > div { display: flex; }',
     'input[type=search] { font-size: 15px; padding-right: 5px; width: 250px; }',
-    'a { display: flex; margin-left: auto; padding-right:20px; }',
+    'a { display: flex; align-items: center; margin-left: auto; }',
 
     `
 

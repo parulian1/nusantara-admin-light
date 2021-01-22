@@ -19,16 +19,13 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
       <button class="control secondary" (click)="cancel()" type="button">
         Cancel
       </button>
-      <button class="control" (click)="close()" type="button" id="confirm-button">Yes</button>
+      <button class="control" (click)="close()" type="button">Yes</button>
     </ngx-smart-modal>
   `,
   styles: [
     'p {margin-bottom: 30px}',
     'button:not(:first-child) { margin-left: 5px; }',
     'h1{font-weight: 700}',
-    'button { min-width: 105px;width: 200px; height: 40px;border-radius: 4px;}',
-    'button.control.secondary{border-color: #365DC3;color: #365DC3; }',
-    '#confirm-button{background-color: #365DC3}',
   ],
 })
 export class ConfirmModalReceivingOrderComponent {

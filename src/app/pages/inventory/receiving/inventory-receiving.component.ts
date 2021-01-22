@@ -53,7 +53,7 @@ import {IError} from "../../../models/base/error";
               </option>
             </select>
             <button (click)="confirmWarehouse()"
-            type="button" id="mp-button"
+            type="button"
             [disabled]="warehouse.disabled || !warehouse.valid"
             class="control">Confirm</button>
       </div>
@@ -110,11 +110,11 @@ import {IError} from "../../../models/base/error";
 
         </table>
 
-        <nus-detail-actions-mp
+        <nus-detail-actions
           [component]="this"
           (cancel)="confirmModal()"
           (delete)="delete()">
-        </nus-detail-actions-mp>
+        </nus-detail-actions>
       </div>
     </form>
     <!-- Modals -->

@@ -315,7 +315,7 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
         </nus-tab>
       </nus-tabs>
     </div>
-    <button [routerLink]="['../']" class="mp-control mp-primary wide">
+    <button [routerLink]="['../']" class="control">
       Done
     </button>`,
   styles: [
@@ -325,7 +325,6 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
       }
 
       a {
-        color: #365dc3;
         text-decoration: underline;
       }
 
@@ -396,39 +395,9 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
       }
 
       .error-info-button {
-        color: #365dc3;
         font-weight: 700;
         text-decoration: none;
         margin-right: 10px;
-      }
-
-      .mp-primary {
-        color: #365dc3;
-      }
-
-      button.mp-control {
-        border: 1px solid;
-        border-radius: 4px;
-        color: white;
-        line-height: 36px;
-        font-weight: 700;
-        font-size: 14px;
-        text-decoration: none;
-      }
-
-      button.mp-primary {
-        cursor: pointer;
-        background: #365dc3;
-        border-radius: 4px;
-      }
-
-      button.wide {
-        padding: 0 60px;
-      }
-
-      button {
-        float: right;
-        margin-right: 12px;
       }
 
       table {

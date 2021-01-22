@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
         <p>Connect to Marketplace, Map Attribute, Set Up Shipping</p>
       </div>
       <div>
-        <button routerLink="setup" class="control mp-control">Open</button>
+        <button routerLink="setup" class="control">Open</button>
       </div>
     </div>
     <div class="wrapper">
@@ -18,7 +18,7 @@ import { Component } from '@angular/core';
         <p>See Publish Progress, See Publish History</p>
       </div>
       <div>
-        <button routerLink="publish" class="control mp-control">Open</button>
+        <button routerLink="publish" class="control">Open</button>
       </div>
     </div>`,
   styles: [
@@ -33,11 +33,6 @@ import { Component } from '@angular/core';
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-      }
-
-      .mp-control {
-        background: #365dc3;
-        border-radius: 4px;
       }
     `,
   ],

@@ -81,7 +81,6 @@ import * as fromReducer from '@nusantara/reducers';
       a {
         display: flex;
         text-decoration: none;
-        color: #365dc3;
       }
       .sub_title {
         color: #365dc3;

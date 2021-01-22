@@ -6,8 +6,8 @@ import { Component, Input, OnInit } from '@angular/core';
     <h2>{{ title }}</h2>
     <p>{{ description }}</p>
     <div id="button-action">
-      <button [routerLink]="cancelUrl" id="cancel">{{ cancelText }}</button>
-      <button [routerLink]="addUrl" id="add-data">
+      <button [routerLink]="cancelUrl" class="control secondary">{{ cancelText }}</button>
+      <button [routerLink]="addUrl" class="control">
         <i class="material-icons">add</i>&nbsp;{{ addText }}
       </button>
     </div>
@@ -48,34 +48,10 @@ import { Component, Input, OnInit } from '@angular/core';
         display: flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
       }
 
       button:not(:first-child) {
         margin-left: 15px;
-      }
-
-      button {
-        border: solid 2px #365dc3;
-        border-radius: 4px;
-        color: white;
-        height: 40px;
-        font-weight: 700;
-        font-size: 14px;
-        text-decoration: none;
-      }
-
-      #add-data {
-        background: #365dc3;
-      }
-
-      #cancel {
-        background: white;
-        color: #365dc3;
-      }
-
-      .material-icons {
-        font-size: 20px;
       }
     `,
   ],

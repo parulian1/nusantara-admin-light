@@ -55,90 +55,50 @@ import {Location} from "@angular/common";
     </ul>
 
     <form [formGroup]="form" (ngSubmit)="save()">
-      <label>
-        <span>Type</span>
-        <input type="text" [value]="entity.type" readonly>
-      </label>
-
-      <label>
-        <span>
-          Status
-        </span>
-        <input type="text" [value]="entity.status" readonly>
-      </label>
-
-    <label>
-        <span>
-          Warehouse
-        </span>
-      <input type="text" [value]="entity.warehouse.name" readonly>
-    </label>
-
-    <label>
-        <span>
-          Created By
-        </span>
-      <input type="text" [value]="entity.createdBy?.name" readonly>
-    </label>
-
-    <label>
-        <span>
-          Reviewed By
-        </span>
-      <input type="text" [value]="entity.reviewedBy?.name" readonly>
-    </label>
-
-    <label>
-        <span>
-          Created
-        </span>
-      <input type="text" [value]="entity.created|date: 'dd MMM yyyy HH:mm'" readonly>
-    </label>
-
-    <table id="general-table-product">
-      <thead>
-      <tr>
-        <th>
-            Product
-        </th>
-        <th>Location</th>
-        <th>sku</th>
-        <th>Locator</th>
-        <th>Original Quantity</th>
-        <th>Stock Requested</th>
-        <th>Batch Number</th>
-        <th>Expiry Date</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let stock_record of entity.stockRecords">
-        <td data-qa="product">
-          <div>{{ stock_record.product.name }}</div>
-        </td>
-        <td>
-          <div>{{ stock_record.location.name }}</div>
-        </td>
-        <td>
-          <div>{{ stock_record.sku }}</div>
-        </td>
-        <td>
-          {{ stock_record.locator }}
-        </td>
-        <td data-qa="original-quantity">
-          {{ stock_record.originalQuantity }}
-        </td>
-        <td data-qa="stock-requested">
-          {{ stock_record.requestingStock }}
-        </td>
-        <td>
-          {{ stock_record.batchNumber }}
-        </td>
-        <td>
-          {{ stock_record.expiryDate|date: 'dd MMM yyyy HH:mm' }}
-        </td>
-      </tr>
-      </tbody>
-    </table>
+      <table id="general-table-product">
+        <thead>
+        <tr>
+          <th>
+              Product
+          </th>
+          <th>Location</th>
+          <th>sku</th>
+          <th>Locator</th>
+          <th>Original Quantity</th>
+          <th>Stock Requested</th>
+          <th>Batch Number</th>
+          <th>Expiry Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let stock_record of entity.stockRecords">
+          <td data-qa="product">
+            <div>{{ stock_record.product.name }}</div>
+          </td>
+          <td>
+            <div>{{ stock_record.location.name }}</div>
+          </td>
+          <td>
+            <div>{{ stock_record.sku }}</div>
+          </td>
+          <td>
+            {{ stock_record.locator }}
+          </td>
+          <td data-qa="original-quantity">
+            {{ stock_record.originalQuantity }}
+          </td>
+          <td data-qa="stock-requested">
+            {{ stock_record.requestingStock }}
+          </td>
+          <td>
+            {{ stock_record.batchNumber }}
+          </td>
+          <td>
+            {{ stock_record.expiryDate|date: 'dd MMM yyyy HH:mm' }}
+          </td>
+        </tr>
+        </tbody>
+      </table>
       <button type="button" (click)="approve()" [disabled]="entity.status !== 'pending'" class="control" id="confirm-button">
         Approve
       </button>
@@ -153,14 +113,10 @@ import {Location} from "@angular/common";
     <nus-confirm-pending-modal></nus-confirm-pending-modal>
   `,
   styles: [
-    'button.danger { margin-left: auto }',
-    '#confirm-button{background-color: #365DC3;}',
-    'button { min-width: 105px; float: right;width: 212px; height: 40px;border-radius: 4px;margin-right: 10px;cursor:pointer;}',
-    'button.control.secondary{border-color: white;color: #365DC3; }',
-    'button.control.danger{font-weight: 700;border-width: 2px;}',
+    'button:not(:first-child) { margin-left: 5px; }',
     'form{max-width: none;}',
     '#general-table-info, #general-table-product{margin-bottom: 30px;height: 80px;border-radius: 8px}',
-    'a{background:none;border:none;cursor: pointer;color: #365DC3;font-weight: 700;}',
+    'a{background:none;border:none;cursor: pointer;font-weight: 700;}',
     '#general-table-info th{text-align: left;font-weight: 400;}',
     '#general-table-info td{text-align: left;font-weight: 700;color: #5A5A5A;}',
     '#general-table-product th{font-weight: 700;color: #5A5A5A;}',

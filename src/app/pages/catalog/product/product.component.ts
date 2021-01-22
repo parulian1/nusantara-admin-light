@@ -427,16 +427,17 @@ import {MarketplaceItemService} from "../../../services/marketplace-item.service
                   </nus-tab>
                 </nus-tabs>
               </div>
-          
+          </div>
+          <div class="wrapper">
             <ng-container *ngIf="!!entity">
               <nus-stock-search [productHref]="entity?.href" ></nus-stock-search>
             </ng-container>
           </div>
 
           <div class="detail-actions">
-            <button type="button" (click)="delete()" *ngIf="!isNew" class="mp-control mp-danger">Delete</button>
-            <button type="button" (click)="navigateToParent(true)" class="mp-control mp-secondary">Cancel</button>
-            <button type="submit" [disabled]="!form.valid" class="mp-control mp-primary">Save</button>
+            <button type="button" (click)="delete()" *ngIf="!isNew" class="control danger">Delete</button>
+            <button type="button" (click)="navigateToParent(true)" class="control secondary">Cancel</button>
+            <button type="submit" [disabled]="!form.valid" class="control">Save</button>
           </div>
         </form>
       </div>

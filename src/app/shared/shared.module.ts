@@ -34,7 +34,6 @@ import { MarketplaceInfoShippingModalComponent } from '@nusantara/shared/marketp
 import { MarketplaceInfoDetailModalComponent } from '@nusantara/shared/marketplace-info-detail-modal.component';
 import { ConfirmModalReceivingOrderComponent } from '@nusantara/shared/confirm-modal-receiving-order.component';
 import { ConfirmModalPendingOrderComponent } from '@nusantara/shared/confirm-modal-pending-order.component';
-import { DetailActionsMpComponent } from '@nusantara/shared/detail-actions-mp.component';
 
 /**
  * The purpose of this module is to make common code (like pipes)
@@ -67,7 +66,6 @@ import { DetailActionsMpComponent } from '@nusantara/shared/detail-actions-mp.co
     EmptyListCOmponent,
     MarketplaceInfoShippingModalComponent,
     ConfirmModalReceivingOrderComponent,
-    DetailActionsMpComponent,
     ConfirmModalPendingOrderComponent,
     MarketplaceInfoDetailModalComponent,
     MarketplaceInfoDetailProductPageComponent
@@ -98,7 +96,6 @@ import { DetailActionsMpComponent } from '@nusantara/shared/detail-actions-mp.co
     EmptyListCOmponent,
     MarketplaceInfoShippingModalComponent,
     ConfirmModalReceivingOrderComponent,
-    DetailActionsMpComponent,
     ConfirmModalPendingOrderComponent,
     MarketplaceInfoDetailModalComponent,
     MarketplaceInfoDetailProductPageComponent

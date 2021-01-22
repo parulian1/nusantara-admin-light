@@ -89,7 +89,7 @@ import { SubFormComponent } from '../sub-form.component';
                   <option *ngFor="let opt of bhismaAttributes" [ngValue]="opt">
                     {{ opt.name }}
                   </option>
-                  <option class="add-new-attr" value="addNewAttr">
+                  <option value="addNewAttr">
                     + Add New Attribute
                   </option>
                 </select>

@@ -11,22 +11,20 @@ import * as shopActions from '@nusantara/actions';
 @Component({
   selector: 'nus-marketplace-setup',
   template: `<h1>Marketplace Set Up</h1>
-    <div *ngIf="!page?.entities?.length; else elseBlock" class="container">
-      <div>
-        <h2>No Connected Store Yet!</h2>
-      </div>
-      <div>
-        Add a marketplace store to manage all your products in one place.
-      </div>
-      <div class="button-action">
-        <button routerLink="../../.." class="control mp-secondary">
-          Cancel
-        </button>
-        <button [routerLink]="['connect', 'new']" class="control mp-control">
-          <i class="material-icons">add</i>Add Store
-        </button>
-      </div>
-    </div>
+    <nus-empty-list
+      *ngIf="!page?.entities?.length; else elseBlock"
+      [title]="'No Connected Store Yet!'"
+      [description]="
+        'Add a marketplace store to manage all your products in one place.'
+      "
+      [cancelUrl]="['../../..']"
+      [addUrl]="[
+        'connect',
+        'new'
+      ]"
+      [addText]="'Add Store'"
+    >
+    </nus-empty-list>
     <ng-template #elseBlock>
       <div class="wrapper">
         <div>
@@ -36,9 +34,9 @@ import * as shopActions from '@nusantara/actions';
         <div>
           <button
             [routerLink]="['connect', 'new']"
-            class="control mp-control add-item"
+            class="control"
           >
-            <i class="material-icons">add</i>Add Store
+            <i class="material-icons">add</i> Add Store
           </button>
         </div>
       </div>
@@ -107,6 +105,11 @@ import * as shopActions from '@nusantara/actions';
         color: #365dc3;
       }
 
+      button {
+        display: flex;
+        align-items: center;
+      }
+
       button:not(:first-child) {
         margin-left: 15px;
       }
@@ -126,50 +129,6 @@ import * as shopActions from '@nusantara/actions';
         flex-direction: column;
         justify-content: center;
         align-items: center;
-      }
-
-      .mp-control {
-        background: #365dc3;
-        border-radius: 4px;
-      }
-
-      .mp-secondary {
-        background: white;
-        color: #365dc3;
-        border: solid 2px #365dc3;
-        border-radius: 4px;
-      }
-
-      .mp-secondary:hover:not([disabled]) {
-        color: white;
-        background-color: #365dc3;
-      }
-
-      .button-action {
-        width: 20em;
-        margin-top: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-
-      .button-action > button {
-        width: 100%;
-        padding-top: 2px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .add-item {
-        padding: 2px 40px;
-        display: flex;
-        align-items: center;
-      }
-
-      .material-icons {
-        font-size: 18px;
-        padding-right: 10px;
       }
 
       .disabled-link {
