@@ -17,7 +17,7 @@ import { drf } from "@nusantara/models";
         </select>
       </td>
       <td>
-        <input type="url" [formControl]="url" data-qa="url">
+        <input type="url" [formControl]="url" data-qa="url" placeholder="https://...">
       </td>
       <td>
         <button (click)="remove.emit()" type="button" class="remove-button" data-qa="remove-button">

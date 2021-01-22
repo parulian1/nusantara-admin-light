@@ -54,6 +54,13 @@ import { SiteConfigService } from "@nusantara/services";
       </label>
 
       <label>
+        <span>Email Customer Service</span>
+        <input type="text" [formControl]="customerServiceEmail">
+        <small>This email is used for CS Email. If it is empty then your customer will not get an email.</small>
+        <nus-field-errors [control]="customerServiceEmail"></nus-field-errors>
+      </label>
+
+      <label>
         <span>Tagline</span>
         <input type="text" [formControl]="tagLine">
         <nus-field-errors [control]="tagLine"></nus-field-errors>
@@ -140,6 +147,10 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
     return this.form.get('favicon') as FormControl;
   }
 
+  get customerServiceEmail(): FormControl {
+    return this.form.get('customerServiceEmail') as FormControl;
+  }
+
   get tagLine(): FormControl {
     return this.form.get('tagLine') as FormControl;
   }
@@ -174,6 +185,7 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
       logo: [],
       gaAccountId: [entity?.gaAccountId ?? '', []],
       favicon: [],
+      customerServiceEmail: [entity?.customerServiceEmail ?? '', [Validators.required, Validators.email]],
       tagLine: [entity?.tagLine ?? '', [Validators.maxLength(50)]],
       extraConfig: this.fb.group({
         description: [entity?.extraConfig?.description, [Validators.maxLength(160)]],
