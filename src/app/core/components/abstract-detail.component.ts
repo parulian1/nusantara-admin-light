@@ -159,14 +159,7 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
       errorMessage = error.errorDetails.message;
     }
       else if (isObject(error.errorDetails)) {
-      Object.keys(error.errorDetails).forEach((field) => {
-        if (error.errorDetails instanceof Array) {
-          errorMessages.push(`${field}: ${error.errorDetails[field]}`);
-        }
-        else {
-          errorMessages.push(`${field}: ${error.errorDetails[field][0]}`);
-        }
-      });
+      this.getErrors(error.errorDetails, errorMessages);
       errorMessage = errorMessages.length > 0 ? errorMessages[0]: 'Please check your input again.';
       this.setFormErrors(error.errorDetails);
     } else {
@@ -228,4 +221,20 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
       }
     }
   }
+
+  /**
+   * Handle error message
+   */
+  getErrors(errorDetail: Object, errorMessages: string[]) {
+    Object.keys(errorDetail).forEach((field) => {
+      if (errorDetail instanceof Array) {
+        errorMessages.push(`${field}: ${errorDetail[field]}`);
+      } else if (isObject(errorDetail[field][0])) {
+        this.getErrors(errorDetail[field][0], errorMessages);
+      } else {
+        errorMessages.push(`${field}: ${errorDetail[field][0]}`);
+      }
+    });
+  }
+
 }
