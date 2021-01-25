@@ -39,18 +39,34 @@ import { OnboardingContentHostComponent } from "@nusantara/pages/cms/onboarding"
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
-
       <nus-onboarding-content-host [form]="contents" [entity]="entity"></nus-onboarding-content-host>
 
+      <div class="action-button">
+        <button (click)="preview()" type="button" class="preview-btn">
+          <i class="material-icons">visibility</i>Preview
+        </button>
+        <nus-detail-actions
+          [component]="this"
+          (cancel)="navigateToParent(true)"
+          (delete)="delete()" [hideDelete]="true">
+        </nus-detail-actions>
 
-      <nus-detail-actions
-        [component]="this"
-        (cancel)="navigateToParent(true)"
-        (delete)="delete()">
-      </nus-detail-actions>
+      </div>
+
     </form>
 
   `,
+  styles: [`
+    .preview-btn {
+      color: #E7E7E7;
+      border: none;
+      background: none;
+    }
+    .action-button {
+      display: flex;
+      justify-content: flex-end;
+    }
+  `]
 })
 export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> implements OnInit {
   entity: IOnBoarding;
@@ -100,10 +116,12 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> im
   }
 
   save() {
-    console.log(`contentHost Value`, this.contentHost.getValue());
-    // this.contents.patchValue(this.contentHost.getValue());
+    this.contentHost.getValue();
     super.save();
   }
 
+  preview () {
+
+  }
 
 }

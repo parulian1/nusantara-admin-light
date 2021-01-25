@@ -10,7 +10,16 @@ import {OnboardingContentImageComponent} from "@nusantara/pages/cms/onboarding/o
   selector: 'nus-onboarding-content',
   template: `
     <form [formGroup]="form" #f>
-      <div  class="onboarding-content">
+      <div class="onboarding-content-title">
+        <div class="title">
+          <input type="text" [formControl]="name">
+          <nus-field-errors [control]="name"></nus-field-errors>
+        </div>
+        <div class="collapse" (click)="toggle()">
+          <img src="/assets/arrowDown.svg">
+        </div>
+      </div>
+      <div  class="onboarding-content" *ngIf="show">
         <label>
           <span>Image</span>
           <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Banner Image" class="preview">
@@ -19,20 +28,11 @@ import {OnboardingContentImageComponent} from "@nusantara/pages/cms/onboarding/o
           </button>
           <nus-onboarding-content-image></nus-onboarding-content-image>
         </label>
-
-        <label>
-          <span>Title</span>
-          <input type="text" [formControl]="name">
-          <nus-field-errors [control]="name"></nus-field-errors>
-        </label>
-
         <label>
           <span>Description</span>
           <textarea [formControl]="description"></textarea>
           <nus-field-errors [control]="description"></nus-field-errors>
         </label>
-        <hr/>
-
         <label>
           <span>Button Status</span>
           <input type="checkbox" [formControl]="buttonStatus" (change)="setAvailabilityAndClearValueButtonProp()">
@@ -51,16 +51,45 @@ import {OnboardingContentImageComponent} from "@nusantara/pages/cms/onboarding/o
         </label>
         <input type="number" hidden [formControl]="sortPriority" min="0">
         <button (click)="remove.emit()" type="button" class="remove-button" data-qa="remove-button">
-          <i class="material-icons">remove_circle_outline</i>
+          Delete
         </button>
       </div>
     </form>
   `,
   styles: [
     `
-      .onboarding-content {
-        border: 1px solid black;
+      .onboarding-content-title {
+        background: #E4E4E4;
+        border: 1px solid #E0E0E0;
+        box-sizing: border-box;
+        border-radius: 8px 8px 0px 0px;
+        transform: matrix(-1, 0, 0, 1, 0, 0);
+        overflow: hidden;
         padding: 10px;
+      }
+      .onboarding-content {
+        background: #FFFFFF;
+        border: 1px solid #E0E0E0;
+        box-sizing: border-box;
+        padding: 10px;
+      }
+      div.title  {
+        width: 90%;
+        float: right;
+      }
+      div.collapse {
+        display: flex;
+      }
+      div.collapse > img {
+        max-height: 10px;
+        max-width: 10px;
+        object-fit: contain;
+      }
+
+      img.preview {
+        max-height: 300px;
+        max-width: 600px;
+        object-fit: contain;
       }
     `
   ]
@@ -70,6 +99,7 @@ export class OnboardingContentComponent extends AbstractEditingComponent impleme
   @Input() entity: IOnboardingContent;
   @Output() remove = new EventEmitter<void>();
   imagePreviewUrl: string;
+  show: boolean = true;
 
   @ViewChild(OnboardingContentImageComponent) onboardingContentImageModal: OnboardingContentImageComponent;
 
@@ -128,6 +158,11 @@ export class OnboardingContentComponent extends AbstractEditingComponent impleme
 
   getValue() {
     return this.form.value;
+  }
+
+  toggle() {
+    this.show = !this.show;
+    return this.show;
   }
 
 }
