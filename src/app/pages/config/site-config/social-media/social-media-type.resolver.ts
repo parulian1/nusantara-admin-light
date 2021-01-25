@@ -3,7 +3,7 @@ import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@a
 import { Observable } from 'rxjs';
 
 import { IChoice } from '@nusantara/models/drf';
-import { SocialMediaService } from "@nusantara/services";
+import { SocialMediaService } from '@nusantara/services';
 
 
 /**

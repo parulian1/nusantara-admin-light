@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractDetailComponent, DialogResult, ToastService } from '@nusantara/core';
 import { drf, INamedHrefEntity, IReseller, IResellerType, products } from '@nusantara/models';
-import { CustomerGroupModalComponent } from "@nusantara/shared";
-import { ResellerService } from "@nusantara/services";
+import { CustomerGroupModalComponent } from '@nusantara/shared';
+import { ResellerService } from '@nusantara/services';
 
 
 @Component({

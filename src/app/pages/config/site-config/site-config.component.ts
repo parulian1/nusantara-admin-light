@@ -3,8 +3,8 @@ import {FormControl, Validators, FormBuilder, FormGroup, FormArray} from '@angul
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ToastService, AbstractDetailComponent } from '@nusantara/core';
-import {drf, ISiteConfig, ISocialMedia} from '@nusantara/models';
-import { SiteConfigService } from "@nusantara/services";
+import { drf, ISiteConfig, ISocialMedia } from '@nusantara/models';
+import { SiteConfigService } from '@nusantara/services';
 
 @Component({
   selector: 'nus-site-config',

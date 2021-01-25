@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { AbstractListComponent } from '@nusantara/core';
-import { IAccessGroup } from "@nusantara/models";
+import { IAccessGroup } from '@nusantara/models';
 
 @Component({
   selector: 'nus-group-list',

@@ -165,7 +165,7 @@ const routes: Routes = [
     path: 'settings',
     component: SiteConfigComponent,
     resolve: { entity: SiteConfigResolver, typeChoices: SocialMediaTypeResolver },
-    runGuardsAndResolvers: "always"
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'reseller',

@@ -1,5 +1,5 @@
-import { INamedHrefEntity } from "@nusantara/models/base";
-import { banner } from "@nusantara/models";
+import { INamedHrefEntity } from '@nusantara/models/base';
+import { banner } from '@nusantara/models';
 
 export interface IBanner extends INamedHrefEntity{
   image: string;

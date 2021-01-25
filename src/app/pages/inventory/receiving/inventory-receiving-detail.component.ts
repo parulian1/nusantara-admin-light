@@ -1,10 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
 
-import { AbstractDetailComponent } from "@nusantara/core/components";
-import { IReceivingOrder } from "@nusantara/models/inventory";
-import { ActivatedRoute, Router } from "@angular/router";
-import { FormBuilder } from "@angular/forms";
-import { InventoryReceivingOrderService } from "@nusantara/services";
+import { AbstractDetailComponent } from '@nusantara/core/components';
+import { IReceivingOrder } from '@nusantara/models/inventory';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder } from '@angular/forms';
+import { InventoryReceivingOrderService } from '@nusantara/services';
 import { ToastService } from '@nusantara/core';
 
 

@@ -3,8 +3,8 @@ import { FormBuilder, FormControl, Validators} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractDetailComponent, ToastService } from '@nusantara/core';
-import { drf, products } from "@nusantara/models";
-import { ProductOptionService } from "@nusantara/services";
+import { drf, products } from '@nusantara/models';
+import { ProductOptionService } from '@nusantara/services';
 
 @Component({
   selector: 'nus-product-option-detail',

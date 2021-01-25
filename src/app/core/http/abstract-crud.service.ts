@@ -180,17 +180,17 @@ export abstract class AbstractCrudService<T extends base.IHrefEntity> {
 
   public fetchParams(params: HttpParams) {
     let page = params.get('page');
-    let per_page = params.get('per_page');
+    let perPage = params.get('per_page');
     if (!page) {
       page = '1';
     }
 
-    if (!per_page) {
-      per_page = '20';
+    if (!perPage) {
+      perPage = '20';
     }
 
     params = params.set('page', page);
-    params = params.set('per_page', per_page);
+    params = params.set('per_page', perPage);
 
     return this.httpClient
       .get<T[]>(

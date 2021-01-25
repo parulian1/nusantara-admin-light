@@ -1,5 +1,5 @@
-import { IWarehouse } from "../index";
-import { IBaseInventoryOrder } from "./index";
+import { IWarehouse } from '../index';
+import { IBaseInventoryOrder } from './index';
 
 
 export interface ITransferOrder extends IBaseInventoryOrder {

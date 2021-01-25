@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { AbstractListComponent } from '@nusantara/core';
-import { device } from "../../../models";
+import { device } from '@nusantara/models';
 
 @Component({
   selector: 'nus-device-list',

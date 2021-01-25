@@ -10,7 +10,7 @@ import {
 } from '@nusantara/core';
 import { ICustomerGroup, CustomerGroupType, drf, IEmailHrefUserEntity, ICustomer } from '@nusantara/models';
 import { CustomerGroupService } from '@nusantara/services';
-import { UserSelectionModalComponent } from "@nusantara/shared";
+import { UserSelectionModalComponent } from '@nusantara/shared';
 
 @Component({
   selector: 'nus-customer-group-detail',
