@@ -77,6 +77,13 @@ import { SiteConfigService } from "@nusantara/services";
         <input type="text" [formControl]="keywords">
         <nus-field-errors [control]="keywords"></nus-field-errors>
       </label>
+
+      <div class="sosmed-title">
+        <h3>
+          Social Media Settings
+        </h3>
+      </div>
+      <hr/>
       <table class="line-items">
         <thead>
         <tr>
@@ -114,6 +121,7 @@ import { SiteConfigService } from "@nusantara/services";
     'img#logo { max-height: 120px; max-width: 120px; }',
     'input[type=file] { display: none; }',
     'img#favicon { max-height: 48px; max-width: 48px; }',
+    'div.sosmed-title { }'
   ]
 })
 export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> implements OnInit {
