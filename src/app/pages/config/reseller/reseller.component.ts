@@ -78,7 +78,7 @@ export class ResellerComponent extends AbstractDetailComponent<IReseller> implem
 
   entity?: IReseller;
   options: drf.IChoice[] = [];
-  showGroups: boolean = false;
+  showGroups: boolean;
 
   constructor(service: ResellerService,
               public fb: FormBuilder,

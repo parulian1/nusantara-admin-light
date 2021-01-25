@@ -108,7 +108,7 @@ export class ProductOptionComponent extends AbstractDetailComponent<products.IPr
     super.ngOnInit();
     this.route.data.subscribe((data: {typeChoices: drf.IChoice[]}) => {
       this.typeChoices = data.typeChoices;
-    })
+    });
   }
 
   initializeForm(entity?: products.IProductOption) {

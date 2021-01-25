@@ -11,7 +11,10 @@ export class NavigationRelativeChoicesResolver implements Resolve<IRelativeChoic
   constructor(private service: NavigationService) {
   }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IRelativeChoices[]> | Promise<IRelativeChoices[]> | IRelativeChoices[] {
+  resolve(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<IRelativeChoices[]> | Promise<IRelativeChoices[]> | IRelativeChoices[] {
     const slug = route.paramMap.get('slug') || '';
     return this.service.fetchRelativeChoices(slug);
   }

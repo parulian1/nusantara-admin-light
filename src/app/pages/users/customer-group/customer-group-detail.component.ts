@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { parse } from 'iso8601-duration';
@@ -91,7 +91,7 @@ import { UserSelectionModalComponent } from '@nusantara/shared';
     '.hidden { display: none; }',
   ]
 })
-export class CustomerGroupDetailComponent extends AbstractDetailComponent<ICustomerGroup> implements OnInit {
+export class CustomerGroupDetailComponent extends AbstractDetailComponent<ICustomerGroup> implements OnInit, AfterViewInit {
 
   @ViewChild(UserSelectionModalComponent) userSelectionModal: UserSelectionModalComponent;
 
@@ -145,7 +145,7 @@ export class CustomerGroupDetailComponent extends AbstractDetailComponent<ICusto
 
     this.entity.customers.forEach((customer) => {
       this.addUser(customer);
-    })
+    });
   }
 
   get currentType(): CustomerGroupType {

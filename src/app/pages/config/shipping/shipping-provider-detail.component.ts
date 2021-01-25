@@ -131,7 +131,7 @@ export class ShippingProviderDetailComponent extends AbstractDetailComponent<ISh
       authUser: [entity?.authUser, []],
       authPass: [entity?.authPass, []],
       isActive: [entity?.isActive ?? false, []],
-      icon: [entity?.href ? '' : null, entity?.icon ? []: [Validators.required]],
+      icon: [entity?.href ? '' : null, entity?.icon ? [] : [Validators.required]],
       services: this.fb.array([]),
     });
 

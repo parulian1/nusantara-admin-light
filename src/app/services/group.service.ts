@@ -19,11 +19,11 @@ export class GroupService extends AbstractCrudService<IAccessGroup> {
 
   fetchByEmail(
     page: number = 1,
-    user_email?: string
+    userEmail?: string
   ): Observable<PagedResponse<IAccessGroup>> {
     const rawParams = {
       'page': page.toFixed(0).toString(),
-      'email': user_email,
+      'email': userEmail,
     };
 
     return this.httpClient

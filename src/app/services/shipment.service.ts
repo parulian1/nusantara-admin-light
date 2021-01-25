@@ -20,7 +20,7 @@ import { IError } from "@nusantara/models/base/error";
 export class ShipmentService extends AbstractCrudService<shipment.IShipment> {
 
   baseUrl = '/api/fulfillment/shipment';
-  createConnoteUrl = '/api/fulfillment/create-awb'
+  createConnoteUrl = '/api/fulfillment/create-awb';
   httpClient: HttpClient;
 
   constructor(httpClient: HttpClient) {

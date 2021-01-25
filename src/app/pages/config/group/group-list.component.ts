@@ -30,5 +30,5 @@ import { IAccessGroup } from '@nusantara/models';
   styles: [],
 })
 export class GroupListComponent extends AbstractListComponent<IAccessGroup> {
-  constructor(route: ActivatedRoute) { super(route);}
+  constructor(route: ActivatedRoute) { super(route); }
 }
