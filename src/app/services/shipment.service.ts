@@ -9,9 +9,9 @@ import {
   SuccessResult
 } from '@nusantara/core';
 import { shipment } from '@nusantara/models';
-import { Observable, of } from "rxjs";
-import { catchError, map } from "rxjs/operators";
-import { IError } from "@nusantara/models/base/error";
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { IError } from '@nusantara/models/base/error';
 
 
 @Injectable({

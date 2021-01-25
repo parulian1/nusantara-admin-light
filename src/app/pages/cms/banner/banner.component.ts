@@ -152,7 +152,7 @@ export class BannerComponent extends AbstractDetailComponent<banner.IBanner> imp
       name: [entity?.name, [Validators.required, Validators.maxLength(50)]],
       type: [entity?.type, [Validators.required]],
       href: [entity?.href, []],
-      image: ['', entity?.image ? []: [Validators.required]],
+      image: ['', entity?.image ? [] : [Validators.required]],
       phoneImage: ['', []],
       tabletImage: ['', []],
       isActive: [entity?.isActive ?? false, []],

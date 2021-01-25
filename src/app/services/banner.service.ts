@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { AbstractCrudService } from '@nusantara/core';
-import { banner } from "@nusantara/models";
+import { banner } from '@nusantara/models';
 
 @Injectable({
   providedIn: 'root'

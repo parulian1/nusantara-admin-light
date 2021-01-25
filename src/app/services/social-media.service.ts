@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { ISocialMedia } from "@nusantara/models";
-import { AbstractCrudService } from "@nusantara/core";
+import { ISocialMedia } from '@nusantara/models';
+import { AbstractCrudService } from '@nusantara/core';
 
 @Injectable({
   providedIn: 'root'

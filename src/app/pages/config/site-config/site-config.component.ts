@@ -183,7 +183,7 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
       this.entity = data.entity;
       this.socialMediaTypes = data.typeChoices;
     });
-    this.originalEntityName = "General Settings";
+    this.originalEntityName = 'General Settings';
   }
 
   initializeForm(entity?: ISiteConfig) {

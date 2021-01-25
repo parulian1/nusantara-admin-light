@@ -4,7 +4,7 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
 import { Subscription } from 'rxjs';
 
 import { DialogResult, PagedResponse } from '@nusantara/core';
-import { INamedHrefEntity } from "@nusantara/models";
+import { INamedHrefEntity } from '@nusantara/models';
 import { CustomerGroupService } from '@nusantara/services';
 
 /**

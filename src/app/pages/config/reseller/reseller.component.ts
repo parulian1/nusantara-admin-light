@@ -98,7 +98,7 @@ export class ResellerComponent extends AbstractDetailComponent<IReseller> implem
       this.options = data.types;
       this.updateShowGroups(this.entity.type);
     });
-    this.originalEntityName = "Reseller Config";
+    this.originalEntityName = 'Reseller Config';
   }
 
   initializeForm(entity?: IReseller) {
