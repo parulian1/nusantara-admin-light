@@ -160,7 +160,7 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
     }
       else if (isObject(error.errorDetails)) {
       this.getErrors(error.errorDetails, errorMessages);
-      errorMessage = errorMessages.length > 0 ? errorMessages[0]: 'Please check your input again.';
+      errorMessage = errorMessages.length > 0 ? errorMessages[0] : 'Please check your input again.';
       this.setFormErrors(error.errorDetails);
     } else {
       errorMessage = 'Please check your input again.';
@@ -225,7 +225,7 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
   /**
    * Handle error message
    */
-  getErrors(errorDetail: Object, errorMessages: string[]) {
+  getErrors(errorDetail: object, errorMessages: string[]) {
     Object.keys(errorDetail).forEach((field) => {
       if (errorDetail instanceof Array) {
         errorMessages.push(`${field}: ${errorDetail[field]}`);
