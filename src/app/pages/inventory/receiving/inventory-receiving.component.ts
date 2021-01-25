@@ -23,61 +23,64 @@ import {IError} from "../../../models/base/error";
 @Component({
   selector: 'nus-inventory-receiving',
   template: `
-    <h1 style="font-weight: 700">Receiving Inventory Order</h1>
+    <h1 class="heading-1">Receiving Inventory Order</h1>
 
     <form [formGroup]="form" (ngSubmit)="saveForm()">
-    <div id="mp-form" >
-      <span style="color: #365dc3; font-weight: 700">General Information</span>
-      <div class="inventory-order-meta">
-            <label class="marketplace-label">Received By</label>
+      <div class="container">
+        <div class="general-info">
+          <h3>General Information</h3>
+          <div>
+            <label>Received By</label>
             <span>{{userDisplayName}}</span>
-      </div>
-      <div class="inventory-order-meta">
-            <label class="marketplace-label">Approved By</label>
+          </div>
+          <div>
+            <label>Approved By</label>
             <span>-</span>
-      </div>
-      <div class="inventory-order-meta">
-            <label class="marketplace-label">Receiving Date</label>
+          </div>
+          <div>
+            <label>Receiving Date</label>
             <span>{{ currentDate|date }}</span>
-      </div>
-      <div class="inventory-order-meta">
-            <label class="marketplace-label">Status</label>
+          </div>
+          <div>
+            <label>Status</label>
             <span>Pending</span>
+          </div>
+          <div [formGroup]="warehouse">
+            <label>Warehouse</label>
+            <div class="confirm-warehouse">
+              <select formControlName="href">
+                <option [ngValue]="null">Select Warehouse</option>
+                <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
+                  {{ wh.name }}
+                </option>
+              </select>
+              <button (click)="confirmWarehouse()" type="button" 
+                [disabled]="warehouse.disabled || !warehouse.valid"
+                class="control">
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="mp-info">
+          <h3>Marketplace Information</h3>
+          <div>
+            <div>Product</div>
+            <div class="count">{{ productValue }}</div>
+          </div>
+          <div>
+            <div>Marketplace</div>
+            <div class="count">{{ marketplaceValue }}</div>
+          </div>
+          <div>
+            <div>Store</div>
+            <div class="count">{{ storeValue }}</div>
+          </div>
+          <a [routerLink]="['./']" (click)="showMarketplaceDetail()">More Detail</a>
+       </div>
       </div>
-      <div class="inventory-order-meta" [formGroup]="warehouse">
-            <label class="marketplace-label">Warehouse</label>
-            <select formControlName="href" style="margin-right: 10px;width: 80%;">
-              <option [ngValue]="null">Select Warehouse</option>
-              <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
-                {{ wh.name }}
-              </option>
-            </select>
-            <button (click)="confirmWarehouse()"
-            type="button"
-            [disabled]="warehouse.disabled || !warehouse.valid"
-            class="control">Confirm</button>
-      </div>
-    </div>
-    <div id="mp-receiving-information">
-        <span style="color: #365dc3; font-weight: 700">Marketplace Information</span>
-        <div class="mp-info">
-          <p>Product</p>
-          <p class="info-value">{{productValue}}</p>
-        </div>
-        <div class="mp-info">
-          <p>Marketplace</p>
-          <p class="info-value">{{marketplaceValue}}</p>
-        </div>
-        <div class="mp-info">
-          <p>Store</p>
-          <p class="info-value">{{storeValue}}</p>
-        </div>
-        <div class="mp-info-detail" *ngIf="showDetail">
-          <button type="button" (click)="showMarketplaceDetail()" id="more-detail-button">More Detail</button>
-        </div>
-    </div>
-    <div *ngIf="warehouse.disabled" style="padding-top: 30px;">
-        <table class="line-items">
+      <div class="product-list" *ngIf="warehouse.disabled">
+        <table>
           <thead>
           <tr id="mp-add-product-head">
             <th>Product (UPC)</th>
@@ -102,18 +105,17 @@ import {IError} from "../../../models/base/error";
 
           <tr>
             <td colspan="9">
-              <button type="button" (click)="addLine()" class="add-button-inventory">
+              <button type="button" (click)="addLine()" class="wide-add-button">
                 <i class="material-icons">add</i> Add Record
               </button>
             </td>
           </tr>
-
         </table>
 
         <nus-detail-actions
           [component]="this"
           (cancel)="confirmModal()"
-          (delete)="delete()">
+          [hideDelete]="true">
         </nus-detail-actions>
       </div>
     </form>
@@ -123,130 +125,25 @@ import {IError} from "../../../models/base/error";
     <nus-confirm-receiving-modal></nus-confirm-receiving-modal>
 
   `,
-  styles: [`
-    form{
-      max-width: none;
-    }
-    #mp-form {
-      float: left;
-      width: 70%;
-      height: 396px;
-      padding: 1em 1em 1em 1em;
-      background: white;
-      border: 1px solid #c1c1c1;
-      margin-top: 5px;
-      margin-right: 30px;
-      border-radius: 8px;
-    }
-
-    #mp-receiving-information{
-      float: left;
-      width: 18%;
-      height: 396px;
-      padding: 1em 1em 1em 1em;
-      background: white;
-      border: 1px solid #c1c1c1;
-      margin-top: 5px;
-      border-radius: 8px;
-    }
-
-    #mp-receiving-information>a{
-      text-align: center;
-    }
-
-    #mp-receiving-information>span{
-      margin-left: 24px;
-    }
-
-    .mp-info{
-      width: 85%;
-      height: 80px;
-      border-radius: 8px;
-      border: 1px solid #c1c1c1;
-      margin-top: 30px;
-      margin-right: 24px;
-      margin-left: 24px;
-      text-align: center;
-      color: #5A5A5A;
-    }
-
-    .add-button-inventory{
-      display: flex ;
-      align-items: center;
-      justify-content: center;
-      background-color: white;
-      width: 100%;
-      height: 56px;
-      border-radius: 4px;
-    }
-
-    .mp-info>p{
-      margin-bottom: 5px;
-    }
-
-    .mp-info-detail{
-      text-align: center;
-      margin-top: 20px;
-    }
-
-    .mp-info-detail>a{
-      text-decoration: None;
-      color: #FF7D09;
-      font-weight: 700;
-    }
-
-    .info-value{
-      font-size: 25px;
-      margin:auto;
-      font-weight: 700;
-    }
-
-    #mp-button{
-      width: 18%;
-      height: 40px;
-      border-radius: 4px;
-    }
-
-    .inventory-order-meta{
-      padding-top: 20px;
-    }
-
-    .inventory-order-meta>select{
-      background-color: white;
-      height: 40px;
-      border-radius: 4px;
-    }
-
-    .inventory-order-meta>span{
-      font-weight: 700;
-      color: #5A5A5A;
-    }
-
-    .line-items {
-      margin-top: 424px;
-      border-radius: 8px;
-    }
-
-    #mp-add-product-head {
-      background-color: #F4F4F4;
-      height: 56px;
-    }
-
-    .marketplace-label{
-      min-height: 0;
-    }
-
-    #more-detail-button{
-      background:none;
-      border:none;
-      margin:0;
-      padding:0;
-      cursor: pointer;
-      color: #FF7D09;
-      font-weight: 700;
-      font-size: 14px;
-    }
-  `
+  styles: [
+  'form{ max-width: none;}',
+  'h3 { font-size: 20px; margin: 0; }',
+  'select { background-color: white; height: 40px; border-radius: 4px; }',
+  'table thead { background-color: var(--darken-white-color); }',
+  'table th { height: 48px; }',
+  '.container { display: grid; grid-template-columns: 4fr 1fr; grid-gap: 24px; }',
+  '.container > div { border: 1px solid var(--grey-color); border-radius: 4px; padding: 16px 24px; }',
+  '.general-info > h3 { margin-bottom: 20px; }',
+  '.general-info > div:not(:last-child) { margin-bottom: 23px; }',
+  '.general-info label { min-height: 0; }',
+  '.general-info span{ font-weight: 700; color: var(--darken-grey-color); }',
+  '.mp-info > h3 { margin-bottom: 16px; }',
+  '.mp-info > div { text-align: center; border: 1px solid var(--grey-color); border-radius: 4px; padding: 12px 16px; margin-bottom: 12px; }',
+  '.mp-info > a { display: block; margin-top: 16px; }',
+  '.mp-info .count { font-size: 28px; font-weight: 700; }',
+  '.confirm-warehouse { display: grid; grid-template-columns: 4fr 1fr; grid-gap: 24px; }',
+  '.product-list { margin-top: 24px; }',
+  '.wide-add-button{ display: flex; align-items: center; justify-content: center; background-color: white; width: 100%; height: 40px; border: solid 2px #485368; border-radius: 4px; font-weight: 700; }',
   ]
 })
 export class InventoryReceivingComponent extends AbstractDetailComponent<inventory.IReceivingOrder> implements OnInit, AfterViewInit {

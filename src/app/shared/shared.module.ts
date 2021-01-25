@@ -24,7 +24,6 @@ import { IncludeDeletedComponent } from './filters/include-deleted.component';
 import { IncludeInactiveComponent } from './filters/include-inactive.component';
 
 import { FieldErrorsMarketplaceComponent } from '@nusantara/shared/field-errors-marketplace.component';
-import { ListHeaderMarketplaceComponent } from '@nusantara/shared/list-header-marketplace.component';
 import { ConfirmModalComponent } from './confirm-modal.component';
 import { TabComponent } from './tab.component';
 import { TabsComponent } from './tabs.component';
@@ -59,7 +58,6 @@ import { ConfirmModalPendingOrderComponent } from '@nusantara/shared/confirm-mod
     CustomerGroupModalComponent,
     IncludeInactiveComponent,
     FieldErrorsMarketplaceComponent,
-    ListHeaderMarketplaceComponent,
     ConfirmModalComponent,
     TabComponent,
     TabsComponent,
@@ -89,7 +87,6 @@ import { ConfirmModalPendingOrderComponent } from '@nusantara/shared/confirm-mod
     CustomerGroupModalComponent,
     IncludeInactiveComponent,
     FieldErrorsMarketplaceComponent,
-    ListHeaderMarketplaceComponent,
     ConfirmModalComponent,
     TabComponent,
     TabsComponent,

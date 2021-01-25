@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'nus-marketplace-integration',
-  template: ` <h1>Marketplace Configuration</h1>
+  template: ` 
+    <h1 class="heading-1">Marketplace Configuration</h1>
     <div class="wrapper">
       <div>
         <h2>Marketplace Setup</h2>

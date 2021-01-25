@@ -18,7 +18,7 @@ import {ISubLocation, IWarehouseDetail, products} from '../models';
   selector: 'nus-marketplace-info-detail-modal',
   template: `
     <ngx-smart-modal  #modal identifier="longTextModal">
-      <h1 style="font-weight: 700;color: #5A5A5A;">Marketplace Information</h1>
+      <h2 class="heading-2">Marketplace Information</h2>
         <div>
           <table>
               <thead id="mp-add-product-head">

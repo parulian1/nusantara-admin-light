@@ -6,20 +6,19 @@ import { FormControl } from '@angular/forms';
   selector: 'nus-list-header',
   template: `
     <header>
-      <h1>{{ title }}</h1>
+      <h1 class="heading-1">{{ title }}</h1>
       <p *ngIf="!!description">{{ description }}</p>
       <div>
          <div class="search control" *ngIf="canSearch">
           <i class="material-icons">search</i>
           <input type="search" placeholder="Search" [formControl]="queryText">
         </div>
-        <a [routerLink]="['new']" class="control" *ngIf="canAddNew"><i class="material-icons">add</i> New</a>
+        <a [routerLink]="['new']" class="control" *ngIf="canAddNew"><i class="material-icons">add</i> Add</a>
       </div>
     </header>
   `,
   styles: [
     'header { margin-bottom: 23px; }',
-    'h1 { font-weight: normal; font-size: 1.5em; }',
     'header > div { display: flex; }',
     'input[type=search] { font-size: 15px; padding-right: 5px; width: 250px; }',
     'a { display: flex; align-items: center; margin-left: auto; }',
@@ -34,6 +33,7 @@ import { FormControl } from '@angular/forms';
         display: flex;
         border: solid 1px var(--lighter-nav-bg);
         background-color: transparent;
+        align-items: center
       }
       div.search > i {
         background-color: white;
@@ -41,7 +41,7 @@ import { FormControl } from '@angular/forms';
         line-height: 31px;
       }
       .search > input[type=search] {
-        border: none;
+        border: none !important;
       }
     `
   ]

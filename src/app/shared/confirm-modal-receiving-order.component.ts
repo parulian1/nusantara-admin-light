@@ -14,7 +14,7 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
       #modal
       [customClass]="'nsm-centered'"
     >
-      <h1>{{ title }}</h1>
+      <h2 class="heading-2">{{ title }}</h2>
       <p>{{ content }}</p>
       <button class="control secondary" (click)="cancel()" type="button">
         Cancel

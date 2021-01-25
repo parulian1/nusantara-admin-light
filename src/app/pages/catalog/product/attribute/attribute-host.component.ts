@@ -29,30 +29,6 @@ import { products } from '@nusantara/models';
   `,
   styles: [
     'h3 {font-size: 16px; font-weight: 400}',
-    `
-    table {
-      box-shadow: none;
-      border: 3px solid #f4f4f4;
-      border-collapse: separate;
-      border-radius: 8px;
-      border-spacing: 0;
-      margin-bottom: 10px;
-    }
-    
-    thead {
-      font-size: 16px;
-      font-weight: bold;
-      line-height: 24px;
-      background: #f4f4f4;
-      color: #5a5a5a;
-    }
-
-    th {
-      padding: 16px;
-      text-align: left;
-    }
-
-    `
   ]
 })
 export class ProductAttributeHostComponent extends AbstractEditingComponent implements OnInit {

@@ -9,7 +9,7 @@ import {MarketplaceShopService, ProductService} from "@nusantara/services";
   selector: 'nus-marketplace-info-shipping-modal',
   template: `
     <ngx-smart-modal  #modal identifier="longTextModal">
-      <h1 style="font-weight: 700;color: #5A5A5A;">Shipping</h1>
+      <h2 class="heading-2">Shipping</h2>
         <div *ngFor="let data of shippingDetail" class="shipping-container wrapper">
           <div id="product-media" class="flex-container">
             <div class="margin-right-container">

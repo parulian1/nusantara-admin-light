@@ -40,24 +40,28 @@ import { SubFormComponent } from '../sub-form.component';
       <div *ngIf="mandatoryAttributes">
         <p>*Mandatory</p>
         <div *ngFor="let attr of mandatories.controls; let i = index">
+        <label>  
           <input
             type="checkbox"
             [formControl]="attr"
             formArrayName="mandatories"
           />
-          {{ mandatoryAttributes[i].name }}
+          <span>{{ mandatoryAttributes[i].name }}</span>
+        </label>
         </div>
       </div>
 
       <div *ngIf="optionalAttributes">
         <p>Optionals</p>
         <div *ngFor="let attr of optionals.controls; let i = index">
-          <input
-            type="checkbox"
-            [formControl]="attr"
-            formArrayName="optionals"
-          />
-          {{ optionalAttributes[i].name }}
+          <label>
+            <input
+              type="checkbox"
+              [formControl]="attr"
+              formArrayName="optionals"
+            />
+            <span>{{ optionalAttributes[i].name }}</span>
+          </label>
         </div>
       </div>
 
@@ -87,7 +91,7 @@ import { SubFormComponent } from '../sub-form.component';
     '.sub-title{color: #365DC3;}',
     'h1{font-weight: bold}',
     '.form-title{font-weight: 700; color: #5A5A5A;}',
-    'input[type=text], select{width: 267px}',
+    'label { min-height: 20px }',
   ],
   providers: [
     {

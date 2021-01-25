@@ -4,9 +4,10 @@ import {ActivatedRoute, Router} from '@angular/router';
 @Component({
   selector: 'nus-include-deleted',
   template: `<label>Show SoftDeleted<input type="checkbox" (click)="applyFilter($event)"></label>`,
-  styles: [`label {
-    min-height: auto;
-  }`]
+  styles: [
+    'label { min-height: auto;}',
+    'input { margin-left: 5px }'
+  ]
 })
 export class IncludeDeletedComponent implements OnInit {
   public applied = false;

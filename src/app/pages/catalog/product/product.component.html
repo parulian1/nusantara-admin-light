@@ -1,0 +1,556 @@
+<nus-detail-title [originalName]="originalEntityName" typeName="Product">
+</nus-detail-title>
+
+<div class="container">
+  <div>
+    <nus-non-field-errors
+      [nonFieldErrors]="nonFieldErrors"
+    ></nus-non-field-errors>
+
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <div id="general-info" class="wrapper">
+        <h3>General Information</h3>
+
+        <label>
+          <span>Name</span>
+          <input type="text" [formControl]="name" />
+          <nus-field-errors [control]="name"></nus-field-errors>
+        </label>
+        <label>
+          <span>Is Active</span>
+          <input
+            id="s2"
+            type="checkbox"
+            class="toggle"
+            [formControl]="isActive"
+          />
+          <nus-field-errors [control]="isActive"></nus-field-errors>
+        </label>
+
+        <label *ngIf="structure.value === 'parent'">
+          <span>Category</span>
+          <div class="manage-section">
+            <div>
+              <select [formControl]="category">
+                <option *ngFor="let c of categories" [ngValue]="c.href">
+                  {{ c.pathName }}
+                </option>
+              </select>
+              <nus-field-errors [control]="category"></nus-field-errors>
+            </div>
+            <div>
+              <a [routerLink]="['/catalog', 'categories']"> Manage Category </a>
+            </div>
+          </div>
+        </label>
+
+        <label *ngIf="structure.value === 'parent'">
+          <span>Product Class</span>
+          <div class="manage-section">
+            <div>
+              <select
+                [formControl]="productClass"
+                (change)="onChangeProductClass($event)"
+              >
+                <option *ngFor="let pc of productClasses" [ngValue]="pc.href">
+                  {{ pc.name }}
+                </option>
+              </select>
+              <nus-field-errors [control]="productClass"></nus-field-errors>
+            </div>
+            <div>
+              <a [routerLink]="['/catalog', 'product-classes']">
+                Manage Class
+              </a>
+            </div>
+          </div>
+        </label>
+
+        <nus-product-attribute-host
+          [form]="attributes"
+          [productClass]="productClass"
+          [originalAttributeValues]="originalAttributeValues"
+          *ngIf="originalAttributeValues"
+        >
+        </nus-product-attribute-host>
+        <a *ngIf="productClass?.value" (click)="goToAttribute()"
+          >Manage Attribute</a
+        >
+      </div>
+
+      <div id="product-info" class="wrapper">
+        <h3>Product Information</h3>
+
+        <div class="rich-text-container">
+          <label for="content" class="external"><span>Description</span></label>
+          <ckeditor
+            [editor]="Editor"
+            [formControl]="description"
+            id="description"
+          ></ckeditor>
+          <nus-field-errors [control]="description"></nus-field-errors>
+        </div>
+
+        <label *ngIf="structure.value === 'parent'">
+          <span>Vendor</span>
+          <div class="manage-section">
+            <div>
+              <select [formControl]="vendor">
+                <option *ngFor="let v of vendors" [ngValue]="v.href">
+                  {{ v.name }}
+                </option>
+              </select>
+              <nus-field-errors [control]="vendor"></nus-field-errors>
+            </div>
+            <div>
+              <a [routerLink]="['/catalog', 'vendors']"> Manage Vendor </a>
+            </div>
+          </div>
+        </label>
+      </div>
+
+      <div id="product-management" class="wrapper">
+        <h3>Product Management</h3>
+        <ng-template [ngIf]="structure.value === 'parent'">
+          <label>
+            <span>Variants</span>
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let v of variants">
+                  <td>
+                    <a [routerLink]="['variants', v.href | entityToSlug]">{{
+                      v.name
+                    }}</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <button
+                      [disabled]="isNew"
+                      (click)="addVariant()"
+                      type="button"
+                      class="add-button"
+                    >
+                      <i class="material-icons">add</i> Add Variant
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </label>
+        </ng-template>
+
+        <label>
+          <span>UPC</span>
+          <input type="text" [formControl]="upc" />
+          <nus-field-errors [control]="upc"></nus-field-errors>
+        </label>
+
+        <nus-price-list-host [form]="priceLists"></nus-price-list-host>
+      </div>
+
+      <div id="product-media" class="wrapper">
+        <h3>Media</h3>
+        <nus-product-media-host [form]="media"></nus-product-media-host>
+      </div>
+
+      <div id="product-packaging" class="wrapper">
+        <h3>Product Packaging</h3>
+        <label>
+          <span>Package Weight (kg)</span>
+          <input
+            type="number"
+            [formControl]="weight"
+            placeholder="Input Weight"
+          />
+          <nus-field-errors [control]="weight"></nus-field-errors>
+        </label>
+        <div
+          class="product-dimension"
+          formGroupName="dimensions"
+        >
+          <label>
+            <span>Length (cm)</span>
+            <input
+              type="number"
+              class="dimension-input"
+              formControlName="current_length"
+              placeholder="Input Length"
+            />
+            <nus-field-errors [control]="length"></nus-field-errors>
+          </label>
+          <label>
+            <span>Width (cm)</span>
+            <input
+              type="number"
+              class="dimension-input"
+              formControlName="current_width"
+              placeholder="Input Width"
+            />
+            <nus-field-errors [control]="width"></nus-field-errors>
+          </label>
+          <label>
+            <span>Height (cm)</span>
+            <input
+              type="number"
+              class="dimension-input"
+              formControlName="current_height"
+              placeholder="Input Height"
+            />
+            <nus-field-errors [control]="height"></nus-field-errors>
+          </label>
+        </div>
+      </div>
+
+      <div id="product-tag" class="wrapper">
+        <h3>Product Tag</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Tag</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let t of tags.controls; let i = index">
+              <td>
+                <input type="text" [formControl]="t" />
+              </td>
+              <td>
+                <button
+                  type="button"
+                  class="remove-button"
+                  (click)="tags.removeAt(i)"
+                >
+                  <i class="material-icons">remove_circle_outline</i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <button (click)="addTag()" type="button" class="add-button">
+                  Add Tag
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="product-other" class="wrapper">
+        <h3>Other</h3>
+        <label>
+          <span>Meta Description</span>
+          <textarea
+            [formControl]="seoDescription"
+            id=""
+            cols="30"
+            rows="10"
+          ></textarea>
+          <nus-field-errors [control]="seoDescription"></nus-field-errors>
+        </label>
+        <label>
+          <span>Meta Keywords</span>
+          <input type="text" [formControl]="seoMeta" />
+          <nus-field-errors [control]="seoMeta"></nus-field-errors>
+        </label>
+      </div>
+
+      <div id="marketplace-information" class="wrapper" *ngIf="!isNew">
+        <h3>Marketplace Information</h3>
+        <div class="small-margin">
+          <span class="span-mp-size"
+            >Marketplace Publish Summary
+            <button
+              type="button"
+              (click)="showMarketplaceDetail()"
+              class="detail-button"
+            >
+              More Detail
+            </button>
+          </span>
+        </div>
+        <div class="flex-container no-margin">
+          <div class="mp-info">
+            <p>Warehouse</p>
+            <p class="span-bold-big-size">{{ warehouseValue }}</p>
+          </div>
+          <div class="mp-info">
+            <p>Marketplace</p>
+            <p class="span-bold-big-size">{{ marketplaceValue }}</p>
+          </div>
+          <div class="mp-info">
+            <p>Store</p>
+            <p class="span-bold-big-size">{{ storeValue }}</p>
+          </div>
+        </div>
+        <div class="big-margin">
+          <span class="span-mp-size"
+            >Shipping
+            <button
+              type="button"
+              (click)="showShippingDetail()"
+              class="detail-button shipping-detail"
+            >
+              More Detail
+            </button>
+          </span>
+          <p>View shipping method for your marketplace stores.</p>
+        </div>
+        <div class="big-margin">
+          <span class="span-mp-size">Marketplace Product Detail</span>
+          <p>
+            This information will be used as specific per marketplace. Skip this
+            if you don't want to publish to marketplace.
+          </p>
+        </div>
+        <div class="big-margin">
+          <nus-tabs (OutPutTitle)="getAttributeOfMarketplace($event)">
+            <nus-tab
+              *ngFor="let data of clientList"
+              [title]="data.marketplaceName"
+            >
+              <div class="marketplace-container">
+                <div *ngIf="!hideOnChangeProductClass">
+                  <div
+                    *ngFor="
+                      let data of marketplaceStoreAttributes;
+                      let x = index
+                    "
+                  >
+                    <div class="shop-slider" (click)="toggleShowDiv(x)">
+                      <h3>Store <i class="arrow down"></i></h3>
+                      <span>{{ data.shop }}</span>
+                    </div>
+                    <div
+                      [@slideInOut]="animationState"
+                      *ngIf="showDivIndex === x"
+                      class="slider-body"
+                    >
+                      <div
+                        class="slider-table"
+                        *ngIf="
+                          data.attributes.length;
+                          else ElseNoAttributeMatching
+                        "
+                      >
+                        <table>
+                          <thead>
+                            <th>Attribute</th>
+                            <th>Value</th>
+                          </thead>
+                          <tbody>
+                            <ng-container formArrayName="marketplaceAttributes">
+                              <tr
+                                *ngFor="
+                                  let attr of marketplaceAttributes.controls;
+                                  let i = index
+                                "
+                                [formGroupName]="i"
+                              >
+                                <td
+                                  *ngIf="
+                                    x ===
+                                    marketplaceAttributes.controls[i].value
+                                      .indexShop
+                                  "
+                                >
+                                  <input
+                                    type="text"
+                                    class="mp-readonly"
+                                    formControlName="name"
+                                    readonly
+                                  />
+                                </td>
+                                <td
+                                  *ngIf="
+                                    x ===
+                                    marketplaceAttributes.controls[i].value
+                                      .indexShop
+                                  "
+                                >
+                                  <div
+                                    *ngIf="
+                                      marketplaceAttributes.controls[i].value
+                                        .type === 'combo box' ||
+                                      marketplaceAttributes.controls[i].value
+                                        .type === 'dropdown'
+                                    "
+                                  >
+                                    <select
+                                      #selecteEditAttr
+                                      formControlName="value"
+                                      (change)="
+                                        attrChange(selecteEditAttr.value, i)
+                                      "
+                                    >
+                                      <option [ngValue]="null">
+                                        Select attribute value of
+                                        {{
+                                          marketplaceAttributes?.controls[i]
+                                            .value.name
+                                        }}
+                                      </option>
+                                      <option
+                                        *ngFor="
+                                          let opt of marketplaceAttributes
+                                            ?.controls[i].value.option
+                                        "
+                                        [ngValue]="opt"
+                                      >
+                                        {{ opt }}
+                                      </option>
+                                      <option
+                                        class="add-new-attr"
+                                        value="addNewAttr"
+                                        *ngIf="
+                                          marketplaceAttributes.controls[i]
+                                            .value.type === 'combo box'
+                                        "
+                                      >
+                                        + Add New Attribute
+                                      </option>
+                                    </select>
+                                    <div
+                                      *ngIf="
+                                        selecteEditAttr.value === 'addNewAttr'
+                                      "
+                                      class="mp-input"
+                                    >
+                                      <input
+                                        type="text"
+                                        formControlName="newvalue"
+                                      />
+                                      <div
+                                        *ngIf="
+                                          marketplaceAttributes.controls[i].get(
+                                            'newvalue'
+                                          ).invalid &&
+                                          marketplaceAttributes.controls[i].get(
+                                            'newvalue'
+                                          ).touched
+                                        "
+                                        class="error-detail"
+                                      >
+                                        This field is required
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <input
+                                    formControlName="value"
+                                    type="text"
+                                    *ngIf="
+                                      marketplaceAttributes.controls[i].value
+                                        .type === 'text'
+                                    "
+                                  />
+                                </td>
+                              </tr>
+                            </ng-container>
+                          </tbody>
+                        </table>
+                      </div>
+                      <ng-template #ElseNoAttributeMatching>
+                        <div class="slider-table">
+                          <div class="no-attribute-mapping">
+                            <h1 class="bold-text">No Mapping Class Yet!</h1>
+                            <span
+                              >Map Class to sync your product to
+                              Marketplace</span
+                            >
+                            <button
+                              [routerLink]="[
+                                '/config/marketplace-integration/setup/product-class/',
+                                data.shopSlug,
+                                productClassSlug
+                              ]"
+                              [state]="{
+                                productClass: { name: productClassName }
+                              }"
+                              type="button"
+                              class="control primary-button"
+                            >
+                              <i class="material-icons">add</i>Set Up Store
+                            </button>
+                          </div>
+                        </div>
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="showNoSlider" class="no-attribute-mapping">
+                  <h1 class="bold-text">No Connected Store Yet!</h1>
+                  <span
+                    >Add a marketplace store to manage all your products in one
+                    place.</span
+                  >
+                  <button
+                    type="button"
+                    [routerLink]="[
+                      '/config/marketplace-integration/setup/connect/new'
+                    ]"
+                    class="control primary-button"
+                  >
+                    <i class="material-icons">add</i>Add Store
+                  </button>
+                </div>
+              </div>
+            </nus-tab>
+          </nus-tabs>
+        </div>
+      </div>
+      <div *ngIf="!isNew" class="wrapper">
+        <ng-container *ngIf="!!entity">
+          <nus-stock-search [productHref]="entity?.href"></nus-stock-search>
+        </ng-container>
+      </div>
+
+      <nus-detail-actions
+        [component]="this"
+        (cancel)="navigateToParent(true)"
+        (delete)="delete()"
+        [hideDelete]="!entity || !entity.isActive"
+      >
+      </nus-detail-actions>
+    </form>
+  </div>
+  <div class="side-navigation">
+    <ul>
+      <li [ngClass]="{ active: currentActive === 'general-info' }">
+        <a (click)="scrollTo('general-info')">General Information</a>
+      </li>
+      <li [ngClass]="{ active: currentActive === 'product-info' }">
+        <a (click)="scrollTo('product-info')">Product Information</a>
+      </li>
+      <li [ngClass]="{ active: currentActive === 'product-management' }">
+        <a (click)="scrollTo('product-management')">Product Management</a>
+      </li>
+      <li [ngClass]="{ active: currentActive === 'product-media' }">
+        <a (click)="scrollTo('product-media')">Media</a>
+      </li>
+      <li [ngClass]="{ active: currentActive === 'product-packaging' }">
+        <a (click)="scrollTo('product-packaging')">Product Packaging</a>
+      </li>
+      <li [ngClass]="{ active: currentActive === 'product-tag' }">
+        <a (click)="scrollTo('product-tag')">Product Tag</a>
+      </li>
+      <li>Other</li>
+      <li *ngIf="!isNew" [ngClass]="{ active: currentActive === 'marketplace-information' }">
+        <a (click)="scrollTo('marketplace-information')"
+          >Marketplace Information</a
+        >
+      </li>
+    </ul>
+  </div>
+</div>
+<nus-marketplace-info-shipping-modal
+  [shippingDetail]="shippingDetail"
+></nus-marketplace-info-shipping-modal>
+<nus-marketplace-info-detail-product-page
+  [warehouseInfoDetail]="warehouseInfoDetail"
+></nus-marketplace-info-detail-product-page>

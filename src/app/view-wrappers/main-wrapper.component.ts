@@ -185,7 +185,7 @@ import { SubscriptionLike } from 'rxjs';
       color: white;
     }
     #dashboard-content {
-      padding: 15px;
+      padding: 16px 24px;
       position: relative;
       box-shadow: inset 4px 4px 8px -4px var(--shadow-color);
     }
@@ -209,7 +209,6 @@ import { SubscriptionLike } from 'rxjs';
       }
       nav li.section-header {
         font-weight: 900;
-        padding-left: 0;
         display: flex;
       }
       nav li.section-header i {
@@ -218,17 +217,19 @@ import { SubscriptionLike } from 'rxjs';
         margin-right: 5px;
       }
       nav li.icon-button a {
+        font-weight: 900;
         padding-left: 0;
         display: flex;
       }
       .icon-button i {
         line-height: 35px;
+        margin-right: 5px;
       }
 
       nav > ul a {
         color: white;
         display: block;
-        padding-left: 25px;
+        padding-left: 30px;
         text-decoration: none;
       }
       nav > ul a.active {

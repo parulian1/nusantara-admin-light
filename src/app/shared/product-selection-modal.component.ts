@@ -18,7 +18,7 @@ import { products } from '../models';
   selector: 'nus-product-selection-modal',
   template: `
     <ngx-smart-modal [identifier]="'selectProduct'" #modal [formGroup]="form">
-      <h1 style="font-weight: 700;">Select Product</h1>
+      <h2 class="heading-2">Select Product</h2>
       <form #modalForm>
           <label>
             <input type="text" id="search_box" [formControl]="searchText" placeholder="Search Product Name or SKU">

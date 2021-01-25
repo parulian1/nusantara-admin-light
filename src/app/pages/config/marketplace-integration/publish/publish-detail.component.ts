@@ -10,7 +10,8 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
 
 @Component({
   selector: 'nus-marketplace-publish',
-  template: `<h1>Publish To Marketplace</h1>
+  template: `
+    <h1 class="heading-1">Publish To Marketplace</h1>
     <div class="wrapper">
       <div>
         <p>Total Product</p>

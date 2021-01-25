@@ -39,11 +39,10 @@ import { Component, Input, OnInit } from '@angular/core';
         margin-top: 20px;
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
       }
 
       #button-action > button {
-        width: 100%;
         padding-top: 2px;
         display: flex;
         align-items: center;

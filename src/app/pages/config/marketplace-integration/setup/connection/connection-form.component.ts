@@ -8,7 +8,7 @@ import { MarketplaceClientEnum } from '../markeplace-client-enum';
 @Component({
   selector: 'nus-marketplace-integration',
   template: `
-    <h1>Add Store</h1>
+    <h1 class="heading-1">Add Store</h1>
     <div class="mp-connect-container">
       <h1 class="mpSubTitle">Connect to Marketplace</h1>
       <p>Connect to manage products in marketplace.</p>

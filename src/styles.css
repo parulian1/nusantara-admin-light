@@ -1,11 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap");
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @import url("~ngx-smart-modal/ngx-smart-modal.css");
-
-/* set ngx-smart-modal width to 100% */
-.nsm-content{
-  width: 100%;
-}
 
 /**
  *  Table of Contents
@@ -38,15 +33,23 @@
   --light-red: #c492b1;
 
 
-  /* Nww Button Adjustment */
+  /** Nww Color Adjustment **/
+  --primary-color: #EA730B;
+  --darken-primary-color: #B95B09;
+  --primary-color-lighter: #E6DCD4;
 
-  --button-orange: #EA730B;
-  --button-orange-darker: #B95B09;
-  --button-orange-lighter: #E6DCD4;
-  --button-grey: #B4B4B4;
+  --white-color: #fff;
+  --darken-white-color: #f4f4f4;
 
-  --hyperlink: #365DC3;
-  --hyperlink-active: #034880;
+  --lighten-black-color: #282828;
+
+  --grey-color: #B4B4B4;
+  --lighten-grey-color: #e7e7e7;
+  --darken-grey-color: #5a5a5a;
+
+  --hyperlink-color: #365DC3;
+  --hyperlink-color-active: #034880;
+  --input-hover-color: #275efe;
 }
 
 /**
@@ -59,27 +62,56 @@ html {
 }
 body {
   margin: 0;
-  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  color: var(--lighten-black-color);
 }
-h1 {
-  font-size: 1.5em;
-  font-weight: normal;
+
+/* Heading and Typography */
+
+/* admin / title 1 */
+h1, h2, h3, h4, .subheading-1, .subheading-2 {
+  font-weight: 700;
 }
-h2 {
-  font-size: 1.1em;
-  font-weight: bold;
+
+.heading-1 { 
+  font-size: 28px;
+  line-height: 36px;
+  margin: 0 0 24px;
 }
-h3 {
-  font-size: 1em;
-  font-weight: bold;
+/* admin / title 2 */
+.heading-2 { 
+  font-size: 24px;
+  line-height: 32px;
+}
+/* admin / heading 1 */
+.heading-3 { 
+  font-size: 20px;
+  line-height: 28px;
+}
+/* admin / heading 2 */
+.heading-4 { 
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.subheading-1 {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.subheading-2 {
+  font-size: 14px;
+  line-height: 18px;
 }
 
 a {
-  color: var(--hyperlink);
+  text-decoration: underline;
+  color: var(--hyperlink-color);
 }
 
 a:active {
-  color: var(--hyperlink-active);
+  color: var(--hyperlink-color-active);
 }
 
 /* 1.1 Common Classes */
@@ -94,13 +126,15 @@ img.preview {
  * 2. Forms
  * --------
  */
-input, select {
+ input:not([type=checkbox]):not([type=radio]), select {
   font-size: 1em;
   font-family: inherit;
-  border: solid var(--input-border) 1px;
+  border: solid var(--grey-color) 1px;
   border-radius: 4px;
   box-sizing: border-box;
   padding: 5px;
+  width: 100%;
+  height: 40px;
 }
 input.ng-untouched {
   border: solid var(--input-border) 1px !important;
@@ -127,9 +161,148 @@ input[type=color] {
   padding: 0;
 }
 
-select {
-  height: 31px; /* fix height: select boxes don't respect padding */
+
+/** Custom input for checkbox, radio and toggle **/
+@supports (-webkit-appearance: none) or (-moz-appearance: none) {
+  input[type="checkbox"], input[type="radio"] {
+    --active: var(--primary-color);
+    --active-inner: var(--white-color);
+    --focus: 1px rgba(39, 94, 254, 0.3);
+    --border: var(--grey-color);
+    --border-hover: var(--input-hover-color);
+    --background: var(--white-color);
+    --disabled: var(--darken-white-color);
+    --disabled-inner: var(--lighten-grey-color);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    margin: 0;
+    cursor: pointer;
+    border: 1px solid var(--bc, var(--border));
+    background: var(--b, var(--background));
+    transition: background 0.3s, border-color 0.3s, box-shadow 0.2s;
+ }
+  input[type="checkbox"]:after, input[type="radio"]:after {
+    content: "";
+    display: block;
+    position: absolute;
+    transition: transform var(--d-t, 0.3s) var(--d-t-e, ease), opacity var(--d-o, 0.2s);
+ }
+  input[type="checkbox"]:checked, input[type="radio"]:checked {
+    --b: var(--active);
+    --bc: var(--active);
+    --d-o: 0.3s;
+    --d-t: 0.6s;
+    --d-t-e: cubic-bezier(0.2, 0.85, 0.32, 1.2);
+ }
+  input[type="checkbox"]:disabled, input[type="radio"]:disabled {
+    cursor: not-allowed;
+    opacity: 0.9;
+ }
+  input[type="checkbox"]:hover:not(:checked):not(:disabled), input[type="radio"]:hover:not(:checked):not(:disabled) {
+    --bc: var(--border-hover);
+ }
+  input[type="checkbox"]:focus, input[type="radio"]:focus {
+    box-shadow: 0 0 0 var(--focus);
+ }
+  input[type="checkbox"]:not(.toggle):after, input[type="radio"]:not(.toggle):after {
+    opacity: var(--o, 0);
+ }
+  input[type="checkbox"]:not(.toggle):checked, input[type="radio"]:not(.toggle):checked {
+    --o: 1;
+ }
+  input[type="checkbox"]:not(.toggle) {
+    top: 3px;
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+ }
+  input[type="checkbox"]:not(.toggle):after {
+    width: 5px;
+    height: 10px;
+    border: 2px solid var(--active-inner);
+    border-top: 0;
+    border-left: 0;
+    top: 0;
+    left: 4px;
+    transform: rotate(var(--r, 20deg));
+ }
+  input[type="checkbox"]:not(.toggle):checked {
+    --r: 43deg;
+    --bc: none;
+ }
+  input[type="checkbox"]:not(.toggle):disabled:checked {
+    --b: var(--disabled-inner);
+    --bc: var(--border);
+ }
+  input[type="checkbox"]:not(.toggle):disabled:checked:after {
+    top: 1px;
+    left: 4px;
+ }
+  input[type="checkbox"].toggle {
+    top: 4px;
+    left: 2px;
+    width: 34px;
+    height: 14px;
+    border-radius: 11px;
+    border: none;
+    background: var(--disabled-inner);
+ }
+  input[type="checkbox"].toggle:after {
+    top: -3px;
+    left: -3px;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    background: var(--disabled);
+    transform: translateX(var(--x, 0));
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.16), 0px -2px 6px rgba(0, 0, 0, 0.08);
+ }
+  input[type="checkbox"].toggle:checked {
+    --x: 19px;
+    background: rgba(255, 125, 9, 0.5) !important;
+ }
+  input[type="checkbox"].toggle:checked:after {
+    background: var(--active);
+ }
+  input[type="checkbox"].toggle:disabled {
+    background: var(--disabled-inner);
+ }
+  input[type="checkbox"].toggle:disabled:after {
+    background: var(--border);
+ }
+  input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--bc, var(--border));
+    background: var(--active-inner);
+ }
+  input[type="radio"]:after {
+    width: 20px;
+    height: 20px;
+    top: -3px;
+    left: -3px;
+    border-radius: 50%;
+    background: var(--active);
+    opacity: 0;
+    transform: scale(var(--s, 0.7));
+ }
+  input[type="radio"]:checked {
+    --s: 0.5;
+ }
+  input[type="radio"]:disabled {
+    border: 2px solid var(--border);
+ }
+  input[type="radio"]:disabled:after {
+    background: var(--border);
+ }
 }
+
+
 form {
   max-width: 600px;
 }
@@ -150,7 +323,7 @@ textarea {
 label {
   display: block;
   padding-bottom: 7px;
-  color: var(--nav-background);
+  color: var(--lighten-black-color);
   box-sizing: border-box;
   min-height: 61px;
 }
@@ -164,9 +337,10 @@ label.external {
 label.without-field-errors { min-height: 0; }
 
 label > span:first-child {
-  font-size: .7em;
+  font-size: 14px;
   font-weight: bold;
   display: block;
+  margin-bottom: 4px;
 }
 label small {
   display: block;
@@ -180,12 +354,12 @@ input[type=checkbox] {
 
 /* 2.1 Generic Form Components */
 .control {
-  border: 1px solid;
+  border: 2px solid;
   border-radius: 4px;
   color: white;
-  background: var(--button-orange);
+  background: var(--primary-color);
   line-height: 40px;
-  font-weight: lighter;
+  font-weight: bold;
   font-size: 1em;
   text-decoration: none;
 }
@@ -193,52 +367,63 @@ button.control, a.control {
   box-sizing: border-box;
   transition: all 0.2s;
 }
+
+button.control:focus, a.control:focus {
+  outline: none;
+}
+
 button.control:hover:not([disabled]), a.control:hover:not([disabled]) {
   color: white;
-  background-color: var(--button-orange-darker);
+  background-color: var(--darken-primary-color);
+  cursor: pointer;
 }
 button.control:disabled, a.control:disabled {
   color: white;
-  background-color: var(--button-grey);
-}
-button.control.secondary:disabled, a.control.secondary:disabled {
-  color: var(--button-grey);
-  background-color: white;
-  border: solid 1px var(--button-grey);
+  background-color: var(--grey-color);
 }
 
 /** Delete buttons, and the such */
 button.control.danger, a.control.danger {
   background: white;
   color: var(--danger-color);
-  border: solid 1px var(--danger-color);
+  border: solid 2px var(--danger-color);
 }
-button.control.danger:hover:not([disabled]), a.control.danger:hover:not([disabled]) {
-  color: white;
-  background-color: var(--danger-color);
+button.control.danger:hover:not([disabled]), a.control.danger:hover:not([disabled]),
+a.control.danger:active:not([disabled]) {
+  color: var(--danger-color);
+  background: var(--primary-color-lighter);
 }
-
-/** Things like cancel buttons */
-button.control.secondary, a.control.secondary {
-  background: white;
-  color: var(--button-orange);
-  border: solid 1px var(--button-orange);
-}
-button.control.secondary:hover:not([disabled]), a.control.secondary:hover:not([disabled]), a.control.secondary:active:not([disabled]) {
-  color: var(--button-orange);
-  background: var(--button-orange-lighter);
-}
-
-/** Ghost button */
-button.control.ghost, a.control.ghost {
-  background: white;
-  color: var(--button-orange);
+button.control.danger.ghost, a.control.danger.ghost {
   border: none;
 }
-button.control.ghost:hover:not([disabled]), a.control.ghost:hover:not([disabled]), a.control.ghost:active:not([disabled]) {
-  color: var(--button-orange);
-  background: var(--button-orange-lighter);
+
+/** Secondary button for things like cancel buttons  */
+button.control.secondary, a.control.secondary {
+  background: white;
+  color: var(--primary-color);
+  border: solid 1px var(--primary-color);
 }
+button.control.secondary:hover:not([disabled]), a.control.secondary:hover:not([disabled]),
+a.control.secondary:active:not([disabled]) {
+  color: var(--primary-color);
+  background: var(--primary-color-lighter);
+}
+button.control.secondary.ghost, a.control.secondary.ghost {
+  border: none;
+}
+
+/* Button disabled */
+button.control.secondary:disabled, button.control.danger:disabled, 
+a.control.secondary:disabled, a.control.danger:disabled {
+  color: var(--grey-color);
+  background-color: white;
+  border: solid 2px var(--grey-color);
+}
+
+button.control.ghost:disabled, a.control.ghost:disabled {
+  border: none;
+}
+
 
 div.controls-container {
   margin-top: 20px;
@@ -275,12 +460,21 @@ ul.non-field-errors {
  * 2.2 List Pages
  */
 .list-page-header { margin-bottom: 25px; }
-table { box-shadow: 0 0 8px -1px var(--shadow-color); width: 100%; border-collapse: collapse; }
-table tbody tr { border-bottom: 1px solid lightgray; transition: background-color 0.3s; }
-td, th { padding: 7px; }
+table { 
+  width: 100%; 
+  border-collapse: separate; 
+  border: solid 1px var(--grey-color); 
+  border-radius: 4px;  border-spacing: 0;
+}
+table thead tr th:first-child { border-top-left-radius: 3px; }
+table thead tr th:last-child { border-top-right-radius: 3px; }
+table tbody td { border-bottom: solid 1px var(--grey-color); transition: background-color 0.3s; }
+th { padding: 14px; }
+td { padding: 6px 14px; }
+thead { background: var(--darken-white-color); }
+thead tr, tbody tr { height: 48px; }
 thead th:first-of-type, tbody td:first-of-type { text-align: left; }
 tbody td { text-align: center; }
-tbody tr:hover, tbody tr:focus, tbody tr:active { background-color: #f5f5f5; }
 
 
 /**
@@ -295,10 +489,10 @@ tbody tr:hover, tbody tr:focus, tbody tr:active { background-color: #f5f5f5; }
   border-radius: 4px;
   border: none;
   color: white;
-  background: var(--button-orange);
+  background: var(--primary-color);
 }
 button.control, a.control {
-  font-weight: lighter;
+  font-weight: bold;
   font-size: 1em;
   text-decoration: none;
   height: 40px;
@@ -310,7 +504,7 @@ button.control, a.control {
 
 button.control:hover:not([disabled]), a.control:hover:not([disabled]), a.control:active:not([disabled]) {
   color: white;
-  background-color: var(--button-orange-darker);
+  background-color: var(--darken-primary-color);
 }
 
 
@@ -360,15 +554,15 @@ button.control:hover:not([disabled]), a.control:hover:not([disabled]), a.control
   border-radius: 4px;
   border: none;
   color: white;
-  background: var(--button-orange);
+  background: var(--primary-color);
 }
 .button:hover:not([disabled]) {
   color: white;
-  background-color: var(--button-orange-darker);
+  background-color: var(--darken-primary-color);
 }
 .button:disabled {
   color: white;
-  background-color: var(--button-grey);
+  background-color: var(--grey-color);
 }
 
 .add-button {
@@ -421,7 +615,7 @@ button.control:hover:not([disabled]), a.control:hover:not([disabled]), a.control
   padding-right: 40px;
   height: 65px;
   border: none;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: lighter;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   cursor: pointer;
@@ -452,3 +646,9 @@ button.control:hover:not([disabled]), a.control:hover:not([disabled]), a.control
 .dropdown-content a:hover {background-color: #f1f1f1}
 .dropdown:hover .dropdown-content { display: block; }
 .dropdown:hover .dropbtn { background-color: var(--lighter-nav-bg); }
+
+
+/* set ngx-smart-modal width to 100% */
+.nsm-content{
+  width: 100%;
+}

@@ -5,7 +5,7 @@ import { IStockSearch } from '@nusantara/models/products/stock-search';
 @Component({
   selector: 'nus-stock-search',
   template: `
-    <p>Available IN</p>
+    <h3>Product Inventory</h3>
     <table *ngIf="!!entity">
       <tr>
         <td>Warehouse</td>
@@ -18,7 +18,9 @@ import { IStockSearch } from '@nusantara/models/products/stock-search';
     </table>
 
   `,
-  styles: ['']
+  styles: [ 
+    'h3 { font-size: 20px; margin: 0 0 20px 0; }',
+  ]
 })
 export class StockSearchComponent implements OnInit {
 

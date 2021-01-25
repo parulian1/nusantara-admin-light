@@ -13,8 +13,7 @@ import * as fromReducer from '@nusantara/reducers';
 @Component({
   selector: 'nus-product-class-mapping-form',
   template: `
-    <h1>Edit Shipping</h1>
-
+    <h1 class="heading-1">Edit Shipping</h1>
     <div class="store-info wrapper">
       <div class="store-info">
         <div>Store</div>

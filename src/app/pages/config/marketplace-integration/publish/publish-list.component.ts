@@ -8,7 +8,8 @@ import {
 
 @Component({
   selector: 'nus-marketplace-publish',
-  template: `<h1>Publish List</h1>
+  template: `
+    <h1 class="heading-1">Publish List</h1>
     <nus-empty-list
       *ngIf="
         !shops?.entities?.length &&

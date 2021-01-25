@@ -10,7 +10,7 @@ import * as fromReducer from '@nusantara/reducers';
 @Component({
   selector: 'nus-product-class-mapping-list',
   template: `
-    <h1>Marketplace Configuration</h1>
+    <h1 class="heading-1">Marketplace Configuration</h1>
 
     <h2 class="sub_title">Product Class List</h2>
     <p>

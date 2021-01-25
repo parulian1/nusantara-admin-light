@@ -18,7 +18,7 @@ import { CustomerService } from '@nusantara/services';
   selector: 'nus-user-selection-modal',
   template: `
     <ngx-smart-modal [identifier]="'selectUser'" #modal [formGroup]="form">
-      <h1>Select User</h1>
+      <h2 class="heading-2">Select User</h2>
       <form #modalForm>
         <label>
           <span>Search</span>

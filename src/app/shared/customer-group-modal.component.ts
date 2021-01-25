@@ -18,7 +18,7 @@ import { CustomerGroupService } from '@nusantara/services';
   selector: 'nus-customer-group-selection-modal',
   template: `
     <ngx-smart-modal [identifier]="'selectGroup'" #modal [formGroup]="form">
-      <h1>Select Group</h1>
+      <h2 class="heading-2">Select Group</h2>
       <form #modalForm>
         <label>
           <span>Search</span>

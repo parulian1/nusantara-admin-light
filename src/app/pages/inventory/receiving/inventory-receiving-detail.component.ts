@@ -21,7 +21,7 @@ import {Location} from "@angular/common";
 @Component({
   selector: 'nus-receiving-order-detail',
   template: `
-    <h1 style="font-weight: 700">
+    <h1 class="heading-1">
       Pending Order {{entity.href|entityToSlug}}
     </h1>
     <p style="margin-bottom: 24px;">Edit shipping method for each product. Skip this step if you don't want to change anything.</p>
@@ -99,15 +99,17 @@ import {Location} from "@angular/common";
         </tr>
         </tbody>
       </table>
-      <button type="button" (click)="approve()" [disabled]="entity.status !== 'pending'" class="control" id="confirm-button">
-        Approve
-      </button>
-      <button type="button" (click)="reject()" [disabled]="entity.status !== 'pending'" class="control danger">
-        Reject
-      </button>
-      <button type="button" (click)="cancel()" class="control secondary">
-        Back
-      </button>
+      <div class="detail-actions">
+        <button type="button" (click)="approve()" [disabled]="entity.status !== 'pending'" class="control" id="confirm-button">
+          Approve
+        </button>
+        <button type="button" (click)="cancel()" class="control secondary">
+          Back
+        </button>
+        <button type="button" (click)="reject()" [disabled]="entity.status !== 'pending'" class="control danger">
+          Reject
+        </button>
+      </div>
     </form>
     <nus-marketplace-info-detail-modal [warehouseInfoDetail]="warehouseDetail"></nus-marketplace-info-detail-modal>
     <nus-confirm-pending-modal></nus-confirm-pending-modal>
@@ -123,7 +125,9 @@ import {Location} from "@angular/common";
     '#general-table-product td{height: 56px}',
     '#general-table-product td div{white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}',
     '#general-table-product thead{background-color: #F4F4F4;}',
-    'table#general-table-product{table-layout: fixed;}'
+    'table#general-table-product{table-layout: fixed;}',
+    'div.detail-actions { display: flex }',
+    'button.danger { margin-left: auto }'
   ]
 })
 export class InventoryReceivingDetailComponent extends AbstractDetailComponent<IReceivingOrder> implements OnInit {

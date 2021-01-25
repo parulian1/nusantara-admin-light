@@ -14,7 +14,7 @@ import {IShopeeAuthResponse} from "@nusantara/models";
     <form [formGroup]="form">
       <div class="variant-container" formArrayName="variantFormArray">
         <div class="variant-class">
-          <h1 style="color:#365DC3;font-weight: 700">Variant Configuration</h1>
+          <h1 class="heading-1">Variant Configuration</h1>
             <p>Once you choose, you can't change back.</p>
             <div class="variant" *ngFor="let order of variantFormArray.controls; let i = index" [formGroupName]="i">
               <input type="radio" (change)="onChangeVariant(i)" formControlName="variant" name="variant"  [checked]="i === variantChecked" >
@@ -47,7 +47,7 @@ import {IShopeeAuthResponse} from "@nusantara/models";
     '.marketplace{font-size: 20px}',
     '.variant-class{overflow: hidden; vertical-align: bottom}',
     '.variant-description{background-color: #F4F4F4; width: 570px;height: 150px;}',
-    'input[type="radio"]{border-radius: 10px;color: orange;width: auto}'
+    'input[type="radio"]{border-radius: 10px;color: orange;}'
   ],
   providers: [
     {

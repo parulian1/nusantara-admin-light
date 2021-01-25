@@ -14,7 +14,7 @@ import { ICustomer, ICustomerGroup, IOrder } from '@nusantara/models';
 @Component({
   selector: 'nus-customer-detail',
   template: `
-    <h1>Customer Details</h1>
+    <h1 class="heading-1">Customer Details</h1>
 
     <ul class="non-field-errors">
       <li *ngFor="let err of nonFieldErrors">{{ err }}</li>
