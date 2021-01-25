@@ -28,6 +28,7 @@ import { drf } from '@nusantara/models';
   `,
   styles: [
     ':host { display: contents; }',
+    'td > select { width: 100%; }'
   ]
 })
 export class SocialMediaHostComponent implements OnInit, AfterViewInit {
