@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { GroupService } from '@nusantara/services';
-import { IAccessGroup } from "@nusantara/models";
+import { IAccessGroup } from '@nusantara/models';
 import { AbstractListResolver } from '@nusantara/core';
 
 @Injectable({

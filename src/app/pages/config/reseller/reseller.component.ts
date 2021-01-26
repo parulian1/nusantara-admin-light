@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractDetailComponent, DialogResult, ToastService } from '@nusantara/core';
 import { drf, INamedHrefEntity, IReseller, IResellerType, products } from '@nusantara/models';
-import { CustomerGroupModalComponent } from "@nusantara/shared";
-import { ResellerService } from "@nusantara/services";
+import { CustomerGroupModalComponent } from '@nusantara/shared';
+import { ResellerService } from '@nusantara/services';
 
 
 @Component({
@@ -78,7 +78,7 @@ export class ResellerComponent extends AbstractDetailComponent<IReseller> implem
 
   entity?: IReseller;
   options: drf.IChoice[] = [];
-  showGroups: boolean = false;
+  showGroups: boolean;
 
   constructor(service: ResellerService,
               public fb: FormBuilder,
@@ -98,7 +98,7 @@ export class ResellerComponent extends AbstractDetailComponent<IReseller> implem
       this.options = data.types;
       this.updateShowGroups(this.entity.type);
     });
-    this.originalEntityName = "Reseller Config";
+    this.originalEntityName = 'Reseller Config';
   }
 
   initializeForm(entity?: IReseller) {

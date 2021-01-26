@@ -19,17 +19,17 @@ export class OrderService extends AbstractCrudService<IOrder> {
 
   public fetchParams(params: HttpParams) {
     let page = params.get('page');
-    let per_page = params.get('per_page');
+    let perPage = params.get('perPage');
     if (!page) {
       page = '1';
     }
 
-    if (!per_page) {
-      per_page = '20';
+    if (!perPage) {
+      perPage = '20';
     }
 
     params = params.set('page', page);
-    params = params.set('per_page', per_page);
+    params = params.set('perPage', perPage);
 
     return this.httpClient
       .get<IOrder[]>(
@@ -44,11 +44,11 @@ export class OrderService extends AbstractCrudService<IOrder> {
 
   fetchWithParam(
     page: number = 1,
-    user_email?: string
+    userEmail?: string
   ): Observable<PagedResponse<IOrder>> {
     const rawParams = {
       'page': page.toFixed(0).toString(),
-      'user': user_email,
+      'user': userEmail,
     };
 
     return this.httpClient

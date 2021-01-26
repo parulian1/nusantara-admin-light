@@ -45,7 +45,7 @@ export class ProductService extends AbstractCrudService<products.IProduct> {
   }
 
   fetch(slug: string): Observable<products.IProduct> {
-    let params = new HttpParams({fromObject: {
+    const params = new HttpParams({fromObject: {
         include_deleted: 'true',
       }});
     return this.httpClient

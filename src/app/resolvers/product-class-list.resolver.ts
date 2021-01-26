@@ -13,7 +13,8 @@ export class ProductClassListResolver implements Resolve<PagedResponse<products.
 
   constructor(private service: ProductClassService, private router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<PagedResponse<products.IProductClass>> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot,
+          state: RouterStateSnapshot): Observable<PagedResponse<products.IProductClass>> | Observable<never> {
     const query = route.queryParamMap.get('q');
     const page = parseInt(route.queryParamMap.get('page') || '1', 10);
     return this.service.fetchList(query, page);

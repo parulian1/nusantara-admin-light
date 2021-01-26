@@ -1,7 +1,7 @@
-import { ActivatedRoute } from "@angular/router";
-import { AbstractListComponent } from "@nusantara/core";
-import { products } from "@nusantara/models";
-import {Component} from "@angular/core";
+import { ActivatedRoute } from '@angular/router';
+import { AbstractListComponent } from '@nusantara/core';
+import { products } from '@nusantara/models';
+import { Component } from '@angular/core';
 
 /**
  * A searchable list of all product option.

@@ -113,7 +113,7 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
 
   public deletedRanges: Array<products.IPriceListRange> = [];
 
-  @Output() removePriceList:EventEmitter<any> = new EventEmitter<any>();
+  @Output() removePriceList: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(protected rangeService: PriceListRangeService,
               protected route: ActivatedRoute,

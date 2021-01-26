@@ -3,9 +3,8 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractDetailComponent, ToastService } from '@nusantara/core';
-import { banner, drf } from '@nusantara/models';
+import { banner, drf, widgets } from '@nusantara/models';
 import { BannerService } from '@nusantara/services';
-import {IBannerGroup} from "../../../models/widgets/banner-group";
 
 @Component({
   selector: 'nus-banner',
@@ -116,7 +115,7 @@ export class BannerComponent extends AbstractDetailComponent<banner.IBanner> imp
   phoneImagePreviewUrl: string;
   tabletImagePreviewUrl: string;
 
-  groups: Array<IBannerGroup>;
+  groups: Array<widgets.IBannerGroup>;
   typeChoices: drf.IChoice[];
 
 
@@ -153,7 +152,7 @@ export class BannerComponent extends AbstractDetailComponent<banner.IBanner> imp
       name: [entity?.name, [Validators.required, Validators.maxLength(50)]],
       type: [entity?.type, [Validators.required]],
       href: [entity?.href, []],
-      image: ['', entity?.image ? []: [Validators.required]],
+      image: ['', entity?.image ? [] : [Validators.required]],
       phoneImage: ['', []],
       tabletImage: ['', []],
       isActive: [entity?.isActive ?? false, []],

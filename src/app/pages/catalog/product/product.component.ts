@@ -404,18 +404,20 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         if (resp instanceof ErrorResult) {
           this.onSaveError(resp);
         } else {
-          if (this.isProductOptionDomain) this.subscriptionHost.save(resp.entity).subscribe(() => { });
+          if (this.isProductOptionDomain) {
+            this.subscriptionHost.save(resp.entity).subscribe(() => { });
+          }
 
           this.mediaHost.saveAll(resp.entity).subscribe(() => { });
-          this.priceListHost.saveAll(resp.entity).pipe(catchError(child_err => {
-            if (child_err instanceof HttpErrorResponse) {
-              return of(new ErrorResult<IError>(child_err.error, child_err.status));
+          this.priceListHost.saveAll(resp.entity).pipe(catchError(childErr => {
+            if (childErr instanceof HttpErrorResponse) {
+              return of(new ErrorResult<IError>(childErr.error, childErr.status));
             } else {
-              return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, child_err.status));
+              return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, childErr.status));
             }
-          })).subscribe( (child_resp) => {
-              if (child_resp instanceof ErrorResult) {
-                this.onSaveError(child_resp);
+          })).subscribe( (childResp) => {
+              if (childResp instanceof ErrorResult) {
+                this.onSaveError(childResp);
               } else {
                 this.onSaveSuccess(resp);
               }

@@ -8,8 +8,8 @@ import { ToastLevelEnum, ToastService } from '@nusantara/core/toast';
 import { ErrorResult, IResultResponse } from '@nusantara/core/responses';
 import { IHttpFailure } from '@nusantara/models';
 import { AbstractEditingComponent } from './abstract-editing.component';
-import { convertStringToObject, keysToCamel } from "@nusantara/shared/helpers";
-import { isObject } from "rxjs/internal-compatibility";
+import { convertStringToObject, keysToCamel } from '@nusantara/shared/helpers';
+import { isObject } from 'rxjs/internal-compatibility';
 
 
 /**
@@ -149,7 +149,7 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
   protected onSaveError(error: any) {
     this.form.enable();
     let errorMessage = '';
-    let errorMessages: string[] = [];
+    const errorMessages: string[] = [];
 
     if (error.errorDetails.errors) {
       this.setFormErrors(error.errorDetails.errors);
@@ -160,7 +160,7 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
     }
       else if (isObject(error.errorDetails)) {
       this.getErrors(error.errorDetails, errorMessages);
-      errorMessage = errorMessages.length > 0 ? errorMessages[0]: 'Please check your input again.';
+      errorMessage = errorMessages.length > 0 ? errorMessages[0] : 'Please check your input again.';
       this.setFormErrors(error.errorDetails);
     } else {
       errorMessage = 'Please check your input again.';
@@ -205,7 +205,7 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
    */
   setFormErrors(error: any) {
     let errorMessage: any;
-    if (typeof error !== "object") {
+    if (typeof error !== 'object') {
       const errorsString = error.join('\n');
       const errorObject = convertStringToObject(errorsString);
       errorMessage = keysToCamel(errorObject);
@@ -225,7 +225,7 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
   /**
    * Handle error message
    */
-  getErrors(errorDetail: Object, errorMessages: string[]) {
+  getErrors(errorDetail: object, errorMessages: string[]) {
     Object.keys(errorDetail).forEach((field) => {
       if (errorDetail instanceof Array) {
         errorMessages.push(`${field}: ${errorDetail[field]}`);

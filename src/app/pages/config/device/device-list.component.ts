@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { AbstractListComponent } from '@nusantara/core';
-import { device } from "../../../models";
+import { device } from '@nusantara/models';
 
 @Component({
   selector: 'nus-device-list',
@@ -34,5 +34,5 @@ import { device } from "../../../models";
   styles: [],
 })
 export class DeviceListComponent extends AbstractListComponent<device.IDevice> {
-  constructor(route: ActivatedRoute) { super(route);}
+  constructor(route: ActivatedRoute) { super(route); }
 }

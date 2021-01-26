@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import {AbstractListResolver, PagedResponse} from '../../core';
 import {banner, IOrder} from '../../models';
-import { BannerService } from "../../services";
+import { BannerService } from '../../services';
 import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
 import {HttpParams} from '@angular/common/http';

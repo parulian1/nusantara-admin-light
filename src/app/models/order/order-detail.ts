@@ -1,5 +1,5 @@
-import { IOrderChildren } from "@nusantara/models/order/order-children";
-import { ICoreOrder } from "@nusantara/models/order/core-order";
+import { IOrderChildren } from '@nusantara/models/order/order-children';
+import { ICoreOrder } from '@nusantara/models/order/core-order';
 
 export interface IOrderDetail extends ICoreOrder {
   customer: {

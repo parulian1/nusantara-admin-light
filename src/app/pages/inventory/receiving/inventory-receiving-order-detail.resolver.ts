@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { AbstractDetailResolver } from '../../../core';
 import { IReceivingOrder} from '../../../models/inventory';
-import { InventoryReceivingOrderService } from "../../../services/inventory-receiving-order.service";
+import { InventoryReceivingOrderService } from '../../../services/inventory-receiving-order.service';
 
 @Injectable({
   providedIn: 'root'

@@ -5,6 +5,7 @@ export * from './receiving-order-status.type';
 export * from './inventory-order-status.type';
 
 export * from './inventory-order.type';
+
 export * from './receiving-order';
 export * from './stock-record';
 

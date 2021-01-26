@@ -1,4 +1,4 @@
-import { INamedHrefEntity } from "../base";
+import { INamedHrefEntity } from '../base';
 
 export interface IOrderChildrenLineItem {
   notes: string;

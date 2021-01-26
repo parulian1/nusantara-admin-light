@@ -1,8 +1,8 @@
-import { Component } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
-import { AbstractListComponent } from "@nusantara/core";
-import { banner } from "@nusantara/models";
+import { AbstractListComponent } from '@nusantara/core';
+import { banner } from '@nusantara/models';
 
 @Component({
   selector: 'nus-banner-list',

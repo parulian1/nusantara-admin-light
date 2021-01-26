@@ -262,7 +262,6 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     return (offset < 0 ? '+' : '-') + ('00' + Math.floor(o / 60)).slice(-2) + ':' + ('00' + (o % 60)).slice(-2);
   }
 
-
   uploadProductXLSX(): void {
     const input: HTMLInputElement = document.createElement('input');
     input.type = 'file';
@@ -304,28 +303,25 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     input.click();
   }
 
-  //
-  // onFileChange(evt: any) {
-	// 	/* wire up file reader */
-	// 	const target: DataTransfer = <DataTransfer>(evt.target);
-	// 	if (target.files.length !== 1) throw new Error('Cannot use multiple files');
-	// 	const reader: FileReader = new FileReader();
-	// 	reader.onload = (e: any) => {
-	// 		/* read workbook */
-	// 		const bstr: string = e.target.result;
-	// 		const wb: XLSX.WorkBook = XLSX.read(bstr, {type: 'binary'});
-  //
-	// 		/* grab first sheet */
-	// 		const wsname: string = wb.SheetNames[0];
-	// 		const ws: XLSX.WorkSheet = wb.Sheets[wsname];
-  //
-	// 		/* save data */
-	// 		this.data = <AOA>(XLSX.utils.sheet_to_json(ws, {header: 1}));
-	// 	};
-	// 	reader.readAsBinaryString(target.files[0]);
-	// }
-
-
+    // onFileChange(evt: any) {
+    // 	/* wire up file reader */
+    // 	const target: DataTransfer = <DataTransfer>(evt.target);
+    // 	if (target.files.length !== 1) throw new Error('Cannot use multiple files');
+    // 	const reader: FileReader = new FileReader();
+    // 	reader.onload = (e: any) => {
+    // 		/* read workbook */
+    // 		const bstr: string = e.target.result;
+    // 		const wb: XLSX.WorkBook = XLSX.read(bstr, {type: 'binary'});
+    //
+    // 		/* grab first sheet */
+    // 		const wsname: string = wb.SheetNames[0];
+    // 		const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+    //
+    // 		/* save data */
+    // 		this.data = <AOA>(XLSX.utils.sheet_to_json(ws, {header: 1}));
+    // 	};
+    // 	reader.readAsBinaryString(target.files[0]);
+    // }
 
   save() {
     this.form.value.validFrom = this.form.value.validFrom + this.getTimeZone();

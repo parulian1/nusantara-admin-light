@@ -1,4 +1,4 @@
-import { INamedHrefEntity } from "@nusantara/models/base";
+import { INamedHrefEntity } from '@nusantara/models/base';
 
 export enum PaymentTypeChoices {
   MANUAL_TRANSFER = 'manual_transfer',
