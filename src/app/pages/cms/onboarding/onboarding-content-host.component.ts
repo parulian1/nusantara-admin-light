@@ -2,9 +2,9 @@ import {AfterViewInit, Component, OnInit, EventEmitter, Input, Output, ViewChild
 import {AbstractEditingComponent, moveItemInFormArray} from '@nusantara/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {IOnBoarding, IOnboardingContent} from "@nusantara/models";
-import {CdkDragDrop} from "@angular/cdk/drag-drop";
-import {OnboardingContentComponent} from "./onboarding-content.component";
+import {IOnBoarding, IOnboardingContent} from '@nusantara/models';
+import {CdkDragDrop} from '@angular/cdk/drag-drop';
+import {OnboardingContentComponent} from './onboarding-content.component';
 
 @Component({
   selector: 'nus-onboarding-content-host',
@@ -27,7 +27,6 @@ import {OnboardingContentComponent} from "./onboarding-content.component";
 export class OnboardingContentHostComponent extends AbstractEditingComponent<FormArray> implements OnInit, AfterViewInit {
   @Input() form: FormArray;
   @Input() entity: IOnBoarding;
-  imagePreviewUrl: string;
 
   @ViewChild(OnboardingContentComponent) content!: OnboardingContentComponent;
 

@@ -25,7 +25,9 @@ import {
   OnboardingComponent,
   OnboardingListComponent,
   OnboardingContentComponent,
-  OnboardingContentHostComponent, OnboardingContentImageComponent
+  OnboardingContentHostComponent,
+  OnboardingContentImageComponent,
+  OnboardingPreviewHostDialogComponent
 } from './onboarding';
 import {DragDropModule} from "@angular/cdk/drag-drop";
 
@@ -63,6 +65,7 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
         OnboardingContentComponent,
         OnboardingContentHostComponent,
         OnboardingContentImageComponent,
+        OnboardingPreviewHostDialogComponent,
     ],
   imports: [
     CommonModule,

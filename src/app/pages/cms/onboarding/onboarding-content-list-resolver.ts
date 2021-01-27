@@ -2,7 +2,7 @@ import {IOnBoarding} from '@nusantara/models';
 import {Injectable} from '@angular/core';
 import {Resolve, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
-import {OnboardingService} from "@nusantara/services";
+import {OnboardingService} from '@nusantara/services';
 
 @Injectable({
   providedIn: 'root',

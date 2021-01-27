@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {AbstractChoiceResolver} from '@nusantara/core';
-import {OnboardingService} from "@nusantara/services";
+import {OnboardingService} from '@nusantara/services';
 
 @Injectable({
   providedIn: 'root',

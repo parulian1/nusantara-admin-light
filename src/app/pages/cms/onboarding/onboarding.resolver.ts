@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AbstractDetailResolver } from '@nusantara/core';
 import { OnboardingService } from '@nusantara/services';
-import { IOnBoarding } from "@nusantara/models";
+import { IOnBoarding } from '@nusantara/models';
 
 @Injectable({
   providedIn: 'root',

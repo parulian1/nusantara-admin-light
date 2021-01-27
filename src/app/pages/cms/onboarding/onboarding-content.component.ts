@@ -1,10 +1,9 @@
-import {AfterViewInit, Component, OnInit, EventEmitter, Input, Output, ViewChild} from '@angular/core';
-import {AbstractEditingComponent, DialogResult} from '@nusantara/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {IOnboardingContent} from "@nusantara/models";
-import {NewProductImageComponent} from "@nusantara/pages/catalog/product/media";
-import {OnboardingContentImageComponent} from "@nusantara/pages/cms/onboarding/onboarding-content-image.component";
+import { AfterViewInit, Component, OnInit, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import { AbstractEditingComponent, DialogResult } from '@nusantara/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { IOnboardingContent } from '@nusantara/models';
+import { OnboardingContentImageComponent } from '@nusantara/pages/cms/onboarding/onboarding-content-image.component';
 
 @Component({
   selector: 'nus-onboarding-content',
@@ -153,8 +152,6 @@ export class OnboardingContentComponent extends AbstractEditingComponent impleme
       this.getValue();
     }
   }
-
-
 
   getValue() {
     return this.form.value;

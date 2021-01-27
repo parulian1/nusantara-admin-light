@@ -6,3 +6,4 @@ export * from './onboarding-type.resolver';
 export * from './onboarding-content.component';
 export * from './onboarding-content-host.component';
 export * from './onboarding-content-image.component';
+export * from './preview';
