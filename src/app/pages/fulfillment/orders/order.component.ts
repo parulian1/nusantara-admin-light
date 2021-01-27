@@ -19,6 +19,7 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
   currentTab: 'orderDetail' | 'shipping' | 'history' | 'paymentConfirm' = 'orderDetail';
   orderStatusChoices: Array<drf.IChoice>;
   entity: order.IOrderDetail;
+  isRequestShipment = false;
 
   constructor(public service: OrderService,
               public route: ActivatedRoute,
@@ -92,28 +93,45 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
     } else if (childrenData.status === 'shipped') {
       alert(`Order already shipped`);
     } else {
+      this.isRequestShipment = true;
+      let shipmentInfo = {
+            orderHref: childrenData.href,
+            message: 'Please wait...',
+            success: true,
+            connoteNumber: '',
+          };
+      this.shipmentMessageInfo.push(shipmentInfo);
       this.shipmentService.createAWB({
         orderNumber: getSlugFromHref(childrenData.href)
       }).subscribe((response) => {
+        let foundShipmentInfoIndex = this.shipmentMessageInfo.findIndex((messageInfo) => {
+          return messageInfo.orderHref === childrenData.href;
+        });
         if (response instanceof ErrorResult) {
-          this.shipmentMessageInfo.push({
+          shipmentInfo = {
             orderHref: childrenData.href,
             message: 'Please contact administrator, something went wrong...',
-            success: response.success,
+            success: true,
             connoteNumber: '',
-          });
+          }
         } else {
-          this.shipmentMessageInfo.push({
+          shipmentInfo = {
             orderHref: childrenData.href,
             message: response.messages[0],
             success: response.success,
             connoteNumber: response.entity.airwayBillNumber,
-          });
+          };
           childrenData.shipmentHistory.href = response.entity.href;
           childrenData.shipmentHistory.awbNumber = response.entity.awbNumber;
           this.fetchAwbUrl(childrenData);
           this.updateOrder(childrenData, 'shipped');
         }
+        if (foundShipmentInfoIndex !== -1) {
+          this.shipmentMessageInfo[foundShipmentInfoIndex] = shipmentInfo;
+        } else {
+          this.shipmentMessageInfo.push(shipmentInfo);
+        }
+        this.isRequestShipment = false;
       });
     }
   }
@@ -205,7 +223,7 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
   }
 
   getIsDisabledForShipment(childrenData: any): boolean {
-    if (childrenData.status !== 'ready' || childrenData.status === 'shipped') {
+    if (childrenData.status !== 'ready' || childrenData.status === 'shipped' || this.isRequestShipment) {
       return true;
     }
     return false;

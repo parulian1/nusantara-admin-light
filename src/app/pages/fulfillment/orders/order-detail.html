@@ -49,6 +49,14 @@
         <address [innerHTML]="getOrderAddress()"></address>
       </td>
     </tr>
+    <tr>
+      <td>Shipment</td>
+      <td>
+        <span *ngFor="let children of orderDetailData.children">
+          {{ children.data[0].shippingMethod }}
+        </span>
+      </td>
+    </tr>
 
     <tr *ngIf="canUpdateOrder()">
       <td></td>
