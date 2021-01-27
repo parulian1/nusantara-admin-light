@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators, FormBuilder } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, Validators, FormBuilder} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import * as ClassicEditor from '@gdnnusantara/ckeditor5-build/build/ckeditor';
 
-import { ToastService, AbstractDetailComponent } from '@nusantara/core';
-import { IFlatPage } from '@nusantara/models';
-import { FlatPageService } from '@nusantara/services';
-import { getLastUrlString } from '@nusantara/core/helpers';
+import {ToastService, AbstractDetailComponent} from '@nusantara/core';
+import {IFlatPage} from '@nusantara/models';
+import {FlatPageService} from '@nusantara/services';
+import {getLastUrlString} from '@nusantara/core/helpers';
 
 @Component({
   selector: 'nus-flat-page',
@@ -34,7 +34,7 @@ import { getLastUrlString } from '@nusantara/core/helpers';
 
       <div>
         <label for="content" class="external"><span>Content</span></label>
-        <ckeditor [editor]="Editor"
+        <ckeditor [editor]="Editor" [config]="editorConfig"
                   [formControl]="content" id="content"></ckeditor>
         <nus-field-errors [control]="content"></nus-field-errors>
       </div>
@@ -55,6 +55,60 @@ export class FlatPageComponent extends AbstractDetailComponent<IFlatPage> implem
   public hideDelete = false;
 
   public Editor = ClassicEditor;
+
+  editorConfig = {
+    toolbar: {
+      items: [
+        'heading',
+        '|',
+        'bold',
+        'italic',
+        'link',
+        'bulletedList',
+        'numberedList',
+        '|',
+        'alignment',
+        'indent',
+        'outdent',
+        '|',
+        'imageUpload',
+        'imageInsert',
+        'blockQuote',
+        'insertTable',
+        'mediaEmbed',
+        'undo',
+        'redo',
+        '|',
+        'code',
+        'codeBlock',
+        'htmlEmbed',
+        'fontColor',
+        'fontSize',
+        'fontFamily',
+        'highlight',
+        'horizontalLine'
+      ]
+    },
+    language: 'en',
+    image: {
+      toolbar: [
+        'imageTextAlternative',
+        'imageStyle:full',
+        'imageStyle:side',
+        'linkImage'
+      ]
+    },
+    table: {
+      contentToolbar: [
+        'tableColumn',
+        'tableRow',
+        'mergeTableCells',
+        'tableCellProperties',
+        'tableProperties'
+      ]
+    },
+    licenseKey: ''
+  };
 
   constructor(service: FlatPageService,
               public fb: FormBuilder,
