@@ -1,12 +1,12 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
 
-import { AbstractDetailComponent, DialogResult, ToastService } from '@nusantara/core';
-import { IProduct } from '@nusantara/models/products';
-import { IPoints, IProductPoints } from '@nusantara/models';
-import { PointsService } from '@nusantara/services';
-import { ProductSelectionModalComponent } from '@nusantara/shared';
+import {AbstractDetailComponent, DialogResult, ToastService} from '@nusantara/core';
+import {IProduct} from '@nusantara/models/products';
+import {IPoints, IProductPoints} from '@nusantara/models';
+import {PointsService} from '@nusantara/services';
+import {ProductSelectionModalComponent} from '@nusantara/shared';
 
 @Component({
   selector: 'nus-points',
@@ -31,13 +31,14 @@ import { ProductSelectionModalComponent } from '@nusantara/shared';
               <label>
                 <span>Every transaction of</span>
                 <span class="rp-text">Rp</span>
-                <input type="text" [formControl]="transactionAmount" maxlength="50" placeholder="x">
+                <input type="text" mask="separator" thousandSeparator="." [formControl]="transactionAmount"
+                       placeholder="x">
                 <nus-field-errors [control]="transactionAmount"></nus-field-errors>
               </label>
 
               <label>
                 <span class="customer-get">customer get</span>
-                <input type="text" [formControl]="point" maxlength="50" placeholder="y Points">
+                <input type="text" mask="separator" thousandSeparator="." [formControl]="point" placeholder="y Points">
                 <nus-field-errors [control]="point"></nus-field-errors>
               </label>
             </div>
@@ -106,23 +107,26 @@ import { ProductSelectionModalComponent } from '@nusantara/shared';
               <label [ngClass]="{'active': expireType === 'after_earning'}">
                 <input type="radio" id="tab_after_earning" value="after_earning" formControlName="expireType">
                 After earning
-                <input type="text" class="expire-at" [formControl]="expireAt" [hidden]="expireType !== 'after_earning'"
+                <input type="number" class="expire-at" [formControl]="expireAt"
+                       [hidden]="expireType !== 'after_earning'"
                        placeholder="x Days">
+                <span class="subtitle" [hidden]="expireType !== 'after_earning'">Days</span>
               </label>
 
               <label [ngClass]="{'active': expireType === 'customer_not_active'}">
                 <input type="radio" id="tab_customer_not_active" value="customer_not_active"
                        formControlName="expireType">
                 If customer not active
-                <input type="text" class="expire-at" [formControl]="expireAt"
+                <input type="number" class="expire-at" [formControl]="expireAt"
                        [hidden]="expireType !== 'customer_not_active'" placeholder=" x Days">
+                <span class="subtitle" [hidden]="expireType !== 'customer_not_active'">Days</span>
               </label>
 
               <label [ngClass]="{'active': expireType === 'every_year'}">
                 <input type="radio" id="tab_every_year" value="every_year" formControlName="expireType">
                 Every year on
-                <input type="text" class="expire-at" [formControl]="expireAt"
-                       [hidden]="expireType !== 'every_year'" maxlength=" 50" placeholder="x Days">
+                <input type="text" mask="d0-m0" [dropSpecialCharacters]="false" class="expire-at" [formControl]="expireAt"
+                       [hidden]="expireType !== 'every_year'" placeholder="dd-mm">
               </label>
             </div>
 
@@ -167,6 +171,18 @@ import { ProductSelectionModalComponent } from '@nusantara/shared';
     </form>
   `,
   styles: [`
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+
     ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
       color: #E7E7E7;
       opacity: 1; /* Firefox */
@@ -291,7 +307,7 @@ import { ProductSelectionModalComponent } from '@nusantara/shared';
       align-items: center;
       cursor: pointer;
       display: grid;
-      grid-template-columns: auto 200px auto;
+      grid-template-columns: auto 200px auto auto;
       grid-template-rows: auto;
     }
 
@@ -358,16 +374,45 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
     super(route, router, toast, service);
   }
 
-  get name(): FormControl { return this.form.get('name') as FormControl; }
-  get transactionAmount(): FormControl { return this.form.get('transactionAmount') as FormControl; }
-  get point(): FormControl { return this.form.get('point') as FormControl; }
-  get rounding(): string { return this.form.get('rounding').value; }
-  get appliedOnOnline(): FormControl { return this.form.get('appliedOnOnline') as FormControl; }
-  get appliedOnOffline(): FormControl { return this.form.get('appliedOnOffline') as FormControl; }
-  get appliedOnApps(): FormControl { return this.form.get('appliedOnApps') as FormControl; }
-  get expireType(): string { return this.form.get('expireType').value; }
-  get expireAt(): FormControl { return this.form.get('expireAt') as FormControl; }
-  get products(): FormArray { return this.form.get('products') as FormArray; }
+  get name(): FormControl {
+    return this.form.get('name') as FormControl;
+  }
+
+  get transactionAmount(): FormControl {
+    return this.form.get('transactionAmount') as FormControl;
+  }
+
+  get point(): FormControl {
+    return this.form.get('point') as FormControl;
+  }
+
+  get rounding(): string {
+    return this.form.get('rounding').value;
+  }
+
+  get appliedOnOnline(): FormControl {
+    return this.form.get('appliedOnOnline') as FormControl;
+  }
+
+  get appliedOnOffline(): FormControl {
+    return this.form.get('appliedOnOffline') as FormControl;
+  }
+
+  get appliedOnApps(): FormControl {
+    return this.form.get('appliedOnApps') as FormControl;
+  }
+
+  get expireType(): string {
+    return this.form.get('expireType').value;
+  }
+
+  get expireAt(): FormControl {
+    return this.form.get('expireAt') as FormControl;
+  }
+
+  get products(): FormArray {
+    return this.form.get('products') as FormArray;
+  }
 
   ngOnInit(): void {
     super.ngOnInit();
@@ -407,8 +452,10 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
 
   addProduct(product?: IProductPoints): void {
     const f = this.fb.group({
-      href: [product?.product.href, []],
-      name: [product?.product.name, []],
+      product: this.fb.group({
+        href: [product?.product.href, []],
+        name: [product?.product.name, []],
+      }),
       amount: [product?.amount, []]
     });
 

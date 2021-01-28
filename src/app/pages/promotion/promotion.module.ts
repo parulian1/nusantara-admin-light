@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NgxMaskModule } from 'ngx-mask';
 
 import { SharedModule } from '@nusantara/shared';
 import { PromotionRoutingModule } from './promotion-routing.module';
@@ -24,6 +25,7 @@ import { ProductPointsComponent } from './points/product-points/product-points.c
     SharedModule,
     ReactiveFormsModule,
     PromotionRoutingModule,
+    NgxMaskModule.forRoot(),
   ],
 })
 export class PromotionModule { }
