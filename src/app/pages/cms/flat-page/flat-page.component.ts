@@ -3,6 +3,7 @@ import {FormControl, Validators, FormBuilder} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import * as ClassicEditor from '@gdnnusantara/ckeditor5-build/build/ckeditor';
 
+
 import {ToastService, AbstractDetailComponent} from '@nusantara/core';
 import {IFlatPage} from '@nusantara/models';
 import {FlatPageService} from '@nusantara/services';
@@ -93,10 +94,15 @@ export class FlatPageComponent extends AbstractDetailComponent<IFlatPage> implem
     image: {
       toolbar: [
         'imageTextAlternative',
+        'imageStyle:alignLeft', 'imageStyle:alignCenter', 'imageStyle:alignRight',
         'imageStyle:full',
-        'imageStyle:side',
-        'linkImage'
-      ]
+        'linkImage',
+        'imageResize'
+      ],
+      styles: [
+        'full',
+        'alignLeft', 'alignCenter', 'alignRight'
+      ],
     },
     table: {
       contentToolbar: [
