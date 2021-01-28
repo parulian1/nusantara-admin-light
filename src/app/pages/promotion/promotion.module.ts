@@ -7,6 +7,8 @@ import { PromotionRoutingModule } from './promotion-routing.module';
 
 import { ProductPromotionComponent, PromotionListComponent } from './promotion';
 import { VoucherListComponent, VoucherComponent } from './voucher';
+import { PointsComponent } from './points/points.component';
+import { ProductPointsComponent } from './points/product-points/product-points.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +16,8 @@ import { VoucherListComponent, VoucherComponent } from './voucher';
     PromotionListComponent,
     VoucherListComponent,
     VoucherComponent,
+    PointsComponent,
+    ProductPointsComponent,
   ],
   imports: [
     CommonModule,

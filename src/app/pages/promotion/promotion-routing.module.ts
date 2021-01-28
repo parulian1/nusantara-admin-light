@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { PointsComponent } from './points/points.component';
+import { PointsResolver } from './points/points.resolver';
 import { ProductPromotionComponent, ProductPromotionListResolver, ProductPromotionResolver, PromotionListComponent } from './promotion';
 import { VoucherComponent, VoucherListComponent } from './voucher';
 import { VoucherListResolver } from './voucher/voucher-list.resolver';
@@ -55,6 +57,18 @@ const routes: Routes = [
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },
       },
+    ]
+  },
+  {
+    path: 'points',
+    children: [
+      {
+        path: '',
+        component: PointsComponent,
+        resolve: { entity: PointsResolver },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'List' }
+      }
     ]
   }
 ];

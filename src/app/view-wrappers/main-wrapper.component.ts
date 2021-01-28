@@ -58,6 +58,7 @@ import { SubscriptionLike } from 'rxjs';
         </li>
         <li><a [routerLink]="['/promotion/promos']" routerLinkActive="active" translate>Promos</a></li>
         <li><a [routerLink]="['/promotion/vouchers']" routerLinkActive="active" translate>Vouchers</a></li>
+        <li><a [routerLink]="['/promotion/points']" routerLinkActive="active" translate>Points</a></li>
 
         <li class="section-header">
           <i class="material-icons">edit</i>
