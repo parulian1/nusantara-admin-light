@@ -28,29 +28,33 @@ import { RangeComponent } from './range.component';
   template: `
     <ng-container [formGroup]="form">
     
-    <div class="price-list">
+    <div class="wrapper list">
       <div>
-        <div>Type</div>
-        <div>
-          {{ type.value | titlecase }}
+        <div class="body-2">Type</div>
+        <div class="subheading-2"> {{ type.value | titlecase }} </div>
+      </div>
+      <div>
+        <div class="body-2">Start</div>
+        <div class="subheading-2"> 
+          {{ ranges.controls.length ? ranges.controls[0].value.price : 0 }}
         </div>
       </div>
       <div>
-        <div>Start</div>
-        <div>{{ ranges.controls.length ? ranges.controls[0].value.price : 0 }}
+        <div class="body-2">Ending</div>
+        <div class="subheading-2"> 
+          {{ ranges.controls.length ? ranges.controls[ranges.length - 1].value.price : 0 }}
         </div>
       </div>
       <div>
-        <div>Ending</div>
-        <div>{{ ranges.controls.length ? ranges.controls[ranges.length - 1].value.price : 0 }}</div>
-      </div>
-      <div>
+        <button type="button" (click)="removePriceList.emit()" class="delete">
+          <i class="material-icons">delete_outline</i>
+        </button>
         <button type="button" (click)="toggleExpansion()" class="expand">
           <i class="material-icons"> {{ isExpanded? 'expand_less' : 'expand_more'}}</i>
         </button>
       </div>
     </div>
-    <div *ngIf="isExpanded" class="price-detail">
+    <div *ngIf="isExpanded" class="wrapper">
       <div>
         <label>
           <span>Type</span>
@@ -68,13 +72,6 @@ import { RangeComponent } from './range.component';
           Is Progressive
         </label>
       </div>
-      <div *ngIf="ranges.controls.length" class="price-range">      
-        <div>Min</div>
-        <div></div>
-        <div>Max</div>
-        <div>Price</div>
-        <div></div>
-      </div>
       <nus-price-list-range
         *ngFor="let range of ranges.controls; let i=index"
         [form]="range"
@@ -85,131 +82,22 @@ import { RangeComponent } from './range.component';
         [siblingQuantityChanged]="rangeQuantityChanged">
       </nus-price-list-range>
       <div>
-        <button type="button" (click)="addRange()" class="add-button">
-        <i class="material-icons">add</i> Add Range
+        <button type="button" (click)="addRange()" class="new-add-button">
+          <i class="material-icons">add</i> Add Range
         </button>
       </div>
     </div>
     </ng-container>
   `,
   styles: [':host { display: contents; }', 
-  `
-
-    .price-list {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr) 20px;
-      align-items: center;
-      border: 1px solid #E7E7E7;
-      padding: 10px 24px;
-    }
-
-    .price-list:first-child {
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
-    }
-
-    .price-list div div:first-child {
-      font-size: 12px;
-      margin-bottom: 3px;
-    }
-
-    .price-list div div:last-child {
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .price-detail {
-      padding: 16px 24px;
-      border: 1px solid #E7E7E7;
-      border-top: none;
-    }
-
-    .price-range {
-      display: grid;
-      grid-template-columns: 1fr 20px 1fr 1fr 20px;
-      gap: 20px;
-      margin-bottom: 4px;
-    }
-
-    .add-button {
-      padding: 0 28px;
-      border: 2px solid #5a5a5a;
-      border-radius: 4px;
-      display: block;
-      color: #5a5a5a;
-      text-align: center;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      height: 40px;
-      opacity: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 18px;
-    }
-    
-    .add-button:hover:not([disabled]), .add-button:focus:not([disabled]) {
-      color: #5a5a5a;
-    }
-
-    .material-icons {
-      font-size: 18px;
-      padding-right: 2px;
-    }
-
-    label > span:first-child {
-      font-size: 16px;
-      font-weight: normal;
-      margin-bottom: 5px;
-    }
-
-    select {
-      height: 40px;
-      border-radius: 4px;
-      width: 100%;
-      background: #ffffff;
-    }
-
-    table {
-      border: none;
-      box-shadow: none;
-      border-collapse: separate;
-      border-radius: 8px;
-      border-spacing: 0;
-      margin-bottom: 10px;
-    }
-
-    thead {
-      background: none;
-    }
-
-    tr:hover,
-    tr:focus,
-    tr:active {
-      background-color: transparent; 
-    }
-
-    th {
-      padding: 7px;
-      font-weight: normal;
-      text-align: left;
-    }
-
-    tr th:first-child {
-      padding-left: 0;
-    }
-
-    tr th:last-child {
-      padding-right: 0;
-    }
-
-    .expand {
-      background: none;
-      border: none;
-    }
-  `
-]
+  '.wrapper { padding: 12px; border: solid 1px var(--grey-color); border-bottom: none; }',
+  '.list { display: grid; grid-template-columns: repeat(3, 1fr) 70px; align-items: center; }',
+  '.list div:last-child { display: flex; justify-content: space-between; }',
+  '.range { margin-bottom: 16px; display: grid; grid-template-columns: 1fr 20px 1fr 1fr 20px; gap: 16px; }',
+  '.expand, .delete { background: none; border: none; outline: none; font-size: 18px; cursor: pointer; }',
+  '.delete { opacity: .5 }', 
+  '.body-2 { margin-bottom: 4px }'
+  ]
 })
 export class PriceListComponent extends AbstractEditingComponent implements OnInit, AfterViewInit {
 

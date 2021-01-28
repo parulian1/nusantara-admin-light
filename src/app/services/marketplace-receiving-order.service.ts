@@ -21,9 +21,11 @@ export class MarketplaceReceivingOrderService {
     let params = new HttpParams().set('page', page.toFixed(0).toString());
 
     if (isPublishedOnly) {
-      params = params.set('is_published_only', isPublishedOnly.toString());
+      params = params.set('is_published_only', 'true');
+    } else {
+      params = params.set('is_processed_only', 'true');
     }
-
+  
     return this.httpClient
       .get<IReceivingOrder[]>(`${this.baseUrl}/`, {
         observe: 'response',

@@ -11,43 +11,46 @@ import {IShopeeAuthResponse} from "@nusantara/models";
 @Component({
   selector: 'nus-variant-client-form',
   template: `
-    <form [formGroup]="form">
-      <div class="variant-container" formArrayName="variantFormArray">
-        <div class="variant-class">
+    <form [formGroup]="form" class="fluid">
+      <div formArrayName="variantFormArray">
+        <div>
           <h1 class="heading-1">Variant Configuration</h1>
             <p>Once you choose, you can't change back.</p>
-            <div class="variant" *ngFor="let order of variantFormArray.controls; let i = index" [formGroupName]="i">
-              <input type="radio" (change)="onChangeVariant(i)" formControlName="variant" name="variant"  [checked]="i === variantChecked" >
-              {{variantType[i].name}}
+            <div class="variant-option">
+              <span *ngFor="let order of variantFormArray.controls;
+                let i = index" [formGroupName]="i">
+                  <input type="radio" 
+                    (change)="onChangeVariant(i)" 
+                    formControlName="variant" 
+                    name="variant"
+                    [checked]="i === variantChecked"/>
+                  <span>{{variantType[i].name}}</span>
+              </span>
             </div>
         </div>
-        <div class="variant-description">
-          <p *ngIf="showDescriptionMerge">
-            <br>
-            Merge will set the items into parent and variant as child <br><br>
-            Example:<br>
-            Bhisma product A with 2 variant (red color and blue color)<br>
-            MP product A will be 1 parent (red color) and 1 child inside the parent (blue color)<br>
-          </p>
-          <p *ngIf="showDescriptionSplit">
-            <br>
-            Split will set all item into parent only or item with no variant/child <br><br>
-
-            Example:<br>
-            Bhisma product A with 2 variant (red color and blue color)<br>
-            MP product A will be 1 parent (red color) and 1 more parent (blue color)<br>
-          </p>
+        <div class="description">
+          <div *ngIf="showDescriptionMerge">
+            <div>Merge will set the items into parent and variant as child</div>
+            <div class="example">Example:</div>
+            <div>Bhisma product A with 2 variant (red color and blue color)</div>
+            <div>MP product A will be 1 parent (red color) and 1 child inside the parent (blue color)</div>
+          </div>
+          <div *ngIf="showDescriptionSplit">
+            <div>Split will set all item into parent only or item with no variant/child</div>
+            <div>Example:</div>
+            <div>Bhisma product A with 2 variant (red color and blue color)</div>
+            <div>MP product A will be 1 parent (red color) and 1 more parent (blue color)</div>
+          </div>
         </div>
       </div>
     </form>
   `,
   styles: [
-    '.variant{float: left; margin-right: 15px}',
-    '.variant-container{padding-bottom: 30px}',
-    '.marketplace{font-size: 20px}',
-    '.variant-class{overflow: hidden; vertical-align: bottom}',
-    '.variant-description{background-color: #F4F4F4; width: 570px;height: 150px;}',
-    'input[type="radio"]{border-radius: 10px;color: orange;}'
+    '.variant-option { margin: 10px 0; }',
+    '.variant-option > span { margin-right: 20px }',
+    'input[type="radio"]{ margin-right: 8px; }',
+    '.description{ padding: 16px 24px; margin: 20px 0; background: var(--darken-white-color); }',
+    '.example { margin-top: 10px; font-weight: 700; }'
   ],
   providers: [
     {

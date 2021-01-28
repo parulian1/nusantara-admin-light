@@ -11,65 +11,39 @@ import {IMarketplaceItemDetailInformation} from '../models';
  * mostly based on SKUs.
  */
 @Component({
-  selector: 'nus-marketplace-info-detail-product-page',
+  selector: 'nus-marketplace-product-info-modal',
   template: `
-    <ngx-smart-modal  #modal identifier="longTextModal">
+    <ngx-smart-modal #modal [identifier]="'marketplaceProductInfoModal'" [customClass]="'wide-modal'">
       <h2 class="heading-2">Marketplace Information</h2>
         <div>
           <table>
-              <thead id="mp-add-product-head">
+              <thead>
                   <tr>
                     <th>Warehouse</th>
-                    <th>Stock</th>
                     <th>Marketplace</th>
+                    <th class="numeric">Stock</th>
                     <th>Store</th>
                   </tr>
               </thead>
               <tbody>
-                  <tr *ngFor="let mp of warehouseInfoDetail">
-                    <td>{{mp.warehouse}}</td>
-                    <td>{{mp.totalStock}}</td>
-                    <td>
-                        <table class="inline-table">
-                            <tr *ngFor="let data of mp.store">
-                                <td style="padding-left: 0">{{data.marketplace}}</td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td>
-                        <table class="inline-table">
-                            <tr *ngFor="let data of mp.store">
-                                <td style="padding-left: 0">{{data.name}}</td>
-                            </tr>
-                        </table>
-                    </td>
-                  </tr>
+                  <ng-container *ngFor="let mp of warehouseInfoDetail">
+                    <tr *ngFor="let store of mp.store">
+                      <td>{{ mp.warehouse }}</td>  
+                      <td>{{ store.marketplace }}</td>
+                      <td class="numeric">{{ mp.totalStock }}</td>
+                      <td>{{ store.name }}</td>
+                    </tr>                    
+                  </ng-container>
               </tbody>
           </table>
         </div>
     </ngx-smart-modal>
   `,
   styles: [
-    `
-      .inline-table{
-        box-shadow: none;
-        border-collapse: separate;
-      }
-      #mp-add-product-head {
-        background-color: #F4F4F4;
-        height: 56px;
-      }
-      th, td{
-        text-align: left;
-      }
-      table{
-        border-radius: 4px;
-      }
-
-    `
+    'h2 { margin-bottom: 20px; }',
   ]
 })
-export class MarketplaceInfoDetailProductPageComponent {
+export class MarketplaceProductInfoComponent {
   @ViewChild('modal') modalInfo: NgxSmartModalComponent;
   @Input() warehouseInfoDetail: IMarketplaceItemDetailInformation[];
 

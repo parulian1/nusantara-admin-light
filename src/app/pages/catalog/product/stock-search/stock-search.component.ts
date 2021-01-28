@@ -7,14 +7,18 @@ import { IStockSearch } from '@nusantara/models/products/stock-search';
   template: `
     <h3>Product Inventory</h3>
     <table *ngIf="!!entity">
-      <tr>
-        <td>Warehouse</td>
-        <td>Quantity</td>
-      </tr>
-      <tr *ngFor="let ent of entity">
-        <td>{{ ent.name }}</td>
-        <td data-qa="quantity">{{ ent.quantity }}</td>
-      </tr>
+      <thead>  
+        <tr>
+          <th>Warehouse</th>
+          <th>Quantity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ent of entity">
+          <td>{{ ent.name }}</td>
+          <td data-qa="quantity">{{ ent.quantity }}</td>
+        </tr>
+      </tbody>
     </table>
 
   `,

@@ -11,82 +11,67 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
 @Component({
   selector: 'nus-marketplace-publish',
   template: `
-    <h1 class="heading-1">Publish To Marketplace</h1>
+    <h1 class="title-1">Publish To Marketplace</h1>
     <div class="wrapper">
       <div>
-        <p>Total Product</p>
-        <p class="item-value">
-          {{ order?.totalProduct }}
-        </p>
+        <p class="body-2">Total Product</p>
+        <p class="subheading-2"> {{ order?.totalProduct }} </p>
       </div>
       <div>
-        <p>Status</p>
-        <p class="item-value">
-          {{ order?.receivingStatus }}
-        </p>
+        <p class="body-2">Status</p>
+        <p class="subheading-2"> {{ order?.receivingStatus }} </p>
       </div>
       <div>
-        <p>Warehouse</p>
-        <p class="item-value mp-primary">
-          {{ order?.warehouse }}
-        </p>
+        <p class="body-2">Warehouse</p>
+        <p class="subheading-2 warehouse"> {{ order?.warehouse }} </p>
+      </div>
+      <div >
+        <p class="body-2">Created By</p>
+        <p class="subheading-2"> {{ order?.receivedBy ? order.receivedBy : '-' }} </p>
       </div>
       <div>
-        <p>Created By</p>
-        <p class="item-value">
-          {{ order?.receivedBy ? order.receivedBy : '-' }}
-        </p>
-      </div>
-      <div>
-        <p>Reviewed By</p>
-        <p class="item-value">
-          {{ order?.approvedBy ? order.approvedBy : '-' }}
-        </p>
+        <p class="body-2">Reviewed By</p>
+        <p class="subheading-2"> {{ order?.approvedBy ? order.approvedBy : '-' }} </p>
       </div>
       <div>
         <p>Date</p>
-        <p class="item-value">
-          {{ order?.created | date: 'dd MMM yyyy' }}
-        </p>
+        <p class="subheading-2"> {{ order?.created | date: 'dd/MM/yyyy' }} </p>
       </div>
     </div>
     <div class="progress-info">
-      <strong
-        >Publishing Your Product ({{ order?.totalRecord?.published }}/{{
-          order?.totalProduct
-        }})</strong
-      >
-      <a [routerLink]="" (click)="loadAllData()" class="error-info-button"
-        >Refresh All</a
-      >
+      <span class="subheading-1">
+        Publishing Your Product ({{ order?.totalRecord?.published }}/{{order?.totalProduct}})
+      </span>
+      <a [routerLink]="" (click)="loadAllData()">Refresh All</a>
     </div>
     <div>
       <nus-tabs>
         <nus-tab [title]="'List Product'">
           <div *ngIf="order?.receivingStatus == 'Error'" class="error-info">
-            <strong>There are Errors When Publishing Products</strong>
-            <ul>
-              <li>Click "Fix" on each product below.</li>
-              <li>Reconnect the stores, then click "Refresh."</li>
-              <li>
-                Click "Refresh" on each product or click "Refresh All" to
-                reupload all products.
-              </li>
-            </ul>
+            <div>
+              <h2 class="heading-2">There are Errors When Publishing Products</h2>
+              <ul>
+                <li>Go to "Product Data Error" tab and click "Fix" on each product"</li>
+                <li>Go to "Credentials Error" tab, reconnect the stores, then click "Refresh"</li>
+                <li>
+                  Go to "Time Out Error" tab and click "Refresh" on each product or "Refresh All" to reupload all products.
+                </li>
+              </ul>
+            </div>
           </div>
           <nus-pagination-child
             [page]="allProducts"
-            (fetchPageNumber)="fetchAllProducts($event)"
-          ></nus-pagination-child>
+            (fetchPageNumber)="fetchAllProducts($event)">
+          </nus-pagination-child>
           <table>
             <thead>
               <tr>
                 <th>Product (UPC)</th>
                 <th>SKU</th>
-                <th>Quantity</th>
+                <th class="numeric">Quantity</th>
                 <th>Location</th>
                 <th>Status</th>
-                <th text-align="left">Information</th>
+                <th>Information</th>
               </tr>
             </thead>
             <tbody>
@@ -98,31 +83,27 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                   </a>
                 </td>
                 <td>{{ product.sku }}</td>
-                <td>{{ product.quantity }}</td>
+                <td class="numeric">{{ product.quantity }}</td>
                 <td>{{ product.sublocation }}</td>
-                <td
-                  [ngClass]="{
-                    published: product.status === 'Published',
-                    publishing: product.status === 'Publishing',
-                    error: product.status === 'Error'
-                  }"
-                >
-                  {{ product.status }}
+                <td>
+                  <span class="badge" [ngClass]="{
+                    'success': product.status === 'Published',
+                    'alert': product.status === 'Publishing',
+                    'error': product.status === 'Error' }">
+                    {{ product.status }}
+                  </span>
                 </td>
-                <td style="text-align: left;">
-                  <ng-template
-                    [ngIf]="product.errorStatus === 'error_authentication'"
-                    >Credentials Error</ng-template
-                  >
-                  <ng-template [ngIf]="product.errorStatus === 'error_metadata'"
-                    >Product Data Error</ng-template
-                  >
-                  <ng-template [ngIf]="product.errorStatus === 'error_timeout'"
-                    >Time Out Error
+                <td>
+                  <ng-template [ngIf]="product.errorStatus === 'error_authentication'">
+                    Credentials Error
                   </ng-template>
-                  <ng-template [ngIf]="product.errorStatus === 'published'"
-                    >-
+                  <ng-template [ngIf]="product.errorStatus === 'error_metadata'">
+                    Product Data Error
                   </ng-template>
+                  <ng-template [ngIf]="product.errorStatus === 'error_timeout'">
+                    Time Out Error
+                  </ng-template>
+                  <ng-template [ngIf]="product.errorStatus === 'published'">-</ng-template>
                 </td>
               </tr>
             </tbody>
@@ -132,26 +113,14 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
             (fetchPageNumber)="fetchAllProducts($event)"
           ></nus-pagination-child>
         </nus-tab>
-        <nus-tab
-          [title]="
-            'Credentials Error (' + order?.totalRecord.errorAuthentication + ')'
-          "
-        >
-          <div
-            *ngIf="order?.totalRecord.errorAuthentication > 0"
-            class="error-info error-info-action"
-          >
+        <nus-tab [title]="'Credentials Error (' + order?.totalRecord.errorAuthentication + ')'">
+          <div *ngIf="order?.totalRecord.errorAuthentication > 0" class="error-info">
             <div>
-              <strong>You are not Connected to Some Stores</strong>
+              <h2 class="heading-2">You are not Connected to Some Stores</h2>
               <p>Click "Reconnect" on each stores to fix this.</p>
             </div>
             <div>
-              <a
-                [routerLink]=""
-                (click)="fetchCredentialsError()"
-                class="error-info-button"
-                >Refresh</a
-              >
+              <a [routerLink]="" (click)="fetchCredentialsError()">Refresh</a>
             </div>
           </div>
           <nus-pagination-child
@@ -165,24 +134,23 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                 <th>Store</th>
                 <th>Marketplace</th>
                 <th>Status</th>
-                <th>Action</th>
+                <th class="centered">Action</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let shop of credentialsError?.entities">
-                <td>
-                  {{ shop.name }}
-                </td>
+                <td> {{ shop.name }} </td>
                 <td>{{ shop.marketplace }}</td>
-                <td class="error">
-                  {{ shop.status }}
-                </td>
                 <td>
-                  <a
-                    [routerLink]="['../../setup/connect', shop.slug]"
-                    class="mp-primary"
-                    >Reconnect</a
-                  >
+                  <span class="badge" [ngClass]="{
+                    'success': shop.status === 'Published',
+                    'alert': shop.status === 'Publishing',
+                    'error': shop.status === 'Error' }">
+                    {{ shop.status }}
+                  </span>
+                </td>
+                <td class="centered">
+                  <a [routerLink]="['/config', 'marketplace-integration', 'connect', shop.slug]">Reconnect</a>
                 </td>
               </tr>
             </tbody>
@@ -193,14 +161,12 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
             (fetchPageNumber)="fetchCredentialsError($event)"
           ></nus-pagination-child>
         </nus-tab>
-        <nus-tab
-          [title]="
-            'Product Data Error (' + order?.totalRecord.errorMetadata + ')'
-          "
-        >
+        <nus-tab [title]="'Product Data Error (' + order?.totalRecord.errorMetadata + ')'">
           <div *ngIf="order?.totalRecord.errorMetadata > 0" class="error-info">
-            <strong> {{ order?.totalRecord.errorMetadata }} Products Can't be Published</strong>
-            <p>Click "Fix" on each product below.</p>
+            <div>
+              <h2 class="heading-2"> {{ order?.totalRecord.errorMetadata }} Products Can't be Published</h2>
+              <p>Click "Fix" on each product below.</p>
+            </div>          
           </div>
           <nus-pagination-child
             *ngIf="dataError?.entities?.length"
@@ -212,10 +178,10 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
               <tr>
                 <th>Product (UPC)</th>
                 <th>SKU</th>
-                <th>Quantity</th>
+                <th class="numeric">Quantity</th>
                 <th>Location</th>
                 <th>Status</th>
-                <th>Action</th>
+                <th class="centered">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -227,15 +193,18 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                   </a>
                 </td>
                 <td>{{ product.sku }}</td>
-                <td>{{ product.quantity }}</td>
+                <td class="numeric">{{ product.quantity }}</td>
                 <td>{{ product.sublocation }}</td>
-                <td class="error">{{ product.status }}</td>
                 <td>
-                  <a
-                    [routerLink]="['/catalog/products', product.slug]"
-                    class="mp-primary"
-                    >Fix</a
-                  >
+                  <span class="badge" [ngClass]="{
+                    'success': product.status === 'Published',
+                    'alert': product.status === 'Publishing',
+                    'error': product.status === 'Error' }">
+                    {{ product.status }}
+                  </span>
+                </td>
+                <td class="centered">
+                  <a [routerLink]="['/catalog/products', product.slug]">Fix</a>
                 </td>
               </tr>
             </tbody>
@@ -246,27 +215,14 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
             (fetchPageNumber)="fetchDataError($event)"
           ></nus-pagination-child>
         </nus-tab>
-        <nus-tab
-          [title]="'Time Out Error (' + order?.totalRecord.errorTimeout + ')'"
-        >
-          <div
-            *ngIf="order?.totalRecord.errorTimeout > 0"
-            class="error-info error-info-action"
-          >
+        <nus-tab [title]="'Time Out Error (' + order?.totalRecord.errorTimeout + ')'">
+          <div *ngIf="order?.totalRecord.errorTimeout > 0" class="error-info">
             <div>
-              <strong>Unable to Publish to 1 Marketplace</strong>
-              <p>
-                Click "Refresh" on each product or click "Refresh All" to
-                reupload all products.
-              </p>
+              <h2 class="heading-2">Unable to Publish to {{ order?.totalRecord.errorTimeout }} Marketplace</h2>
+              <p>Click "Refresh" on each product or click "Refresh All" to reupload all products.</p>
             </div>
             <div>
-              <a
-                [routerLink]=""
-                (click)="refreshAllTimeoutError($event, receivingOrderId)"
-                class="error-info-button"
-                >Refresh All</a
-              >
+              <a [routerLink]="" (click)="refreshAllTimeoutError($event, receivingOrderId)">Refresh All</a>
             </div>
           </div>
           <nus-pagination-child
@@ -279,10 +235,10 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
               <tr>
                 <th>Product (UPC)</th>
                 <th>SKU</th>
-                <th>Quantity</th>
+                <th class="numeric">Quantity</th>
                 <th>Location</th>
                 <th>Status</th>
-                <th>Action</th>
+                <th class="centered">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -294,16 +250,17 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                   </a>
                 </td>
                 <td>{{ product.sku }}</td>
-                <td>{{ product.quantity }}</td>
+                <td class="numeric">{{ product.quantity }}</td>
                 <td>{{ product.sublocation }}</td>
-                <td class="error">{{ product.status }}</td>
                 <td>
-                  <a
-                    [routerLink]=""
-                    (click)="refreshTimeoutError($event, product.identifier)"
-                    class="mp-primary"
-                    >Refresh</a
-                  >
+                  <span class="badge" [ngClass]="{
+                    'success': product.status === 'Published',
+                    'alert': product.status === 'Publishing',
+                    'error': product.status === 'Error' }">
+                    {{ product.status }}
+                  </span>
+                <td class="centered">
+                  <a [routerLink]="" (click)="refreshTimeoutError($event, product.identifier)">Refresh</a>
                 </td>
               </tr>
             </tbody>
@@ -316,116 +273,37 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
         </nus-tab>
       </nus-tabs>
     </div>
-    <button [routerLink]="['../']" class="control">
-      Done
-    </button>`,
+    <button [routerLink]="['../']" class="control">Back</button>
+  `,
   styles: [
     `
-      p,strong,li {
-        margin: 8px;
-      }
-
-      a {
-        text-decoration: underline;
-      }
-
       .wrapper {
-        padding: 20px;
-        margin: 0 18px 20px 18px;
-        border: solid 1px #e7e7e7;
-        border-radius: 8px;
+        padding: 20px 24px;
+        margin-bottom: 20px;
+        border: solid 1px var(--grey-color);
+        border-radius: 4px;
 
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-      }
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        grid-row-gap: 20px;
 
-      .wrapper p {
-        margin: 5px 0px;
-      }
-
-      .wrapper > * {
-        flex: 1;
-        min-width: 0;
-        margin: 10px;
-      }
-
-      .item-value {
-        color: #5a5a5a;
-        font-weight: 700;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .error {
-        color: #c83228;
-      }
-
-      .publishing {
-        color: #f0be00;
-      }
-
-      .published {
-        color: #21a656;
-      }
-
-      .progress-info {
-        padding: 20px;
-        margin: 0 18px 20px 18px;
-        background: #f4f4f4;
-        border-radius: 8px;
-      }
-
-      .progress-info :first-child {
-        margin-right: 20px;
-      }
-
-      .error-info {
-        padding: 20px;
-        background: #ffe9e8;
-        color: #c83228;
-        border-radius: 8px;
-      }
-
-      .error-info-action {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .error-info-button {
-        font-weight: 700;
-        text-decoration: none;
-        margin-right: 10px;
-      }
-
-      table {
-        box-shadow: none;
-        border: 3px solid #f4f4f4;
-        border-collapse: separate;
-        border-radius: 8px;
-        border-spacing: 0;
-        margin-bottom: 10px;
-      }
-
-      thead {
-        font-size: 16px;
-        font-weight: bold;
-        line-height: 24px;
-        background: #f4f4f4;
-        color: #5a5a5a;
-      }
-
-      th {
-        padding: 16px;
-      }
-
-      td {
-        padding: 18px;
       }
     `,
+    '.wrapper > div { flex: 1; min-width: 0; }',
+    '.wrapper p { color: var(--darken-grey-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }',
+    '.wrapper .warehouse{ color: var(--quinary-color) }',
+    '.progress-info { padding: 16px 24px; margin-bottom: 24px; background: var(--darken-white-color); border-radius: 4px; }',
+    '.progress-info > span { margin-right: 8px; }',
+    `.error-info { 
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 24px;
+      background: var(--error-lighten);
+      color: var(--error);
+      margin: 14px 0 5px 0;
+    }`,
+    'ul { list-style: disc; margin-left: 20px; margin-top: 8px; }'
   ],
 })
 export class PublishDetailComponent implements OnInit {

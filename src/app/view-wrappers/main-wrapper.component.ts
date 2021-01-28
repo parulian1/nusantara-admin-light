@@ -216,9 +216,11 @@ import { SubscriptionLike } from 'rxjs';
         height: 35px;
         margin-right: 5px;
       }
+      nav li.section-header i, nav li.icon-button a {
+        padding-left: 25px;
+      }
       nav li.icon-button a {
         font-weight: 900;
-        padding-left: 0;
         display: flex;
       }
       .icon-button i {
@@ -231,16 +233,23 @@ import { SubscriptionLike } from 'rxjs';
         display: block;
         padding-left: 30px;
         text-decoration: none;
+        padding-left: 56px;
       }
       nav > ul a.active {
         background-color: #7B869B;
-        border-left: 6px solid var(--bhisma-orange);
+        border-left: 6px solid var(--primary-color);
+      }
+      nav > ul li:not(.icon-button) a.active {
+        padding-left: 50px;
+      }
+      nav > ul li.icon-button a.active {
+        padding-left: 19px;
       }
       nav > ul a:hover,
       nav > ul a:focus {
         transition: all .3s;
         border-left: 6px solid var(--bhisma-orange);
-        background-color: #7B869B; /*var(--accent-lighter-color);*/
+        background-color: #7B869B; /*var(--accent-lighter-color);*/        
       }
 
       @media print {

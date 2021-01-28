@@ -1,58 +1,21 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'nus-empty-list',
-  template: ` <div id="container">
-    <h2>{{ title }}</h2>
+  template: ` 
+  <div>
+    <h1 class="heading-1">{{ title }}</h1>
     <p>{{ description }}</p>
-    <div id="button-action">
-      <button [routerLink]="cancelUrl" class="control secondary">{{ cancelText }}</button>
-      <button [routerLink]="addUrl" class="control">
-        <i class="material-icons">add</i>&nbsp;{{ addText }}
-      </button>
-    </div>
+    <button [routerLink]="addUrl" class="control">
+      <i class="material-icons">add</i>&nbsp;{{ addText }}
+    </button>
   </div>`,
   styles: [
-    `
-      #container {
-        height: 600px;
-        padding: 10px 20px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-
-      h2 {
-        font-size: 20px;
-        font-weight: 700;
-        line-height: 24px;
-      }
-
-      p {
-        font-size: 14px;
-        line-height: 20px;
-      }
-
-      #button-action {
-        width: 24em;
-        margin-top: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      #button-action > button {
-        padding-top: 2px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      button:not(:first-child) {
-        margin-left: 15px;
-      }
-    `,
+    '.material-icons { font-size: 20px; }',
+    'div { height: 70vh; display: flex; flex-direction: column; justify-content: center; align-items: center}',
+    'h1 { margin-buttom: 10px; }',
+    'p { line-height: 20px; margin-bottom: 24px; }',
+    'button { display: flex; align-items: center; justify-content: center; }'
   ],
 })
 export class EmptyListCOmponent {
@@ -61,5 +24,5 @@ export class EmptyListCOmponent {
   @Input() cancelUrl: string[];
   @Input() addUrl: string[];
   @Input() cancelText = 'Back';
-  @Input() addText = 'Add Data';
+  @Input() addText = 'Add';
 }

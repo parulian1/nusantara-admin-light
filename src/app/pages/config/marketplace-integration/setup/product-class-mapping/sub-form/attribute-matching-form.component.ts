@@ -31,129 +31,89 @@ import {
 } from '@nusantara/models';
 import { MarketplaceProductClassService } from '@nusantara/services';
 import { ConfirmModalComponent } from '@nusantara/shared/confirm-modal.component';
-import { SubFormComponent } from '../sub-form.component';
+import { SubFormComponent } from './sub-form.component';
 
 @Component({
   selector: 'nus-attribute-matching-form',
   template: `
-    <h2 class="sub-title">Match Attribute (3/3)</h2>
-    <p>Choose {{currentShop}} attributes for your product.</p>
     <form [formGroup]="form">
-      <p class="form-title">{{currentShop}} Category</p>
-      <p>{{ categoryNames }}</p>
+      <div class="wrapper">
+        <h1 class="heading-1">Match Attribute (3/3)</h1>
+        <p>Choose {{ currentShop }} attributes for your product.</p>
+      
+        <div class="form">
+          <label>
+            <span>{{ currentShop }} Category </span>
+            <p>{{ categoryNames }}</p>
+          </label>
 
-      <p class="form-title">{{currentShop}} Attributes</p>
-      <p>{{ attributeNames }}</p>
-      <h2>Attributes</h2>
-      <table>
-        <thead>
-          <tr>
-            <th colspan="2">{{currentShop}} Attributes</th>
-            <th colspan="2">Bhisma Attributes</th>
-          </tr>
-        </thead>
-        <tbody>
-          <ng-container formArrayName="attributes">
-            <tr
-              *ngFor="let attr of attributes.controls; let i = index"
-              [formGroupName]="i"
-            >
-              <td>
+          <label>
+            <span>{{ currentShop }} Attributes </span>
+            <p>{{ attributeNames }}</p>
+          </label>
+
+          <h4 class="subheading-2">Match {{ currentShop }} Attribute</h4>
+          <div>
+            <div class="attribute-group">
+              <p>{{ currentShop }} Attributes</p>
+              <p>Type {{ currentShop }}</p>
+              <p>Bhisma Attributes</p>
+              <p>Type Bhisma</p>
+            </div>
+            <div formArrayName="attributes" class="attributes">
+              <div *ngFor="let attr of attributes.controls; let i = index" [formGroupName]="i">
                 <input type="text" formControlName="shopeeName" readonly />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  formControlName="shopeeType"
-                  [ngClass]="
-                    attributes.controls[i].get('bhismaType').invalid
-                      ? 'error-display'
-                      : null
-                  "
-                  readonly
-                />
-              </td>
-
-              <td>
-                <select
-                  #selectedAttr
-                  formControlName="bhismaObj"
-                  (change)="attrChange(selectedAttr.value, i)"
-                  [ngClass]="{
-                    'error-display error-warning': attributes.controls[i].get(
-                      'bhismaObj'
-                    ).invalid
-                  }"
-                >
-                  <option [ngValue]="null">Select an option</option>
-                  <option *ngFor="let opt of bhismaAttributes" [ngValue]="opt">
-                    {{ opt.name }}
-                  </option>
-                  <option value="addNewAttr">
-                    + Add New Attribute
-                  </option>
-                </select>
-                <div
-                  *ngIf="attributes.controls[i].get('bhismaObj').invalid"
-                  class="error-detail"
-                >
-                  Please select an option
-                </div>
-                <div *ngIf="selectedAttr.value === 'addNewAttr'">
-                  <input type="text" formControlName="newAttrName" />
-                  <div
-                    *ngIf="
-                      attributes.controls[i].get('newAttrName').invalid &&
-                      attributes.controls[i].get('newAttrName').touched
-                    "
-                    class="error-detail"
-                  >
-                    This field is required
+                <input type="text" formControlName="shopeeType" 
+                  [ngClass]="attributes.controls[i].get('bhismaType').invalid? 'mismatch': null" readonly/>
+                <div>
+                  <select #selectedAttr
+                    formControlName="bhismaObj"
+                    (change)="attrChange(selectedAttr.value, i)"
+                    [ngClass]="{ 'mismatch warning': attributes.controls[i].get('bhismaObj').invalid}">
+                    
+                    <option [ngValue]="null">Select an option</option>
+                    <option *ngFor="let opt of bhismaAttributes" [ngValue]="opt">
+                      {{ opt.name }}
+                    </option>
+                    <option value="addNewAttr">
+                      + Add New Attribute
+                    </option>
+                  </select>
+                  <div *ngIf="attributes.controls[i].get('bhismaObj').invalid"class="error-detail">
+                    Please select an option
+                  </div>
+                  <div *ngIf="selectedAttr.value === 'addNewAttr'" class="new-attr-input">
+                    <input type="text" formControlName="newAttrName" />
+                    <div *ngIf="
+                        attributes.controls[i].get('newAttrName').invalid &&
+                        attributes.controls[i].get('newAttrName').touched
+                      " class="error-detail">
+                      This field is required
+                    </div>
                   </div>
                 </div>
-              </td>
-
-              <td>
-                <select
-                  formControlName="bhismaType"
-                  [ngClass]="
-                    attributes.controls[i].get('bhismaType').valid
-                      ? 'correct-display'
-                      : 'error-display error-warning'
-                  "
-                >
-                  <option [ngValue]="null">Select an option</option>
-                  <option *ngFor="let type of bhismaAttributeTypes">
-                    {{ type }}
-                  </option>
-                </select>
-                <div
-                  *ngIf="attributes.controls[i].get('bhismaType').invalid"
-                  class="error-detail"
-                >
-                  Match with {{currentShop}} Type
+                <div>
+                  <select formControlName="bhismaType"
+                    [ngClass]="attributes.controls[i].get('bhismaType').valid? 'match': 'mismatch warning'">
+                    
+                    <option [ngValue]="null">Select an option</option>
+                    <option *ngFor="let type of bhismaAttributeTypes">{{ type }}</option>
+                  </select>
+                  <div *ngIf="attributes.controls[i].get('bhismaType').invalid" class="error-detail">
+                    Match with {{ currentShop }} Type
+                  </div>
                 </div>
-              </td>
-            </tr>
-          </ng-container>
-        </tbody>
-      </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <br />
-      <button
-        type="button"
-        class="control secondary"
-        (click)="confirmModal.open()"
-      >
-        Previous
-      </button>
-      <button
-        type="button"
-        class="control"
-        (click)="onSubmit()"
-        [disabled]="form.invalid"
-      >
+      <button type="button" class="control" (click)="onSubmit()" [disabled]="form.invalid">
         Submit
+      </button>      
+      <button type="button" class="control secondary ghost" (click)="confirmModal.open()">
+        Previous
       </button>
     </form>
 
@@ -161,52 +121,24 @@ import { SubFormComponent } from '../sub-form.component';
     <nus-confirm-modal></nus-confirm-modal>
   `,
   styles: [
-    `
-      button:not(:first-child) {
-        margin-left: 5px;
-      }
-      th:not(:first-child) {
-        text-align: left;
-      }
-
-      .sub-title,
-      .add-new-attr {
-        color: #365dc3;
-      }
-      .add-new-attr {
-        font-weight: 600;
-        font-size: 16px;
-      }
-
-      h1 {
-        font-weight: bold;
-      }
-
-      .form-title {
-        font-weight: 700;
-        color: #5a5a5a;
-      }
-
-      input[type='text'],
-      select {
-        width: 15vw;
-      }
-
-      .error-detail {
-        text-align: left;
-      }
-
-      .correct-display {
-        border-color: var(--success) !important;
-      }
-      .error-display {
-        border-color: var(--error) !important;
-      }
-      .error-warning {
-        background: url('assets/warning-24px.svg') no-repeat scroll right 15px
-          center !important;
-      }
-    `,
+    `.wrapper { padding: 16px 24px; border: solid 1px var(--grey-color); border-radius: 4px; width: 60vw; margin-bottom: 20px; }`,
+    'p {color: var(--darken-grey-color); }',
+    '.form { margin-top: 20px; }',
+    'label { margin-bottom: 12px; min-height: 0; }',
+    'button:not(:first-of-type) { margin-left: 5px; }',
+    '.attribute-group{ display: grid; grid-template-columns: repeat(4, 1fr); grid-gap: 10px; margin-bottom: 4px; };',
+    `.attributes > div { 
+        display: grid; 
+        grid-template-columns: repeat(4, 1fr); 
+        grid-gap: 10px;
+        margin-bottom: 8px; 
+    };`,
+    '.new-attr-input { margin-top: 4px; }',
+    '.add-new-attr { font-weight: 600; font-size: 16px; }',
+    '.error-detail { text-align: left; }',
+    '.match { border-color: var(--success) !important; }',
+    '.mismatch { border-color: var(--error) !important; }',
+    `.warning { background: url('assets/warning-24px.svg') no-repeat scroll right 15px center !important;}`
   ],
   providers: [
     {

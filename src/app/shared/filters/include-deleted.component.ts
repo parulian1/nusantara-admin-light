@@ -1,16 +1,16 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'nus-include-deleted',
-  template: `<label>Show SoftDeleted<input type="checkbox" (click)="applyFilter($event)"></label>`,
+  template: `<label><input type="checkbox" (click)="applyFilter($event)">{{ text }}</label>`,
   styles: [
-    'label { min-height: auto;}',
-    'input { margin-left: 5px }'
+    'label { min-height: auto; width: fit-content; }',
   ]
 })
 export class IncludeDeletedComponent implements OnInit {
   public applied = false;
+  @Input() text = "Show SoftDeleted";
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute) {

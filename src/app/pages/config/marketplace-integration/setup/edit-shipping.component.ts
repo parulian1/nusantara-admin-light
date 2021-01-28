@@ -13,101 +13,73 @@ import * as fromReducer from '@nusantara/reducers';
 @Component({
   selector: 'nus-product-class-mapping-form',
   template: `
-    <h1 class="heading-1">Edit Shipping</h1>
-    <div class="store-info wrapper">
-      <div class="store-info">
-        <div>Store</div>
+    <h1 class="title-1">Edit Shipping</h1>
+    <div class="container">
+      <div class="wrapper store-info">
         <div>
-          <strong>{{ (currentShop$ | async)?.name }}</strong>
+          <div>Store</div>
+          <div>
+            <strong>{{ (currentShop$ | async)?.name }}</strong>
+          </div>
         </div>
-      </div>
-      <div class="store-info">
-        <div>Marketplace</div>
         <div>
-          <strong>{{ (currentShop$ | async)?.marketplace | titlecase }}</strong>
+          <div>Marketplace</div>
+          <div>
+            <strong>{{ (currentShop$ | async)?.marketplace | titlecase }}</strong>
+          </div>
+        </div>
+        <div>
+          <div>Status</div>
+          <div>
+            <strong>
+              {{ (currentShop$ | async)?.isConnected === true? 'Connected':'Not Connected'}}
+            </strong>
+          </div>
         </div>
       </div>
-      <div class="store-info">
-        <div>Status</div>
-        <div
-          [ngClass]="{ connected: (currentShop$ | async)?.isConnected === true }"
-        >
-          <strong>
-            {{
-              (currentShop$ | async)?.isConnected === true
-                ? 'Connected'
-                : 'Not Connected'
-            }}
-          </strong>
-        </div>
-      </div>
-    </div>
 
-    <form [formGroup]="form">
-      <div
-        *ngFor="let attr of shipping.controls; let i = index"
-        class="wrapper shipping-option"
-      >
-        <div class="logistic-name">
-          <strong>{{ logistics[i].name }}</strong>
+      <form [formGroup]="form" class="fluid">
+        <div
+          *ngFor="let attr of shipping.controls; let i = index"
+          class="wrapper shipping-option">
+          <div class="logistic-name">
+            <strong>{{ logistics[i].name }}</strong>
+          </div>
+          <div class="shipping-status">
+            <input
+              type="checkbox" class="toggle"
+              [formControl]="attr"
+              formArrayName="shipping"/>
+            <span>
+              {{ form.value.shipping[i] === true ? 'Active' : 'Inactive' }}
+            </span>
+          </div>
         </div>
-        <div class="shipping-status">
-          <input
-            type="checkbox"
-            [formControl]="attr"
-            formArrayName="shipping"
-          />
-          <span>
-            {{ logistics[i].enabled === true ? 'Active' : 'Inactive' }}
-          </span>
+        <div class="action-buttons">
+          <button *ngIf="!readOnly.includes((currentShop$ | async)?.marketplace)"
+            type="button"
+            class="control"
+            (click)="onSubmit()"
+            [disabled]="isBusy">
+            Save
+          </button>  
+          <button type="button" class="control" (click)="onBack()"
+            [ngClass]="{ 'secondary ghost': !readOnly.includes((currentShop$ | async)?.marketplace) }">
+            Cancel
+          </button>
         </div>
-      </div>
-      <button type="button" class="control secondary" (click)="onBack()">
-        Previous
-      </button>
-      <button *ngIf="!readOnly.includes((currentShop$ | async)?.marketplace)"
-        type="button"
-        class="control"
-        (click)="onSubmit()"
-        [disabled]="isBusy"
-      >
-        Save
-      </button>
-    </form>
+      </form>
+    </div>
   `,
   styles: [
-    `
-      button:not(:first-child) {
-        margin-left: 5px;
-      }
-
-      .store-info {
-        flex: 1 1 auto;
-        text-align: left;
-      }
-
-      .connected {
-        color: var(--success) !important;
-      }
-
-      .wrapper {
-        width: 60vw;
-        display: flex;
-        flex-direction: row;
-        padding: 20px;
-        border: solid 1px #e7e7e7;
-        border-radius: 5px;
-        margin-bottom: 20px;
-      }
-
-      .logistic-name {
-        flex: 6 0px;
-      }
-
-      .shipping-status {
-        flex: 1 0px;
-      }
-    `,
+    '.container { width: 60vw; }',
+    '.wrapper { display: grid; border: solid 1px var(--grey-color); border-radius: 4px;}',
+    '.store-info { grid-template-columns: 4fr 3fr 3fr; padding: 20px 24px;  margin-bottom: 24px; }',
+    '.shipping-option { grid-template-columns: 5fr 1fr; padding: 14px 24px; margin-bottom: 16px }',
+    '.shipping-option > div:last-child { align-self: end; }',
+    '.toggle { margin-right: 16px }',
+    '.action-buttons { margin-top: 30px; }',
+    'button:not(:first-of-type) { margin-left: 5px; }',
   ],
 })
 export class EditShippingComponent implements OnInit {

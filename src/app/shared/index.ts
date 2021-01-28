@@ -10,5 +10,7 @@ export * from './customer-group-modal.component';
 export * from './marketplace-info-detail-modal.component';
 export * from './confirm-modal-receiving-order.component';
 export * from './confirm-modal-pending-order.component';
+export * from './marketplace-info-detail-modal.component';
+export * from './marketplace-info-shipping-modal.component';
+export * from './marketplace-info-detail-product-page.component';
 export * from './animation';
-export * from './animation'

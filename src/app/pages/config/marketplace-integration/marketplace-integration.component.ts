@@ -3,11 +3,20 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'nus-marketplace-integration',
   template: ` 
-    <h1 class="heading-1">Marketplace Configuration</h1>
+    <h1 class="title-1">Marketplace Configuration</h1>
     <div class="wrapper">
       <div>
-        <h2>Marketplace Setup</h2>
-        <p>Connect to Marketplace, Map Attribute, Set Up Shipping</p>
+        <h1 class="heading-1">Connect to Marketplace</h1>
+        <p>Connect to Marketplace, Map Attribute</p>
+      </div>
+      <div>
+        <button routerLink="connect" class="control">Open</button>
+      </div>
+    </div>
+    <div class="wrapper">
+      <div>
+        <h1 class="heading-1">Marketplace Setup</h1>
+        <p>Set Up Shipping, Set Up Showcase</p>
       </div>
       <div>
         <button routerLink="setup" class="control">Open</button>
@@ -15,7 +24,7 @@ import { Component } from '@angular/core';
     </div>
     <div class="wrapper">
       <div>
-        <h2>Publish to Marketplace</h2>
+        <h1 class="heading-1">Publish to Marketplace</h1>
         <p>See Publish Progress, See Publish History</p>
       </div>
       <div>
@@ -25,17 +34,17 @@ import { Component } from '@angular/core';
   styles: [
     `
       .wrapper {
-        padding: 10px 20px;
-        border: solid 1px #e7e7e7;
-        border-radius: 5px;
-        margin-bottom: 20px;
-
+        padding: 12px 24px;
+        margin-bottom: 24px;
+        border: solid 1px var(--grey-color);
+        border-radius: 4px;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
       }
     `,
+    'p { line-height: 20px }',
   ],
 })
 export class MarketplaceIntegrationComponent {}

@@ -14,7 +14,7 @@ import { ToastLevelEnum, ToastService } from '@nusantara/core/toast';
 @Component({
   selector: 'nus-product-class-mapping-form',
   template: `
-    <h1 class="heading-1">Category & Attribute Mapping</h1>
+    <h1 class="title-1">Category & Attribute Mapping</h1>
 
     <form [formGroup]="form">
       <nus-category-selection-form

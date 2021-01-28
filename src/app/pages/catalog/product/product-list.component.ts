@@ -16,7 +16,7 @@ import { AbstractListComponent } from '@nusantara/core';
       title="Products">
     </nus-list-header>
     <div class="filtering">
-      <nus-include-deleted></nus-include-deleted>
+      <nus-include-deleted text="Show Deleted Product"></nus-include-deleted>
     </div>
     <nus-pagination [page]="page"></nus-pagination>
 
@@ -25,19 +25,20 @@ import { AbstractListComponent } from '@nusantara/core';
         <tr>
           <th translate>Name</th>
           <th>UPC</th>
-          <th>Variants</th>
-          <th>Has Image</th>
+          <th class="numeric">Variants</th>
+          <th class="centered">Has Image</th>
           <th>Category</th>
           <th>Product Class</th>
           <th>Vendor</th>
+          <th class="centered">Is Active</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let entity of page.entities">
           <td><a [routerLink]="[entity|entityToSlug]">{{ entity.name }}</a></td>
           <td>{{ entity.upc }}</td>
-          <td><span *ngIf="entity.variants.length">{{ entity.variants.length }}</span></td>
-          <td><nus-true-false [value]="entity.media.length > 0"></nus-true-false></td>
+          <td class="numeric"><span *ngIf="entity.variants.length">{{ entity.variants.length }}</span></td>
+          <td class="centered"><nus-true-false [value]="entity.media.length > 0"></nus-true-false></td>
           <td>
             <a [routerLink]="['/catalog', 'categories', entity.category|entityToSlug]">
               {{ entity.category.name }}
@@ -53,7 +54,7 @@ import { AbstractListComponent } from '@nusantara/core';
               {{ entity?.vendor?.name }}
             </a>
           </td>
-          <td><nus-true-false [value]="entity.isActive"></nus-true-false></td>
+          <td class="centered"><nus-true-false [value]="entity.isActive"></nus-true-false></td>
         </tr>
       </tbody>
     </table>

@@ -17,7 +17,7 @@
   --accent-lighter-color: #bb00bb;
   --error-color: #c40000;
 
-  --nav-background: #485368;
+  --nav-background: var(--tertiary);
   --lighter-nav-bg: #7b869b;
 
   --input-border: #cad0d9;
@@ -28,15 +28,22 @@
   --bhisma-orange-lighter: #F4924C;
 
   --info: #BCE7FD;
-  --error: #af3b6e;
-  --success: #1b998b;
+  --error: #c83228;
+  --error-lighten: #fde8e8;
+  --success: #21a656;
+  --alert: #f0be00;
   --light-red: #c492b1;
 
 
   /** Nww Color Adjustment **/
   --primary-color: #EA730B;
   --darken-primary-color: #B95B09;
-  --primary-color-lighter: #E6DCD4;
+  --lighten-primary-color: #E6DCD4;
+
+  --tertiary: #485368;
+  --tertiary-lighten: #7B869B;
+  --quinary-color: #365dc3;
+  --senary-color: var(--tertiary);
 
   --white-color: #fff;
   --darken-white-color: #f4f4f4;
@@ -50,6 +57,7 @@
   --hyperlink-color: #365DC3;
   --hyperlink-color-active: #034880;
   --input-hover-color: #275efe;
+
 }
 
 /**
@@ -72,25 +80,27 @@ body {
 /* admin / title 1 */
 h1, h2, h3, h4, .subheading-1, .subheading-2 {
   font-weight: 700;
+  margin: 0;
 }
 
-.heading-1 { 
+.title-1 { 
   font-size: 28px;
   line-height: 36px;
   margin: 0 0 24px;
 }
 /* admin / title 2 */
-.heading-2 { 
+.title-2 { 
   font-size: 24px;
   line-height: 32px;
 }
 /* admin / heading 1 */
-.heading-3 { 
+.heading-1 { 
   font-size: 20px;
   line-height: 28px;
+  margin-bottom: 4px;
 }
 /* admin / heading 2 */
-.heading-4 { 
+.heading-2 { 
   font-size: 18px;
   line-height: 24px;
 }
@@ -105,13 +115,31 @@ h1, h2, h3, h4, .subheading-1, .subheading-2 {
   line-height: 18px;
 }
 
+.body-1 {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.body-2 {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+
 a {
   text-decoration: underline;
   color: var(--hyperlink-color);
+  cursor: pointer;
 }
 
 a:active {
   color: var(--hyperlink-color-active);
+}
+
+a.disabled {
+  color: var(--grey-color);
+  pointer-events: none;
+  cursor: default;
 }
 
 /* 1.1 Common Classes */
@@ -129,6 +157,7 @@ img.preview {
  input:not([type=checkbox]):not([type=radio]), select {
   font-size: 1em;
   font-family: inherit;
+  background: white;
   border: solid var(--grey-color) 1px;
   border-radius: 4px;
   box-sizing: border-box;
@@ -139,6 +168,10 @@ img.preview {
 input.ng-untouched {
   border: solid var(--input-border) 1px !important;
   background: none !important;
+}
+::placeholder {
+  color: var(--grey-color);
+  opacity: 1;
 }
 
 /* For input fields that should immediately show when they are invalid */
@@ -212,22 +245,22 @@ input[type=color] {
     opacity: var(--o, 0);
  }
   input[type="checkbox"]:not(.toggle):checked, input[type="radio"]:not(.toggle):checked {
-    --o: 1;
+    --o: 1 !important;
  }
   input[type="checkbox"]:not(.toggle) {
-    top: 3px;
+    top: 2px;
     width: 16px;
     height: 16px;
-    margin-right: 10px;
+    margin-right: 13.5px;
  }
   input[type="checkbox"]:not(.toggle):after {
-    width: 5px;
-    height: 10px;
+    width: 4px;
+    height: 9px;
     border: 2px solid var(--active-inner);
     border-top: 0;
     border-left: 0;
-    top: 0;
-    left: 4px;
+    top: 1px;
+    left: 5px;
     transform: rotate(var(--r, 20deg));
  }
   input[type="checkbox"]:not(.toggle):checked {
@@ -249,7 +282,7 @@ input[type=color] {
     height: 14px;
     border-radius: 11px;
     border: none;
-    background: var(--disabled-inner);
+    background: var(--lighten-grey-color) !important;
  }
   input[type="checkbox"].toggle:after {
     top: -3px;
@@ -306,6 +339,9 @@ input[type=color] {
 form {
   max-width: 600px;
 }
+form.fluid {
+  max-width: unset;
+}
 input[type=file] {
   border: none;
 }
@@ -317,12 +353,12 @@ textarea {
   font-family: inherit;
   border: solid var(--input-border) 1px;
   border-radius: 2px;
-  width: 100%;
+  width: 98.33%;
   height: 5em;
 }
 label {
   display: block;
-  padding-bottom: 7px;
+  padding-bottom: 16px;
   color: var(--lighten-black-color);
   box-sizing: border-box;
   min-height: 61px;
@@ -338,6 +374,7 @@ label.without-field-errors { min-height: 0; }
 
 label > span:first-child {
   font-size: 14px;
+  line-height: 20px;
   font-weight: bold;
   display: block;
   margin-bottom: 4px;
@@ -351,6 +388,16 @@ input[type=file] {
 input[type=checkbox] {
   width: auto;
 }
+input:focus, input:active,
+button:focus, button:active,
+a:focus, a:active {
+  outline: none;
+}
+button:hover:not([disabled]) { cursor: pointer; }
+
+input[type="text"]:read-only, input[type="number"]:read-only {
+  color: var(--grey-color);
+} 
 
 /* 2.1 Generic Form Components */
 .control {
@@ -366,10 +413,6 @@ input[type=checkbox] {
 button.control, a.control {
   box-sizing: border-box;
   transition: all 0.2s;
-}
-
-button.control:focus, a.control:focus {
-  outline: none;
 }
 
 button.control:hover:not([disabled]), a.control:hover:not([disabled]) {
@@ -391,7 +434,7 @@ button.control.danger, a.control.danger {
 button.control.danger:hover:not([disabled]), a.control.danger:hover:not([disabled]),
 a.control.danger:active:not([disabled]) {
   color: var(--danger-color);
-  background: var(--primary-color-lighter);
+  background: var(--lighten-primary-color);
 }
 button.control.danger.ghost, a.control.danger.ghost {
   border: none;
@@ -406,7 +449,7 @@ button.control.secondary, a.control.secondary {
 button.control.secondary:hover:not([disabled]), a.control.secondary:hover:not([disabled]),
 a.control.secondary:active:not([disabled]) {
   color: var(--primary-color);
-  background: var(--primary-color-lighter);
+  background: var(--lighten-primary-color);
 }
 button.control.secondary.ghost, a.control.secondary.ghost {
   border: none;
@@ -440,8 +483,8 @@ input.error, select.error, textarea.error {
 form .error-detail {
   /* Small help-text displayed below form input fields when validation fails */
   color: var(--error);
-  font-size: .5em;
-  font-weight: bold;
+  font-size: 10px;
+  margin-top: 2px;
 }
 
 /* 2.1.3 Errors related to data-entry but not linked to a single field */
@@ -468,14 +511,20 @@ table {
 }
 table thead tr th:first-child { border-top-left-radius: 3px; }
 table thead tr th:last-child { border-top-right-radius: 3px; }
-table tbody td { border-bottom: solid 1px var(--grey-color); transition: background-color 0.3s; }
+table tbody td { 
+  border-bottom: solid 1px var(--grey-color); 
+  transition: background-color 0.3s;  
+  vertical-align: middle;
+}
 th { padding: 14px; }
 td { padding: 6px 14px; }
 thead { background: var(--darken-white-color); }
 thead tr, tbody tr { height: 48px; }
-thead th:first-of-type, tbody td:first-of-type { text-align: left; }
-tbody td { text-align: center; }
-
+thead th { text-align: left; }
+tbody td { color: var(--darken-grey-color); }
+th.numeric, td.numeric { text-align: right; }
+th.centered, td.centered { text-align: center; }
+td.vertical-aligned { vertical-align: top; padding-top: 14px;}
 
 /**
  * 2.3 Detail Pages
@@ -615,9 +664,8 @@ button.control:hover:not([disabled]), a.control:hover:not([disabled]), a.control
   padding-right: 40px;
   height: 65px;
   border: none;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: lighter;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
   cursor: pointer;
   display: flex;
   line-height: 65px;
@@ -651,4 +699,146 @@ button.control:hover:not([disabled]), a.control:hover:not([disabled]), a.control
 /* set ngx-smart-modal width to 100% */
 .nsm-content{
   width: 100%;
+  margin: 0;
+}
+.nsm-dialog {
+  display: flex;
+  align-items: center;
+  min-height: calc(100% - (1.75rem * 2));
+  max-width: 500px;
+}
+.nsm-content{
+  border-radius: 4px;
+  padding: 0;
+}
+.nsm-dialog-btn-close {
+  padding: 10px;
+}
+.nsm-dialog-btn-close svg {
+  width: 12px;
+  height: 12px;
+}
+
+.nsm-body {
+  padding: 24px;
+}
+
+/* Without close icon in top right */
+.no-close-icon-modal .nsm-dialog-btn-close {
+  visibility: hidden;
+}
+
+.wide-modal.nsm-dialog {
+  max-width: 684px;
+}
+
+.no-padding-modal .nsm-body {
+  padding: 0;
+}
+
+
+/** Badges **/
+span.badge {
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+.badge.success {
+  color: white;
+  background: var(--success);
+}
+.badge.error {
+  color: white;
+  background: var(--error);
+}
+.badge.alert {
+  color: var(--lighten-black-color);
+  background: var(--alert);
+}
+
+/** Tooltips **/
+[tooltip]{
+  position:relative;
+  display:inline-block;
+}
+[tooltip]::before {
+    content: "";
+    position: absolute;
+    top:-6px;
+    left:50%;
+    transform: translateX(-50%);
+    border-width: 4px 6px 0 6px;
+    border-style: solid;
+    border-color: rgba(0,0,0,0.7) transparent transparent transparent;
+    z-index: 99;
+    opacity:0;
+}
+
+[tooltip-position='bottom']::before{
+  top:100%;
+  margin-top:8px;
+  transform: translateX(-50%) translatey(-100%) rotate(-180deg)
+}
+[tooltip]::after {
+    content: attr(tooltip);
+    position: absolute;
+    left:50%;
+    top:-6px;
+    transform: translateX(-50%)   translateY(-100%);
+    background: rgba(0,0,0,0.7);
+    text-align: center;
+    color: #fff;
+    padding:4px;
+    font-size: 12px;
+    min-width: 80px;
+    border-radius: 5px;
+    pointer-events: none;
+    z-index:99;
+    opacity:0;
+}
+
+[tooltip-position='bottom']::after{
+  top:100%;
+  margin-top:8px;
+  transform: translateX(-50%) translateY(0%);
+}
+
+[tooltip]:hover::after,[tooltip]:hover::before {
+   opacity:1
+}
+
+
+/* New Add Button */
+.new-add-button {  
+  height: 40px;
+  padding: 0 48px;
+  background-color: white; 
+  border: solid 2px var(--senary-color); 
+  border-radius: 4px; font-weight: 700; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+}
+.new-add-button i {
+  font-size: 12px;
+}
+.new-add-button:disabled {
+  color: var(--grey-color);
+  border-color: var(--grey-color); 
+}
+
+.new-add-button.wide {
+  width: 100%;
+}
+
+
+
+/* Slim and rounded scrollbar */
+.slim-scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.slim-scrollbar::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: var(--grey-color);
 }

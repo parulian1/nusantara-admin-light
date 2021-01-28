@@ -15,13 +15,18 @@ import { products } from '@nusantara/models';
 @Component({
   selector: 'nus-price-list-range',
   template: `
-    <div [formGroup]="form" class="wrapper immediate-error-display">
+    <div [formGroup]="form" class="wrapper immediate-error-display">        
+      <div>Min</div>
+      <div></div>
+      <div>Max</div>
+      <div>Price</div>
+      <div></div>
       <div style="text-align: left;">
         <input type="number"
                [formControl]="minQuantity"
                [readonly]="isInitialRange">
       </div>
-      <div><strong>To</strong></div>
+      <div>To</div>
       <div>
         <input type="number"
                [formControl]="maxQuantity"
@@ -34,7 +39,6 @@ import { products } from '@nusantara/models';
       </div>
       <div>
         <button type="button"
-                class="remove-button"
                 [disabled]="isInitialRange"
                 (click)="remove.emit(this)">
           <i class="material-icons">delete_outline</i>
@@ -43,41 +47,11 @@ import { products } from '@nusantara/models';
     </div>
   `,
   styles: [':host { display: contents; }',
-  `    
-    .wrapper {
-      display: grid;
-      grid-template-columns: 1fr 20px 1fr 1fr 30px;
-      gap: 20px;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    input,select {
-      height: 40px;
-      border-radius: 4px;
-      background: #ffffff;
-    }
-
-    .currency {
-      display: inline-block;
-      position: relative;
-      width: 100%;
-    }
-    
-    .currency::before {
-      content: "Rp";
-      position: absolute;
-      font-weight: bold;
-      left: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    .currency input {
-      padding-left: 35px;
-    }
-
-  `
+  '.wrapper { margin-bottom: 16px; display: grid; grid-template-columns: 1fr 16px 1fr 1fr 30px; grid-column-gap: 16px; grid-row-gap: 4px; align-items: center; }',
+  '.currency { display: inline-block; position: relative; width: 100%; }',
+  '.currency::before { content: "Rp"; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); }',
+  '.currency input { padding-left: 35px; }',
+  'button { background: transparent; border: none; padding: 0; opacity: .5; }',
 ]
 })
 export class RangeComponent extends AbstractEditingComponent implements OnInit {

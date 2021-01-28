@@ -5,7 +5,7 @@ import {
   MarketplaceProductClassListResolver,
   MarketplaceShopListResolver,
 } from '@nusantara/resolvers';
-import { ConnectionFormComponent } from './setup/connection';
+import { ConnectComponent, ConnectionFormComponent } from './connect';
 import {
   SetupComponent,
   EditShippingComponent,
@@ -21,28 +21,23 @@ const routes: Routes = [
     runGuardsAndResolvers: 'always',
   },
   {
-    path: 'setup',
+    path: 'connect',
     children: [
       {
         path: '',
-        component: SetupComponent,
+        component: ConnectComponent,
         resolve: { page: MarketplaceShopListResolver },
         runGuardsAndResolvers: 'always',
       },
       {
-        path: 'connect',
-        children: [
-          {
-            path: 'new',
-            component: ConnectionFormComponent,
-            runGuardsAndResolvers: 'always',
-          },
-          {
-            path: ':shop-slug',
-            component: ConnectionFormComponent,
-            runGuardsAndResolvers: 'always',
-          },
-        ],
+        path: 'new',
+        component: ConnectionFormComponent,
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: ':shop-slug',
+        component: ConnectionFormComponent,
+        runGuardsAndResolvers: 'always',
       },
       {
         path: 'product-class/:shop-slug',
@@ -58,6 +53,18 @@ const routes: Routes = [
             component: ProductClassMappingFormComponent,
           },
         ],
+      },
+    ],
+    
+  },
+  {
+    path: 'setup',
+    children: [
+      {
+        path: '',
+        component: SetupComponent,
+        resolve: { page: MarketplaceShopListResolver },
+        runGuardsAndResolvers: 'always',
       },
       {
         path: 'edit-shipping/:shop-slug',

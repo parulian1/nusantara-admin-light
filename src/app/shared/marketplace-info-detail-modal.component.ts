@@ -1,11 +1,7 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, ViewChild} from '@angular/core';
 import { NgxSmartModalComponent } from 'ngx-smart-modal';
-import { Subscription } from 'rxjs';
-
-import { DialogResult, PagedResponse } from '../core';
-import { ProductService } from '../services';
-import {ISubLocation, IWarehouseDetail, products} from '../models';
+import { DialogResult } from '../core';
+import { IWarehouseDetail } from '../models';
 
 /**
  * Shows the user a list of products they can select from.
@@ -17,7 +13,7 @@ import {ISubLocation, IWarehouseDetail, products} from '../models';
 @Component({
   selector: 'nus-marketplace-info-detail-modal',
   template: `
-    <ngx-smart-modal  #modal identifier="longTextModal">
+    <ngx-smart-modal  #modal [customClass]="'wide-modal'">
       <h2 class="heading-2">Marketplace Information</h2>
         <div>
           <table>
@@ -40,18 +36,8 @@ import {ISubLocation, IWarehouseDetail, products} from '../models';
     </ngx-smart-modal>
   `,
   styles: [
-    `
-      #mp-add-product-head {
-        background-color: #F4F4F4;
-        height: 56px;
-      }
-      th, td{
-        text-align: left;
-      }
-      table{
-        border-radius: 4px;
-      }
-    `
+    'h2 { margin-bottom: 20px; }',
+    'tr td:nth-child(2), tr th:nth-child(2) { text-align: right; }',
   ]
 })
 export class MarketplaceInfoDetailModalComponent {

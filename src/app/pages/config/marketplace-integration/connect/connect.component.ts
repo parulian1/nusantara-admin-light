@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 
-import { PagedResponse } from '@nusantara/core';
+import { PagedResponse, ToastLevelEnum, ToastService } from '@nusantara/core';
 import { IShop } from '@nusantara/models';
 import * as fromMarketplaces from '@nusantara/reducers/marketplace.reducers';
 import * as shopActions from '@nusantara/actions';
 
 @Component({
   selector: 'nus-marketplace-setup',
-  template: `<h1 class="title-1">Marketplace Set Up</h1>
+  template: `<h1 class="title-1">Connect to Marketplace</h1>
     <nus-empty-list
       *ngIf="!page?.entities?.length; else elseBlock"
       title="No Connected Store Yet!"
@@ -18,6 +18,14 @@ import * as shopActions from '@nusantara/actions';
       addText="Add Store">
     </nus-empty-list>
     <ng-template #elseBlock>
+      <div class="header">
+        <div>
+          <h1 class="heading-1">Store List</h1>
+          <p>All marketplace stores you connected are listed here.</p>
+        </div>
+        <button [routerLink]="['new']" class="control"><i class="material-icons">add</i> Add</button>
+      </div>
+
       <nus-pagination [page]="page"></nus-pagination>
       <table>
         <thead>
@@ -26,7 +34,6 @@ import * as shopActions from '@nusantara/actions';
             <th>Warehouse</th>
             <th>Status</th>
             <th>Action</th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -41,29 +48,28 @@ import * as shopActions from '@nusantara/actions';
               <span class="badge success">Connected</span>
             </td>
 
-            <td>
-              <a [routerLink]="['edit-shipping/', entity.slug]"
-                (click)="setSelectedShop(entity)" 
-                [ngClass]="{'disabled': entity.isConnected === false}">
-                Edit Shipping
+            <td *ngIf="entity.isConnected == true">
+              <a [routerLink]="['product-class/', entity.slug]" (click)="setSelectedShop(entity)">
+                Map Class & Attribute
               </a>
             </td>
-            <td>
-              <a [routerLink]="" 
-                [ngClass]="{'disabled': entity.isConnected === false}">
-                Set Up Showcase
-              </a>
+            <td *ngIf="entity.isConnected == false">
+              <a [routerLink]="[entity.slug]">Reconnect</a>
             </td>
           </tr>
         </tbody>
       </table>
-      <nus-pagination [page]="page"></nus-pagination>
-    </ng-template>`,
+      <nus-pagination [page]="page"></nus-pagination>                  
+    </ng-template>
+      `,
   styles: [
-    'thead th, tbody td { text-align: left }'
+    '.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }',
+    'p { color: var(--darken-grey-color); }',
+    'button { display: flex; align-items: center; }',
+    '.material-icons { font-size: 20px; }',
   ],
 })
-export class SetupComponent implements OnInit {
+export class ConnectComponent implements OnInit {
   page: PagedResponse<IShop>;
 
   constructor(

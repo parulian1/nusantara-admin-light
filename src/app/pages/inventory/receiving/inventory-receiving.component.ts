@@ -23,7 +23,7 @@ import {IError} from "../../../models/base/error";
 @Component({
   selector: 'nus-inventory-receiving',
   template: `
-    <h1 class="heading-1">Receiving Inventory Order</h1>
+    <h1 class="title-1">Receiving Inventory Order</h1>
 
     <form [formGroup]="form" (ngSubmit)="saveForm()">
       <div class="container">
@@ -105,7 +105,7 @@ import {IError} from "../../../models/base/error";
 
           <tr>
             <td colspan="9">
-              <button type="button" (click)="addLine()" class="wide-add-button">
+              <button type="button" (click)="addLine()" class="new-add-button wide">
                 <i class="material-icons">add</i> Add Record
               </button>
             </td>
@@ -128,9 +128,6 @@ import {IError} from "../../../models/base/error";
   styles: [
   'form{ max-width: none;}',
   'h3 { font-size: 20px; margin: 0; }',
-  'select { background-color: white; height: 40px; border-radius: 4px; }',
-  'table thead { background-color: var(--darken-white-color); }',
-  'table th { height: 48px; }',
   '.container { display: grid; grid-template-columns: 4fr 1fr; grid-gap: 24px; }',
   '.container > div { border: 1px solid var(--grey-color); border-radius: 4px; padding: 16px 24px; }',
   '.general-info > h3 { margin-bottom: 20px; }',
@@ -143,7 +140,6 @@ import {IError} from "../../../models/base/error";
   '.mp-info .count { font-size: 28px; font-weight: 700; }',
   '.confirm-warehouse { display: grid; grid-template-columns: 4fr 1fr; grid-gap: 24px; }',
   '.product-list { margin-top: 24px; }',
-  '.wide-add-button{ display: flex; align-items: center; justify-content: center; background-color: white; width: 100%; height: 40px; border: solid 2px #485368; border-radius: 4px; font-weight: 700; }',
   ]
 })
 export class InventoryReceivingComponent extends AbstractDetailComponent<inventory.IReceivingOrder> implements OnInit, AfterViewInit {

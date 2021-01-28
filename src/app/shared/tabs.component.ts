@@ -7,7 +7,7 @@ import {
   Component,
   ContentChildren,
   QueryList,
-  AfterContentInit, Output, EventEmitter,
+  AfterContentInit, Output, EventEmitter, Input,
 } from '@angular/core';
 
 import { TabComponent } from './tab.component';
@@ -20,45 +20,28 @@ import { TabComponent } from './tab.component';
         *ngFor="let tab of tabs"
         (click)="selectTab(tab)"
         [class.active]="tab.active"
-      >
+        [ngClass]="{ 'fluid' : fluid === true }">
         <strong>{{ tab.title }}</strong>
       </div>
     </div>
     <ng-content></ng-content>
   `,
   styles: [
-    `
-      .tab {
-        overflow: hidden;
-        display: flex;
-        margin: 0 18px;
-        justify-content: space-evenly;
-      }
-
-      .tab div {
-        flex-grow: 1;
-        text-align: center;
-        outline: none;
-        cursor: pointer;
-        padding: 15px 0;
-        transition: 0.3s;
-        border-bottom: 3px solid #e7e7e7;
-      }
-
-      .tab div:hover {
-        background: #f4f4f4;
-      }
-
-      .tab div.active {
-        border-bottom: 3px solid #ff7d09;
-      }
-    `,
+    '.tab { overflow: hidden; display: flex; justify-content: start; border-bottom: 1px solid var(--grey-color); }',
+    '.tab div { outline: none; cursor: pointer; padding: 12px 50px; transition: 0.3s; }',
+    '.tab div:hover { background: var(--darken-white-color); }',
+    '.tab div.active { border-bottom: 2px solid var(--primary-color); }',
+    
+    '.tab.wide { justify-content: center; }',
+    '.tab.wide div { flex-grow: 1; }',
+    '.fluid { flex-grow: 1; text-align: center; }'
   ],
 })
 export class TabsComponent implements AfterContentInit {
   @ContentChildren(TabComponent) tabs: QueryList<TabComponent>;
-  @Output() OutPutTitle = new EventEmitter<any>();
-
+  @Output() select = new EventEmitter<any>();
+  @Input() fluid = false;
+  
   // contentChildren are set
   ngAfterContentInit() {
     // get all active tabs
@@ -76,6 +59,6 @@ export class TabsComponent implements AfterContentInit {
 
     // activate the tab the user has clicked on.
     tab.active = true;
-    this.OutPutTitle.next(tab.title);
+    this.select.next(tab.title);
   }
 }

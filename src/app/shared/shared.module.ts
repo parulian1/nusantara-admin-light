@@ -27,12 +27,13 @@ import { FieldErrorsMarketplaceComponent } from '@nusantara/shared/field-errors-
 import { ConfirmModalComponent } from './confirm-modal.component';
 import { TabComponent } from './tab.component';
 import { TabsComponent } from './tabs.component';
+import { TooltipComponent } from './tooltip.component';
 import { EmptyListCOmponent } from './empty-list.component';
-import { MarketplaceInfoDetailProductPageComponent } from "@nusantara/shared/marketplace-info-detail-product-page.component";
-import { MarketplaceInfoShippingModalComponent } from '@nusantara/shared/marketplace-info-shipping-modal.component';
-import { MarketplaceInfoDetailModalComponent } from '@nusantara/shared/marketplace-info-detail-modal.component';
-import { ConfirmModalReceivingOrderComponent } from '@nusantara/shared/confirm-modal-receiving-order.component';
-import { ConfirmModalPendingOrderComponent } from '@nusantara/shared/confirm-modal-pending-order.component';
+import { MarketplaceProductInfoComponent } from "./marketplace-info-detail-product-page.component";
+import { MarketplaceShippingInfoModalComponent } from './marketplace-info-shipping-modal.component';
+import { MarketplaceInfoDetailModalComponent } from './marketplace-info-detail-modal.component';
+import { ConfirmModalReceivingOrderComponent } from './confirm-modal-receiving-order.component';
+import { ConfirmModalPendingOrderComponent } from './confirm-modal-pending-order.component';
 
 /**
  * The purpose of this module is to make common code (like pipes)
@@ -61,12 +62,13 @@ import { ConfirmModalPendingOrderComponent } from '@nusantara/shared/confirm-mod
     ConfirmModalComponent,
     TabComponent,
     TabsComponent,
+    TooltipComponent,
     EmptyListCOmponent,
-    MarketplaceInfoShippingModalComponent,
+    MarketplaceShippingInfoModalComponent,
     ConfirmModalReceivingOrderComponent,
     ConfirmModalPendingOrderComponent,
     MarketplaceInfoDetailModalComponent,
-    MarketplaceInfoDetailProductPageComponent
+    MarketplaceProductInfoComponent
   ],
   exports: [
     EntityToSlugPipe,
@@ -90,12 +92,13 @@ import { ConfirmModalPendingOrderComponent } from '@nusantara/shared/confirm-mod
     ConfirmModalComponent,
     TabComponent,
     TabsComponent,
+    TooltipComponent,
     EmptyListCOmponent,
-    MarketplaceInfoShippingModalComponent,
+    MarketplaceShippingInfoModalComponent,
     ConfirmModalReceivingOrderComponent,
     ConfirmModalPendingOrderComponent,
     MarketplaceInfoDetailModalComponent,
-    MarketplaceInfoDetailProductPageComponent
+    MarketplaceProductInfoComponent
   ],
   imports: [
     CommonModule,

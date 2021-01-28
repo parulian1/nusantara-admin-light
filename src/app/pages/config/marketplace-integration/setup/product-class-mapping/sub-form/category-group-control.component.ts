@@ -35,14 +35,14 @@ export interface IGroupControlComponentData {
 @Component({
   selector: 'nus-category-group-control',
   template: `
-    <form [formGroup]="form">
+    <form [formGroup]="form" class="fluid">
       <div>
         <label>
           <span *ngIf="formLabel; else defaultLabel"
             >{{ formLabel }} Subcategory
           </span>
           <ng-template #defaultLabel>
-            <span>{{currentShop}} Category</span>
+            <span>{{ currentShop }} Category</span>
           </ng-template>
           <select formControlName="category" (ngModelChange)="onSelect($event)">
             <option *ngFor="let c of categories" [ngValue]="c">
@@ -63,6 +63,9 @@ export interface IGroupControlComponentData {
       </div>
     </form>
   `,
+  styles: [
+    'label { margin-bottom: 12px; min-height: 0; }',
+  ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

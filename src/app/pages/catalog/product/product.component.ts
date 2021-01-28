@@ -6,41 +6,300 @@ import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import {SlideInOutAnimation} from '@nusantara/shared';
+
 import { ToastService, AbstractDetailComponent, PagedResponse, getSlugFromHref, NusantaraValidators, ErrorResult } from '@nusantara/core';
-import {
-  ICategory,
-  IVendor,
-  drf,
-  products,
-  IMarketplaceItemAttributeInformation,
-  IShopAttributeMapping, IMarketplaceItemLogisticInformation, IMarketplaceItemInformation, IClient
-} from '@nusantara/models';
+import { ICategory, IVendor, drf, products } from '@nusantara/models';
 import { IError } from '@nusantara/models/base/error';
-import {MarketplaceClientService, ProductService} from '@nusantara/services';
+import { ProductService } from '@nusantara/services';
 import { PriceListHostComponent } from './price';
 import { ProductMediaHostComponent } from './media';
 import { ProductAttributeHostComponent } from './attribute';
 import { ProductSubscriptonHostComponent } from './subscription';
-import {MarketplaceInfoDetailProductPageComponent} from "../../../shared/marketplace-info-detail-product-page.component";
-import {MarketplaceInfoShippingModalComponent} from "../../../shared/marketplace-info-shipping-modal.component";
-import {ProductSelectionModalComponent} from "../../../shared";
-import {MarketplaceClientEnum} from "../../config/marketplace-integration/setup/markeplace-client-enum";
-import {MarketplaceItemService} from "../../../services/marketplace-item.service";
+import { MarketplaceInfoHostComponent } from './marketplace';
 
 /**
  * Allows the user to edit/create a single product.
  */
 @Component({
   selector: 'nus-product',
-  animations: [SlideInOutAnimation],
-  templateUrl:'./product.component.html',
-  styleUrls: ['./product.component.css']
+  template: `
+    <nus-detail-title [originalName]="originalEntityName" typeName="Product"></nus-detail-title>
+    <div class="container">
+      <div>
+        <nus-non-field-errors
+          [nonFieldErrors]="nonFieldErrors">
+        </nus-non-field-errors>
+
+        <form [formGroup]="form" (ngSubmit)="save()" class="fluid">
+          <div id="general-info" class="wrapper">
+            <h1 class="heading-1">General Information</h1>
+            <label>
+              <span>Name</span>
+              <input type="text" [formControl]="name" placeholder="Input Name"/>
+              <nus-field-errors [control]="name"></nus-field-errors>
+            </label>
+            <label class="toggle">
+              <input id="s2" type="checkbox" class="toggle"[formControl]="isActive"/>
+              <span>Is Active</span>
+              <nus-field-errors [control]="isActive"></nus-field-errors>
+            </label>
+
+            <label *ngIf="structure.value === 'parent'">
+              <span>Product Category</span>
+              <div class="manage">
+                <div>
+                  <select [formControl]="category" aria-placeholder="Select Category">
+                    <option *ngFor="let c of categories" [ngValue]="c.href">
+                      {{ c.pathName }}
+                    </option>
+                  </select>
+                  <nus-field-errors [control]="category"></nus-field-errors>
+                </div>
+                <div><a [routerLink]="['/catalog', 'categories']"> Manage Category</a></div>
+              </div>
+            </label>
+
+            <label *ngIf="structure.value === 'parent'">
+              <span>Product Class</span>
+              <div class="manage">
+                <div>
+                  <select [formControl]="productClass">
+                    <option *ngFor="let pc of productClasses" [ngValue]="pc.href">
+                      {{ pc.name }}
+                    </option>
+                  </select>
+                  <nus-field-errors [control]="productClass"></nus-field-errors>
+                </div>
+                <div><a [routerLink]="['/catalog', 'product-classes']">Manage Class</a>
+                </div>
+              </div>
+            </label>
+            <div *ngIf="productClass.value">
+              <nus-product-attribute-host
+                [form]="attributes"
+                [productClass]="productClass"
+                [originalAttributeValues]="originalAttributeValues"
+                *ngIf="originalAttributeValues">
+              </nus-product-attribute-host>
+            </div>
+          </div>
+
+          <div id="product-info" class="wrapper">
+            <h1 class="heading-1">Product Information</h1>
+
+            <div class="rich-text-container">
+              <label for="content" class="external"><span>Description</span></label>
+              <ckeditor [editor]="Editor" [formControl]="description" id="description"></ckeditor>
+              <nus-field-errors [control]="description"></nus-field-errors>
+            </div>
+
+            <label *ngIf="structure.value === 'parent'">
+              <span>Vendor</span>
+              <div class="manage">
+                <div>
+                  <select [formControl]="vendor">
+                    <option *ngFor="let v of vendors" [ngValue]="v.href">
+                      {{ v.name }}
+                    </option>
+                  </select>
+                  <nus-field-errors [control]="vendor"></nus-field-errors>
+                </div>
+                <div><a [routerLink]="['/catalog', 'vendors']"> Manage Vendor </a></div>
+              </div>
+            </label>
+          </div>
+
+          <div id="product-management" class="wrapper">
+            <h1 class="heading-1">Product Management</h1>
+            <ng-template [ngIf]="structure.value === 'parent'">
+              <label>
+                <span>Variant Table</span>
+                <table>
+                  <thead>
+                    <tr><th>Name</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let v of variants">
+                      <td>
+                        <a [routerLink]="['variants', v.href | entityToSlug]">{{ v.name}}</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 14px;">
+                        <button [disabled]="isNew" (click)="addVariant()" type="button" class="new-add-button wide">
+                          <i class="material-icons">add</i> Add Variant
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </label>
+            </ng-template>
+
+            <label>
+              <span>UPC</span>
+              <input type="text" [formControl]="upc" />
+              <nus-field-errors [control]="upc"></nus-field-errors>
+            </label>
+
+            <nus-price-list-host [form]="priceLists"></nus-price-list-host>
+          </div>
+
+          <div id="product-media" class="wrapper">
+            <h1 class="heading-1">Media</h1>
+            <nus-product-media-host [form]="media"></nus-product-media-host>
+          </div>
+
+          <div id="product-packaging" class="wrapper">
+            <h1 class="heading-1">Product Packaging</h1>
+            <label>
+              <span>Package Weight (kg)</span>
+              <input type="number" [formControl]="weight"placeholder="Input Weight"/>
+              <nus-field-errors [control]="weight"></nus-field-errors>
+            </label>
+            <div formGroupName="dimensions" class="product-dimension">
+              <label>
+                <span>Length (cm)</span>
+                <input
+                  type="number"
+                  class="dimension-input"
+                  formControlName="current_length"
+                  placeholder="Input Length"/>
+                <nus-field-errors [control]="length"></nus-field-errors>
+              </label>
+              <label>
+                <span>Width (cm)</span>
+                <input
+                  type="number"
+                  class="dimension-input"
+                  formControlName="current_width"
+                  placeholder="Input Width"/>
+                <nus-field-errors [control]="width"></nus-field-errors>
+              </label>
+              <label>
+                <span>Height (cm)</span>
+                <input
+                  type="number"
+                  class="dimension-input"
+                  formControlName="current_height"
+                  placeholder="Input Height"/>
+                <nus-field-errors [control]="height"></nus-field-errors>
+              </label>
+            </div>
+          </div>
+
+          <div id="product-tag" class="wrapper">
+            <h1 class="heading-1">Product Tag</h1>
+            <label *ngFor="let t of tags.controls; let i = index">    
+              <span>Tag {{ i + 1 }}</span>
+              <div style="display: flex;">
+                <input type="text" [formControl]="t" />
+                <button type="button" class="delete" (click)="tags.removeAt(i)">
+                  <i class="material-icons">delete_outline</i>
+                </button>
+              </div>
+            </label>
+            <button (click)="addTag()" type="button" class="new-add-button wide">
+              <i class="material-icons">add</i> Add Tag
+            </button>
+          </div>
+
+          <div id="product-other" class="wrapper">
+            <h1 class="heading-1">Other</h1>
+            <label>
+              <span>Meta Description</span>
+              <textarea
+                [formControl]="seoDescription"
+                id=""
+                cols="30"
+                rows="10"
+              ></textarea>
+              <nus-field-errors [control]="seoDescription"></nus-field-errors>
+            </label>
+            <label>
+              <span>Meta Keywords</span>
+              <input type="text" [formControl]="seoMeta" />
+              <nus-field-errors [control]="seoMeta"></nus-field-errors>
+            </label>
+          </div>
+
+          <nus-marketplace-info id="marketplace-information" 
+            *ngIf="!isNew"
+            [form]="marketplace"
+            [productClass]="selectedProductClass">
+          </nus-marketplace-info>
+
+          <div *ngIf="!isNew" class="wrapper" id="product-inventory">
+            <ng-container *ngIf="!!entity">
+              <nus-stock-search [productHref]="entity?.href"></nus-stock-search>
+            </ng-container>
+          </div>
+
+          <nus-detail-actions
+            [component]="this"
+            (cancel)="navigateToParent(true)"
+            (delete)="delete()"
+            [hideDelete]="!entity || !entity.isActive"
+          >
+          </nus-detail-actions>
+        </form>
+      </div>
+      <div class="side-nav">
+        <ul>
+          <li [ngClass]="{ active: currentActive === 'general-info' }">
+            <a (click)="scrollTo('general-info')">General Information</a>
+          </li>
+          <li [ngClass]="{ active: currentActive === 'product-info' }">
+            <a (click)="scrollTo('product-info')">Product Information</a>
+          </li>
+          <li [ngClass]="{ active: currentActive === 'product-management' }">
+            <a (click)="scrollTo('product-management')">Product Management</a>
+          </li>
+          <li [ngClass]="{ active: currentActive === 'product-media' }">
+            <a (click)="scrollTo('product-media')">Media</a>
+          </li>
+          <li [ngClass]="{ active: currentActive === 'product-packaging' }">
+            <a (click)="scrollTo('product-packaging')">Product Packaging</a>
+          </li>
+          <li [ngClass]="{ active: currentActive === 'product-tag' }">
+            <a (click)="scrollTo('product-tag')">Product Tag</a>
+          </li>
+          <li [ngClass]="{ active: currentActive === 'product-other' }">
+            <a (click)="scrollTo('product-other')">Other</a>
+          </li>
+          <li *ngIf="!isNew" [ngClass]="{ active: currentActive === 'marketplace-information' }">
+            <a (click)="scrollTo('marketplace-information')">Marketplace Information</a>
+          </li>
+          <li *ngIf="!isNew" [ngClass]="{ active: currentActive === 'product-inventory' }">
+            <a (click)="scrollTo('product-inventory')">Product Inventory</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  `,
+  // styleUrls: ['./product.component.css']
+  styles: [
+    '.container { display: grid; grid-template-columns: 3fr 1fr; grid-column-gap: 24px; }',
+    '.wrapper { padding: 16px 24px; border: solid 1px var(--grey-color); border-radius: 4px; margin-bottom: 24px; }',
+    '.manage { display: grid; grid-template-columns: 7fr 1fr; grid-gap: 20px; align-items: center; }',
+    '.product-dimension { display: grid; grid-template-columns: repeat(3, 1fr); grid-column-gap: 16px; }',
+    
+    '.heading-1 { margin-bottom: 16px; }',
+    'label.toggle { padding-bottom: 20px 0; width: fit-content; min-height: 0; }',
+    'label.toggle > input { margin-right: 16px }',
+    '.rich-text-container { padding-bottom: 16px; margin: 0 !important; }',
+
+    '.side-nav li { font-size: 14px; line-height: 20px; font-weight: bold; color: var(--tertiary); padding: 10px 32px; cursor: pointer; }',
+    '.side-nav li.active { padding: 10px 24px; color: white; background: var(--tertiary-lighten); border-left: solid 8px var(--primary-color); border-radius: 4px; }',
+    '.side-nav li a { text-decoration: none; color: inherit; }',
+  
+
+    '.delete { background: none; border: none; outline: none; font-size: 18px; cursor: pointer; opacity: .5; }',
+  ]
 })
 export class ProductComponent extends AbstractDetailComponent<products.IProduct> implements OnInit, AfterViewInit {
 
   productClasses: Array<products.IProductClass>;
-  productClassSlug: string;
   categories: Array<ICategory>;
   vendors: Array<IVendor>;
   attribute: Array<products.IProductAttribute>;
@@ -50,51 +309,24 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   originalAttributeValues: {[key: string]: string|number|boolean};
   entity: products.IProduct;
   currentActive = 'general-info';
-  warehouseValue: number=0;
-  storeValue:number=0;
-  marketplaceValue:number=0;
-  productSlug: string;
-  shippingDetail: any;
-  warehouseInfoDetail: any;
-  marketplaceStoreAttributes: any;
-  visible: boolean;
-  animationState = 'out';
   Editor = ClassicEditor;
-  clientList: IClient[];
-  marketplaceClient = MarketplaceClientEnum;
-  productClassEntity: IShopAttributeMapping;
-  productClassName: string;
-  showNoSlider: boolean;
-  showDivIndex: number;
-  isBusy: boolean;
-  isComboBox: boolean;
-  isDropDown: boolean;
-  detailAttributes: string[];
-  isInput: boolean;
-  currentMarketpalce: string;
-  showAttribute: number;
+
+  selectedProductClass: products.IProductClass;
 
   @ViewChild(ProductMediaHostComponent) mediaHost!: ProductMediaHostComponent;
   @ViewChild(PriceListHostComponent) priceListHost!: PriceListHostComponent;
   @ViewChild(ProductAttributeHostComponent) attributeHost!: ProductAttributeHostComponent;
   @ViewChild(ProductSubscriptonHostComponent) subscriptionHost!: ProductSubscriptonHostComponent;
-  @ViewChild(MarketplaceInfoShippingModalComponent) shippingModalComponent: MarketplaceInfoShippingModalComponent;
-  @ViewChild(MarketplaceInfoDetailProductPageComponent) marketplaceInfo: MarketplaceInfoDetailProductPageComponent;
-  hideOnChangeProductClass: boolean;
+  @ViewChild(MarketplaceInfoHostComponent) marketplaceHost!: MarketplaceInfoHostComponent;
 
   constructor(service: ProductService,
               private fb: FormBuilder,
-              public route: ActivatedRoute,
-              public toast: ToastService,
-              public router: Router,
-              public clientService: MarketplaceClientService,
-              public itemService: MarketplaceItemService,
+              route: ActivatedRoute,
+              toast: ToastService,
+              router: Router,
               public modal: NgxSmartModalService) {
     super(route, router, toast, service);
   }
-  @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
-
-
 
   get name(): FormControl { return this.form.get('name') as FormControl; }
   get isActive(): FormControl { return this.form.get('isActive') as FormControl; }
@@ -112,13 +344,14 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   get width(): FormControl { return this.form.get('width') as FormControl; }
   get height(): FormControl { return this.form.get('height') as FormControl; }
   get parent(): FormControl { return this.form.get('parent') as FormControl; }
+  get dimensions(): FormArray { return this.form.get('dimension') as FormArray; }
   get structure(): FormControl { return this.form.get('structure') as FormControl; }
   get tags(): FormArray { return this.form.get('tags') as FormArray; }
   get seoMeta(): FormControl { return this.form.get('seoMeta') as FormControl; }
   get seoDescription(): FormControl { return this.form.get('seoDescription') as FormControl; }
   get subscription(): FormControl { return this.form.get('subscription') as FormControl; }
-  get marketplaceAttributes() {return this.form.get('marketplaceAttributes') as FormArray;}
-  get dimensions() {return this.form.get('dimension') as FormArray;}
+  get marketplace(): FormGroup { return this.form.get('marketplace') as FormGroup; }
+ 
 
   get isProductOptionDomain(): boolean {
     const pc = this.productClasses.filter(e => e.href === (this.form.get('productClass').get('href') as FormControl)?.value)[0];
@@ -129,8 +362,6 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   ngOnInit(): void {
-    this.hideOnChangeProductClass = false;
-    this.showNoSlider = false;
     this.route.data.subscribe((
       data: { entity: products.IProduct, categories: ICategory[], parent: products.IProduct, vendors: PagedResponse<IVendor>,
         productClasses: products.IProductClass[], mediaTypes: drf.IChoice[]}) => {
@@ -141,36 +372,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       this.mediaTypes = data.mediaTypes;
       this.entity = data.entity;
     });
-    this.visible = false;
 
-    if (this.isNew){
-      this.productSlug = this.route.snapshot.paramMap.get('slug')
-      this.itemService
-        .getItemMarketplaceInformation(this.productSlug)
-        .subscribe((data: IMarketplaceItemInformation) => {
-          this.warehouseValue = data.totalWarehouse;
-          this.marketplaceValue = data.totalMarketplace;
-          this.storeValue = data.totalStore;
-          this.warehouseInfoDetail = data.details;
-        });
-
-
-      this.itemService
-        .getItemMarketplaceLogisticInformation(this.productSlug)
-        .subscribe((data: IMarketplaceItemLogisticInformation) => {
-          this.shippingDetail = data;
-        });
-
-      this.clientService
-        .client.subscribe((data: IClient[]) => {
-          this.clientList = data;
-        });
-    }
-
-    this.route.data.subscribe((data: { entity: products.IProduct }) => {
-      this.initializeForm(data.entity);
-      this.setOriginalEntityName(data.entity);
-    });
+    super.ngOnInit();
   }
 
   /**
@@ -201,7 +404,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       vendor: this.fb.group({href: [entity?.vendor?.href, [Validators.required]]}),
       media: this.fb.array([]),
       attributes: this.fb.group({}, []),
-      marketplaceAttributes: this.fb.array([]),
+      marketplace: this.fb.group({}, []),
       priceLists: this.fb.array([]),
       related: this.fb.array([]),
       seoMeta: [entity?.seoMeta, []],
@@ -282,23 +485,19 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
    */
   getFormValue(): any {
     const formValue = {};
-    delete (this.form.value.marketplaceAttributes);
-    Object.assign(formValue, this.form.value);
 
+    Object.assign(formValue, this.form.value);
     // delete sub entities that shouldn't be saved on the primary object
     // like price-lists, media, dll.
     delete (formValue as products.IProduct).media;
     delete (formValue as products.IProduct).priceLists;
+    
+    delete (this.form.value.marketplace);
+
     return formValue;
   }
 
   save() {
-
-    const formPatch = {
-      attributes: this.formValueMapping,
-    };
-    // we should patch here after know that the marketplace is different, otherwise the data will be gone
-    this.patchAttribute(formPatch)
 
     this.service.save(this.getFormValue()).pipe(catchError(err => {
       if (err instanceof HttpErrorResponse) {
@@ -330,6 +529,11 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         }
       }
     );
+
+    if(!this.isNew) {
+      this.marketplaceHost.saveAll();
+    }
+
     this.form.disable();
   }
 
@@ -362,18 +566,15 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   onProductClassChanged(newValue: any) {
     // protect against triggering during initialization
     if (!newValue || !this.productClasses) { return; }
+
     const pc = this.productClasses.filter(e => e.href === newValue)[0];
-    const slugs = pc.href.split('/').reverse();
-    this.productClassSlug = slugs[0] ? slugs[0] : slugs[1];
-    this.hideOnChangeProductClass = true;
-
-    this.productClassName = pc.name;
-
     if (pc.type === 'physical') {
       this.weight.enable();
     } else {
       this.weight.disable();
     }
+
+    this.selectedProductClass =  pc;
   }
 
   scrollTo(id: string) {
@@ -384,138 +585,5 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       inline: 'nearest',
     });
     this.currentActive = id;
-  }
-
-  goToAttribute(): void {
-    this.router.navigate(['/catalog/product-classes', this.productClassSlug]);
-  }
-
-  showMarketplaceDetail() {
-    this.marketplaceInfo.open()
-  }
-
-  showShippingDetail() {
-    this.shippingModalComponent.open();
-  }
-
-  show(){
-    this.visible=true;
-  }
-
-  toggleShowDiv(index: number) {
-      this.showDivIndex = index;
-      this.animationState = this.animationState === 'out' ? 'in' : 'out';
-  }
-
-  getAttributeOfMarketplace(marketplace: any) {
-    this.showNoSlider = false;
-    this.hideOnChangeProductClass = false;
-    if(this.currentMarketpalce){
-      if(this.currentMarketpalce !== marketplace.toLowerCase()){
-        const formPatch = {
-          attributes: this.formValueMapping,
-        };
-          //we should patch here after know that the marketplace is different, otherwise the data will be gone
-        this.patchAttribute(formPatch)
-      }
-    }
-
-    this.currentMarketpalce = marketplace.toLowerCase();
-    this.clearFormArray(this.marketplaceAttributes);
-
-    this.itemService
-      .getItemMarketplaceAttribute(this.currentMarketpalce,this.productClassSlug.toLowerCase(), this.productSlug)
-      .subscribe((data: IMarketplaceItemAttributeInformation[]) => {
-        this.isBusy = true;
-        this.marketplaceStoreAttributes = data;
-        this.isDropDown = false;
-        this.isInput = false;
-        this.isComboBox = false;
-
-        if(data === null){
-          this.showNoSlider = true;
-        }
-
-        //loop add form for edit attribute
-        data?.forEach((objStore:IMarketplaceItemAttributeInformation,index) => {
-          objStore.attributes.forEach((objAttr) => {
-            this.marketplaceAttributes.push(
-              this.fb.group({
-                name: [objAttr.name],
-                type: [objAttr.type],
-                identifier: [objAttr.identifier],
-                value: [objAttr.value],
-                option: [objAttr.option],
-                newvalue: null,
-                indexShop: index,
-              })
-            );
-          });
-        })
-    });
-  }
-
-  get formValueMapping() {
-    //this part is to validate new value at combo box
-    return this.marketplaceAttributes.value.map((attr: any) => {
-      let currVal = attr.value;
-      if(attr.newvalue!==null){
-        currVal = attr.newvalue;
-      }
-      return {
-        identifier: attr.identifier,
-        value: currVal,
-        product: this.productSlug,
-      };
-    });
-  }
-
-  attrChange(value: string, index: number) {
-    const attr = this.marketplaceAttributes.at(index).get('newvalue');
-    if (value === 'addNewAttr') {
-      attr.setValidators(Validators.required);
-
-      //should set string otherwise it will give value addNewAttr
-      attr.setValue("")
-    } else {
-      attr.clearValidators();
-      attr.reset();
-    }
-    attr.updateValueAndValidity();
-  }
-
-  patchAttribute(formPatch: any){
-    this.itemService
-      .patchItemAttribute(formPatch, this.productClassSlug.toLowerCase())
-      .subscribe(
-        (resp) => {
-          console.log(resp);
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
-  }
-
-  clearFormArray(formArray: FormArray) {
-    while (formArray.length !== 0) {
-      formArray.removeAt(0);
-    }
-  }
-
-  onChangeProductClass(event: any) {
-    const slugs = event.target.value.split('/').reverse();
-
-    // get last slug
-    this.productClassSlug = slugs[0] ? slugs[0] : slugs[1];
-    this.hideOnChangeProductClass = true;
-    this.clearFormArray(this.marketplaceAttributes);
-  }
-
-  updateValidator(newForm: any) {
-    if(!newForm){
-        this.form.controls['marketplaceAttributes'].setValidators([Validators.required,]);
-        this.form.controls['marketplaceAttributes'].updateValueAndValidity();
-    }
   }
 }

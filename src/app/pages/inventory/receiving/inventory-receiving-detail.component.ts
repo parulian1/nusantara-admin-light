@@ -21,7 +21,7 @@ import {Location} from "@angular/common";
 @Component({
   selector: 'nus-receiving-order-detail',
   template: `
-    <h1 class="heading-1">
+    <h1 class="title-1">
       Pending Order {{entity.href|entityToSlug}}
     </h1>
     <p style="margin-bottom: 24px;">Edit shipping method for each product. Skip this step if you don't want to change anything.</p>
@@ -106,7 +106,7 @@ import {Location} from "@angular/common";
         <button type="button" (click)="cancel()" class="control secondary">
           Back
         </button>
-        <button type="button" (click)="reject()" [disabled]="entity.status !== 'pending'" class="control danger">
+        <button type="button" (click)="reject()" [disabled]="entity.status !== 'pending'" class="control danger ghost">
           Reject
         </button>
       </div>

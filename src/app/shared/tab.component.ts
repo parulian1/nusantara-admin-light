@@ -4,18 +4,10 @@
  * and ngTemplateOutletContext directives.
  */
 
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {IShopAttribute} from "@nusantara/models";
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'nus-tab',
-  styles: [
-    `
-      .pane {
-        padding: 1em;
-      }
-    `,
-  ],
   template: `
     <div [hidden]="!active" class="pane">
       <ng-content></ng-content>

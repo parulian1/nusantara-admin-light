@@ -10,7 +10,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'nus-config-hub',
   template: `
-    <h1 class="heading-1">Config Hub</h1>
+    <h1 class="title-1">Config Hub</h1>
     <div>
       <a id="warehouse-config" [routerLink]="['./warehouses']"><i class="material-icons">domain</i> Warehouses</a>
       <a id="pg-config" [routerLink]="['./payment-gateways']"><i class="material-icons">payment</i> Payment Gateways</a>

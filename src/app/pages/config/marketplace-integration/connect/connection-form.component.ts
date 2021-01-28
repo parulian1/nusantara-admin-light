@@ -3,17 +3,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MarketplaceClientService } from '@nusantara/services';
 import { IClient, IShopeeAuthResponse } from '@nusantara/models';
 import { Observable } from 'rxjs';
-import { MarketplaceClientEnum } from '../markeplace-client-enum';
+import { MarketplaceClientEnum } from './markeplace-client-enum';
 
 @Component({
   selector: 'nus-marketplace-integration',
   template: `
-    <h1 class="heading-1">Add Store</h1>
-    <div class="mp-connect-container">
-      <h1 class="mpSubTitle">Connect to Marketplace</h1>
+    <h1 class="title-1">Add Store</h1>
+    <div class="wrapper">
+      <h1 class="heading-1">Connect to Marketplace</h1>
       <p>Connect to manage products in marketplace.</p>
 
-      <form>
+      <form class="fluid">
         <label>
           <span>Marketplace</span>
           <select
@@ -46,30 +46,10 @@ import { MarketplaceClientEnum } from '../markeplace-client-enum';
     </div>
   `,
   styles: [
-    `
-      h1{
-        font-weight: bold;
-      }
-
-      .mpSubTitle{
-        color: #365DC3;
-      }
-
-      .mp-connect-container{
-        border-radius: 5px;
-        background-color: white;
-        padding: 20px;
-        border: 1px solid #E7E7E7;
-        width: 566px;
-      }
-      select{
-        background-color: white !important;
-        max-width: none !important;
-        width: 100%;
-        height: 40px;
-        border-radius: 4px;
-      }
-    `
+    `.wrapper { padding: 16px 24px; border: solid 1px var(--grey-color); border-radius: 4px; width: 60vw; }`,
+    'p { color: var(--darken-grey-color); }',
+    'form { margin-top: 16px; }',
+    'label { margin-bottom: 16px; padding: 0; }'
   ],
 })
 export class ConnectionFormComponent implements OnInit {
@@ -103,7 +83,7 @@ export class ConnectionFormComponent implements OnInit {
           }
         },
         () => {
-          this.router.navigate(['../../'], { relativeTo: this.route });
+          this.router.navigate(['../'], { relativeTo: this.route });
         }
       );
     }

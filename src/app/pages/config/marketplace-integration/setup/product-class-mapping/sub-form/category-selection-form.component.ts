@@ -17,49 +17,49 @@ import {
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
 } from '@angular/forms';
-import { SubFormComponent } from '../sub-form.component';
+import { SubFormComponent } from './sub-form.component';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 
 @Component({
   selector: 'nus-category-selection-form',
   template: `
-    <h2 class="sub-title">Choose Category (1/3)</h2>
-    <p>Choose a category that matches your Product Class</p>
+    <form [formGroup]="form" class="fluid"> 
+      <div class="wrapper">
+        <h1 class="heading-1">Choose Category (1/3)</h1>
+        <p>Choose a category that matches your Product Class</p>
 
-    <form [formGroup]="form">
-      <label>
-        <span>Product Class Name</span>
-        <span>{{ productClassName }}</span>
-      </label>
+        <div class="form">
+          <label>
+            <span>Product Class Name</span>
+            <span>{{ productClassName }}</span>
+          </label>
 
-      <ng-container formArrayName="categories">
-        <nus-category-group-control
-          [categories]="categories"
-          [currentShop]="currentShop"
-          *ngFor="let s of categoriesFormArray?.controls; index as i"
-          [formControlName]="i"
-        >
-        </nus-category-group-control>
-      </ng-container>
+          <ng-container formArrayName="categories">
+            <nus-category-group-control
+              [categories]="categories"
+              [currentShop]="currentShop"
+              *ngFor="let s of categoriesFormArray?.controls; index as i"
+              [formControlName]="i">
+            </nus-category-group-control>
+          </ng-container>
+        </div>
+      </div>
 
-      <button type="button" class="control secondary" (click)="onCancel()">
-        Cancel
-      </button>
-      <button
-        type="button"
-        [disabled]="form.invalid"
-        class="control"
-        (click)="onNext()"
-      >
+      <button type="button" [disabled]="form.invalid" class="control" (click)="onNext()">
         Next
       </button>
+      <button type="button" class="control secondary ghost" (click)="onCancel()">
+        Cancel
+      </button>
+
     </form>
   `,
   styles: [
-    'button:not(:first-child) { margin-left: 5px; }',
-    '.sub-title{color: #365DC3;}',
-    'h1{font-weight: bold}',
-    'input[type=text], select{width: 267px}',
+    `.wrapper { padding: 16px 24px; border: solid 1px var(--grey-color); border-radius: 4px; width: 60vw; margin-bottom: 20px; }`,
+    'p {color: var(--darken-grey-color); }',
+    '.form { margin-top: 20px; }',
+    'label { margin-bottom: 12px; min-height: 0; }',
+    'button:not(:first-of-type) { margin-left: 5px; }',
   ],
   providers: [
     {

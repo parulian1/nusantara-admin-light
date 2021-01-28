@@ -23,63 +23,55 @@ import { DialogResult, ToastLevelEnum, ToastService } from '@nusantara/core';
 import { IShopAttribute, ISelectedCategory } from '@nusantara/models';
 import { MarketplaceShopService } from '@nusantara/services';
 import { ConfirmModalComponent } from '@nusantara/shared/confirm-modal.component';
-import { SubFormComponent } from '../sub-form.component';
+import { SubFormComponent } from './sub-form.component';
 
 @Component({
   selector: 'nus-attribute-selection-form',
   template: `
     <nus-spinner [appBusy]="isBusy"></nus-spinner>
-
-    <h2 class="sub-title">Choose Attribute (2/3)</h2>
-    <p>Choose {{currentShop}} attributes for your product.</p>
-
+    
     <form [formGroup]="form">
-      <p class="form-title">{{currentShop}} Category</p>
-      <p>{{ categoryNames }}</p>
+      <div class="wrapper">
+        <h1 class="heading-1">Choose Attribute (2/3)</h1>
+        <p>Choose {{ currentShop }} attributes for your product.</p>
 
-      <div *ngIf="mandatoryAttributes">
-        <p>*Mandatory</p>
-        <div *ngFor="let attr of mandatories.controls; let i = index">
-        <label>  
-          <input
-            type="checkbox"
-            [formControl]="attr"
-            formArrayName="mandatories"
-          />
-          <span>{{ mandatoryAttributes[i].name }}</span>
-        </label>
-        </div>
-      </div>
-
-      <div *ngIf="optionalAttributes">
-        <p>Optionals</p>
-        <div *ngFor="let attr of optionals.controls; let i = index">
+        <div class="form">
           <label>
-            <input
-              type="checkbox"
-              [formControl]="attr"
-              formArrayName="optionals"
-            />
-            <span>{{ optionalAttributes[i].name }}</span>
+            <span>{{ currentShop }} Category</span>
+            <p>{{ categoryNames }}</p>          
           </label>
+
+          <label>
+            <span>{{ currentShop }} Attributes</span>
+            <div *ngIf="mandatoryAttributes">
+              <p>Mandatory</p>
+              <div class="checkboxes">
+                <label *ngFor="let attr of mandatories.controls; let i = index">  
+                  <input type="checkbox" [formControl]="attr" formArrayName="mandatories"/>
+                  <span>{{ mandatoryAttributes[i].name }}</span>
+                </label>
+              </div>
+            </div>
+
+            <div *ngIf="optionalAttributes">
+              <p>Optionals</p>
+              <div class="checkboxes">
+                <label *ngFor="let attr of optionals.controls; let i = index">
+                  <input type="checkbox" [formControl]="attr" formArrayName="optionals"/>
+                  <span>{{ optionalAttributes[i].name }}</span>
+                </label>
+              </div>
+            </div>
+          </label>
+          
         </div>
       </div>
 
-      <br />
-      <button
-        type="button"
-        class="control secondary"
-        (click)="confirmModal.open()"
-      >
-        Previous
-      </button>
-      <button
-        type="button"
-        class="control"
-        (click)="onNext()"
-        [disabled]="isBusy"
-      >
+      <button type="button" class="control" (click)="onNext()" [disabled]="isBusy">
         Next
+      </button>
+      <button type="button" class="control secondary ghost" (click)="confirmModal.open()">
+        Previous
       </button>
     </form>
 
@@ -87,11 +79,13 @@ import { SubFormComponent } from '../sub-form.component';
     <nus-confirm-modal></nus-confirm-modal>
   `,
   styles: [
-    'button:not(:first-child) { margin-left: 5px; }',
-    '.sub-title{color: #365DC3;}',
-    'h1{font-weight: bold}',
-    '.form-title{font-weight: 700; color: #5A5A5A;}',
-    'label { min-height: 20px }',
+    `.wrapper { padding: 16px 24px; border: solid 1px var(--grey-color); border-radius: 4px; width: 60vw; margin-bottom: 20px; }`,
+    'p {color: var(--darken-grey-color); }',
+    '.form { margin-top: 20px; }',
+    'label { margin-bottom: 12px; min-height: 0; }',
+    '.checkboxes { width: 40vw; margin-top: 8px; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }',
+    'button:not(:first-of-type) { margin-left: 5px; }',
+
   ],
   providers: [
     {

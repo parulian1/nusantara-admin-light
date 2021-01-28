@@ -17,42 +17,55 @@ import { products } from '../models';
 @Component({
   selector: 'nus-product-selection-modal',
   template: `
-    <ngx-smart-modal [identifier]="'selectProduct'" #modal [formGroup]="form">
+    <ngx-smart-modal [identifier]="'selectProduct'" #modal [formGroup]="form" [customClass]="'wide-modal'">
       <h2 class="heading-2">Select Product</h2>
-      <form #modalForm>
-          <label>
-            <input type="text" id="search_box" [formControl]="searchText" placeholder="Search Product Name or SKU">
-          </label>
-        <input type="hidden" [formControl]="product">
-
-        <div>
-          <table>
-            <thead>
-            <tr style="background-color: #F4F4F4;">
-              <th>Product Name</th>
-              <th>SKU</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let p of displayedResults?.entities">
-              <td><div><a href="#" (click)="selectProduct(p)" >{{ p.name }}</a></div></td>
-              <td>{{ p.upc }}</td>
-            </tr>
-            </tbody>
-          </table>
+      <form #modalForm class="fluid">
+        <div class="search">
+          <i class="material-icons">search</i>
+          <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Product Name or SKU">
         </div>
+        <input type="hidden" [formControl]="product">
+        <p>Showing 10 recently added products. Search product name or SKU to find more products.</p>
+        <table>
+          <thead>
+          <tr style="background-color: #F4F4F4;">
+            <th>Product Name</th>
+            <th>SKU</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let p of displayedResults?.entities">
+            <td>{{ p.name }}</td>
+            <td>{{ p.upc }}</td>
+            <td><a href="#" (click)="selectProduct(p)">Add</a></td>
+          </tr>
+          </tbody>
+        </table>
       </form>
     </ngx-smart-modal>
   `,
   styles: [
-    '#search_box{border-radius: 4px}',
-    '.mp-button{width: 50%;margin-top: 30px;height: 40px;font-weight: 700;}',
-    '.mp-white{background-color: white;color: #365DC3}',
-    '.mp-blue{background-color: #365DC3}',
-    'table{table-layout: fixed;}',
-    'td{height: 56px;}',
-    'td div{white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}',
-    '.item-value {white-space: nowrap;width: 200px;overflow: hidden;text-overflow: ellipsis}',
+    'h2 { padding-bottom: 16px }',
+    'p { color : var(--darken-grey-color); margin-bottom: 16px; }',
+    'td { white-space: nowrap;  overflow: hidden; text-overflow: ellipsis; }',
+    ` .search {
+        display: flex;
+        border: solid 1px var(--lighter-nav-bg);
+        background-color: transparent;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+      div.search > i {
+        background-color: white;
+        color: var(--nav-background);
+        line-height: 31px;
+        padding-left: 13px;
+      }
+      .search > input[type=search] {
+        border: none !important;
+      }
+    `,
   ]
 })
 export class ProductSelectionModalComponent implements OnInit, AfterViewInit {
