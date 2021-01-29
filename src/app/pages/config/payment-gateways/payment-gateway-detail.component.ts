@@ -87,6 +87,11 @@ import { setAndClearValidators } from './utils';
         <input type="checkbox" [formControl]="isActive" name="isActive">
       </label>
 
+      <label>
+        <span>Is Allowed For POS</span>
+        <input type="checkbox" [formControl]="allowPos" name="allowPos">
+      </label>
+
       <div>
         <label for="description" class="external"><span>Description</span></label>
         <ckeditor [editor]="Editor" [config]="editorConfig"
@@ -172,6 +177,9 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
   get isActive(): FormControl {
     return this.form.get('isActive') as FormControl;
   }
+  get allowPos(): FormControl {
+    return this.form.get('allowPos') as FormControl;
+  }
 
   get description(): FormControl {
     return this.form.get('description') as FormControl;
@@ -205,6 +213,7 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
       isActive: [entity?.isActive ?? true],
       description: [entity?.description ?? ''],
       code: [entity?.code],
+      allowPos: [entity?.allowPos ?? false],
     });
 
     this.entity = entity;

@@ -14,4 +14,5 @@ export interface IPaymentGateway extends INamedHrefEntity{
   accountNumber?: string;
   accountHoldNumber?: string;
   isActive: boolean;
+  allowPos?: boolean;
 }
