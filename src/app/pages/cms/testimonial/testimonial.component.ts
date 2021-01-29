@@ -113,42 +113,11 @@ export class TestimonialComponent extends AbstractDetailComponent<ITestimonial> 
         'indent',
         'outdent',
         '|',
-        'imageUpload',
-        'imageInsert',
-        'blockQuote',
-        'insertTable',
-        'mediaEmbed',
         'undo',
-        'redo',
-        '|',
-        'code',
-        'codeBlock',
-        'htmlEmbed',
-        'fontColor',
-        'fontSize',
-        'fontFamily',
-        'highlight',
-        'horizontalLine'
+        'redo'
       ]
     },
     language: 'en',
-    image: {
-      toolbar: [
-        'imageTextAlternative',
-        'imageStyle:full',
-        'imageStyle:side',
-        'linkImage'
-      ]
-    },
-    table: {
-      contentToolbar: [
-        'tableColumn',
-        'tableRow',
-        'mergeTableCells',
-        'tableCellProperties',
-        'tableProperties'
-      ]
-    },
     licenseKey: ''
   };
 
