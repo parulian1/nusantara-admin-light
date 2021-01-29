@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService, AbstractDetailComponent } from '@nusantara/core';
 import { drf, IPaymentGateway } from '@nusantara/models';
 import { PaymentGatewayService } from '@nusantara/services';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import * as ClassicEditor from '@gdnnusantara/ckeditor5-build/build/ckeditor';
 import { setAndClearValidators } from './utils';
 
 @Component({
@@ -89,7 +89,7 @@ import { setAndClearValidators } from './utils';
 
       <div>
         <label for="description" class="external"><span>Description</span></label>
-        <ckeditor [editor]="Editor"
+        <ckeditor [editor]="Editor" [config]="editorConfig"
                   [formControl]="description" id="description"></ckeditor>
         <nus-field-errors [control]="description"></nus-field-errors>
       </div>
@@ -108,6 +108,25 @@ import { setAndClearValidators } from './utils';
 export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaymentGateway> implements OnInit {
 
   public Editor = ClassicEditor;
+  editorConfig = {
+    toolbar: {
+      items: [
+        'heading',
+        '|',
+        'bold',
+        'italic',
+        'link',
+        'bulletedList',
+        'numberedList',
+        '|',
+        'alignment',
+        'indent',
+        'outdent',
+      ]
+    },
+    language: 'en',
+    licenseKey: ''
+  };
 
   entity?: IPaymentGateway;
   logoPreviewUrl: string;
