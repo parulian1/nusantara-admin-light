@@ -35,6 +35,7 @@ import { AppComponent } from './app.component';
           new RegExp('([\\w\\-\\.]+).bhisma.([\\w\\-\\.]+)?'),
           'marthatilaarshop.com',
           'ez-shop.co.id',
+          new RegExp('.+')
         ],
         disallowedRoutes: [
           'localhost:8080/api/iam/login/',
