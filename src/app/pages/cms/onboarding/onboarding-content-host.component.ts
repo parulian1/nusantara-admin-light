@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, Input, ViewChild} from '@angular/core';
 import {AbstractEditingComponent, moveItemInFormArray} from '@nusantara/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';

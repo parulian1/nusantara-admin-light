@@ -13,9 +13,9 @@ import { OnboardingContentImageComponent } from '@nusantara/pages/cms/onboarding
         <div class="title">
           <input type="text" [formControl]="name">
           <nus-field-errors [control]="name"></nus-field-errors>
-        </div>
-        <div class="collapse" (click)="toggle()">
-          <img src="/assets/arrowDown.svg">
+          <div class="collapse" (click)="toggle()">
+            <img src="/assets/arrowDown.svg">
+          </div>
         </div>
       </div>
       <div  class="onboarding-content" *ngIf="show">
@@ -62,22 +62,18 @@ import { OnboardingContentImageComponent } from '@nusantara/pages/cms/onboarding
         border: 1px solid #E0E0E0;
         box-sizing: border-box;
         border-radius: 8px 8px 0px 0px;
-        transform: matrix(-1, 0, 0, 1, 0, 0);
         overflow: hidden;
         padding: 10px;
+      }
+      .onboarding-content-title .title input[type=text] {
+        float: left;
+        width: 98%;
       }
       .onboarding-content {
         background: #FFFFFF;
         border: 1px solid #E0E0E0;
         box-sizing: border-box;
         padding: 10px;
-      }
-      div.title  {
-        width: 90%;
-        float: right;
-      }
-      div.collapse {
-        display: flex;
       }
       div.collapse > img {
         max-height: 10px;
@@ -89,6 +85,13 @@ import { OnboardingContentImageComponent } from '@nusantara/pages/cms/onboarding
         max-height: 300px;
         max-width: 600px;
         object-fit: contain;
+      }
+      ::ng-deep .nsm-content {
+        background-color: #fff;
+        width: inherit;
+      }
+      ::ng-deep .nsm-dialog {
+        max-width: 600px;
       }
     `
   ]

@@ -8,31 +8,39 @@ import {NgxSmartModalComponent} from "ngx-smart-modal";
   template: `
     <ngx-smart-modal [customClass]="'content-container'" [identifier]="'onboardingPreviewHostDialogModal'" #modal
                      *ngIf="!!form">
-        <div class="content-header">
+        <div class="background-header">
+        </div>
+        <div class="body">
+          <div class="content">
+            <div class="content-img">
+              <img [src]="getContentImage(form.controls[startIndex])" alt="Image Preview">
+            </div>
+            <div class="content-value">
+              <h1>
+                  {{ getContentName(form.controls[startIndex]) }}
+              </h1>
+              <label>
+                {{ getContentDescription(form.controls[startIndex] )}}
+              </label>
+            </div>
+            <div class="slider">
+              <input type="radio" name="slider-radio" *ngFor="let formControl of form.controls; let i=index"
+                     [value]="i" [checked]="i === startIndex" [disabled]="true">
+            </div>
+            <div class="action-button">
+              <button (click)="next()" type="button" class="control secondary">Selanjutnya</button>
+            </div>
+          </div>
+        </div>
+      <div class="content-content">
 
-        </div>
-        <div class="content-body">
-          <div class="content-value">
-            <h1>
-                {{ getContentName(form.controls[startIndex]) }}
-            </h1>
-            <label>
-              {{ getContentDescription(form.controls[startIndex] )}}
-            </label>
-          </div>
-          <div class="slider">
-            <input type="radio" name="slider-radio" *ngFor="let formControl of form.controls; let i=index"
-                   [value]="i" [checked]="i === startIndex" [disabled]="true">
-          </div>
-          <div class="action-button">
-            <button (click)="next()" type="button" class="control secondary">Selanjutnya</button>
-          </div>
-        </div>
+      </div>
+
     </ngx-smart-modal>
   `,
   styles: [`
 
-    .content-header {
+    .background-header {
       background: #00AEEF;
       height: 152px;
       background: #00AEEF;
@@ -40,25 +48,43 @@ import {NgxSmartModalComponent} from "ngx-smart-modal";
       padding: 10px;
     }
 
-    .content-body {
+    .body {
       background: #FFFFFF;
-      padding: 20px;
+      padding: 20px 0px;
       border-radius: 0px 0px 24px 24px;
       height: 361px;
-    }
-
-    .content-body div {
-      width: 100%;
       display: flex;
       justify-content: center;
-      padding: 20px;
+      text-align: center;
     }
 
-    ::ng-deep .nsm-content{
-      background: none;
-      box-shadow: none;
-      width: 800px;
-     }
+    .body div {
+      width: 100%;
+    }
+
+    .body .content {
+      position: absolute;
+      top: 80px;
+    }
+
+    .body .content .content-img {
+      height: 184px;
+    }
+
+    .body .content .slider {
+      padding-bottom: 20px;
+    }
+
+    .body .content .content-value {
+      padding: 0px 20px;
+      height: 160px;
+      width: auto;
+    }
+
+    .body .content .content-img img {
+      max-height: 184px;
+      max-width: 295px;
+    }
 
     .slider input {
       width: 30px;
@@ -71,6 +97,11 @@ import {NgxSmartModalComponent} from "ngx-smart-modal";
     ::ng-deep .nsm-dialog-btn-close {
       top: 25px;
       right: 30px;
+    }
+    ::ng-deep .content-container .nsm-content {
+      background-color: transparent;
+      width: 800px;
+      box-shadow: none;
     }
 
   `]
@@ -121,6 +152,13 @@ export class OnboardingPreviewHostDialogComponent extends AbstractEditingCompone
   getContentDescription(formGroup?: AbstractControl) : string {
     if (!!formGroup) {
       return formGroup.get('description').value;
+    }
+    return '';
+  }
+
+  getContentImage(formGroup?: AbstractControl) : string {
+    if (!!formGroup) {
+      return formGroup.get('image').value;
     }
     return '';
   }
