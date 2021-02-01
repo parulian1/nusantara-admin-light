@@ -15,14 +15,14 @@ import { IEmployee, IHttpFailure, IWarehouse } from '@nusantara/models';
 import { EmployeeService, WarehouseService } from '@nusantara/services';
 import {
   AbstractDetailComponent,
-  ErrorResult, ToastLevelEnum,
+  ErrorResult, SuccessResult, ToastLevelEnum,
   ToastService,
 } from '@nusantara/core';
 
-import {environment} from '@env/environment';
 import { AuthService } from '@nusantara/auth';
-import { parseJwt } from '../utils';
 import { EmployeeWarehouseHostComponent } from './warehouse';
+import { IJwtClaims } from '@nusantara/auth/models';
+
 
 @Component({
   selector: 'nus-employee-detail',
@@ -125,7 +125,7 @@ export class EmployeeComponent
    * send email
    */
   isLoadingResetPassword = false;
-  currentUser: { email?: string, user_id?: string, href?: string, site?: string };
+  currentUser: IJwtClaims;
 
   constructor(
     service: EmployeeService,
@@ -198,8 +198,8 @@ export class EmployeeComponent
         })
       )
       .pipe(
-        mergeMap((response) => {
-          return this.EmployeeWarehouseHostComponent.saveAll().pipe(
+        mergeMap((response: SuccessResult<IEmployee>) => {
+          return this.EmployeeWarehouseHostComponent.saveAll(response.entity.href).pipe(
             map(() => response)
           );
         })
@@ -216,16 +216,12 @@ export class EmployeeComponent
 
 
   handleCurrentUser(): void {
-    this.currentUser = parseJwt(this.authService.token);
-    this.currentUser = {
-      ...this.currentUser,
-      href: `${environment.apiBaseUrl}/api/iam/user/${this.currentUser.user_id}/`,
-    };
+    this.currentUser = this.authService.tokenPayload as IJwtClaims;
   }
 
   sendResetPassword(): void {
     this.isLoadingResetPassword = true;
-    this.authService.forgotPassword(this.currentUser.email, this.currentUser.site).subscribe(() => {
+    this.authService.forgotPassword(this.email.value, this.currentUser.site).subscribe(() => {
       this.isLoadingResetPassword = false;
       this.toast?.addMessage(`send reset password successfully.`, 'Send Email', ToastLevelEnum.success);
     }, (error) => {

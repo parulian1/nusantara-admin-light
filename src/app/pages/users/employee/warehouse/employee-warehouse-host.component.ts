@@ -3,13 +3,12 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 
 import { forkJoin, Observable, zip } from 'rxjs';
 
-import { environment } from '@env/environment';
 import { AuthService } from '@nusantara/auth';
 import { WarehouseService } from '@nusantara/services';
 import { IEmployee, IWarehouse } from '@nusantara/models';
 
 import { getSlugFromHref } from '@nusantara/shared/helpers';
-import { parseJwt } from '@nusantara/pages/users/utils';
+import { IJwtClaims } from '@nusantara/auth/models';
 
 @Component({
   selector: 'nus-employee-warehouse-host',
@@ -44,7 +43,7 @@ export class EmployeeWarehouseHostComponent implements OnInit {
   @Input() form: FormArray;
   @Input() choices: IWarehouse[] = [];
 
-  currentUser: { user_id?: string; href?: string, email?: string, site?: string }; // user_id is username
+  currentUser: IJwtClaims; // user_id is username
   deletedWarehouse: IWarehouse[] = [];
 
   get token(): any {
@@ -54,7 +53,7 @@ export class EmployeeWarehouseHostComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private warehouseService: WarehouseService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -63,11 +62,7 @@ export class EmployeeWarehouseHostComponent implements OnInit {
   }
 
   handleCurrentUser(): void {
-    this.currentUser = parseJwt(this.authService.token);
-    this.currentUser = {
-      ...this.currentUser,
-      href: `${environment.apiBaseUrl}/api/iam/user/${this.currentUser.user_id}/`,
-    };
+    this.currentUser = this.authService.tokenPayload;
   }
 
   initialFormArray(): void {
@@ -96,13 +91,13 @@ export class EmployeeWarehouseHostComponent implements OnInit {
     this.form.removeAt(index);
   }
 
-  saveAll(): Observable<any> {
+  saveAll(userHref: string): Observable<any> {
     const savedJoin$ = forkJoin(
       this.form.value.map((warehouse) => {
         return this.warehouseService.createEmployee(
           getSlugFromHref(warehouse.href),
           {
-            user: this.currentUser.href,
+            user: userHref,
           }
         );
       }) || []
@@ -111,7 +106,8 @@ export class EmployeeWarehouseHostComponent implements OnInit {
       this.deletedWarehouse.map((warehouse) => {
         return this.warehouseService.deleteEmployee(
           getSlugFromHref(warehouse.href),
-          this.currentUser.user_id
+          getSlugFromHref(userHref),
+          // this.currentUser.user_id
         );
       })
     );
