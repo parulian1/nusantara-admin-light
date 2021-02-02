@@ -47,7 +47,7 @@ import { setAndClearValidators } from './utils';
       </label>
 
       <!-- Show when type of payment other than manual transfer -->
-      <ng-template [ngIf]="currentType && (currentType !== 'manual_transfer')">
+      <ng-template [ngIf]="currentType && (currentType !== 'manual_transfer') && (currentType !== 'in_store')">
         <label>
           <span>Client Key</span>
           <input type="text" [formControl]="clientKey" name="clientKey">
@@ -82,9 +82,27 @@ import { setAndClearValidators } from './utils';
         </label>
       </ng-template>
 
+      <!-- Show when type of payment is in_store -->
+      <ng-template [ngIf]="currentType && (currentType === 'in_store')">
+        <label>
+          <span>In Store Type</span>
+          <select [formControl]="inStoreType">
+            <option *ngFor="let opt of inStoreTypeChoices" [value]="opt.value">
+              {{opt.displayName}}
+            </option>
+          </select>
+          <nus-field-errors [control]="inStoreType"></nus-field-errors>
+        </label>
+      </ng-template>
+
       <label>
         <span>Is Active</span>
         <input type="checkbox" [formControl]="isActive" name="isActive">
+      </label>
+
+      <label>
+        <span>Allow in Cashier</span>
+        <input type="checkbox" [formControl]="allowPos" name="allowPos">
       </label>
 
       <div>
@@ -113,6 +131,14 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
   logoPreviewUrl: string;
   currentType: string;
   typeChoices: drf.IChoice[];
+  inStoreTypeChoices: drf.IChoice[] = [
+    {displayName: 'Cash', value: 'cash'},
+    {displayName: 'EDC', value: 'edc'},
+    {displayName: 'E-Wallet', value: 'e_wallet'},
+    {displayName: 'Gift Voucher', value: 'gift_voucher'},
+    {displayName: 'Point', value: 'point'},
+    {displayName: 'Sales', value: 'sales'},
+  ];
 
   constructor(service: PaymentGatewayService,
               public fb: FormBuilder,
@@ -162,6 +188,14 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     return this.form.get('code') as FormControl;
   }
 
+  get allowPos(): FormControl {
+    return this.form.get('allowPos') as FormControl;
+  }
+
+  get inStoreType(): FormControl {
+    return this.form.get('inStoreType') as FormControl;
+  }
+
   ngOnInit(): void {
     this.route.data.subscribe((data: { typeChoices: drf.IChoice[] }) => {
       this.typeChoices = data.typeChoices;
@@ -186,6 +220,8 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
       isActive: [entity?.isActive ?? true],
       description: [entity?.description ?? ''],
       code: [entity?.code],
+      allowPos: [entity?.allowPos ?? false],
+      inStoreType: [entity.meta?.type ?? '']
     });
 
     this.entity = entity;
