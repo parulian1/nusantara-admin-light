@@ -8,4 +8,5 @@ export interface ICustomer extends IUser {
   homePhoneNumber: string;
   profile: ICustomerProfile;
   customerGroups: ICustomerGroup[];
+  isActive?: boolean;
 }
