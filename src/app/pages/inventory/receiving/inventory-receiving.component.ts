@@ -89,7 +89,7 @@ import { ProductSelectionModalComponent } from '../../../shared/product-selectio
 
         <nus-detail-actions
           [component]="this"
-          (cancel)="navigateToParent(true)"
+          (cancel)="resetForm(true)"
           (delete)="delete()">
         </nus-detail-actions>
       </div>
@@ -220,5 +220,11 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
 
   getFormValue() {
     return this.form.getRawValue();
+  }
+
+  resetForm(warnOnDirty = false) {
+    this.form.reset();
+    this.warehouse.enable();
+    this.stockRecords.clear();
   }
 }
