@@ -10,6 +10,7 @@ import { ProductPromotionComponent, PromotionListComponent } from './promotion';
 import { VoucherListComponent, VoucherComponent } from './voucher';
 import { PointsComponent } from './points/points.component';
 import { ProductPointsComponent } from './points/product-points/product-points.component';
+import { ProductPromoQuantityComponent } from './promotion/product-promo-quantity/product-promo-quantity.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { ProductPointsComponent } from './points/product-points/product-points.c
     VoucherComponent,
     PointsComponent,
     ProductPointsComponent,
+    ProductPromoQuantityComponent,
   ],
   imports: [
     CommonModule,

@@ -16,6 +16,7 @@ import { ResellerComponent } from './reseller';
 import { BlogFeedComponent } from './blog-feed';
 import { AuthSocialComponent } from './auth-social';
 import { AuthSocialListComponent } from './auth-social';
+import { PaymentGatewayMetaComponent } from './payment-gateways/payment-gateway-meta/payment-gateway-meta.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { AuthSocialListComponent } from './auth-social';
     SocialMediaHostComponent,
     AuthSocialComponent,
     AuthSocialListComponent,
+    PaymentGatewayMetaComponent,
   ],
   imports: [
     CommonModule,
