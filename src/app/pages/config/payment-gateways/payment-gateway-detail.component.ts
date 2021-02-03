@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators, FormBuilder } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, Validators, FormBuilder} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
 
-import { ToastService, AbstractDetailComponent } from '@nusantara/core';
-import { drf, IPaymentGateway } from '@nusantara/models';
-import { PaymentGatewayService } from '@nusantara/services';
+import {ToastService, AbstractDetailComponent} from '@nusantara/core';
+import {drf, IPaymentGateway} from '@nusantara/models';
+import {PaymentGatewayService} from '@nusantara/services';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { setAndClearValidators } from './utils';
+import {setAndClearValidators} from './utils';
 
 @Component({
   selector: 'nus-payment-gateway',
@@ -47,7 +47,7 @@ import { setAndClearValidators } from './utils';
       </label>
 
       <!-- Show when type of payment other than manual transfer -->
-      <ng-template [ngIf]="currentType && (currentType !== 'manual_transfer')">
+      <ng-template [ngIf]="currentType && (currentType !== 'manual_transfer') && (currentType !== 'in_store') ">
         <label>
           <span>Client Key</span>
           <input type="text" [formControl]="clientKey" name="clientKey">
@@ -82,9 +82,43 @@ import { setAndClearValidators } from './utils';
         </label>
       </ng-template>
 
+      <!-- Show when type of payment is in_store -->
+      <ng-template [ngIf]="currentType && (currentType === 'in_store')">
+        <label>
+          <span>In Store Type</span>
+          <select [formControl]="meta" (ngModelChange)="onInStoreChange($event)">
+            <option *ngFor="let opt of inStoreTypeChoices" [value]="opt.value">
+              {{opt.displayName}}
+            </option>
+          </select>
+          <nus-field-errors [control]="meta"></nus-field-errors>
+        </label>
+
+        <div class="ewallet-banks" *ngIf="isMetaDetailAvailable">
+          <table>
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>{{ this.currentMetaLabel }}</th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+          </table>
+        </div>
+
+      </ng-template>
+
       <label>
         <span>Is Active</span>
         <input type="checkbox" [formControl]="isActive" name="isActive">
+      </label>
+
+      <label>
+        <span>Allow POS</span>
+        <input type="checkbox" [formControl]="allowPos" name="isActive">
       </label>
 
       <div>
@@ -110,9 +144,20 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
   public Editor = ClassicEditor;
 
   entity?: IPaymentGateway;
+  currentMetaType: string;
+  currentMetaLabel: string;
+  isMetaDetailAvailable = false;
   logoPreviewUrl: string;
   currentType: string;
   typeChoices: drf.IChoice[];
+  inStoreTypeChoices: drf.IChoice[] = [
+    {displayName: 'Cash', value: 'cash'},
+    {displayName: 'EDC', value: 'edc'},
+    {displayName: 'E-Wallet', value: 'e_wallet'},
+    {displayName: 'Gift Voucher', value: 'gift_voucher'},
+    {displayName: 'Point', value: 'point'},
+    {displayName: 'Sales', value: 'sales'},
+  ];
 
   constructor(service: PaymentGatewayService,
               public fb: FormBuilder,
@@ -162,6 +207,14 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     return this.form.get('code') as FormControl;
   }
 
+  get allowPos(): FormControl {
+    return this.form.get('allowPos') as FormControl;
+  }
+
+  get meta(): FormControl {
+    return this.form.get('meta') as FormControl;
+  }
+
   ngOnInit(): void {
     this.route.data.subscribe((data: { typeChoices: drf.IChoice[] }) => {
       this.typeChoices = data.typeChoices;
@@ -186,6 +239,8 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
       isActive: [entity?.isActive ?? true],
       description: [entity?.description ?? ''],
       code: [entity?.code],
+      allowPos: [entity?.allowPos ?? false, []],
+      meta: [entity?.meta ?? {}, []]
     });
 
     this.entity = entity;
@@ -211,5 +266,18 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
       this.form.value.logo = this.logoPreviewUrl;
     }
     super.save();
+  }
+
+  onInStoreChange($event: any) {
+    this.isMetaDetailAvailable = $event === 'e_wallet' || $event === 'edc';
+    this.currentMetaType = $event;
+
+    if (this.currentMetaType === 'e_wallet') {
+      this.currentMetaLabel = 'eWallets';
+    } else if (this.currentMetaType === 'edc') {
+      this.currentMetaLabel = 'banks';
+    } else {
+      this.currentMetaLabel = '';
+    }
   }
 }
