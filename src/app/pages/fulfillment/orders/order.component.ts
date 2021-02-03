@@ -20,6 +20,7 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
   orderStatusChoices: Array<drf.IChoice>;
   entity: order.IOrderDetail;
   isRequestShipment = false;
+  isShippableOrder = true;
 
   constructor(public service: OrderService,
               public route: ActivatedRoute,
@@ -37,6 +38,7 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
       data: { entity: order.IOrderDetail, orderStatus: Array<drf.IChoice> }) => {
       this.orderDetailData = data.entity;
       this.orderStatusChoices = data.orderStatus;
+      this.isShippableOrder = !!this.orderDetailData.orderAddress;
     });
     this.fetchAwbUrl();
   }
@@ -173,7 +175,7 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
   }
 
   getOrderAddress(): string {
-    if (!this.orderDetailData) {
+    if (!this.orderDetailData || !this.orderDetailData.orderAddress) {
       return '';
     }
     return `${this.orderDetailData.orderAddress.shipToName} <br>` +
