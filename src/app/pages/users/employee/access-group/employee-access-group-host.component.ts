@@ -46,8 +46,21 @@ export class EmployeeAccessGroupHostComponent implements OnInit {
     private groupService: GroupService,
   ) {}
 
-  ngOnInit(): void {}
-  initialFormArray(): void {}
+  ngOnInit(): void {
+    this.initialFormArray();
+  }
+
+  initialFormArray(): void {
+    if (this.entity) {
+      this.groupService
+        .fetchByEmail(1, this.entity?.email)
+        .subscribe((accessGroups) => {
+          accessGroups.entities.forEach(accessGroup => {
+            this.addToForm(accessGroup);
+          });
+        });
+    }
+  }
 
   addToForm(accessGroup?: IAccessGroup): void {
     const form = this.fb.group({
@@ -76,6 +89,17 @@ export class EmployeeAccessGroupHostComponent implements OnInit {
       }) || []
     );
 
-    return forkJoin([savedJoin$]);
+    const deletedJoin$ = forkJoin(
+      this.deletedAccessGroups.filter(
+        (accessGroup) => accessGroup?.href
+      ).map((accessGroup: any) => {
+          return this.groupService.removeEmployee(
+            getSlugFromHref(accessGroup.href),
+            getSlugFromHref(userHref),
+          );
+      })
+    );
+
+    return forkJoin([savedJoin$, deletedJoin$]);
   }
 }

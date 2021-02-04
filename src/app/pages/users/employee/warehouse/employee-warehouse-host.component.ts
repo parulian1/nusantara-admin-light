@@ -65,13 +65,15 @@ export class EmployeeWarehouseHostComponent implements OnInit {
   }
 
   initialFormArray(): void {
-    this.warehouseService
-      .fetchAllByUser(this.entity?.username)
-      .subscribe((warehouses) => {
-        warehouses.forEach((warehouse) => {
-          this.addToForm(warehouse);
+    if (this.entity) {
+      this.warehouseService
+        .fetchAllByUser(this.entity?.username)
+        .subscribe((warehouses) => {
+          warehouses.forEach((warehouse) => {
+            this.addToForm(warehouse);
+          });
         });
-      });
+    }
   }
 
   addToForm(warehouse?: IWarehouse): void {
