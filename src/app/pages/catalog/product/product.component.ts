@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Validators, FormBuilder, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import * as ClassicEditor from '@gdnnusantara/ckeditor5-build/build/ckeditor';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -81,7 +81,7 @@ import { ProductSubscriptonHostComponent } from './subscription';
 
       <div class="rich-text-container">
         <label for="content" class="external"><span>Description</span></label>
-        <ckeditor [editor]="Editor"
+        <ckeditor [editor]="Editor" [config]="editorConfig"
                   [formControl]="description" id="description"></ckeditor>
         <nus-field-errors [control]="description"></nus-field-errors>
       </div>
@@ -220,6 +220,59 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   entity: products.IProduct;
 
   Editor = ClassicEditor;
+  editorConfig = {
+    toolbar: {
+      items: [
+        'heading',
+        '|',
+        'bold',
+        'italic',
+        'link',
+        'bulletedList',
+        'numberedList',
+        '|',
+        'alignment',
+        'indent',
+        'outdent',
+        '|',
+        'imageUpload',
+        'imageInsert',
+        'blockQuote',
+        'insertTable',
+        'mediaEmbed',
+        'undo',
+        'redo',
+        '|',
+        'code',
+        'codeBlock',
+        'htmlEmbed',
+        'fontColor',
+        'fontSize',
+        'fontFamily',
+        'highlight',
+        'horizontalLine'
+      ]
+    },
+    language: 'en',
+    image: {
+      toolbar: [
+        'imageTextAlternative',
+        'imageStyle:full',
+        'imageStyle:side',
+        'linkImage'
+      ]
+    },
+    table: {
+      contentToolbar: [
+        'tableColumn',
+        'tableRow',
+        'mergeTableCells',
+        'tableCellProperties',
+        'tableProperties'
+      ]
+    },
+    licenseKey: ''
+  };
 
   @ViewChild(ProductMediaHostComponent) mediaHost!: ProductMediaHostComponent;
   @ViewChild(PriceListHostComponent) priceListHost!: PriceListHostComponent;

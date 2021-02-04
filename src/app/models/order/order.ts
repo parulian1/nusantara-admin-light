@@ -4,6 +4,7 @@ export interface IOrder extends ICoreOrder {
   customer: {
     name: string;
     href: string;
+    email?: string;
   };
 
   featuredProduct?: {
