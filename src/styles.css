@@ -415,3 +415,25 @@ button.control:disabled, a.control:disabled {
 .dropdown-content a:hover {background-color: #f1f1f1}
 .dropdown:hover .dropdown-content { display: block; }
 .dropdown:hover .dropbtn { background-color: var(--lighter-nav-bg); }
+
+
+/* Helpers: Spacing */
+/*
+    mt: margin-top, mb: margin-bottom,
+    my: margin top and bottom, mx: margin right and left
+*/
+.mt-0 {
+  margin-top: 0;
+}
+.mt-1 {
+  margin-top: 0.5rem;
+}
+.mt-2 {
+  margin-top: 1rem;
+}
+.mt-3 {
+  margin-top: 1.25rem;
+}
+.is-marginless {
+  margin: 0;
+}

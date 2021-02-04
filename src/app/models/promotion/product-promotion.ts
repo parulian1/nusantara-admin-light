@@ -1,5 +1,5 @@
 import { INamedHrefEntity } from '../base';
-import { ProductPromotionType } from './product-promotion.type';
+import { ProductPromotionType, IProductBundling } from '@nusantara/models';
 
 export interface IProductPromotion extends INamedHrefEntity {
   products: Array<INamedHrefEntity>;
@@ -13,4 +13,7 @@ export interface IProductPromotion extends INamedHrefEntity {
   validTo?: string;
   priority?: number;
   banner?: string;
+  productBundlingBenefit?: Array<IProductBundling>;
+  productBundlingCondition?: Array<IProductBundling>;
+  multiplyItem?: boolean;
 }

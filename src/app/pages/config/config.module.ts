@@ -13,9 +13,10 @@ import { DeviceListComponent, DeviceComponent } from './device';
 import { GroupComponent, GroupListComponent, UserGroupComponent } from './group';
 import { SiteConfigComponent, SocialMediaHostComponent } from './site-config';
 import { ResellerComponent } from './reseller';
-import { BlogFeedComponent } from './blog-feed/blog-feed.component';
-import { AuthSocialComponent } from './auth-social/auth-social.component';
-import { AuthSocialListComponent } from './auth-social/auth-social-list.component';
+import { BlogFeedComponent } from './blog-feed';
+import { AuthSocialComponent } from './auth-social';
+import { AuthSocialListComponent } from './auth-social';
+import { PaymentGatewayMetaComponent } from './payment-gateways/payment-gateway-meta/payment-gateway-meta.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { AuthSocialListComponent } from './auth-social/auth-social-list.componen
     SocialMediaHostComponent,
     AuthSocialComponent,
     AuthSocialListComponent,
+    PaymentGatewayMetaComponent,
   ],
   imports: [
     CommonModule,
