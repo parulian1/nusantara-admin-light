@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ToastService, AbstractDetailComponent } from '@nusantara/core';
-import { drf, IPaymentGateway } from '@nusantara/models';
-import { PaymentGatewayService } from '@nusantara/services';
+import {ToastService, AbstractDetailComponent} from '@nusantara/core';
+import {drf, IPaymentGateway} from '@nusantara/models';
+import {PaymentGatewayService} from '@nusantara/services';
 import * as ClassicEditor from '@gdnnusantara/ckeditor5-build/build/ckeditor';
-import { setAndClearValidators } from './utils';
+import {setAndClearValidators} from './utils';
 
 @Component({
   selector: 'nus-payment-gateway',
@@ -47,7 +47,7 @@ import { setAndClearValidators } from './utils';
       </label>
 
       <!-- Show when type of payment other than manual transfer -->
-      <ng-template [ngIf]="currentType && (currentType !== 'manual_transfer')">
+      <ng-template [ngIf]="currentType && (currentType !== 'manual_transfer') && (currentType !== 'in_store') ">
         <label>
           <span>Client Key</span>
           <input type="text" [formControl]="clientKey" name="clientKey">
@@ -88,8 +88,8 @@ import { setAndClearValidators } from './utils';
       </label>
 
       <label>
-        <span>Is Allowed For POS</span>
-        <input type="checkbox" [formControl]="allowPos" name="allowPos">
+        <span>Allow POS</span>
+        <input type="checkbox" [formControl]="allowPos" name="isActive">
       </label>
 
       <div>

@@ -21,6 +21,8 @@ import { UserSelectionModalComponent } from '@nusantara/shared/user-selection-mo
 import { CustomerGroupModalComponent } from '@nusantara/shared/customer-group-modal.component';
 import { IncludeDeletedComponent } from './filters/include-deleted.component';
 import { IncludeInactiveComponent } from './filters/include-inactive.component';
+import { NusTabsComponent } from './nus-tabs/nus-tabs.component';
+import { NusTabComponent } from './nus-tabs/nus-tab.component';
 
 
 /**
@@ -46,6 +48,8 @@ import { IncludeInactiveComponent } from './filters/include-inactive.component';
     IncludeDeletedComponent,
     CustomerGroupModalComponent,
     IncludeInactiveComponent,
+    NusTabsComponent,
+    NusTabComponent,
   ],
   exports: [
     EntityToSlugPipe,
@@ -64,7 +68,9 @@ import { IncludeInactiveComponent } from './filters/include-inactive.component';
     UserSelectionModalComponent,
     IncludeDeletedComponent,
     CustomerGroupModalComponent,
-    IncludeInactiveComponent
+    IncludeInactiveComponent,
+    NusTabsComponent,
+    NusTabComponent
   ],
   imports: [
     CommonModule,
