@@ -36,4 +36,8 @@ export class GroupService extends AbstractCrudService<IAccessGroup> {
         }
       ).pipe(map(resp => new PagedResponse(resp)));
   }
+
+  addEmployee(accessGroupId: string, user: string): Observable<unknown> {
+    return this.httpClient.post(`${this.baseUrl}/${accessGroupId}/user/`, { user });
+  }
 }

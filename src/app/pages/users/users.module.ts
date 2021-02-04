@@ -8,6 +8,7 @@ import { UsersRoutingModule } from './users-routing.module';
 import { CustomerListComponent, CustomerDetailComponent } from './customer';
 import { CustomerGroupListComponent, CustomerGroupDetailComponent } from './customer-group';
 import {
+  EmployeeAccessGroupHostComponent, EmployeeAccessGroupListComponent,
   EmployeeComponent, EmployeeListComponent,
   EmployeeWarehouseHostComponent, EmployeeWarehouseListComponent,
 } from './employee';
@@ -21,10 +22,12 @@ import { EmptyDataPipe } from './empty-data.pipe';
     EmployeeComponent,
     EmployeeListComponent,
     EmployeeWarehouseHostComponent,
+    EmployeeAccessGroupHostComponent,
 
     CustomerGroupListComponent,
     CustomerGroupDetailComponent,
     EmployeeWarehouseListComponent,
+    EmployeeAccessGroupListComponent,
 
     // pipes
     EmptyDataPipe,

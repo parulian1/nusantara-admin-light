@@ -9,18 +9,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { of } from 'rxjs';
-import { catchError, map, mergeMap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
-import { IEmployee, IHttpFailure, IWarehouse } from '@nusantara/models';
+import { IAccessGroup, IEmployee, IHttpFailure, IWarehouse } from '@nusantara/models';
 import { EmployeeService, WarehouseService } from '@nusantara/services';
 import {
   AbstractDetailComponent,
-  ErrorResult, SuccessResult, ToastLevelEnum,
+  ErrorResult, IResultResponse, ToastLevelEnum,
   ToastService,
 } from '@nusantara/core';
 
 import { AuthService } from '@nusantara/auth';
 import { EmployeeWarehouseHostComponent } from './warehouse';
+import { EmployeeAccessGroupHostComponent } from './access-group';
 import { IJwtClaims } from '@nusantara/auth/models';
 
 
@@ -63,6 +64,14 @@ import { IJwtClaims } from '@nusantara/auth/models';
         [form]="warehouses"
       >
       </nus-employee-warehouse-host>
+
+      <div style="margin-top: 1rem;">
+        <nus-employee-access-group-host
+          [entity]="entity"
+          [choices]="accessGroupChoices"
+          [form]="accessGroups">
+        </nus-employee-access-group-host>
+      </div>
 
       <div class="mt-3" *ngIf="entity">
         <h4 class="is-marginless">Send Reset Password Email?</h4>
@@ -116,8 +125,11 @@ export class EmployeeComponent
   implements OnInit {
   @ViewChild(EmployeeWarehouseHostComponent)
   EmployeeWarehouseHostComponent: EmployeeWarehouseHostComponent;
+  @ViewChild(EmployeeAccessGroupHostComponent)
+  EmployeeAccessGroupHostComponent: EmployeeAccessGroupHostComponent;
 
   warehouseChoices: IWarehouse[] = [];
+  accessGroupChoices: IAccessGroup[] = [];
 
   entity?: IEmployee;
 
@@ -140,9 +152,11 @@ export class EmployeeComponent
   }
 
   ngOnInit(): void {
-    this.route.data.subscribe((data: { warehouses: IWarehouse[] }) => {
+    this.route.data.subscribe((data: { warehouses: IWarehouse[], accessGroups: IAccessGroup[] }) => {
       this.warehouseChoices = data.warehouses;
+      this.accessGroupChoices = data.accessGroups;
     });
+
     super.ngOnInit();
     this.handleCurrentUser();
   }
@@ -156,6 +170,7 @@ export class EmployeeComponent
       phoneNumber: [entity?.phoneNumber, []],
       isActive: [entity?.isActive ?? true, [Validators.required]],
       warehouses: this.fb.array([]),
+      accessGroups: this.fb.array([]),
     });
 
     this.entity = entity;
@@ -179,6 +194,9 @@ export class EmployeeComponent
   get warehouses(): FormArray {
     return this.form.get('warehouses') as FormArray;
   }
+  get accessGroups(): FormArray {
+    return this.form.get('accessGroups') as FormArray;
+  }
 
   save(): void {
     this.service
@@ -197,13 +215,6 @@ export class EmployeeComponent
           }
         })
       )
-      .pipe(
-        mergeMap((response: SuccessResult<IEmployee>) => {
-          return this.EmployeeWarehouseHostComponent.saveAll(response.entity.href).pipe(
-            map(() => response)
-          );
-        })
-      )
       .subscribe((resp) => {
         if (resp.success) {
           this.onSaveSuccess(resp);
@@ -214,6 +225,12 @@ export class EmployeeComponent
     this.form.disable();
   }
 
+  protected onSaveSuccess(result: IResultResponse<IEmployee>) {
+    this.EmployeeWarehouseHostComponent.saveAll(result.entity.href).subscribe(() => {});
+    this.EmployeeAccessGroupHostComponent.saveAll(result.entity.href).subscribe(() => {});
+
+    super.onSaveSuccess(result);
+  }
 
   handleCurrentUser(): void {
     this.currentUser = this.authService.tokenPayload as IJwtClaims;
