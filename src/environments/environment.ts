@@ -10,7 +10,7 @@ export const environment = {
   appVersion: version,
   elasticAPM: {
     serviceName: 'nusantara-admin',
-    serverUrl: 'https://apm.bhisma.cloud',
+    serverUrl: 'https://f51291eec6a94ce2a7309a312be33aa7.apm.ap-southeast-1.aws.cloud.es.io:443',
     serviceVersion: version,
     debug: true,
     active: true,
