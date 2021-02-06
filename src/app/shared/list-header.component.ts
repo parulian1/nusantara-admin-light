@@ -21,7 +21,7 @@ import { FormControl } from '@angular/forms';
     'header { margin-bottom: 23px; }',
     'header > div { display: flex; }',
     'input[type=search] { font-size: 15px; padding-right: 5px; width: 325px; }',
-    'a { display: flex; align-items: center; margin-left: auto; }',
+    'a { display: flex; justify-content: center; align-items: center; margin-left: auto; }',
 
     `
 

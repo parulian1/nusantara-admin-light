@@ -29,9 +29,9 @@ import { TabComponent } from './tab.component';
 import { TabsComponent } from './tabs.component';
 import { TooltipComponent } from './tooltip.component';
 import { EmptyListCOmponent } from './empty-list.component';
-import { MarketplaceProductInfoComponent } from "./marketplace-info-detail-product-page.component";
-import { MarketplaceShippingInfoModalComponent } from './marketplace-info-shipping-modal.component';
-import { MarketplaceInfoDetailModalComponent } from './marketplace-info-detail-modal.component';
+import { MarketplaceStockInfoModalComponent } from "./marketplace-stock-info-modal.component";
+import { MarketplaceShippingInfoModalComponent } from './marketplace-shipping-info-modal.component';
+import { MarketplaceChannelInfoModalComponent } from './marketplace-channel-info-modal.component';
 import { ConfirmModalReceivingOrderComponent } from './confirm-modal-receiving-order.component';
 import { ConfirmModalPendingOrderComponent } from './confirm-modal-pending-order.component';
 
@@ -67,8 +67,8 @@ import { ConfirmModalPendingOrderComponent } from './confirm-modal-pending-order
     MarketplaceShippingInfoModalComponent,
     ConfirmModalReceivingOrderComponent,
     ConfirmModalPendingOrderComponent,
-    MarketplaceInfoDetailModalComponent,
-    MarketplaceProductInfoComponent
+    MarketplaceChannelInfoModalComponent,
+    MarketplaceStockInfoModalComponent
   ],
   exports: [
     EntityToSlugPipe,
@@ -97,8 +97,8 @@ import { ConfirmModalPendingOrderComponent } from './confirm-modal-pending-order
     MarketplaceShippingInfoModalComponent,
     ConfirmModalReceivingOrderComponent,
     ConfirmModalPendingOrderComponent,
-    MarketplaceInfoDetailModalComponent,
-    MarketplaceProductInfoComponent
+    MarketplaceChannelInfoModalComponent,
+    MarketplaceStockInfoModalComponent
   ],
   imports: [
     CommonModule,

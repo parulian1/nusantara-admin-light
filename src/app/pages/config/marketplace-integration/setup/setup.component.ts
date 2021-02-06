@@ -49,7 +49,7 @@ import * as shopActions from '@nusantara/actions';
               </a>
             </td>
             <td>
-              <a [routerLink]="" 
+              <a [routerLink]="" class="disabled"
                 [ngClass]="{'disabled': entity.isConnected === false}">
                 Set Up Showcase
               </a>

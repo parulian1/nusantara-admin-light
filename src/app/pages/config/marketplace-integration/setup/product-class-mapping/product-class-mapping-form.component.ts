@@ -28,8 +28,7 @@ import { ToastLevelEnum, ToastService } from '@nusantara/core/toast';
           showMatchForm = false
         "
         (selectedCategory)="onSelectedCategory($event)"
-        formControlName="categorySelection"
-      >
+        formControlName="categorySelection">
       </nus-category-selection-form>
 
       <nus-attribute-selection-form
@@ -43,9 +42,10 @@ import { ToastLevelEnum, ToastService } from '@nusantara/core/toast';
           showCategoryForm = false;
           showMatchForm = true
         "
+        (saveNoAttr)="onSubmit($event)"
         (selectedAttribute)="onAttributesSubmit($event)"
-        formControlName="attributeSelection"
-      ></nus-attribute-selection-form>
+        formControlName="attributeSelection">
+      </nus-attribute-selection-form>
 
       <nus-attribute-matching-form
         [currentShop]="currentShop"
@@ -56,8 +56,8 @@ import { ToastLevelEnum, ToastService } from '@nusantara/core/toast';
         (previous)="showAttributeForm = true; showMatchForm = false"
         (save)="onSubmit($event)"
         (patchAttr)="onPatchNewAttr($event)"
-        formControlName="attributeMatching"
-      ></nus-attribute-matching-form>
+        formControlName="attributeMatching">
+      </nus-attribute-matching-form>
     </form>  `,
   styles: [
     'button:not(:first-child) { margin-left: 5px; }',

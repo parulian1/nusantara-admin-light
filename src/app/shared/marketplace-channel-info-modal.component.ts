@@ -4,22 +4,21 @@ import { DialogResult } from '../core';
 import { IWarehouseDetail } from '../models';
 
 /**
- * Shows the user a list of products they can select from.
- *
- * Note: Currently this does not allow the user to navigate
- * paginated data -- it assumes they're going to be searching
- * mostly based on SKUs.
+ * Used in Delivery Orders Page / inventory-receiving
+ * 
  */
 @Component({
-  selector: 'nus-marketplace-info-detail-modal',
+  selector: 'nus-marketplace-channel-info-modal',
   template: `
-    <ngx-smart-modal  #modal [customClass]="'wide-modal'">
+    <ngx-smart-modal #modal [identifier]="'marketplaceChannelInfoModal'"
+      [customClass]="'wide-modal no-padding-modal'">
       <h2 class="heading-2">Marketplace Information</h2>
-        <div>
+      <div class="content">  
+        <div class="table">
           <table>
-              <thead id="mp-add-product-head">
+              <thead>
                   <tr>
-                    <th>Marketplace</th>
+                    <th>Channel</th>
                     <th>Stock</th>
                     <th>Store</th>
                   </tr>
@@ -33,14 +32,19 @@ import { IWarehouseDetail } from '../models';
               </tbody>
           </table>
         </div>
+      </div>
     </ngx-smart-modal>
   `,
   styles: [
-    'h2 { margin-bottom: 20px; }',
+    'h2 { padding: 24px 24px 16px; }',
+    `.content { display: block; position: relative; overflow-y: scroll; max-height: 500px; margin-right: 2px; }`,
+    '.table { padding: 0 14px 24px 24px }',
     'tr td:nth-child(2), tr th:nth-child(2) { text-align: right; }',
+    '::-webkit-scrollbar { width: 8px; }',
+    '::-webkit-scrollbar-thumb { -webkit-border-radius: 10px; border-radius: 10px; background: var(--grey); }',
   ]
 })
-export class MarketplaceInfoDetailModalComponent {
+export class MarketplaceChannelInfoModalComponent {
   @ViewChild('modal') modalInfo: NgxSmartModalComponent;
   @Input() warehouseInfoDetail: IWarehouseDetail[];
 

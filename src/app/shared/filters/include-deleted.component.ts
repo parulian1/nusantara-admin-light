@@ -5,7 +5,8 @@ import {ActivatedRoute, Router} from '@angular/router';
   selector: 'nus-include-deleted',
   template: `<label><input type="checkbox" (click)="applyFilter($event)">{{ text }}</label>`,
   styles: [
-    'label { min-height: auto; width: fit-content; }',
+    'label { min-height: auto; padding-bottom: 0; }',
+    ':host { padding-right: 20px }'
   ]
 })
 export class IncludeDeletedComponent implements OnInit {

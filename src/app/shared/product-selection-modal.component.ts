@@ -47,7 +47,7 @@ import { products } from '../models';
   `,
   styles: [
     'h2 { padding-bottom: 16px }',
-    'p { color : var(--darken-grey-color); margin-bottom: 16px; }',
+    'p { color : var(--darken-grey); margin-bottom: 16px; }',
     'td { white-space: nowrap;  overflow: hidden; text-overflow: ellipsis; }',
     ` .search {
         display: flex;

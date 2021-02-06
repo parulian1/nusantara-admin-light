@@ -26,7 +26,7 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
   `,
   styles: [
     'h2 { margin-bottom: 11px; }',
-    'p { color: var(--darken-grey-color); }',
+    'p { color: var(--darken-grey); }',
     '.wrapper { padding: 16px; }',
     '.message { margin: 0 8px 32px 8px; }',
     'div.action { display: flex; justify-content: space-between; }',

@@ -16,7 +16,8 @@ import { AbstractListComponent } from '@nusantara/core';
       title="Products">
     </nus-list-header>
     <div class="filtering">
-      <nus-include-deleted text="Show Deleted Product"></nus-include-deleted>
+      <!-- Soft deleted product but change the wording into InActive -->
+      <nus-include-deleted text="Show Inactive Product"></nus-include-deleted>
     </div>
     <nus-pagination [page]="page"></nus-pagination>
 

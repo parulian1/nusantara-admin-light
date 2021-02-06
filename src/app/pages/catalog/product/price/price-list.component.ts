@@ -90,7 +90,7 @@ import { RangeComponent } from './range.component';
     </ng-container>
   `,
   styles: [':host { display: contents; }', 
-  '.wrapper { padding: 12px; border: solid 1px var(--grey-color); border-bottom: none; }',
+  '.wrapper { padding: 12px; border: solid 1px var(--grey); border-bottom: none; }',
   '.list { display: grid; grid-template-columns: repeat(3, 1fr) 70px; align-items: center; }',
   '.list div:last-child { display: flex; justify-content: space-between; }',
   '.range { margin-bottom: 16px; display: grid; grid-template-columns: 1fr 20px 1fr 1fr 20px; gap: 16px; }',

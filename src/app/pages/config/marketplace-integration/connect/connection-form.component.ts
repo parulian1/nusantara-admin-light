@@ -46,8 +46,8 @@ import { MarketplaceClientEnum } from './markeplace-client-enum';
     </div>
   `,
   styles: [
-    `.wrapper { padding: 16px 24px; border: solid 1px var(--grey-color); border-radius: 4px; width: 60vw; }`,
-    'p { color: var(--darken-grey-color); }',
+    `.wrapper { padding: 16px 24px; border: solid 1px var(--grey); border-radius: 4px; width: 60vw; }`,
+    'p { color: var(--darken-grey); }',
     'form { margin-top: 16px; }',
     'label { margin-bottom: 16px; padding: 0; }'
   ],

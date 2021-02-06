@@ -55,8 +55,8 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
     </form>
   `,
   styles: [
-    `.wrapper { padding: 16px 24px; border: solid 1px var(--grey-color); border-radius: 4px; width: 60vw; margin-bottom: 20px; }`,
-    'p {color: var(--darken-grey-color); }',
+    `.wrapper { padding: 16px 24px; border: solid 1px var(--grey); border-radius: 4px; width: 60vw; margin-bottom: 20px; }`,
+    'p {color: var(--darken-grey); }',
     '.form { margin-top: 20px; }',
     'label { margin-bottom: 12px; min-height: 0; }',
     'button:not(:first-of-type) { margin-left: 5px; }',

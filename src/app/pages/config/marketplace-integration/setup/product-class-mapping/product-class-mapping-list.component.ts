@@ -48,8 +48,11 @@ import * as fromReducer from '@nusantara/reducers';
           </td>
           <!--Action to Match-->
           <td>
-            <a [routerLink]="[entity.slug]" [state]="{ productClass: entity }">
-              {{ entity.isMapped? 'Edit Mapping' : 'Start Mapping' }}
+            <a *ngIf="entity.isMapped" class="disabled"> 
+              Edit Mapping
+            </a>
+            <a *ngIf="!entity.isMapped" [routerLink]="[entity.slug]" [state]="{ productClass: entity }">
+              Start Mapping
             </a>
           </td>
         </tr>
@@ -62,7 +65,7 @@ import * as fromReducer from '@nusantara/reducers';
   `,
   styles: [
     '.header { margin-bottom: 10px }',
-    'p { color: var(--darken-grey-color); }',
+    'p { color: var(--darken-grey); }',
   ],
 })
 export class ProductClassMappingListComponent implements OnInit {

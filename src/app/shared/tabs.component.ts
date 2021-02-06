@@ -27,10 +27,10 @@ import { TabComponent } from './tab.component';
     <ng-content></ng-content>
   `,
   styles: [
-    '.tab { overflow: hidden; display: flex; justify-content: start; border-bottom: 1px solid var(--grey-color); }',
+    '.tab { overflow: hidden; display: flex; justify-content: start; border-bottom: 1px solid var(--grey); }',
     '.tab div { outline: none; cursor: pointer; padding: 12px 50px; transition: 0.3s; }',
-    '.tab div:hover { background: var(--darken-white-color); }',
-    '.tab div.active { border-bottom: 2px solid var(--primary-color); }',
+    '.tab div:hover { background: var(--darken-white); }',
+    '.tab div.active { border-bottom: 2px solid var(--secondary); }',
     
     '.tab.wide { justify-content: center; }',
     '.tab.wide div { flex-grow: 1; }',

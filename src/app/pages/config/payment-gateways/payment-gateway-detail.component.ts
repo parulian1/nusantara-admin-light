@@ -96,7 +96,7 @@ import { setAndClearValidators } from './utils';
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
-        (delete)="delete()">
+        [hideDelete]="!entity || !entity.isActive">
       </nus-detail-actions>
     </form>
   `,

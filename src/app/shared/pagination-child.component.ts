@@ -16,7 +16,7 @@ import {PaginationComponent} from "@nusantara/shared/pagination.component";
       </div>
       <div class="pg-button">
         <button (click)="goBack()" type="button"><i class="material-icons">arrow_back_ios</i></button>
-        <strong>{{ page?.pageNumber }} / {{ page?.maximumPageCount }}</strong>
+        <span><strong>{{ page?.pageNumber }}</strong> / <strong>{{ page.maximumPageCount }}</strong></span>
         <button (click)="goNext()" type="button"><i class="material-icons">arrow_forward_ios</i></button>
       </div>
     </div>

@@ -1,14 +1,13 @@
-import {Component, OnInit, ViewChild} from "@angular/core";
-
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { AbstractDetailComponent } from "@nusantara/core/components";
 import { IReceivingOrder } from "@nusantara/models/inventory";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FormBuilder } from "@angular/forms";
 import { ToastService } from '@nusantara/core';
 import { InventoryReceivingOrderService } from "@nusantara/services/inventory-receiving-order.service";
-import {IWarehouse, IWarehouseDetail, IWarehouseInformation} from "../../../models";
+import { IWarehouse, IWarehouseDetail, IWarehouseInformation} from "../../../models";
 import {MarketplaceClientService} from "../../../services";
-import {MarketplaceInfoDetailModalComponent} from "../../../shared";
+import {MarketplaceChannelInfoModalComponent} from "../../../shared";
 import {ConfirmModalPendingOrderComponent} from "../../../shared";
 import {catchError} from "rxjs/operators";
 import {HttpErrorResponse} from "@angular/common/http";
@@ -47,7 +46,7 @@ import {Location} from "@angular/common";
             <td *ngIf="!entity.reviewedBy?.name">-</td>
             <td *ngIf="entity.reviewedBy?.name">{{entity.reviewedBy?.name}}</td>
 
-            <td>{{entity.created|date: 'dd/MM/yyyy'}}</td>
+            <td>{{entity.created | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
       </tbody>
     </table>
     <ul class="non-field-errors" *ngIf="!!nonFieldErrors.length">
@@ -111,7 +110,7 @@ import {Location} from "@angular/common";
         </button>
       </div>
     </form>
-    <nus-marketplace-info-detail-modal [warehouseInfoDetail]="warehouseDetail"></nus-marketplace-info-detail-modal>
+    <nus-marketplace-channel-info-modal [warehouseInfoDetail]="warehouseDetail"></nus-marketplace-channel-info-modal>
     <nus-confirm-pending-modal></nus-confirm-pending-modal>
   `,
   styles: [
@@ -136,7 +135,7 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
   warehouseDetail : IWarehouseDetail[];
   marketplaceValue:number=0;
 
-  @ViewChild(MarketplaceInfoDetailModalComponent) marketplaceInfoModal: MarketplaceInfoDetailModalComponent;
+  @ViewChild(MarketplaceChannelInfoModalComponent) marketplaceChannelInfo: MarketplaceChannelInfoModalComponent;
   @ViewChild(ConfirmModalPendingOrderComponent) marketplaceProgressModal: ConfirmModalPendingOrderComponent;
 
   constructor(public service: InventoryReceivingOrderService,
@@ -204,7 +203,7 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
   }
 
   showWarehouseDetail() {
-    this.marketplaceInfoModal.open();
+    this.marketplaceChannelInfo.open();
   }
 
   showMarketplaceProgressModal() {

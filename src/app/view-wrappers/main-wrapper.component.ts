@@ -237,7 +237,7 @@ import { SubscriptionLike } from 'rxjs';
       }
       nav > ul a.active {
         background-color: #7B869B;
-        border-left: 6px solid var(--primary-color);
+        border-left: 6px solid var(--secondary);
       }
       nav > ul li:not(.icon-button) a.active {
         padding-left: 50px;
@@ -249,7 +249,7 @@ import { SubscriptionLike } from 'rxjs';
       nav > ul a:focus {
         transition: all .3s;
         border-left: 6px solid var(--bhisma-orange);
-        background-color: #7B869B; /*var(--accent-lighter-color);*/        
+        background-color: #7B869B;     
       }
 
       @media print {

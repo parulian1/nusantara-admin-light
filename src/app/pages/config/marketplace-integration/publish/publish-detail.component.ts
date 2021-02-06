@@ -35,7 +35,7 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
       </div>
       <div>
         <p>Date</p>
-        <p class="subheading-2"> {{ order?.created | date: 'dd/MM/yyyy' }} </p>
+        <p class="subheading-2"> {{ order?.created | date: 'dd/MM/yyyy HH:mm:ss' }} </p>
       </div>
     </div>
     <div class="progress-info">
@@ -280,7 +280,7 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
       .wrapper {
         padding: 20px 24px;
         margin-bottom: 20px;
-        border: solid 1px var(--grey-color);
+        border: solid 1px var(--grey);
         border-radius: 4px;
 
         display: grid;
@@ -290,9 +290,9 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
       }
     `,
     '.wrapper > div { flex: 1; min-width: 0; }',
-    '.wrapper p { color: var(--darken-grey-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }',
-    '.wrapper .warehouse{ color: var(--quinary-color) }',
-    '.progress-info { padding: 16px 24px; margin-bottom: 24px; background: var(--darken-white-color); border-radius: 4px; }',
+    '.wrapper p { color: var(--darken-grey); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }',
+    '.wrapper .warehouse{ color: var(--quinary) }',
+    '.progress-info { padding: 16px 24px; margin-bottom: 24px; background: var(--darken-white); border-radius: 4px; }',
     '.progress-info > span { margin-right: 8px; }',
     `.error-info { 
       display: flex;

@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { MarketplaceProductInfoComponent, MarketplaceShippingInfoModalComponent, SlideInOutAnimation } from '@nusantara/shared';
+import { MarketplaceStockInfoModalComponent, MarketplaceShippingInfoModalComponent, SlideInOutAnimation } from '@nusantara/shared';
 import { IClient, IMarketplaceItemAttributeInformation, IMarketplaceItemInformation, IMarketplaceItemLogisticInformation, products} from '@nusantara/models';
 import { MarketplaceClientService, MarketplaceItemService } from '@nusantara/services';
 import { AbstractEditingComponent } from '@nusantara/core';
@@ -14,7 +14,7 @@ import { Observable } from 'rxjs';
       <h1 class="heading-1">Marketplace Information</h1>
       <div class="subinfo">
         <div class="subheading-2">Marketplace Publish Summary</div>
-        <a (click)="marketplaceInfo.open()">More Detail</a>
+        <a (click)="marketplaceStockInfo.open()">More Detail</a>
       </div>
       <div class="summary">
         <div class="wrapper">
@@ -35,7 +35,7 @@ import { Observable } from 'rxjs';
           <h4 class="subheading-2">Shipping</h4>
           <p>View shipping method for your marketplace stores.</p>
         </div>
-        <a (click)="shippingModalComponent.open();">More Detail</a>
+        <a (click)="shippingInfo.open();">More Detail</a>
       </div>
       <div class="detail">
         <h4 class="subheading-2">Marketplace Product Detail</h4>
@@ -57,9 +57,10 @@ import { Observable } from 'rxjs';
                 </div>
                 <div [@slideInOut]="animationState" *ngIf="showedStore === storeIndex">
                   <div *ngIf="data.attributes.length; else noAttributeMatch" class="attr-table" [formGroup]="form">
+                    <h4 class="subheading-2">Attribute</h4>
                     <table>
                       <thead>
-                        <th>Attribute Name</th>
+                        <th>Name</th>
                         <th>Value</th>
                       </thead>
                       <tbody formArrayName="attributes" *ngIf="attributesFormArray.controls.length">
@@ -98,18 +99,15 @@ import { Observable } from 'rxjs';
                   <ng-template #noAttributeMatch>
                     <div>
                       <div class="no-attribute">
-                        <h1 class="heading-1">
-                          No Mapping Class Yet!
-                        </h1>
-                        <p>Map Class to sync your product to Marketplace</p>
+                        <h1 class="heading-1">Product Class is Not Mapped Yet!</h1>
+                        <p>Map Class to sync your product to marketplace.</p>
                         <button [routerLink]="['/config/marketplace-integration/connect/product-class/',
                               data.shopSlug,
                               productClass.href
                             ]"
                           [state]="{ productClass: { name: productClassName } }"
                           type="button"
-                          class="control">
-                          <i class="material-icons">add</i>Set Up Store
+                          class="control">Start Mapping
                         </button>
                       </div>
                     </div>
@@ -130,21 +128,21 @@ import { Observable } from 'rxjs';
     </div>
    
     <nus-marketplace-shipping-info-modal [shippingDetail]="shippingDetail"></nus-marketplace-shipping-info-modal>
-    <nus-marketplace-product-info-modal [warehouseInfoDetail]="warehouseInfoDetail"></nus-marketplace-product-info-modal>
+    <nus-marketplace-stock-info-modal [warehouseInfoDetail]="warehouseInfoDetail"></nus-marketplace-stock-info-modal>
   `,
   styles: [
-    '.wrapper { padding: 16px 24px; border: solid 1px var(--grey-color); border-radius: 4px; margin-bottom: 24px; }',
+    '.wrapper { padding: 16px 24px; border: solid 1px var(--grey); border-radius: 4px; margin-bottom: 24px; }',
     'h1 { margin-bottom: 16px; }',
-    'p { color: var(--darken-grey-color); }',
+    'p { color: var(--darken-grey); }',
     '.subinfo { display: flex; justify-content: space-between; }',
     '.summary { display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 16px; }',
     '.summary > div { padding: 12px 16px; margin-bottom: 20px; margin-top: 4px; text-align: center; }',
     '.title-1 { font-weight: bold; margin-bottom: 0; }',
     '.detail { margin-top: 24px; }',
-    '.detail-store { border: solid 1px var(--grey-color); border-radius: 4px; margin-top: 8px; }',
+    '.detail-store { border: solid 1px var(--grey); border-radius: 4px; margin-top: 8px; }',
     `.store { 
         padding: 10px 12px; 
-        border-bottom: solid 1px var(--grey-color); 
+        border-bottom: solid 1px var(--grey); 
         display: flex; 
         justify-content: space-between; 
         justify-items: center;  }
@@ -157,11 +155,11 @@ import { Observable } from 'rxjs';
         justify-content: center; 
         align-items: center; 
         padding: 16px 0; 
-        border-bottom: solid 1px var(--grey-color); }
+        border-bottom: solid 1px var(--grey); }
       `,
     '.no-attribute h1 { margin-bottom: 10px; }',
-    '.no-attribute p { color : var(--grey-color); margin-bottom: 24px; }',
-    '.no-attribute button { display: flex; align-items: center; }',
+    '.no-attribute p { color : var(--grey); margin-bottom: 24px; }',
+    '.no-attribute button { display: flex; justify-content: center; align-items: center; }',
     '.no-attribute button > i { font-size: 20px; }',
     '.add-new-attr { font-weight: 600; font-size: 16px; }',
   ]
@@ -171,8 +169,8 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
   @Input() form: FormGroup;
   @Input() productClass: products.IProductClass;
 
-  @ViewChild(MarketplaceShippingInfoModalComponent) shippingModalComponent: MarketplaceShippingInfoModalComponent;
-  @ViewChild(MarketplaceProductInfoComponent) marketplaceInfo: MarketplaceProductInfoComponent;
+  @ViewChild(MarketplaceShippingInfoModalComponent) shippingInfo: MarketplaceShippingInfoModalComponent;
+  @ViewChild(MarketplaceStockInfoModalComponent) marketplaceStockInfo: MarketplaceStockInfoModalComponent;
 
   productClassChanged: boolean;
   emptyStore: boolean;
@@ -235,7 +233,8 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
     this.productClassChanged = true;
     const productClassValue = changes.productClass.currentValue.href;
     const slugs = productClassValue.split('/').reverse();
-    this.productClassSlug = slugs[0] ? slugs[0] : slugs[1]; 
+    this.productClassSlug = slugs[0] ? slugs[0] : slugs[1];
+    this.productClassName =  changes.productClass.currentValue.name;
   }
 
   private initializeForm() {

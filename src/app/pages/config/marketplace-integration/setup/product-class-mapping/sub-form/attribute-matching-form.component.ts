@@ -62,8 +62,8 @@ import { SubFormComponent } from './sub-form.component';
             </div>
             <div formArrayName="attributes" class="attributes">
               <div *ngFor="let attr of attributes.controls; let i = index" [formGroupName]="i">
-                <input type="text" formControlName="shopeeName" readonly />
-                <input type="text" formControlName="shopeeType" 
+                <input type="text" formControlName="marketplaceName" readonly />
+                <input type="text" formControlName="marketplaceType" 
                   [ngClass]="attributes.controls[i].get('bhismaType').invalid? 'mismatch': null" readonly/>
                 <div>
                   <select #selectedAttr
@@ -121,8 +121,8 @@ import { SubFormComponent } from './sub-form.component';
     <nus-confirm-modal></nus-confirm-modal>
   `,
   styles: [
-    `.wrapper { padding: 16px 24px; border: solid 1px var(--grey-color); border-radius: 4px; width: 60vw; margin-bottom: 20px; }`,
-    'p {color: var(--darken-grey-color); }',
+    `.wrapper { padding: 16px 24px; border: solid 1px var(--grey); border-radius: 4px; width: 60vw; margin-bottom: 20px; }`,
+    'p {color: var(--darken-grey); }',
     '.form { margin-top: 20px; }',
     'label { margin-bottom: 12px; min-height: 0; }',
     'button:not(:first-of-type) { margin-left: 5px; }',
@@ -176,7 +176,7 @@ export class AttributeMatchingFormComponent
   selectedCategory: ISelectedCategory = null;
   bhismaAttributes: IShopAttribute[];
   bhismaAttributeTypes: string[];
-  shopeeAttributes: IShopAttribute[];
+  marketplaceAttributes: IShopAttribute[];
   productClassAttrId: number;
   isShowSelectBhismaAttr: boolean;
   isShowSInputBhismaAttr: boolean;
@@ -196,9 +196,9 @@ export class AttributeMatchingFormComponent
     this.productClassSlug = this.state.productClass?.slug;
     this.form.valueChanges.subscribe((changes) => {
       this.attributes.controls.forEach((control) => {
-        const shopeeType = control.get('shopeeType');
+        const marketplaceType = control.get('marketplaceType');
         const bhismaType = control.get('bhismaType');
-        bhismaType.setValidators(this.isMatch(shopeeType.value));
+        bhismaType.setValidators(this.isMatch(marketplaceType.value));
       });
     });
   }
@@ -208,7 +208,7 @@ export class AttributeMatchingFormComponent
     const attrCurrValue = changes.attribute?.currentValue;
 
     if (
-      JSON.stringify(attrCurrValue) !== JSON.stringify(this.shopeeAttributes)
+      JSON.stringify(attrCurrValue) !== JSON.stringify(this.marketplaceAttributes)
     ) {
       if (this.productClassSlug) {
         this.service
@@ -235,7 +235,7 @@ export class AttributeMatchingFormComponent
         this.addAttributeInputs(attrCurrValue);
       }
     }
-    this.shopeeAttributes = attrCurrValue;
+    this.marketplaceAttributes = attrCurrValue;
   }
 
   ngAfterViewInit() {
@@ -257,16 +257,18 @@ export class AttributeMatchingFormComponent
   }
 
   addAttributeInputs(attrs: IShopAttribute[]) {
-    attrs.forEach((obj) => {
-      const attrGroup = this.fb.group({
-        shopeeName: obj.name,
-        shopeeType: obj.type,
-        bhismaObj: ['', Validators.required],
-        bhismaType: ['', Validators.required],
-        newAttrName: null,
+    if(attrs) {
+      attrs.forEach((obj) => {
+        const attrGroup = this.fb.group({
+          marketplaceName: obj.name,
+          marketplaceType: obj.type,
+          bhismaObj: ['', Validators.required],
+          bhismaType: ['', Validators.required],
+          newAttrName: null,
+        });
+        this.attributes.push(attrGroup);
       });
-      this.attributes.push(attrGroup);
-    });
+    }
   }
 
   clearFormArray(formArray: FormArray) {
@@ -344,10 +346,10 @@ export class AttributeMatchingFormComponent
       }
 
       return {
-        marketplace_attribute_name: attr.shopeeName,
-        marketplace_attribute_id: this.shopeeAttributes[i].attributeId,
-        marketplace_attribute_type: attr.shopeeType,
-        marketplace_attribute_option: this.shopeeAttributes[i].options,
+        marketplace_attribute_name: attr.marketplaceName,
+        marketplace_attribute_id: this.marketplaceAttributes[i].attributeId,
+        marketplace_attribute_type: attr.marketplaceType,
+        marketplace_attribute_option: this.marketplaceAttributes[i].options,
         product_class_attribute_id: attr.bhismaObj.attributeId
           ? attr.bhismaObj.attributeId
           : null,

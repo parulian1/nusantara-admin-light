@@ -49,7 +49,7 @@ import {IShopeeAuthResponse} from "@nusantara/models";
     '.variant-option { margin: 10px 0; }',
     '.variant-option > span { margin-right: 20px }',
     'input[type="radio"]{ margin-right: 8px; }',
-    '.description{ padding: 16px 24px; margin: 20px 0; background: var(--darken-white-color); }',
+    '.description{ padding: 16px 24px; margin: 20px 0; background: var(--darken-white); }',
     '.example { margin-top: 10px; font-weight: 700; }'
   ],
   providers: [

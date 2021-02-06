@@ -14,7 +14,7 @@ import { IInventoryOrderSummary } from '@nusantara/models/inventory';
   selector: 'nus-pending-order-list',
   template: `
     <nus-list-header
-      title="Inventory Order List"
+      title="Inventory Orders"
       [canAddNew]="false">
     </nus-list-header>
 

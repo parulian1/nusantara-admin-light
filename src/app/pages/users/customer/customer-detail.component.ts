@@ -134,7 +134,7 @@ import { ICustomer, ICustomerGroup, IOrder } from '@nusantara/models';
           <tbody>
             <tr *ngFor="let order of orders">
               <td>{{ order.orderNumber }}</td>
-              <td>{{ order.created | date }}</td>
+              <td>{{ order.created | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
               <td>-</td>
               <td>{{ order.type }}</td>
               <td>{{ order.status }}</td>

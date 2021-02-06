@@ -9,7 +9,7 @@ import {InventoryReceivingService, MarketplaceClientService} from '../../../serv
 import { IProduct } from '../../../models/products';
 import {
   ProductSelectionModalComponent,
-  MarketplaceInfoDetailModalComponent,
+  MarketplaceChannelInfoModalComponent,
   ConfirmModalReceivingOrderComponent
 } from '../../../shared';
 import {catchError} from "rxjs/operators";
@@ -23,7 +23,7 @@ import {IError} from "../../../models/base/error";
 @Component({
   selector: 'nus-inventory-receiving',
   template: `
-    <h1 class="title-1">Receiving Inventory Order</h1>
+    <h1>Receiving Inventory Order</h1>
 
     <form [formGroup]="form" (ngSubmit)="saveForm()">
       <div class="container">
@@ -54,9 +54,9 @@ import {IError} from "../../../models/base/error";
                   {{ wh.name }}
                 </option>
               </select>
-              <button (click)="confirmWarehouse()" type="button" 
+              <button (click)="confirmWarehouse()" type="button"
                 [disabled]="warehouse.disabled || !warehouse.valid"
-                class="control">
+                class="control confirm">
                 Confirm
               </button>
             </div>
@@ -121,24 +121,25 @@ import {IError} from "../../../models/base/error";
     </form>
     <!-- Modals -->
     <nus-product-selection-modal></nus-product-selection-modal>
-    <nus-marketplace-info-detail-modal [warehouseInfoDetail]="warehouseDetail"></nus-marketplace-info-detail-modal>
+    <nus-marketplace-channel-info-modal [warehouseInfoDetail]="warehouseDetail"></nus-marketplace-channel-info-modal>
     <nus-confirm-receiving-modal></nus-confirm-receiving-modal>
 
   `,
   styles: [
   'form{ max-width: none;}',
   'h3 { font-size: 20px; margin: 0; }',
+  'button.confirm { width: auto }',
   '.container { display: grid; grid-template-columns: 4fr 1fr; grid-gap: 24px; }',
-  '.container > div { border: 1px solid var(--grey-color); border-radius: 4px; padding: 16px 24px; }',
+  '.container > div { border: 1px solid var(--grey); border-radius: 4px; padding: 16px 24px; }',
   '.general-info > h3 { margin-bottom: 20px; }',
   '.general-info > div:not(:last-child) { margin-bottom: 23px; }',
   '.general-info label { min-height: 0; }',
-  '.general-info span{ font-weight: 700; color: var(--darken-grey-color); }',
+  '.general-info span{ font-weight: 700; color: var(--darken-grey); }',
   '.mp-info > h3 { margin-bottom: 16px; }',
-  '.mp-info > div { text-align: center; border: 1px solid var(--grey-color); border-radius: 4px; padding: 12px 16px; margin-bottom: 12px; }',
+  '.mp-info > div { text-align: center; border: 1px solid var(--grey); border-radius: 4px; padding: 12px 16px; margin-bottom: 12px; }',
   '.mp-info > a { display: block; margin-top: 16px; }',
   '.mp-info .count { font-size: 28px; font-weight: 700; }',
-  '.confirm-warehouse { display: grid; grid-template-columns: 4fr 1fr; grid-gap: 24px; }',
+  '.confirm-warehouse { display: grid; grid-template-columns: 5fr 1fr; grid-gap: 24px; }',
   '.product-list { margin-top: 24px; }',
   ]
 })
@@ -149,7 +150,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
   warehouseDetail : IWarehouseDetail[];
 
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
-  @ViewChild(MarketplaceInfoDetailModalComponent) marketplaceInfoModal: MarketplaceInfoDetailModalComponent;
+  @ViewChild(MarketplaceChannelInfoModalComponent) marketplaceChannelInfo: MarketplaceChannelInfoModalComponent;
   @ViewChild(ConfirmModalReceivingOrderComponent) confirmModalReceiving: ConfirmModalReceivingOrderComponent;
 
   currentDate: Date;
@@ -182,7 +183,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
   ngAfterViewInit() {
     // wire-up modal closed callback
     this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
-    this.marketplaceInfoModal.onClose.subscribe(() => this.onMarketplaceModalClosed());
+    this.marketplaceChannelInfo.onClose.subscribe(() => this.onMarketplaceModalClosed());
   }
 
   initializeForm(entity?: inventory.IReceivingOrder) {
@@ -232,7 +233,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
   }
 
   showMarketplaceDetail() {
-    this.marketplaceInfoModal.open();
+    this.marketplaceChannelInfo.open();
   }
 
   confirmModal() {

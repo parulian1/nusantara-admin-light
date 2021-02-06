@@ -7,7 +7,8 @@ import { Component } from '@angular/core';
     <div class="wrapper">
       <div>
         <h1 class="heading-1">Connect to Marketplace</h1>
-        <p>Connect to Marketplace, Map Attribute</p>
+        <p>Add store, Map Attribute
+        </p>
       </div>
       <div>
         <button routerLink="connect" class="control">Open</button>
@@ -36,7 +37,7 @@ import { Component } from '@angular/core';
       .wrapper {
         padding: 12px 24px;
         margin-bottom: 24px;
-        border: solid 1px var(--grey-color);
+        border: solid 1px var(--grey);
         border-radius: 4px;
         display: flex;
         flex-direction: row;

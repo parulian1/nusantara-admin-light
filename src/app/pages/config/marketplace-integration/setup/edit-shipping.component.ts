@@ -1,15 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { ILogistic, IShop } from '@nusantara/models';
 import { MarketplaceShopService } from '@nusantara/services';
 import { ToastLevelEnum, ToastService } from '@nusantara/core';
 import * as fromReducer from '@nusantara/reducers';
-
 @Component({
   selector: 'nus-product-class-mapping-form',
   template: `
@@ -39,22 +38,27 @@ import * as fromReducer from '@nusantara/reducers';
       </div>
 
       <form [formGroup]="form" class="fluid">
-        <div
-          *ngFor="let attr of shipping.controls; let i = index"
-          class="wrapper shipping-option">
-          <div class="logistic-name">
-            <strong>{{ logistics[i].name }}</strong>
-          </div>
-          <div class="shipping-status">
-            <input
-              type="checkbox" class="toggle"
-              [formControl]="attr"
-              formArrayName="shipping"/>
-            <span>
-              {{ form.value.shipping[i] === true ? 'Active' : 'Inactive' }}
-            </span>
-          </div>
-        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Logistic</th>
+              <th class="centered">Is Active</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let attr of shipping.controls; let i = index">
+              <td>
+                <strong>{{ logistics[i].name }}</strong>
+              </td>
+              <td class="centered">
+                <input
+                  type="checkbox" class="toggle"
+                  [formControl]="attr"
+                  formArrayName="shipping"/>
+              </td>
+            </tr>
+          </tbody>
+        </table>
         <div class="action-buttons">
           <button *ngIf="!readOnly.includes((currentShop$ | async)?.marketplace)"
             type="button"
@@ -73,7 +77,7 @@ import * as fromReducer from '@nusantara/reducers';
   `,
   styles: [
     '.container { width: 60vw; }',
-    '.wrapper { display: grid; border: solid 1px var(--grey-color); border-radius: 4px;}',
+    '.wrapper { display: grid; border: solid 1px var(--grey); border-radius: 4px;}',
     '.store-info { grid-template-columns: 4fr 3fr 3fr; padding: 20px 24px;  margin-bottom: 24px; }',
     '.shipping-option { grid-template-columns: 5fr 1fr; padding: 14px 24px; margin-bottom: 16px }',
     '.shipping-option > div:last-child { align-self: end; }',
@@ -82,12 +86,15 @@ import * as fromReducer from '@nusantara/reducers';
     'button:not(:first-of-type) { margin-left: 5px; }',
   ],
 })
-export class EditShippingComponent implements OnInit {
+export class EditShippingComponent implements OnInit, OnDestroy {
   form: FormGroup;
   shopSlug: string;
   currentShop$: Observable<IShop>;
+  marketplace: string;
   logistics: ILogistic[];
   isBusy: boolean;
+
+  subscription: Subscription;
 
   readOnly = [
     'tsc'
@@ -107,10 +114,18 @@ export class EditShippingComponent implements OnInit {
 
   ngOnInit() {
     this.shopSlug = this.route.snapshot.paramMap.get('shop-slug');
+    this.subscription = this.currentShop$.subscribe(shop => {
+      this.marketplace = shop.marketplace;
+    });
+
     this.route.data.subscribe((data: { logistics: ILogistic[] }) => {
       this.logistics = data.logistics;
       this.addCheckboxes();
     });
+  }
+
+  ngOnDestroy(){
+    this.subscription.unsubscribe();
   }
 
   private initializeForm() {
@@ -123,6 +138,9 @@ export class EditShippingComponent implements OnInit {
     const checkboxes = this.buildCheckboxes(this.logistics)
     if(checkboxes) {
       checkboxes.forEach((attr: FormControl) => {
+        if(this.readOnly.includes(this.marketplace)) {
+          attr.disable();
+        }
         this.shipping.push(attr);
       });
     }

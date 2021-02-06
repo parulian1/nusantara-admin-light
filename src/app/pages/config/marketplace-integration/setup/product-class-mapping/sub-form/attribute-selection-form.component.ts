@@ -1,14 +1,6 @@
 import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  forwardRef,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  SimpleChanges,
-  ViewChild,
+  AfterViewInit, Component, EventEmitter, forwardRef,
+  Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild,
 } from '@angular/core';
 import {
   FormArray,
@@ -41,25 +33,27 @@ import { SubFormComponent } from './sub-form.component';
             <p>{{ categoryNames }}</p>          
           </label>
 
-          <label>
+          <label class="attributes">
             <span>{{ currentShop }} Attributes</span>
             <div *ngIf="mandatoryAttributes">
               <p>Mandatory</p>
               <div class="checkboxes">
-                <label *ngFor="let attr of mandatories.controls; let i = index">  
+                <div *ngFor="let attr of mandatories.controls; let i = index">  
                   <input type="checkbox" [formControl]="attr" formArrayName="mandatories"/>
                   <span>{{ mandatoryAttributes[i].name }}</span>
-                </label>
+                </div>
               </div>
             </div>
 
             <div *ngIf="optionalAttributes">
               <p>Optionals</p>
               <div class="checkboxes">
-                <label *ngFor="let attr of optionals.controls; let i = index">
-                  <input type="checkbox" [formControl]="attr" formArrayName="optionals"/>
-                  <span>{{ optionalAttributes[i].name }}</span>
-                </label>
+                <div *ngFor="let attr of optionals.controls; let i = index">
+                  <label [for]="i">
+                    <input type="checkbox" id="i" [formControl]="attr" formArrayName="optionals"/>
+                    <span>{{ optionalAttributes[i].name }}</span>
+                  </label>
+                </div>
               </div>
             </div>
           </label>
@@ -67,7 +61,7 @@ import { SubFormComponent } from './sub-form.component';
         </div>
       </div>
 
-      <button type="button" class="control" (click)="onNext()" [disabled]="isBusy">
+      <button type="button" class="control" (click)="marketplaceAttributes? onNext() : onSubmitNoAttributes()" [disabled]="isBusy">
         Next
       </button>
       <button type="button" class="control secondary ghost" (click)="confirmModal.open()">
@@ -79,11 +73,19 @@ import { SubFormComponent } from './sub-form.component';
     <nus-confirm-modal></nus-confirm-modal>
   `,
   styles: [
-    `.wrapper { padding: 16px 24px; border: solid 1px var(--grey-color); border-radius: 4px; width: 60vw; margin-bottom: 20px; }`,
-    'p {color: var(--darken-grey-color); }',
+    `.wrapper { padding: 16px 24px; border: solid 1px var(--grey); border-radius: 4px; width: 60vw; margin-bottom: 20px; }`,
+    'p {color: var(--darken-grey); }',
     '.form { margin-top: 20px; }',
-    'label { margin-bottom: 12px; min-height: 0; }',
-    '.checkboxes { width: 40vw; margin-top: 8px; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }',
+    'label { margin: 0; padding: 0; min-height: 0; }',
+    'label.attributes { margin-top: 19px; }',
+    `.checkboxes { 
+      width: 40vw;
+      margin-top: 8px;
+      margin-bottom: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-row-gap: 25px;
+    }`,
     'button:not(:first-of-type) { margin-left: 5px; }',
 
   ],
@@ -111,13 +113,15 @@ export class AttributeSelectionFormComponent
   @Input() currentShop: string;
   @Output() previous = new EventEmitter<boolean>();
   @Output() next = new EventEmitter<any>();
+  @Output() saveNoAttr = new EventEmitter<any>();
   @Output() selectedAttribute = new EventEmitter<IShopAttribute[]>();
-
+ 
   shopSlug: string;
-  allAttributes: IShopAttribute[];
+  marketplaceAttributes: IShopAttribute[];
   mandatoryAttributes: IShopAttribute[];
   optionalAttributes: IShopAttribute[];
   form: FormGroup;
+  categoryId: number;
   categoryNames: string;
   selectedCategory: ISelectedCategory = null;
   isBusy: boolean;
@@ -138,36 +142,41 @@ export class AttributeSelectionFormComponent
 
   ngOnChanges(changes: SimpleChanges) {
     const currValue: ISelectedCategory = changes.category.currentValue;
-    if (currValue !== this.selectedCategory) {
+    const prevValue: ISelectedCategory = changes.category.previousValue;
+    this.categoryId = currValue?.deepestChildId;
+
+    if (currValue && (JSON.stringify(currValue) !== JSON.stringify(prevValue))) {
       this.isBusy = true;
       this.service
         .fetchAttribute(this.shopSlug, currValue.deepestChildId)
         .subscribe(
           (attributes: IShopAttribute[]) => {
-            [
-              this.mandatoryAttributes,
-              this.optionalAttributes,
-            ] = attributes.reduce(
-              ([mandatories, optionals], attr) => {
-                return attr.isMandatory
-                  ? [[...mandatories, attr], optionals]
-                  : [mandatories, [...optionals, attr]];
-              },
-              [[], []]
-            );
-            if (this.selectedCategory === null) {
-              this.addCheckboxes();
-            } else if (
-              currValue.deepestChildId !== this.selectedCategory.deepestChildId
-            ) {
+            
+            // if attributes from marketplace not empty
+            if(attributes) {
+              [
+                this.mandatoryAttributes, 
+                this.optionalAttributes,
+              ] = attributes.reduce(
+                ([mandatories, optionals], attr) => {
+                  return attr.isMandatory
+                    ? [[...mandatories, attr], optionals]
+                    : [mandatories, [...optionals, attr]];
+                },
+                [[], []]
+              );
+
               this.clearFormArray(this.mandatories);
               this.clearFormArray(this.optionals);
               this.addCheckboxes();
+
+            } else {
+              this.clearFormArray(this.mandatories);
+              this.clearFormArray(this.optionals);
             }
 
-            this.allAttributes = attributes;
-            this.selectedCategory = changes.category.currentValue;
-            this.categoryNames = this.selectedCategory.categoryNames.join(
+            this.marketplaceAttributes = attributes;
+            this.categoryNames = currValue.categoryNames.join(
               ' > '
             );
             this.isBusy = false;
@@ -198,12 +207,14 @@ export class AttributeSelectionFormComponent
   addCheckboxes() {
     this.buildCheckboxes(this.mandatoryAttributes).forEach(
       (attr: FormControl) => {
+        attr.markAsTouched();
         attr.disable();
         this.mandatories.push(attr);
       }
     );
     this.buildCheckboxes(this.optionalAttributes).forEach(
       (attr: FormControl) => {
+        attr.markAsTouched();
         this.optionals.push(attr);
       }
     );
@@ -252,6 +263,14 @@ export class AttributeSelectionFormComponent
       })
       .filter((attr) => attr !== null);
     this.selectedAttribute.next(mandatoryvalues.concat(optionalValues));
+  }
+
+  onSubmitNoAttributes() {
+    const formValue = {
+      category_id: this.categoryId,
+      attributes: [],
+    };
+    this.saveNoAttr.next(formValue);
   }
 
   onConfirmModalClosed() {

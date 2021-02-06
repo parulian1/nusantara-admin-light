@@ -33,7 +33,7 @@ import { PriceListComponent } from './price-list.component';
     </div>
   `,
   styles: [
-    `div { padding: 12px; border: solid 1px var(--grey-color); }`,
+    `div { padding: 12px; border: solid 1px var(--grey); }`,
     'h4 { margin-bottom: 4px; }',
   ],
 })

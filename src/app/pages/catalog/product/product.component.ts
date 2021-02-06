@@ -154,7 +154,7 @@ import { MarketplaceInfoHostComponent } from './marketplace';
             <h1 class="heading-1">Product Packaging</h1>
             <label>
               <span>Package Weight (kg)</span>
-              <input type="number" [formControl]="weight"placeholder="Input Weight"/>
+              <input type="number" [formControl]="weight" placeholder="Input Weight"/>
               <nus-field-errors [control]="weight"></nus-field-errors>
             </label>
             <div formGroupName="dimensions" class="product-dimension">
@@ -224,7 +224,7 @@ import { MarketplaceInfoHostComponent } from './marketplace';
           </div>
 
           <nus-marketplace-info id="marketplace-information" 
-            *ngIf="!isNew"
+            *ngIf="!isNew && productClassType === 'physical'"
             [form]="marketplace"
             [productClass]="selectedProductClass">
           </nus-marketplace-info>
@@ -277,29 +277,27 @@ import { MarketplaceInfoHostComponent } from './marketplace';
       </div>
     </div>
   `,
-  // styleUrls: ['./product.component.css']
   styles: [
     '.container { display: grid; grid-template-columns: 3fr 1fr; grid-column-gap: 24px; }',
-    '.wrapper { padding: 16px 24px; border: solid 1px var(--grey-color); border-radius: 4px; margin-bottom: 24px; }',
+    '.wrapper { padding: 16px 24px; border: solid 1px var(--grey); border-radius: 4px; margin-bottom: 24px; }',
     '.manage { display: grid; grid-template-columns: 7fr 1fr; grid-gap: 20px; align-items: center; }',
     '.product-dimension { display: grid; grid-template-columns: repeat(3, 1fr); grid-column-gap: 16px; }',
-    
     '.heading-1 { margin-bottom: 16px; }',
     'label.toggle { padding-bottom: 20px 0; width: fit-content; min-height: 0; }',
     'label.toggle > input { margin-right: 16px }',
     '.rich-text-container { padding-bottom: 16px; margin: 0 !important; }',
-
+    'ul { list-style: none }',
     '.side-nav li { font-size: 14px; line-height: 20px; font-weight: bold; color: var(--tertiary); padding: 10px 32px; cursor: pointer; }',
-    '.side-nav li.active { padding: 10px 24px; color: white; background: var(--tertiary-lighten); border-left: solid 8px var(--primary-color); border-radius: 4px; }',
+    '.side-nav li.active { padding: 10px 24px; color: white; background: var(--tertiary-lighten); border-left: solid 8px var(--secondary); border-radius: 4px; }',
     '.side-nav li a { text-decoration: none; color: inherit; }',
-  
-
     '.delete { background: none; border: none; outline: none; font-size: 18px; cursor: pointer; opacity: .5; }',
+    
   ]
 })
 export class ProductComponent extends AbstractDetailComponent<products.IProduct> implements OnInit, AfterViewInit {
 
   productClasses: Array<products.IProductClass>;
+  productClassType: string;
   categories: Array<ICategory>;
   vendors: Array<IVendor>;
   attribute: Array<products.IProductAttribute>;
@@ -340,11 +338,13 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   get attributes(): FormGroup { return this.form.get('attributes') as FormGroup; }
   get related(): FormArray { return this.form.get('related') as FormArray; }
   get weight(): FormControl { return this.form.get('weight') as FormControl; }
+
+  get dimensions(): FormArray { return this.form.get('dimensions') as FormArray; }
   get length(): FormControl { return this.form.get('length') as FormControl; }
   get width(): FormControl { return this.form.get('width') as FormControl; }
   get height(): FormControl { return this.form.get('height') as FormControl; }
+  
   get parent(): FormControl { return this.form.get('parent') as FormControl; }
-  get dimensions(): FormArray { return this.form.get('dimension') as FormArray; }
   get structure(): FormControl { return this.form.get('structure') as FormControl; }
   get tags(): FormArray { return this.form.get('tags') as FormArray; }
   get seoMeta(): FormControl { return this.form.get('seoMeta') as FormControl; }
@@ -568,10 +568,18 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     if (!newValue || !this.productClasses) { return; }
 
     const pc = this.productClasses.filter(e => e.href === newValue)[0];
+    this.productClassType = pc.type;
+
     if (pc.type === 'physical') {
       this.weight.enable();
+      Object.keys(this.dimensions.controls).forEach(key => {
+        this.dimensions.controls[key].enable();
+      });
     } else {
       this.weight.disable();
+      Object.keys(this.dimensions.controls).forEach(key => {
+        this.dimensions.controls[key].disable();
+      });
     }
 
     this.selectedProductClass =  pc;

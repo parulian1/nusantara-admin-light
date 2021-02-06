@@ -31,6 +31,7 @@ import * as shopActions from '@nusantara/actions';
         <thead>
           <tr>
             <th>Store Name</th>
+            <th>Marketplace</th>
             <th>Warehouse</th>
             <th>Status</th>
             <th>Action</th>
@@ -39,6 +40,7 @@ import * as shopActions from '@nusantara/actions';
         <tbody>
           <tr *ngFor="let entity of page.entities">
             <td>{{ entity.name }}</td>
+            <td>{{ entity.marketplace }}</td>
             <td>{{ entity.warehouse.name }}</td>
 
             <td *ngIf="entity.isConnected == false">
@@ -64,8 +66,8 @@ import * as shopActions from '@nusantara/actions';
       `,
   styles: [
     '.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }',
-    'p { color: var(--darken-grey-color); }',
-    'button { display: flex; align-items: center; }',
+    'p { color: var(--darken-grey); }',
+    'button { display: flex; justify-content: center; align-items: center; }',
     '.material-icons { font-size: 20px; }',
   ],
 })

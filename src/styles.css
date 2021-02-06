@@ -6,53 +6,64 @@
  *  Table of Contents
  *  =================
  *  1. Standard overrides
- *  2. Forms
- *  3. List Pages
- *  4. Detail Pages
+ *  2. Typhography
+ *  3. Forms
+ *  4. List Pages
+ *  5. Detail Pages
  */
 :root {
-  --primary-color: green;
-  --danger-color: #c40000;
-  --accent-color: #6c006c;
-  --accent-lighter-color: #bb00bb;
-  --error-color: #c40000;
+  /** Color Pallete  **/
+  
+  /* UI */
+  --info: #BCE7FD;
+  --error: #C83228;
+  --error-lighten: #FDE8E8;
+  --error-darken: #591612;
+  --success: #21A656;
+  --success-lighten: #DAFBEB;
+  --success-darken: #0B5B33;
+  --alert: #F0BE00;
+  --alert-lighten: #FFF8DB;
+  --alert-darken: #8F7200;
+  
+  /* Greyscale */
+  --black: #000000;
+  --lighten-black: #282828;
+  --darken-grey: #5A5A5A;
+  --grey: #B4B4B4;
+  --lighten-grey: #E7E7E7;
+  --darken-white: #F4F4F4;
+  --white: #FFFFFF;
 
-  --nav-background: var(--tertiary);
-  --lighter-nav-bg: #7b869b;
-
-  --input-border: #cad0d9;
-
-  --shadow-color: rgba(0,0,0,0.44);
-
+  /* Bhisma Theme Color */
   --bhisma-orange: #f27720;
   --bhisma-orange-lighter: #F4924C;
 
-  --info: #BCE7FD;
-  --error: #c83228;
-  --error-lighten: #fde8e8;
-  --success: #21a656;
-  --alert: #f0be00;
-  --light-red: #c492b1;
-
-
-  /** Nww Color Adjustment **/
-  --primary-color: #EA730B;
-  --darken-primary-color: #B95B09;
-  --lighten-primary-color: #E6DCD4;
-
+  /* Brand */
+  --primary: #E7E7E7;
+  --primary-lighten: #FFFFFF;
+  --primary-darken: #5A5A5A;
+  --secondary: #EA730B;
+  --secondary-lighten: #FFF0E0;
+  --secondary-darken: #B95B09;
   --tertiary: #485368;
   --tertiary-lighten: #7B869B;
-  --quinary-color: #365dc3;
-  --senary-color: var(--tertiary);
+  --tertiary-darken: #1F2A3E;
+  --quarternary: #EA730B;
+  --quarternary-lighten: #FFF0E0;
+  --quarternary-darken: #B95B09;
+  --quinary: #365DC3;
+  --quinary-lighten: #D8E1F3;
+  --quinary-darken: #20306F;
+  --senary: #485368;
+  --senary-lighten:#D6DBE4;
+  --senary-darken: #1F2A3E;
 
-  --white-color: #fff;
-  --darken-white-color: #f4f4f4;
-
-  --lighten-black-color: #282828;
-
-  --grey-color: #B4B4B4;
-  --lighten-grey-color: #e7e7e7;
-  --darken-grey-color: #5a5a5a;
+  /* Other element color */
+  --nav-background: var(--tertiary);
+  --lighter-nav-bg: #7b869b;
+  --input-border: #cad0d9;
+  --shadow-color: rgba(0,0,0,0.44);
 
   --hyperlink-color: #365DC3;
   --hyperlink-color-active: #034880;
@@ -72,17 +83,28 @@ body {
   margin: 0;
   font-family: 'Open Sans', sans-serif;
   font-size: 14px;
-  color: var(--lighten-black-color);
+  color: var(--lighten-black);
 }
 
-/* Heading and Typography */
+/* 1.1 Common Classes */
+.hidden { display: none; }
 
-/* admin / title 1 */
+img.preview {
+  background-color: var(--nav-background);
+  object-fit: scale-down;
+}
+
+/**
+ * 2. Heading and Typography
+ * -------------------------
+ */
+
 h1, h2, h3, h4, .subheading-1, .subheading-2 {
   font-weight: 700;
   margin: 0;
 }
 
+/* admin / title 1 */
 .title-1 { 
   font-size: 28px;
   line-height: 36px;
@@ -125,7 +147,6 @@ h1, h2, h3, h4, .subheading-1, .subheading-2 {
   line-height: 20px;
 }
 
-
 a {
   text-decoration: underline;
   color: var(--hyperlink-color);
@@ -137,18 +158,11 @@ a:active {
 }
 
 a.disabled {
-  color: var(--grey-color);
+  color: var(--grey);
   pointer-events: none;
-  cursor: default;
+  cursor: not-allowed;
 }
 
-/* 1.1 Common Classes */
-.hidden { display: none; }
-
-img.preview {
-  background-color: var(--nav-background);
-  object-fit: scale-down;
-}
 
 /**
  * 2. Forms
@@ -158,7 +172,7 @@ img.preview {
   font-size: 1em;
   font-family: inherit;
   background: white;
-  border: solid var(--grey-color) 1px;
+  border: solid var(--grey) 1px;
   border-radius: 4px;
   box-sizing: border-box;
   padding: 5px;
@@ -170,42 +184,21 @@ input.ng-untouched {
   background: none !important;
 }
 ::placeholder {
-  color: var(--grey-color);
+  color: var(--grey);
   opacity: 1;
 }
-
-/* For input fields that should immediately show when they are invalid */
-.immediate-error-display input.ng-untouched.ng-invalid {
-  border-color: var(--error) !important;
-  background: url('assets/warning-24px.svg') no-repeat scroll right 5px center !important;
-}
-.immediate-error-display select.ng-untouched.ng-invalid {
-  border-color: var(--error) !important;
-  background: url('assets/warning-24px.svg') no-repeat scroll right 15px center !important;
-}
-
-input.ng-invalid {
-  border-color: var(--error);
-  outline-color: var(--error);
-  background: url('assets/warning-24px.svg') no-repeat scroll right 5px center;
-}
-
-input[type=color] {
-  padding: 0;
-}
-
 
 /** Custom input for checkbox, radio and toggle **/
 @supports (-webkit-appearance: none) or (-moz-appearance: none) {
   input[type="checkbox"], input[type="radio"] {
-    --active: var(--primary-color);
-    --active-inner: var(--white-color);
+    --active: var(--secondary);
+    --active-inner: var(--white);
     --focus: 1px rgba(39, 94, 254, 0.3);
-    --border: var(--grey-color);
+    --border: var(--grey);
     --border-hover: var(--input-hover-color);
-    --background: var(--white-color);
-    --disabled: var(--darken-white-color);
-    --disabled-inner: var(--lighten-grey-color);
+    --background: var(--white);
+    --disabled: var(--darken-white);
+    --disabled-inner: var(--lighten-grey);
     -webkit-appearance: none;
     -moz-appearance: none;
     outline: none;
@@ -264,8 +257,8 @@ input[type=color] {
     transform: rotate(var(--r, 20deg));
  }
   input[type="checkbox"]:not(.toggle):checked {
-    --r: 43deg;
-    --bc: none;
+    --r: 43deg !important;
+    --bc: none !important;
  }
   input[type="checkbox"]:not(.toggle):disabled:checked {
     --b: var(--disabled-inner);
@@ -282,7 +275,7 @@ input[type=color] {
     height: 14px;
     border-radius: 11px;
     border: none;
-    background: var(--lighten-grey-color) !important;
+    background: var(--lighten-grey) !important;
  }
   input[type="checkbox"].toggle:after {
     top: -3px;
@@ -298,11 +291,11 @@ input[type=color] {
     --x: 19px;
     background: rgba(255, 125, 9, 0.5) !important;
  }
-  input[type="checkbox"].toggle:checked:after {
+  input[type="checkbox"].toggle:not([disabled]):checked:after {
     background: var(--active);
  }
   input[type="checkbox"].toggle:disabled {
-    background: var(--disabled-inner);
+    background: var(--disabled-inner) !important;
  }
   input[type="checkbox"].toggle:disabled:after {
     background: var(--border);
@@ -335,6 +328,26 @@ input[type=color] {
  }
 }
 
+/* For input fields that should immediately show when they are invalid */
+.immediate-error-display input.ng-untouched.ng-invalid {
+  border-color: var(--error) !important;
+  background: url('assets/warning-24px.svg') no-repeat scroll right 5px center !important;
+}
+.immediate-error-display select.ng-untouched.ng-invalid {
+  border-color: var(--error) !important;
+  background: url('assets/warning-24px.svg') no-repeat scroll right 15px center !important;
+}
+
+input.ng-invalid {
+  border-color: var(--error);
+  outline-color: var(--error);
+  background: url('assets/warning-24px.svg') no-repeat scroll right 5px center;
+}
+
+input[type=color] {
+  padding: 0;
+}
+
 
 form {
   max-width: 600px;
@@ -359,7 +372,7 @@ textarea {
 label {
   display: block;
   padding-bottom: 16px;
-  color: var(--lighten-black-color);
+  color: var(--lighten-black);
   box-sizing: border-box;
   min-height: 61px;
 }
@@ -396,7 +409,7 @@ a:focus, a:active {
 button:hover:not([disabled]) { cursor: pointer; }
 
 input[type="text"]:read-only, input[type="number"]:read-only {
-  color: var(--grey-color);
+  color: var(--grey);
 } 
 
 /* 2.1 Generic Form Components */
@@ -404,7 +417,7 @@ input[type="text"]:read-only, input[type="number"]:read-only {
   border: 2px solid;
   border-radius: 4px;
   color: white;
-  background: var(--primary-color);
+  background: var(--secondary);
   line-height: 40px;
   font-weight: bold;
   font-size: 1em;
@@ -417,24 +430,24 @@ button.control, a.control {
 
 button.control:hover:not([disabled]), a.control:hover:not([disabled]) {
   color: white;
-  background-color: var(--darken-primary-color);
+  background-color: var(--secondary-darken);
   cursor: pointer;
 }
 button.control:disabled, a.control:disabled {
   color: white;
-  background-color: var(--grey-color);
+  background-color: var(--grey);
 }
 
 /** Delete buttons, and the such */
 button.control.danger, a.control.danger {
   background: white;
-  color: var(--danger-color);
-  border: solid 2px var(--danger-color);
+  color: var(--error);
+  border: solid 2px var(--error);
 }
 button.control.danger:hover:not([disabled]), a.control.danger:hover:not([disabled]),
 a.control.danger:active:not([disabled]) {
-  color: var(--danger-color);
-  background: var(--lighten-primary-color);
+  color: var(--error);
+  background: var(--secondary-lighten);
 }
 button.control.danger.ghost, a.control.danger.ghost {
   border: none;
@@ -443,13 +456,13 @@ button.control.danger.ghost, a.control.danger.ghost {
 /** Secondary button for things like cancel buttons  */
 button.control.secondary, a.control.secondary {
   background: white;
-  color: var(--primary-color);
-  border: solid 1px var(--primary-color);
+  color: var(--secondary);
+  border: solid 2px var(--secondary);
 }
 button.control.secondary:hover:not([disabled]), a.control.secondary:hover:not([disabled]),
 a.control.secondary:active:not([disabled]) {
-  color: var(--primary-color);
-  background: var(--lighten-primary-color);
+  color: var(--secondary);
+  background: var(--secondary-lighten);
 }
 button.control.secondary.ghost, a.control.secondary.ghost {
   border: none;
@@ -458,9 +471,9 @@ button.control.secondary.ghost, a.control.secondary.ghost {
 /* Button disabled */
 button.control.secondary:disabled, button.control.danger:disabled, 
 a.control.secondary:disabled, a.control.danger:disabled {
-  color: var(--grey-color);
+  color: var(--grey);
   background-color: white;
-  border: solid 2px var(--grey-color);
+  border: solid 2px var(--grey);
 }
 
 button.control.ghost:disabled, a.control.ghost:disabled {
@@ -506,22 +519,22 @@ ul.non-field-errors {
 table { 
   width: 100%; 
   border-collapse: separate; 
-  border: solid 1px var(--grey-color); 
+  border: solid 1px var(--grey); 
   border-radius: 4px;  border-spacing: 0;
 }
 table thead tr th:first-child { border-top-left-radius: 3px; }
 table thead tr th:last-child { border-top-right-radius: 3px; }
 table tbody td { 
-  border-bottom: solid 1px var(--grey-color); 
+  border-bottom: solid 1px var(--grey); 
   transition: background-color 0.3s;  
   vertical-align: middle;
 }
 th { padding: 14px; }
 td { padding: 6px 14px; }
-thead { background: var(--darken-white-color); }
+thead { background: var(--darken-white); }
 thead tr, tbody tr { height: 48px; }
 thead th { text-align: left; }
-tbody td { color: var(--darken-grey-color); }
+tbody td { color: var(--darken-grey); }
 th.numeric, td.numeric { text-align: right; }
 th.centered, td.centered { text-align: center; }
 td.vertical-aligned { vertical-align: top; padding-top: 14px;}
@@ -538,22 +551,22 @@ td.vertical-aligned { vertical-align: top; padding-top: 14px;}
   border-radius: 4px;
   border: none;
   color: white;
-  background: var(--primary-color);
+  background: var(--secondary);
 }
 button.control, a.control {
   font-weight: bold;
   font-size: 1em;
   text-decoration: none;
   height: 40px;
+  width: 120px;
   line-height: 31px;
-  padding: 0 40px;
   box-sizing: border-box;
   transition: all 0.2s;
 }
 
 button.control:hover:not([disabled]), a.control:hover:not([disabled]), a.control:active:not([disabled]) {
   color: white;
-  background-color: var(--darken-primary-color);
+  background-color: var(--secondary-darken);
 }
 
 
@@ -603,15 +616,15 @@ button.control:hover:not([disabled]), a.control:hover:not([disabled]), a.control
   border-radius: 4px;
   border: none;
   color: white;
-  background: var(--primary-color);
+  background: var(--secondary);
 }
 .button:hover:not([disabled]) {
   color: white;
-  background-color: var(--darken-primary-color);
+  background-color: var(--secondary-darken);
 }
 .button:disabled {
   color: white;
-  background-color: var(--grey-color);
+  background-color: var(--grey);
 }
 
 .add-button {
@@ -633,7 +646,7 @@ button.control:hover:not([disabled]), a.control:hover:not([disabled]), a.control
 }
 .remove-button:hover:not([disabled]), .remove-button:focus:not([disabled]) {
   opacity: 1;
-  color: var(--danger-color);
+  color: var(--error);
 }
 
 
@@ -689,14 +702,15 @@ button.control:hover:not([disabled]), a.control:hover:not([disabled]), a.control
   color: black;
   padding: 12px 16px;
   text-decoration: none;
-  display: block;
+  display: flex;
+  align-items: center;
 }
 .dropdown-content a:hover {background-color: #f1f1f1}
 .dropdown:hover .dropdown-content { display: block; }
 .dropdown:hover .dropbtn { background-color: var(--lighter-nav-bg); }
 
 
-/* set ngx-smart-modal width to 100% */
+/* NGX-smart modal customization */
 .nsm-content{
   width: 100%;
   margin: 0;
@@ -708,7 +722,7 @@ button.control:hover:not([disabled]), a.control:hover:not([disabled]), a.control
   max-width: 500px;
 }
 .nsm-content{
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 0;
 }
 .nsm-dialog-btn-close {
@@ -751,7 +765,7 @@ span.badge {
   background: var(--error);
 }
 .badge.alert {
-  color: var(--lighten-black-color);
+  color: var(--lighten-black);
   background: var(--alert);
 }
 
@@ -812,7 +826,7 @@ span.badge {
   height: 40px;
   padding: 0 48px;
   background-color: white; 
-  border: solid 2px var(--senary-color); 
+  border: solid 2px var(--senary); 
   border-radius: 4px; font-weight: 700; 
   display: flex; 
   align-items: center; 
@@ -822,23 +836,10 @@ span.badge {
   font-size: 12px;
 }
 .new-add-button:disabled {
-  color: var(--grey-color);
-  border-color: var(--grey-color); 
+  color: var(--grey);
+  border-color: var(--grey); 
 }
 
 .new-add-button.wide {
   width: 100%;
-}
-
-
-
-/* Slim and rounded scrollbar */
-.slim-scrollbar::-webkit-scrollbar {
-    width: 8px;
-}
-
-.slim-scrollbar::-webkit-scrollbar-thumb {
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
-  background: var(--grey-color);
 }
