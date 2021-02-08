@@ -26,8 +26,8 @@ import {
 
     <div *ngIf="processing?.entities?.length || completed?.entities?.length">
       <p></p>
-      <nus-tabs>
-        <nus-tab [title]="'Processing'">
+      <nus-tabs-mp>
+        <nus-tab-mp [title]="'Processing'">
           <nus-pagination-child
             *ngIf="processing?.entities?.length"
             [page]="processing"
@@ -45,7 +45,7 @@ import {
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let entity of processing.entities">
+              <tr *ngFor="let entity of processing?.entities">
                 <td> 
                   <a routerLink="{{ entity.encryptId }}">
                     {{ entity.id }}
@@ -71,8 +71,8 @@ import {
             [page]="processing"
             (fetchPageNumber)="fetchProcessing($event)"
           ></nus-pagination-child>
-        </nus-tab>
-        <nus-tab [title]="'Completed'">
+        </nus-tab-mp>
+        <nus-tab-mp [title]="'Completed'">
           <nus-pagination-child
             *ngIf="completed?.entities?.length"
             [page]="completed"
@@ -90,7 +90,7 @@ import {
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let entity of completed.entities">
+              <tr *ngFor="let entity of completed?.entities">
                 <td> 
                   <a routerLink="{{ entity.encryptId }}">
                     {{ entity.id }}
@@ -116,8 +116,8 @@ import {
             [page]="completed"
             (fetchPageNumber)="fetchCompleted($event)"
           ></nus-pagination-child>
-        </nus-tab>
-      </nus-tabs>
+        </nus-tab-mp>
+      </nus-tabs-mp>
     </div>`,
     styles: [
     'table { table-layout: fixed }',

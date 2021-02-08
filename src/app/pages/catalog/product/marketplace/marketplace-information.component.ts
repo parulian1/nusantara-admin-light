@@ -42,8 +42,8 @@ import { Observable } from 'rxjs';
         <p>This information will be used as specific per marketplace. Skip this if you don't want to publish to marketplace.</p>
       </div>
       <div class="detail-store">
-        <nus-tabs (select)="getAttributes($event)" [fluid]="true">
-          <nus-tab *ngFor="let data of clientList" [title]="data.marketplaceName">
+        <nus-tabs-mp (select)="getAttributes($event)" [fluid]="true">
+          <nus-tab-mp *ngFor="let data of clientList" [title]="data.marketplaceName">
             <div *ngIf="!productClassChanged">
               <div *ngFor="let data of marketplaceStoreAttributes; let storeIndex = index">
                 <div class="store">
@@ -123,8 +123,8 @@ import { Observable } from 'rxjs';
                 <i class="material-icons">add</i>Add Store
               </button>
             </div>
-          </nus-tab>
-        </nus-tabs>
+          </nus-tab-mp>
+        </nus-tabs-mp>
       </div>
     </div>
 
