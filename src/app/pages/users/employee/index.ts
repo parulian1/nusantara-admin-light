@@ -4,3 +4,4 @@ export * from './employee.resolver';
 export * from './employee-list.resolver';
 
 export * from './warehouse';
+export * from './access-group';

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 
-import { forkJoin, Observable, zip } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 
 import { AuthService } from '@nusantara/auth';
 import { WarehouseService } from '@nusantara/services';
@@ -13,7 +13,6 @@ import { IJwtClaims } from '@nusantara/auth/models';
 @Component({
   selector: 'nus-employee-warehouse-host',
   template: `
-    <h4>Employee</h4>
     <table>
       <thead>
         <tr>
@@ -66,13 +65,15 @@ export class EmployeeWarehouseHostComponent implements OnInit {
   }
 
   initialFormArray(): void {
-    this.warehouseService
-      .fetchAllByUser(this.entity?.username)
-      .subscribe((warehouses) => {
-        warehouses.forEach((warehouse) => {
-          this.addToForm(warehouse);
+    if (this.entity) {
+      this.warehouseService
+        .fetchAllByUser(this.entity?.username)
+        .subscribe((warehouses) => {
+          warehouses.forEach((warehouse) => {
+            this.addToForm(warehouse);
+          });
         });
-      });
+    }
   }
 
   addToForm(warehouse?: IWarehouse): void {
@@ -91,7 +92,7 @@ export class EmployeeWarehouseHostComponent implements OnInit {
     this.form.removeAt(index);
   }
 
-  saveAll(userHref: string): Observable<any> {
+  saveAll(userHref: string): Observable<unknown> {
     const savedJoin$ = forkJoin(
       this.form.value.map((warehouse) => {
         return this.warehouseService.createEmployee(
@@ -102,6 +103,7 @@ export class EmployeeWarehouseHostComponent implements OnInit {
         );
       }) || []
     );
+
     const deletedJoin$ = forkJoin(
       this.deletedWarehouse.map((warehouse) => {
         return this.warehouseService.deleteEmployee(
@@ -112,6 +114,6 @@ export class EmployeeWarehouseHostComponent implements OnInit {
       })
     );
 
-    return zip(savedJoin$, deletedJoin$);
+    return forkJoin([savedJoin$, deletedJoin$]);
   }
 }

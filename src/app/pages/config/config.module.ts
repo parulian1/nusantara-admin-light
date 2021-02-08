@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 import { SharedModule } from '@nusantara/shared';
@@ -17,6 +17,7 @@ import { BlogFeedComponent } from './blog-feed';
 import { AuthSocialComponent } from './auth-social';
 import { AuthSocialListComponent } from './auth-social';
 import { PaymentGatewayMetaComponent } from './payment-gateways/payment-gateway-meta/payment-gateway-meta.component';
+import { PaymentGatewayInstoreComponent } from './payment-gateways/payment-gateway-instore/payment-gateway-instore.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { PaymentGatewayMetaComponent } from './payment-gateways/payment-gateway-
     AuthSocialComponent,
     AuthSocialListComponent,
     PaymentGatewayMetaComponent,
+    PaymentGatewayInstoreComponent,
   ],
   imports: [
     CommonModule,
@@ -47,6 +49,7 @@ import { PaymentGatewayMetaComponent } from './payment-gateways/payment-gateway-
     ReactiveFormsModule,
     ConfigRoutingModule,
     CKEditorModule,
+    FormsModule,
   ],
 })
 export class ConfigModule { }
