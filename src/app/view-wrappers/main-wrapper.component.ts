@@ -40,7 +40,7 @@ import { SubscriptionLike } from 'rxjs';
         </li>
         <li><a [routerLink]="['/catalog/products']" routerLinkActive="active" translate>Products</a></li>
         <li><a [routerLink]="['/catalog/categories']" routerLinkActive="active" translate>Categories</a></li>
-        <li *ngIf="isSmeLicense()"><a [routerLink]="['/catalog/product-options']" routerLinkActive="active" translate>Product Options</a></li>
+        <li *ngIf="enterpriseLicense()"><a [routerLink]="['/catalog/product-options']" routerLinkActive="active" translate>Product Options</a></li>
         <li><a [routerLink]="['/catalog/product-classes']" routerLinkActive="active" translate>Product Classes</a></li>
         <li><a [routerLink]="['/catalog/vendors']" routerLinkActive="active" translate>Vendors</a></li>
 
@@ -322,8 +322,8 @@ export class MainWrapperComponent implements OnInit, OnDestroy {
     this.isBusy = false;
   }
 
-  isSmeLicense() {
-    return !this.configSercvice.isSmeLicense();
+  enterpriseLicense() {
+    return this.configSercvice.isEnterpriseLicense();
   }
 
 }

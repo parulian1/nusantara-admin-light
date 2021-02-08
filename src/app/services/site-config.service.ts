@@ -40,8 +40,8 @@ export class SiteConfigService extends AbstractCrudService<ISiteConfig> {
     this.licenseType = licenseType;
   }
 
-  isSmeLicense() {
-    return this.licenseType === LicenseTypeChoices.SME;
+  isEnterpriseLicense() {
+    return this.licenseType === LicenseTypeChoices.ENTERPRISE;
   }
 
 }
