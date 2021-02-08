@@ -10,7 +10,10 @@ import {ActivatedRoute} from '@angular/router';
       title="Onboarding"
       description="">
     </nus-list-header>
-
+    <div class="filtering">
+      <nus-include-deleted></nus-include-deleted>
+    </div>
+    <nus-pagination [page]="page"></nus-pagination>
     <table>
       <thead>
       <tr>
@@ -20,13 +23,15 @@ import {ActivatedRoute} from '@angular/router';
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let entity of page">
+      <tr *ngFor="let entity of page.entities">
         <td><a [routerLink]="[entity|entityToSlug]">{{ entity.name }}</a></td>
         <td>{{ entity.type }}</td>
         <td>{{ entity.isActive }}</td>
       </tr>
       </tbody>
     </table>
+
+    <nus-pagination [page]="page"></nus-pagination>
   `,
   styles: []
 })
