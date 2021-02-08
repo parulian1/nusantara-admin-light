@@ -15,7 +15,7 @@ import { of } from 'rxjs';
 @Component({
   selector: 'nus-theme-detail',
   template: `
-    <h1>Theme Details</h1>
+    <h1 class="title-1">Theme Details</h1>
 
     <ul class="non-field-errors">
       <li *ngFor="let err of nonFieldErrors">{{ err }}</li>

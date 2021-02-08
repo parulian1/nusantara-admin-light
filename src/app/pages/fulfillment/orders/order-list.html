@@ -33,7 +33,7 @@
     <td>{{ entity.children.length }}</td>
     <td>{{ entity.status }}</td>
     <td>{{ (entity.orderPayment?.amount || 0)|currency:"IDR" }}</td>
-    <td>{{ entity.created | date }}</td>
+    <td>{{ entity.created | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
   </tr>
   </tbody>
 </table>

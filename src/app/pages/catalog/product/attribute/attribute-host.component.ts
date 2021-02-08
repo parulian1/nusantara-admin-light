@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractEditingComponent } from '@nusantara/core';
 import { products } from '@nusantara/models';
@@ -8,26 +8,34 @@ import { products } from '@nusantara/models';
 @Component({
   selector: 'nus-product-attribute-host',
   template: `
-    <h2>Attributes</h2>
+    <h4 class="subheading-2">Attributes</h4>
 
     <table>
       <thead>
       <tr>
         <th>Name</th>
-        <th>Enabled</th>
+        <th class="centered">Enabled</th>
         <th>Value</th>
       </tr>
       </thead>
       <tbody *ngIf="!!originalAttributeValues">
-        <nus-product-attribute-value
+        <nus-product-attribute-value  
           *ngFor="let attr of attributeDefinitions; let i=index"
           [attributeDefinition]="attr"
           [control]="getFormControlForAttribute(attr)">
         </nus-product-attribute-value>
+        <tr>
+          <td colspan="3">
+            <a (click)="goToClass()" class="manage-attr">Manage Attribute</a>          
+          </td>
+        </tr>
       </tbody>
     </table>
+
   `,
-  styles: [ ]
+  styles: [
+    'h4 { margin-bottom: 4px; }',
+  ]
 })
 export class ProductAttributeHostComponent extends AbstractEditingComponent implements OnInit {
 
@@ -36,7 +44,7 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
   @Input() productClass: FormControl; // href
   @Input() originalAttributeValues: {[key: string]: string|number|boolean};
 
-  constructor(protected route: ActivatedRoute, protected fb: FormBuilder) { super(); }
+  constructor(protected route: ActivatedRoute, protected fb: FormBuilder, private router: Router) { super(); }
 
   ngOnInit() {
     this.route.data.subscribe((data: {productClasses: products.IProductClass[]}) => {
@@ -62,5 +70,11 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
     const productClassHref = this.productClass.value?.href ?? this.productClass.value;
     const productClass = this.productClasses.filter(e => e.href === productClassHref)[0];
     return productClass.attributes;
+  }
+
+  goToClass(): void {
+    const slugs = this.productClass.value.split('/').reverse();
+    const productClassSlug = slugs[0] ? slugs[0] : slugs[1];
+    this.router.navigate(['/catalog/product-classes', productClassSlug]);
   }
 }

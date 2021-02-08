@@ -1,18 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'nus-include-inactive',
   template: `
-    <label>Show InActive<input type="checkbox" (click)="applyFilter($event)"></label>
+    <label>
+      <input type="checkbox" (click)="applyFilter($event)">{{ text }}
+    </label>
   `,
-  styles: [`label {
-    min-height: auto;
-  }`
+  styles: [
+    'label { min-height: auto; padding-bottom: 0; }',
+    ':host { padding-right: 20px }'
   ]
 })
 export class IncludeInactiveComponent implements OnInit {
   public applied = false;
+  @Input() text = "Show InActive";
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute) {

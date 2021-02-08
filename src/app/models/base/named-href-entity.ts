@@ -6,3 +6,8 @@ import { IHrefEntity } from './href-entity';
 export interface INamedHrefEntity extends IHrefEntity {
   name: string;
 }
+
+export interface INamedHrefEntityWarehouse extends IHrefEntity {
+  name: string;
+  code:string;
+}

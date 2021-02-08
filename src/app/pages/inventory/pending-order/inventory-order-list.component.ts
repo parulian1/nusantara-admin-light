@@ -29,18 +29,25 @@ import { IInventoryOrderSummary } from '@nusantara/models/inventory';
         <th>Created By</th>
         <th>Reviewed By</th>
         <th>Warehouse</th>
-        <th>Date</th>
+        <th class="numeric">Date</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let entity of page.entities">
         <td><a [routerLink]="[getRouterLink(entity)]">{{ entity|entityToSlug }}</a></td>
         <td>{{ entity.type }}</td>
-        <td>{{ entity.status }}</td>
-        <td>{{ entity.createdBy.name }}</td>
-        <td>{{ entity.reviewedBy?.name }}</td>
+        <td>
+          <span class="badge" [ngClass]="{
+            'success': entity.status === 'pending',
+            'alert': entity.status === 'approved',
+            'error': entity.status === 'rejected' }">
+            {{ entity.status | titlecase }}
+          </span>
+        </td>
+        <td>{{ entity.createdBy.name ? entity.createdBy.name : '-' }}</td>
+        <td>{{ entity.reviewedBy ? entity.reviewedBy?.name : '-'}}</td>
         <td>{{ entity.warehouse.name }}</td>
-        <td>{{ entity.created|date: 'dd MMM yyyy HH:mm' }}</td>
+        <td class="numeric">{{ entity.created|date: 'dd/MM/yyyy HH:mm:ss' }}</td>
       </tr>
       </tbody>
     </table>

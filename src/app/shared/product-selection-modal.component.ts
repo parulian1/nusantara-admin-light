@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { NgxSmartModalComponent } from 'ngx-smart-modal';
 import { Subscription } from 'rxjs';
 
@@ -17,35 +17,56 @@ import { products } from '../models';
 @Component({
   selector: 'nus-product-selection-modal',
   template: `
-    <ngx-smart-modal [identifier]="'selectProduct'" #modal [formGroup]="form">
-      <h1>Select Product</h1>
-      <form #modalForm>
-        <label>
-          <span>Search</span>
-          <input type="text" [formControl]="searchText" placeholder="ex, BR0591020041S or 'Hand Sanitizer'">
-        </label>
-        <input type="hidden" [formControl]="product">
-
-        <div>
-          <table>
-            <thead>
-            <tr>
-              <th>Name</th>
-              <th>SKU</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let p of displayedResults?.entities">
-              <td><a href="#" (click)="selectProduct(p)">{{ p.name }}</a></td>
-              <td>{{ p.upc }}</td>
-            </tr>
-            </tbody>
-          </table>
+    <ngx-smart-modal [identifier]="'selectProduct'" #modal [formGroup]="form" [customClass]="'wide-modal'">
+      <h2 class="heading-2">Select Product</h2>
+      <form #modalForm class="fluid">
+        <div class="search">
+          <i class="material-icons">search</i>
+          <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Product Name or SKU">
         </div>
+        <input type="hidden" [formControl]="product">
+        <p>Showing 10 recently added products. Search product name or SKU to find more products.</p>
+        <table>
+          <thead>
+          <tr style="background-color: #F4F4F4;">
+            <th>Product Name</th>
+            <th>SKU</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let p of displayedResults?.entities">
+            <td>{{ p.name }}</td>
+            <td>{{ p.upc }}</td>
+            <td><a href="#" (click)="selectProduct(p)">Add</a></td>
+          </tr>
+          </tbody>
+        </table>
       </form>
     </ngx-smart-modal>
   `,
-  styles: [ ]
+  styles: [
+    'h2 { padding-bottom: 16px }',
+    'p { color : var(--darken-grey); margin-bottom: 16px; }',
+    'td { white-space: nowrap;  overflow: hidden; text-overflow: ellipsis; }',
+    ` .search {
+        display: flex;
+        border: solid 1px var(--lighter-nav-bg);
+        background-color: transparent;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+      div.search > i {
+        background-color: white;
+        color: var(--nav-background);
+        line-height: 31px;
+        padding-left: 13px;
+      }
+      .search > input[type=search] {
+        border: none !important;
+      }
+    `,
+  ]
 })
 export class ProductSelectionModalComponent implements OnInit, AfterViewInit {
 

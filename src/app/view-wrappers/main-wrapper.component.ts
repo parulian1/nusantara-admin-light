@@ -187,7 +187,7 @@ import { SubscriptionLike } from 'rxjs';
       color: white;
     }
     #dashboard-content {
-      padding: 15px;
+      padding: 16px 24px;
       position: relative;
       box-shadow: inset 4px 4px 8px -4px var(--shadow-color);
     }
@@ -211,7 +211,6 @@ import { SubscriptionLike } from 'rxjs';
       }
       nav li.section-header {
         font-weight: 900;
-        padding-left: 0;
         display: flex;
       }
       nav li.section-header i {
@@ -219,32 +218,41 @@ import { SubscriptionLike } from 'rxjs';
         height: 35px;
         margin-right: 5px;
       }
+      nav li.section-header i, nav li.icon-button a {
+        padding-left: 25px;
+      }
       nav li.icon-button a {
-        padding-left: 0;
+        font-weight: 900;
         display: flex;
       }
       .icon-button i {
         line-height: 35px;
+        margin-right: 5px;
       }
 
       nav > ul a {
         color: white;
         display: block;
-        padding-left: 25px;
+        padding-left: 30px;
         text-decoration: none;
+        padding-left: 56px;
       }
       nav > ul a.active {
         background-color: #7B869B;
-        border-left: 6px solid var(--bhisma-orange);
+        border-left: 6px solid var(--secondary);
+      }
+      nav > ul li:not(.icon-button) a.active {
+        padding-left: 50px;
+      }
+      nav > ul li.icon-button a.active {
+        padding-left: 19px;
       }
       nav > ul a:hover,
       nav > ul a:focus {
         transition: all .3s;
         border-left: 6px solid var(--bhisma-orange);
-        background-color: #7B869B; /*var(--accent-lighter-color);*/
+        background-color: #7B869B;     
       }
-
-      footer { margin-top: 45px; }
 
       @media print {
         :host {
@@ -263,6 +271,7 @@ import { SubscriptionLike } from 'rxjs';
         }
 
       }
+      footer { margin-top: 45px; width: 80%; bottom: 0;position: absolute;}
     `],
   animations: [ slideInAnimation, ],
 })

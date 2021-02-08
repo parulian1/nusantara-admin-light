@@ -15,7 +15,7 @@ import { IProductClass } from '@nusantara/models/products';
 @Component({
   selector: 'nus-inventory-transfer',
   template: `
-    <h1>Transfer Inventory Order</h1>
+    <h1 class="title-1">Transfer Inventory Order</h1>
 
     <form [formGroup]="form" (ngSubmit)="save()">
 
@@ -112,9 +112,9 @@ import { IProductClass } from '@nusantara/models/products';
     <nus-product-selection-modal></nus-product-selection-modal>
   `,
   styles: [`
-    form { width: 1200px; max-width: 100%; }
+    form { width: 58vw; max-width: 100%; }
     .inventory-order-meta {
-      width: auto;
+      width: 100%;
     }
     .inventory-order-meta th {
       text-align: left;

@@ -6,9 +6,13 @@ import { IProductAttribute } from '@nusantara/models/products';
 @Component({
   selector: 'nus-product-attribute-value',
   template: `
-    <tr>
-      <td>{{ attributeDefinition.name }}</td>
-      <td><input type="checkbox" [checked]="control.enabled"></td>
+    <tr *ngIf="!(attributeDefinition.type === 'combo box' || attributeDefinition.type === 'dropdown')">
+      <td [ngClass]="{'vertical-aligned': attributeDefinition.type === 'markdown'}">
+        {{ attributeDefinition.name }}
+      </td>
+      <td class="centered" [ngClass]="{'vertical-aligned': attributeDefinition.type === 'markdown'}">
+        <input type="checkbox" class="toggle"/>
+      </td>
 
       <td [ngClass]="{'color-input': attributeDefinition.type === 'color'}">
         <input type="text"
@@ -46,8 +50,10 @@ import { IProductAttribute } from '@nusantara/models/products';
   `,
   styles: [
     ':host { display: contents; }',
+    'textarea { height: 120px; }',
     '.color-input { text-align: left; }',
-    '.color-input input { width: 23px }',
+    '.color-input input { width: 40px; height: 40px; border-radius: 4px; padding: 0; }',
+    'input { height: 40px; }',
   ]
 })
 export class AttributeValueComponent {

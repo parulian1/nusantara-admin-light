@@ -14,7 +14,7 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
   selector: 'nus-new-theme-image',
   template: `
     <ngx-smart-modal [identifier]="'newImageModal'" #modal [formGroup]="form" [title]="'Upload Image'" *ngIf="!!form">
-      <h1>Upload Image</h1>
+      <h2 class="heading-2">Upload Image</h2>
       <form #modalForm>
         <img [src]="imagePreviewUrl" alt="Image Preview">
         <input type="hidden" [formControl]="href" name="href">

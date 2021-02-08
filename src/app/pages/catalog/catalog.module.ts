@@ -43,6 +43,8 @@ import { StockSearchComponent } from './product/stock-search/stock-search.compon
 
     product.subscription.ProductSubscriptonHostComponent,
 
+    product.marketplace.MarketplaceInfoHostComponent,
+
     VendorListComponent,
     VendorComponent,
 

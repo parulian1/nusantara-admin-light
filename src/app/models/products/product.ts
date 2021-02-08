@@ -9,6 +9,13 @@ import { IProductSubscription } from './product-subscription';
 /**
  * Anything that is available for sale.
  */
+
+export interface IDimensions {
+  currentHeight: number;
+  currentLength: number;
+  currentWidth: number;
+}
+
 export interface IProduct extends INamedHrefEntity {
   upc: string;
   description: string;
@@ -29,4 +36,5 @@ export interface IProduct extends INamedHrefEntity {
   seoDescription: string;
   subscription: IProductSubscription;
   isActive?: boolean;
+  dimensions: IDimensions;
 }

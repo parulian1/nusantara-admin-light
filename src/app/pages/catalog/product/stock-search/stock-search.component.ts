@@ -5,20 +5,26 @@ import { IStockSearch } from '@nusantara/models/products/stock-search';
 @Component({
   selector: 'nus-stock-search',
   template: `
-    <p>Available IN</p>
+    <h3>Product Inventory</h3>
     <table *ngIf="!!entity">
-      <tr>
-        <td>Warehouse</td>
-        <td>Quantity</td>
-      </tr>
-      <tr *ngFor="let ent of entity">
-        <td>{{ ent.name }}</td>
-        <td data-qa="quantity">{{ ent.quantity }}</td>
-      </tr>
+      <thead>  
+        <tr>
+          <th>Warehouse</th>
+          <th>Quantity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ent of entity">
+          <td>{{ ent.name }}</td>
+          <td data-qa="quantity">{{ ent.quantity }}</td>
+        </tr>
+      </tbody>
     </table>
 
   `,
-  styles: ['']
+  styles: [ 
+    'h3 { font-size: 20px; margin: 0 0 20px 0; }',
+  ]
 })
 export class StockSearchComponent implements OnInit {
 

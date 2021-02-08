@@ -11,10 +11,10 @@ import { AbstractDetailComponent } from '@nusantara/core';
     <button type="submit" [disabled]="!component.form.valid" class="control" *ngIf="!hideSave">
       Save
     </button>
-    <button type="button" (click)="cancel.emit()" class="control secondary">
+    <button type="button" (click)="cancel.emit()" [ngClass]="{'ghost': hideDelete}" class="control secondary">
       Cancel
     </button>
-    <button type="button" (click)="delete.emit()" *ngIf="!component.isNew && !hideDelete" class="control danger">
+    <button type="button" (click)="delete.emit()" *ngIf="!component.isNew && !hideDelete" class="control danger ghost">
       Delete
     </button>
   `,
