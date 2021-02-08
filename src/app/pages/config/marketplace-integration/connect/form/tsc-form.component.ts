@@ -70,13 +70,8 @@ import { MarketplaceClientEnum } from '../markeplace-client-enum';
           variable="warehouse ID"
         ></nus-field-errors-marketplace>
       </label>
-      
-      <nus-variant-client-form
-        (isSplit)="isSplitValue($event)"
-        [shopSlug]="shopSlug"
-        [isEdit]="isEdit" *ngIf="!isEdit">
-      </nus-variant-client-form>
-      
+
+
       <div class="action-buttons">
         <button *ngIf="isEdit"
           type="submit"
@@ -214,7 +209,7 @@ export class TscFormComponent implements OnInit {
       redirect_url: this.form.value.redirectUrl,
       shop_id: this.form.value.shopId,
       warehouse_id: this.form.value.warehouseId,
-      split_variant: this.variantValue,
+      split_variant: false,
     };
     return formValue;
   }

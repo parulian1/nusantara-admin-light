@@ -47,7 +47,7 @@ import { Observable } from 'rxjs';
             <div *ngIf="!productClassChanged">
               <div *ngFor="let data of marketplaceStoreAttributes; let storeIndex = index">
                 <div class="store">
-                  <div>  
+                  <div>
                     <p class="body-2">Store</p>
                     <h4 class="subheading-2">{{ data.shop }}</h4>
                   </div>
@@ -91,6 +91,7 @@ import { Observable } from 'rxjs';
                               </div>
                             </div>
                             <input formControlName="value" type="text" *ngIf="attributesFormArray.controls[i].value.type === 'text'"/>
+                            <input formControlName="value" type="integer" *ngIf="attributesFormArray.controls[i].value.type === 'integer'"/>
                           </td>
                         </tr>
                       </tbody>
@@ -126,7 +127,7 @@ import { Observable } from 'rxjs';
         </nus-tabs>
       </div>
     </div>
-   
+
     <nus-marketplace-shipping-info-modal [shippingDetail]="shippingDetail"></nus-marketplace-shipping-info-modal>
     <nus-marketplace-stock-info-modal [warehouseInfoDetail]="warehouseInfoDetail"></nus-marketplace-stock-info-modal>
   `,
@@ -140,21 +141,21 @@ import { Observable } from 'rxjs';
     '.title-1 { font-weight: bold; margin-bottom: 0; }',
     '.detail { margin-top: 24px; }',
     '.detail-store { border: solid 1px var(--grey); border-radius: 4px; margin-top: 8px; }',
-    `.store { 
-        padding: 10px 12px; 
-        border-bottom: solid 1px var(--grey); 
-        display: flex; 
-        justify-content: space-between; 
+    `.store {
+        padding: 10px 12px;
+        border-bottom: solid 1px var(--grey);
+        display: flex;
+        justify-content: space-between;
         justify-items: center;  }
     `,
     '.expand { background: none; border: none; outline: none; font-size: 18px; cursor: pointer; }',
     '.attr-table { padding: 16px 12px; }',
-    `.no-attribute { 
-        display: flex; 
-        flex-direction: column; 
-        justify-content: center; 
-        align-items: center; 
-        padding: 16px 0; 
+    `.no-attribute {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 16px 0;
         border-bottom: solid 1px var(--grey); }
       `,
     '.no-attribute h1 { margin-bottom: 10px; }',
@@ -197,11 +198,11 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
 
   constructor(
     protected route: ActivatedRoute,
-    protected fb: FormBuilder, 
+    protected fb: FormBuilder,
     private mpClientService: MarketplaceClientService,
     private mpItemService: MarketplaceItemService,
-  ) { 
-    super(); 
+  ) {
+    super();
   }
 
   ngOnInit() {
@@ -253,7 +254,7 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
     this.emptyStore = false;
     this.productClassChanged = false;
     if(this.selectedTab){
-      if(this.selectedTab !== marketplace.toLowerCase()){        
+      if(this.selectedTab !== marketplace.toLowerCase()){
         this.saveAll();
       }
     }
