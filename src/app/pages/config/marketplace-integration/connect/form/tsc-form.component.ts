@@ -70,13 +70,8 @@ import { MarketplaceClientEnum } from '../markeplace-client-enum';
           variable="warehouse ID"
         ></nus-field-errors-marketplace>
       </label>
-      
-      <nus-variant-client-form
-        (isSplit)="isSplitValue($event)"
-        [shopSlug]="shopSlug"
-        [isEdit]="isEdit" *ngIf="!isEdit">
-      </nus-variant-client-form>
-      
+
+
       <div class="action-buttons">
         <button *ngIf="isEdit"
           type="submit"
@@ -122,6 +117,7 @@ export class TscFormComponent implements OnInit {
   warehouses: IMarketplaceWarehouse[] = [];
   variantValue : boolean;
   credentialInfo = "Contact our support by email to integrations.gramedia.digital to get your partner credential (ShopID/PartnerID/Partner Key)";
+  shopIdValue: any;
 
   constructor(
     private service: MarketplaceClientService,
@@ -157,6 +153,7 @@ export class TscFormComponent implements OnInit {
             shopId: data.shopId,
             warehouseId: data.warehouseId,
           });
+          this.shopIdValue = data.shopId
         }
       });
   }
@@ -212,9 +209,9 @@ export class TscFormComponent implements OnInit {
       partner_id: this.form.value.partnerId,
       partner_key: this.form.value.partnerKey,
       redirect_url: this.form.value.redirectUrl,
-      shop_id: this.form.value.shopId,
+      shop_id: this.shopIdValue,
       warehouse_id: this.form.value.warehouseId,
-      split_variant: this.variantValue,
+      split_variant: false,
     };
     return formValue;
   }
