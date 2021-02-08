@@ -69,16 +69,11 @@ export class OnboardingContentHostComponent extends AbstractEditingComponent<For
     this.form.controls.map((content, index) => {
       content.value.sortPriority = index;
       let _content = (content as FormGroup);
-      console.log('this.contents', this.contents, this.contents.toArray()[index]);
       this.contents.map((contentComponent, _index) => {
         if (_index == index) {
-          console.log(`image value`, contentComponent.imagePreviewUrl);
           _content.value.image = contentComponent.imagePreviewUrl;
         }
       });
-      // if (!!content.value?.href && !content.value?.image) {
-      //   _content.removeControl('image');
-      // }
       content = _content;
     });
   }

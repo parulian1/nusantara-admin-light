@@ -113,6 +113,8 @@ export class OnboardingPreviewHostDialogComponent extends AbstractEditingCompone
   @Input() form: FormArray;
   @ViewChild('modal') modal: NgxSmartModalComponent;
 
+  imagePreviewUrl: string;
+
   result: DialogResult;
   startIndex = 0;
 
@@ -123,8 +125,6 @@ export class OnboardingPreviewHostDialogComponent extends AbstractEditingCompone
   ngOnInit() {
   }
 
-
-
   ngAfterViewInit(): void {
     this.modal.onOpen.subscribe(() => {
       this.result = DialogResult.Cancelled;
@@ -132,9 +132,6 @@ export class OnboardingPreviewHostDialogComponent extends AbstractEditingCompone
   }
 
   open() {
-    // this.form.controls.map((control) => {
-    //   this._setImagePreview(control.get('image').value, control);
-    // });
     this.modal.open();
   }
 
@@ -177,11 +174,10 @@ export class OnboardingPreviewHostDialogComponent extends AbstractEditingCompone
   }
 
   getContentImage(formControl?: AbstractControl) : string {
-    console.log(`formcontrol`, formControl);
-    if (!!formControl) {
-      return formControl.get('image').value;
+    if (!!formControl && !!formControl.get('image')) {
+      this.setImagePreview(formControl.value.image);
     }
-    return '';
+    return this.imagePreviewUrl;
   }
 
   next() {
@@ -190,13 +186,10 @@ export class OnboardingPreviewHostDialogComponent extends AbstractEditingCompone
     }
   }
 
-  // _setImagePreview(data: Event | string, control: AbstractControl) {
-  //   console.log(`data`, data);
-  //   console.log(`control`, control);
-  //   this.setImagePreview(data, (dataAsUrl) => {
-  //     control.get('image').setValue(dataAsUrl);
-  //     console.log(`control`, control.get('image').value);
-  //   });
-  // }
+  setImagePreview(data: Event | string) {
+    super.setImagePreview(data, (dataAsUrl) => {
+      this.imagePreviewUrl = dataAsUrl;
+    });
+  }
 
 }

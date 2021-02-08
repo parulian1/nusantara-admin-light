@@ -102,21 +102,17 @@ export class OnboardingContentComponent extends AbstractEditingComponent impleme
   imagePreviewUrl: string;
   show: boolean = true;
 
-  // @ViewChild(OnboardingContentImageComponent) onboardingContentImageModal: OnboardingContentImageComponent;
-
   constructor(public route: ActivatedRoute,
               public router: Router) {
     super();
   }
 
   ngOnInit() {
-    console.log(`image`, this.entity);
     this.setImagePreview(this.entity?.image);
     this.setAvailabilityAndClearValueButtonProp();
   }
 
   ngAfterViewInit() {
-    // this.onboardingContentImageModal.onClose.subscribe(() => this.onImageModalClosed());
   }
 
   get buttonText(): FormControl { return this.form.get('buttonText') as FormControl; }
@@ -129,7 +125,6 @@ export class OnboardingContentComponent extends AbstractEditingComponent impleme
   get sortPriority(): FormControl { return this.form.get('sortPriority') as FormControl; }
 
   setImagePreview(data: Event | string) {
-    console.log(`data`, data, typeof data);
     super.setImagePreview(data, (dataAsUrl) => {
       this.imagePreviewUrl = dataAsUrl;
     });
@@ -147,16 +142,6 @@ export class OnboardingContentComponent extends AbstractEditingComponent impleme
     }
   }
 
-  // onImageModalClosed() {
-  //   if (this.onboardingContentImageModal.result === DialogResult.OK) {
-  //     if (!!this.onboardingContentImageModal?.imagePreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
-  //       this.imagePreviewUrl = this.onboardingContentImageModal.imagePreviewUrl;
-  //       this.image.setValue(this.onboardingContentImageModal.imagePreviewUrl);
-  //     }
-  //     this.getValue();
-  //   }
-  // }
-
   getValue() {
     return this.form.value;
   }
@@ -167,7 +152,6 @@ export class OnboardingContentComponent extends AbstractEditingComponent impleme
   }
 
   saveImage() {
-    console.log(`imagepreview`, this.imagePreviewUrl, this.image);
     this.form.value.image = this.imagePreviewUrl;
   }
 

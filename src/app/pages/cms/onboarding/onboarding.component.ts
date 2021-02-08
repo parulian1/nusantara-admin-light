@@ -1,7 +1,7 @@
 import {AfterViewChecked, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import { AbstractDetailComponent, moveItemInFormArray, ToastService } from '@nusantara/core';
 import { drf, IOnBoarding, IOnboardingContent, OnBoardingTypeEnum } from '@nusantara/models';
-import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OnboardingService } from '@nusantara/services';
 import {
@@ -137,12 +137,25 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> im
 
   save() {
     this.contentHost.getValue();
+    this.cleanData();
     super.save();
+  }
+
+  cleanData() {
+    this.contents.controls.map((contentControl, index) => {
+      let _contentControl = (contentControl as FormGroup);
+      if (!contentControl.value.image.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
+        _contentControl.removeControl('image');
+      }
+      contentControl = _contentControl;
+    });
+
   }
 
   preview () {
     this.onboardingPreviewHostDialogComponent.startIndex = 0;
     this.contentHost.getValue();
+    this.onboardingPreviewHostDialogComponent.form = this.contents;
     this.onboardingPreviewHostDialogComponent.open();
   }
 
