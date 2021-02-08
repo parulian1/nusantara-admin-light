@@ -76,7 +76,7 @@ import {IError} from "../../../models/base/error";
             <div>Store</div>
             <div class="count">{{ storeValue }}</div>
           </div>
-          <a [routerLink]="['./']" (click)="showMarketplaceDetail()">More Detail</a>
+          <a  (click)="showMarketplaceDetail()">More Detail</a>
        </div>
       </div>
       <div class="product-list" *ngIf="warehouse.disabled">
