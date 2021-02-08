@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, Input, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, Input, ViewChild, ViewChildren, QueryList} from '@angular/core';
 import {AbstractEditingComponent, moveItemInFormArray} from '@nusantara/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -28,7 +28,7 @@ export class OnboardingContentHostComponent extends AbstractEditingComponent<For
   @Input() form: FormArray;
   @Input() entity: IOnBoarding;
 
-  @ViewChild(OnboardingContentComponent) content!: OnboardingContentComponent;
+  @ViewChildren(OnboardingContentComponent) contents!: QueryList<OnboardingContentComponent>;
 
   constructor(public route: ActivatedRoute,
               public fb: FormBuilder,
@@ -57,7 +57,7 @@ export class OnboardingContentHostComponent extends AbstractEditingComponent<For
     this.form.push(form);
   }
 
-  drop(event: CdkDragDrop<string[]>) {
+  drop(event: CdkDragDrop<FormArray, any>) {
     moveItemInFormArray(
       this.form,
       event.previousIndex,
@@ -68,12 +68,19 @@ export class OnboardingContentHostComponent extends AbstractEditingComponent<For
   getValue() {
     this.form.controls.map((content, index) => {
       content.value.sortPriority = index;
-      if (!!content.value?.href && !content.value?.image) {
-        (content as FormGroup).removeControl('image');
-      }
-
+      let _content = (content as FormGroup);
+      console.log('this.contents', this.contents, this.contents.toArray()[index]);
+      this.contents.map((contentComponent, _index) => {
+        if (_index == index) {
+          console.log(`image value`, contentComponent.imagePreviewUrl);
+          _content.value.image = contentComponent.imagePreviewUrl;
+        }
+      });
+      // if (!!content.value?.href && !content.value?.image) {
+      //   _content.removeControl('image');
+      // }
+      content = _content;
     });
-    return this.form.value;
   }
 
 }

@@ -22,9 +22,8 @@ import { OnboardingContentImageComponent } from '@nusantara/pages/cms/onboarding
         <label>
           <span>Image</span>
           <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Banner Image" class="preview">
-          <button hidden (click)="onboardingContentImageModal.open()" type="button" title="Upload Image">
-            <i class="material-icons">image</i>
-          </button>
+          <input type="file" [formControl]="image" (change)="setImagePreview($event)"
+               name="icon" accept="image/*">
           <nus-onboarding-content-image></nus-onboarding-content-image>
         </label>
         <label>
@@ -103,7 +102,7 @@ export class OnboardingContentComponent extends AbstractEditingComponent impleme
   imagePreviewUrl: string;
   show: boolean = true;
 
-  @ViewChild(OnboardingContentImageComponent) onboardingContentImageModal: OnboardingContentImageComponent;
+  // @ViewChild(OnboardingContentImageComponent) onboardingContentImageModal: OnboardingContentImageComponent;
 
   constructor(public route: ActivatedRoute,
               public router: Router) {
@@ -111,12 +110,13 @@ export class OnboardingContentComponent extends AbstractEditingComponent impleme
   }
 
   ngOnInit() {
+    console.log(`image`, this.entity);
     this.setImagePreview(this.entity?.image);
     this.setAvailabilityAndClearValueButtonProp();
   }
 
   ngAfterViewInit() {
-    this.onboardingContentImageModal.onClose.subscribe(() => this.onImageModalClosed());
+    // this.onboardingContentImageModal.onClose.subscribe(() => this.onImageModalClosed());
   }
 
   get buttonText(): FormControl { return this.form.get('buttonText') as FormControl; }
@@ -129,6 +129,7 @@ export class OnboardingContentComponent extends AbstractEditingComponent impleme
   get sortPriority(): FormControl { return this.form.get('sortPriority') as FormControl; }
 
   setImagePreview(data: Event | string) {
+    console.log(`data`, data, typeof data);
     super.setImagePreview(data, (dataAsUrl) => {
       this.imagePreviewUrl = dataAsUrl;
     });
@@ -146,15 +147,15 @@ export class OnboardingContentComponent extends AbstractEditingComponent impleme
     }
   }
 
-  onImageModalClosed() {
-    if (this.onboardingContentImageModal.result === DialogResult.OK) {
-      if (!!this.onboardingContentImageModal?.imagePreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
-        this.imagePreviewUrl = this.onboardingContentImageModal.imagePreviewUrl;
-        this.image.setValue(this.onboardingContentImageModal.imagePreviewUrl);
-      }
-      this.getValue();
-    }
-  }
+  // onImageModalClosed() {
+  //   if (this.onboardingContentImageModal.result === DialogResult.OK) {
+  //     if (!!this.onboardingContentImageModal?.imagePreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
+  //       this.imagePreviewUrl = this.onboardingContentImageModal.imagePreviewUrl;
+  //       this.image.setValue(this.onboardingContentImageModal.imagePreviewUrl);
+  //     }
+  //     this.getValue();
+  //   }
+  // }
 
   getValue() {
     return this.form.value;
@@ -163,6 +164,11 @@ export class OnboardingContentComponent extends AbstractEditingComponent impleme
   toggle() {
     this.show = !this.show;
     return this.show;
+  }
+
+  saveImage() {
+    console.log(`imagepreview`, this.imagePreviewUrl, this.image);
+    this.form.value.image = this.imagePreviewUrl;
   }
 
 }

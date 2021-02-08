@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {AfterViewChecked, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import { AbstractDetailComponent, moveItemInFormArray, ToastService } from '@nusantara/core';
 import { drf, IOnBoarding, IOnboardingContent, OnBoardingTypeEnum } from '@nusantara/models';
 import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -71,7 +71,7 @@ import {
     }
   `]
 })
-export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> implements OnInit {
+export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> implements OnInit, AfterViewChecked {
   entity: IOnBoarding;
   typeChoices: drf.IChoice[] = [];
   contentsValue: IOnboardingContent[];
@@ -83,7 +83,8 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> im
               public fb: FormBuilder,
               toast: ToastService,
               route: ActivatedRoute,
-              router: Router) {
+              router: Router,
+              private changeDetector : ChangeDetectorRef ) {
     super(route, router, toast, service);
   }
 
@@ -101,6 +102,10 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> im
     super.ngOnInit();
   }
 
+  ngAfterViewChecked(){
+    this.changeDetector.detectChanges();
+  }
+
   initializeForm(entity?: IOnBoarding) {
     this.entity = entity;
     this.form = this.fb.group({
@@ -110,13 +115,24 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> im
       isActive: [entity?.isActive ?? true, []],
       contents: this.fb.array([], [Validators.required]),
     });
+    for (const content of entity?.contents ?? []) {
+      this.addContent(content);
+    }
   }
 
-  initializeSubViewForms(entity?: IOnBoarding) {
-    for (const content of entity?.contents ?? []) {
-      this.contentHost.addContent(content);
-    }
+  addContent(content?: IOnboardingContent) {
+    const form = this.fb.group({
+      href: [content?.href ?? '', []],
+      image: ['', content?.image ? []: [Validators.required]],
+      name: [content?.name, [Validators.required, Validators.maxLength(50)]],
+      description: [content?.description, [Validators.maxLength(255)]],
+      buttonStatus: [content?.buttonStatus ?? false, []],
+      buttonText: [content?.buttonText ?? '', []],
+      buttonUrl: [content?.buttonUrl ?? '', []],
+      sortPriority: [content?.sortPriority, []],
 
+    });
+    this.contents.push(form);
   }
 
   save() {
@@ -126,6 +142,7 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> im
 
   preview () {
     this.onboardingPreviewHostDialogComponent.startIndex = 0;
+    this.contentHost.getValue();
     this.onboardingPreviewHostDialogComponent.open();
   }
 

@@ -1,7 +1,8 @@
 import {AbstractEditingComponent, DialogResult} from '@nusantara/core';
-import {AbstractControl, FormArray, FormGroup} from '@angular/forms';
+import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AfterViewInit, Component, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
 import {NgxSmartModalComponent} from "ngx-smart-modal";
+import {IOnboardingContent} from "@nusantara/models";
 
 @Component({
   selector: 'nus-onboarding-preview-host-dialog',
@@ -112,16 +113,17 @@ export class OnboardingPreviewHostDialogComponent extends AbstractEditingCompone
   @Input() form: FormArray;
   @ViewChild('modal') modal: NgxSmartModalComponent;
 
-  imagePreviewUrl: string;
   result: DialogResult;
   startIndex = 0;
 
-  constructor() {
+  constructor(public fb: FormBuilder) {
     super();
   }
 
   ngOnInit() {
   }
+
+
 
   ngAfterViewInit(): void {
     this.modal.onOpen.subscribe(() => {
@@ -130,7 +132,25 @@ export class OnboardingPreviewHostDialogComponent extends AbstractEditingCompone
   }
 
   open() {
+    // this.form.controls.map((control) => {
+    //   this._setImagePreview(control.get('image').value, control);
+    // });
     this.modal.open();
+  }
+
+  addContent(content?: IOnboardingContent) {
+    const form = this.fb.group({
+      href: [content?.href ?? '', []],
+      image: [content?.image, content?.image ? []: [Validators.required]],
+      name: [content?.name, [Validators.required, Validators.maxLength(50)]],
+      description: [content?.description, [Validators.maxLength(255)]],
+      buttonStatus: [content?.buttonStatus ?? false, []],
+      buttonText: [content?.buttonText ?? '', []],
+      buttonUrl: [content?.buttonUrl ?? '', []],
+      sortPriority: [content?.sortPriority, []],
+
+    });
+    this.form.push(form);
   }
 
   get onClose(): EventEmitter<any> {
@@ -142,23 +162,24 @@ export class OnboardingPreviewHostDialogComponent extends AbstractEditingCompone
     this.modal.close();
   }
 
-  getContentName(formGroup?: AbstractControl) : string {
-    if (!!formGroup) {
-      return formGroup.get('name').value;
+  getContentName(formControl?: AbstractControl) : string {
+    if (!!formControl) {
+      return formControl.get('name').value;
     }
     return '';
   }
 
-  getContentDescription(formGroup?: AbstractControl) : string {
-    if (!!formGroup) {
-      return formGroup.get('description').value;
+  getContentDescription(formControl?: AbstractControl) : string {
+    if (!!formControl) {
+      return formControl.get('description').value;
     }
     return '';
   }
 
-  getContentImage(formGroup?: AbstractControl) : string {
-    if (!!formGroup) {
-      return formGroup.get('image').value;
+  getContentImage(formControl?: AbstractControl) : string {
+    console.log(`formcontrol`, formControl);
+    if (!!formControl) {
+      return formControl.get('image').value;
     }
     return '';
   }
@@ -169,5 +190,13 @@ export class OnboardingPreviewHostDialogComponent extends AbstractEditingCompone
     }
   }
 
+  // _setImagePreview(data: Event | string, control: AbstractControl) {
+  //   console.log(`data`, data);
+  //   console.log(`control`, control);
+  //   this.setImagePreview(data, (dataAsUrl) => {
+  //     control.get('image').setValue(dataAsUrl);
+  //     console.log(`control`, control.get('image').value);
+  //   });
+  // }
 
 }
