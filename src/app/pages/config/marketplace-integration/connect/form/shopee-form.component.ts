@@ -21,7 +21,7 @@ import { MarketplaceClientEnum } from '../markeplace-client-enum';
   selector: 'nus-shopee-client-form',
   template: `
     <form [formGroup]="form" class="fluid">
-      <label>
+      <label *ngIf="!isEdit">
         <span>Shop ID
           <nus-tooltip [text]="shopIdInfo"></nus-tooltip>
         </span>
@@ -128,6 +128,8 @@ export class ShopeeeClientFormComponent implements OnInit {
   partnerKeyInfo = "To get your Partner Key, go to Shopee Open Platform and create APP console"
   partnerIdInfo = "Partner ID is assigned upon registration is successful. Required for all requests."
 
+  shopIdValue: any;
+
   constructor(
     private service: MarketplaceClientService,
     private fb: FormBuilder,
@@ -163,6 +165,7 @@ export class ShopeeeClientFormComponent implements OnInit {
             shopId: data.shopId,
             warehouseId: data.warehouseId,
           });
+          this.shopIdValue = data.shopId
         }
       });
   }
@@ -219,7 +222,7 @@ export class ShopeeeClientFormComponent implements OnInit {
       partner_id: this.form.value.partnerId,
       partner_key: this.form.value.partnerKey,
       redirect_url: this.form.value.redirectUrl,
-      shop_id: this.form.value.shopId,
+      shop_id: this.shopIdValue,
       warehouse_id: this.form.value.warehouseId,
       split_variant: false,
     };
