@@ -10,7 +10,7 @@ import { catchError } from 'rxjs/operators';
 import { ToastService, AbstractDetailComponent, PagedResponse, getSlugFromHref, NusantaraValidators, ErrorResult } from '@nusantara/core';
 import { ICategory, IVendor, drf, products } from '@nusantara/models';
 import { IError } from '@nusantara/models/base/error';
-import { ProductService } from '@nusantara/services';
+import { ProductService, SiteConfigService } from '@nusantara/services';
 import { PriceListHostComponent } from './price';
 import { ProductMediaHostComponent } from './media';
 import { ProductAttributeHostComponent } from './attribute';
@@ -99,7 +99,13 @@ import { ProductSubscriptonHostComponent } from './subscription';
         *ngIf="originalAttributeValues">
       </nus-product-attribute-host>
 
-      <nus-price-list-host [form]="priceLists"></nus-price-list-host>
+      <label class="single-price" *ngIf="!enterpriseLicense()">
+        <span>Price</span>
+        <input type="number" [formControl]="price" name="price" (change)="setSinglePrice($event)">
+        <nus-field-errors [control]="price"></nus-field-errors>
+      </label>
+
+      <nus-price-list-host [ngClass]="{'hidden' : !enterpriseLicense()}" [form]="priceLists"></nus-price-list-host>
 
       <nus-product-subscription [form]="subscription" *ngIf="isProductOptionDomain"></nus-product-subscription>
 
@@ -125,8 +131,8 @@ import { ProductSubscriptonHostComponent } from './subscription';
         </table>
       </div>
 
-      <h2>Tags</h2>
-      <table>
+      <h2 *ngIf="enterpriseLicense()">Tags</h2>
+      <table *ngIf="enterpriseLicense()">
         <thead>
         <tr><th>Tag</th><th></th></tr>
         </thead>
@@ -205,6 +211,7 @@ import { ProductSubscriptonHostComponent } from './subscription';
   `,
   styles: [
     '.rich-text-container { padding-bottom: 14px; }', // double standard label padding
+    '.single-price { margin-top: 30px; }',
   ]
 })
 export class ProductComponent extends AbstractDetailComponent<products.IProduct> implements OnInit, AfterViewInit {
@@ -283,6 +290,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
               private fb: FormBuilder,
               route: ActivatedRoute,
               toast: ToastService,
+              private configSercvice: SiteConfigService,
               router: Router,
               public modal: NgxSmartModalService) {
     super(route, router, toast, service);
@@ -301,6 +309,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   get related(): FormArray { return this.form.get('related') as FormArray; }
 
   get weight(): FormControl { return this.form.get('weight') as FormControl; }
+
+  get price(): FormControl { return this.form.get('price') as FormControl; }
 
   get parent(): FormControl { return this.form.get('parent') as FormControl; }
   get structure(): FormControl { return this.form.get('structure') as FormControl; }
@@ -352,6 +362,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       structure: [entity?.structure ?? 'parent', [Validators.required, ]],
       description: [entity?.description, [Validators.required, ]],
       weight: [entity?.weight, [Validators.required, ]],
+      price: [0, []],
       productClass: this.fb.group({href: [entity?.productClass.href, [Validators.required]]}),
       category: this.fb.group({href: [entity?.category.href, [Validators.required]]}),
       vendor: this.fb.group({href: [entity?.vendor?.href, [Validators.required]]}),
@@ -405,6 +416,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   initializeSubViewForms(entity?: products.IProduct) {
     for (const priceList of entity?.priceLists ?? []) {
       this.priceListHost.addPriceList(priceList);
+      this.price.setValue(priceList?.ranges[0]?.price);
     }
     // if the product doesn't have a pricelist, we automatically add one.
     if (!entity?.priceLists.length) {
@@ -462,20 +474,20 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
           }
 
           this.mediaHost.saveAll(resp.entity).subscribe(() => { });
-          this.priceListHost.saveAll(resp.entity).pipe(catchError(childErr => {
-            if (childErr instanceof HttpErrorResponse) {
-              return of(new ErrorResult<IError>(childErr.error, childErr.status));
-            } else {
-              return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, childErr.status));
-            }
-          })).subscribe( (childResp) => {
-              if (childResp instanceof ErrorResult) {
-                this.onSaveError(childResp);
+            this.priceListHost.saveAll(resp.entity).pipe(catchError(childErr => {
+              if (childErr instanceof HttpErrorResponse) {
+                return of(new ErrorResult<IError>(childErr.error, childErr.status));
               } else {
-                this.onSaveSuccess(resp);
+                return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, childErr.status));
               }
-            }
-          );
+            })).subscribe( (childResp) => {
+                if (childResp instanceof ErrorResult) {
+                  this.onSaveError(childResp);
+                } else {
+                  this.onSaveSuccess(resp);
+                }
+              }
+            );
         }
       }
     );
@@ -519,4 +531,30 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       this.weight.disable();
     }
   }
+
+  enterpriseLicense() {
+    return this.configSercvice.isEnterpriseLicense();
+  }
+
+  setSinglePrice(event) {
+    for (const priceList of this.entity?.priceLists ?? []) {
+      priceList.ranges[0].price = this.price.value;
+      this.priceListHost.updatePriceList(priceList, 0);
+    }
+
+    if (!this.entity?.priceLists.length) {
+      this.priceListHost.updatePriceList({
+        href: null,
+        product: this.href.value,
+        type: 'default',
+        platforms: [],
+        locations: [],
+        isProgressive: false,
+        ranges: [
+          { href: null, priceList: null, price: this.price.value, minQuantity: 1, maxQuantity: null },
+        ]
+      }, 0);
+    }
+  }
+
 }

@@ -91,7 +91,16 @@ export class PriceListHostComponent extends AbstractEditingComponent<FormArray> 
     }
 
     this.form.push(f);
+    console.log('CC', this.form.length);
+    console.log('CC1', this.form.controls[0].value);
 
+  }
+
+  updatePriceList(entity?: products.IPriceList, index?: number) {
+    this.form.at(index).patchValue(entity);
+    console.log(this.priceLists.changes);
+    const elementTwo = this.priceLists.filter((element, index) => index === 0);
+    console.log(elementTwo);
   }
 
   /**
