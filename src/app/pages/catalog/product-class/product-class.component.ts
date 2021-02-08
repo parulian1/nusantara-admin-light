@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractDetailComponent, ToastService } from '@nusantara/core';
 import { drf, products } from '@nusantara/models';
-import { ProductClassService, ProductAttributeService } from '@nusantara/services';
+import { ProductClassService, ProductAttributeService, SiteConfigService } from '@nusantara/services';
 
 @Component({
   selector: 'nus-product-class',
@@ -56,7 +56,7 @@ import { ProductClassService, ProductAttributeService } from '@nusantara/service
 
       <br/>
 
-      <table>
+      <table *ngIf="isSmeLicense()">
         <tr>
           <td class="immediate-error-display">
             <h2>Product Options</h2>
@@ -91,6 +91,7 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
 
   constructor(service: ProductClassService,
               private attributeService: ProductAttributeService,
+              private configSercvice: SiteConfigService,
               private fb: FormBuilder,
               toast: ToastService,
               route: ActivatedRoute,
@@ -162,5 +163,9 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
       if (value === 'digital') {
         fc.setValue(false);
     }});
+  }
+
+  isSmeLicense() {
+    return !this.configSercvice.isSmeLicense();
   }
 }

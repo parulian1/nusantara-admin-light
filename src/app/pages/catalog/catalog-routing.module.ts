@@ -23,6 +23,7 @@ import { MediaTypeResolver } from './product/media';
 import { PriceListTypeResolver } from './product/price';
 import { ProductOptionListComponent, AllProductOptionResolver, ProductOptionComponent  } from './product-options';
 import { DurationListResolver, LengthListResolver, PacketListResolver } from './product/subscription';
+import { RequireIsEnterpriseGuard } from '@nusantara/auth/guards';
 
 const routes: Routes = [
   {
@@ -190,6 +191,7 @@ const routes: Routes = [
   },
   {
     path: 'product-options',
+    canActivate: [RequireIsEnterpriseGuard],
     children: [
       {
         path: '',
