@@ -50,3 +50,5 @@ import * as order from './order';
 export { base, drf, google, widgets, products, inventory, device, banner, shipment, themes, order };
 
 export * from './reseller';
+
+export * from './license-sme';

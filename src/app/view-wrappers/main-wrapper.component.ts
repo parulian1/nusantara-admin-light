@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '@nusantara/auth';
+import { SiteConfigService } from '@nusantara/services';
 import { slideInAnimation } from '@nusantara/route-animations';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { SubscriptionLike } from 'rxjs';
@@ -39,7 +40,7 @@ import { SubscriptionLike } from 'rxjs';
         </li>
         <li><a [routerLink]="['/catalog/products']" routerLinkActive="active" translate>Products</a></li>
         <li><a [routerLink]="['/catalog/categories']" routerLinkActive="active" translate>Categories</a></li>
-        <li><a [routerLink]="['/catalog/product-options']" routerLinkActive="active" translate>Product Options</a></li>
+        <li *ngIf="isSmeLicense()"><a [routerLink]="['/catalog/product-options']" routerLinkActive="active" translate>Product Options</a></li>
         <li><a [routerLink]="['/catalog/product-classes']" routerLinkActive="active" translate>Product Classes</a></li>
         <li><a [routerLink]="['/catalog/vendors']" routerLinkActive="active" translate>Vendors</a></li>
 
@@ -271,7 +272,7 @@ export class MainWrapperComponent implements OnInit, OnDestroy {
   private routerEventsSub: SubscriptionLike;
   isBusy = false;
 
-  constructor(public authService: AuthService, public router: Router) {
+  constructor(public authService: AuthService, public configSercvice: SiteConfigService, public router: Router) {
 
   }
 
@@ -319,6 +320,10 @@ export class MainWrapperComponent implements OnInit, OnDestroy {
 
   onNavigationEnded() {
     this.isBusy = false;
+  }
+
+  isSmeLicense() {
+    return !this.configSercvice.isSmeLicense();
   }
 
 }
