@@ -19,7 +19,7 @@ import {
   ToastService,
 } from '@nusantara/core';
 
-import { AuthService } from '@nusantara/auth';
+import { AuthService, RequireIsEnterpriseGuard } from '@nusantara/auth';
 import { EmployeeWarehouseHostComponent } from './warehouse';
 import { EmployeeAccessGroupHostComponent } from './access-group';
 import { IJwtClaims } from '@nusantara/auth/models';
@@ -65,7 +65,7 @@ import { IJwtClaims } from '@nusantara/auth/models';
       >
       </nus-employee-warehouse-host>
 
-      <div style="margin-top: 1rem;">
+      <div style="margin-top: 1rem;" *ngIf="enterpriseGuard.canActivate(null, null)">
         <nus-employee-access-group-host
           [entity]="entity"
           [choices]="accessGroupChoices"
@@ -146,7 +146,8 @@ export class EmployeeComponent
     router: Router,
     toast: ToastService,
     private warehouseService: WarehouseService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public enterpriseGuard: RequireIsEnterpriseGuard
   ) {
     super(route, router, toast, service);
   }

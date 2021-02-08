@@ -40,12 +40,7 @@ import { SubscriptionLike } from 'rxjs';
         </li>
         <li><a [routerLink]="['/catalog/products']" routerLinkActive="active" translate>Products</a></li>
         <li><a [routerLink]="['/catalog/categories']" routerLinkActive="active" translate>Categories</a></li>
-<<<<<<< HEAD
-        <li *ngIf="enterpriseLicense()"><a [routerLink]="['/catalog/product-options']" routerLinkActive="active" translate>Product Options</a></li>
-=======
-        <li *ngIf="isSmeLicense()"><a [routerLink]="['/catalog/product-options']" routerLinkActive="active" translate>Product
-          Options</a></li>
->>>>>>> 1b2724bfb389904956417fe3973c28bd3c0687ef
+        <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/catalog/product-options']" routerLinkActive="active" translate>Product Options</a></li>
         <li><a [routerLink]="['/catalog/product-classes']" routerLinkActive="active" translate>Product Classes</a></li>
         <li><a [routerLink]="['/catalog/vendors']" routerLinkActive="active" translate>Vendors</a></li>
 
@@ -66,8 +61,8 @@ import { SubscriptionLike } from 'rxjs';
         </li>
         <li><a [routerLink]="['/promotion/promos']" routerLinkActive="active" translate>Promos</a></li>
         <li><a [routerLink]="['/promotion/vouchers']" routerLinkActive="active" translate>Vouchers</a></li>
-        <li><a [routerLink]="['/promotion/points']" routerLinkActive="active" translate>Points</a></li>
-        <li><a [routerLink]="['/promotion/gift-voucher']" routerLinkActive="active" translate>Gift Vouchers</a></li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/promotion/points']" routerLinkActive="active" translate>Points</a></li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/promotion/gift-voucher']" routerLinkActive="active" translate>Gift Vouchers</a></li>
 
         <li class="section-header">
           <i class="material-icons">edit</i>
@@ -94,7 +89,7 @@ import { SubscriptionLike } from 'rxjs';
           <span>Customers and Users</span>
         </li>
         <li><a [routerLink]="['/users/customer']" routerLinkActive="active" translate>Customers</a></li>
-        <li><a [routerLink]="['/users/customer-groups']" routerLinkActive="active" translate>Customer Groups</a></li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/users/customer-groups']" routerLinkActive="active" translate>Customer Groups</a></li>
         <li><a [routerLink]="['/users/employee']" routerLinkActive="active" translate>Employees</a></li>
 
         <li class="icon-button" translate>
@@ -356,10 +351,6 @@ export class MainWrapperComponent implements OnInit, OnDestroy {
 
   onNavigationEnded() {
     this.isBusy = false;
-  }
-
-  enterpriseLicense() {
-    return this.configSercvice.isEnterpriseLicense();
   }
 
 }

@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService, UserService } from '@nusantara/services';
 import { AbstractDetailComponent, PagedResponse, ToastService } from '@nusantara/core';
 import { ICustomer, ICustomerGroup, IOrder } from '@nusantara/models';
+import { RequireIsEnterpriseGuard } from '@nusantara/auth';
 
 /**
  * Displays basic information about a customer, their profile, purchase history,
@@ -66,7 +67,7 @@ import { ICustomer, ICustomerGroup, IOrder } from '@nusantara/models';
           Orders
         </label>
 
-        <label [ngClass]="{'active': currentTab === 'groups'}">
+        <label [ngClass]="{'active': currentTab === 'groups'}" *ngIf="enterpriseGuard.canActivate(null, null)">
           <i class="material-icons">group_work</i>
           <input type="radio" id="tab_profile" value="groups" formControlName="currentTab">
           Groups
@@ -248,7 +249,8 @@ export class CustomerDetailComponent extends AbstractDetailComponent<ICustomer> 
               router: Router,
               toast: ToastService,
               private fb: FormBuilder,
-              private orderService: OrderService) {
+              private orderService: OrderService,
+              public enterpriseGuard: RequireIsEnterpriseGuard) {
     super(route, router, toast, service);
   }
 

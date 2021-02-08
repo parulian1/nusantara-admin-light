@@ -3,8 +3,9 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractDetailComponent, ToastService } from '@nusantara/core';
-import { banner, drf, widgets } from '@nusantara/models';
+import { banner, BannerTypeSmeClient, drf, widgets } from '@nusantara/models';
 import { BannerService } from '@nusantara/services';
+import { enumToArray } from '@nusantara/shared/helpers';
 
 @Component({
   selector: 'nus-banner',
@@ -144,6 +145,7 @@ export class BannerComponent extends AbstractDetailComponent<banner.IBanner> imp
     this.route.data.subscribe((data: {typeChoices: drf.IChoice[]}) => {
       this.typeChoices = data.typeChoices;
     });
+    this.smeLicenseBannerType();
   }
 
   initializeForm(entity?: banner.IBanner) {
@@ -224,5 +226,10 @@ export class BannerComponent extends AbstractDetailComponent<banner.IBanner> imp
     }
     super.save();
   }
+
+  smeLicenseBannerType() {
+    this.typeChoices = this.typeChoices.filter(opt => enumToArray(BannerTypeSmeClient).includes(opt.value));
+  }
+
 }
 

@@ -6,3 +6,12 @@ export enum LicenseTypeChoices {
 export enum ProductTypeSmeClient {
   'physical'
 }
+
+export enum PaymentTypeSmeClient {
+  'credit_card', 'bank_transfer', 'manual_transfer'
+}
+
+export enum BannerTypeSmeClient {
+  'utama', 'promo'
+}
+
