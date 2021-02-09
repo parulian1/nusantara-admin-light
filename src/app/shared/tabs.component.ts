@@ -13,7 +13,7 @@ import {
 import { TabComponent } from './tab.component';
 
 @Component({
-  selector: 'nus-tabs',
+  selector: 'nus-tabs-mp',
   template: `
     <div class="tab">
       <div

@@ -7,7 +7,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'nus-tab',
+  selector: 'nus-tab-mp',
   template: `
     <div [hidden]="!active" class="pane">
       <ng-content></ng-content>

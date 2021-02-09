@@ -621,7 +621,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     if (!newValue || !this.productClasses) { return; }
     const pc = this.productClasses.filter(e => e.href === newValue)[0];
     this.selectedProductClass =  pc;
-  
+
     if (pc.type === 'physical') {
       this.weight.enable();
       Object.keys(this.dimensions.controls).forEach(key => {
