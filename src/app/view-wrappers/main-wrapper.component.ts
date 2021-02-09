@@ -92,7 +92,7 @@ import { SubscriptionLike } from 'rxjs';
         <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/users/customer-groups']" routerLinkActive="active" translate>Customer Groups</a></li>
         <li><a [routerLink]="['/users/employee']" routerLinkActive="active" translate>Employees</a></li>
 
-        <li class="icon-button" translate>
+        <li *ngIf="enterpriseGuard.canActivate(null, null)" class="icon-button" translate>
           <a href="https://reports.bhisma.cloud" target="_blank">
             <i class="material-icons">assessment</i>Reports
           </a>
