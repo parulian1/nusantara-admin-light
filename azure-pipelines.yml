@@ -63,8 +63,8 @@ jobs:
       - task: SonarSource.sonarcloud.ce096e50-6155-4de8-8800-4221aaeed4a1.SonarCloudAnalyze@1
       - task: SonarSource.sonarcloud.38b27399-a642-40af-bb7d-9971f69712e8.SonarCloudPublish@1
 
-  - job: build_job
-    displayName: Angular Build
+  - job: production
+    displayName: Angular Build (Production)
     steps:
       - task: NodeTool@0
         displayName: Use Node 12.x
@@ -101,11 +101,11 @@ jobs:
           archiveType: tar
           tarCompression: bz2
 
-      - task: PublishBuildArtifacts@1
-        displayName: Publish Artifact
-        inputs:
-          PathtoPublish: '$(System.DefaultWorkingDirectory)/artifact.tar.bz2'
-          ArtifactName: dist
+      # - task: PublishBuildArtifacts@1
+      #   displayName: Publish Artifact
+      #   inputs:
+      #     PathtoPublish: '$(System.DefaultWorkingDirectory)/artifact.tar.bz2'
+      #     ArtifactName: dist
 
       - task: PublishPipelineArtifact@1
         displayName: 'Publish Pipeline Artifact'
@@ -113,8 +113,30 @@ jobs:
           targetPath: artifact.tar.bz2
           artifact: production
           publishLocation: pipeline
+    
+  # Staging Build
+  - job: staging
+    displayName: Angular Build (Production)
+    steps:
+      - task: NodeTool@0
+        displayName: Use Node 12.x
+        inputs:
+          versionSpec: 12.x
+      - task: 1ESLighthouseEng.PipelineArtifactCaching.RestoreAndSaveCacheV1.RestoreAndSaveCache@1
+        displayName: Restore and save cache from Azure Artifact
+        inputs:
+          keyfile: '**/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json'
+          targetfolder: '**/node_modules, !**/node_modules/**/node_modules'
+          vstsFeed: '$(NpmCacheFeed)'
+          platformIndependent: true
+          alias: nusantara-admin
 
-    # Staging Build
+      - task: Npm@1
+        displayName: Install App Dependencies
+        inputs:
+          verbose: false
+        condition: ne(variables['CacheRestored-nusantara-admin'], 'true')
+        
       - task: Npm@1
         displayName: Build & Packaging (Staging)
         inputs:
@@ -131,11 +153,11 @@ jobs:
           archiveType: tar
           tarCompression: bz2
 
-      - task: PublishBuildArtifacts@1
-        displayName: Publish Artifact
-        inputs:
-          PathtoPublish: '$(System.DefaultWorkingDirectory)/artifact.tar.bz2'
-          ArtifactName: dist
+      # - task: PublishBuildArtifacts@1
+      #   displayName: Publish Artifact
+      #   inputs:
+      #     PathtoPublish: '$(System.DefaultWorkingDirectory)/artifact.tar.bz2'
+      #     ArtifactName: dist
 
       - task: PublishPipelineArtifact@1
         displayName: 'Publish Pipeline Artifact'
