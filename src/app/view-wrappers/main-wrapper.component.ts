@@ -119,10 +119,11 @@ import { SubscriptionLike } from 'rxjs';
         <router-outlet #o="outlet"></router-outlet>
       </div>
 
-      <footer class="main-footer">
-        <nus-copyright-notice></nus-copyright-notice>
-      </footer>
     </div>
+    
+    <footer class="main-footer">
+      <nus-copyright-notice></nus-copyright-notice>
+    </footer>
   `,
   styles: [
     `
@@ -181,7 +182,7 @@ import { SubscriptionLike } from 'rxjs';
     }
 
     nav {
-      grid-row: 2;
+      grid-row: 2/4;
       grid-column: 1;
       background: var(--nav-background);
       color: white;
@@ -195,7 +196,15 @@ import { SubscriptionLike } from 'rxjs';
       grid-column: 2;
       grid-row: 2;
       margin: 5px;
-    }`,
+    }
+    
+    footer {
+      grid-row: 3;
+      grid-column: 2/3;
+      align-self: flex-end;
+      margin-bottom: 10px;
+    }
+    `,
     `
       /*
        * Sidebar Nav
@@ -271,7 +280,6 @@ import { SubscriptionLike } from 'rxjs';
         }
 
       }
-      footer { margin-top: 45px; width: 80%; bottom: 0;position: absolute;}
     `],
   animations: [ slideInAnimation, ],
 })
