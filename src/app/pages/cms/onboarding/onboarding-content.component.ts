@@ -151,8 +151,4 @@ export class OnboardingContentComponent extends AbstractEditingComponent impleme
     return this.show;
   }
 
-  saveImage() {
-    this.form.value.image = this.imagePreviewUrl;
-  }
-
 }

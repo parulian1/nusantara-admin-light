@@ -153,7 +153,7 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> im
   }
 
   preview () {
-    this.onboardingPreviewHostDialogComponent.startIndex = 0;
+    this.onboardingPreviewHostDialogComponent.position = 0;
     this.contentHost.getValue();
     this.onboardingPreviewHostDialogComponent.form = this.contents;
     this.onboardingPreviewHostDialogComponent.open();

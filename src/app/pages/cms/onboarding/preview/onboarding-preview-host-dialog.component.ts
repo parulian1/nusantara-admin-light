@@ -9,30 +9,34 @@ import {IOnboardingContent} from "@nusantara/models";
   template: `
     <ngx-smart-modal [customClass]="'content-container'" [identifier]="'onboardingPreviewHostDialogModal'" #modal
                      *ngIf="!!form">
-        <div class="background-header">
-        </div>
-        <div class="body">
-          <div class="content">
-            <div class="content-img">
-              <img [src]="getContentImage(form.controls[startIndex])" alt="Image Preview">
-            </div>
-            <div class="content-value">
-              <h1>
-                  {{ getContentName(form.controls[startIndex]) }}
-              </h1>
-              <label>
-                {{ getContentDescription(form.controls[startIndex] )}}
-              </label>
-            </div>
-            <div class="slider">
-              <input type="radio" name="slider-radio" *ngFor="let formControl of form.controls; let i=index"
-                     [value]="i" [checked]="i === startIndex" [disabled]="true">
-            </div>
-            <div class="action-button">
-              <button (click)="next()" type="button" class="control secondary">Selanjutnya</button>
-            </div>
+      <div class="background-header">
+      </div>
+      <div class="body">
+        <div class="content">
+          <div class="content-img">
+            <img [src]="getContentImage(form.controls[position])" alt="Image Preview">
+          </div>
+          <div class="content-value">
+            <h1>
+              {{ getContentName(form.controls[position]) }}
+            </h1>
+            <label>
+              {{ getContentDescription(form.controls[position])}}
+            </label>
+          </div>
+          <div class="slider">
+            <input type="radio" name="slider-radio" *ngFor="let formControl of form.controls; let i=index"
+                   [value]="i" [checked]="i === position" [disabled]="true">
+          </div>
+          <div class="action-button">
+            <button type="button" class="button-action" *ngIf="getContentButtonStatus(form.controls[position])"
+                    (click)="executeButtonAction(form.controls[position])">
+              {{ getContentButtonText(form.controls[position]) }}
+            </button>
+            <button (click)="next()" type="button" class="button-next">Selanjutnya</button>
           </div>
         </div>
+      </div>
       <div class="content-content">
 
       </div>
@@ -105,6 +109,19 @@ import {IOnboardingContent} from "@nusantara/models";
       box-shadow: none;
     }
 
+    .button-action {
+      width: 208px;
+      height: 47px;
+      background: #F0BE00;
+      border-radius: 40px;
+    }
+
+    .button-next {
+      width: 208px;
+      height: 47px;
+      background: #00AEEF;
+      border-radius: 40px;
+    }
   `]
 })
 export class OnboardingPreviewHostDialogComponent extends AbstractEditingComponent<FormArray> implements OnInit,
@@ -116,7 +133,7 @@ export class OnboardingPreviewHostDialogComponent extends AbstractEditingCompone
   imagePreviewUrl: string;
 
   result: DialogResult;
-  startIndex = 0;
+  position = 0;
 
   constructor(public fb: FormBuilder) {
     super();
@@ -161,14 +178,14 @@ export class OnboardingPreviewHostDialogComponent extends AbstractEditingCompone
 
   getContentName(formControl?: AbstractControl) : string {
     if (!!formControl) {
-      return formControl.get('name').value;
+      return formControl.value.name;
     }
     return '';
   }
 
   getContentDescription(formControl?: AbstractControl) : string {
     if (!!formControl) {
-      return formControl.get('description').value;
+      return formControl.value.description;
     }
     return '';
   }
@@ -180,9 +197,28 @@ export class OnboardingPreviewHostDialogComponent extends AbstractEditingCompone
     return this.imagePreviewUrl;
   }
 
+  getContentButtonStatus(formControl?: AbstractControl) : boolean {
+    if (!!formControl && !!formControl.value.buttonStatus) {
+      return true;
+    }
+    return false;
+  }
+
+  getContentButtonText(formControl?: AbstractControl) : string {
+    if (!!formControl && !!formControl.get('buttonText')) {
+      return formControl.value.buttonText;
+    }
+  }
+
+  executeButtonAction(formControl?: AbstractControl) {
+    if (!!formControl && !!formControl.get('buttonStatus')) {
+      window.open(formControl.value.buttonUrl, '_blank');
+    }
+  }
+
   next() {
-    if (this.startIndex < (this.form.controls.length - 1)) {
-      this.startIndex += 1;
+    if (this.position < (this.form.controls.length - 1)) {
+      this.position += 1;
     }
   }
 
