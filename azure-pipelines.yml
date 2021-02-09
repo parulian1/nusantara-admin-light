@@ -14,6 +14,7 @@ jobs:
         displayName: Use Node 12.x
         inputs:
           versionSpec: 12.x
+
       - task: Npm@1
         displayName: npm install
         inputs:
@@ -30,18 +31,12 @@ jobs:
             npm run ng -- test
             export TEST_EXIT_CODE=$?
             test $TEST_EXIT_CODE -eq 0 || exit 1
+
       - task: PublishTestResults@2
         displayName: Publish test report to Azure DevOps
         inputs:
           testRunTitle: node
-        
-  - job: sonar_cloud_job
-    displayName: SonarCloud Analysis
-    steps:
-      - task: NodeTool@0
-        displayName: Use Node 12.x
-        inputs:
-          versionSpec: 12.x
+  
       - task: 1ESLighthouseEng.PipelineArtifactCaching.RestoreAndSaveCacheV1.RestoreAndSaveCache@1
         displayName: Restore and save cache from Azure Artifact
         inputs:
@@ -50,10 +45,7 @@ jobs:
           vstsFeed: '$(NpmCacheFeed)'
           platformIndependent: true
           alias: nusantara-admin
-      - task: Npm@1
-        displayName: Install App Dependencies
-        inputs:
-          verbose: false
+
       - task: SonarSource.sonarcloud.14d9cde6-c1da-4d55-aa01-2965cd301255.SonarCloudPrepare@1
         displayName: Prepare analysis on SonarCloud
         inputs:
