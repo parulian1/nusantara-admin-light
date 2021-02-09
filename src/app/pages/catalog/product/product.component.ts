@@ -1,3 +1,4 @@
+import { StockInputComponent } from './stock-input/stock-input.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Validators, FormBuilder, FormArray, FormControl, FormGroup } from '@angular/forms';
@@ -195,8 +196,12 @@ import { ProductSubscriptonHostComponent } from './subscription';
         <nus-field-errors [control]="seoDescription"></nus-field-errors>
       </label>
 
-      <ng-container *ngIf="!!entity">
+      <ng-container *ngIf="!!entity && enterpriseLicense()">
         <nus-stock-search [productHref]="entity?.href" ></nus-stock-search>
+      </ng-container>
+
+      <ng-container>
+        <nus-stock-input [ngClass]="{'hidden' : enterpriseLicense()}" [productHref]="entity?.href" ></nus-stock-input>
       </ng-container>
 
       <nus-detail-actions
@@ -285,6 +290,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   @ViewChild(PriceListHostComponent) priceListHost!: PriceListHostComponent;
   @ViewChild(ProductAttributeHostComponent) attributeHost!: ProductAttributeHostComponent;
   @ViewChild(ProductSubscriptonHostComponent) subscriptionHost!: ProductSubscriptonHostComponent;
+  @ViewChild(StockInputComponent) stockInput!: StockInputComponent;
 
   constructor(service: ProductService,
               private fb: FormBuilder,
@@ -473,21 +479,25 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
             this.subscriptionHost.save(resp.entity).subscribe(() => { });
           }
 
+          if (!this.enterpriseLicense()) {
+            this.stockInput.save(resp.entity).subscribe(() => { });
+          }
+
           this.mediaHost.saveAll(resp.entity).subscribe(() => { });
-            this.priceListHost.saveAll(resp.entity).pipe(catchError(childErr => {
-              if (childErr instanceof HttpErrorResponse) {
-                return of(new ErrorResult<IError>(childErr.error, childErr.status));
+          this.priceListHost.saveAll(resp.entity).pipe(catchError(childErr => {
+            if (childErr instanceof HttpErrorResponse) {
+              return of(new ErrorResult<IError>(childErr.error, childErr.status));
+            } else {
+              return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, childErr.status));
+            }
+          })).subscribe( (childResp) => {
+              if (childResp instanceof ErrorResult) {
+                this.onSaveError(childResp);
               } else {
-                return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, childErr.status));
+                this.onSaveSuccess(resp);
               }
-            })).subscribe( (childResp) => {
-                if (childResp instanceof ErrorResult) {
-                  this.onSaveError(childResp);
-                } else {
-                  this.onSaveSuccess(resp);
-                }
-              }
-            );
+            }
+          );
         }
       }
     );

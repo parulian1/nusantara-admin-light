@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+import * as config from '@nusantara/pages/config';
 import { CategoryComponent, CategoryListComponent, AllCategoryResolver } from './category';
 import { ProductClassListComponent, ProductClassComponent, AllProductClassResolver } from './product-class';
 import { ProductListComponent, ProductComponent, ProductListResolver, ProductResolver, ParentProductResolver  } from './product';
@@ -77,6 +78,7 @@ const routes: Routes = [
           subscriptionPacket: PacketListResolver,
           subscriptionDuration: DurationListResolver,
           subscriptionLength: LengthListResolver,
+          warehouses: config.warehouse.AllWarehouseResolver,
         },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },
@@ -94,6 +96,7 @@ const routes: Routes = [
           subscriptionPacket: PacketListResolver,
           subscriptionDuration: DurationListResolver,
           subscriptionLength: LengthListResolver,
+          warehouses: config.warehouse.AllWarehouseResolver,
         },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },
