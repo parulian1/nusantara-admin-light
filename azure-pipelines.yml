@@ -27,7 +27,7 @@ jobs:
           script: |
             npm run env -s
             npm run lint -s
-            npm run ng -- test --configuration=ci
+            npm run ng -- test
             export TEST_EXIT_CODE=$?
             test $TEST_EXIT_CODE -eq 0 || exit 1
       - task: PublishTestResults@2
@@ -83,14 +83,15 @@ jobs:
         inputs:
           verbose: false
         condition: ne(variables['CacheRestored-nusantara-admin'], 'true')
+
+    # Production Build
       - task: Npm@1
         displayName: Build Angular
         inputs:
           command: custom
           verbose: false
-          customCommand: run ng -- build --prod
-      - script: |
-          ls -lah
+          customCommand: run ng -- build --prod --configuration=production
+    
       - task: ArchiveFiles@2
         displayName: Archive dist folder as Artifact
         inputs:
@@ -99,8 +100,46 @@ jobs:
           archiveFile: '$(System.DefaultWorkingDirectory)/artifact.tar.bz2'
           archiveType: tar
           tarCompression: bz2
+
       - task: PublishBuildArtifacts@1
         displayName: Publish Artifact
         inputs:
           PathtoPublish: '$(System.DefaultWorkingDirectory)/artifact.tar.bz2'
           ArtifactName: dist
+
+      - task: PublishPipelineArtifact@1
+        displayName: 'Publish Pipeline Artifact'
+        inputs:
+          targetPath: artifact.tar.bz2
+          artifact: production
+          publishLocation: pipeline
+
+    # Staging Build
+      - task: Npm@1
+        displayName: Build Angular
+        inputs:
+          command: custom
+          verbose: false
+          customCommand: run ng -- build --prod --configuration=staging
+    
+      - task: ArchiveFiles@2
+        displayName: Archive dist folder as Artifact
+        inputs:
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist' 
+          includeRootFolder: true
+          archiveFile: '$(System.DefaultWorkingDirectory)/artifact.tar.bz2'
+          archiveType: tar
+          tarCompression: bz2
+
+      - task: PublishBuildArtifacts@1
+        displayName: Publish Artifact
+        inputs:
+          PathtoPublish: '$(System.DefaultWorkingDirectory)/artifact.tar.bz2'
+          ArtifactName: dist
+
+      - task: PublishPipelineArtifact@1
+        displayName: 'Publish Pipeline Artifact'
+        inputs:
+          targetPath: artifact.tar.bz2
+          artifact: staging
+          publishLocation: pipeline
