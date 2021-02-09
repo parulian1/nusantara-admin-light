@@ -7,7 +7,7 @@ export const environment = {
   production: false,
   // apiBaseUrl: 'https://staging.bhisma.cloud',
 
-  apiBaseUrl: 'https://dev-marketplace.bhisma.cloud',
+  apiBaseUrl: '/api',
   googleApiKey: 'AIzaSyB7m0r7paaV5I5U6vjf0pDmocvD8-K-D-w',
   appVersion: version,
   elasticAPM: {
