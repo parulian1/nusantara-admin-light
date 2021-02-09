@@ -56,7 +56,7 @@ jobs:
       - task: SonarSource.sonarcloud.38b27399-a642-40af-bb7d-9971f69712e8.SonarCloudPublish@1
 
   - job: production
-    displayName: Angular Build (Production)
+    displayName: Angular Build
     steps:
       - task: NodeTool@0
         displayName: Use Node 12.x
@@ -70,6 +70,7 @@ jobs:
           vstsFeed: '$(NpmCacheFeed)'
           platformIndependent: true
           alias: nusantara-admin
+
       - task: Npm@1
         displayName: Install App Dependencies
         inputs:
@@ -85,7 +86,7 @@ jobs:
           customCommand: run ng -- build --configuration=production
     
       - task: ArchiveFiles@2
-        displayName: Archive dist folder as Artifact
+        displayName: Archive dist (Production)
         inputs:
           rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist' 
           includeRootFolder: true
@@ -93,42 +94,13 @@ jobs:
           archiveType: tar
           tarCompression: bz2
 
-      # - task: PublishBuildArtifacts@1
-      #   displayName: Publish Artifact
-      #   inputs:
-      #     PathtoPublish: '$(System.DefaultWorkingDirectory)/artifact.tar.bz2'
-      #     ArtifactName: dist
-
       - task: PublishPipelineArtifact@1
-        displayName: 'Publish Pipeline Artifact'
+        displayName: 'Publish Pipeline (Production)'
         inputs:
           targetPath: artifact.tar.bz2
           artifact: production
           publishLocation: pipeline
-    
-  # Staging Build
-  - job: staging
-    displayName: Angular Build (Production)
-    steps:
-      - task: NodeTool@0
-        displayName: Use Node 12.x
-        inputs:
-          versionSpec: 12.x
-      - task: 1ESLighthouseEng.PipelineArtifactCaching.RestoreAndSaveCacheV1.RestoreAndSaveCache@1
-        displayName: Restore and save cache from Azure Artifact
-        inputs:
-          keyfile: '**/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json'
-          targetfolder: '**/node_modules, !**/node_modules/**/node_modules'
-          vstsFeed: '$(NpmCacheFeed)'
-          platformIndependent: true
-          alias: nusantara-admin
-
-      - task: Npm@1
-        displayName: Install App Dependencies
-        inputs:
-          verbose: false
-        condition: ne(variables['CacheRestored-nusantara-admin'], 'true')
-        
+            
       - task: Npm@1
         displayName: Build & Packaging (Staging)
         inputs:
@@ -137,7 +109,7 @@ jobs:
           customCommand: run ng build
     
       - task: ArchiveFiles@2
-        displayName: Archive dist folder as Artifact
+        displayName: Archive dist (Staging)
         inputs:
           rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist' 
           includeRootFolder: true
@@ -145,14 +117,8 @@ jobs:
           archiveType: tar
           tarCompression: bz2
 
-      # - task: PublishBuildArtifacts@1
-      #   displayName: Publish Artifact
-      #   inputs:
-      #     PathtoPublish: '$(System.DefaultWorkingDirectory)/artifact.tar.bz2'
-      #     ArtifactName: dist
-
       - task: PublishPipelineArtifact@1
-        displayName: 'Publish Pipeline Artifact'
+        displayName: 'Publish Pipeline (Staging)'
         inputs:
           targetPath: artifact.tar.bz2
           artifact: staging
