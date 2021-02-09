@@ -120,7 +120,7 @@ jobs:
         inputs:
           command: custom
           verbose: false
-          customCommand: run ng -- build --prod --configuration=staging
+          customCommand: run ng build
     
       - task: ArchiveFiles@2
         displayName: Archive dist folder as Artifact
