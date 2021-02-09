@@ -56,7 +56,7 @@ jobs:
       - task: SonarSource.sonarcloud.38b27399-a642-40af-bb7d-9971f69712e8.SonarCloudPublish@1
 
   - job: production
-    displayName: Angular Build (Production)
+    displayName: Production
     steps:
       - task: NodeTool@0
         displayName: Use Node 12.x
@@ -102,7 +102,7 @@ jobs:
     
   # Staging Build
   - job: staging
-    displayName: Angular Build (Production)
+    displayName: Staging
     steps:
       - task: NodeTool@0
         displayName: Use Node 12.x
