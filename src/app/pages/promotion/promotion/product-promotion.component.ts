@@ -666,6 +666,11 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
       this.form.removeControl('products');
     }
 
+    if (this.type.value !== 'promo_bundling') {
+      this.form.removeControl('productBundlingBenefit');
+      this.form.removeControl('productBundlingCondition');
+    }
+
     super.save();
   }
 
