@@ -86,7 +86,7 @@ jobs:
 
     # Production Build
       - task: Npm@1
-        displayName: Build Angular
+        displayName: Build & Packaging (Production)
         inputs:
           command: custom
           verbose: false
@@ -116,7 +116,7 @@ jobs:
 
     # Staging Build
       - task: Npm@1
-        displayName: Build Angular
+        displayName: Build & Packaging (Staging)
         inputs:
           command: custom
           verbose: false
