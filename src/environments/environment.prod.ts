@@ -2,7 +2,7 @@ import { version } from '../../package.json';
 
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://staging.bhisma.cloud',
+  apiBaseUrl: '/api',
   googleApiKey: 'AIzaSyB7m0r7paaV5I5U6vjf0pDmocvD8-K-D-w',
   appVersion: version,
   elasticAPM: {
