@@ -111,7 +111,7 @@ import {IOnboardingContent} from "@nusantara/models";
 
     .button-action {
       width: 208px;
-      height: 47px;
+      padding: 20px;
       background: #F0BE00;
       border-radius: 40px;
     }

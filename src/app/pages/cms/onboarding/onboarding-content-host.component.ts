@@ -46,11 +46,11 @@ export class OnboardingContentHostComponent extends AbstractEditingComponent<For
     const form = this.fb.group({
       href: [content?.href ?? '', []],
       image: ['', content?.image ? []: [Validators.required]],
-      name: [content?.name, [Validators.required, Validators.maxLength(50)]],
+      name: [content?.name, [Validators.required, Validators.maxLength(100)]],
       description: [content?.description, [Validators.maxLength(255)]],
       buttonStatus: [content?.buttonStatus ?? false, []],
-      buttonText: [content?.buttonText ?? '', []],
-      buttonUrl: [content?.buttonUrl ?? '', []],
+      buttonText: [content?.buttonText ?? '', [Validators.maxLength(100)]],
+      buttonUrl: [content?.buttonUrl ?? '', [Validators.maxLength(160)]],
       sortPriority: [content?.sortPriority, []],
 
     });

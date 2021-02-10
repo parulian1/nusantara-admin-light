@@ -48,27 +48,31 @@ import {
         <button (click)="preview()" type="button" class="preview-btn" [disabled]="!contents.length">
           <i class="material-icons">visibility</i>Preview
         </button>
-        <nus-detail-actions
-          [component]="this"
-          (cancel)="navigateToParent(true)"
-          (delete)="delete()" [hideDelete]="true">
-        </nus-detail-actions>
-
+        <button type="button" (click)="navigateToParent(true)" class="control secondary">
+          Cancel
+        </button>
+        <button type="submit" [disabled]="!form.valid" class="control">
+            Save
+        </button>
       </div>
 
     </form>
 
   `,
   styles: [`
-    .preview-btn {
-      color: #E7E7E7;
-      border: none;
-      background: none;
-    }
-    .action-button {
-      display: flex;
-      justify-content: flex-end;
-    }
+      .preview-btn {
+        color: #E7E7E7;
+        border: none;
+        background: none;
+      }
+      .action-button {
+        display: flex;
+        justify-content: flex-end;
+      }
+      .action-button button {
+        margin-left: 24px;
+        width: 212px;
+      }
   `]
 })
 export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> implements OnInit, AfterViewChecked {
@@ -109,7 +113,7 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> im
   initializeForm(entity?: IOnBoarding) {
     this.entity = entity;
     this.form = this.fb.group({
-      name: [entity?.name, [Validators.required]],
+      name: [entity?.name, [Validators.required, Validators.maxLength(50)]],
       href: [entity?.href, []],
       type: [entity?.type ?? OnBoardingTypeEnum.reseller, [Validators.required]],
       isActive: [entity?.isActive ?? true, []],
@@ -124,11 +128,11 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> im
     const form = this.fb.group({
       href: [content?.href ?? '', []],
       image: ['', content?.image ? []: [Validators.required]],
-      name: [content?.name, [Validators.required, Validators.maxLength(50)]],
+      name: [content?.name, [Validators.required, Validators.maxLength(100)]],
       description: [content?.description, [Validators.maxLength(255)]],
       buttonStatus: [content?.buttonStatus ?? false, []],
-      buttonText: [content?.buttonText ?? '', []],
-      buttonUrl: [content?.buttonUrl ?? '', []],
+      buttonText: [content?.buttonText ?? '', [Validators.maxLength(100)]],
+      buttonUrl: [content?.buttonUrl ?? '', [Validators.maxLength(160)]],
       sortPriority: [content?.sortPriority, []],
 
     });
