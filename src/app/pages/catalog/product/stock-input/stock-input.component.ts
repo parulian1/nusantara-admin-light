@@ -19,10 +19,10 @@ import { ActivatedRoute, Router } from '@angular/router';
       </tr>
       <tr>
         <td data-qa="quantity">
-          <input type="number" min="1" [ngClass]="{'disabled': !warehouses}" [attr.disabled]="!warehouses ? '' : null" [formControl]="originalQuantity" data-qa="original-quantity">
+          <input type="number" min="1" [ngClass]="{'disabled': warehouses.length < 1}" [attr.disabled]="warehouses.length < 1 ? '' : null" [formControl]="originalQuantity" data-qa="original-quantity">
         </td>
       </tr>
-      <tr *ngIf="!warehouses">
+      <tr *ngIf="warehouses.length < 1">
           <td>
             <small>To input quantity, add warehouse first</small>
           </td>
@@ -59,7 +59,7 @@ export class StockInputComponent extends AbstractEditingComponent implements OnI
   ngOnInit(): void {
     this.route.data.subscribe((data: { warehouses: IWarehouse[]}) => {
       this.warehouses = data.warehouses;
-      if (this.warehouses)
+      if (this.warehouses.length > 0)
         this.availableSubLocations = this.warehouses[0].subLocations;
     });
 
@@ -120,7 +120,7 @@ export class StockInputComponent extends AbstractEditingComponent implements OnI
    */
   save(product: IProduct): Observable<IResultResponse[]> {
     let stock = this.originalQuantity.value - this.currentQuantity;
-    if (this.warehouse && stock > 0) {
+    if (this.warehouses.length > 0 && stock > 0) {
       // Update stock receiving
       this.originalQuantity.setValue(stock);
 
