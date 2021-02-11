@@ -8,7 +8,14 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { ToastService, AbstractDetailComponent, PagedResponse, getSlugFromHref, NusantaraValidators, ErrorResult } from '@nusantara/core';
+import {
+  ToastService,
+  AbstractDetailComponent,
+  PagedResponse,
+  getSlugFromHref,
+  NusantaraValidators,
+  ErrorResult
+} from '@nusantara/core';
 import { ICategory, IVendor, drf, products } from '@nusantara/models';
 import { IError } from '@nusantara/models/base/error';
 import { ProductService, SiteConfigService } from '@nusantara/services';
@@ -126,7 +133,9 @@ import { ProductSubscriptonHostComponent } from './subscription';
             <td><a [routerLink]="['variants', v.href|entityToSlug]">{{ v.name }}</a></td>
           </tr>
           <tr>
-            <td><button [disabled]="isNew" (click)="addVariant()" type="button" class="add-button">Add Variant</button></td>
+            <td>
+              <button [disabled]="isNew" (click)="addVariant()" type="button" class="add-button">Add Variant</button>
+            </td>
           </tr>
           </tbody>
         </table>
@@ -135,7 +144,10 @@ import { ProductSubscriptonHostComponent } from './subscription';
       <h2 *ngIf="enterpriseLicense()">Tags</h2>
       <table *ngIf="enterpriseLicense()">
         <thead>
-        <tr><th>Tag</th><th></th></tr>
+        <tr>
+          <th>Tag</th>
+          <th></th>
+        </tr>
         </thead>
         <tbody>
         <tr *ngFor="let t of tags.controls; let i = index">
@@ -151,7 +163,9 @@ import { ProductSubscriptonHostComponent } from './subscription';
           </td>
         </tr>
         <tr>
-          <td colspan="2"><button (click)="addTag()" type="button" class="add-button">Add Tag</button></td>
+          <td colspan="2">
+            <button (click)="addTag()" type="button" class="add-button">Add Tag</button>
+          </td>
         </tr>
         </tbody>
       </table>
@@ -197,11 +211,11 @@ import { ProductSubscriptonHostComponent } from './subscription';
       </label>
 
       <ng-container *ngIf="!!entity && enterpriseLicense()">
-        <nus-stock-search [productHref]="entity?.href" ></nus-stock-search>
+        <nus-stock-search [productHref]="entity?.href"></nus-stock-search>
       </ng-container>
 
       <ng-container>
-        <nus-stock-input [ngClass]="{'hidden' : enterpriseLicense()}" [productHref]="entity?.href" ></nus-stock-input>
+        <nus-stock-input [ngClass]="{'hidden' : enterpriseLicense()}" [productHref]="entity?.href"></nus-stock-input>
       </ng-container>
 
       <nus-detail-actions
@@ -216,7 +230,7 @@ import { ProductSubscriptonHostComponent } from './subscription';
   `,
   styles: [
     '.rich-text-container { padding-bottom: 14px; }', // double standard label padding
-    '.single-price { margin-top: 30px; }',
+    '.single-price { margin-top: 30px; }'
   ]
 })
 export class ProductComponent extends AbstractDetailComponent<products.IProduct> implements OnInit, AfterViewInit {
@@ -228,7 +242,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   mediaTypes: Array<drf.IChoice>;
   parentProduct: products.IProduct;
   variants: Array<products.IVariantSummary> = [];
-  originalAttributeValues: {[key: string]: string|number|boolean};
+  originalAttributeValues: { [key: string]: string | number | boolean };
   entity: products.IProduct;
 
   Editor = ClassicEditor;
@@ -302,33 +316,87 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     super(route, router, toast, service);
   }
 
-  get name(): FormControl { return this.form.get('name') as FormControl; }
-  get isActive(): FormControl { return this.form.get('isActive') as FormControl; }
-  get upc(): FormControl { return this.form.get('upc') as FormControl; }
-  get productClass(): FormControl { return this.form.get('productClass').get('href') as FormControl; }
-  get category(): FormControl { return this.form.get('category').get('href') as FormControl; }
-  get vendor(): FormControl { return this.form.get('vendor').get('href') as FormControl; }
-  get description(): FormControl { return this.form.get('description') as FormControl; }
-  get media(): FormArray { return this.form.get('media') as FormArray; }
-  get priceLists(): FormArray { return this.form.get('priceLists') as FormArray; }
-  get attributes(): FormGroup { return this.form.get('attributes') as FormGroup; }
-  get related(): FormArray { return this.form.get('related') as FormArray; }
+  get name(): FormControl {
+    return this.form.get('name') as FormControl;
+  }
 
-  get weight(): FormControl { return this.form.get('weight') as FormControl; }
+  get isActive(): FormControl {
+    return this.form.get('isActive') as FormControl;
+  }
 
-  get price(): FormControl { return this.form.get('price') as FormControl; }
+  get upc(): FormControl {
+    return this.form.get('upc') as FormControl;
+  }
 
-  get parent(): FormControl { return this.form.get('parent') as FormControl; }
-  get structure(): FormControl { return this.form.get('structure') as FormControl; }
+  get productClass(): FormControl {
+    return this.form.get('productClass').get('href') as FormControl;
+  }
 
-  get tags(): FormArray { return this.form.get('tags') as FormArray; }
-  get seoMeta(): FormControl { return this.form.get('seoMeta') as FormControl; }
-  get seoDescription(): FormControl { return this.form.get('seoDescription') as FormControl; }
+  get category(): FormControl {
+    return this.form.get('category').get('href') as FormControl;
+  }
 
-  get subscription(): FormControl { return this.form.get('subscription') as FormControl; }
+  get vendor(): FormControl {
+    return this.form.get('vendor').get('href') as FormControl;
+  }
+
+  get description(): FormControl {
+    return this.form.get('description') as FormControl;
+  }
+
+  get media(): FormArray {
+    return this.form.get('media') as FormArray;
+  }
+
+  get priceLists(): FormArray {
+    return this.form.get('priceLists') as FormArray;
+  }
+
+  get attributes(): FormGroup {
+    return this.form.get('attributes') as FormGroup;
+  }
+
+  get related(): FormArray {
+    return this.form.get('related') as FormArray;
+  }
+
+  get weight(): FormControl {
+    return this.form.get('weight') as FormControl;
+  }
+
+  get price(): FormControl {
+    return this.form.get('price') as FormControl;
+  }
+
+  get parent(): FormControl {
+    return this.form.get('parent') as FormControl;
+  }
+
+  get structure(): FormControl {
+    return this.form.get('structure') as FormControl;
+  }
+
+  get tags(): FormArray {
+    return this.form.get('tags') as FormArray;
+  }
+
+  get seoMeta(): FormControl {
+    return this.form.get('seoMeta') as FormControl;
+  }
+
+  get seoDescription(): FormControl {
+    return this.form.get('seoDescription') as FormControl;
+  }
+
+  get subscription(): FormControl {
+    return this.form.get('subscription') as FormControl;
+  }
 
   get isProductOptionDomain(): boolean {
-    const pc = this.productClasses.filter(e => e.href === (this.form.get('productClass').get('href') as FormControl)?.value)[0];
+    let pc;
+    if (this.productClasses) {
+      pc = this.productClasses.filter(e => e.href === (this.form.get('productClass').get('href') as FormControl)?.value)[0];
+    }
     if (pc && (pc.type === 'subscription' && pc.option)) {
       return true;
     }
@@ -337,10 +405,12 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   ngOnInit(): void {
     this.route.data.subscribe((
-      data: { entity: products.IProduct, categories: ICategory[], parent: products.IProduct, vendors: PagedResponse<IVendor>,
-        productClasses: products.IProductClass[], mediaTypes: drf.IChoice[]}) => {
+      data: {
+        entity: products.IProduct, categories: ICategory[], parent: products.IProduct, vendors: PagedResponse<IVendor>,
+        productClasses: products.IProductClass[], mediaTypes: drf.IChoice[]
+      }) => {
       this.parentProduct = data.parent;
-      this.vendors = data.vendors.entities;
+      this.vendors = data.vendors?.entities;
       this.categories = data.categories;
       this.productClasses = data.productClasses;
       this.mediaTypes = data.mediaTypes;
@@ -360,14 +430,14 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   initializeForm(entity?: products.IProduct) {
 
     this.form = this.fb.group({
-      name: [entity?.name, [Validators.required, Validators.maxLength(120), ]],
+      name: [entity?.name, [Validators.required, Validators.maxLength(120)]],
       isActive: [entity?.isActive, []],
-      parent: [entity?.parent ],
+      parent: [entity?.parent],
       href: [entity?.href],
-      upc: [entity?.upc, [Validators.required, ]],
-      structure: [entity?.structure ?? 'parent', [Validators.required, ]],
-      description: [entity?.description, [Validators.required, ]],
-      weight: [entity?.weight, [Validators.required, ]],
+      upc: [entity?.upc, [Validators.required]],
+      structure: [entity?.structure ?? 'parent', [Validators.required]],
+      description: [entity?.description, [Validators.required]],
+      weight: [entity?.weight, [Validators.required]],
       price: [0, []],
       productClass: this.fb.group({href: [entity?.productClass.href, [Validators.required]]}),
       category: this.fb.group({href: [entity?.category.href, [Validators.required]]}),
@@ -378,8 +448,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       related: this.fb.array([]),
       seoMeta: [entity?.seoMeta, []],
       seoDescription: [entity?.seoDescription, []],
-      tags: this.fb.array([], [NusantaraValidators.preventArrayDuplicates(), ]),
-      subscription: this.fb.group({}, []),
+      tags: this.fb.array([], [NusantaraValidators.preventArrayDuplicates()]),
+      subscription: this.fb.group({}, [])
     });
 
     // new product variant
@@ -405,7 +475,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
           name: [relatedProduct.name],
           href: [relatedProduct.href],
           image: [relatedProduct.image],
-          vendor: [relatedProduct.vendor],
+          vendor: [relatedProduct.vendor]
         })
       );
     }
@@ -416,17 +486,17 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
     // listen for any changes to this so we can disable weight when appropriate
     this.productClass.valueChanges.subscribe(val => this.onProductClassChanged(val));
-    this.onProductClassChanged(this.productClass.value?.href ?? this.productClass.value );
+    this.onProductClassChanged(this.productClass.value?.href ?? this.productClass.value);
   }
 
   initializeSubViewForms(entity?: products.IProduct) {
     for (const priceList of entity?.priceLists ?? []) {
-      this.priceListHost.addPriceList(priceList);
+      this.priceListHost?.addPriceList(priceList);
       this.price.setValue(priceList?.ranges[0]?.price);
     }
     // if the product doesn't have a pricelist, we automatically add one.
     if (!entity?.priceLists.length) {
-      this.priceListHost.addPriceList({
+      this.priceListHost?.addPriceList({
         href: null,
         product: this.href.value,
         type: 'default',
@@ -434,7 +504,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         locations: [],
         isProgressive: false,
         ranges: [
-          { href: null, priceList: null, price: null, minQuantity: 1, maxQuantity: null },
+          {href: null, priceList: null, price: null, minQuantity: 1, maxQuantity: null}
         ]
       });
     }
@@ -476,21 +546,24 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
           this.onSaveError(resp);
         } else {
           if (this.isProductOptionDomain) {
-            this.subscriptionHost.save(resp.entity).subscribe(() => { });
+            this.subscriptionHost.save(resp.entity).subscribe(() => {
+            });
           }
 
           if (!this.enterpriseLicense()) {
-            this.stockInput.save(resp.entity).subscribe(() => { });
+            this.stockInput.save(resp.entity).subscribe(() => {
+            });
           }
 
-          this.mediaHost.saveAll(resp.entity).subscribe(() => { });
+          this.mediaHost.saveAll(resp.entity).subscribe(() => {
+          });
           this.priceListHost.saveAll(resp.entity).pipe(catchError(childErr => {
             if (childErr instanceof HttpErrorResponse) {
               return of(new ErrorResult<IError>(childErr.error, childErr.status));
             } else {
               return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, childErr.status));
             }
-          })).subscribe( (childResp) => {
+          })).subscribe((childResp) => {
               if (childResp instanceof ErrorResult) {
                 this.onSaveError(childResp);
               } else {
@@ -511,7 +584,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   addTag(value?: string) {
     this.tags.push(
-      this.fb.control(value, [Validators.required, ])
+      this.fb.control(value, [Validators.required])
     );
   }
 
@@ -532,7 +605,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
    */
   onProductClassChanged(newValue: any) {
     // protect against triggering during initialization
-    if (!newValue || !this.productClasses) { return; }
+    if (!newValue || !this.productClasses) {
+      return;
+    }
 
     const pc = this.productClasses.filter(e => e.href === newValue)[0];
     if (pc.type === 'physical') {
@@ -561,7 +636,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         locations: [],
         isProgressive: false,
         ranges: [
-          { href: null, priceList: null, price: this.price.value, minQuantity: 1, maxQuantity: null },
+          {href: null, priceList: null, price: this.price.value, minQuantity: 1, maxQuantity: null}
         ]
       }, 0);
     }
