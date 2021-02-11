@@ -20,14 +20,14 @@ import {IAuthSocial} from '../../../models/auth-social';
       <tr>
         <th>Auth Type</th>
         <th>App Key</th>
-        <th>Is Active</th>
+        <th class="centered">Is Active</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let entity of page.entities">
         <td><a [routerLink]="[entity|entityToSlug]">{{ entity.authType }}</a></td>
         <td>{{ entity.appKey }}</td>
-        <td><nus-true-false [value]="entity.isActive"></nus-true-false></td>
+        <td class="centered"><nus-true-false [value]="entity.isActive"></nus-true-false></td>
       </tr>
       </tbody>
     </table>

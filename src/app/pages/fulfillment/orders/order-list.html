@@ -20,20 +20,20 @@
   <tr>
     <th>Order Number</th>
     <th>Customer</th>
-    <th>Shipments</th>
+    <th class="numeric">Shipments</th>
     <th>Status</th>
-    <th>Total</th>
-    <th>Created</th>
+    <th class="numeric">Total</th>
+    <th class="numeric">Created</th>
   </tr>
   </thead>
   <tbody>
   <tr *ngFor="let entity of page.entities">
     <td><a [routerLink]="[entity|entityToSlug]">{{ entity.orderNumber }}</a></td>
     <td><a [routerLink]="['/users/customer/', entity.customer.href|entityToSlug]">{{ entity.customer.name ? entity.customer.name : entity.customer.email }}</a></td>
-    <td>{{ entity.children.length }}</td>
+    <td class="numeric">{{ entity.children.length }}</td>
     <td>{{ entity.status }}</td>
-    <td>{{ (entity.orderPayment?.amount || 0)|currency:"IDR" }}</td>
-    <td>{{ entity.created | date }}</td>
+    <td class="numeric">{{ (entity.orderPayment?.amount || 0)|currency:"IDR" }}</td>
+    <td class="numeric">{{ entity.created | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
   </tr>
   </tbody>
 </table>

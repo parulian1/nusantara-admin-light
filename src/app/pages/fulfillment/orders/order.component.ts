@@ -123,6 +123,13 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
             success: response.success,
             connoteNumber: response.entity.airwayBillNumber,
           };
+          if (!childrenData.shipmentHistory) {
+            childrenData.shipmentHistory = new Object({
+              'awbNumber': null,
+              'href': null,
+              'shippingLabelUrl': '',
+            });
+          }
           childrenData.shipmentHistory.href = response.entity.href;
           childrenData.shipmentHistory.awbNumber = response.entity.awbNumber;
           this.fetchAwbUrl(childrenData);
@@ -157,9 +164,12 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
     if (!selectedOrderDetail) {
       this.orderDetailData.children.forEach((children) => {
         children.data.forEach((childrenData) => {
-          this.shipmentService.fetch(getSlugFromHref(childrenData.shipmentHistory.href)).subscribe((entity) => {
-            childrenData.shipmentHistory.shippingLabelUrl = entity.shippingLabelUrl;
-          });
+          if (childrenData.shipmentHistory?.href) {
+            this.shipmentService.fetch(getSlugFromHref(childrenData.shipmentHistory?.href)).subscribe((entity) => {
+              childrenData.shipmentHistory.shippingLabelUrl = entity.shippingLabelUrl;
+            });
+          }
+
         });
       });
     } else {

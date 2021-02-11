@@ -34,15 +34,15 @@ import { enumToArray } from '@nusantara/shared/helpers';
         </select>
       </label>
 
-      <label [ngClass]="{'hidden': isDigitalProduct}" class="without-field-errors">
+      <label [ngClass]="{'hidden': isDigitalProduct}" class="without-field-errors checkbox">
         <input type="checkbox" [formControl]="requiresShipping" name="requiresShipping">
         Requires Shipping?
       </label>
-      <label [ngClass]="{'hidden': isDigitalProduct}" class="without-field-errors">
+      <label [ngClass]="{'hidden': isDigitalProduct}" class="without-field-errors checkbox">
         <input type="checkbox" [formControl]="trackStock" name="trackStock">
         Track Stock?
       </label>
-      <label [ngClass]="{'hidden': isDigitalProduct}" class="without-field-errors">
+      <label [ngClass]="{'hidden': isDigitalProduct}" class="without-field-errors checkbox">
         <input type="checkbox" [formControl]="isPerishable" name="isPerishable">
         Is Perishable?
       </label>
@@ -141,6 +141,11 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
       attributes: this.fb.array([]),
       option: this.fb.group({href: [entity?.option?.href, []]}),
     });
+
+    // need to mark as touched to make custom styling works
+    this.form.controls.requiresShipping.markAsTouched();
+    this.form.controls.trackStock.markAsTouched();
+    this.form.controls.isPerishable.markAsTouched();
 
     // users cannot change 'type' of product class once it has been created.
     if (!this.isNew) {

@@ -11,5 +11,6 @@ import * as attribute from './attribute';
 import * as price from './price';
 import * as media from './media';
 import * as subscription from './subscription';
+import * as marketplace from './marketplace';
 
-export { media, price, attribute, subscription };
+export { media, price, attribute, subscription, marketplace };

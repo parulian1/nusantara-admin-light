@@ -11,21 +11,19 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
 @Component({
   selector: 'nus-points',
   template: `
-    <h2>Points</h2>
+    <h1 class="title-1">Points</h1>
     <form [formGroup]="form" (ngSubmit)="save()">
       <nus-tabs>
         <nus-tab [title]="'Configuration'">
           <div class="points-config">
+ 
+            <label>
+              <span>Points Name</span>
+              <input type="text" [formControl]="name" maxlength="50" placeholder="Points Name">
+              <nus-field-errors [control]="name"></nus-field-errors>
+            </label>
 
-            <div class="points-name">
-              <label>
-                <span>Points Name</span>
-                <input type="text" [formControl]="name" maxlength="50" placeholder="Points Name">
-                <nus-field-errors [control]="name"></nus-field-errors>
-              </label>
-            </div>
-
-            <span class="subtitle">Transaction Value</span>
+            <span class="subheading-2">Transaction Value</span>
 
             <div class="transaction-points">
               <label>
@@ -43,7 +41,7 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
               </label>
             </div>
 
-            <span class="subtitle">Rounding off transaction value to points</span>
+            <span class="subheading-2">Rounding off transaction value to points</span>
 
             <div class="transaction-rounding">
               <label [ngClass]="{'active': rounding === 'up'}">
@@ -77,87 +75,84 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
               </ul>
             </div>
 
-            <span class="subtitle">Earning Points Platform</span>
-
-            <div class="points-platform">
-              <label>
+            <div class="earning-points">
+              <span class="subheading-2">Earning Points Platform</span>
+              <label class="checkbox">
                 <input type="checkbox" [formControl]="appliedOnOnline" name="appliedOnOnline">
                 <span>Online</span>
               </label>
 
-              <label>
+              <label class="checkbox">
                 <input type="checkbox" [formControl]="appliedOnOffline" name="appliedOnOffline">
                 <span>Offline</span>
               </label>
 
-              <label>
+              <label class="checkbox">
                 <input type="checkbox" [formControl]="appliedOnApps" name="appliedOnApps">
                 <span>Apps</span>
               </label>
             </div>
 
-            <span class="subtitle">Points Expire</span>
-
             <div class="points-expire">
-              <label [ngClass]="{'active': expireType === 'never'}">
+              <span class="subheading-2">Points Expire</span>
+              <label [ngClass]="{'active': expireType === 'never'}" class="radio">
                 <input type="radio" id="tab_never" value="never" formControlName="expireType">
                 Never
               </label>
-
-              <label [ngClass]="{'active': expireType === 'after_earning'}">
+              <label [ngClass]="{'active': expireType === 'after_earning'}" class="radio">
                 <input type="radio" id="tab_after_earning" value="after_earning" formControlName="expireType">
                 After earning
                 <input type="number" class="expire-at" [formControl]="expireAt"
-                       [hidden]="expireType !== 'after_earning'"
-                       placeholder="x Days">
-                <span class="subtitle" [hidden]="expireType !== 'after_earning'">Days</span>
+                        [hidden]="expireType !== 'after_earning'"
+                        placeholder="x Days">
+                <span class="subheading-2" [hidden]="expireType !== 'after_earning'">Days</span>
               </label>
 
-              <label [ngClass]="{'active': expireType === 'customer_not_active'}">
+              <label [ngClass]="{'active': expireType === 'customer_not_active'}" class="radio">
                 <input type="radio" id="tab_customer_not_active" value="customer_not_active"
-                       formControlName="expireType">
+                        formControlName="expireType">
                 If customer not active
                 <input type="number" class="expire-at" [formControl]="expireAt"
-                       [hidden]="expireType !== 'customer_not_active'" placeholder=" x Days">
-                <span class="subtitle" [hidden]="expireType !== 'customer_not_active'">Days</span>
+                        [hidden]="expireType !== 'customer_not_active'" placeholder=" x Days">
+                <span class="subheading-2" [hidden]="expireType !== 'customer_not_active'">Days</span>
               </label>
 
-              <label [ngClass]="{'active': expireType === 'every_year'}">
+              <label [ngClass]="{'active': expireType === 'every_year'}" class="radio">
                 <input type="radio" id="tab_every_year" value="every_year" formControlName="expireType">
                 Every year on
                 <input type="text" mask="d0-m0" [dropSpecialCharacters]="false" class="expire-at" [formControl]="expireAt"
-                       [hidden]="expireType !== 'every_year'" placeholder="dd-mm">
+                        [hidden]="expireType !== 'every_year'" placeholder="dd-mm">
               </label>
             </div>
-
-
           </div>
         </nus-tab>
         <nus-tab [title]="'Products'">
-          <span class="subtitle">Products that can be exchanged for points</span>
-          <table class="product-table">
-            <thead>
-            <tr>
-              <th>Product</th>
-              <th>Points</th>
-              <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <nus-product-points
-              *ngFor="let control of products.controls; let i=index"
-              [form]="control"
-              (remove)="removeProduct(i)"
-            ></nus-product-points>
-            <tr>
-              <td>
-                <button type="button" (click)="selectProduct()" class="add-button">
-                  Add Product
-                </button>
-              </td>
-            </tr>
-            </tbody>
-          </table>
+          <div class="product-table">
+            <p class="subheading-2">Products that can be exchanged for points</p>
+            <table>
+              <thead>
+              <tr>
+                <th>Product</th>
+                <th>Points</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              <nus-product-points
+                *ngFor="let control of products.controls; let i=index"
+                [form]="control"
+                (remove)="removeProduct(i)"
+              ></nus-product-points>
+              <tr>
+                <td colspan="3">
+                  <button type="button" (click)="selectProduct()" class="new-add-button wide">
+                    <i class="material-icons">add</i> Add Product
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
         </nus-tab>
       </nus-tabs>
       <nus-detail-actions
@@ -171,52 +166,28 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
     </form>
   `,
   styles: [`
-    /* Chrome, Safari, Edge, Opera */
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
+    .points-config, .product-table {
+      margin-top: 20px;
+    }
+    .checkbox, .radio {
+      padding: 10px 0;
+      min-height: auto;
     }
 
-    /* Firefox */
-    input[type=number] {
-      -moz-appearance: textfield;
+    .radio {
+      height: 60px;
     }
 
-    ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-      color: #E7E7E7;
-      opacity: 1; /* Firefox */
+    .product-table > p {
+      margin-bottom: 5px;
     }
 
-    :-ms-input-placeholder { /* Internet Explorer 10-11 */
-      color: #E7E7E7;
+    .earning-points {
+      margin-bottom: 16px;
     }
 
-    ::-ms-input-placeholder { /* Microsoft Edge */
-      color: #E7E7E7;
-    }
-
-    .points-name > label > span {
-      font-size: 14px;
-      font-weight: bold;
-      line-height: 20px;
-    }
-
-    label > input {
-      border-radius: 8px;
-      font-family: Lato, sans-serif;
-      font-size: 14px;
-      line-height: 22px;
-      margin: 12px 0;
-      min-height: 48px;
-    }
-
-    .transaction-points {
-      align-items: center;
-      display: flex;
-    }
-
-    .transaction-points > label {
+    .transaction-points, .transaction-points > label, 
+    .transaction-rounding, .transaction-rounding > label {
       align-items: center;
       display: flex;
     }
@@ -235,11 +206,6 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
       margin: 0 7px;
     }
 
-    .transaction-rounding {
-      display: flex;
-      align-items: center;
-    }
-
     .transaction-rounding > label:first-child {
       margin-right: 30px;
     }
@@ -249,8 +215,6 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
     }
 
     .transaction-rounding > label {
-      align-items: center;
-      display: flex;
       cursor: pointer;
     }
 
@@ -265,6 +229,7 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
       font-size: 12px;
       font-weight: 300;
       line-height: 20px;
+      margin-bottom: 20px;
     }
 
     .rounding-description > ul {
@@ -282,21 +247,6 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
       margin-right: 12px;
     }
 
-    .points-platform > label {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      min-height: auto;
-      height: 48px;
-      width: fit-content;
-    }
-
-    .points-platform > label > input {
-      margin-right: 12px;
-      width: 16px;
-      height: 16px;
-    }
-
     .points-expire {
       display: flex;
       align-items: flex-start;
@@ -312,33 +262,19 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
     }
 
     .points-expire > label > input {
-      height: 18px;
       margin-right: 11px;
       min-height: auto;
-      width: 18px;
     }
 
     .points-expire > label > input.expire-at {
-      height: 48px;
-      margin-right: 11px;
-      min-height: auto;
       width: 200px;
-      border-radius: 8px;
-    }
-
-    .subtitle {
-      font-size: 14px;
-      font-weight: bold;
-      margin-top: 16px;
-      line-height: 20px;
-      color: #485368;
     }
 
     .rp-text {
-      background-color: #F4F4F4;
-      border: 1px solid #E7E7E7;
+      background-color: var(--darken-white);
+      border: 1px solid var(--lighten-grey);
       border-radius: 8px;
-      color: #282828;
+      color: var(--lighten-black);
       display: flex;
       font-size: 14px;
       font-weight: 400;
@@ -349,13 +285,6 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
       width: 30px;
     }
 
-    table.product-table {
-      margin-top: 12px;
-    }
-
-    table.product-table > tbody > tr > td > button {
-      cursor: pointer;
-    }
   `]
 })
 export class PointsComponent extends AbstractDetailComponent<IPoints> implements OnInit, AfterViewInit {
@@ -444,6 +373,14 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
     entity?.products.forEach((value) => {
       this.addProduct(value);
     });
+
+
+    // need to mark as touched to make custom styling works
+    this.form.controls.rounding.markAsTouched();
+    this.form.controls.appliedOnOnline.markAsTouched();
+    this.form.controls.appliedOnOffline.markAsTouched();
+    this.form.controls.appliedOnApps.markAsTouched();
+    this.form.controls.expireType.markAsTouched();
   }
 
   selectProduct() {

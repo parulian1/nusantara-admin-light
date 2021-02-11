@@ -52,9 +52,9 @@ import { NewProductYoutubeComponent } from './new-product-youtube.component';
 
       nus-product-media {
         height: 160px;
+        width: 160px;
         box-shadow: 0 0 8px -1px var(--shadow-color);
         margin: 0 5px 5px 0;
-        width: 32%;
       }
     `,
   ]

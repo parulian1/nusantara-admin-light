@@ -62,7 +62,7 @@ import {ActivatedRoute, Router} from '@angular/router';
         </select>
       </label>
 
-      <label>
+      <label class="checkbox">
         <span>Is Active</span>
         <input type="checkbox" [formControl]="isActive">
         <nus-field-errors [control]="isActive"></nus-field-errors>
@@ -78,7 +78,7 @@ import {ActivatedRoute, Router} from '@angular/router';
                              [children]="children">
     </nus-navigation-children>
   `,
-  styles: [``]
+  styles: []
 })
 export class NavigationComponent extends AbstractDetailComponent<INavigation> implements OnInit {
   flatPages: IFlatPage[] = [];
@@ -133,9 +133,12 @@ export class NavigationComponent extends AbstractDetailComponent<INavigation> im
       // displayUrl: [entity?.displayUrl],
       position: [entity?.position, [Validators.required]],
       relativeTo: [entity?.relativeTo],
-      isActive: [entity?.isActive, [Validators.required]],
+      isActive: [entity?.isActive ?? true, [Validators.required]],
       page: [entity?.page],
     });
+
+    // need to mark as touched to make custom styling works
+    this.form.controls.isActive.markAsTouched();
   }
 
   protected onDeleteSuccess() {

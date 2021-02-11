@@ -15,7 +15,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
 @Component({
   selector: 'nus-customer-detail',
   template: `
-    <h1>Customer Details</h1>
+    <h1 class="title-1">Customer Details</h1>
 
     <ul class="non-field-errors">
       <li *ngFor="let err of nonFieldErrors">{{ err }}</li>
@@ -135,7 +135,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
           <tbody>
             <tr *ngFor="let order of orders">
               <td>{{ order.orderNumber }}</td>
-              <td>{{ order.created | date }}</td>
+              <td>{{ order.created | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
               <td>-</td>
               <td>{{ order.type }}</td>
               <td>{{ order.status }}</td>

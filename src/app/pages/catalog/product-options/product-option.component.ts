@@ -36,7 +36,7 @@ import { ProductOptionService } from '@nusantara/services';
         <nus-field-errors [control]="type"></nus-field-errors>
       </label>
 
-      <label>
+      <label class="checkbox">
         <span>Is Active</span>
         <input type="checkbox" formControlName="isActive">
         <nus-field-errors [control]="isActive"></nus-field-errors>
@@ -123,6 +123,9 @@ export class ProductOptionComponent extends AbstractDetailComponent<products.IPr
       webhookPostCheckout: [entity?.webhookPostCheckout ?? '', []],
       isActive: [entity?.isActive ?? false, []],
     });
+
+    // need to mark as touched to make custom styling works
+    this.form.controls.isActive.markAsTouched();
 
     if (!this.isNew) {
       this.type.disable();

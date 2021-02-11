@@ -15,15 +15,24 @@ import { FieldErrorsComponent } from './field-errors.component';
 import { NonFieldErrorsComponent } from './non-field-errors.component';
 import { SpinnerComponent } from './spinner.component';
 import { ProductSelectionModalComponent } from '@nusantara/shared/product-selection-modal.component';
+
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { PaginationChildComponent } from '@nusantara/shared/pagination-child.component';
 import { UserSelectionModalComponent } from '@nusantara/shared/user-selection-modal.component';
 import { CustomerGroupModalComponent } from '@nusantara/shared/customer-group-modal.component';
 import { IncludeDeletedComponent } from './filters/include-deleted.component';
 import { IncludeInactiveComponent } from './filters/include-inactive.component';
-import { NusTabsComponent } from './nus-tabs/nus-tabs.component';
-import { NusTabComponent } from './nus-tabs/nus-tab.component';
+import { NusTabsComponent, NusTabComponent } from './nus-tabs';
 
+import { FieldErrorsMarketplaceComponent } from '@nusantara/shared/field-errors-marketplace.component';
+import { ConfirmModalComponent } from './confirm-modal.component';
+import { TooltipComponent } from './tooltip.component';
+import { EmptyListCOmponent } from './empty-list.component';
+import { MarketplaceStockInfoModalComponent } from './marketplace-stock-info-modal.component';
+import { MarketplaceShippingInfoModalComponent } from './marketplace-shipping-info-modal.component';
+import { MarketplaceChannelInfoModalComponent } from './marketplace-channel-info-modal.component';
+import { ConfirmModalReceivingOrderComponent } from './confirm-modal-receiving-order.component';
+import { ConfirmModalPendingOrderComponent } from './confirm-modal-pending-order.component';
 
 /**
  * The purpose of this module is to make common code (like pipes)
@@ -50,6 +59,15 @@ import { NusTabComponent } from './nus-tabs/nus-tab.component';
     IncludeInactiveComponent,
     NusTabsComponent,
     NusTabComponent,
+    FieldErrorsMarketplaceComponent,
+    ConfirmModalComponent,
+    TooltipComponent,
+    EmptyListCOmponent,
+    MarketplaceShippingInfoModalComponent,
+    ConfirmModalReceivingOrderComponent,
+    ConfirmModalPendingOrderComponent,
+    MarketplaceChannelInfoModalComponent,
+    MarketplaceStockInfoModalComponent
   ],
   exports: [
     EntityToSlugPipe,
@@ -70,7 +88,16 @@ import { NusTabComponent } from './nus-tabs/nus-tab.component';
     CustomerGroupModalComponent,
     IncludeInactiveComponent,
     NusTabsComponent,
-    NusTabComponent
+    NusTabComponent,
+    FieldErrorsMarketplaceComponent,
+    ConfirmModalComponent,
+    TooltipComponent,
+    EmptyListCOmponent,
+    MarketplaceShippingInfoModalComponent,
+    ConfirmModalReceivingOrderComponent,
+    ConfirmModalPendingOrderComponent,
+    MarketplaceChannelInfoModalComponent,
+    MarketplaceStockInfoModalComponent
   ],
   imports: [
     CommonModule,
@@ -80,6 +107,5 @@ import { NusTabComponent } from './nus-tabs/nus-tab.component';
     ReactiveFormsModule,
     FormsModule,
   ],
-
 })
-export class SharedModule { }
+export class SharedModule {}

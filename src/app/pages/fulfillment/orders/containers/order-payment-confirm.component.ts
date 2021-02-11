@@ -59,7 +59,7 @@ import { takeUntil } from 'rxjs/operators';
               >&nbsp;
               <button
                 type="button"
-                class="control danger"
+                class="control ghost"
                 (click)="onDelete(paymentConfirm)"
                 [disabled]="!canDoCRUD()"
               >

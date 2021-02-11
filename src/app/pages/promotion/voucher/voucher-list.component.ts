@@ -31,9 +31,6 @@ import { AbstractListComponent } from '@nusantara/core';
     </table>
     <nus-pagination [page]="page"></nus-pagination>
   `,
-  styles: [`.filtering {
-    display: flex;
-  }` ]
 })
 export class VoucherListComponent extends AbstractListComponent<IVoucher> {
   constructor(route: ActivatedRoute) { super(route); }

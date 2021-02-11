@@ -65,3 +65,13 @@ export * from './site-config.service';
 export * from './auth-social.service';
 
 export * from './social-media.service';
+
+export * from './marketplace-client.service';
+export * from './marketplace-shop.service';
+export * from './marketplace-product-class.service';
+export * from './marketplace-catalog.service';
+export * from './marketplace-receiving-order.service';
+export * from './marketplace-receiving-products.service';
+export * from './marketplace-item.service';
+
+export * from './local-storage.service';

@@ -35,7 +35,7 @@ import { GoogleService } from '@nusantara/services';
   styles: [
     ':host { position: relative; text-align: center; }',
     'button { position: absolute; right: 0; top: 0; border: 0; background: transparent; opacity: .3; }',
-    'button:hover, button:focus { color: var(--danger-color); transition: all .3s; opacity: 1; }',
+    'button:hover, button:focus { color: var(--error); transition: all .3s; opacity: 1; }',
     'img { height: 120px; width: 120px; object-fit: contain; }',
     '.video-title { font-size: .7em; }',
   ]

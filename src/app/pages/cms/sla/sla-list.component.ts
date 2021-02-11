@@ -21,16 +21,16 @@ import { ISla } from '@nusantara/models';
         <tr>
           <th>Title</th>
           <th>Description</th>
-          <th>Sort Priority</th>
-          <th>Is Active</th>
+          <th class="numeric">Sort Priority</th>
+          <th class="centered">Is Active</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let entity of page.entities">
           <td><a [routerLink]="[entity|entityToSlug]">{{ entity.title }}</a></td>
           <td>{{ entity.description }}</td>
-          <td>{{ entity.sortPriority }}</td>
-          <td><nus-true-false [value]="entity.isActive"></nus-true-false></td>
+          <td class="numeric">{{ entity.sortPriority }}</td>
+          <td class="centered"><nus-true-false [value]="entity.isActive"></nus-true-false></td>
         </tr>
       </tbody>
     </table>

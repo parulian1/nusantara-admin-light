@@ -22,7 +22,7 @@ import { widgets } from '@nusantara/models';
           <th>Name</th>
           <th>Vendor/Product</th>
           <th>Reviewer Name</th>
-          <th>Is Active</th>
+          <th class="centered">Is Active</th>
         </tr>
       </thead>
       <tbody>
@@ -30,7 +30,7 @@ import { widgets } from '@nusantara/models';
         <td><a [routerLink]="[entity|entityToSlug]">{{ entity.name }}</a></td>
         <td>{{ entity.vendor?.name || entity.product?.name }}</td>
         <td>{{ entity.reviewerName }}</td>
-        <td><nus-true-false [value]="entity.isActive"></nus-true-false></td>
+        <td class="centered"><nus-true-false [value]="entity.isActive"></nus-true-false></td>
       </tr>
       </tbody>
     </table>

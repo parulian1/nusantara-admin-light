@@ -19,32 +19,23 @@ import { PriceListComponent } from './price-list.component';
 @Component({
   selector: 'nus-price-list-host',
   template: `
-    <h2>Price Lists</h2>
+    <h4 class="subheading-2">Price List</h4>
 
-    <table>
-      <thead>
-      <tr>
-        <th>Type/Name</th>
-        <th>Ranges</th>
-        <th>Starting</th>
-        <th>Ending</th>
-      </tr>
-      </thead>
-      <tbody>
-      <nus-price-list
-        *ngFor="let priceList of form.controls; let i=index;"
-        [form]="priceList" (removePriceList)="removePriceList(i)">
-      </nus-price-list>
+    <nus-price-list
+      *ngFor="let priceList of form.controls; let i=index;"
+      [form]="priceList" (removePriceList)="removePriceList(i)">
+    </nus-price-list>
 
-      <tr>
-        <td colspan="4"><button (click)="addPriceList()" type="button" class="add-button">Add Price List</button></td>
-      </tr>
-      </tbody>
-    </table>
+    <div>
+      <button (click)="addPriceList()" type="button" class="new-add-button wide">
+        <i class="material-icons">add</i> Add Price List
+      </button>
+    </div>
   `,
   styles: [
-    'ul { list-style-type: none; padding: 0; }',
-  ]
+    `div { padding: 12px; border: solid 1px var(--grey); }`,
+    'h4 { margin-bottom: 4px; }',
+  ],
 })
 export class PriceListHostComponent extends AbstractEditingComponent<FormArray> implements OnInit {
 

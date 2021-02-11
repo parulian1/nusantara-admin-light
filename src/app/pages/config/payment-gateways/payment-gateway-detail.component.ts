@@ -150,12 +150,12 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
 
       </ng-template>
 
-      <label>
+      <label class="checkbox">
         <span>Is Active</span>
         <input type="checkbox" [formControl]="isActive" name="isActive">
       </label>
 
-      <label *ngIf="enterpriseGuard.canActivate(null, null)">
+      <label *ngIf="enterpriseGuard.canActivate(null, null)" class="checkbox">
         <span>Allow POS</span>
         <input type="checkbox" [formControl]="allowPos" name="isActive">
       </label>
@@ -169,7 +169,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
-        (delete)="delete()">
+        [hideDelete]="!entity || !entity.isActive">
       </nus-detail-actions>
     </form>
   `,
@@ -322,6 +322,10 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     });
 
     this.entity = entity;
+
+    // need to mark as touched to make custom styling works
+    this.form.controls.isActive.markAsTouched();
+    this.form.controls.allowPos.markAsTouched();
 
     if (entity.meta.banks) {
       const bankValues = JSON.parse(entity.meta.banks.replace(/'/g, '"'));

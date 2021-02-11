@@ -5,4 +5,6 @@ export type ProductAttributeType =
   'decimal' |
   'color' |
   'image' |
-  'boolean';
+  'boolean' |
+  'combo box' |
+  'dropdown';

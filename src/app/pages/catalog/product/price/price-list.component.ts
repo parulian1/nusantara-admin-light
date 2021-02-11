@@ -27,77 +27,77 @@ import { RangeComponent } from './range.component';
   selector: 'nus-price-list',
   template: `
     <ng-container [formGroup]="form">
-    <tr>
 
-      <td>
-        <button type="button" (click)="toggleExpansion()">
-          {{ type.value }}
+    <div class="wrapper list">
+      <div>
+        <div class="body-2">Type</div>
+        <div class="subheading-2"> {{ type.value | titlecase }} </div>
+      </div>
+      <div>
+        <div class="body-2">Start</div>
+        <div class="subheading-2">
+          {{ ranges.controls.length ? ranges.controls[0].value.price : 0 }}
+        </div>
+      </div>
+      <div>
+        <div class="body-2">Ending</div>
+        <div class="subheading-2">
+          {{ ranges.controls.length ? ranges.controls[ranges.length - 1].value.price : 0 }}
+        </div>
+      </div>
+      <div>
+        <button type="button" (click)="removePriceList.emit()" class="delete">
+          <i class="material-icons">delete_outline</i>
         </button>
-      </td>
-      <td>
-        {{ ranges.length }}
-      </td>
-      <td>
-        {{ ranges.controls.length ? ranges.controls[0].value.price : 0 }}
-      </td>
-      <td>
-        {{ ranges.controls.length ? ranges.controls[ranges.length - 1].value.price : 0 }}
-        <button type="button" class="remove-button" (click)="removePriceList.emit()">
-          <i class="material-icons">remove_circle_outline</i>
+        <button type="button" (click)="toggleExpansion()" class="expand">
+          <i class="material-icons"> {{ isExpanded? 'expand_less' : 'expand_more'}}</i>
         </button>
-      </td>
-    </tr>
-      <tr *ngIf="isExpanded">
-        <td colspan="4">
-
-          <label>
-            <span>Type</span>
-            <select [formControl]="type">
-              <option
-                *ngFor="let opt of types"
-                [ngValue]="opt.value">{{ opt.displayName }}
-              </option>
-            </select>
-          </label>
-
-          <label class="without-field-errors">
-            <input type="checkbox" [formControl]="isProgressive">
-            Is Progressive
-          </label>
-
-          <table>
-            <thead>
-            <tr>
-              <th>Price</th>
-              <th>Min</th>
-              <th>Max</th>
-              <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <nus-price-list-range
-              *ngFor="let range of ranges.controls; let i=index"
-              [form]="range"
-              [index]="i"
-              [allRanges]="ranges.controls"
-              (quantityChanged)="onRangeQuantityChanged(i)"
-              (remove)="removeRange($event, i)"
-              [siblingQuantityChanged]="rangeQuantityChanged">
-            </nus-price-list-range>
-            <tr>
-              <td colspan="4">
-                <button type="button" (click)="addRange()" class="add-button">
-                  Add Range
-                </button>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </td>
-      </tr>
+      </div>
+    </div>
+    <div *ngIf="isExpanded" class="wrapper">
+      <div>
+        <label>
+          <span>Type</span>
+          <select [formControl]="type">
+            <option
+              *ngFor="let opt of types"
+              [ngValue]="opt.value">{{ opt.displayName }}
+            </option>
+          </select>
+        </label>
+      </div>
+      <div>
+        <label class="without-field-errors">
+          <input type="checkbox" [formControl]="isProgressive">
+          Is Progressive
+        </label>
+      </div>
+      <nus-price-list-range
+        *ngFor="let range of ranges.controls; let i=index"
+        [form]="range"
+        [index]="i"
+        [allRanges]="ranges.controls"
+        (quantityChanged)="onRangeQuantityChanged(i)"
+        (remove)="removeRange($event, i)"
+        [siblingQuantityChanged]="rangeQuantityChanged">
+      </nus-price-list-range>
+      <div>
+        <button type="button" (click)="addRange()" class="new-add-button">
+          <i class="material-icons">add</i> Add Range
+        </button>
+      </div>
+    </div>
     </ng-container>
   `,
-  styles: [':host { display: contents; }', ]
+  styles: [':host { display: contents; }',
+  '.wrapper { padding: 12px; border: solid 1px var(--grey); border-bottom: none; }',
+  '.list { display: grid; grid-template-columns: repeat(3, 1fr) 70px; align-items: center; }',
+  '.list div:last-child { display: flex; justify-content: space-between; }',
+  '.range { margin-bottom: 16px; display: grid; grid-template-columns: 1fr 20px 1fr 1fr 20px; gap: 16px; }',
+  '.expand, .delete { background: none; border: none; outline: none; font-size: 18px; cursor: pointer; }',
+  '.delete { opacity: .5 }',
+  '.body-2 { margin-bottom: 4px }'
+  ]
 })
 export class PriceListComponent extends AbstractEditingComponent implements OnInit, AfterViewInit {
 
@@ -136,6 +136,9 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
     // triggers change
     if(!this.enterpriseLicense()) {
       this.toggleExpansion();
+      if(!this.ranges.length) {
+        this.addRange();
+      }
     }
   }
 
@@ -167,6 +170,9 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
       // adding a new range
       let minQuantity = PriceListComponent.MINIMUM_QUANTITY;
       let price = PriceListComponent.DEFAULT_PRICE;
+      if(!this.enterpriseLicense()) {
+        price = 0;
+      }
 
       if (!!this.ranges.length) {
         const terminalRange = this.ranges.controls[this.ranges.length - 1];

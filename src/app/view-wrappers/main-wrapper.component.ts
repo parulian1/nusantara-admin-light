@@ -122,10 +122,11 @@ import { SubscriptionLike } from 'rxjs';
         <router-outlet #o="outlet"></router-outlet>
       </div>
 
-      <footer class="main-footer">
-        <nus-copyright-notice></nus-copyright-notice>
-      </footer>
     </div>
+
+    <footer class="main-footer">
+      <nus-copyright-notice></nus-copyright-notice>
+    </footer>
   `,
   styles: [
     `
@@ -162,52 +163,30 @@ import { SubscriptionLike } from 'rxjs';
         height: 20px;
       }
 
-      header > ul {
-        grid-row: 1;
-        grid-column: 2
-      }
+    nav {
+      grid-row: 2/4;
+      grid-column: 1;
+      background: var(--nav-background);
+      color: white;
+    }
+    #dashboard-content {
+      padding: 16px 24px;
+      position: relative;
+      box-shadow: inset 4px 4px 8px -4px var(--shadow-color);
+    }
+    #pages-content {
+      grid-column: 2;
+      grid-row: 2;
+      margin: 5px;
+    }
 
-      header > :last-child {
-        margin-left: auto;
-        margin-top: 0;
-        margin-bottom: 0;
-        list-style-type: none;
-      }
-
-      #current-user {
-
-      }
-
-      #current-user img {
-        height: 45px;
-        width: 45px;
-      }
-
-      nus-spinner {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        margin: 0;
-      }
-
-      nav {
-        grid-row: 2;
-        grid-column: 1;
-        background: var(--nav-background);
-        color: white;
-      }
-
-      #dashboard-content {
-        padding: 15px;
-        position: relative;
-        box-shadow: inset 4px 4px 8px -4px var(--shadow-color);
-      }
-
-      #pages-content {
-        grid-column: 2;
-        grid-row: 2;
-        margin: 5px;
-      }`,
+    footer {
+      grid-row: 3;
+      grid-column: 2/3;
+      align-self: flex-end;
+      margin-bottom: 10px;
+    }
+    `,
     `
       /*
        * Sidebar Nav
@@ -225,7 +204,6 @@ import { SubscriptionLike } from 'rxjs';
 
       nav li.section-header {
         font-weight: 900;
-        padding-left: 0;
         display: flex;
       }
 
@@ -234,37 +212,43 @@ import { SubscriptionLike } from 'rxjs';
         height: 35px;
         margin-right: 5px;
       }
-
+      nav li.section-header i, nav li.icon-button a {
+        padding-left: 25px;
+      }
       nav li.icon-button a {
-        padding-left: 0;
+        font-weight: 900;
         display: flex;
       }
 
       .icon-button i {
         line-height: 35px;
+        margin-right: 5px;
       }
 
       nav > ul a {
         color: white;
         display: block;
-        padding-left: 25px;
+        padding-left: 30px;
         text-decoration: none;
+        padding-left: 56px;
       }
 
       nav > ul a.active {
         background-color: #7B869B;
-        border-left: 6px solid var(--bhisma-orange);
+        border-left: 6px solid var(--secondary);
+      }
+      nav > ul li:not(.icon-button) a.active {
+        padding-left: 50px;
+      }
+      nav > ul li.icon-button a.active {
+        padding-left: 19px;
       }
 
       nav > ul a:hover,
       nav > ul a:focus {
         transition: all .3s;
         border-left: 6px solid var(--bhisma-orange);
-        background-color: #7B869B; /*var(--accent-lighter-color);*/
-      }
-
-      footer {
-        margin-top: 45px;
+        background-color: #7B869B;
       }
 
       @media print {

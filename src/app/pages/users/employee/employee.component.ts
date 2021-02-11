@@ -32,6 +32,10 @@ import { IJwtClaims } from '@nusantara/auth/models';
     </nus-detail-title>
 
     <form [formGroup]="form" (ngSubmit)="save()">
+      <label class="hidden">
+        <span>Name</span>
+        <input type="text" [formControl]="name"/>
+      </label>
       <label>
         <span>First Name</span>
         <input type="text" [formControl]="firstName"/>
@@ -52,7 +56,7 @@ import { IJwtClaims } from '@nusantara/auth/models';
         <input type="tel" [formControl]="phoneNumber"/>
       </label>
 
-      <label>
+      <label class="checkbox">
         <span>Is Active</span>
         <input type="checkbox" [formControl]="isActive"/>
         <nus-field-errors [control]="isActive"></nus-field-errors>
@@ -164,6 +168,7 @@ export class EmployeeComponent
 
   initializeForm(entity?: IEmployee) {
     this.form = this.fb.group({
+      name: [entity?.firstName, []],
       firstName: [entity?.firstName, [Validators.required]],
       lastName: [entity?.lastName, [Validators.required]],
       email: [entity?.email, [Validators.required]],
@@ -175,8 +180,14 @@ export class EmployeeComponent
     });
 
     this.entity = entity;
+
+    // need to mark as touched to make custom styling works
+    this.form.controls.isActive.markAsTouched();
   }
 
+  get name(): FormControl {
+    return this.form.get('name') as FormControl;
+  }
   get firstName(): FormControl {
     return this.form.get('firstName') as FormControl;
   }
@@ -200,6 +211,7 @@ export class EmployeeComponent
   }
 
   save(): void {
+    this.name.setValue(this.firstName.value); // Handle name in success massage
     this.service
       .save(this.getFormValue())
       .pipe(
@@ -228,7 +240,9 @@ export class EmployeeComponent
 
   protected onSaveSuccess(result: IResultResponse<IEmployee>) {
     this.EmployeeWarehouseHostComponent.saveAll(result.entity.href).subscribe(() => {});
-    this.EmployeeAccessGroupHostComponent.saveAll(result.entity.href).subscribe(() => {});
+    if (this.enterpriseGuard.canActivate(null, null)) {
+      this.EmployeeAccessGroupHostComponent.saveAll(result.entity.href).subscribe(() => {});
+    }
 
     super.onSaveSuccess(result);
   }

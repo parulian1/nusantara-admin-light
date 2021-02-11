@@ -47,7 +47,7 @@ import { SlaService } from '@nusantara/services';
         <nus-field-errors [control]="form.get('sortPriority')"></nus-field-errors>
       </label>
 
-      <label>
+      <label class="checkbox">
         <input type="checkbox" formControlName="isActive" name="isActive"> Is Active
         <nus-field-errors [control]="form.get('isActive')"></nus-field-errors>
       </label>
@@ -60,7 +60,7 @@ import { SlaService } from '@nusantara/services';
     </form>
   `,
   styles: [
-    '.ck-editor__main { min-height: 150px; }',
+    '.ck-editor__main { min-height: 150px; }'
   ]
 })
 export class SlaComponent extends AbstractDetailComponent<ISla> implements OnInit {
@@ -86,6 +86,9 @@ export class SlaComponent extends AbstractDetailComponent<ISla> implements OnIni
     });
 
     this.entity = entity;
+
+    // need to mark as touched to make custom styling works
+    this.form.controls.isActive.markAsTouched();
 
     this.setPhotoPreview(entity?.image);
   }

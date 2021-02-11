@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 import { SharedModule } from '@nusantara/shared';
@@ -46,6 +46,7 @@ import { PaymentGatewayInstoreComponent } from './payment-gateways/payment-gatew
   imports: [
     CommonModule,
     SharedModule,
+    FormsModule,
     ReactiveFormsModule,
     ConfigRoutingModule,
     CKEditorModule,

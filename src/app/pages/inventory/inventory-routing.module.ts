@@ -13,6 +13,7 @@ import { InventoryOrderListResolver } from './pending-order/inventory-order-list
 import { InventoryTransferOrderComponent } from './transfer-order';
 import { InventoryTransferOrderDetailResolver } from './transfer-order/inventory-transfer-order-detail.resolver';
 
+import {PublishListComponent} from "../config/marketplace-integration";
 
 const routes: Routes = [
   {
@@ -74,7 +75,17 @@ const routes: Routes = [
   },
   {
     path: 'adjustment',
-  }
+  },
+  {
+    path: 'publish',
+    children: [
+      {
+        path: '',
+        component: PublishListComponent,
+        runGuardsAndResolvers: 'always',
+      },
+    ],
+  },
 ];
 
 @NgModule({

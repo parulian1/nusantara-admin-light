@@ -44,6 +44,8 @@ import { StockInputComponent } from './product/stock-input/stock-input.component
 
     product.subscription.ProductSubscriptonHostComponent,
 
+    product.marketplace.MarketplaceInfoHostComponent,
+
     VendorListComponent,
     VendorComponent,
 
