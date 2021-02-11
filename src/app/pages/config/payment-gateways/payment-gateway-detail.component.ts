@@ -148,12 +148,12 @@ import {setAndClearValidators} from './utils';
 
       </ng-template>
 
-      <label>
+      <label class="checkbox">
         <span>Is Active</span>
         <input type="checkbox" [formControl]="isActive" name="isActive">
       </label>
 
-      <label>
+      <label class="checkbox">
         <span>Allow POS</span>
         <input type="checkbox" [formControl]="allowPos" name="isActive">
       </label>
@@ -319,6 +319,10 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     });
 
     this.entity = entity;
+
+    // need to mark as touched to make custom styling works
+    this.form.controls.isActive.markAsTouched();
+    this.form.controls.allowPos.markAsTouched();
 
     if (entity.meta.banks) {
       const bankValues = JSON.parse(entity.meta.banks.replace(/'/g, '"'));

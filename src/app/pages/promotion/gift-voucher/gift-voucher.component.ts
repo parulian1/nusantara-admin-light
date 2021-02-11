@@ -47,7 +47,7 @@ import {ActivatedRoute, Router} from '@angular/router';
         <nus-field-errors [control]="validTo"></nus-field-errors>
       </label>
 
-      <label>
+      <label class="checkbox">
         <span>Is Active</span>
         <input type="checkbox" [formControl]="isActive">
         <nus-field-errors [control]="isActive"></nus-field-errors>
@@ -113,6 +113,9 @@ export class GiftVoucherComponent extends AbstractDetailComponent<IGiftVoucher> 
       validTo: [this.convertDateTime(entity?.validTo), [Validators.required]],
       isActive: [entity?.isActive, []],
     });
+    
+    // need to mark as touched to make custom styling works
+    this.form.controls.isActive.markAsTouched();
   }
 
   convertDateTime(timestamp: string) {

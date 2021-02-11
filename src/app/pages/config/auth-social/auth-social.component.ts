@@ -42,7 +42,7 @@ import {drf} from '../../../models';
         <input type="text" [formControl]="redirectUrl" name="redirectUrl">
         <nus-field-errors [control]="redirectUrl"></nus-field-errors>
       </label>
-      <label>
+      <label class="checkbox">
         <span>Is Active</span>
         <input type="checkbox" [formControl]="isActive" name="isActive">
       </label>
@@ -54,8 +54,7 @@ import {drf} from '../../../models';
       </nus-detail-actions>
     </form>
   `,
-  styles: [
-  ]
+  styles: []
 })
 export class AuthSocialComponent extends AbstractDetailComponent<IAuthSocial> implements OnInit{
 
@@ -109,6 +108,9 @@ export class AuthSocialComponent extends AbstractDetailComponent<IAuthSocial> im
     });
 
     this.entity = entity;
+
+    // need to mark as touched to make custom styling works
+    this.form.controls.isActive.markAsTouched();
   }
 
 }

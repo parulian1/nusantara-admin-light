@@ -108,6 +108,10 @@ export class ResellerComponent extends AbstractDetailComponent<IReseller> implem
       type: [entity?.type, [Validators.required]],
       resellerGroups: this.fb.array([]),
     });
+
+    // need to mark as touched to make custom styling works
+    this.form.controls.type.markAsTouched();
+
     for (const group of entity?.resellerGroups ?? []) {
       this.addGroup(group);
     }

@@ -26,8 +26,8 @@ import {
 
     <div *ngIf="processing?.entities?.length || completed?.entities?.length">
       <p></p>
-      <nus-tabs-mp>
-        <nus-tab-mp [title]="'Processing'">
+      <nus-tabs>
+        <nus-tab [title]="'Processing'">
           <nus-pagination-child
             *ngIf="processing?.entities?.length"
             [page]="processing"
@@ -71,8 +71,8 @@ import {
             [page]="processing"
             (fetchPageNumber)="fetchProcessing($event)"
           ></nus-pagination-child>
-        </nus-tab-mp>
-        <nus-tab-mp [title]="'Completed'">
+        </nus-tab>
+        <nus-tab [title]="'Completed'">
           <nus-pagination-child
             *ngIf="completed?.entities?.length"
             [page]="completed"
@@ -116,8 +116,8 @@ import {
             [page]="completed"
             (fetchPageNumber)="fetchCompleted($event)"
           ></nus-pagination-child>
-        </nus-tab-mp>
-      </nus-tabs-mp>
+        </nus-tab>
+      </nus-tabs>
     </div>`,
     styles: [
     'table { table-layout: fixed }',

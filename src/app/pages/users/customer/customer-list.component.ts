@@ -21,9 +21,9 @@ import { AbstractListComponent } from '@nusantara/core';
         <th>Email</th>
         <th>First Name</th>
         <th>Last Name</th>
-        <th>Date Registered</th>
+        <th class="numeric">Date Registered</th>
         <th>LTV</th>
-        <th>Last Login</th>
+        <th class="numeric">Last Login</th>
       </tr>
       </thead>
       <tbody>
@@ -31,9 +31,9 @@ import { AbstractListComponent } from '@nusantara/core';
         <td><a [routerLink]="[entity|entityToSlug]">{{ entity.email }}</a></td>
         <td>{{ entity.firstName }}</td>
         <td>{{ entity.lastName }}</td>
-        <td>{{ entity.dateJoined|date }}</td>
+        <td class="numeric">{{ entity.dateJoined|date: 'dd/MM/yyyy HH:mm:ss' }}</td>
         <td>{{ entity.profile?.lifetimeValue|currency:"IDR" }}</td>
-        <td>{{ entity.lastLogin|date }}</td>
+        <td class="numeric">{{ entity.lastLogin|date: 'dd/MM/yyyy HH:mm:ss' }}</td>
       </tr>
       </tbody>
     </table>

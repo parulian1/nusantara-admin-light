@@ -52,7 +52,7 @@ import { IJwtClaims } from '@nusantara/auth/models';
         <input type="tel" [formControl]="phoneNumber"/>
       </label>
 
-      <label>
+      <label class="checkbox">
         <span>Is Active</span>
         <input type="checkbox" [formControl]="isActive"/>
         <nus-field-errors [control]="isActive"></nus-field-errors>
@@ -174,6 +174,9 @@ export class EmployeeComponent
     });
 
     this.entity = entity;
+
+    // need to mark as touched to make custom styling works
+    this.form.controls.isActive.markAsTouched();
   }
 
   get firstName(): FormControl {

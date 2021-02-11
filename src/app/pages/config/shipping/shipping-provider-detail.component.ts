@@ -43,7 +43,7 @@ import { ShippingProviderService } from '@nusantara/services';
         <nus-field-errors [control]="authPass"></nus-field-errors>
       </label>
 
-      <label>
+      <label class="checkbox">
         <span>Is Active</span>
         <input type="checkbox" formControlName="isActive">
       </label>
@@ -137,6 +137,9 @@ export class ShippingProviderDetailComponent extends AbstractDetailComponent<ISh
 
     this.entity = entity;
 
+    // need to mark as touched to make custom styling works
+    this.form.controls.isActive.markAsTouched();
+
     this.setIconImagePreview(entity?.icon);
 
     this.originalEntityName = entity?.name;
@@ -157,6 +160,10 @@ export class ShippingProviderDetailComponent extends AbstractDetailComponent<ISh
       graceAmount: [service?.graceAmount ?? 0, [Validators.required, ]],
       description: [service?.description ?? '', []]
     });
+
+    // need to mark as touched to make custom styling works
+    f.controls.isActive.markAsTouched();
+
     this.services.push(f);
   }
 

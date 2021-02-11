@@ -19,8 +19,8 @@ import { IEmployee } from '@nusantara/models/user';
           <th>ID Employee</th>
           <th>First Name</th>
           <th>Last Name</th>
-          <th>Date Registered</th>
-          <th>Last Login</th>
+          <th class="numeric">Date Registered</th>
+          <th class="numeric">Last Login</th>
         </tr>
       </thead>
       <tbody>
@@ -31,8 +31,8 @@ import { IEmployee } from '@nusantara/models/user';
           <td>{{ entity.identityNumber | emptyData }}</td>
           <td>{{ entity.lastName | emptyData }}</td>
           <td>{{ entity.firstName | emptyData }}</td>
-          <td>{{ entity.dateJoined | date | emptyData }}</td>
-          <td>{{ entity.lastLogin | date: "medium" | emptyData }}</td>
+          <td class="numeric">{{ entity.dateJoined | date: 'dd/MM/yyyy HH:mm:ss' | emptyData }}</td>
+          <td class="numeric">{{ entity.lastLogin | date: 'dd/MM/yyyy HH:mm:ss' | emptyData }}</td>
         </tr>
       </tbody>
     </table>

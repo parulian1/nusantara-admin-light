@@ -45,8 +45,8 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
       <a [routerLink]="" (click)="loadAllData()">Refresh All</a>
     </div>
     <div>
-      <nus-tabs-mp>
-        <nus-tab-mp [title]="'List Product'">
+      <nus-tabs>
+        <nus-tab [title]="'List Product'">
           <div *ngIf="order?.receivingStatus == 'Error'" class="error-info">
             <div>
               <h2 class="heading-2">There are Errors When Publishing Products</h2>
@@ -112,8 +112,8 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
             [page]="allProducts"
             (fetchPageNumber)="fetchAllProducts($event)"
           ></nus-pagination-child>
-        </nus-tab-mp>
-        <nus-tab-mp [title]="'Credentials Error (' + order?.totalRecord.errorAuthentication + ')'">
+        </nus-tab>
+        <nus-tab [title]="'Credentials Error (' + order?.totalRecord.errorAuthentication + ')'">
           <div *ngIf="order?.totalRecord.errorAuthentication > 0" class="error-info">
             <div>
               <h2 class="heading-2">You are not Connected to Some Stores</h2>
@@ -160,8 +160,8 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
             [page]="credentialsError"
             (fetchPageNumber)="fetchCredentialsError($event)"
           ></nus-pagination-child>
-        </nus-tab-mp>
-        <nus-tab-mp [title]="'Product Data Error (' + order?.totalRecord.errorMetadata + ')'">
+        </nus-tab>
+        <nus-tab [title]="'Product Data Error (' + order?.totalRecord.errorMetadata + ')'">
           <div *ngIf="order?.totalRecord.errorMetadata > 0" class="error-info">
             <div>
               <h2 class="heading-2"> {{ order?.totalRecord.errorMetadata }} Products Can't be Published</h2>
@@ -214,8 +214,8 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
             [page]="dataError"
             (fetchPageNumber)="fetchDataError($event)"
           ></nus-pagination-child>
-        </nus-tab-mp>
-        <nus-tab-mp [title]="'Time Out Error (' + order?.totalRecord.errorTimeout + ')'">
+        </nus-tab>
+        <nus-tab [title]="'Time Out Error (' + order?.totalRecord.errorTimeout + ')'">
           <div *ngIf="order?.totalRecord.errorTimeout > 0" class="error-info">
             <div>
               <h2 class="heading-2">Unable to Publish to {{ order?.totalRecord.errorTimeout }} Marketplace</h2>
@@ -270,8 +270,8 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
             [page]="timeoutError"
             (fetchPageNumber)="fetchTimeoutError($event)"
           ></nus-pagination-child>
-        </nus-tab-mp>
-      </nus-tabs-mp>
+        </nus-tab>
+      </nus-tabs>
     </div>
     <button [routerLink]="['../']" class="control">Back</button>
   `,

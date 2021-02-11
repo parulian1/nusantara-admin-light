@@ -19,17 +19,17 @@ import { ICategory } from '@nusantara/models';
       <thead>
         <tr>
           <th translate>Name</th>
-          <th translate>Depth</th>
-          <th translate>Has Icon?</th>
-          <th translate>Product Count</th>
+          <th translatec class="numeric">Depth</th>
+          <th translate class="centered">Has Icon?</th>
+          <th translate class="numeric">Product Count</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let entity of page.entities">
           <td><a [routerLink]="[entity|entityToSlug]">{{ entity.pathName }}</a></td>
-          <td>{{entity.depth}}</td>
-          <td><nus-true-false [value]="!!entity.image" [showFalseIcon]="false"></nus-true-false></td>
-          <td>{{ entity.productCount }}</td>
+          <td class="numeric">{{entity.depth}}</td>
+          <td class="centered"><nus-true-false [value]="!!entity.image" [showFalseIcon]="false"></nus-true-false></td>
+          <td class="numeric">{{ entity.productCount }}</td>
         </tr>
       </tbody>
     </table>

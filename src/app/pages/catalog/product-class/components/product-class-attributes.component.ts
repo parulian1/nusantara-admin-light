@@ -96,6 +96,10 @@ export class ProductClassAttributesComponent implements OnInit {
       isFilterable: [attr?.isFilterable ?? false, []],
     });
 
+    // need to mark as touched to make custom styling works
+    attrGroup.controls.isSearchable.markAsTouched();
+    attrGroup.controls.isFilterable.markAsTouched();
+
     // if the attr already has an href (it exists in the database)
     // then the name and type may not be changed.
     if (!!attrGroup.get('href').value) {
