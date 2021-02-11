@@ -47,7 +47,7 @@ export class OnboardingContentHostComponent extends AbstractEditingComponent<For
       href: [content?.href ?? '', []],
       image: ['', content?.image ? []: [Validators.required]],
       name: [content?.name, [Validators.required, Validators.maxLength(100)]],
-      description: [content?.description, [Validators.maxLength(255)]],
+      description: [content?.description, [Validators.maxLength(255), Validators.required]],
       buttonStatus: [content?.buttonStatus ?? false, []],
       buttonText: [content?.buttonText ?? '', [Validators.maxLength(100)]],
       buttonUrl: [content?.buttonUrl ?? '', [Validators.maxLength(160)]],
