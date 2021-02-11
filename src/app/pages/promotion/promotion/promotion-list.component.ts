@@ -20,26 +20,26 @@ import { IProductPromotion } from '@nusantara/models';
       <tr>
         <th translate>Name</th>
         <th>Type</th>
-        <th>Amount</th>
-        <th>Valid From</th>
-        <th>Valid To</th>
-        <th>Priority</th>
-        <th>Is Active</th>
+        <th class="numeric">Amount</th>
+        <th class="numeric">Valid From</th>
+        <th class="numeric">Valid To</th>
+        <th class="numeric">Priority</th>
+        <th class="centered">Is Active</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let entity of page.entities">
         <td><a [routerLink]="[entity|entityToSlug]">{{ entity.name }}</a></td>
         <td>{{ entity.type }}</td>
-        <td>
+        <td class="numeric">
           <span *ngIf="entity.type !== 'percentage'">Rp</span>
           {{ entity.amount }}
           <span *ngIf="entity.type === 'percentage'">%</span>
         </td>
-        <td>{{ entity.validFrom|date }}</td>
-        <td><span *ngIf="!!entity.validTo">{{ entity.validTo|date }}</span></td>
-        <td>{{ entity.priority }}</td>
-        <td><nus-true-false [value]="entity.isActive"></nus-true-false></td>
+        <td class="numeric">{{ entity.validFrom|date: 'dd/MM/yyyy HH:mm:ss' }}</td>
+        <td class="numeric"><span *ngIf="!!entity.validTo">{{ entity.validTo|date: 'dd/MM/yyyy HH:mm:ss' }}</span></td>
+        <td class="numeric">{{ entity.priority }}</td>
+        <td class="centered"><nus-true-false [value]="entity.isActive"></nus-true-false></td>
       </tr>
       </tbody>
     </table>

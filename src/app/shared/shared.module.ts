@@ -22,13 +22,10 @@ import { UserSelectionModalComponent } from '@nusantara/shared/user-selection-mo
 import { CustomerGroupModalComponent } from '@nusantara/shared/customer-group-modal.component';
 import { IncludeDeletedComponent } from './filters/include-deleted.component';
 import { IncludeInactiveComponent } from './filters/include-inactive.component';
-import { NusTabsComponent } from './nus-tabs/nus-tabs.component';
-import { NusTabComponent } from './nus-tabs/nus-tab.component';
+import { NusTabsComponent, NusTabComponent } from './nus-tabs';
 
 import { FieldErrorsMarketplaceComponent } from '@nusantara/shared/field-errors-marketplace.component';
 import { ConfirmModalComponent } from './confirm-modal.component';
-import { TabComponent } from './tab.component';
-import { TabsComponent } from './tabs.component';
 import { TooltipComponent } from './tooltip.component';
 import { EmptyListCOmponent } from './empty-list.component';
 import { MarketplaceStockInfoModalComponent } from './marketplace-stock-info-modal.component';
@@ -64,8 +61,6 @@ import { ConfirmModalPendingOrderComponent } from './confirm-modal-pending-order
     NusTabComponent,
     FieldErrorsMarketplaceComponent,
     ConfirmModalComponent,
-    TabComponent,
-    TabsComponent,
     TooltipComponent,
     EmptyListCOmponent,
     MarketplaceShippingInfoModalComponent,
@@ -96,8 +91,6 @@ import { ConfirmModalPendingOrderComponent } from './confirm-modal-pending-order
     NusTabComponent,
     FieldErrorsMarketplaceComponent,
     ConfirmModalComponent,
-    TabComponent,
-    TabsComponent,
     TooltipComponent,
     EmptyListCOmponent,
     MarketplaceShippingInfoModalComponent,

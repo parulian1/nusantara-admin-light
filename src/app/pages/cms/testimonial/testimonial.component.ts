@@ -71,7 +71,7 @@ import { TestimonialService } from '@nusantara/services';
         <nus-field-errors [control]="sortPriority"></nus-field-errors>
       </label>
 
-      <label class="without-field-errors">
+      <label class="without-field-errors checkbox">
         <input type="checkbox" [formControl]="isActive" name="isActive"> Is Active
       </label>
 
@@ -195,6 +195,9 @@ export class TestimonialComponent extends AbstractDetailComponent<ITestimonial> 
 
     this.entity = entity;
 
+    // need to mark as touched to make custom styling works
+    this.form.controls.isActive.markAsTouched();
+    
     this.setPhotoPreview(entity?.photo);
   }
 

@@ -37,7 +37,7 @@ import { DeviceService } from '@nusantara/services';
         <input type="text" [value]="entity.data.firebaseId" readonly>
       </label>
 
-      <label>
+      <label class="checkbox">
         <span>Is Approved</span>
         <input type="checkbox" [formControl]="isApproved">
       </label>
@@ -73,6 +73,9 @@ export class DeviceComponent extends AbstractDetailComponent<device.IDevice> imp
       href: [entity?.href],
       isApproved: [entity?.isApproved ?? true],
     });
+
+    // need to mark as touched to make custom styling works
+    this.form.controls.isApproved.markAsTouched();
   }
 }
 
