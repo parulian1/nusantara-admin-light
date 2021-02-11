@@ -1,9 +1,8 @@
-import { AfterViewInit, Component, OnInit, EventEmitter, Input, Output, ViewChild} from '@angular/core';
-import { AbstractEditingComponent, DialogResult } from '@nusantara/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { AfterViewInit, Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
+import { AbstractEditingComponent } from '@nusantara/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IOnboardingContent } from '@nusantara/models';
-import { OnboardingContentImageComponent } from '@nusantara/pages/cms/onboarding/onboarding-content-image.component';
 
 @Component({
   selector: 'nus-onboarding-content',
@@ -131,15 +130,25 @@ export class OnboardingContentComponent extends AbstractEditingComponent impleme
   }
 
   setAvailabilityAndClearValueButtonProp() {
+    let buttonTextValidators = [Validators.maxLength(100)];
+    let buttonUrlValidators = [Validators.maxLength(160)];
+
     if (this.buttonStatus.value === true) {
       this.buttonText.enable();
       this.buttonUrl.enable();
+      buttonTextValidators.push(Validators.required);
+      buttonUrlValidators.push(Validators.required);
+
     } else {
       this.buttonText.patchValue(null);
       this.buttonUrl.patchValue(null);
       this.buttonText.disable();
       this.buttonUrl.disable();
     }
+    this.buttonText.setValidators(buttonTextValidators);
+    this.buttonUrl.setValidators(buttonUrlValidators);
+    this.buttonText.updateValueAndValidity();
+    this.buttonUrl.updateValueAndValidity();
   }
 
   getValue() {
