@@ -243,6 +243,9 @@ import { SubscriptionLike } from 'rxjs';
       nav > ul li.icon-button a.active {
         padding-left: 19px;
       }
+      nav > ul li.icon-button a.active {
+        padding-left: 19px;
+      }
 
       nav > ul a:hover,
       nav > ul a:focus {

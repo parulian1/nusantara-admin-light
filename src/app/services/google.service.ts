@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpBackend, HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
 
@@ -9,8 +9,13 @@ import { google } from '@nusantara/models';
   providedIn: 'root'
 })
 export class GoogleService {
+  private httpClient: HttpClient;
 
-  constructor(protected httpClient: HttpClient) { }
+  constructor(
+    protected httpBackend: HttpBackend,
+  ) {
+    this.httpClient = new HttpClient(httpBackend);
+  }
 
   fetchYoutubeVideoMeta(videoId: string): Observable<google.youtube.IVideoList> {
 

@@ -574,7 +574,6 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     // like price-lists, media, dll.
     delete (formValue as products.IProduct).media;
     delete (formValue as products.IProduct).priceLists;
-
     delete (this.form.value.marketplace);
 
     return formValue;
