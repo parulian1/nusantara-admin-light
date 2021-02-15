@@ -41,6 +41,12 @@ import { NavigationListResolver} from './navigation/navigation-list/navigation-l
 import { NavigationRelativeChoicesResolver} from './navigation/navigation-relative-choices-resolver';
 import { OnboardingListComponent, OnboardingTypeResolver } from './onboarding';
 import { OnboardingComponent, OnboardingContentListResolver, OnboardingResolver } from './onboarding';
+import {
+  VideoIntegrationListComponent,
+  VideoIntegrationListResolver,
+  VideoIntegrationComponent,
+  VideoIntegrationResolver
+} from './video-integration';
 
 
 const dashboardRoutes: Routes = [
@@ -315,6 +321,29 @@ const dashboardRoutes: Routes = [
       },
     ]
   },
+  {
+    path: 'video-integration',
+    children: [
+      { path: '',
+        component: VideoIntegrationListComponent,
+        resolve: { page: VideoIntegrationListResolver },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'List' }
+      },
+      {
+        path: 'new',
+        component: VideoIntegrationComponent,
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+      { path: ':slug',
+        component: VideoIntegrationComponent,
+        resolve: { entity: VideoIntegrationResolver },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail' }
+      }
+    ]
+  }
 ];
 
 @NgModule({

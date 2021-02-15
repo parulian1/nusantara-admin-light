@@ -18,6 +18,7 @@ import { TestimonialComponent, TestimonialListComponent } from './testimonial';
 import { BannerListComponent, BannerComponent } from './banner';
 import { HighlightComponent, HighlightListComponent } from './highlight';
 import { SlaListComponent, SlaComponent } from './sla';
+import { VideoIntegrationListComponent, VideoIntegrationComponent } from './video-integration';
 import { NavigationComponent } from './navigation/detail/navigation.component';
 import { NavigationListComponent } from './navigation/navigation-list/navigation-list.component';
 import { NavigationChildrenComponent } from './navigation/navigation-children/navigation-children.component';
@@ -57,6 +58,8 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
 
         SlaComponent,
         SlaListComponent,
+        VideoIntegrationComponent,
+        VideoIntegrationListComponent,
         NavigationComponent,
         NavigationListComponent,
         NavigationChildrenComponent,

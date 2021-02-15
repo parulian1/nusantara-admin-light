@@ -26,6 +26,7 @@ export * from './http-failure';
 export * from './content-footer';
 export * from './relative-choices';
 export * from './sla';
+export * from './video-integration';
 
 export * from './navigation';
 
