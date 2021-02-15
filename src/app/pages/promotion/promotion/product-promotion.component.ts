@@ -600,12 +600,8 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
       this.form.removeControl('banner');
     }
     if (!!this.banner && this.imagePreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
-      console.log(true);
       this.form.value.banner = this.imagePreviewUrl;
     }
-
-    console.log(this.imagePreviewUrl);
-    console.table(this.form.value);
 
     super.save();
   }
