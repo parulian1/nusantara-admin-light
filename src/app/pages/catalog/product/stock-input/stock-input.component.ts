@@ -23,7 +23,7 @@ import { ActivatedRoute, Router } from '@angular/router';
         <tr>
           <td data-qa="quantity">
             <input type="number" min="1" [ngClass]="{'disabled': warehouses.length < 1}" [attr.disabled]="warehouses.length < 1 ? '' : null" [formControl]="originalQuantity" data-qa="original-quantity">
-            <div class="min-quantity" *ngIf="fm.get('originalQuantity').errors && fm.get('originalQuantity').errors.min">
+            <div class="min-quantity" *ngIf="(fm.get('originalQuantity').errors && fm.get('originalQuantity').errors.min) || (currentQuantity && !originalQuantity.value)">
               <small>Quantity cannot be less than current stock ( {{ currentQuantity }} )</small>
             </div>
           </td>
