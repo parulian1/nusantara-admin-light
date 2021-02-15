@@ -28,7 +28,6 @@ export class ProductPromoQuantityComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    console.log('form-promo-quantity', this.form);
   }
 
 }

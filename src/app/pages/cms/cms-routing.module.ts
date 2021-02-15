@@ -36,9 +36,11 @@ import {
 import { HighlightListResolver, HighlightListComponent, HighlightComponent } from './highlight';
 import { HighlightResolver } from './highlight/highlight.resolver';
 import { SlaListComponent, SlaListResolver, SlaComponent, SlaResolver } from './sla';
-import {NavigationComponent, NavigationListComponent, NavigationResolver} from './navigation';
-import {NavigationListResolver} from './navigation/navigation-list/navigation-list-resolver';
-import {NavigationRelativeChoicesResolver} from './navigation/navigation-relative-choices-resolver';
+import { NavigationComponent, NavigationListComponent, NavigationResolver} from './navigation';
+import { NavigationListResolver} from './navigation/navigation-list/navigation-list-resolver';
+import { NavigationRelativeChoicesResolver} from './navigation/navigation-relative-choices-resolver';
+import { OnboardingListComponent, OnboardingTypeResolver } from './onboarding';
+import { OnboardingComponent, OnboardingContentListResolver, OnboardingResolver } from './onboarding';
 
 
 const dashboardRoutes: Routes = [
@@ -256,6 +258,32 @@ const dashboardRoutes: Routes = [
         path: ':slug',
         component: HighlightComponent,
         resolve: {entity: HighlightResolver, vendors: VendorFullListResolver},
+        runGuardsAndResolvers: 'always',
+        data: {animation: 'Detail'}
+      }
+    ]
+  },
+  {
+    path: 'onboardingcontent',
+    children: [
+      {
+        path: '',
+        component: OnboardingListComponent,
+        resolve: {page: OnboardingContentListResolver},
+        runGuardsAndResolvers: 'always',
+        data: {animation: 'List'}
+      },
+      {
+        path: 'new',
+        component: OnboardingComponent,
+        resolve: { typeChoices: OnboardingTypeResolver },
+        runGuardsAndResolvers: 'always',
+        data: {animation: 'Detail'}
+      },
+      {
+        path: ':slug',
+        component: OnboardingComponent,
+        resolve: {entity: OnboardingResolver, typeChoices: OnboardingTypeResolver},
         runGuardsAndResolvers: 'always',
         data: {animation: 'Detail'}
       }
