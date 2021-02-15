@@ -2,21 +2,20 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 import { version } from '../../package.json';
+import { env } from '@env/.env';
 
 export const environment = {
   production: false,
-  // apiBaseUrl: 'https://staging.bhisma.cloud',
-
   apiBaseUrl: '/api',
-  googleApiKey: 'AIzaSyB7m0r7paaV5I5U6vjf0pDmocvD8-K-D-w',
+  googleApiKey: env.YOUTUBE_KEY || 'AIzaSyB7m0r7paaV5I5U6vjf0pDmocvD8-K-D-w',
   appVersion: version,
   elasticAPM: {
-    serviceName: 'nusantara-admin',
-    serverUrl: 'https://f51291eec6a94ce2a7309a312be33aa7.apm.ap-southeast-1.aws.cloud.es.io:443',
+    serviceName: env.APM_NAME || 'nusantara-admin',
+    serverUrl: env.APM_URL || 'https://apm.bhisma.cloud',
     serviceVersion: version,
     debug: true,
-    active: true,
-    environment: 'development',
+    active: env.APM_ACTIVE ? env.APM_ACTIVE.toLowerCase() === 'true' : false,
+    environment: env.APM_ENVIRONMENT || 'development',
     breakdownMetrics: true,
     distributedTracingOrigins: [ ],
     ignoreTransactions: [],
