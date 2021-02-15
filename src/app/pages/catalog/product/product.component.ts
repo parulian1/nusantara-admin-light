@@ -289,7 +289,7 @@ import { MarketplaceInfoHostComponent } from './marketplace';
           <li [ngClass]="{ active: currentActive === 'product-other' }">
             <a (click)="scrollTo('product-other')">Other</a>
           </li>
-          <li *ngIf="!isNew && enterpriseLicense()" [ngClass]="{ active: currentActive === 'marketplace-information' }">
+          <li *ngIf="!isNew && selectedProductClass.type === 'physical' && enterpriseLicense()" [ngClass]="{ active: currentActive === 'marketplace-information' }">
             <a (click)="scrollTo('marketplace-information')">Marketplace Information</a>
           </li>
           <li *ngIf="!isNew" [ngClass]="{ active: currentActive === 'product-inventory' }">
