@@ -36,7 +36,7 @@ import { OnboardingPreviewHostDialogComponent } from './preview';
 
       <label class="checkbox">
         <span>Display On/Off</span>
-        <input type="checkbox" [formControl]="isActive" (change)="testConsole()">
+        <input type="checkbox" [formControl]="isActive">
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
@@ -162,7 +162,4 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> im
     this.onboardingPreviewHostDialogComponent.open();
   }
 
-  testConsole() {
-    console.log(`isActive`, this.isActive);
-  }
 }
