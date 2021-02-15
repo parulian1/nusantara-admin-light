@@ -243,7 +243,6 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
    * @param priceList The price list that owns this range.
    */
   saveRanges(priceList: products.IPriceList): Observable<IResultResponse<products.IPriceListRange>[]> {
-    console.log('rangeComponents', this.rangeComponents);
     // ensure ranges have their parent price list set
     this.rangeComponents.forEach((component) => { component.priceList.setValue(priceList.href); });
 
