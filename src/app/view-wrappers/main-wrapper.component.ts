@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService, RequireIsEnterpriseGuard } from '@nusantara/auth';
-import { SiteConfigService } from '@nusantara/services';
 import { slideInAnimation } from '@nusantara/route-animations';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { SubscriptionLike } from 'rxjs';
@@ -31,7 +30,7 @@ import { SubscriptionLike } from 'rxjs';
           <a [routerLink]="['/dashboard']" routerLinkActive="active">
             <i class="material-icons">dashboard</i>
             <span translate>Dashboard</span>
-          </a>
+            </a>
         </li>
 
         <li class="section-header">
@@ -48,12 +47,10 @@ import { SubscriptionLike } from 'rxjs';
           <i class="material-icons">assignment</i>
           <span>Inventory Management</span>
         </li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/inventory/orders-list']"
-                                                               routerLinkActive="active" translate>Pending Orders</a>
-        </li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/inventory/orders-list']" routerLinkActive="active" translate>Pending Orders</a></li>
         <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/inventory/receiving']" routerLinkActive="active" translate>Receiving</a></li>
         <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/inventory/transfer-order']" routerLinkActive="active" translate>Transfer</a></li>
-        <!--        <li><a [routerLink]="['/inventory/adjustment']" routerLinkActive="active" translate>Adjustment</a></li>-->
+<!--        <li><a [routerLink]="['/inventory/adjustment']" routerLinkActive="active" translate>Adjustment</a></li>-->
 
         <li class="section-header">
           <i class="material-icons">local_offer</i>
@@ -68,7 +65,7 @@ import { SubscriptionLike } from 'rxjs';
           <i class="material-icons">edit</i>
           <span>CMS</span>
         </li>
-        <!--        <li><a [routerLink]="['/cms/widgets']" routerLinkActive="active" translate>Widgets</a></li>-->
+<!--        <li><a [routerLink]="['/cms/widgets']" routerLinkActive="active" translate>Widgets</a></li>-->
         <li><a [routerLink]="['/cms/banners']" routerLinkActive="active">Banners</a></li>
         <li><a [routerLink]="['/cms/testimonials']" routerLinkActive="active">Testimonials</a></li>
         <li><a [routerLink]="['/cms/flat-pages']" routerLinkActive="active">Pages</a></li>
@@ -131,38 +128,59 @@ import { SubscriptionLike } from 'rxjs';
   `,
   styles: [
     `
-      /*
-       * Main Page Layout
-       */
-      :host {
-        display: grid;
-        grid-template-columns: 250px auto;
-        grid-template-rows: 65px auto;
-        min-height: 100vh;
-      }
+    /*
+     * Main Page Layout
+     */
+    :host {
+      display: grid;
+      grid-template-columns: 250px auto;
+      grid-template-rows: 65px auto;
+      min-height: 100vh;
+    }
+    header {
+      grid-row: 1;
+      grid-column: 1/3;
+      background: var(--nav-background);
+      color: white;
+      display: flex;
+    }
+    #branding {
+      grid-row: 1;
+      grid-column: 1;
+      max-width: 250px;
+      padding: 15px 15px 10px 5px;
+      box-sizing: border-box;
+      font-weight: bold;
+      text-align: center;
+      width: 100%;
+    }
+    #branding img {
+      height: 20px;
+    }
+    header > ul {
+      grid-row: 1;
+      grid-column: 2
+    }
+    header > :last-child {
+      margin-left: auto;
+      margin-top: 0;
+      margin-bottom: 0;
+      list-style-type: none;
+    }
 
-      header {
-        grid-row: 1;
-        grid-column: 1/3;
-        background: var(--nav-background);
-        color: white;
-        display: flex;
-      }
+    #current-user {
 
-      #branding {
-        grid-row: 1;
-        grid-column: 1;
-        max-width: 250px;
-        padding: 15px 15px 10px 5px;
-        box-sizing: border-box;
-        font-weight: bold;
-        text-align: center;
-        width: 100%;
-      }
-
-      #branding img {
-        height: 20px;
-      }
+    }
+    #current-user img {
+      height: 45px;
+      width: 45px;
+    }
+    nus-spinner {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      margin: 0;
+    }
 
     nav {
       grid-row: 2/4;
@@ -197,17 +215,14 @@ import { SubscriptionLike } from 'rxjs';
         list-style-type: none;
         margin: 0;
       }
-
       nav li {
         height: 35px;
         line-height: 35px;
       }
-
       nav li.section-header {
         font-weight: 900;
         display: flex;
       }
-
       nav li.section-header i {
         line-height: 35px;
         height: 35px;
@@ -220,7 +235,6 @@ import { SubscriptionLike } from 'rxjs';
         font-weight: 900;
         display: flex;
       }
-
       .icon-button i {
         line-height: 35px;
         margin-right: 5px;
@@ -233,7 +247,6 @@ import { SubscriptionLike } from 'rxjs';
         text-decoration: none;
         padding-left: 56px;
       }
-
       nav > ul a.active {
         background-color: #7B869B;
         border-left: 6px solid var(--secondary);
@@ -244,10 +257,6 @@ import { SubscriptionLike } from 'rxjs';
       nav > ul li.icon-button a.active {
         padding-left: 19px;
       }
-      nav > ul li.icon-button a.active {
-        padding-left: 19px;
-      }
-
       nav > ul a:hover,
       nav > ul a:focus {
         transition: all .3s;
@@ -260,15 +269,12 @@ import { SubscriptionLike } from 'rxjs';
           display: block;
           width: 100%;
         }
-
         header.main-header {
           display: none;
         }
-
         footer.main-footer {
           display: none;
         }
-
         #dashboard-content {
           width: 100%;
           box-shadow: none;
@@ -276,7 +282,7 @@ import { SubscriptionLike } from 'rxjs';
 
       }
     `],
-  animations: [slideInAnimation]
+  animations: [ slideInAnimation, ],
 })
 export class MainWrapperComponent implements OnInit, OnDestroy {
 
@@ -284,10 +290,9 @@ export class MainWrapperComponent implements OnInit, OnDestroy {
   isBusy = false;
 
   constructor(public authService: AuthService,
-              public configSercvice: SiteConfigService,
-              public router: Router,
-              public enterpriseGuard: RequireIsEnterpriseGuard
-  ) {
+    public router: Router,
+    public enterpriseGuard: RequireIsEnterpriseGuard) {
+
   }
 
   ngOnInit(): void {
@@ -324,13 +329,8 @@ export class MainWrapperComponent implements OnInit, OnDestroy {
     }
   }
 
-  get profileImage(): string {
-    return '/assets/default-profile-img.svg';
-  }
-
-  get currentSiteName(): string {
-    return 'marthatilaarshop.com';
-  }
+  get profileImage(): string { return '/assets/default-profile-img.svg'; }
+  get currentSiteName(): string { return 'marthatilaarshop.com'; }
 
   onNavigationStarted() {
     window.scrollTo(0, 0);
