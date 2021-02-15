@@ -35,7 +35,7 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
         </select>
       </label>
 
-      <label>
+      <label *ngIf="!isPromoBundling">
         <span>Minimum Order Value</span>
         <input type="number" [formControl]="minimumOrderAmount"
                placeholder="ex. 1000000">
@@ -171,7 +171,7 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
         <a class="download-product" href="{{ service.productListDownloadUrl }}" target="_blank">Download Product List</a>
       </div>
 
-      <label class="checkbox">
+      <label *ngIf="!isPromoBundling" class="checkbox">
         <input type="checkbox" class="input-checkbox" [formControl]="isExclusive">
         <span>Is Exclusive</span>
         <nus-field-errors [control]="isExclusive"></nus-field-errors>
@@ -297,7 +297,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
       href: [entity?.href, []],
       type: [entity?.type, [Validators.required]],
       amount: [entity?.amount ?? 1, [Validators.required, Validators.min(0)]],
-      minimumOrderAmount: [entity?.minimumOrderAmount, [Validators.required, Validators.min(0)]],
+      minimumOrderAmount: [entity?.minimumOrderAmount ?? 1, [Validators.required, Validators.min(0)]],
       maxAmount: [entity?.maxAmount ?? 1, [Validators.required, Validators.min(0)]],
       isExclusive: [entity?.isExclusive ?? false, [Validators.required]],
       isActive: [entity?.isActive ?? true, [Validators.required]],
