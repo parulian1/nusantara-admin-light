@@ -109,6 +109,7 @@ export class OnboardingContentComponent extends AbstractEditingComponent impleme
   ngOnInit() {
     this.setImagePreview(this.entity?.image);
     this.setAvailabilityAndClearValueButtonProp();
+    this.buttonStatus.markAsTouched();
   }
 
   ngAfterViewInit() {

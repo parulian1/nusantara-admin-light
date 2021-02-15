@@ -1,13 +1,11 @@
-import {AfterViewChecked, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import { AbstractDetailComponent, moveItemInFormArray, ToastService } from '@nusantara/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { AbstractDetailComponent, ToastService } from '@nusantara/core';
 import { drf, IOnBoarding, IOnboardingContent, OnBoardingTypeEnum } from '@nusantara/models';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OnboardingService } from '@nusantara/services';
-import {
-  OnboardingContentHostComponent,
-  OnboardingPreviewHostDialogComponent
-} from '@nusantara/pages/cms/onboarding';
+import { OnboardingContentHostComponent } from '../onboarding/onboarding-content-host.component';
+import { OnboardingPreviewHostDialogComponent } from '../onboarding/preview';
 
 @Component({
   selector: 'nus-onboarding',
@@ -36,9 +34,9 @@ import {
         <nus-field-errors [control]="type"></nus-field-errors>
       </label>
 
-      <label>
+      <label class="checkbox">
         <span>Display On/Off</span>
-        <input type="checkbox" [formControl]="isActive">
+        <input type="checkbox" [formControl]="isActive" (change)="testConsole()">
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
@@ -119,6 +117,7 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> im
       isActive: [entity?.isActive ?? true, []],
       contents: this.fb.array([], [Validators.required]),
     });
+    this.isActive.markAsTouched();
     for (const content of entity?.contents ?? []) {
       this.addContent(content);
     }
@@ -163,4 +162,7 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> im
     this.onboardingPreviewHostDialogComponent.open();
   }
 
+  testConsole() {
+    console.log(`isActive`, this.isActive);
+  }
 }
