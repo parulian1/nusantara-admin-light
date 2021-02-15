@@ -4,8 +4,8 @@ import { drf, IOnBoarding, IOnboardingContent, OnBoardingTypeEnum } from '@nusan
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OnboardingService } from '@nusantara/services';
-import { OnboardingContentHostComponent } from '../onboarding/onboarding-content-host.component';
-import { OnboardingPreviewHostDialogComponent } from '../onboarding/preview';
+import { OnboardingContentHostComponent } from './onboarding-content-host.component';
+import { OnboardingPreviewHostDialogComponent } from './preview';
 
 @Component({
   selector: 'nus-onboarding',
