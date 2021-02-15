@@ -1,14 +1,14 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormArray, Validators, FormControl} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as XLSX from 'xlsx';
 
-import {ProductPromotionService, ProductService} from '@nusantara/services';
-import {AbstractDetailComponent, DialogResult, ToastService} from '@nusantara/core';
-import {INamedHrefEntity} from '@nusantara/models/base';
-import {IProductBundling, IProductPromotion, ProductPromotionType} from '@nusantara/models';
-import {IProduct} from '@nusantara/models/products';
-import {ProductSelectionModalComponent} from '@nusantara/shared';
+import { ProductPromotionService, ProductService } from '@nusantara/services';
+import { AbstractDetailComponent, DialogResult, ToastService } from '@nusantara/core';
+import { INamedHrefEntity } from '@nusantara/models/base';
+import { IProductBundling, IProductPromotion, ProductPromotionType } from '@nusantara/models';
+import { IProduct } from '@nusantara/models/products';
+import { ProductSelectionModalComponent } from '@nusantara/shared';
 
 @Component({
   selector: 'nus-product-promotion',
@@ -161,14 +161,15 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
           <tr>
             <td colspan="3">
               <button type="button" (click)="selectProduct()" class="new-add-button wide">
-              <i class="material-icons">add</i> Add Product
+                <i class="material-icons">add</i> Add Product
               </button>
             </td>
           </tr>
           </tbody>
         </table>
 
-        <a class="download-product" href="{{ service.productListDownloadUrl }}" target="_blank">Download Product List</a>
+        <a class="download-product" href="{{ service.productListDownloadUrl }}" target="_blank">Download Product
+          List</a>
       </div>
 
       <label class="checkbox">
@@ -338,7 +339,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     this.setImagePreview(entity?.banner);
   }
 
-  setImagePreview(data: Event | string) {
+  setImagePreview(data?: Event | string) {
     super.setImagePreview(data, (dataAsUrl => this.imagePreviewUrl = dataAsUrl));
   }
 
@@ -461,7 +462,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
 
       const f = this.fb.group({
         name: [selectedProduct.name, []],
-        href: [selectedProduct.href, []],
+        href: [selectedProduct.href, []]
       });
       this.products.push(f);
 
@@ -586,13 +587,6 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     this.form.value.validFrom = this.form.value.validFrom + this.getTimeZone();
     this.form.value.validTo = this.form.value.validTo + this.getTimeZone();
 
-    if (!!this.entity?.href && !!this.entity?.banner && !this.banner.value) {
-      this.form.removeControl('banner');
-    }
-    if (!!this.banner && this.imagePreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
-      this.form.value.banner = this.imagePreviewUrl;
-    }
-
     if (this.type.value === 'promo_bundling') {
       this.form.removeControl('products');
     }
@@ -601,6 +595,17 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
       this.form.removeControl('productBundlingBenefit');
       this.form.removeControl('productBundlingCondition');
     }
+
+    if (!!this.entity?.href && !!this.entity?.banner && !this.banner.value) {
+      this.form.removeControl('banner');
+    }
+    if (!!this.banner && this.imagePreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
+      console.log(true);
+      this.form.value.banner = this.imagePreviewUrl;
+    }
+
+    console.log(this.imagePreviewUrl);
+    console.table(this.form.value);
 
     super.save();
   }
