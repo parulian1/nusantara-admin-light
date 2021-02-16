@@ -212,6 +212,7 @@ export class EmployeeComponent
 
   save(): void {
     this.name.setValue(this.firstName.value); // Handle name in success massage
+    this.email.setValue(this.email.value.toLowerCase());
     this.service
       .save(this.getFormValue())
       .pipe(

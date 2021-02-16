@@ -152,7 +152,7 @@ import { MarketplaceInfoHostComponent } from './marketplace';
 
             <label class="single-price" *ngIf="!enterpriseLicense()">
               <span>Price</span>
-              <input type="number" [formControl]="price" name="price" (change)="setSinglePrice($event)">
+              <input type="number" [formControl]="price" name="price" min="0" appOnlyNumber decimal="true" (change)="setSinglePrice($event)">
               <nus-field-errors [control]="price"></nus-field-errors>
             </label>
 
@@ -475,7 +475,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       structure: [entity?.structure ?? 'parent', [Validators.required, ]],
       description: [entity?.description, [Validators.required, ]],
       weight: [entity?.weight, [Validators.required, ]],
-      price: [0, []],
+      price: [0, [Validators.minLength(0)]],
       dimensions: this.fb.group({
         current_length:[entity?.dimensions.currentLength,],
         current_width:[entity?.dimensions.currentWidth,],
