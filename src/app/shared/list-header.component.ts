@@ -98,6 +98,7 @@ export class ListHeaderComponent implements OnInit {
           ['.'],
           {
             queryParams: params,
+            queryParamsHandling: 'merge',
             relativeTo: this.route
           }
         );

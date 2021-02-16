@@ -12,6 +12,10 @@ import { IWarehouse } from '@nusantara/models';
       description="A warehouse is any location where inventory is held;  This can involved retail locations.">
     </nus-list-header>
 
+    <div>
+      <nus-include-deleted></nus-include-deleted>
+    </div>
+
     <nus-pagination [page]="page"></nus-pagination>
 
     <table>
