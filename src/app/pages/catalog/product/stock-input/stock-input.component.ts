@@ -30,7 +30,7 @@ import { ActivatedRoute, Router } from '@angular/router';
         </tr>
         <tr *ngIf="warehouses.length < 1">
           <td>
-            <small>To input quantity, add warehouse first</small>
+            <small>To input quantity, add warehouse first - ( <a (click)="goToWarehouse()">Manage Warehouse</a> )</small>
           </td>
         </tr>
       </tbody>
@@ -150,7 +150,9 @@ export class StockInputComponent extends AbstractEditingComponent implements OnI
     );
   }
 
-
+  goToWarehouse() {
+    this.router.navigate(['./config/warehouses']);
+  }
 
 
 }
