@@ -27,7 +27,7 @@ import { RangeComponent } from './range.component';
   selector: 'nus-price-list',
   template: `
     <ng-container [formGroup]="form">
-    
+
     <div class="wrapper list">
       <div>
         <div class="body-2">Type</div>
@@ -35,13 +35,13 @@ import { RangeComponent } from './range.component';
       </div>
       <div>
         <div class="body-2">Start</div>
-        <div class="subheading-2"> 
+        <div class="subheading-2">
           {{ ranges.controls.length ? ranges.controls[0].value.price : 0 }}
         </div>
       </div>
       <div>
         <div class="body-2">Ending</div>
-        <div class="subheading-2"> 
+        <div class="subheading-2">
           {{ ranges.controls.length ? ranges.controls[ranges.length - 1].value.price : 0 }}
         </div>
       </div>
@@ -89,13 +89,13 @@ import { RangeComponent } from './range.component';
     </div>
     </ng-container>
   `,
-  styles: [':host { display: contents; }', 
+  styles: [':host { display: contents; }',
   '.wrapper { padding: 12px; border: solid 1px var(--grey); border-bottom: none; }',
   '.list { display: grid; grid-template-columns: repeat(3, 1fr) 70px; align-items: center; }',
   '.list div:last-child { display: flex; justify-content: space-between; }',
   '.range { margin-bottom: 16px; display: grid; grid-template-columns: 1fr 20px 1fr 1fr 20px; gap: 16px; }',
   '.expand, .delete { background: none; border: none; outline: none; font-size: 18px; cursor: pointer; }',
-  '.delete { opacity: .5 }', 
+  '.delete { opacity: .5 }',
   '.body-2 { margin-bottom: 4px }'
   ]
 })
@@ -132,6 +132,7 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
     this.route.data.subscribe((data: {priceListTypes: drf.IChoice[]}) => {
       this.types = data.priceListTypes;
     });
+    this.isProgressive.markAsTouched();
   }
 
   ngAfterViewInit() {
