@@ -73,6 +73,7 @@ import { SubscriptionLike } from 'rxjs';
         <li><a [routerLink]="['/cms/content-footers']" routerLinkActive="active">Content Footers</a></li>
         <li><a [routerLink]="['/cms/highlights']" routerLinkActive="active">Highlights</a></li>
         <li><a [routerLink]="['/cms/sla']" routerLinkActive="active">SLA</a></li>
+        <li><a [routerLink]="['/cms/video-integration']" routerLinkActive="active">Video Integration</a></li>
         <li><a [routerLink]="['/cms/onboardingcontent']" routerLinkActive="active">Onboarding</a></li>
 
 
@@ -121,7 +122,7 @@ import { SubscriptionLike } from 'rxjs';
       </div>
 
     </div>
-    
+
     <footer class="main-footer">
       <nus-copyright-notice></nus-copyright-notice>
     </footer>
@@ -198,7 +199,7 @@ import { SubscriptionLike } from 'rxjs';
       grid-row: 2;
       margin: 5px;
     }
-    
+
     footer {
       grid-row: 3;
       grid-column: 2/3;
@@ -261,7 +262,7 @@ import { SubscriptionLike } from 'rxjs';
       nav > ul a:focus {
         transition: all .3s;
         border-left: 6px solid var(--bhisma-orange);
-        background-color: #7B869B;     
+        background-color: #7B869B;
       }
 
       @media print {
