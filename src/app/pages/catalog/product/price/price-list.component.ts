@@ -140,6 +140,7 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
         this.addRange();
       }
     }
+    this.isProgressive.markAsTouched();
   }
 
   ngAfterViewInit() {

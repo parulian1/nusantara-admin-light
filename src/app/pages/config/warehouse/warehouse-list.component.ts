@@ -15,6 +15,10 @@ import { SiteConfigService } from '@nusantara/services';
     >
     </nus-list-header>
 
+    <div>
+      <nus-include-deleted></nus-include-deleted>
+    </div>
+
     <nus-pagination *ngIf="enterprise" [page]="page"></nus-pagination>
 
     <table>
