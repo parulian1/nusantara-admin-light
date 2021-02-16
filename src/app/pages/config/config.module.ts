@@ -18,6 +18,7 @@ import { AuthSocialComponent } from './auth-social';
 import { AuthSocialListComponent } from './auth-social';
 import { PaymentGatewayMetaComponent } from './payment-gateways/payment-gateway-meta/payment-gateway-meta.component';
 import { PaymentGatewayInstoreComponent } from './payment-gateways/payment-gateway-instore/payment-gateway-instore.component';
+import { ShippingServiceHostComponent } from './shipping/shipping-service/shipping-service-host.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { PaymentGatewayInstoreComponent } from './payment-gateways/payment-gatew
     AuthSocialListComponent,
     PaymentGatewayMetaComponent,
     PaymentGatewayInstoreComponent,
+    ShippingServiceHostComponent
   ],
   imports: [
     CommonModule,
