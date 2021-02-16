@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 
-import { forkJoin, Observable } from 'rxjs';
+import { combineLatest, forkJoin, Observable } from 'rxjs';
 
 import { AuthService } from '@nusantara/auth';
 import { WarehouseService } from '@nusantara/services';
@@ -101,7 +101,7 @@ export class EmployeeWarehouseHostComponent implements OnInit {
             user: userHref,
           }
         );
-      }) || []
+      }) as []
     );
 
     const deletedJoin$ = forkJoin(
@@ -114,6 +114,6 @@ export class EmployeeWarehouseHostComponent implements OnInit {
       })
     );
 
-    return forkJoin([savedJoin$, deletedJoin$]);
+    return combineLatest([savedJoin$, deletedJoin$]);
   }
 }
