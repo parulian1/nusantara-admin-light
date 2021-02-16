@@ -38,10 +38,10 @@ export class GroupService extends AbstractCrudService<IAccessGroup> {
   }
 
   addEmployee(accessGroupId: string, user: string): Observable<unknown> {
-    return this.httpClient.post(`${this.baseUrl}/${accessGroupId}/user/`, { user });
+    return this.httpClient.post(`${this.baseUrl}/${accessGroupId}/user/`, { user }, {observe: 'response', responseType: 'json'});
   }
 
   removeEmployee(accessGroupId: string, username: string): Observable<unknown> {
-    return this.httpClient.delete(`${this.baseUrl}/${accessGroupId}/user/${username}/`);
+    return this.httpClient.delete(`${this.baseUrl}/${accessGroupId}/user/${username}/`, {observe: 'response', responseType: 'json'});
   }
 }
