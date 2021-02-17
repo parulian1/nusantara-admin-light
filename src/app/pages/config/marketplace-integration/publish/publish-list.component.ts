@@ -14,13 +14,14 @@ import {
       *ngIf="!shops?.entities?.length && !processing?.entities?.length && !completed?.entities?.length"
       title="Add Store Before Publishing Products"
       description="Add a marketplace store to manage all your products in one place."
-      [addUrl]="['config', 'marketplace-integration', 'connect', 'new']"
+      [addUrl]="['/config', 'marketplace-integration', 'connect', 'new']"
       addText="Add Store">
     </nus-empty-list>
     <nus-empty-list
       *ngIf="shops?.entities?.length && !processing?.entities?.length && !completed?.entities?.length"
       title="No Published Product Yet!"
       description="Go to &quot;Receiving&quot; menu to publish your products."
+      [addUrl]="['/inventory', 'receiving']"
       addText="Receiving Inventory">
     </nus-empty-list>
 
