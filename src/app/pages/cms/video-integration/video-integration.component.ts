@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
-import { IVideoIntegrationItem } from '@nusantara/models';
+import { IVideoIntegrationItem, VideoIntegrationItemChoices } from '@nusantara/models';
+import { AbstractDetailComponent, ToastService } from '@nusantara/core';
 import { VideoIntegrationService } from '@nusantara/services';
 
 import { getYoutubeIdFromUrl, youtubeUrl, youtubeUrlValidator } from './utils';
@@ -20,26 +21,47 @@ import { getYoutubeIdFromUrl, youtubeUrl, youtubeUrlValidator } from './utils';
     <form [formGroup]="form" (ngSubmit)="save()" #f>
 
       <label>
-        <span>Name</span>
+        <span>Title</span>
         <input type="text" [formControl]="name" name="name">
 
-        <div *ngIf="name.errors && (name.touched || name.dirty)" class="error-detail">
-          <div *ngIf="name.errors.required">Required</div>
-          <div *ngIf="name.errors.apiError"></div>
-        </div>
+        <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
       <label>
-        <span>Youtube Video</span>
-        <input type="text" [formControl]="youtubeVideoId" name="youtube-video-id">
+        <span>Description</span>
+        <textarea name="description" cols="30" rows="10" [formControl]="description">
+        </textarea>
+
+        <nus-field-errors [control]="isActive"></nus-field-errors>
+      </label>
+
+
+      <label>
+        <span>Type</span>
+
+        <select formControlName="type">
+          <option value="" disabled>-- Choose Type --</option>
+          <option *ngFor="let choice of typeChoices" [ngValue]="choice.value">
+            {{ choice.displayName }}
+          </option>
+        </select>
+
+        <nus-field-errors [control]="isActive"></nus-field-errors>
+      </label>
+
+      <label>
+        <span>Embeded Url</span>
+        <input type="text" [formControl]="embededUrl" name="youtube-video-id">
 
         <div style="margin: 0.1rem 0 0.5rem; font-size: 0.7rem;">
           example: <span style="font-weight: bold;">https://www.youtube.com/watch?v=bWXazVhlyxQ</span>
         </div>
 
-        <div *ngIf="youtubeVideoId.errors && (youtubeVideoId.touched || youtubeVideoId.dirty)" class="error-detail">
-          <div *ngIf="youtubeVideoId.hasError('required')">Required</div>
-          <div *ngIf="youtubeVideoId.hasError('invalidYoutubeUrl')">
+        <nus-field-errors [control]="embededUrl"></nus-field-errors>
+
+        <!-- extra error messages -->
+        <div *ngIf="embededUrl.errors && (embededUrl.touched || embededUrl.dirty)" class="error-detail">
+          <div *ngIf="embededUrl.hasError('invalidYoutubeUrl')">
             Your url is invalid, please follow example properly
           </div>
         </div>
@@ -49,10 +71,13 @@ import { getYoutubeIdFromUrl, youtubeUrl, youtubeUrlValidator } from './utils';
       <label>
         <span>Sort Priority</span>
         <input type="number" [formControl]="sortPriority" name="sortPriority">
-        <div *ngIf="sortPriority.errors && (sortPriority.touched || sortPriority.dirty)" class="error-detail">
-          <div *ngIf="sortPriority.errors.required">Required</div>
-          <div *ngIf="sortPriority.errors.min">Minimal value is 0</div>
-        </div>
+
+        <nus-field-errors [control]="isActive"></nus-field-errors>
+      </label>
+
+      <label>
+        <input type="checkbox" [formControl]="isActive" name="isActive"> Is Active
+        <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
       <nus-detail-actions
@@ -64,72 +89,53 @@ import { getYoutubeIdFromUrl, youtubeUrl, youtubeUrlValidator } from './utils';
   `,
   styles: [``]
 })
-export class VideoIntegrationComponent implements OnInit {
-  isNew = true;
-  nonFieldErrors: string[] = [];
-  originalEntityName: string;
-  form: FormGroup;
+export class VideoIntegrationComponent extends AbstractDetailComponent<IVideoIntegrationItem> implements OnInit {
+  typeChoices: { value: string, displayName: string }[] = [
+    { value: VideoIntegrationItemChoices.youtube, displayName: 'Youtube' }
+  ];
+  contentGroup: string;
 
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private route: ActivatedRoute,
-    private service: VideoIntegrationService,
-  ) { }
+  constructor(service: VideoIntegrationService,
+              private service1: VideoIntegrationService,
+              public fb: FormBuilder,
+              toast: ToastService,
+              route: ActivatedRoute,
+              router: Router) {
+    super(route, router, toast, service);
+  }
 
   ngOnInit(): void {
-    this.route.data.subscribe((data: { entity?: IVideoIntegrationItem }) => {
-      this.initializeForm(data.entity);
-      this.isNew = !data?.entity;
-      this.originalEntityName = data.entity?.name || 'Create Video Integration';
+    super.ngOnInit();
+    this.service.fetchFirstGroup().subscribe((contentGroup) => {
+      this.contentGroup = contentGroup;
     });
   }
 
-  initializeForm(entity?: IVideoIntegrationItem): void {
+  initializeForm(entity?: IVideoIntegrationItem) {
     this.form = this.fb.group({
-      href: [entity?.href ?? '', []],
       name: [entity?.name ?? '', [Validators.required]],
-      youtubeVideoId: [this.youtube(entity?.youtubeVideoId) ?? '', [youtubeUrlValidator, Validators.required]],
-      sortPriority: [entity?.sortPriority ?? 0, [Validators.required, Validators.min(0)]],
+      href: [entity?.href ?? '', []],
+      description: [entity?.description ?? '', [Validators.required]],
+      type: [entity?.type ?? VideoIntegrationItemChoices.youtube, [Validators.required]],
+      embededUrl: [entity?.embededUrl ?? '', [Validators.required, youtubeUrlValidator]],
+      sortPriority: [entity?.sortPriority ?? 0, []],
+      isActive: [entity?.isActive ?? true, []],
     });
   }
 
   get name(): FormControl { return this.form.get('name') as FormControl; }
-  get youtubeVideoId(): FormControl { return this.form.get('youtubeVideoId') as FormControl; }
+  get description(): FormControl { return this.form.get('description') as FormControl; }
+  get type(): FormControl { return this.form.get('type') as FormControl; }
+  get embededUrl(): FormControl { return this.form.get('embededUrl') as FormControl; }
   get sortPriority(): FormControl { return this.form.get('sortPriority') as FormControl; }
+  get isActive(): FormControl { return this.form.get('isActive') as FormControl; }
 
-  getValue(): any {
+  getFormValue() {
     return {
       ...this.form.value,
-      youtubeVideoId: getYoutubeIdFromUrl(this.youtubeVideoId.value ?? '')
+      contentGroup: this.contentGroup,
+      youtubeVideoId: getYoutubeIdFromUrl(this.embededUrl.value ?? '')
     };
-  }
-
-  save(): void {
-    if (this.form.valid) {
-      if (this.isNew) {
-        this.service.create2(this.getValue()).subscribe(() => {
-          this.navigateToParent(true);
-        });
-      } else {
-        this.service.update2(this.getValue()).subscribe(() => {
-          this.navigateToParent(true);
-        });
-      }
-    }
-  }
-
-  delete(): void {
-    this.service.delete(this.getValue()).subscribe(() => {
-      this.navigateToParent(true);
-    });
-  }
-
-  /**
-   * redirect to video integration list
-   */
-  navigateToParent(isTrue?: boolean): void {
-    this.router.navigate(['/cms/video-integration']);
   }
 
   /**
