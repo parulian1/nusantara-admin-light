@@ -7,7 +7,7 @@ import { catchError, mergeMap } from 'rxjs/operators';
 
 import { IVideoIntegrationItem } from '@nusantara/models/video-integration';
 import { VideoIntegrationService } from '@nusantara/services/video-integration.service';
-import { AbstractListResolver, PagedResponse } from '@nusantara/core';
+import { AbstractListResolver, getSlugFromHref, PagedResponse } from '@nusantara/core';
 
 
 @Injectable({ providedIn: 'root'})
@@ -21,7 +21,7 @@ export class VideoIntegrationListResolver extends AbstractListResolver<IVideoInt
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<PagedResponse<IVideoIntegrationItem>> | Observable<never> {
     return this.service1.fetchFirstGroup().pipe(
       mergeMap(groupHref => {
-        return this.fetch(route, { content_group: 2 });
+        return this.fetch(route, { content_group: getSlugFromHref(groupHref) });
       }),
       catchError(e => {
         return of([]);
