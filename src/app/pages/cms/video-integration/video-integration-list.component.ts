@@ -12,6 +12,9 @@ import { youtubeUrl } from './utils';
       title="Video Integration"
       description="Customer reviews of Video Integration">
     </nus-list-header>
+    <div class="filtering">
+      <nus-include-deleted></nus-include-deleted>
+    </div>
 
     <nus-pagination [page]="page"></nus-pagination>
 
