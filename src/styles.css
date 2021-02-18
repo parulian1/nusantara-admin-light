@@ -180,6 +180,9 @@ a.disabled {
   height: 40px;
 }
 
+input:disabled, select:disabled {
+  cursor: not-allowed;
+}
 
 /** Hide spinner on input type number **/
  /* for Chrome, Safari, Edge, Opera */
@@ -557,6 +560,7 @@ thead { background: var(--darken-white); }
 thead tr, tbody tr { height: 48px; }
 thead th { text-align: left; }
 tbody td { color: var(--darken-grey); }
+tbody tr:last-child td { border-bottom: none; }
 th.numeric, td.numeric { text-align: right; }
 th.centered, td.centered { text-align: center; }
 td.vertical-aligned { vertical-align: top; padding-top: 14px;}

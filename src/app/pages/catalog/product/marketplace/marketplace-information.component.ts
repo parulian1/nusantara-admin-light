@@ -104,9 +104,9 @@ import { Observable } from 'rxjs';
                         <p>Map Class to sync your product to marketplace.</p>
                         <button [routerLink]="['/config/marketplace-integration/connect/product-class/',
                               data.shopSlug,
-                              productClass.href
+                              productClassSlug
                             ]"
-                          [state]="{ productClass: { name: productClassName } }"
+                          [state]="{ productClass: { name: productClassName, slug: productClassSlug } }"
                           type="button"
                           class="control">Start Mapping
                         </button>
