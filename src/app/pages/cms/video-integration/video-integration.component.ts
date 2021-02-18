@@ -24,7 +24,7 @@ import { getYoutubeIdFromUrl, youtubeUrl, youtubeUrlValidator } from './utils';
         <span>Title</span>
         <input type="text" [formControl]="name" name="name">
 
-        <nus-field-errors [control]="isActive"></nus-field-errors>
+        <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
@@ -32,21 +32,21 @@ import { getYoutubeIdFromUrl, youtubeUrl, youtubeUrlValidator } from './utils';
         <textarea name="description" cols="30" rows="10" [formControl]="description">
         </textarea>
 
-        <nus-field-errors [control]="isActive"></nus-field-errors>
+        <nus-field-errors [control]="description"></nus-field-errors>
       </label>
 
 
       <label>
         <span>Type</span>
 
-        <select formControlName="type">
+        <select [formControl]="type">
           <option value="" disabled>-- Choose Type --</option>
           <option *ngFor="let choice of typeChoices" [ngValue]="choice.value">
             {{ choice.displayName }}
           </option>
         </select>
 
-        <nus-field-errors [control]="isActive"></nus-field-errors>
+        <nus-field-errors [control]="type"></nus-field-errors>
       </label>
 
       <label>
@@ -75,8 +75,12 @@ import { getYoutubeIdFromUrl, youtubeUrl, youtubeUrlValidator } from './utils';
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
-      <label class="without-field-errors checkbox">
-        <input type="checkbox" [formControl]="isActive" name="isActive"> Is Active
+      <label>
+        <span>Is Active</span>
+        <select [formControl]="isActive">
+          <option [ngValue]="true">True</option>
+          <option [ngValue]="false">False</option>
+        </select>
       </label>
 
       <nus-detail-actions
@@ -120,7 +124,7 @@ export class VideoIntegrationComponent extends AbstractDetailComponent<IVideoInt
         Validators.required, youtubeUrlValidator, Validators.maxLength(80)]
       ],
       sortPriority: [entity?.sortPriority ?? 0, []],
-      isActive: [entity?.isActive ?? true, []],
+      isActive: [entity?.isActive ?? true, [Validators.required]],
     });
   }
 
