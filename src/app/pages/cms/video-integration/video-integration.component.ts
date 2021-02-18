@@ -75,9 +75,8 @@ import { getYoutubeIdFromUrl, youtubeUrl, youtubeUrlValidator } from './utils';
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
-      <label>
+      <label class="without-field-errors checkbox">
         <input type="checkbox" [formControl]="isActive" name="isActive"> Is Active
-        <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
       <nus-detail-actions
@@ -113,11 +112,13 @@ export class VideoIntegrationComponent extends AbstractDetailComponent<IVideoInt
 
   initializeForm(entity?: IVideoIntegrationItem) {
     this.form = this.fb.group({
-      name: [entity?.name ?? '', [Validators.required]],
+      name: [entity?.name ?? '', [Validators.required, Validators.maxLength(100)]],
       href: [entity?.href ?? '', []],
-      description: [entity?.description ?? '', [Validators.required]],
+      description: [entity?.description ?? '', []],
       type: [entity?.type ?? VideoIntegrationItemChoices.youtube, [Validators.required]],
-      embededUrl: [entity?.embededUrl ?? '', [Validators.required, youtubeUrlValidator]],
+      embededUrl: [entity?.embededUrl ?? '', [
+        Validators.required, youtubeUrlValidator, Validators.maxLength(80)]
+      ],
       sortPriority: [entity?.sortPriority ?? 0, []],
       isActive: [entity?.isActive ?? true, []],
     });
