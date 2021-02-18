@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfigChatService } from '@nusantara/services';
 import { IConfigChat, ProviderChoices } from '@nusantara/models';
-import { mergeMapTo } from 'rxjs/operators';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Observable } from 'rxjs';
+
+import { mergeMap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'nus-config-chat-service',
@@ -88,7 +89,14 @@ export class ConfigChatServiceComponent implements OnInit {
     return this.service
       .deleteAll()
       .pipe(
-        mergeMapTo(this.service.create(this.form.value)),
+        mergeMap(() => {
+          // has value mean create one
+          if (this.provider.value) {
+            return this.service.create(this.form.value);
+          } else {
+            return of([]);
+          }
+        }),
       );
   }
 
