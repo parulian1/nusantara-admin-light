@@ -19,7 +19,8 @@ import { Observable } from 'rxjs';
         <form [formGroup]="form">
           <div>
             <div>
-              <select name="" id="" [formControl]="provider">
+              <select name="" id="" [formControl]="provider" (change)="onProviderChange($event)">
+                <option value="">-- Select Live Chat --</option>
                 <option
                   *ngFor="let provider of providers"
                   [ngValue]="provider.value"
@@ -63,7 +64,7 @@ export class ConfigChatServiceComponent implements OnInit {
   initializeForm(entity?: IConfigChat) {
     this.form = this.fb.group({
       provider: [
-        ProviderChoices.ZENDESK ?? entity?.provider,
+        entity?.provider ?? '',
         [Validators.required],
       ],
       widgetCode: [null ?? entity?.widgetCode, [Validators.required]],
@@ -89,5 +90,15 @@ export class ConfigChatServiceComponent implements OnInit {
       .pipe(
         mergeMapTo(this.service.create(this.form.value)),
       );
+  }
+
+  /**
+   * whenever user change provider to `-- select live chat --`
+   * remove exist widgetCode value
+   */
+  onProviderChange(ev: any): void {
+    if (!ev.target.value) {
+      this.widgetCode.setValue('', {onlySelf: true});
+    }
   }
 }
