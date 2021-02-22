@@ -91,7 +91,7 @@ import { AbstractEditingComponent } from '@nusantara/core';
                               </div>
                             </div>
                             <input formControlName="value" type="text" *ngIf="attributesFormArray.controls[i].value.type === 'text'"/>
-                            <input formControlName="value" type="integer" *ngIf="attributesFormArray.controls[i].value.type === 'integer'"/>
+                            <input formControlName="value" type="number" *ngIf="attributesFormArray.controls[i].value.type === 'integer'"/>
                           </td>
                         </tr>
                       </tbody>
@@ -217,10 +217,12 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
     this.mpItemService
       .getItemMarketplaceInformation(this.productSlug)
       .subscribe((data: IMarketplaceItemInformation) => {
-        this.warehouseCount = data.totalWarehouse;
-        this.marketplaceCount = data.totalMarketplace;
-        this.storeCount = data.totalStore;
-        this.warehouseInfoDetail = data.details;
+        if(data){
+          this.warehouseCount = data.totalWarehouse;
+          this.marketplaceCount = data.totalMarketplace;
+          this.storeCount = data.totalStore;
+          this.warehouseInfoDetail = data.details;
+        }
       });
 
     this.mpItemService
