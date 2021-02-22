@@ -33,6 +33,11 @@ import { IJwtClaims } from '@nusantara/auth/models';
 
     <form [formGroup]="form" (ngSubmit)="save()">
       <label>
+        <span>Employee ID</span>
+        <input type="text" [formControl]="identityNumber"/>
+      </label>
+
+      <label>
         <span>First Name</span>
         <input type="text" [formControl]="firstName"/>
       </label>
@@ -44,7 +49,12 @@ import { IJwtClaims } from '@nusantara/auth/models';
 
       <label>
         <span>Email Address</span>
-        <input type="email" [formControl]="email"/>
+        <div *ngIf="!entity; else emailReadOnly">
+          <input type="email" [formControl]="email"/>
+        </div>
+        <ng-template #emailReadOnly>
+          <div style="font-size: 0.85rem;">{{ email.value }}</div>
+        </ng-template>
       </label>
 
       <label>
@@ -163,14 +173,16 @@ export class EmployeeComponent
 
   initializeForm(entity?: IEmployee) {
     this.form = this.fb.group({
+      identityNumber: [entity?.identityNumber, [Validators.required]],
       firstName: [entity?.firstName, [Validators.required]],
       lastName: [entity?.lastName, [Validators.required]],
       email: [entity?.email, [Validators.required]],
       href: [entity?.href, []],
       phoneNumber: [entity?.phoneNumber, []],
       isActive: [entity?.isActive ?? true, [Validators.required]],
-      warehouses: this.fb.array([]),
+      warehouses: this.fb.array([], [Validators.required]),
       accessGroups: this.fb.array([]),
+      title: [entity?.firstName, []], // used as formality when delete data
     });
 
     this.entity = entity;
@@ -179,6 +191,9 @@ export class EmployeeComponent
     this.form.controls.isActive.markAsTouched();
   }
 
+  get identityNumber(): FormControl {
+    return this.form.get('identityNumber') as FormControl;
+  }
   get firstName(): FormControl {
     return this.form.get('firstName') as FormControl;
   }
@@ -199,6 +214,18 @@ export class EmployeeComponent
   }
   get accessGroups(): FormArray {
     return this.form.get('accessGroups') as FormArray;
+  }
+
+  getFormValue(): any {
+    const formValue = super.getFormValue();
+    delete formValue?.title;
+
+    if (!this.entity) {
+      return { ...formValue,  email: this.email.value.toLowerCase() };
+    } else {
+      delete formValue?.email;
+      return formValue;
+    }
   }
 
   save(): void {
@@ -226,6 +253,13 @@ export class EmployeeComponent
         }
       });
     this.form.disable();
+  }
+
+  delete(): void {
+    const isDelete = confirm('Do you really want delete this data?');
+    if (isDelete) {
+      super.delete();
+    }
   }
 
   protected onSaveSuccess(result: IResultResponse<IEmployee>) {
