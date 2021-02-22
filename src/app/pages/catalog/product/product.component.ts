@@ -89,7 +89,8 @@ import { MarketplaceInfoHostComponent } from './marketplace';
 
             <div class="rich-text-container">
               <label for="content" class="external"><span>Description</span></label>
-              <ckeditor [editor]="Editor" [formControl]="description" id="description"></ckeditor>
+              <ckeditor [editor]="Editor" [config]="editorConfig"
+                  [formControl]="description" id="description"></ckeditor>
               <nus-field-errors [control]="description"></nus-field-errors>
             </div>
 

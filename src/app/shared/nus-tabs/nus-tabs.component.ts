@@ -49,7 +49,9 @@ export class NusTabsComponent implements AfterContentInit {
 
     // if there is no active tab set, activate the first
     if (activeTabs.length === 0) {
-      this.selectTab(this.tabs.first);
+      if(this.tabs.length){
+        this.selectTab(this.tabs.first);
+      }
     }
   }
 
