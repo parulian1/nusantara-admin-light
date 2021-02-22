@@ -73,6 +73,7 @@ import { SubscriptionLike } from 'rxjs';
         <li><a [routerLink]="['/cms/content-footers']" routerLinkActive="active">Content Footers</a></li>
         <li><a [routerLink]="['/cms/highlights']" routerLinkActive="active">Highlights</a></li>
         <li><a [routerLink]="['/cms/sla']" routerLinkActive="active">SLA</a></li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/cms/video-integration']" routerLinkActive="active">Video Integration</a></li>
         <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/cms/onboardingcontent']" routerLinkActive="active">Onboarding</a></li>
 
 

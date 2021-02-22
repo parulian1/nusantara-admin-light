@@ -21,7 +21,7 @@ jobs:
           verbose: false
           customRegistry: useFeed
           customFeed: $(FEED_ID)
-          
+
       - task: CmdLine@2
         displayName: Run Unit Tests
         continueOnError: true
@@ -37,7 +37,7 @@ jobs:
         displayName: Publish test report to Azure DevOps
         inputs:
           testRunTitle: node
-  
+
       - task: 1ESLighthouseEng.PipelineArtifactCaching.RestoreAndSaveCacheV1.RestoreAndSaveCache@1
         displayName: Restore and save cache from Azure Artifact
         inputs:
@@ -86,18 +86,18 @@ jobs:
           verbose: false
           customCommand: run env
 
-    # Production Build
+      # Production Build
       - task: Npm@1
         displayName: Build & Packaging (Production)
         inputs:
           command: custom
           verbose: false
           customCommand: run ng -- build --configuration=production
-    
+
       - task: ArchiveFiles@2
         displayName: Archive dist folder as Artifact
         inputs:
-          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist' 
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist'
           includeRootFolder: true
           archiveFile: '$(System.DefaultWorkingDirectory)/artifact.tar.bz2'
           archiveType: tar
@@ -109,7 +109,7 @@ jobs:
           targetPath: artifact.tar.bz2
           artifact: production
           publishLocation: pipeline
-    
+
   # Staging Build
   - job: staging
     displayName: Staging
@@ -140,18 +140,18 @@ jobs:
           command: custom
           verbose: false
           customCommand: run env
-        
+
       - task: Npm@1
         displayName: Build & Packaging (Staging)
         inputs:
           command: custom
           verbose: false
           customCommand: run ng build
-    
+
       - task: ArchiveFiles@2
         displayName: Archive dist folder as Artifact
         inputs:
-          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist' 
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist'
           includeRootFolder: true
           archiveFile: '$(System.DefaultWorkingDirectory)/artifact.tar.bz2'
           archiveType: tar

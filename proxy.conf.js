@@ -17,6 +17,20 @@ const proxyConfig = [
   //   secure: false
   // },
   {
+    context: '/api/fulfillment',
+    pathRewrite: {'^/api/fulfillment': ''},
+    target: 'http://127.0.0.1:8003',
+    changeOrigin: true,
+    secure: false
+  },
+  {
+    context: '/api/order',
+    pathRewrite: {'^/api/order': ''},
+    target: 'http://127.0.0.1:8002',
+    changeOrigin: true,
+    secure: false
+  },
+  {
     context: '/api/catalog',
     pathRewrite: {'^/api/catalog': ''},
     target: 'http://127.0.0.1:8001',
@@ -25,8 +39,8 @@ const proxyConfig = [
   },
   {
     context: '/api/iam',
-    // pathRewrite: {'^/api/iam': ''},
-    target: 'https://bhisma.cloud/api/iam',
+    pathRewrite: {'^/api/iam': ''},
+    target: 'http://127.0.0.1:8000',
     changeOrigin: true,
     secure: false
   }

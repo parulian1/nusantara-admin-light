@@ -54,6 +54,7 @@ import { IProductAttribute } from '@nusantara/models/products';
     '.color-input { text-align: left; }',
     '.color-input input { width: 40px; height: 40px; border-radius: 4px; padding: 0; }',
     'input { height: 40px; }',
+    'td { border-bottom: solid 1px var(--grey) !important; }'
   ]
 })
 export class AttributeValueComponent {
