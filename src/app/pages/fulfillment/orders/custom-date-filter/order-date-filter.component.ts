@@ -1,0 +1,210 @@
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
+import { MatSelectChange } from "@angular/material/select";
+import {
+  ORDER_CUSTOM_DATE_FORMATS,
+  DATE_DISPLAY_FORMAT,
+  OrderDateAdapter,
+} from "../order-date-adapter";
+import { DateAdapter, MAT_DATE_FORMATS } from "@angular/material/core";
+import * as moment from "moment";
+
+const apiDateFormat = "YYYY-MM-DDTHH:mm:ss";
+
+@Component({
+  selector: 'nus-order-date-filter',
+  template: `
+  <div>
+    <mat-form-field>
+      <mat-select 
+        [disableOptionCentering]="true" 
+        panelClass="mat-select-panel" [formControl]="date" (selectionChange)="onDateOptionsSelected($event)">
+        <mat-select-trigger>
+          <ng-template [ngIf]="date.value === 'allDate'">
+            All Date
+          </ng-template>
+          <ng-template [ngIf]="date.value === 'today'">
+            {{ showDisplayDate(dateFromNow()) }}
+          </ng-template>
+          <ng-template [ngIf]="date.value === 'yesterday'">
+            {{ showDisplayDate(dateFromNow(-1)) }}
+          </ng-template>
+          <ng-template [ngIf]="date.value === 'last3Days'">
+            {{ showDisplayDate(dateFromNow(-3)) }}
+            -
+            {{ showDisplayDate(dateFromNow()) }}
+          </ng-template>
+          <ng-template [ngIf]="date.value === 'last7Days'">
+            {{ showDisplayDate(dateFromNow(-7)) }}
+            -
+            {{ showDisplayDate(dateFromNow()) }}
+          </ng-template>
+          <ng-template [ngIf]="date.value === 'customDate'">
+            {{ customDate.value ? showDisplayDate(customDate.value) : '' }}
+          </ng-template>
+          <ng-template [ngIf]="date.value === 'customRange'">
+            {{ customRange.get('start').value ? showDisplayDate(customRange.get('start').value) : '' }}
+            -
+            {{ customRange.get('end').value ? showDisplayDate(customRange.get('end').value) : '' }}
+          </ng-template>           
+        </mat-select-trigger>
+        <mat-option value="allDate">All Date</mat-option>
+        <mat-option value="today">Today</mat-option>
+        <mat-option value="yesterday">Yesterday</mat-option>
+        <mat-option value="last3Days">Last 3 days</mat-option>
+        <mat-option value="last7Days">Last 7 days</mat-option>
+        <mat-option value="customDate" (click)="datePicker.open()">Custom Date</mat-option>
+        <mat-option value="customRange" (click)="dateRangePicker.open()">Custom Range</mat-option>
+        <mat-option class="custom-date-filter">
+          <mat-form-field>
+            <input matInput (dateChange)="onCustomDateFilterChange()"
+              [formControl]="customDate"
+              [matDatepicker]="datePicker"
+            />
+            <mat-datepicker-toggle matSuffix [for]="datePicker">
+            </mat-datepicker-toggle>
+            <mat-datepicker touchUi #datePicker></mat-datepicker>
+          </mat-form-field>
+        </mat-option>
+        <mat-option class="custom-date-filter">
+          <mat-form-field>
+            <mat-date-range-input
+              [formGroup]="customRange"
+              [rangePicker]="dateRangePicker">
+              <input 
+                (dateChange)="onCustomDateRangeStartChange()"
+                matStartDate formControlName="start"/>
+              <input 
+                (dateChange)="onCustomDateRangeEndChange()"
+                matEndDate formControlName="end"/>
+            </mat-date-range-input>
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="dateRangePicker">
+            </mat-datepicker-toggle>
+            <mat-date-range-picker touchUi #dateRangePicker (opened)="addMaxRangeInfo()">
+              <span><sup>*</sup>Select up to 14 days</span>
+            </mat-date-range-picker>
+          </mat-form-field>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-error *ngIf="date.value === 'customRange' && customRange.errors?.range">Allowed range are within 14 days</mat-error>
+    <mat-error *ngIf="date.value === 'customRange' && customRange.errors?.empty">Start date and end date on custom range cannot be empty</mat-error>
+  </div>`,
+  styles: [
+    '.select-date { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 20px; }',
+    `.svg {
+        content: "";
+        position: absolute;
+        height: 10px;
+        width: 10%;
+        background-image: url("assets/arrowDown.svg");
+        background-size: 12px; 
+      }`,
+    '.custom-date-filter { display: none; }',
+    '::ng-deep .mat-calendar .mat-button-wrapper { color: var(--lighten-black); font-weight: bold; }'
+  ],
+  providers: [
+    { provide: MAT_DATE_FORMATS, useValue: ORDER_CUSTOM_DATE_FORMATS },
+    { provide: DateAdapter, useClass: OrderDateAdapter },
+  ],
+})
+export class OrderDateFilterComponent implements OnInit {
+  @Output() startDate = new EventEmitter<string>();
+  @Output() endDate = new EventEmitter<string>();
+
+  date = new FormControl("allDate");
+  customDate = new FormControl();
+  customRange: FormGroup;
+
+  constructor(private fb: FormBuilder) {}
+
+  ngOnInit() {
+    this.customRange = this.fb.group(
+      {
+        start: [""],
+        end: [""],
+      },
+      { validator: this.dateRangeValidator(14) }
+    );
+  }
+
+  onDateOptionsSelected(event: MatSelectChange) {
+    switch (event.value) {
+      case "allDate":
+        this.startDate.emit(null);
+        this.endDate.emit(null);
+        break;
+      case "today":
+        this.startDate.emit(moment().format(apiDateFormat));
+        this.endDate.emit(moment().format(apiDateFormat));
+        break;
+      case "yesterday":
+        this.startDate.emit(moment().subtract(1, "days").format(apiDateFormat));
+        this.endDate.emit(moment().subtract(1, "days").format(apiDateFormat));
+        break;
+      case "last3Days":
+        this.startDate.emit(moment().subtract(3, "days").format(apiDateFormat));
+        this.endDate.emit(moment().format(apiDateFormat));
+        break;
+      case "last7Days":
+        this.startDate.emit(moment().subtract(7, "days").format(apiDateFormat));
+        this.endDate.emit(moment().format(apiDateFormat));
+        break;
+      default:
+        break;
+    }
+  }
+
+  onCustomDateFilterChange() {
+    this.startDate.emit(moment(this.customDate.value).format(apiDateFormat));
+    this.endDate.emit(moment(this.customDate.value).format(apiDateFormat));
+  }
+
+  onCustomDateRangeStartChange() {
+    if(this.customRange.get('start').value !== null){
+      this.startDate.emit(moment(this.customRange.get('start').value).format(apiDateFormat));
+    }
+  }
+
+  onCustomDateRangeEndChange() {
+    if(this.customRange.get('end').value !== null){
+      this.endDate.emit(moment(this.customRange.get('end').value).format(apiDateFormat));
+    }
+  }
+
+  showDisplayDate(date: Date): string {
+    return moment(date).format(DATE_DISPLAY_FORMAT);
+  }
+
+  dateFromNow(accumulator = 0) {
+    const date = new Date();
+    date.setDate(date.getDate() + accumulator);
+    return date;
+  }
+
+  dateRangeValidator(maxDiff: number) {
+    return (fg: FormGroup) => {
+      const start = fg.get("start").value;
+      const end = fg.get("end").value;
+
+      if (start !== null && end !== null) {
+        return moment(end).diff(moment(start), "days") <= maxDiff
+          ? null
+          : { range: true };
+      } else {
+        return { empty: true };
+      }
+    };
+  }
+
+  addMaxRangeInfo() {
+    var matCalendar = document.getElementsByClassName("mat-calendar")[0];
+    let footer = document.createElement("div") as HTMLDivElement;
+    footer.setAttribute("class", "date-range-footer");
+    const text = document.createTextNode("*Select up to 14 days");
+    footer.appendChild(text);
+    matCalendar.appendChild(footer);
+  }
+}

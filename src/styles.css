@@ -76,6 +76,7 @@
  * ---------------------
  * Site-wide styling -- not specific to any single type of page
  */
+html, body { height: 100%; }
 html {
   scroll-behavior: smooth;
 }
@@ -208,7 +209,7 @@ input.ng-untouched {
 }
 
 /** Custom input for checkbox, radio and toggle **/
-@supports (-webkit-appearance: none) or (-moz-appearance: none) {
+/* @supports (-webkit-appearance: none) or (-moz-appearance: none) {
   input[type="checkbox"], input[type="radio"] {
     --active: var(--secondary);
     --active-inner: var(--white);
@@ -236,7 +237,14 @@ input.ng-untouched {
     position: absolute;
     transition: transform var(--d-t, 0.3s) var(--d-t-e, ease), opacity var(--d-o, 0.2s);
  }
-  input[type="checkbox"]:checked, input[type="radio"]:checked {
+  input[type="checkbox"]:checked, input[type="radio"]:checked {::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-ripple .mat-ripple-element {
+    opacity: 0.03 !important;
+    background-color: #005691!important;
+  }
+
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background,.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    background-color: #005691;
+  }
     --b: var(--active);
     --bc: var(--active);
     --d-o: 0.3s;
@@ -345,7 +353,7 @@ input.ng-untouched {
   input[type="radio"]:disabled:after {
     background: var(--border);
  }
-}
+} */
 
 /* For input fields that should immediately show when they are invalid */
 .immediate-error-display input.ng-untouched.ng-invalid {
@@ -583,7 +591,7 @@ button.control, a.control {
   font-weight: bold;
   font-size: 1em;
   text-decoration: none;
-  height: 40px;
+  min-height: 40px;
   min-width: 120px;
   line-height: 31px;
   box-sizing: border-box;
@@ -793,6 +801,10 @@ button.control:hover:not([disabled]), a.control:hover:not([disabled]), a.control
   max-width: 684px;
 }
 
+.medium-modal.nsm-dialog {
+  max-width: 566px;
+}
+
 .no-padding-modal .nsm-body {
   padding: 0;
 }
@@ -889,4 +901,109 @@ span.badge {
 
 .new-add-button.wide {
   width: 100%;
+}
+
+
+/** Angular Material **/
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-form-field-wrapper {
+  padding-bottom: 0;
+}
+
+.mat-form-field-appearance-outline .mat-form-field .mat-form-field-underline {
+  display: none;
+}
+.mat-form-field-appearance-outline .mat-form-field-flex {
+  height: 42px;
+}
+.mat-form-field-appearance-outline .mat-form-field-flex > .mat-form-field-infix { 
+  padding-top: 1.1em;
+  border-top: none; 
+}
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: var(--grey);
+}
+
+/* Calendar */
+.mat-calendar thead{ background: transparent; }
+.mat-calendar thead tr, .mat-calendar tbody tr { height: unset; }
+.mat-calendar table, .mat-calendar table tbody td { border: unset; border-radius: unset; }
+.mat-datepicker-content .mat-calendar {
+  width: 360px !important;
+  height: 500px !important;
+}
+
+.mat-date-range-input input {
+  border: unset !important;
+  height: unset !important;
+  background: transparent !important;
+  padding: unset !important;
+}
+
+/* Select */
+.mat-select-panel {
+  max-height: 500px !important;
+  margin-top: 32px;
+}
+.mat-select-arrow { visibility: hidden; } 
+.mat-select-arrow-wrapper {
+  display: flex !important;
+  align-items: center;
+}
+.mat-select-arrow-wrapper:before {
+  content: "";
+  position: absolute;
+  height: 10px;
+  width: 10px;
+  background: url("assets/arrowDown.svg") center no-repeat;
+  background-size: 10px;
+}
+
+.mat-selected:after {
+  content: "";
+  background: url("assets/green-checkmark.svg") center no-repeat;
+  height: 15px;
+  width: 18px;
+  background-size: 20px;
+}
+
+.mat-select-panel .mat-option.mat-selected:not(.mat-option-multiple) {
+  background: transparent;
+}
+
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled) { 
+  color: var(--lighten-black);
+}
+
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  color: var(--grey);
+}
+
+.mat-calendar-body-selected {
+  background-color: var(--tertiary-lighten);
+}
+
+
+/* Checkbox */
+mat-checkbox label { min-height: unset; padding-bottom: unset;}
+
+.mat-checkbox-checked.mat-accent .mat-checkbox-ripple .mat-ripple-element {
+  opacity: 0.03 !important;
+  background-color: var(--secondary) !important;
+}
+
+.mat-checkbox-checked.mat-accent .mat-checkbox-background,.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background-color: var(--secondary);
+}
+
+.mat-checkbox .mat-checkbox-layout {
+  vertical-align: unset !important;
+}
+
+.mat-datepicker-content-touch .mat-calendar {
+  max-height: 470;
 }

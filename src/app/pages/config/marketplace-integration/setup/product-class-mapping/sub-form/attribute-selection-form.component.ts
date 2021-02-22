@@ -50,7 +50,7 @@ import { SubFormComponent } from './sub-form.component';
               <div class="checkboxes">
                 <div *ngFor="let attr of optionals.controls; let i = index">
                   <label [for]="i">
-                    <input type="checkbox" id="i" [formControl]="attr" formArrayName="optionals"/>
+                    <input type="checkbox" [id]="i" [formControl]="attr" formArrayName="optionals"/>
                     <span>{{ optionalAttributes[i].name }}</span>
                   </label>
                 </div>

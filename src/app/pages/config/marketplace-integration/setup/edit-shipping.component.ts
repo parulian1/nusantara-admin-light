@@ -10,7 +10,7 @@ import { MarketplaceShopService } from '@nusantara/services';
 import { ToastLevelEnum, ToastService } from '@nusantara/core';
 import * as fromReducer from '@nusantara/reducers';
 @Component({
-  selector: 'nus-product-class-mapping-form',
+  selector: 'nus-edit-shipping',
   template: `
     <h1 class="title-1">Edit Shipping</h1>
     <div class="container">

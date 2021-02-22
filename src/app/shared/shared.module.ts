@@ -2,9 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxSmartModalModule } from 'ngx-smart-modal';
 
 import { EntityToSlugPipe } from './entity-to-slug.pipe';
 import { PaginationComponent } from './pagination.component';
+import { PaginationChildComponent } from '@nusantara/shared/pagination-child.component';
 import { DetailTitleComponent } from './detail-title.component';
 import { ListHeaderComponent } from './list-header.component';
 import { DetailActionsComponent } from './detail-actions.component';
@@ -16,14 +18,14 @@ import { NonFieldErrorsComponent } from './non-field-errors.component';
 import { SpinnerComponent } from './spinner.component';
 import { ProductSelectionModalComponent } from '@nusantara/shared/product-selection-modal.component';
 
-import { NgxSmartModalModule } from 'ngx-smart-modal';
-import { PaginationChildComponent } from '@nusantara/shared/pagination-child.component';
 import { UserSelectionModalComponent } from '@nusantara/shared/user-selection-modal.component';
 import { CustomerGroupModalComponent } from '@nusantara/shared/customer-group-modal.component';
 import { IncludeDeletedComponent } from './filters/include-deleted.component';
 import { IncludeInactiveComponent } from './filters/include-inactive.component';
+import { SortToggleComponent } from './sorts/sort-toggle.component';
+import { MilestoneComponent } from './milestone.component';
+import { ActivityTrackingComponent } from './activity-tracking.component';
 import { NusTabsComponent, NusTabComponent } from './nus-tabs';
-
 import { FieldErrorsMarketplaceComponent } from '@nusantara/shared/field-errors-marketplace.component';
 import { ConfirmModalComponent } from './confirm-modal.component';
 import { TooltipComponent } from './tooltip.component';
@@ -57,6 +59,9 @@ import { ConfirmModalPendingOrderComponent } from './confirm-modal-pending-order
     IncludeDeletedComponent,
     CustomerGroupModalComponent,
     IncludeInactiveComponent,
+    SortToggleComponent,
+    MilestoneComponent,
+    ActivityTrackingComponent,
     NusTabsComponent,
     NusTabComponent,
     FieldErrorsMarketplaceComponent,
@@ -85,8 +90,12 @@ import { ConfirmModalPendingOrderComponent } from './confirm-modal-pending-order
     PaginationChildComponent,
     UserSelectionModalComponent,
     IncludeDeletedComponent,
+    SortToggleComponent,
     CustomerGroupModalComponent,
     IncludeInactiveComponent,
+    SortToggleComponent,
+    MilestoneComponent,
+    ActivityTrackingComponent,
     NusTabsComponent,
     NusTabComponent,
     FieldErrorsMarketplaceComponent,
