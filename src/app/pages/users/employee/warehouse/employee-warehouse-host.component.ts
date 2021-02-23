@@ -114,6 +114,6 @@ export class EmployeeWarehouseHostComponent implements OnInit {
       })
     );
 
-    return combineLatest([savedJoin$, deletedJoin$]);
+    return combineLatest([deletedJoin$, savedJoin$]);
   }
 }
