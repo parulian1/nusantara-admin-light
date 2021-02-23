@@ -24,7 +24,7 @@ import { MarketplaceClientEnum } from '../markeplace-client-enum';
       <label>
         <span>Seller Email
         </span>
-        <input formControlName="sellerEmail" placeholder="Input Seller Email"/>
+        <input type="email" formControlName="sellerEmail" placeholder="Input Seller Email"/>
         <nus-field-errors-marketplace
           [control]="sellerEmail"
           variable="Seller Email"
@@ -138,7 +138,7 @@ export class LazadaFormComponent implements OnInit {
 
   initializeForm(entity?: ILazadaCredential) {
     this.form = this.fb.group({
-      sellerEmail: [entity?.sellerEmail, [Validators.required, Validators.maxLength(100)]],
+      sellerEmail: [entity?.sellerEmail ?? '', [Validators.required, Validators.email]],
       warehouseId: [entity?.warehouse, [Validators.required]],
     });
   }
