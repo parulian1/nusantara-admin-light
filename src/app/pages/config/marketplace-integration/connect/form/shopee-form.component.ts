@@ -128,7 +128,7 @@ export class ShopeeeClientFormComponent implements OnInit {
   partnerKeyInfo = "To get your Partner Key, go to Shopee Open Platform and create APP console"
   partnerIdInfo = "Partner ID is assigned upon registration is successful. Required for all requests."
 
-  shopIdValue: any;
+  shopIdValue: number;
 
   constructor(
     private service: MarketplaceClientService,
@@ -136,12 +136,9 @@ export class ShopeeeClientFormComponent implements OnInit {
     private toast: ToastService,
     private route: ActivatedRoute,
     private router: Router,
-  ) {
-    this.initializeForm();
-  }
+  ) {}
 
   ngOnInit() {
-
     this.service
       .getWarehouse(MarketplaceClientEnum.shopee)
       .subscribe((data: IMarketplaceWarehouse[]) => {
@@ -151,6 +148,7 @@ export class ShopeeeClientFormComponent implements OnInit {
     if (this.shopSlug) {
       this.fillFormDetail(this.shopSlug);
     }
+    this.initializeForm();
   }
 
   fillFormDetail(shopId: string) {
@@ -194,6 +192,10 @@ export class ShopeeeClientFormComponent implements OnInit {
       shopId: [entity?.shopId, [Validators.required, this.isInteger()]],
       warehouseId: [entity?.warehouse, [Validators.required]],
     });
+
+    if(this.isEdit){
+      this.shopId.disable();
+    }
   }
 
   check_if_is_integer(value){
@@ -222,7 +224,7 @@ export class ShopeeeClientFormComponent implements OnInit {
       partner_id: this.form.value.partnerId,
       partner_key: this.form.value.partnerKey,
       redirect_url: this.form.value.redirectUrl,
-      shop_id: this.shopIdValue,
+      shop_id: this.isEdit? this.shopIdValue : this.form.value.shopId,
       warehouse_id: this.form.value.warehouseId,
       split_variant: false,
     };

@@ -119,7 +119,8 @@ export class WidgetBlockComponent extends AbstractDetailComponent<IWidgetBlock> 
       contentType: this.fb.group({
         href: [widget?.contentType.href, []],
         appLabel: [widget?.contentType.appLabel, []],
-        model: [widget?.contentType.model, []],}),
+        model: [widget?.contentType.model, []]
+      }),
       contentObject: this.fb.group([]),
       objectId: [widget?.objectId, []],
       isActive: [widget?.isActive, []],

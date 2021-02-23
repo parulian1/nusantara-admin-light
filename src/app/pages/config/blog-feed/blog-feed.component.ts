@@ -99,7 +99,7 @@ export class BlogFeedComponent extends AbstractDetailComponent<IBlogFeedSetting>
         return;
       }
     }
-    this.router.navigate(['../'], {relativeTo: this.route});
+    this.router.navigate(['../../'], {relativeTo: this.route});
   }
 
 }

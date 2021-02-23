@@ -21,7 +21,7 @@ import {
 } from '@nusantara/resolvers';
 import { MediaTypeResolver } from './product/media';
 import { PriceListTypeResolver } from './product/price';
-import { ProductOptionListComponent, AllProductOptionResolver, ProductOptionComponent  } from "./product-options";
+import { ProductOptionListComponent, AllProductOptionResolver, ProductOptionComponent  } from './product-options';
 import { DurationListResolver, LengthListResolver, PacketListResolver } from './product/subscription';
 import {EditShippingComponent} from "../config/marketplace-integration";
 

@@ -1,9 +1,10 @@
-import { ICoreOrder } from "@nusantara/models/order/core-order";
+import { ICoreOrder } from '@nusantara/models/order/core-order';
 
 export interface IOrder extends ICoreOrder {
   customer: {
     name: string;
     href: string;
+    email?: string;
   };
 
   featuredProduct?: {

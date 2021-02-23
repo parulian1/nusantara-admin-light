@@ -12,6 +12,10 @@ import { IWarehouse } from '@nusantara/models';
       description="A warehouse is any location where inventory is held;  This can involved retail locations.">
     </nus-list-header>
 
+    <div>
+      <nus-include-deleted></nus-include-deleted>
+    </div>
+
     <nus-pagination [page]="page"></nus-pagination>
 
     <table>
@@ -21,8 +25,8 @@ import { IWarehouse } from '@nusantara/models';
           <th>Street</th>
           <th>City</th>
           <th>Type</th>
-          <th>Stock Locations</th>
-          <th>Is Active</th>
+          <th class="numeric">Stock Locations</th>
+          <th class="centered">Is Active</th>
         </tr>
       </thead>
       <tbody>
@@ -31,8 +35,8 @@ import { IWarehouse } from '@nusantara/models';
         <td>{{ entity.address?.street }}</td>
         <td>{{ entity.address?.city }}</td>
         <td>{{ entity.type }}</td>
-        <td>{{ entity.subLocations.length }}</td>
-        <td><nus-true-false [value]="entity.isActive"></nus-true-false></td>
+        <td class="numeric">{{ entity.subLocations.length }}</td>
+        <td class="centered"><nus-true-false [value]="entity.isActive"></nus-true-false></td>
       </tr>
       </tbody>
     </table>

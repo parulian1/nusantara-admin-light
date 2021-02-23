@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -226,7 +226,7 @@ import { ICustomer, ICustomerGroup, IOrder } from '@nusantara/models';
     }
   `]
 })
-export class CustomerDetailComponent extends AbstractDetailComponent<ICustomer> {
+export class CustomerDetailComponent extends AbstractDetailComponent<ICustomer> implements OnInit{
 
   dateJoined: Date;
   registrationCampaign: string;

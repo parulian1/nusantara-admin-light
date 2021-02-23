@@ -11,23 +11,29 @@ import {Router} from "@angular/router";
 @Component({
   selector: 'nus-confirm-pending-modal',
   template: `
-    <ngx-smart-modal
-      [identifier]="'confirm'"
-      #modal
-      [customClass]="'nsm-centered'"
-    >
-      <h2 class="heading-2">{{ title }}</h2>
-      <p>{{ content }}</p>
-      <button class="control secondary" (click)="cancel()" type="button">
+    <ngx-smart-modal [identifier]="'confirm'" #modal [customClass]="'no-close-icon-modal no-padding-modal'">
+    <div class="wrapper">
+      <div class="message">
+        <h2 class="heading-2">{{ title }}</h2>
+        <p class="body-2">{{ content }}</p>
+      </div>
+      <div class="action">
+        <button class="control" (click)="close()" type="button">View Progress</button>
+        <button class="control secondary ghost" (click)="cancel()" type="button">
         Go to Approved Order
-      </button>
-      <button class="control" (click)="close()" type="button">View Progress</button>
-    </ngx-smart-modal>
+        </button>
+      </div>
+    </div>
+  </ngx-smart-modal>
   `,
   styles: [
-    'p {margin-bottom: 30px}',
-    'button:not(:first-child) { margin-left: 5px; }',
-    'h1{font-weight: 700}',
+    'h2 { margin-bottom: 11px; }',
+    'p { color: var(--darken-grey); }',
+    '.wrapper { padding: 16px; }',
+    '.message { margin: 0 8px 32px 8px; }',
+    'div.action { display: flex; justify-content: space-between; }',
+    'button { width: 100% }',
+    'button:not(:first-of-type) { margin-left: 5px; }',
   ],
 })
 export class ConfirmModalPendingOrderComponent {

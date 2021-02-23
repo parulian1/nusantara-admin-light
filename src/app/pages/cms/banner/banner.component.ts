@@ -3,9 +3,8 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractDetailComponent, ToastService } from '@nusantara/core';
-import { banner, drf } from '@nusantara/models';
+import { banner, drf, widgets } from '@nusantara/models';
 import { BannerService } from '@nusantara/services';
-import {IBannerGroup} from "../../../models/widgets/banner-group";
 
 @Component({
   selector: 'nus-banner',
@@ -33,7 +32,7 @@ import {IBannerGroup} from "../../../models/widgets/banner-group";
         <nus-field-errors [control]="type"></nus-field-errors>
       </label>
 
-      <label>
+      <label class="checkbox">
         <span>Is Active</span>
         <input type="checkbox" [formControl]="isActive" name="isActive">
       </label>
@@ -81,7 +80,7 @@ import {IBannerGroup} from "../../../models/widgets/banner-group";
         <nus-field-errors [control]="clickUrl"></nus-field-errors>
       </label>
 
-      <label>
+      <label class="checkbox">
         <span>Is Display at Homepage</span>
         <input type="checkbox" [formControl]="displayHomepage" name="displayHomepage">
       </label>
@@ -107,6 +106,7 @@ import {IBannerGroup} from "../../../models/widgets/banner-group";
   `,
   styles: [
     '.rich-text-container { padding-bottom: 14px; }', // double standard label padding
+    `.checkbox { width: fit-content; }`
   ]
 })
 export class BannerComponent extends AbstractDetailComponent<banner.IBanner> implements OnInit {
@@ -116,7 +116,7 @@ export class BannerComponent extends AbstractDetailComponent<banner.IBanner> imp
   phoneImagePreviewUrl: string;
   tabletImagePreviewUrl: string;
 
-  groups: Array<IBannerGroup>;
+  groups: Array<widgets.IBannerGroup>;
   typeChoices: drf.IChoice[];
 
 
@@ -153,7 +153,7 @@ export class BannerComponent extends AbstractDetailComponent<banner.IBanner> imp
       name: [entity?.name, [Validators.required, Validators.maxLength(50)]],
       type: [entity?.type, [Validators.required]],
       href: [entity?.href, []],
-      image: ['', entity?.image ? []: [Validators.required]],
+      image: ['', entity?.image ? [] : [Validators.required]],
       phoneImage: ['', []],
       tabletImage: ['', []],
       isActive: [entity?.isActive ?? false, []],
@@ -165,6 +165,10 @@ export class BannerComponent extends AbstractDetailComponent<banner.IBanner> imp
       group: [entity?.group ?? '', []],
       sortPriority: [entity?.sortPriority ?? '', []],
     });
+
+    // need to mark as touched to make custom styling works
+    this.form.controls.isActive.markAsTouched();
+    this.form.controls.displayHomepage.markAllAsTouched();
 
     this.setImagePreview(entity?.image);
     this.setPhoneImagePreview(entity?.phoneImage);

@@ -26,6 +26,7 @@ export * from './http-failure';
 export * from './content-footer';
 export * from './relative-choices';
 export * from './sla';
+export * from './video-integration';
 
 export * from './navigation';
 
@@ -54,3 +55,5 @@ import * as order from './order';
 export { base, drf, google, widgets, products, inventory, device, banner, shipment, themes, order };
 
 export * from './reseller';
+
+export * from './onboarding';

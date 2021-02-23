@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Validators, FormBuilder, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import * as ClassicEditor from '@gdnnusantara/ckeditor5-build/build/ckeditor';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -89,7 +89,8 @@ import { MarketplaceInfoHostComponent } from './marketplace';
 
             <div class="rich-text-container">
               <label for="content" class="external"><span>Description</span></label>
-              <ckeditor [editor]="Editor" [formControl]="description" id="description"></ckeditor>
+              <ckeditor [editor]="Editor" [config]="editorConfig"
+                  [formControl]="description" id="description"></ckeditor>
               <nus-field-errors [control]="description"></nus-field-errors>
             </div>
 
@@ -224,7 +225,7 @@ import { MarketplaceInfoHostComponent } from './marketplace';
           </div>
 
           <nus-marketplace-info id="marketplace-information" 
-            *ngIf="!isNew && productClassType === 'physical'"
+            *ngIf="!isNew && selectedProductClass.type === 'physical'"
             [form]="marketplace"
             [productClass]="selectedProductClass">
           </nus-marketplace-info>
@@ -286,7 +287,7 @@ import { MarketplaceInfoHostComponent } from './marketplace';
     'label.toggle { padding-bottom: 20px 0; width: fit-content; min-height: 0; }',
     'label.toggle > input { margin-right: 16px }',
     '.rich-text-container { padding-bottom: 16px; margin: 0 !important; }',
-    'ul { list-style: none }',
+    'ul { list-style: none; margin: 0; padding: 0; }',
     '.side-nav li { font-size: 14px; line-height: 20px; font-weight: bold; color: var(--tertiary); padding: 10px 32px; cursor: pointer; }',
     '.side-nav li.active { padding: 10px 24px; color: white; background: var(--tertiary-lighten); border-left: solid 8px var(--secondary); border-radius: 4px; }',
     '.side-nav li a { text-decoration: none; color: inherit; }',
@@ -297,7 +298,6 @@ import { MarketplaceInfoHostComponent } from './marketplace';
 export class ProductComponent extends AbstractDetailComponent<products.IProduct> implements OnInit, AfterViewInit {
 
   productClasses: Array<products.IProductClass>;
-  productClassType: string;
   categories: Array<ICategory>;
   vendors: Array<IVendor>;
   attribute: Array<products.IProductAttribute>;
@@ -308,7 +308,59 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   entity: products.IProduct;
   currentActive = 'general-info';
   Editor = ClassicEditor;
-
+  editorConfig = {
+    toolbar: {
+      items: [
+        'heading',
+        '|',
+        'bold',
+        'italic',
+        'link',
+        'bulletedList',
+        'numberedList',
+        '|',
+        'alignment',
+        'indent',
+        'outdent',
+        '|',
+        'imageUpload',
+        'imageInsert',
+        'blockQuote',
+        'insertTable',
+        'mediaEmbed',
+        'undo',
+        'redo',
+        '|',
+        'code',
+        'codeBlock',
+        'htmlEmbed',
+        'fontColor',
+        'fontSize',
+        'fontFamily',
+        'highlight',
+        'horizontalLine'
+      ]
+    },
+    language: 'en',
+    image: {
+      toolbar: [
+        'imageTextAlternative',
+        'imageStyle:full',
+        'imageStyle:side',
+        'linkImage'
+      ]
+    },
+    table: {
+      contentToolbar: [
+        'tableColumn',
+        'tableRow',
+        'mergeTableCells',
+        'tableCellProperties',
+        'tableProperties'
+      ]
+    },
+    licenseKey: ''
+  };
   selectedProductClass: products.IProductClass;
 
   @ViewChild(ProductMediaHostComponent) mediaHost!: ProductMediaHostComponent;
@@ -509,18 +561,20 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         if (resp instanceof ErrorResult) {
           this.onSaveError(resp);
         } else {
-          if (this.isProductOptionDomain) this.subscriptionHost.save(resp.entity).subscribe(() => { });
+          if (this.isProductOptionDomain) {
+            this.subscriptionHost.save(resp.entity).subscribe(() => { });
+          }
 
           this.mediaHost.saveAll(resp.entity).subscribe(() => { });
-          this.priceListHost.saveAll(resp.entity).pipe(catchError(child_err => {
-            if (child_err instanceof HttpErrorResponse) {
-              return of(new ErrorResult<IError>(child_err.error, child_err.status));
+          this.priceListHost.saveAll(resp.entity).pipe(catchError(childErr => {
+            if (childErr instanceof HttpErrorResponse) {
+              return of(new ErrorResult<IError>(childErr.error, childErr.status));
             } else {
-              return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, child_err.status));
+              return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, childErr.status));
             }
-          })).subscribe( (child_resp) => {
-              if (child_resp instanceof ErrorResult) {
-                this.onSaveError(child_resp);
+          })).subscribe( (childResp) => {
+              if (childResp instanceof ErrorResult) {
+                this.onSaveError(childResp);
               } else {
                 this.onSaveSuccess(resp);
               }
@@ -566,9 +620,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   onProductClassChanged(newValue: any) {
     // protect against triggering during initialization
     if (!newValue || !this.productClasses) { return; }
-
     const pc = this.productClasses.filter(e => e.href === newValue)[0];
-    this.productClassType = pc.type;
+    this.selectedProductClass =  pc;
 
     if (pc.type === 'physical') {
       this.weight.enable();
@@ -581,8 +634,6 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         this.dimensions.controls[key].disable();
       });
     }
-
-    this.selectedProductClass =  pc;
   }
 
   scrollTo(id: string) {

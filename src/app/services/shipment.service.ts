@@ -9,9 +9,9 @@ import {
   SuccessResult
 } from '@nusantara/core';
 import { shipment } from '@nusantara/models';
-import { Observable, of } from "rxjs";
-import { catchError, map } from "rxjs/operators";
-import { IError } from "@nusantara/models/base/error";
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { IError } from '@nusantara/models/base/error';
 
 
 @Injectable({
@@ -20,7 +20,7 @@ import { IError } from "@nusantara/models/base/error";
 export class ShipmentService extends AbstractCrudService<shipment.IShipment> {
 
   baseUrl = '/api/fulfillment/shipment';
-  createConnoteUrl = '/api/fulfillment/create-awb'
+  createConnoteUrl = '/api/fulfillment/create-awb';
   httpClient: HttpClient;
 
   constructor(httpClient: HttpClient) {

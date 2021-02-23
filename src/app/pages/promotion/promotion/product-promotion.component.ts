@@ -1,21 +1,21 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {FormArray, FormBuilder, FormControl, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
 import * as XLSX from 'xlsx';
 
-import { ProductPromotionService, ProductService } from '@nusantara/services';
-import { AbstractDetailComponent, DialogResult, ToastService } from '@nusantara/core';
-import { INamedHrefEntity } from '@nusantara/models/base';
-import { IProductPromotion, ProductPromotionType } from '@nusantara/models';
-import { IProduct } from '@nusantara/models/products';
-import { ProductSelectionModalComponent } from '@nusantara/shared';
+import {ProductPromotionService, ProductService} from '@nusantara/services';
+import {AbstractDetailComponent, DialogResult, ToastService} from '@nusantara/core';
+import {INamedHrefEntity} from '@nusantara/models/base';
+import {IProductBundling, IProductPromotion, ProductPromotionType} from '@nusantara/models';
+import {IProduct} from '@nusantara/models/products';
+import {ProductSelectionModalComponent} from '@nusantara/shared';
 
 @Component({
-  selector: 'nus-category',
+  selector: 'nus-product-promotion',
   template: `
     <nus-detail-title
       [originalName]="originalEntityName"
-      typeName="Product Promotion">
+      typeName="Promo">
     </nus-detail-title>
 
     <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
@@ -30,105 +30,179 @@ import { ProductSelectionModalComponent } from '@nusantara/shared';
 
       <label>
         <span>Type</span>
-        <select [formControl]="type">
+        <select [formControl]="type" (ngModelChange)="onPromoTypeChange($event)">
           <option *ngFor="let t of types" [ngValue]="t">{{ t }}</option>
         </select>
       </label>
 
-      <label>
-        <span>Amount</span>
-        <input type="number" [formControl]="amount" placeholder="Ex, 10000000">
-        <nus-field-errors [control]="amount"></nus-field-errors>
-      </label>
-
-      <label>
-        <span>Minimum Order Amount</span>
-        <input type="number" [formControl]="minimumOrderAmount" placeholder="Ex, 10000000">
+      <label *ngIf="!isPromoBundling">
+        <span>Minimum Order Value</span>
+        <input type="number" [formControl]="minimumOrderAmount"
+               placeholder="ex. 1000000">
         <nus-field-errors [control]="minimumOrderAmount"></nus-field-errors>
       </label>
 
-      <label>
+      <div class="promo-date">
+        <label class="promo-date-label">
+          <span class="subtitle">Valid From</span>
+          <input type="datetime-local" [formControl]="validFrom">
+          <nus-field-errors [control]="validFrom"></nus-field-errors>
+        </label>
+
+        <label class="promo-date-label">
+          <span class="subtitle">Valid To</span>
+          <input type="datetime-local" [formControl]="validTo">
+          <nus-field-errors [control]="validTo"></nus-field-errors>
+        </label>
+      </div>
+
+
+      <label *ngIf="!isPromoBundling">
+        <span>Amount</span>
+        <input type="number" [formControl]="amount"
+               placeholder="ex. 1000000">
+        <nus-field-errors [control]="amount"></nus-field-errors>
+      </label>
+
+      <label *ngIf="!isPromoBundling">
         <span>Max Amount</span>
-        <input type="text" [formControl]="maxAmount" placeholder="Ex, 10000000">
+        <input type="number" [formControl]="maxAmount"
+               placeholder="ex. 1000000">
         <nus-field-errors [control]="maxAmount"></nus-field-errors>
       </label>
 
-      <label>
+      <div class="promo-bundling-condition" *ngIf="isPromoBundling">
+        <span class="subheading-2">Condition</span>
+        <span
+          class="subtitle-condition">Requirements that customers need to meet in order for the promo to be used</span>
+        <table>
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>Product</th>
+            <th>Quantity</th>
+          </tr>
+          </thead>
+          <tbody>
+          <nus-product-promo-quantity
+            *ngFor="let control of productBundlingCondition.controls; let i=index"
+            [index]="i"
+            [form]="control"
+            (remove)="removeProductCondition(i)">
+          </nus-product-promo-quantity>
+          <tr>
+            <td colspan="3">
+              <button type="button" (click)="selectProductBundlingCondition()" class="new-add-button wide">
+                <i class="material-icons">add</i> Add Product
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="promo-bundling-benefit" *ngIf="isPromoBundling">
+        <span class="subheading-2">Benefit</span>
+        <span
+          class="subtitle-condition">The benefits that customers will get</span>
+        <table>
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>Product</th>
+            <th>Quantity</th>
+          </tr>
+          </thead>
+          <tbody>
+          <nus-product-promo-quantity
+            *ngFor="let control of productBundlingBenefit.controls; let i=index"
+            [index]="i"
+            [form]="control"
+            (remove)="removeProductBenefit(i)">
+          </nus-product-promo-quantity>
+          <tr>
+            <td colspan="3">
+              <button type="button" (click)="selectProductBundlingBenefit()" class="new-add-button wide">
+                <i class="material-icons">add</i> Add Product
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="promo-products" *ngIf="!isPromoBundling">
+        <span class="upload-product">
+          <h2 class="title-2">Promotion Products</h2>
+          <button type="button" class="control" (click)="uploadProductXLSX()">
+            <i class="material-icons">publish</i>
+            <span>Upload from XLSX</span>
+          </button>
+        </span>
+
+        <table>
+          <thead>
+          <tr>
+            <th class="numeric">#</th>
+            <th>Product</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let control of products.controls; let i=index">
+            <td class="numeric">{{ i + 1 }}</td>
+            <td>{{ control.get('name').value }}</td>
+            <td>
+              <button (click)="products.removeAt(i)" type="button" class="remove-button">
+                <i class="material-icons">remove_circle_outline</i>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3">
+              <button type="button" (click)="selectProduct()" class="new-add-button wide">
+                <i class="material-icons">add</i> Add Product
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <a class="download-product" href="{{ service.productListDownloadUrl }}" target="_blank">Download Product
+          List</a>
+      </div>
+
+      <label *ngIf="!isPromoBundling" class="checkbox">
+        <input type="checkbox" class="input-checkbox" [formControl]="isExclusive">
         <span>Is Exclusive</span>
-        <input type="checkbox" [formControl]="isExclusive">
         <nus-field-errors [control]="isExclusive"></nus-field-errors>
       </label>
 
-      <label>
+      <label class="checkbox">
+        <input type="checkbox" class="input-checkbox" [formControl]="isActive">
         <span>Is Active</span>
-        <input type="checkbox" [formControl]="isActive">
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
-      <label>
-        <span>Valid From</span>
-        <input type="datetime-local" [formControl]="validFrom">
-        <nus-field-errors [control]="validFrom"></nus-field-errors>
+      <label *ngIf="isPromoBundling" class="checkbox">
+        <input type="checkbox" class="input-checkbox" [formControl]="multiplyItem">
+        <span>Multiply Item</span>
+        <nus-field-errors [control]="multiplyItem"></nus-field-errors>
       </label>
 
-      <label>
-        <span>Valid To</span>
-        <input type="datetime-local" [formControl]="validTo">
-        <nus-field-errors [control]="validTo"></nus-field-errors>
-      </label>
-
-      <label>
-        <span>Priority</span>
+      <label class="checkbox">
+        <span class="subtitle">Priority</span>
         <input type="number" [formControl]="priority">
         <nus-field-errors [control]="priority"></nus-field-errors>
       </label>
 
-      <label>
-        <span>Image</span>
+      <label *ngIf="!isPromoBundling">
+        <span class="subtitle">Image</span>
         <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Banner Image" class="preview">
-        <input type="file" [formControl]="banner" (change)="setImagePreview($event)"
+        <input type="file" [formControl]="banner" (change)="setImagePromoPreview($event)"
                name="bannerImage" accept="image/*">
         <nus-field-errors [control]="banner"></nus-field-errors>
       </label>
-
-
-      <h2>
-        Promotion Products
-        <button type="button" class="control" (click)="uploadProductXLSX()">
-          <i class="material-icons">publish</i>
-          <span>Upload from XLSX</span>
-        </button>
-      </h2>
-
-      <table>
-        <thead>
-        <tr>
-          <th>#</th>
-          <th>Product</th>
-          <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let control of products.controls; let i=index">
-          <th>{{ i + 1 }}</th>
-          <td>{{ control.get('name').value }}</td>
-          <td>
-            <button (click)="products.removeAt(i)" type="button" class="remove-button">
-              <i class="material-icons">remove_circle_outline</i>
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            <button type="button" (click)="selectProduct()" class="add-button">
-              Add Product
-            </button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-
-      <a href="{{ service.productListDownloadUrl }}" target="_blank">Download Product List</a>
 
       <nus-detail-actions
         [component]="this"
@@ -137,17 +211,76 @@ import { ProductSelectionModalComponent } from '@nusantara/shared';
       </nus-detail-actions>
 
       <!-- Modals -->
-      <nus-product-selection-modal></nus-product-selection-modal>
+      <nus-product-selection-modal #conditionModal></nus-product-selection-modal>
+      <nus-product-selection-modal #benefitModal></nus-product-selection-modal>
+      <nus-product-selection-modal #productModal></nus-product-selection-modal>
 
     </form>
   `,
-  styles: []
+  styles: [`
+    .promo-date {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-column-gap: 30px;
+    }
+
+    .checkbox {
+      padding: 10px 0;
+      min-height: auto;
+      width: fit-content
+    }
+
+    .promo-products {
+      margin: 10px 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .upload-product {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .upload-product button {
+      display: flex;
+      align-items: center;
+    }
+
+    .download-product {
+      margin-top: 5px;
+    }
+
+    .promo-bundling-benefit {
+      margin: 16px 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .promo-bundling-condition {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .subtitle-condition {
+      font-size: 12px;
+      line-height: 20px;
+      color: var(--darken-grey);
+    }
+
+  `]
 })
 export class ProductPromotionComponent extends AbstractDetailComponent<IProductPromotion> implements OnInit, AfterViewInit {
+
   entity: IProductPromotion;
-  types: Array<ProductPromotionType> = ['percentage', 'amount_off', 'override_price'];
+  types: Array<ProductPromotionType> = ['percentage', 'amount_off', 'override_price', 'promo_bundling'];
   imagePreviewUrl: string;
-  @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
+  isPromoBundling = false;
+
+  @ViewChild('productModal') productSelectionModal: ProductSelectionModalComponent;
+  @ViewChild('conditionModal') productBundlingConditionSelectionModal: ProductSelectionModalComponent;
+  @ViewChild('benefitModal') productBundlingBenefitSelectionModal: ProductSelectionModalComponent;
 
   constructor(service: ProductPromotionService,
               route: ActivatedRoute,
@@ -161,34 +294,59 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
   initializeForm(entity?: IProductPromotion) {
     this.entity = entity;
     this.form = this.fb.group({
-      name: [entity?.name, [Validators.required, ]],
+      name: [entity?.name, [Validators.required]],
       href: [entity?.href, []],
       type: [entity?.type, [Validators.required]],
-      amount: [entity?.amount, [Validators.required, Validators.min(0)]],
-      minimumOrderAmount: [entity?.minimumOrderAmount, [Validators.required, Validators.min(0)]],
-      maxAmount: [entity?.maxAmount, [Validators.required, Validators.min(0)]],
+      amount: [entity?.amount ?? 1, [Validators.required, Validators.min(0)]],
+      minimumOrderAmount: [entity?.minimumOrderAmount ?? 1, [Validators.required, Validators.min(0)]],
+      maxAmount: [entity?.maxAmount ?? 1, [Validators.required, Validators.min(0)]],
       isExclusive: [entity?.isExclusive ?? false, [Validators.required]],
       isActive: [entity?.isActive ?? true, [Validators.required]],
       validFrom: [this.convertDateTime(entity?.validFrom), [Validators.required]],
       validTo: [this.convertDateTime(entity?.validTo), []],
       priority: [entity?.priority ?? 1, [Validators.required]],
       products: this.fb.array([]),
-      banner: ['', [] ]
+      banner: ['',  []],
+      productBundlingBenefit: this.fb.array([]),
+      productBundlingCondition: this.fb.array([]),
+      multiplyItem: [entity?.multiplyItem ?? false, []]
     });
+
+
+    // need to mark as touched to make custom styling works
+    this.form.controls.isExclusive.markAsTouched();
+    this.form.controls.isActive.markAsTouched();
+    this.form.controls.multiplyItem.markAsTouched();
+
+
+    for (const prodBenefit of entity?.productBundlingBenefit ?? []) {
+      this.addProductBenefit(prodBenefit);
+    }
+
+    for (const prodCondition of entity?.productBundlingCondition ?? []) {
+      this.addProductCondition(prodCondition);
+    }
 
     for (const prod of entity?.products ?? []) {
       this.addProduct(prod);
     }
 
-    this.setImagePreview(entity?.banner);
+    if (this.type.value === 'promo_bundling') {
+      this.isPromoBundling = true;
+    }
+
+
+    this.setImagePromoPreview(entity?.banner);
   }
 
-  setImagePreview(data: Event | string) {
-    super.setImagePreview(data, (dataAsUrl => this.imagePreviewUrl = dataAsUrl));
+  setImagePromoPreview(data?: Event | string) {
+    this.setImagePreview(data, (dataAsUrl) => this.imagePreviewUrl = dataAsUrl);
   }
 
   ngAfterViewInit() {
     this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
+    this.productBundlingConditionSelectionModal.onClose.subscribe(() => this.onProductBundlingConditionSelectionModalClosed());
+    this.productBundlingBenefitSelectionModal.onClose.subscribe(() => this.onProductBundlingBenefitSelectionModalClosed());
   }
 
   get name(): FormControl { return this.form.get('name') as FormControl; }
@@ -203,35 +361,92 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
   get priority(): FormControl { return this.form.get('priority') as FormControl; }
   get isActive(): FormControl { return this.form.get('isActive') as FormControl; }
   get banner(): FormControl { return this.form.get('banner') as FormControl; }
+  get productBundlingBenefit(): FormArray { return this.form.get('productBundlingBenefit') as FormArray; }
+  get productBundlingCondition(): FormArray { return this.form.get('productBundlingCondition') as FormArray; }
+  get multiplyItem(): FormControl { return this.form.get('multiplyItem') as FormControl; }
 
   addProduct(product: INamedHrefEntity) {
-
     if ((this.products.value as Array<IProduct>).filter(p => p.href === product.href).length > 0) {
       console.log('Product already in list -- skipping');
       return;
     }
 
-    this.products.push(
-      this.fb.group({
-        name: [product.name],
-        href: [product.href]
-      }));
+    const f = this.fb.group({
+      name: [product.name],
+      href: [product.href]
+    });
+
+    this.products.push(f);
+  }
+
+  addProductCondition(prodCondition?: IProductBundling) {
+    const f = this.fb.group({
+      name: [prodCondition.name],
+      href: [prodCondition.href],
+      quantity: [prodCondition.quantity]
+    });
+
+    this.productBundlingCondition.push(f);
+  }
+
+  addProductBenefit(prodBenefit?: IProductBundling) {
+    const f = this.fb.group({
+      name: [prodBenefit.name],
+      href: [prodBenefit.href],
+      quantity: [prodBenefit.quantity]
+    });
+
+    this.productBundlingBenefit.push(f);
   }
 
   selectProduct() {
     this.productSelectionModal.open();
   }
 
+  selectProductBundlingCondition() {
+    this.productBundlingConditionSelectionModal.open();
+  }
+
+  selectProductBundlingBenefit() {
+    this.productBundlingBenefitSelectionModal.open();
+  }
+
   onProductSelectionModalClosed() {
     if (this.productSelectionModal.result === DialogResult.OK) {
-
       const selectedProduct = this.productSelectionModal.product.value as IProduct;
 
       const f = this.fb.group({
         name: [selectedProduct.name, []],
-        href: [selectedProduct.href, []]
+        href: [selectedProduct.href, []],
       });
       this.products.push(f);
+
+    }
+  }
+
+  onProductBundlingConditionSelectionModalClosed() {
+    if (this.productBundlingConditionSelectionModal.result === DialogResult.OK) {
+      const selectedConditionProduct = this.productBundlingConditionSelectionModal.product.value as IProductBundling;
+
+      const f = this.fb.group({
+        name: [selectedConditionProduct.name, []],
+        href: [selectedConditionProduct.href, []],
+        quantity: [selectedConditionProduct.quantity, []]
+      });
+      this.productBundlingCondition.push(f);
+    }
+  }
+
+  onProductBundlingBenefitSelectionModalClosed() {
+    if (this.productBundlingBenefitSelectionModal.result === DialogResult.OK) {
+      const selectedBenefitProduct = this.productBundlingBenefitSelectionModal.product.value as IProductBundling;
+
+      const f = this.fb.group({
+        name: [selectedBenefitProduct.name, []],
+        href: [selectedBenefitProduct.href, []],
+        quantity: [selectedBenefitProduct.quantity, []]
+      });
+      this.productBundlingBenefit.push(f);
     }
   }
 
@@ -261,7 +476,6 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     const o = Math.abs(offset);
     return (offset < 0 ? '+' : '-') + ('00' + Math.floor(o / 60)).slice(-2) + ':' + ('00' + (o % 60)).slice(-2);
   }
-
 
   uploadProductXLSX(): void {
     const input: HTMLInputElement = document.createElement('input');
@@ -304,28 +518,25 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     input.click();
   }
 
-  //
   // onFileChange(evt: any) {
-	// 	/* wire up file reader */
-	// 	const target: DataTransfer = <DataTransfer>(evt.target);
-	// 	if (target.files.length !== 1) throw new Error('Cannot use multiple files');
-	// 	const reader: FileReader = new FileReader();
-	// 	reader.onload = (e: any) => {
-	// 		/* read workbook */
-	// 		const bstr: string = e.target.result;
-	// 		const wb: XLSX.WorkBook = XLSX.read(bstr, {type: 'binary'});
+  // 	/* wire up file reader */
+  // 	const target: DataTransfer = <DataTransfer>(evt.target);
+  // 	if (target.files.length !== 1) throw new Error('Cannot use multiple files');
+  // 	const reader: FileReader = new FileReader();
+  // 	reader.onload = (e: any) => {
+  // 		/* read workbook */
+  // 		const bstr: string = e.target.result;
+  // 		const wb: XLSX.WorkBook = XLSX.read(bstr, {type: 'binary'});
   //
-	// 		/* grab first sheet */
-	// 		const wsname: string = wb.SheetNames[0];
-	// 		const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+  // 		/* grab first sheet */
+  // 		const wsname: string = wb.SheetNames[0];
+  // 		const ws: XLSX.WorkSheet = wb.Sheets[wsname];
   //
-	// 		/* save data */
-	// 		this.data = <AOA>(XLSX.utils.sheet_to_json(ws, {header: 1}));
-	// 	};
-	// 	reader.readAsBinaryString(target.files[0]);
-	// }
-
-
+  // 		/* save data */
+  // 		this.data = <AOA>(XLSX.utils.sheet_to_json(ws, {header: 1}));
+  // 	};
+  // 	reader.readAsBinaryString(target.files[0]);
+  // }
 
   save() {
     this.form.value.validFrom = this.form.value.validFrom + this.getTimeZone();
@@ -334,11 +545,35 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     if (!!this.entity?.href && !!this.entity?.banner && !this.banner.value) {
       this.form.removeControl('banner');
     }
+
+    if (this.type.value === 'promo_bundling') {
+      this.form.removeControl('products');
+    }
+
+    if (this.type.value !== 'promo_bundling') {
+      this.form.removeControl('productBundlingBenefit');
+      this.form.removeControl('productBundlingCondition');
+    }
+
     if (!!this.banner && this.imagePreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
       this.form.value.banner = this.imagePreviewUrl;
     }
 
     super.save();
   }
+
+  removeProductCondition(i: number): void {
+    this.productBundlingCondition.removeAt(i);
+  }
+
+  removeProductBenefit(i: number): void {
+    this.productBundlingBenefit.removeAt(i);
+  }
+
+  onPromoTypeChange($event: any) {
+    this.isPromoBundling = $event === 'promo_bundling';
+  }
+
+
 }
 

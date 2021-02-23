@@ -1,4 +1,4 @@
-import { IHrefEntity } from "../base";
+import { IHrefEntity } from '../base';
 
 export interface IShipmentHistory extends IHrefEntity {
   status?: string;

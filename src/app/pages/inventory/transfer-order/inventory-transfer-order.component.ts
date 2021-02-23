@@ -102,7 +102,7 @@ import { IProductClass } from '@nusantara/models/products';
 
         <nus-detail-actions
           [component]="this"
-          (cancel)="navigateToParent(true)"
+          (cancel)="resetForm(true)"
           (delete)="delete()">
         </nus-detail-actions>
       </div>
@@ -242,9 +242,9 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
 
   get userDisplayName(): string {
     return [
-      this.authService.tokenPayload.last_name,
-      this.authService.tokenPayload.first_name,
-      `(${this.authService.tokenPayload.email})`,
+      this.authService.tokenPayload?.last_name ?? '',
+      this.authService.tokenPayload?.first_name ?? '',
+      `(${this.authService.tokenPayload?.email ?? ''})`,
     ].join(', ').trim();
   }
 
@@ -254,6 +254,18 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
 
   save(): void {
     super.save();
+    this.stockRecords.clear();
+  }
+
+  resetForm(warnOnDirty = false) {
+    if (warnOnDirty && this.form?.dirty) {
+      const leavePage = confirm('Your changes will be lost.  Do you want to continue?');
+      if (!leavePage) {
+        return;
+      }
+    }
+    this.form.reset();
+    this.warehouse.enable();
     this.stockRecords.clear();
   }
 }

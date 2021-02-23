@@ -3,8 +3,8 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 
 import {AbstractCrudService, PagedResponse} from '@nusantara/core';
 import {IAccessGroup, IOrder} from '@nusantara/models';
-import {Observable} from "rxjs";
-import {map} from "rxjs/operators";
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -19,11 +19,11 @@ export class GroupService extends AbstractCrudService<IAccessGroup> {
 
   fetchByEmail(
     page: number = 1,
-    user_email?: string
+    userEmail?: string
   ): Observable<PagedResponse<IAccessGroup>> {
     const rawParams = {
       'page': page.toFixed(0).toString(),
-      'email': user_email,
+      'email': userEmail,
     };
 
     return this.httpClient
@@ -35,5 +35,13 @@ export class GroupService extends AbstractCrudService<IAccessGroup> {
           params: new HttpParams({fromObject: rawParams})
         }
       ).pipe(map(resp => new PagedResponse(resp)));
+  }
+
+  addEmployee(accessGroupId: string, user: string): Observable<unknown> {
+    return this.httpClient.post(`${this.baseUrl}/${accessGroupId}/user/`, { user }, {observe: 'response', responseType: 'json'});
+  }
+
+  removeEmployee(accessGroupId: string, username: string): Observable<unknown> {
+    return this.httpClient.delete(`${this.baseUrl}/${accessGroupId}/user/${username}/`, {observe: 'response', responseType: 'json'});
   }
 }

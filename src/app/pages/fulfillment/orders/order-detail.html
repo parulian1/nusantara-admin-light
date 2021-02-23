@@ -49,6 +49,14 @@
         <address [innerHTML]="getOrderAddress()"></address>
       </td>
     </tr>
+    <tr>
+      <td>Shipment</td>
+      <td>
+        <span *ngFor="let children of orderDetailData.children">
+          <ng-container *ngIf="children.data[0]?.shippingMethod">{{ children.data[0].shippingMethod }}</ng-container>
+        </span>
+      </td>
+    </tr>
 
     <tr *ngIf="canUpdateOrder()">
       <td></td>
@@ -100,7 +108,7 @@
     <ng-container *ngFor="let children of orderDetailData.children">
       <b style="margin-right: 10px">Warehouse: {{ children.warehouse.name }}</b>
       <br>
-      <div class="shipment-action">
+      <div class="shipment-action" *ngIf="isShippableOrder">
         <button type="button" (click)="updateOrder(children.data[0], 'ready')"
                 class="control" [disabled]="getIsDisabledForReady(children.data[0])">
           Ready

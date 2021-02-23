@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import * as ClassicEditor from '@gdnnusantara/ckeditor5-build/build/ckeditor';
 
 import { ToastService, AbstractDetailComponent } from '@nusantara/core';
 import { INamedHrefEntity } from '@nusantara/models/base';
@@ -71,13 +71,13 @@ import { TestimonialService } from '@nusantara/services';
         <nus-field-errors [control]="sortPriority"></nus-field-errors>
       </label>
 
-      <label class="without-field-errors">
+      <label class="without-field-errors checkbox">
         <input type="checkbox" [formControl]="isActive" name="isActive"> Is Active
       </label>
 
       <div>
         <label for="content" class="external"><span>Content</span></label>
-        <ckeditor [editor]="Editor"
+        <ckeditor [editor]="Editor" [config]="editorConfig"
                   [formControl]="content" id="content" name="content"></ckeditor>
         <nus-field-errors [control]="content"></nus-field-errors>
       </div>
@@ -98,6 +98,28 @@ export class TestimonialComponent extends AbstractDetailComponent<ITestimonial> 
   @ViewChild('f') formView: ElementRef<HTMLFormElement>;
 
   public Editor = ClassicEditor;
+  editorConfig = {
+    toolbar: {
+      items: [
+        'heading',
+        '|',
+        'bold',
+        'italic',
+        'link',
+        'bulletedList',
+        'numberedList',
+        '|',
+        'alignment',
+        'indent',
+        'outdent',
+        '|',
+        'undo',
+        'redo'
+      ]
+    },
+    language: 'en',
+    licenseKey: ''
+  };
 
   entity?: ITestimonial;
   photoPreviewUrl: string;
@@ -173,6 +195,9 @@ export class TestimonialComponent extends AbstractDetailComponent<ITestimonial> 
 
     this.entity = entity;
 
+    // need to mark as touched to make custom styling works
+    this.form.controls.isActive.markAsTouched();
+    
     this.setPhotoPreview(entity?.photo);
   }
 

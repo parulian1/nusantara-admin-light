@@ -22,6 +22,7 @@ import { FormControl } from '@angular/forms';
     'header > div { display: flex; }',
     'input[type=search] { font-size: 15px; padding-right: 5px; width: 325px; }',
     'a { display: flex; justify-content: center; align-items: center; margin-left: auto; }',
+    'p { margin-bottom: 5px; }',
 
     `
 
@@ -97,6 +98,7 @@ export class ListHeaderComponent implements OnInit {
           ['.'],
           {
             queryParams: params,
+            queryParamsHandling: 'merge',
             relativeTo: this.route
           }
         );

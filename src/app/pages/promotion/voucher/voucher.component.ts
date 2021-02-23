@@ -103,31 +103,31 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
         <nus-field-errors [control]="validTo"></nus-field-errors>
       </label>
 
-      <label>
+      <label class="checkbox">
         <span>Is Active</span>
         <input type="checkbox" [formControl]="isActive">
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
-      <h2>
-        Voucher Eligible Products
+      <span class="eligible-product">
+        <h2 class="title-2">Voucher Eligible Products</h2>
         <button type="button" class="control" (click)="uploadProductXLSX()">
           <i class="material-icons">publish</i>
           <span>Upload from XLSX</span>
         </button>
-      </h2>
+      </span>
 
       <table>
         <thead>
         <tr>
-          <th>#</th>
+          <th class="numeric">#</th>
           <th>Product</th>
-          <th></th>
+          <th>Action</th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let control of products.controls; let i=index">
-          <th>{{ i + 1 }}</th>
+          <td class="numeric">{{ i + 1 }}</td>
           <td>{{ control.get('name').value }}</td>
           <td>
             <button (click)="products.removeAt(i)" type="button" class="remove-button">
@@ -137,8 +137,8 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
         </tr>
         <tr>
           <td colspan="3">
-            <button type="button" (click)="selectProduct()" class="add-button">
-              Add Product
+            <button type="button" (click)="selectProduct()" class="new-add-button wide">
+              <i class="material-icons">add</i> Add Product
             </button>
           </td>
         </tr>
@@ -157,9 +157,11 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
 
     <!-- Modals -->
     <nus-product-selection-modal></nus-product-selection-modal>
-
   `,
-  styles: []
+  styles: [
+    '.eligible-product { display: flex; margin-bottom: 10px; justify-content: space-between; align-item: }',
+    '.eligible-product button { display: flex; align-items: center; }'
+  ]
 })
 export class VoucherComponent extends AbstractDetailComponent<IVoucher> implements OnInit, AfterViewInit {
 
@@ -251,13 +253,16 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
       minimumOrderAmount: [entity?.minimumOrderAmount, [Validators.required, Validators.min(1)]],
       maxAmount: [entity?.maxAmount, [Validators.required, Validators.min(1)]],
       maxUsed: [entity?.maxUsed, [Validators.required, Validators.min(1)]],
-      validFrom: [this.convertDateTime(entity?.validFrom), [Validators.required,]],
-      validTo: [this.convertDateTime(entity?.validTo), [Validators.required,]],
+      validFrom: [this.convertDateTime(entity?.validFrom), [Validators.required]],
+      validTo: [this.convertDateTime(entity?.validTo), [Validators.required]],
       isActive: [entity?.isActive, []],
       products: this.fb.array([]),
     }, {
       validator: DiscAmountValidator
     });
+
+    // need to mark as touched to make custom styling works
+    this.form.controls.isActive.markAsTouched();
 
     for (const prod of entity?.products ?? []) {
       this.addProduct(prod);

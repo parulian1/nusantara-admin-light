@@ -21,18 +21,18 @@ import { IHighlight } from '@nusantara/models';
       <tr>
         <th>Name</th>
         <th>Vendor</th>
-        <th>Is Show Homepage</th>
-        <th>Is Active</th>
+        <th class="centered">Is Show Homepage</th>
+        <th class="centered">Is Active</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let entity of page.entities">
         <td><a [routerLink]="[entity|entityToSlug]">{{ entity.name }}</a></td>
         <td>{{ entity.forVendor?.name}}</td>
-        <td>
+        <td class="centered">
           <nus-true-false [value]="entity.isShowHomepage"></nus-true-false>
         </td>
-        <td>
+        <td class="centered">
           <nus-true-false [value]="entity.isActive"></nus-true-false>
         </td>
       </tr>

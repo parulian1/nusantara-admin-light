@@ -1,20 +1,27 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { AbstractDetailComponent } from "@nusantara/core/components";
-import { IReceivingOrder } from "@nusantara/models/inventory";
-import { ActivatedRoute, Router } from "@angular/router";
-import { FormBuilder } from "@angular/forms";
-import { ToastService } from '@nusantara/core';
-import { InventoryReceivingOrderService } from "@nusantara/services/inventory-receiving-order.service";
-import { IWarehouse, IWarehouseDetail, IWarehouseInformation} from "../../../models";
-import {MarketplaceClientService} from "../../../services";
-import {MarketplaceChannelInfoModalComponent} from "../../../shared";
-import {ConfirmModalPendingOrderComponent} from "../../../shared";
-import {catchError} from "rxjs/operators";
-import {HttpErrorResponse} from "@angular/common/http";
-import {of} from "rxjs";
-import {ErrorResult} from "../../../core";
-import {IError} from "../../../models/base/error";
-import {Location} from "@angular/common";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Location } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder } from '@angular/forms';
+import {
+  IWarehouse,
+  IWarehouseDetail,
+  IWarehouseInformation,
+  IError
+} from '@nusantara/models';
+import { IReceivingOrder } from '@nusantara/models/inventory';
+import { AbstractDetailComponent } from '@nusantara/core/components';
+import { 
+  InventoryReceivingOrderService,
+  MarketplaceClientService
+} from '@nusantara/services';
+import { ToastService, ErrorResult } from '@nusantara/core';
+import {
+  MarketplaceChannelInfoModalComponent,
+  ConfirmModalPendingOrderComponent,
+} from '@nusantara/shared';
+import { of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 
 @Component({
@@ -133,7 +140,7 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
   entity: IReceivingOrder;
   warehouses: IWarehouse[];
   warehouseDetail : IWarehouseDetail[];
-  marketplaceValue:number=0;
+  marketplaceValue = 0;
 
   @ViewChild(MarketplaceChannelInfoModalComponent) marketplaceChannelInfo: MarketplaceChannelInfoModalComponent;
   @ViewChild(ConfirmModalPendingOrderComponent) marketplaceProgressModal: ConfirmModalPendingOrderComponent;

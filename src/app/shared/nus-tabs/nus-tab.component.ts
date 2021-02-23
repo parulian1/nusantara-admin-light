@@ -14,7 +14,7 @@ import { Component, Input } from '@angular/core';
     </div>
   `,
 })
-export class TabComponent {
+export class NusTabComponent {
   @Input() title: string;
   @Input() active = false;
 }

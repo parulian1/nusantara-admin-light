@@ -1,10 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { PointsComponent } from './points/points.component';
+import { PointsResolver } from './points/points.resolver';
 import { ProductPromotionComponent, ProductPromotionListResolver, ProductPromotionResolver, PromotionListComponent } from './promotion';
 import { VoucherComponent, VoucherListComponent } from './voucher';
 import { VoucherListResolver } from './voucher/voucher-list.resolver';
 import { VoucherResolver } from './voucher/voucher.resolver';
+import { GiftVoucherComponent, GiftVoucherListComponent } from './gift-voucher';
+import { GiftVoucherListResolver } from './gift-voucher/gift-voucher-list.resolver';
+import { GiftVoucherResolver } from './gift-voucher/gift-voucher.resolver';
 
 const routes: Routes = [
   {
@@ -56,7 +61,44 @@ const routes: Routes = [
         data: { animation: 'Detail', },
       },
     ]
-  }
+  },
+  {
+    path: 'points',
+    children: [
+      {
+        path: '',
+        component: PointsComponent,
+        resolve: { entity: PointsResolver },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'List' }
+      }
+    ]
+  },
+  {
+    path: 'gift-voucher',
+    children: [
+      {
+        path: '',
+        component: GiftVoucherListComponent,
+        resolve: { page: GiftVoucherListResolver, },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'List' },
+      },
+      {
+        path: 'new',
+        component: GiftVoucherComponent,
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+      {
+        path: ':slug',
+        component: GiftVoucherComponent,
+        resolve: { entity: GiftVoucherResolver, },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+    ]
+  },
 ];
 
 @NgModule({

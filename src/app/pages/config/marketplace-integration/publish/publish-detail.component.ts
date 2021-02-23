@@ -60,6 +60,7 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
             </div>
           </div>
           <nus-pagination-child
+            *ngIf="allProducts?.entities?.length"
             [page]="allProducts"
             (fetchPageNumber)="fetchAllProducts($event)">
           </nus-pagination-child>
@@ -69,6 +70,7 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                 <th>Product (UPC)</th>
                 <th>SKU</th>
                 <th class="numeric">Quantity</th>
+                <th>Store</th>
                 <th>Location</th>
                 <th>Status</th>
                 <th>Information</th>
@@ -84,6 +86,7 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                 </td>
                 <td>{{ product.sku }}</td>
                 <td class="numeric">{{ product.quantity }}</td>
+                <td>{{ product.store }}</td>
                 <td>{{ product.sublocation }}</td>
                 <td>
                   <span class="badge" [ngClass]="{
@@ -109,9 +112,10 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
             </tbody>
           </table>
           <nus-pagination-child
+            *ngIf="allProducts?.entities?.length"
             [page]="allProducts"
-            (fetchPageNumber)="fetchAllProducts($event)"
-          ></nus-pagination-child>
+            (fetchPageNumber)="fetchAllProducts($event)">
+          </nus-pagination-child>
         </nus-tab>
         <nus-tab [title]="'Credentials Error (' + order?.totalRecord.errorAuthentication + ')'">
           <div *ngIf="order?.totalRecord.errorAuthentication > 0" class="error-info">

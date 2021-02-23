@@ -7,9 +7,11 @@ export enum HttpStatusCode {
   /**
    * The server has received the request headers and the client should proceed to send the request body
    * (in the case of a request for which a body needs to be sent; for example, a POST request).
-   * Sending a large request body to a server after a request has been rejected for inappropriate headers would be inefficient.
-   * To have a server check the request's headers, a client must send Expect: 100-continue as a header in its initial request
-   * and receive a 100 Continue status code in response before sending the body. The response 417 Expectation Failed indicates the request should not be continued.
+   * Sending a large request body to a server after a request has been rejected for inappropriate headers
+   * would be inefficient.
+   * To have a server check the request's headers, a client must send Expect: 100-continue as a header
+   * in its initial request and receive a 100 Continue status code in response before sending the body.
+   * The response 417 Expectation Failed indicates the request should not be continued.
    */
   CONTINUE = 100,
 
@@ -19,8 +21,9 @@ export enum HttpStatusCode {
   SWITCHING_PROTOCOLS = 101,
 
   /**
-   * A WebDAV request may contain many sub-requests involving file operations, requiring a long time to complete the request.
-   * This code indicates that the server has received and is processing the request, but no response is available yet.
+   * A WebDAV request may contain many sub-requests involving file operations, requiring a long time to
+   * complete the request. This code indicates that the server has received and is processing the request,
+   * but no response is available yet.
    * This prevents the client from timing out and assuming the request was lost.
    */
   PROCESSING = 102,
@@ -83,12 +86,14 @@ export enum HttpStatusCode {
 
   /**
    * The server has fulfilled a request for the resource,
-   * and the response is a representation of the result of one or more instance-manipulations applied to the current instance.
+   * and the response is a representation of the result of one or more instance-manipulations
+   * applied to the current instance.
    */
   IM_USED = 226,
 
   /**
-   * Indicates multiple options for the resource from which the client may choose (via agent-driven content negotiation).
+   * Indicates multiple options for the resource from which the client may choose
+   * (via agent-driven content negotiation).
    * For example, this code could be used to present multiple video format options,
    * to list files with different filename extensions, or to suggest word-sense disambiguation.
    */
@@ -118,7 +123,8 @@ export enum HttpStatusCode {
   SEE_OTHER = 303,
 
   /**
-   * Indicates that the resource has not been modified since the version specified by the request headers If-Modified-Since or If-None-Match.
+   * Indicates that the resource has not been modified since the version specified by the request headers
+   * If-Modified-Since or If-None-Match.
    * In such case, there is no need to retransmit the resource since the client still has a previously-downloaded copy.
    */
   NOT_MODIFIED = 304,
@@ -126,7 +132,8 @@ export enum HttpStatusCode {
   /**
    * SINCE HTTP/1.1
    * The requested resource is available only through a proxy, the address for which is provided in the response.
-   * Many HTTP clients (such as Mozilla and Internet Explorer) do not correctly handle responses with this status code, primarily for security reasons.
+   * Many HTTP clients (such as Mozilla and Internet Explorer) do not correctly handle responses with this status code,
+   * primarily for security reasons.
    */
   USE_PROXY = 305,
 
@@ -137,8 +144,10 @@ export enum HttpStatusCode {
 
   /**
    * SINCE HTTP/1.1
-   * In this case, the request should be repeated with another URI; however, future requests should still use the original URI.
-   * In contrast to how 302 was historically implemented, the request method is not allowed to be changed when reissuing the original request.
+   * In this case, the request should be repeated with another URI; however,
+   * future requests should still use the original URI.
+   * In contrast to how 302 was historically implemented, the request method is not allowed to be changed when
+   * reissuing the original request.
    * For example, a POST request should be repeated using another POST request.
    */
   TEMPORARY_REDIRECT = 307,
@@ -185,12 +194,14 @@ export enum HttpStatusCode {
 
   /**
    * A request method is not supported for the requested resource;
-   * for example, a GET request on a form that requires data to be presented via POST, or a PUT request on a read-only resource.
+   * for example, a GET request on a form that requires data to be presented via POST,
+   * or a PUT request on a read-only resource.
    */
   METHOD_NOT_ALLOWED = 405,
 
   /**
-   * The requested resource is capable of generating only content not acceptable according to the Accept headers sent in the request.
+   * The requested resource is capable of generating only content not acceptable according to the Accept
+   * headers sent in the request.
    */
   NOT_ACCEPTABLE = 406,
 
@@ -202,7 +213,8 @@ export enum HttpStatusCode {
   /**
    * The server timed out waiting for the request.
    * According to HTTP specifications:
-   * "The client did not produce a request within the time that the server was prepared to wait. The client MAY repeat the request without modifications at any later time."
+   * "The client did not produce a request within the time that the server was prepared to wait.
+   * The client MAY repeat the request without modifications at any later time."
    */
   REQUEST_TIMEOUT = 408,
 
@@ -217,7 +229,8 @@ export enum HttpStatusCode {
    * This should be used when a resource has been intentionally removed and the resource should be purged.
    * Upon receiving a 410 status code, the client should not request the resource in the future.
    * Clients such as search engines should remove the resource from their indices.
-   * Most use cases do not require clients and search engines to purge the resource, and a "404 Not Found" may be used instead.
+   * Most use cases do not require clients and search engines to purge the resource, and a "404 Not Found"
+   * may be used instead.
    */
   GONE = 410,
 
@@ -237,7 +250,8 @@ export enum HttpStatusCode {
   PAYLOAD_TOO_LARGE = 413,
 
   /**
-   * The URI provided was too long for the server to process. Often the result of too much data being encoded as a query-string of a GET request,
+   * The URI provided was too long for the server to process.
+   * Often the result of too much data being encoded as a query-string of a GET request,
    * in which case it should be converted to a POST request.
    * Called "Request-URI Too Long" previously.
    */
@@ -245,7 +259,8 @@ export enum HttpStatusCode {
 
   /**
    * The request entity has a media type which the server or resource does not support.
-   * For example, the client uploads an image as image/svg+xml, but the server requires that images use a different format.
+   * For example, the client uploads an image as image/svg+xml,
+   * but the server requires that images use a different format.
    */
   UNSUPPORTED_MEDIA_TYPE = 415,
 
@@ -262,14 +277,16 @@ export enum HttpStatusCode {
   EXPECTATION_FAILED = 417,
 
   /**
-   * This code was defined in 1998 as one of the traditional IETF April Fools' jokes, in RFC 2324, Hyper Text Coffee Pot Control Protocol,
+   * This code was defined in 1998 as one of the traditional IETF April Fools' jokes, in RFC 2324,
+   * Hyper Text Coffee Pot Control Protocol,
    * and is not expected to be implemented by actual HTTP servers. The RFC specifies this code should be returned by
    * teapots requested to brew coffee. This HTTP status is used as an Easter egg in some websites, including Google.com.
    */
   I_AM_A_TEAPOT = 418,
 
   /**
-   * The request was directed at a server that is not able to produce a response (for example because a connection reuse).
+   * The request was directed at a server that is not able to produce a response
+   * (for example because a connection reuse).
    */
   MISDIRECTED_REQUEST = 421,
 
@@ -319,7 +336,8 @@ export enum HttpStatusCode {
   UNAVAILABLE_FOR_LEGAL_REASONS = 451,
 
   /**
-   * A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.
+   * A generic error message, given when an unexpected condition was encountered and
+   * no more specific message is suitable.
    */
   INTERNAL_SERVER_ERROR = 500,
 

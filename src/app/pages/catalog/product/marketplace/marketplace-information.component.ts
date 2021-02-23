@@ -5,7 +5,7 @@ import { MarketplaceStockInfoModalComponent, MarketplaceShippingInfoModalCompone
 import { IClient, IMarketplaceItemAttributeInformation, IMarketplaceItemInformation, IMarketplaceItemLogisticInformation, products} from '@nusantara/models';
 import { MarketplaceClientService, MarketplaceItemService } from '@nusantara/services';
 import { AbstractEditingComponent } from '@nusantara/core';
-import { Observable } from 'rxjs';
+
 @Component({
   selector: 'nus-marketplace-info',
   animations: [SlideInOutAnimation],
@@ -43,7 +43,7 @@ import { Observable } from 'rxjs';
       </div>
       <div class="detail-store">
         <nus-tabs (select)="getAttributes($event)" [fluid]="true">
-          <nus-tab *ngFor="let data of clientList" [title]="data.marketplaceName">
+          <nus-tab *ngFor="let client of clientList" [title]="client.marketplaceName">
             <div *ngIf="!productClassChanged">
               <div *ngFor="let data of marketplaceStoreAttributes; let storeIndex = index">
                 <div class="store">
@@ -91,26 +91,29 @@ import { Observable } from 'rxjs';
                               </div>
                             </div>
                             <input formControlName="value" type="text" *ngIf="attributesFormArray.controls[i].value.type === 'text'"/>
-                            <input formControlName="value" type="integer" *ngIf="attributesFormArray.controls[i].value.type === 'integer'"/>
+                            <input formControlName="value" type="number" *ngIf="attributesFormArray.controls[i].value.type === 'integer'"/>
                           </td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
-                  <ng-template #noAttributeMatch>
-                    <div>
-                      <div class="no-attribute">
+                  <ng-template #noAttributeMatch> 
+                    <div class="no-attribute">
+                      <div *ngIf="client.option === TSC; else nonTscEmptyInfo">
+                        <h3 class="subheading-1">Product class doesn't have attribute.</h3>
+                      </div>
+                      <ng-template #nonTscEmptyInfo>
                         <h1 class="heading-1">Product Class is Not Mapped Yet!</h1>
                         <p>Map Class to sync your product to marketplace.</p>
                         <button [routerLink]="['/config/marketplace-integration/connect/product-class/',
                               data.shopSlug,
-                              productClass.href
+                              productClassSlug
                             ]"
-                          [state]="{ productClass: { name: productClassName } }"
+                          [state]="{ productClass: { name: productClassName, slug: productClassSlug } }"
                           type="button"
                           class="control">Start Mapping
                         </button>
-                      </div>
+                      </ng-template>
                     </div>
                   </ng-template>
                 </div>
@@ -134,7 +137,7 @@ import { Observable } from 'rxjs';
   styles: [
     '.wrapper { padding: 16px 24px; border: solid 1px var(--grey); border-radius: 4px; margin-bottom: 24px; }',
     'h1 { margin-bottom: 16px; }',
-    'p { color: var(--darken-grey); }',
+    'p { color: var(--darken-grey); margin: 0; }',
     '.subinfo { display: flex; justify-content: space-between; }',
     '.summary { display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 16px; }',
     '.summary > div { padding: 12px 16px; margin-bottom: 20px; margin-top: 4px; text-align: center; }',
@@ -172,6 +175,8 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
 
   @ViewChild(MarketplaceShippingInfoModalComponent) shippingInfo: MarketplaceShippingInfoModalComponent;
   @ViewChild(MarketplaceStockInfoModalComponent) marketplaceStockInfo: MarketplaceStockInfoModalComponent;
+
+  readonly TSC = 'tsc';
 
   productClassChanged: boolean;
   emptyStore: boolean;
@@ -212,10 +217,12 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
     this.mpItemService
       .getItemMarketplaceInformation(this.productSlug)
       .subscribe((data: IMarketplaceItemInformation) => {
-        this.warehouseCount = data.totalWarehouse;
-        this.marketplaceCount = data.totalMarketplace;
-        this.storeCount = data.totalStore;
-        this.warehouseInfoDetail = data.details;
+        if(data){
+          this.warehouseCount = data.totalWarehouse;
+          this.marketplaceCount = data.totalMarketplace;
+          this.storeCount = data.totalStore;
+          this.warehouseInfoDetail = data.details;
+        }
       });
 
     this.mpItemService

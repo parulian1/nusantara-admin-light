@@ -2,7 +2,7 @@ import { INamedHrefEntity, INamedHrefEntityWarehouse } from '@nusantara/models/b
 import { IStockRecord } from './stock-record';
 import { ReceivingOrderStatusType } from './receiving-order-status.type';
 import { ReceivingOrderType } from './receiving-order.type';
-import {IBaseInventoryOrder} from "@nusantara/models/inventory/base-inventory-order";
+import {IBaseInventoryOrder} from '@nusantara/models/inventory/base-inventory-order';
 
 export interface IReceivingOrder extends IBaseInventoryOrder {
   status: ReceivingOrderStatusType;

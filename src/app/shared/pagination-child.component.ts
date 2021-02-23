@@ -1,6 +1,6 @@
-import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
-import {PagedResponse} from "../core/pagination";
-import {PaginationComponent} from "@nusantara/shared/pagination.component";
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { PagedResponse } from '../core/pagination';
+import { PaginationComponent } from '@nusantara/shared/pagination.component';
 
 
 @Component({

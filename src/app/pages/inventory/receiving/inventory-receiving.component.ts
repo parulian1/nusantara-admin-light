@@ -115,7 +115,7 @@ import {IError} from "../../../models/base/error";
         <nus-detail-actions
           [component]="this"
           (cancel)="confirmModal()"
-          [hideDelete]="true">
+          (delete)="delete()">
         </nus-detail-actions>
       </div>
     </form>
@@ -184,6 +184,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     // wire-up modal closed callback
     this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
     this.marketplaceChannelInfo.onClose.subscribe(() => this.onMarketplaceModalClosed());
+    this.confirmModalReceiving.onClose.subscribe(() => this.onConfirmModalClosed());
   }
 
   initializeForm(entity?: inventory.IReceivingOrder) {
@@ -240,7 +241,11 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     this.confirmModalReceiving.open();
   }
 
-
+  onConfirmModalClosed() {
+    if (this.confirmModalReceiving.result === DialogResult.OK) {
+      this.resetForm(true);
+    }
+  }
   confirmWarehouse(): void {
     if (!this.warehouse.value) {
       alert('You must first select a warehouse');
@@ -287,9 +292,9 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
   }
 
   get userDisplayName(): string {
-    const last_name = this.authService.tokenPayload.last_name;
-    const first_name = this.authService.tokenPayload.first_name;
-    const email = this.authService.tokenPayload.email;
+    const last_name = this.authService.tokenPayload?.last_name ?? '';
+    const first_name = this.authService.tokenPayload?.first_name ?? '';
+    const email = this.authService.tokenPayload?.email ?? '';
     const fullname = first_name.concat(" ", last_name);
 
     if(last_name && first_name && email){
@@ -303,6 +308,11 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     return this.form.getRawValue();
   }
 
+  resetForm(warnOnDirty = false) {
+    this.form.reset();
+    this.warehouse.enable();
+    this.stockRecords.clear();
+  }
   onMarketplaceModalClosed() {}
 
 }

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { AbstractListComponent } from '@nusantara/core';
-import { IAccessGroup } from "@nusantara/models";
+import { IAccessGroup } from '@nusantara/models';
 
 @Component({
   selector: 'nus-group-list',
@@ -30,5 +30,5 @@ import { IAccessGroup } from "@nusantara/models";
   styles: [],
 })
 export class GroupListComponent extends AbstractListComponent<IAccessGroup> {
-  constructor(route: ActivatedRoute) { super(route);}
+  constructor(route: ActivatedRoute) { super(route); }
 }

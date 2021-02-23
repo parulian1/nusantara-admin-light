@@ -7,7 +7,12 @@ import { UsersRoutingModule } from './users-routing.module';
 
 import { CustomerListComponent, CustomerDetailComponent } from './customer';
 import { CustomerGroupListComponent, CustomerGroupDetailComponent } from './customer-group';
-import { EmployeeComponent, EmployeeListComponent } from './employee';
+import {
+  EmployeeAccessGroupHostComponent, EmployeeAccessGroupListComponent,
+  EmployeeComponent, EmployeeListComponent,
+  EmployeeWarehouseHostComponent, EmployeeWarehouseListComponent,
+} from './employee';
+import { EmptyDataPipe } from './empty-data.pipe';
 
 @NgModule({
   declarations: [
@@ -16,9 +21,16 @@ import { EmployeeComponent, EmployeeListComponent } from './employee';
 
     EmployeeComponent,
     EmployeeListComponent,
+    EmployeeWarehouseHostComponent,
+    EmployeeAccessGroupHostComponent,
 
     CustomerGroupListComponent,
     CustomerGroupDetailComponent,
+    EmployeeWarehouseListComponent,
+    EmployeeAccessGroupListComponent,
+
+    // pipes
+    EmptyDataPipe,
   ],
   imports: [
     CommonModule,

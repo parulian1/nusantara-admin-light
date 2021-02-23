@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { DeviceService } from '@nusantara/services';
-import { device } from "@nusantara/models";
+import { device } from '@nusantara/models';
 import { AbstractListResolver } from '@nusantara/core';
 
 @Injectable({

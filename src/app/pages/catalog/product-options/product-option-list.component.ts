@@ -1,7 +1,7 @@
-import { ActivatedRoute } from "@angular/router";
-import { AbstractListComponent } from "@nusantara/core";
-import { products } from "@nusantara/models";
-import {Component} from "@angular/core";
+import { ActivatedRoute } from '@angular/router';
+import { AbstractListComponent } from '@nusantara/core';
+import { products } from '@nusantara/models';
+import { Component } from '@angular/core';
 
 /**
  * A searchable list of all product option.
@@ -20,16 +20,16 @@ import {Component} from "@angular/core";
       <tr>
         <th translate>Name</th>
         <th>Type</th>
-        <th>Minimum Length</th>
-        <th>Maximum length</th>
+        <th class="numeric">Minimum Length</th>
+        <th class="numeric">Maximum length</th>
       </tr>
       </thead>
       <tbody>
         <tr *ngFor="let entity of page.entities">
           <td><a [routerLink]="[entity|entityToSlug]">{{ entity.name }}</a></td>
           <td>{{ entity.type }}</td>
-          <td>{{ entity.minimumLength }}</td>
-          <td>{{ entity.maximumLength }}</td>
+          <td class="numeric">{{ entity.minimumLength }}</td>
+          <td class="numeric">{{ entity.maximumLength }}</td>
         </tr>
       </tbody>
     </table>

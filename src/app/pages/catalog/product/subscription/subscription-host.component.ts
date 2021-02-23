@@ -82,15 +82,18 @@ export class ProductSubscriptonHostComponent extends AbstractEditingComponent im
 
   ngOnInit() {
     this.initializeForm(this.entity);
-    console.log('INIT');
-    this.route.data.subscribe((data: {subscriptionPacket: drf.IChoice[], subscriptionDuration: drf.IChoice[], subscriptionLength: drf.IChoice[]}) => {
+    this.route.data.subscribe((data: {
+      subscriptionPacket: drf.IChoice[],
+      subscriptionDuration: drf.IChoice[],
+      subscriptionLength: drf.IChoice[]
+    }) => {
       this.packetChoices = data.subscriptionPacket;
       this.durationChoices = data.subscriptionDuration;
       this.lengthChoices = data.subscriptionLength;
     });
   }
 
-    /**
+  /**
    * Configures the form that is edited in this component.
    *
    * Special notes related to the ProductComponent:
@@ -99,19 +102,19 @@ export class ProductSubscriptonHostComponent extends AbstractEditingComponent im
    */
   initializeForm(entity?: products.IProductSubscription) {
     this.form = this.fb.group({
-      packet: [entity?.packet, [Validators.required,]],
-      href: [entity?.href, []],
-      duration: [entity?.duration, [Validators.required,]],
-      length: [entity?.length, [Validators.required,]],
+      packet: [entity?.packet, [Validators.required]],
+      href: [ entity?.href, [] ],
+      duration: [entity?.duration, [Validators.required]],
+      length: [entity?.length, [Validators.required]],
     });
   }
 
   add(entity?: products.IProductSubscription) {
     this.form = this.fb.group({
-      packet: [entity?.packet, [Validators.required,]],
+      packet: [entity?.packet, [Validators.required]],
       href: [entity?.href, []],
-      duration: [entity?.duration, [Validators.required,]],
-      length: [entity?.length, [Validators.required,]],
+      duration: [entity?.duration, [Validators.required]],
+      length: [entity?.length, [Validators.required]],
       product: [entity?.product, []],
     });
   }
@@ -124,7 +127,7 @@ export class ProductSubscriptonHostComponent extends AbstractEditingComponent im
     this.subscription.push(this.form.value);
 
     // make sure subscription have the product href set
-    this.subscription.forEach((value) => { value.product = product.href });
+    this.subscription.forEach((value) => { value.product = product.href; });
 
     // submit all changes to the API and an observable of all responses
     return zip(

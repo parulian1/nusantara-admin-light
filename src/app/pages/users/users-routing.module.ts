@@ -9,9 +9,11 @@ import {
   CustomerResolver
 } from '@nusantara/resolvers';
 
+import { AllWarehouseResolver } from '@nusantara/pages/config/warehouse';
 import { CustomerListComponent, CustomerDetailComponent } from './customer';
 import { CustomerGroupListComponent, CustomerGroupDetailComponent } from './customer-group';
 import { EmployeeListComponent, EmployeeComponent, EmployeeListResolver, EmployeeResolver } from './employee';
+import { AllGroupResolver } from '../config/group/resolvers/all-group.resolver';
 
 
 const dashboardRoutes: Routes = [
@@ -77,12 +79,17 @@ const dashboardRoutes: Routes = [
       {
         path: 'new',
         component: EmployeeComponent,
+        resolve: { warehouses: AllWarehouseResolver, accessGroups: AllGroupResolver },
         runGuardsAndResolvers: 'always',
       },
       {
         path: ':username',
         component: EmployeeComponent,
-        resolve: { entity: EmployeeResolver },
+        resolve: {
+          entity: EmployeeResolver,
+          warehouses: AllWarehouseResolver,
+          accessGroups: AllGroupResolver,
+        },
         runGuardsAndResolvers: 'always',
       },
     ]

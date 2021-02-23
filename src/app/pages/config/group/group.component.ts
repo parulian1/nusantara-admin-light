@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractDetailComponent, DialogResult, ToastService } from '@nusantara/core';
 import { IEmailHrefUserEntity, IAccessGroup, ICustomer } from '@nusantara/models';
-import { GroupService } from "@nusantara/services";
-import { UserSelectionModalComponent } from "@nusantara/shared";
+import { GroupService } from '@nusantara/services';
+import { UserSelectionModalComponent } from '@nusantara/shared';
 
 
 @Component({

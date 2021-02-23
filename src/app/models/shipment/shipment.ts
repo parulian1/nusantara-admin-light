@@ -1,5 +1,5 @@
-import { IHrefEntity } from "../base";
-import { IShipmentHistory } from "./shipment-history";
+import { IHrefEntity } from '../base';
+import { IShipmentHistory } from './shipment-history';
 
 export interface IShipment extends IHrefEntity {
   order: string[];

@@ -14,7 +14,7 @@ import * as shopActions from '@nusantara/actions';
       *ngIf="!page?.entities?.length; else elseBlock"
       title="No Connected Store Yet!"
       description="Add a marketplace store to manage all your products in one place."
-      addUrl="new"
+      [addUrl]="['/config', 'marketplace-integration', 'connect', 'new']"
       addText="Add Store">
     </nus-empty-list>
     <ng-template #elseBlock>
@@ -49,10 +49,7 @@ import * as shopActions from '@nusantara/actions';
               </a>
             </td>
             <td>
-              <a [routerLink]="" class="disabled"
-                [ngClass]="{'disabled': entity.isConnected === false}">
-                Set Up Showcase
-              </a>
+              <a class="disabled">Set Up Showcase</a>
             </td>
           </tr>
         </tbody>

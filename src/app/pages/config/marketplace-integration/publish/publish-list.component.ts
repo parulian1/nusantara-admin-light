@@ -14,13 +14,14 @@ import {
       *ngIf="!shops?.entities?.length && !processing?.entities?.length && !completed?.entities?.length"
       title="Add Store Before Publishing Products"
       description="Add a marketplace store to manage all your products in one place."
-      [addUrl]="['config', 'marketplace-integration', 'connect', 'new']"
+      [addUrl]="['/config', 'marketplace-integration', 'connect', 'new']"
       addText="Add Store">
     </nus-empty-list>
     <nus-empty-list
       *ngIf="shops?.entities?.length && !processing?.entities?.length && !completed?.entities?.length"
       title="No Published Product Yet!"
       description="Go to &quot;Receiving&quot; menu to publish your products."
+      [addUrl]="['/inventory', 'receiving']"
       addText="Receiving Inventory">
     </nus-empty-list>
 
@@ -45,7 +46,7 @@ import {
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let entity of processing.entities">
+              <tr *ngFor="let entity of processing?.entities">
                 <td> 
                   <a routerLink="{{ entity.encryptId }}">
                     {{ entity.id }}
@@ -90,7 +91,7 @@ import {
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let entity of completed.entities">
+              <tr *ngFor="let entity of completed?.entities">
                 <td> 
                   <a routerLink="{{ entity.encryptId }}">
                     {{ entity.id }}

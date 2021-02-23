@@ -10,7 +10,7 @@ import {
   AfterContentInit, Output, EventEmitter, Input,
 } from '@angular/core';
 
-import { TabComponent } from './tab.component';
+import { NusTabComponent } from '@nusantara/shared/nus-tabs/nus-tab.component';
 
 @Component({
   selector: 'nus-tabs',
@@ -37,8 +37,8 @@ import { TabComponent } from './tab.component';
     '.fluid { flex-grow: 1; text-align: center; }'
   ],
 })
-export class TabsComponent implements AfterContentInit {
-  @ContentChildren(TabComponent) tabs: QueryList<TabComponent>;
+export class NusTabsComponent implements AfterContentInit {
+  @ContentChildren(NusTabComponent) tabs: QueryList<NusTabComponent>;
   @Output() select = new EventEmitter<any>();
   @Input() fluid = false;
   
@@ -49,11 +49,13 @@ export class TabsComponent implements AfterContentInit {
 
     // if there is no active tab set, activate the first
     if (activeTabs.length === 0) {
-      this.selectTab(this.tabs.first);
+      if(this.tabs.length){
+        this.selectTab(this.tabs.first);
+      }
     }
   }
 
-  selectTab(tab: TabComponent) {
+  selectTab(tab: NusTabComponent) {
     // deactivate all tabs
     this.tabs.toArray().forEach((tab) => (tab.active = false));
 

@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { drf } from "@nusantara/models";
+import { drf } from '@nusantara/models';
 
 
 @Component({
@@ -28,6 +28,7 @@ import { drf } from "@nusantara/models";
   `,
   styles: [
     ':host { display: contents; }',
+    'td > select { width: 100%; }'
   ]
 })
 export class SocialMediaHostComponent implements OnInit, AfterViewInit {

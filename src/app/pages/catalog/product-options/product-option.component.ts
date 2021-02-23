@@ -3,8 +3,8 @@ import { FormBuilder, FormControl, Validators} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractDetailComponent, ToastService } from '@nusantara/core';
-import { drf, products } from "@nusantara/models";
-import { ProductOptionService } from "@nusantara/services";
+import { drf, products } from '@nusantara/models';
+import { ProductOptionService } from '@nusantara/services';
 
 @Component({
   selector: 'nus-product-option-detail',
@@ -36,7 +36,7 @@ import { ProductOptionService } from "@nusantara/services";
         <nus-field-errors [control]="type"></nus-field-errors>
       </label>
 
-      <label>
+      <label class="checkbox">
         <span>Is Active</span>
         <input type="checkbox" formControlName="isActive">
         <nus-field-errors [control]="isActive"></nus-field-errors>
@@ -108,7 +108,7 @@ export class ProductOptionComponent extends AbstractDetailComponent<products.IPr
     super.ngOnInit();
     this.route.data.subscribe((data: {typeChoices: drf.IChoice[]}) => {
       this.typeChoices = data.typeChoices;
-    })
+    });
   }
 
   initializeForm(entity?: products.IProductOption) {
@@ -123,6 +123,9 @@ export class ProductOptionComponent extends AbstractDetailComponent<products.IPr
       webhookPostCheckout: [entity?.webhookPostCheckout ?? '', []],
       isActive: [entity?.isActive ?? false, []],
     });
+
+    // need to mark as touched to make custom styling works
+    this.form.controls.isActive.markAsTouched();
 
     if (!this.isNew) {
       this.type.disable();
