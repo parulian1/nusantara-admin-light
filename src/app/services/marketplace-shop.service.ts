@@ -85,4 +85,11 @@ export class MarketplaceShopService {
       `${this.baseUrl}/${shopSlug}/`
     );
   }
+
+  shopCallback(formData: FormData): Observable<any>{
+    return this.httpClient.post(
+      `http://localhost:4201/api/marketplace/shop-callback/`,
+      formData
+    );
+  }
 }

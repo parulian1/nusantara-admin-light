@@ -266,7 +266,7 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
       .getItemMarketplaceAttribute(this.selectedTab,this.productClassSlug, this.productSlug)
       .subscribe((data: IMarketplaceItemAttributeInformation[]) => {
         this.marketplaceStoreAttributes = data;
-
+        console.log(this.marketplaceStoreAttributes)
         if(!data){
           this.emptyStore = true;
         }

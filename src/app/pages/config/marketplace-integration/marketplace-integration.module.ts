@@ -39,6 +39,8 @@ import {
   MARKETPLACE_CONFIG_TOKEN,
 } from "./marketplace.tokens";
 import * as fromReducer from "@nusantara/reducers/marketplace.reducers";
+import {CallbackFormComponent} from "./connect/callback-form.component";
+import {LazadaFormComponent} from "./connect/form/lazada-form.component";
 
 export function getMarketplacesConfig(
   saveKeys: string[],
@@ -71,6 +73,8 @@ export function getMarketplacesConfig(
     PublishListComponent,
     PublishDetailComponent,
     MarketplaceIntegrationComponent,
+    CallbackFormComponent,
+    LazadaFormComponent,
   ],
   imports: [
     CommonModule,
