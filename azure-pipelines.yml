@@ -12,6 +12,12 @@ variables:
   APM_URL: https://apm.bhisma.cloud/
   # NPM_CACHE_FEED: e09e6f3d-7f3b-43d4-8f43-f50424bd8131
 
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: Operations/pipeline-templates
+
 jobs:
   - job: unit_test
     displayName: Run Unit Test
