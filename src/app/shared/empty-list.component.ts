@@ -7,7 +7,8 @@ import { Component, Input } from '@angular/core';
     <h1 class="heading-1">{{ title }}</h1>
     <p>{{ description }}</p>
     <button [routerLink]="addUrl" class="control">
-      <i class="material-icons">add</i>&nbsp;{{ addText }}
+      <i class="material-icons">add</i>&nbsp;
+      <span>{{ addText }}</span>
     </button>
   </div>`,
   styles: [
@@ -15,7 +16,8 @@ import { Component, Input } from '@angular/core';
     'div { height: 70vh; display: flex; flex-direction: column; justify-content: center; align-items: center}',
     'h1 { margin-buttom: 10px; }',
     'p { line-height: 20px; margin-bottom: 24px; }',
-    'button { display: flex; align-items: center; justify-content: center; }'
+    'button { display: flex; align-items: center; justify-content: center; }',
+    'span { padding-right: 10px; }'
   ],
 })
 export class EmptyListCOmponent {

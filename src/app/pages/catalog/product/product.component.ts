@@ -89,7 +89,8 @@ import { MarketplaceInfoHostComponent } from './marketplace';
 
             <div class="rich-text-container">
               <label for="content" class="external"><span>Description</span></label>
-              <ckeditor [editor]="Editor" [formControl]="description" id="description"></ckeditor>
+              <ckeditor [editor]="Editor" [config]="editorConfig"
+                  [formControl]="description" id="description"></ckeditor>
               <nus-field-errors [control]="description"></nus-field-errors>
             </div>
 
@@ -286,7 +287,7 @@ import { MarketplaceInfoHostComponent } from './marketplace';
     'label.toggle { padding-bottom: 20px 0; width: fit-content; min-height: 0; }',
     'label.toggle > input { margin-right: 16px }',
     '.rich-text-container { padding-bottom: 16px; margin: 0 !important; }',
-    'ul { list-style: none }',
+    'ul { list-style: none; margin: 0; padding: 0; }',
     '.side-nav li { font-size: 14px; line-height: 20px; font-weight: bold; color: var(--tertiary); padding: 10px 32px; cursor: pointer; }',
     '.side-nav li.active { padding: 10px 24px; color: white; background: var(--tertiary-lighten); border-left: solid 8px var(--secondary); border-radius: 4px; }',
     '.side-nav li a { text-decoration: none; color: inherit; }',
@@ -621,7 +622,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     if (!newValue || !this.productClasses) { return; }
     const pc = this.productClasses.filter(e => e.href === newValue)[0];
     this.selectedProductClass =  pc;
-  
+
     if (pc.type === 'physical') {
       this.weight.enable();
       Object.keys(this.dimensions.controls).forEach(key => {

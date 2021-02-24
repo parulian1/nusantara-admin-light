@@ -242,9 +242,9 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
 
   get userDisplayName(): string {
     return [
-      this.authService.tokenPayload.last_name,
-      this.authService.tokenPayload.first_name,
-      `(${this.authService.tokenPayload.email})`,
+      this.authService.tokenPayload?.last_name ?? '',
+      this.authService.tokenPayload?.first_name ?? '',
+      `(${this.authService.tokenPayload?.email ?? ''})`,
     ].join(', ').trim();
   }
 

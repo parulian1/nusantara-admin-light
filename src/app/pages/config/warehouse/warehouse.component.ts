@@ -60,7 +60,7 @@ import { WarehouseService } from '@nusantara/services';
       <nus-address [form]="form.get('address')" formGroupName="address">
       </nus-address>
 
-      <label>
+      <label class="checkbox">
         <input type="checkbox" formControlName="isActive" name="isActive"> Is Active
         <nus-field-errors [control]="form.get('isActive')"></nus-field-errors>
       </label>
@@ -168,6 +168,9 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
         longitude: [entity?.address?.longitude, []],
       }),
     });
+
+    // need to mark as touched to make custom styling works
+    this.form.controls.isActive.markAsTouched();
 
     const defaultSubLoc: ISubLocation = {
       href: null,

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { NgxSmartModalModule } from 'ngx-smart-modal';
 
 import { SharedModule } from '@nusantara/shared';
 import { CmsRoutingModule } from './cms-routing.module';
@@ -17,40 +18,58 @@ import { TestimonialComponent, TestimonialListComponent } from './testimonial';
 import { BannerListComponent, BannerComponent } from './banner';
 import { HighlightComponent, HighlightListComponent } from './highlight';
 import { SlaListComponent, SlaComponent } from './sla';
+import { VideoIntegrationListComponent, VideoIntegrationComponent } from './video-integration';
 import { NavigationComponent } from './navigation/detail/navigation.component';
 import { NavigationListComponent } from './navigation/navigation-list/navigation-list.component';
 import { NavigationChildrenComponent } from './navigation/navigation-children/navigation-children.component';
+import {
+  OnboardingComponent,
+  OnboardingListComponent,
+  OnboardingContentComponent,
+  OnboardingContentHostComponent,
+  OnboardingContentImageComponent,
+  OnboardingPreviewHostDialogComponent
+} from './onboarding';
+import {DragDropModule} from "@angular/cdk/drag-drop";
 
 
 @NgModule({
-  declarations: [
-    FlatPageListComponent,
-    FlatPageComponent,
+    declarations: [
+        FlatPageListComponent,
+        FlatPageComponent,
 
-    TestimonialComponent,
-    TestimonialListComponent,
+        TestimonialComponent,
+        TestimonialListComponent,
 
-    WidgetBlockListComponent,
-    WidgetBlockComponent,
-    WidgetSummaryRowComponent,
+        WidgetBlockListComponent,
+        WidgetBlockComponent,
+        WidgetSummaryRowComponent,
 
-    BannerGroupComponent,
-    BannerListComponent,
-    BannerComponent,
+        BannerGroupComponent,
+        BannerListComponent,
+        BannerComponent,
 
-    ContentFooterComponent,
-    ContentFooterListComponent,
-    ContentFooterChildrenComponent,
+        ContentFooterComponent,
+        ContentFooterListComponent,
+        ContentFooterChildrenComponent,
 
-    HighlightListComponent,
-    HighlightComponent,
+        HighlightListComponent,
+        HighlightComponent,
 
-    SlaComponent,
-    SlaListComponent,
-    NavigationComponent,
-    NavigationListComponent,
-    NavigationChildrenComponent,
-  ],
+        SlaComponent,
+        SlaListComponent,
+        VideoIntegrationComponent,
+        VideoIntegrationListComponent,
+        NavigationComponent,
+        NavigationListComponent,
+        NavigationChildrenComponent,
+        OnboardingComponent,
+        OnboardingListComponent,
+        OnboardingContentComponent,
+        OnboardingContentHostComponent,
+        OnboardingContentImageComponent,
+        OnboardingPreviewHostDialogComponent,
+    ],
   imports: [
     CommonModule,
     SharedModule,
@@ -58,6 +77,9 @@ import { NavigationChildrenComponent } from './navigation/navigation-children/na
     ReactiveFormsModule,
     CKEditorModule,
     CmsRoutingModule,
+    DragDropModule,
+    NgxSmartModalModule.forChild(),
   ],
+  exports: [],
 })
 export class CmsModule { }

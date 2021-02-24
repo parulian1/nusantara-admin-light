@@ -32,7 +32,7 @@ import { BannerService } from '@nusantara/services';
         <nus-field-errors [control]="type"></nus-field-errors>
       </label>
 
-      <label>
+      <label class="checkbox">
         <span>Is Active</span>
         <input type="checkbox" [formControl]="isActive" name="isActive">
       </label>
@@ -80,7 +80,7 @@ import { BannerService } from '@nusantara/services';
         <nus-field-errors [control]="clickUrl"></nus-field-errors>
       </label>
 
-      <label>
+      <label class="checkbox">
         <span>Is Display at Homepage</span>
         <input type="checkbox" [formControl]="displayHomepage" name="displayHomepage">
       </label>
@@ -106,6 +106,7 @@ import { BannerService } from '@nusantara/services';
   `,
   styles: [
     '.rich-text-container { padding-bottom: 14px; }', // double standard label padding
+    `.checkbox { width: fit-content; }`
   ]
 })
 export class BannerComponent extends AbstractDetailComponent<banner.IBanner> implements OnInit {
@@ -164,6 +165,10 @@ export class BannerComponent extends AbstractDetailComponent<banner.IBanner> imp
       group: [entity?.group ?? '', []],
       sortPriority: [entity?.sortPriority ?? '', []],
     });
+
+    // need to mark as touched to make custom styling works
+    this.form.controls.isActive.markAsTouched();
+    this.form.controls.displayHomepage.markAllAsTouched();
 
     this.setImagePreview(entity?.image);
     this.setPhoneImagePreview(entity?.phoneImage);

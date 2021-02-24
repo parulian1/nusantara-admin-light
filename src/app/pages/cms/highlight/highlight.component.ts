@@ -76,11 +76,11 @@ import { IProduct } from '@nusantara/models/products';
         <nus-field-errors [control]="sortPriority"></nus-field-errors>
       </label>
 
-      <label class="without-field-errors">
+      <label class="without-field-errors checkbox">
         <input type="checkbox" [formControl]="isActive" name="isActive"> Is Active
       </label>
 
-      <label class="without-field-errors">
+      <label class="without-field-errors checkbox">
         <input type="checkbox" [formControl]="isShowHomepage" name="isShowHomepage"> Is Show Homepage
       </label>
 
@@ -163,6 +163,10 @@ export class HighlightComponent extends AbstractDetailComponent<IHighlight> impl
     });
 
     this.entity = entity;
+
+    // need to mark as touched to make custom styling works
+    this.form.controls.isActive.markAsTouched();
+    this.form.controls.isShowHomepage.markAllAsTouched();
 
     this.setPhotoPreview(entity?.banner, 'banner');
     this.setPhotoPreview(entity?.background, 'background');

@@ -17,15 +17,15 @@ import {ActivatedRoute} from '@angular/router';
       <thead>
       <tr>
         <th>Title</th>
-        <th>Number of Child</th>
-        <th>Is Active</th>
+        <th class="numeric">Number of Child</th>
+        <th class="centered">Is Active</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let entity of page.entities">
         <td><a [routerLink]="[entity|entityToSlug]">{{ entity.title }}</a></td>
-        <td>{{ entity.children.length }}</td>
-        <td><nus-true-false [value]="entity.isActive"></nus-true-false></td>
+        <td class="numeric">{{ entity.children.length }}</td>
+        <td class="centered"><nus-true-false [value]="entity.isActive"></nus-true-false></td>
       </tr>
       </tbody>
     </table>

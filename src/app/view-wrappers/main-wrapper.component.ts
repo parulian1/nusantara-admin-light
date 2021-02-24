@@ -73,6 +73,8 @@ import { SubscriptionLike } from 'rxjs';
         <li><a [routerLink]="['/cms/content-footers']" routerLinkActive="active">Content Footers</a></li>
         <li><a [routerLink]="['/cms/highlights']" routerLinkActive="active">Highlights</a></li>
         <li><a [routerLink]="['/cms/sla']" routerLinkActive="active">SLA</a></li>
+        <li><a [routerLink]="['/cms/video-integration']" routerLinkActive="active">Video Integration</a></li>
+        <li><a [routerLink]="['/cms/onboardingcontent']" routerLinkActive="active">Onboarding</a></li>
 
 
         <li class="section-header">
@@ -119,10 +121,11 @@ import { SubscriptionLike } from 'rxjs';
         <router-outlet #o="outlet"></router-outlet>
       </div>
 
-      <footer class="main-footer">
-        <nus-copyright-notice></nus-copyright-notice>
-      </footer>
     </div>
+
+    <footer class="main-footer">
+      <nus-copyright-notice></nus-copyright-notice>
+    </footer>
   `,
   styles: [
     `
@@ -181,7 +184,7 @@ import { SubscriptionLike } from 'rxjs';
     }
 
     nav {
-      grid-row: 2;
+      grid-row: 2/4;
       grid-column: 1;
       background: var(--nav-background);
       color: white;
@@ -195,7 +198,15 @@ import { SubscriptionLike } from 'rxjs';
       grid-column: 2;
       grid-row: 2;
       margin: 5px;
-    }`,
+    }
+
+    footer {
+      grid-row: 3;
+      grid-column: 2/3;
+      align-self: flex-end;
+      margin-bottom: 10px;
+    }
+    `,
     `
       /*
        * Sidebar Nav
@@ -251,7 +262,7 @@ import { SubscriptionLike } from 'rxjs';
       nav > ul a:focus {
         transition: all .3s;
         border-left: 6px solid var(--bhisma-orange);
-        background-color: #7B869B;     
+        background-color: #7B869B;
       }
 
       @media print {
@@ -271,7 +282,6 @@ import { SubscriptionLike } from 'rxjs';
         }
 
       }
-      footer { margin-top: 45px; width: 80%; bottom: 0;position: absolute;}
     `],
   animations: [ slideInAnimation, ],
 })

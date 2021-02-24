@@ -292,9 +292,9 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
   }
 
   get userDisplayName(): string {
-    const last_name = this.authService.tokenPayload.last_name;
-    const first_name = this.authService.tokenPayload.first_name;
-    const email = this.authService.tokenPayload.email;
+    const last_name = this.authService.tokenPayload?.last_name ?? '';
+    const first_name = this.authService.tokenPayload?.first_name ?? '';
+    const email = this.authService.tokenPayload?.email ?? '';
     const fullname = first_name.concat(" ", last_name);
 
     if(last_name && first_name && email){

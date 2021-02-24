@@ -36,7 +36,7 @@ import { AbstractDetailComponent, ToastService } from '@nusantara/core';
         </select>
       </label>
 
-      <label>
+      <label class="checkbox">
         <input type="checkbox" [formControl]="isActive" name="isActive"> Is Active
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
@@ -131,6 +131,9 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
     });
 
     this.entity = entity;
+
+    // need to mark as touched to make custom styling works
+    this.form.controls.isActive.markAsTouched();
 
     this.setIconImagePreview(entity?.image);
 

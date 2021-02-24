@@ -179,6 +179,25 @@ a.disabled {
   width: 100%;
   height: 40px;
 }
+
+input:disabled, select:disabled {
+  cursor: not-allowed;
+}
+
+/** Hide spinner on input type number **/
+ /* for Chrome, Safari, Edge, Opera */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+ /* for Firefox */
+ input[type=number] {
+   -moz-appearance: textfield;
+ }
+
+
 input.ng-untouched {
   border: solid var(--input-border) 1px !important;
   background: none !important;
@@ -395,6 +414,12 @@ label > span:first-child {
 label small {
   display: block;
 }
+
+/* Make sure click area not to wide for checkbox and radio */
+label.checkbox, label.radio {
+  width: fit-content;
+}
+
 input[type=file] {
   display: block;
 }
@@ -535,6 +560,7 @@ thead { background: var(--darken-white); }
 thead tr, tbody tr { height: 48px; }
 thead th { text-align: left; }
 tbody td { color: var(--darken-grey); }
+tbody tr:last-child td { border-bottom: none; }
 th.numeric, td.numeric { text-align: right; }
 th.centered, td.centered { text-align: center; }
 td.vertical-aligned { vertical-align: top; padding-top: 14px;}
@@ -558,7 +584,7 @@ button.control, a.control {
   font-size: 1em;
   text-decoration: none;
   height: 40px;
-  width: 120px;
+  min-width: 120px;
   line-height: 31px;
   box-sizing: border-box;
   transition: all 0.2s;
