@@ -1,165 +1,80 @@
+trigger:
+  - release/*
+  - hotfix/*
+  
 pool:
   vmImage: ubuntu-20.04
 
 variables:
-  system.debug: false
-  NpmCacheFeed: e09e6f3d-7f3b-43d4-8f43-f50424bd8131
   FEED_ID: 61101818-286e-47e5-b86b-ef800ee02eea
+  # Don't forget add trailing slash ('/').
+  BUILD_DEST_PATH: dist/
+  APM_URL: https://apm.bhisma.cloud/
+  # NPM_CACHE_FEED: e09e6f3d-7f3b-43d4-8f43-f50424bd8131
 
 jobs:
   - job: unit_test
     displayName: Run Unit Test
     steps:
-      - task: NodeTool@0
-        displayName: Use Node 12.x
-        inputs:
-          versionSpec: 12.x
+      # https://dev.azure.com/gramediadigital/Operations/_git/pipeline-templates?path=%2Fweb%2Funit_test.yml
+      - template: web/unit_test.yml@templates
+        parameters:
+          feedId: $(FEED_ID)
+          testArgs: ''
 
-      - task: Npm@1
-        displayName: npm install
-        inputs:
-          verbose: false
-          customRegistry: useFeed
-          customFeed: $(FEED_ID)
+      # - task: 1ESLighthouseEng.PipelineArtifactCaching.RestoreAndSaveCacheV1.RestoreAndSaveCache@1
+      #   displayName: Restore and save cache from Azure Artifact
+      #   inputs:
+      #     keyfile: '**/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json'
+      #     targetfolder: '**/node_modules, !**/node_modules/**/node_modules'
+      #     vstsFeed: '$(NPM_CACHE_FEED)'
+      #     platformIndependent: true
+      #     alias: nusantara-admin
 
-      - task: CmdLine@2
-        displayName: Run Unit Tests
-        continueOnError: true
-        inputs:
-          script: |
-            npm run env -s
-            npm run lint -s
-            npm run ng -- test
-            export TEST_EXIT_CODE=$?
-            test $TEST_EXIT_CODE -eq 0 || exit 1
-
-      - task: PublishTestResults@2
-        displayName: Publish test report to Azure DevOps
-        inputs:
-          testRunTitle: node
-
-      - task: 1ESLighthouseEng.PipelineArtifactCaching.RestoreAndSaveCacheV1.RestoreAndSaveCache@1
-        displayName: Restore and save cache from Azure Artifact
-        inputs:
-          keyfile: '**/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json'
-          targetfolder: '**/node_modules, !**/node_modules/**/node_modules'
-          vstsFeed: '$(NpmCacheFeed)'
-          platformIndependent: true
-          alias: nusantara-admin
-
-      - task: SonarSource.sonarcloud.14d9cde6-c1da-4d55-aa01-2965cd301255.SonarCloudPrepare@1
-        displayName: Prepare analysis on SonarCloud
-        inputs:
-          SonarCloud: SonarCloud
-          organization: gdn-ecommerce
-          scannerMode: CLI
-      - task: SonarSource.sonarcloud.ce096e50-6155-4de8-8800-4221aaeed4a1.SonarCloudAnalyze@1
-      - task: SonarSource.sonarcloud.38b27399-a642-40af-bb7d-9971f69712e8.SonarCloudPublish@1
-
-  - job: production
-    displayName: Production
+  - job: build_prod
+    displayName: Build & Packaging PROD
+    dependsOn: unit_test
+    condition: |
+      and(
+        succeeded(),
+        ne(variables['Build.Reason'], 'PullRequest')
+      )
     steps:
-      - task: NodeTool@0
-        displayName: Use Node 12.x
-        inputs:
-          versionSpec: 12.x
+      # https://dev.azure.com/gramediadigital/Operations/_git/pipeline-templates?path=%2Fweb%2Fbuild.yml
+      - template: web/build.yml@templates
+        parameters:
+          appEnv: production
+          feedId: $(FEED_ID)
+          buildPath: $(BUILD_DEST_PATH)
+          envVars: 'APM_NAME=nus-admin APM_ACTIVE=True APM_ENVIRONMENT=production APM_URL=$(APM_URL)'
 
-      - task: 1ESLighthouseEng.PipelineArtifactCaching.RestoreAndSaveCacheV1.RestoreAndSaveCache@1
-        displayName: Restore and save cache from Azure Artifact
-        inputs:
-          keyfile: '**/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json'
-          targetfolder: '**/node_modules, !**/node_modules/**/node_modules'
-          vstsFeed: '$(NpmCacheFeed)'
-          platformIndependent: true
-          alias: nusantara-admin
+      # - task: 1ESLighthouseEng.PipelineArtifactCaching.RestoreAndSaveCacheV1.RestoreAndSaveCache@1
+      #   displayName: Restore and save cache from Azure Artifact
+      #   inputs:
+      #     keyfile: '**/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json'
+      #     targetfolder: '**/node_modules, !**/node_modules/**/node_modules'
+      #     vstsFeed: '$(NPM_CACHE_FEED)'
+      #     platformIndependent: true
+      #     alias: nusantara-admin
 
-      - task: Npm@1
-        displayName: Install App Dependencies
-        inputs:
-          verbose: false
-        condition: ne(variables['CacheRestored-nusantara-admin'], 'true')
-
-      - task: Npm@1
-        displayName: Setup Env
-        inputs:
-          command: custom
-          verbose: false
-          customCommand: run env
-
-      # Production Build
-      - task: Npm@1
-        displayName: Build & Packaging (Production)
-        inputs:
-          command: custom
-          verbose: false
-          customCommand: run ng -- build --configuration=production
-
-      - task: ArchiveFiles@2
-        displayName: Archive dist folder as Artifact
-        inputs:
-          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist'
-          includeRootFolder: true
-          archiveFile: '$(System.DefaultWorkingDirectory)/artifact.tar.bz2'
-          archiveType: tar
-          tarCompression: bz2
-
-      - task: PublishPipelineArtifact@1
-        displayName: 'Publish Pipeline Artifact'
-        inputs:
-          targetPath: artifact.tar.bz2
-          artifact: production
-          publishLocation: pipeline
+      # - task: Npm@1
+      #   displayName: Install App Dependencies
+      #   inputs:
+      #     verbose: false
+      #   condition: ne(variables['CacheRestored-nusantara-admin'], 'true')
 
   # Staging Build
-  - job: staging
-    displayName: Staging
+  - job: build_staging
+    displayName: Build & Packaging STAGING
+    dependsOn: unit_test
+    condition: |
+      and(
+        succeeded(),
+        ne(variables['Build.Reason'], 'PullRequest')
+      )
     steps:
-      - task: NodeTool@0
-        displayName: Use Node 12.x
-        inputs:
-          versionSpec: 12.x
-
-      - task: 1ESLighthouseEng.PipelineArtifactCaching.RestoreAndSaveCacheV1.RestoreAndSaveCache@1
-        displayName: Restore and save cache from Azure Artifact
-        inputs:
-          keyfile: '**/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json'
-          targetfolder: '**/node_modules, !**/node_modules/**/node_modules'
-          vstsFeed: '$(NpmCacheFeed)'
-          platformIndependent: true
-          alias: nusantara-admin
-
-      - task: Npm@1
-        displayName: Install App Dependencies
-        inputs:
-          verbose: false
-        condition: ne(variables['CacheRestored-nusantara-admin'], 'true')
-
-      - task: Npm@1
-        displayName: Setup Env
-        inputs:
-          command: custom
-          verbose: false
-          customCommand: run env
-
-      - task: Npm@1
-        displayName: Build & Packaging (Staging)
-        inputs:
-          command: custom
-          verbose: false
-          customCommand: run ng build
-
-      - task: ArchiveFiles@2
-        displayName: Archive dist folder as Artifact
-        inputs:
-          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist'
-          includeRootFolder: true
-          archiveFile: '$(System.DefaultWorkingDirectory)/artifact.tar.bz2'
-          archiveType: tar
-          tarCompression: bz2
-
-      - task: PublishPipelineArtifact@1
-        displayName: 'Publish Pipeline Artifact'
-        inputs:
-          targetPath: artifact.tar.bz2
-          artifact: staging
-          publishLocation: pipeline
+      - template: web/build.yml@templates
+        parameters:
+          feedId: $(FEED_ID)
+          buildPath: $(BUILD_DEST_PATH)
+          envVars: 'APM_NAME=nus-admin APM_ACTIVE=False APM_ENVIRONMENT=staging APM_URL=$(APM_URL)'
