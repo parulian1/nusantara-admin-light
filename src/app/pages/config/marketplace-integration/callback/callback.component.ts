@@ -53,7 +53,7 @@ export class CallbackComponent implements OnInit {
   isBusy = false;
   codeCallback: any;
   redirectOnFail = '/auth/login';
-  baseurl = window.location.origin;
+  siteDomain = this.auth.siteDomain;
 
   constructor(private fb: FormBuilder,
               private service: MarketplaceShopService,
@@ -107,7 +107,7 @@ export class CallbackComponent implements OnInit {
       this.form.disable();
     } else {
       this.service
-          .shopCallback(this.getFormValue(), this.baseurl)
+          .shopCallback(this.getFormValue(), this.siteDomain)
           .subscribe(result => {
              if (result instanceof ErrorResult) {
                this.onLoginFail(result.errorDetails);
@@ -115,6 +115,7 @@ export class CallbackComponent implements OnInit {
                this.onLoginSuccess();
              }
           });
+
       this.auth.logout();
       this.router.navigate([this.redirectOnFail, ], {queryParams: {next: '/config/marketplace-integration/connect'}});
       return false;

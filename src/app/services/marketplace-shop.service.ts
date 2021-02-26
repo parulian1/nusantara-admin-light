@@ -95,7 +95,7 @@ export class MarketplaceShopService {
 
   shopCallback(formData: FormData, baseurl: string): Observable<any>{
     return this.httpClient.post(
-      `${baseurl}/api/marketplace/shop-callback/`,
+      `https://${baseurl}/api/marketplace/shop-callback/`,
       formData
     );
   }
