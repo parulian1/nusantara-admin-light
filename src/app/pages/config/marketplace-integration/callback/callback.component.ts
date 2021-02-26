@@ -8,6 +8,7 @@ import { IError } from '@nusantara/models/base/error';
 import {MarketplaceShopService} from "../../../../services";
 import {MarketplaceClientEnum} from "../connect/markeplace-client-enum";
 import {RequireLoggedInGuard} from "../../../../auth";
+import {base} from "../../../../models";
 
 /**
  * Allows the user to authenticate with an email address and password.
@@ -52,6 +53,7 @@ export class CallbackComponent implements OnInit {
   isBusy = false;
   codeCallback: any;
   redirectOnFail = '/auth/login';
+  baseurl = window.location.origin;
 
   constructor(private fb: FormBuilder,
               private service: MarketplaceShopService,
@@ -92,18 +94,27 @@ export class CallbackComponent implements OnInit {
     this.nonFieldErrors.length = 0;
     this.isBusy = true;
 
-    this.service
-        .shopCallback(this.getFormValue())
-        .subscribe(result => {
-           if (result instanceof ErrorResult) {
-             this.onLoginFail(result.errorDetails);
-           } else {
-             this.onLoginSuccess();
-           }
-        });
-    this.form.disable();
-
-    if (!this.auth.isAuthenticated) {
+    if(this.auth.isAuthenticated){
+      this.service
+          .shopInAuthCallback(this.getFormValue())
+          .subscribe(result => {
+             if (result instanceof ErrorResult) {
+               this.onLoginFail(result.errorDetails);
+             } else {
+               this.onLoginSuccess();
+             }
+          });
+      this.form.disable();
+    } else {
+      this.service
+          .shopCallback(this.getFormValue(), this.baseurl)
+          .subscribe(result => {
+             if (result instanceof ErrorResult) {
+               this.onLoginFail(result.errorDetails);
+             } else {
+               this.onLoginSuccess();
+             }
+          });
       this.auth.logout();
       this.router.navigate([this.redirectOnFail, ], {queryParams: {next: '/config/marketplace-integration/connect'}});
       return false;
