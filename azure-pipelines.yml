@@ -17,7 +17,6 @@ resources:
     - repository: templates
       type: git
       name: Operations/pipeline-templates
-      ref: feature/cache-node
 
 jobs:
   - job: unit_test
