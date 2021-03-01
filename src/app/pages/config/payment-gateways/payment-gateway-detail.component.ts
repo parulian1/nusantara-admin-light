@@ -167,6 +167,7 @@ import {setAndClearValidators} from './utils';
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
+        (delete)="delete()"
         [hideDelete]="!entity || !entity.isActive">
       </nus-detail-actions>
     </form>
@@ -324,14 +325,14 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     this.form.controls.isActive.markAsTouched();
     this.form.controls.allowPos.markAsTouched();
 
-    if (entity.meta.banks) {
+    if (entity.meta?.banks) {
       const bankValues = JSON.parse(entity.meta.banks.replace(/'/g, '"'));
       for (const bank of bankValues ?? []) {
         this.addLineBank(bank);
       }
     }
 
-    if (entity.meta.eWallets) {
+    if (entity.meta?.eWallets) {
       const wallValues =  JSON.parse(entity.meta.eWallets.replace(/'/g, '"'));
       for (const bank of wallValues ?? []) {
         this.addLineWallet(bank);
@@ -381,6 +382,10 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
       delete (this.form.value.meta.banks) ;
     }
     super.save();
+  }
+
+  delete(): void {
+    super.delete();
   }
 
   onInStoreChange($event: any) {
