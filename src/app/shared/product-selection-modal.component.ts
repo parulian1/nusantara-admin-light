@@ -27,18 +27,23 @@ import { products } from '../models';
         <input type="hidden" [formControl]="product">
         <p>Showing 10 recently added products. Search product name or SKU to find more products.</p>
         <table>
+          <colgroup>
+            <col class="product-name">
+            <col class="product-sku">
+            <col>
+          </colgroup>
           <thead>
           <tr style="background-color: #F4F4F4;">
             <th>Product Name</th>
             <th>SKU</th>
-            <th>Action</th>
+            <th class="centered">Action</th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let p of displayedResults?.entities">
-            <td>{{ p.name }}</td>
-            <td>{{ p.upc }}</td>
-            <td><a href="#" (click)="selectProduct(p)">Add</a></td>
+            <td class="product-name">{{ p.name }}</td>
+            <td class="product-sku">{{ p.upc }}</td>
+            <td class="centered"><a href="#" (click)="selectProduct(p)">Add</a></td>
           </tr>
           </tbody>
         </table>
@@ -66,6 +71,10 @@ import { products } from '../models';
         border: none !important;
       }
     `,
+    'table { table-layout: fixed }',
+    'td { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }',
+    '.product-name { width: 50%; }',
+    '.product-sku { width: 30%; }'
   ]
 })
 export class ProductSelectionModalComponent implements OnInit, AfterViewInit {

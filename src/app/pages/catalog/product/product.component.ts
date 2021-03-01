@@ -35,11 +35,19 @@ import { MarketplaceInfoHostComponent } from './marketplace';
             <h1 class="heading-1">General Information</h1>
             <label>
               <span>Name</span>
-              <input type="text" [formControl]="name" placeholder="Input Name"/>
+              <input type="text" 
+                [formControl]="name" 
+                name="name" 
+                placeholder="Input Name"
+                data-qa="name"/>
               <nus-field-errors [control]="name"></nus-field-errors>
             </label>
             <label class="toggle">
-              <input id="s2" type="checkbox" class="toggle"[formControl]="isActive"/>
+              <input id="s2" type="checkbox" 
+                class="toggle"
+                [formControl]="isActive"
+                name="is-active"
+                data-qa="is-active"/>
               <span>Is Active</span>
               <nus-field-errors [control]="isActive"></nus-field-errors>
             </label>
@@ -48,7 +56,7 @@ import { MarketplaceInfoHostComponent } from './marketplace';
               <span>Product Category</span>
               <div class="manage">
                 <div>
-                  <select [formControl]="category" aria-placeholder="Select Category">
+                  <select [formControl]="category" name="category" data-qa="category">
                     <option *ngFor="let c of categories" [ngValue]="c.href">
                       {{ c.pathName }}
                     </option>
@@ -63,7 +71,7 @@ import { MarketplaceInfoHostComponent } from './marketplace';
               <span>Product Class</span>
               <div class="manage">
                 <div>
-                  <select [formControl]="productClass">
+                  <select [formControl]="productClass" name="product-class" data-qa="product-class">
                     <option *ngFor="let pc of productClasses" [ngValue]="pc.href">
                       {{ pc.name }}
                     </option>
@@ -90,7 +98,11 @@ import { MarketplaceInfoHostComponent } from './marketplace';
             <div class="rich-text-container">
               <label for="content" class="external"><span>Description</span></label>
               <ckeditor [editor]="Editor" [config]="editorConfig"
-                  [formControl]="description" id="description"></ckeditor>
+                  [formControl]="description" 
+                  id="description"
+                  name="description"
+                  data-qa="description">
+              </ckeditor>
               <nus-field-errors [control]="description"></nus-field-errors>
             </div>
 
@@ -98,7 +110,7 @@ import { MarketplaceInfoHostComponent } from './marketplace';
               <span>Vendor</span>
               <div class="manage">
                 <div>
-                  <select [formControl]="vendor">
+                  <select [formControl]="vendor" name="vendor" data-qa="vendor">
                     <option *ngFor="let v of vendors" [ngValue]="v.href">
                       {{ v.name }}
                     </option>
@@ -139,7 +151,11 @@ import { MarketplaceInfoHostComponent } from './marketplace';
 
             <label>
               <span>UPC</span>
-              <input type="text" [formControl]="upc" />
+              <input type="text" 
+                [formControl]="upc" 
+                name="upc"
+                placeholder="Input UPC"
+                data-qa="upc"/>
               <nus-field-errors [control]="upc"></nus-field-errors>
             </label>
 
@@ -155,7 +171,10 @@ import { MarketplaceInfoHostComponent } from './marketplace';
             <h1 class="heading-1">Product Packaging</h1>
             <label>
               <span>Package Weight (kg)</span>
-              <input type="number" [formControl]="weight" placeholder="Input Weight"/>
+              <input type="number" [formControl]="weight" 
+                name="weight"
+                placeholder="Input Weight"
+                data-qa="weight"/>
               <nus-field-errors [control]="weight"></nus-field-errors>
             </label>
             <div formGroupName="dimensions" class="product-dimension">
@@ -163,28 +182,34 @@ import { MarketplaceInfoHostComponent } from './marketplace';
                 <span>Length (cm)</span>
                 <input
                   type="number"
+                  name="length"
                   class="dimension-input"
-                  formControlName="current_length"
-                  placeholder="Input Length"/>
-                <nus-field-errors [control]="length"></nus-field-errors>
+                  formControlName="currentLength"
+                  placeholder="Input Length"
+                  data-qa="length"/>
+                  <nus-field-errors [control]="dimensions.get('currentLength')"></nus-field-errors>
               </label>
               <label>
                 <span>Width (cm)</span>
                 <input
                   type="number"
+                  name="width"
                   class="dimension-input"
-                  formControlName="current_width"
-                  placeholder="Input Width"/>
-                <nus-field-errors [control]="width"></nus-field-errors>
+                  formControlName="currentWidth"
+                  placeholder="Input Width"
+                  data-qa="width"/>
+                <nus-field-errors [control]="dimensions.get('currentWidth')"></nus-field-errors>
               </label>
               <label>
                 <span>Height (cm)</span>
                 <input
                   type="number"
+                  name="height"
                   class="dimension-input"
-                  formControlName="current_height"
-                  placeholder="Input Height"/>
-                <nus-field-errors [control]="height"></nus-field-errors>
+                  formControlName="currentHeight"
+                  placeholder="Input Height"
+                  data-qa="height"/>
+                  <nus-field-errors [control]="dimensions.get('currentHeight')"></nus-field-errors>
               </label>
             </div>
           </div>
@@ -194,7 +219,7 @@ import { MarketplaceInfoHostComponent } from './marketplace';
             <label *ngFor="let t of tags.controls; let i = index">    
               <span>Tag {{ i + 1 }}</span>
               <div style="display: flex;">
-                <input type="text" [formControl]="t" />
+                <input type="text" [formControl]="t" name="tag" data-qa="tag"/>
                 <button type="button" class="delete" (click)="tags.removeAt(i)">
                   <i class="material-icons">delete_outline</i>
                 </button>
@@ -209,17 +234,20 @@ import { MarketplaceInfoHostComponent } from './marketplace';
             <h1 class="heading-1">Other</h1>
             <label>
               <span>Meta Description</span>
-              <textarea
-                [formControl]="seoDescription"
-                id=""
-                cols="30"
-                rows="10"
-              ></textarea>
+              <textarea 
+                [formControl]="seoDescription" 
+                name="seo-description"
+                cols="30" rows="10"
+                data-qa="seo-description">
+              </textarea>
               <nus-field-errors [control]="seoDescription"></nus-field-errors>
             </label>
             <label>
               <span>Meta Keywords</span>
-              <input type="text" [formControl]="seoMeta" />
+              <input type="text"
+                [formControl]="seoMeta" 
+                name="seo-meta"
+                data-qa="seo-meta"/>
               <nus-field-errors [control]="seoMeta"></nus-field-errors>
             </label>
           </div>
@@ -391,11 +419,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   get related(): FormArray { return this.form.get('related') as FormArray; }
   get weight(): FormControl { return this.form.get('weight') as FormControl; }
 
-  get dimensions(): FormArray { return this.form.get('dimensions') as FormArray; }
-  get length(): FormControl { return this.form.get('length') as FormControl; }
-  get width(): FormControl { return this.form.get('width') as FormControl; }
-  get height(): FormControl { return this.form.get('height') as FormControl; }
-  
+  get dimensions(): FormGroup { return this.form.get('dimensions') as FormGroup; }
+
   get parent(): FormControl { return this.form.get('parent') as FormControl; }
   get structure(): FormControl { return this.form.get('structure') as FormControl; }
   get tags(): FormArray { return this.form.get('tags') as FormArray; }
@@ -447,9 +472,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       description: [entity?.description, [Validators.required, ]],
       weight: [entity?.weight, [Validators.required, ]],
       dimensions: this.fb.group({
-        current_length:[entity?.dimensions.currentLength,],
-        current_width:[entity?.dimensions.currentWidth,],
-        current_height:[entity?.dimensions.currentHeight,]
+        currentLength:[entity?.dimensions.currentLength,],
+        currentWidth:[entity?.dimensions.currentWidth,],
+        currentHeight:[entity?.dimensions.currentHeight,]
       }),
       productClass: this.fb.group({href: [entity?.productClass.href, [Validators.required]]}),
       category: this.fb.group({href: [entity?.category.href, [Validators.required]]}),
