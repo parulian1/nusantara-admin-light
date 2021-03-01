@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractDetailComponent, ToastService } from '@nusantara/core';
 import { banner, BannerTypeSmeClient, drf, widgets } from '@nusantara/models';
-import { BannerService } from '@nusantara/services';
+import { BannerService, SiteConfigService } from '@nusantara/services';
 import { enumToArray } from '@nusantara/shared/helpers';
 
 @Component({
@@ -125,6 +125,7 @@ export class BannerComponent extends AbstractDetailComponent<banner.IBanner> imp
               router: Router,
               route: ActivatedRoute,
               public fb: FormBuilder,
+              private configSercvice: SiteConfigService,
               toast: ToastService) { super(route, router, toast, service); }
 
   get name(): FormControl { return this.form.get('name') as FormControl; }
@@ -233,7 +234,9 @@ export class BannerComponent extends AbstractDetailComponent<banner.IBanner> imp
   }
 
   smeLicenseBannerType() {
-    this.typeChoices = this.typeChoices.filter(opt => enumToArray(BannerTypeSmeClient).includes(opt.value));
+    if (!this.configSercvice.isEnterpriseLicense()) {
+      this.typeChoices = this.typeChoices.filter(opt => enumToArray(BannerTypeSmeClient).includes(opt.value));
+    }
   }
 
 }

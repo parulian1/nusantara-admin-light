@@ -269,7 +269,7 @@ import { MarketplaceInfoHostComponent } from './marketplace';
           </div>
 
           <nus-marketplace-info id="marketplace-information"
-            *ngIf="!isNew && selectedProductClass.type === 'physical' && enterpriseLicense()"
+            *ngIf="!isNew && isPhysical() && enterpriseLicense()"
             [form]="marketplace"
             [productClass]="selectedProductClass">
           </nus-marketplace-info>
@@ -318,7 +318,7 @@ import { MarketplaceInfoHostComponent } from './marketplace';
           <li [ngClass]="{ active: currentActive === 'product-other' }">
             <a (click)="scrollTo('product-other')">Other</a>
           </li>
-          <li *ngIf="!isNew && selectedProductClass.type === 'physical' && enterpriseLicense()" [ngClass]="{ active: currentActive === 'marketplace-information' }">
+          <li *ngIf="!isNew && isPhysical() && enterpriseLicense()" [ngClass]="{ active: currentActive === 'marketplace-information' }">
             <a (click)="scrollTo('marketplace-information')">Marketplace Information</a>
           </li>
           <li *ngIf="!isNew" [ngClass]="{ active: currentActive === 'product-inventory' }">
@@ -697,6 +697,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         this.dimensions.controls[key].disable();
       });
     }
+  }
+
+  isPhysical() {
+    return this.selectedProductClass.type === 'physical';
   }
 
   enterpriseLicense() {

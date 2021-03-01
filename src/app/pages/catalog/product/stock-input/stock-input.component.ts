@@ -135,7 +135,6 @@ export class StockInputComponent extends AbstractEditingComponent implements OnI
     if (this.warehouses.length > 0 && stock > 0) {
       // Update stock receiving
       this.originalQuantity.setValue(stock);
-      console.log('PROD', product);
       this.warehouse.get('href').setValue(this.warehouses[0].href);
       this.product.setValue(product);
       this.location.get('href').setValue(this.availableSubLocations[0].href);

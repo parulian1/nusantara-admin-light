@@ -177,7 +177,9 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
   }
 
   smeLicenseProductType() {
-    this.typeChoices = this.typeChoices.filter(opt => enumToArray(ProductTypeSmeClient).includes(opt.value));
+    if (!this.enterpriseLicense()) {
+      this.typeChoices = this.typeChoices.filter(opt => enumToArray(ProductTypeSmeClient).includes(opt.value));
+    }
   }
 
 }
