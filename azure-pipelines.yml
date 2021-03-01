@@ -6,11 +6,14 @@ pool:
   vmImage: ubuntu-20.04
 
 variables:
-  FEED_ID: 61101818-286e-47e5-b86b-ef800ee02eea
+  - group: nusantara-web-pipeline-build
+
   # Don't forget add trailing slash ('/').
-  BUILD_DEST_PATH: dist/nusantara-admin
-  APM_URL: https://apm.bhisma.cloud/
-  # NPM_CACHE_FEED: e09e6f3d-7f3b-43d4-8f43-f50424bd8131
+  - name: BUILD_DEST_PATH
+    value: dist/nusantara-admin
+
+  - name: APM_NAME
+    value: Nusantara-Web-Admin
 
 resources:
   repositories:
@@ -28,15 +31,6 @@ jobs:
           feedId: $(FEED_ID)
           testArgs: ''
 
-      # - task: 1ESLighthouseEng.PipelineArtifactCaching.RestoreAndSaveCacheV1.RestoreAndSaveCache@1
-      #   displayName: Restore and save cache from Azure Artifact
-      #   inputs:
-      #     keyfile: '**/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json'
-      #     targetfolder: '**/node_modules, !**/node_modules/**/node_modules'
-      #     vstsFeed: '$(NPM_CACHE_FEED)'
-      #     platformIndependent: true
-      #     alias: nusantara-admin
-
   - job: build_prod
     displayName: Build & Packaging PROD
     dependsOn: unit_test
@@ -52,22 +46,7 @@ jobs:
           appEnv: production
           feedId: $(FEED_ID)
           buildPath: $(BUILD_DEST_PATH)
-          envVars: 'APM_NAME=nus-admin APM_ACTIVE=True APM_ENVIRONMENT=production APM_URL=$(APM_URL)'
-
-      # - task: 1ESLighthouseEng.PipelineArtifactCaching.RestoreAndSaveCacheV1.RestoreAndSaveCache@1
-      #   displayName: Restore and save cache from Azure Artifact
-      #   inputs:
-      #     keyfile: '**/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json'
-      #     targetfolder: '**/node_modules, !**/node_modules/**/node_modules'
-      #     vstsFeed: '$(NPM_CACHE_FEED)'
-      #     platformIndependent: true
-      #     alias: nusantara-admin
-
-      # - task: Npm@1
-      #   displayName: Install App Dependencies
-      #   inputs:
-      #     verbose: false
-      #   condition: ne(variables['CacheRestored-nusantara-admin'], 'true')
+          envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=True APM_ENVIRONMENT=Prod-FE APM_URL=$(APM_URL)'
 
   # Staging Build
   - job: build_staging
@@ -83,4 +62,4 @@ jobs:
         parameters:
           feedId: $(FEED_ID)
           buildPath: $(BUILD_DEST_PATH)
-          envVars: 'APM_NAME=nus-admin APM_ACTIVE=False APM_ENVIRONMENT=staging APM_URL=$(APM_URL)'
+          envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=False APM_ENVIRONMENT=Stage-FE APM_URL=$(APM_URL)'
