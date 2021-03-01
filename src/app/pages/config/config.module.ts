@@ -11,7 +11,7 @@ import { PaymentGatewayListComponent, PaymentGatewayDetailComponent } from './pa
 import { ShippingMethodListComponent, ShippingProviderDetailComponent, ShippingServiceComponent } from './shipping';
 import { DeviceListComponent, DeviceComponent } from './device';
 import { GroupComponent, GroupListComponent, UserGroupComponent } from './group';
-import { SiteConfigComponent, SocialMediaHostComponent } from './site-config';
+import { SiteConfigComponent, SocialMediaHostComponent, ConfigChatServiceComponent } from './site-config';
 import { ResellerComponent } from './reseller';
 import { BlogFeedComponent } from './blog-feed';
 import { AuthSocialComponent } from './auth-social';
@@ -42,6 +42,7 @@ import { PaymentGatewayInstoreComponent } from './payment-gateways/payment-gatew
     AuthSocialListComponent,
     PaymentGatewayMetaComponent,
     PaymentGatewayInstoreComponent,
+    ConfigChatServiceComponent,
   ],
   imports: [
     CommonModule,
@@ -50,7 +51,6 @@ import { PaymentGatewayInstoreComponent } from './payment-gateways/payment-gatew
     ReactiveFormsModule,
     ConfigRoutingModule,
     CKEditorModule,
-    FormsModule,
   ],
 })
 export class ConfigModule { }
