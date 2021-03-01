@@ -1,3 +1,4 @@
+import { RequireIsEnterpriseGuard } from '@nusantara/auth/guards';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -40,6 +41,7 @@ const dashboardRoutes: Routes = [
   },
   {
     path: 'customer-groups',
+    canActivate: [RequireIsEnterpriseGuard],
     children: [
       {
         path: '',

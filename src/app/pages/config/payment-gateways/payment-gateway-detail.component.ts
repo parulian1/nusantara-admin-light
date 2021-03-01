@@ -3,10 +3,12 @@ import {FormControl, Validators, FormBuilder, FormArray, FormGroup} from '@angul
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {ToastService, AbstractDetailComponent, NusantaraValidators} from '@nusantara/core';
-import {drf, IPaymentGateway} from '@nusantara/models';
+import {drf, IPaymentGateway, PaymentTypeSmeClient} from '@nusantara/models';
 import {PaymentGatewayService} from '@nusantara/services';
 import * as ClassicEditor from '@gdnnusantara/ckeditor5-build/build/ckeditor';
 import {setAndClearValidators} from './utils';
+import { enumToArray } from '@nusantara/shared/helpers';
+import { RequireIsEnterpriseGuard } from '@nusantara/auth';
 
 @Component({
   selector: 'nus-payment-gateway',
@@ -153,7 +155,7 @@ import {setAndClearValidators} from './utils';
         <input type="checkbox" [formControl]="isActive" name="isActive">
       </label>
 
-      <label class="checkbox">
+      <label *ngIf="enterpriseGuard.canActivate(null, null)" class="checkbox">
         <span>Allow POS</span>
         <input type="checkbox" [formControl]="allowPos" name="isActive">
       </label>
@@ -221,6 +223,7 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
               public fb: FormBuilder,
               toast: ToastService,
               route: ActivatedRoute,
+              public enterpriseGuard: RequireIsEnterpriseGuard,
               router: Router) {
     super(route, router, toast, service);
   }
@@ -290,7 +293,7 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
       this.typeChoices = data.typeChoices;
     });
     super.ngOnInit();
-
+    this.smeLicensePaymentType()
     this.type.valueChanges.subscribe(change => {
       this.setCurrentTypeAndValidatorFields(change);
     });
@@ -400,4 +403,9 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
       this.currentMetaLabel = '';
     }
   }
+
+  smeLicensePaymentType() {
+    this.typeChoices = this.typeChoices.filter(opt => enumToArray(PaymentTypeSmeClient).includes(opt.value));
+  }
+
 }

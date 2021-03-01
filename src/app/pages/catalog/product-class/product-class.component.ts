@@ -3,8 +3,9 @@ import { FormControl, FormGroup, FormArray, Validators, FormBuilder } from '@ang
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractDetailComponent, ToastService } from '@nusantara/core';
-import { drf, products } from '@nusantara/models';
-import { ProductClassService, ProductAttributeService } from '@nusantara/services';
+import { drf, products, ProductTypeSmeClient } from '@nusantara/models';
+import { ProductClassService, ProductAttributeService, SiteConfigService } from '@nusantara/services';
+import { enumToArray } from '@nusantara/shared/helpers';
 
 @Component({
   selector: 'nus-product-class',
@@ -56,7 +57,7 @@ import { ProductClassService, ProductAttributeService } from '@nusantara/service
 
       <br/>
 
-      <table>
+      <table *ngIf="enterpriseLicense()">
         <tr>
           <td class="immediate-error-display">
             <h2>Product Options</h2>
@@ -91,6 +92,7 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
 
   constructor(service: ProductClassService,
               private attributeService: ProductAttributeService,
+              private configSercvice: SiteConfigService,
               private fb: FormBuilder,
               toast: ToastService,
               route: ActivatedRoute,
@@ -121,6 +123,7 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
       this.entity = data.entity;
       this.attributeTypeChoices = data.attributeTypeChoices;
       this.typeChoices = data.typeChoices;
+      this.smeLicenseProductType();
       this.optionChoices = data.optionChoices;
 
       this.type.valueChanges.subscribe((value) => this.onTypeChanged(value));
@@ -168,4 +171,13 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
         fc.setValue(false);
     }});
   }
+
+  enterpriseLicense() {
+    return this.configSercvice.isEnterpriseLicense();
+  }
+
+  smeLicenseProductType() {
+    this.typeChoices = this.typeChoices.filter(opt => enumToArray(ProductTypeSmeClient).includes(opt.value));
+  }
+
 }

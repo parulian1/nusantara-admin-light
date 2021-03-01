@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@nusantara/auth/auth.service';
 import { ErrorResult } from '@nusantara/core/responses';
 import { IError } from '@nusantara/models/base/error';
+import { SiteConfigService } from '@nusantara/services';
 
 /**
  * Allows the user to authenticate with an email address and password.
@@ -77,6 +78,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               private service: AuthService,
+              private configService: SiteConfigService,
               private router: Router,
               private activatedRoute: ActivatedRoute) { }
 
@@ -113,6 +115,9 @@ export class LoginComponent implements OnInit {
          this.onLoginFail(result.errorDetails);
        } else {
          this.onLoginSuccess();
+         this.configService.fetch().subscribe((config) => {
+           this.configService.saveLicenseType(config?.licenseType);
+         });
        }
     });
 

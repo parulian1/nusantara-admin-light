@@ -19,7 +19,7 @@ import {
   ToastService,
 } from '@nusantara/core';
 
-import { AuthService } from '@nusantara/auth';
+import { AuthService, RequireIsEnterpriseGuard } from '@nusantara/auth';
 import { EmployeeWarehouseHostComponent } from './warehouse';
 import { EmployeeAccessGroupHostComponent } from './access-group';
 import { IJwtClaims } from '@nusantara/auth/models';
@@ -32,6 +32,10 @@ import { IJwtClaims } from '@nusantara/auth/models';
     </nus-detail-title>
 
     <form [formGroup]="form" (ngSubmit)="save()">
+      <label class="hidden">
+        <span>Name</span>
+        <input type="text" [formControl]="name"/>
+      </label>
       <label>
         <span>Employee ID</span>
         <input type="text" [formControl]="identityNumber"/>
@@ -75,7 +79,7 @@ import { IJwtClaims } from '@nusantara/auth/models';
       >
       </nus-employee-warehouse-host>
 
-      <div style="margin-top: 1rem;">
+      <div style="margin-top: 1rem;" *ngIf="enterpriseGuard.canActivate(null, null)">
         <nus-employee-access-group-host
           [entity]="entity"
           [choices]="accessGroupChoices"
@@ -156,7 +160,8 @@ export class EmployeeComponent
     router: Router,
     toast: ToastService,
     private warehouseService: WarehouseService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public enterpriseGuard: RequireIsEnterpriseGuard
   ) {
     super(route, router, toast, service);
   }
@@ -173,6 +178,7 @@ export class EmployeeComponent
 
   initializeForm(entity?: IEmployee) {
     this.form = this.fb.group({
+      name: [entity?.firstName, []],
       identityNumber: [entity?.identityNumber, [Validators.required]],
       firstName: [entity?.firstName, [Validators.required]],
       lastName: [entity?.lastName, [Validators.required]],
@@ -191,6 +197,9 @@ export class EmployeeComponent
     this.form.controls.isActive.markAsTouched();
   }
 
+  get name(): FormControl {
+    return this.form.get('name') as FormControl;
+  }
   get identityNumber(): FormControl {
     return this.form.get('identityNumber') as FormControl;
   }
@@ -229,6 +238,8 @@ export class EmployeeComponent
   }
 
   save(): void {
+    this.name.setValue(this.firstName.value); // Handle name in success massage
+    this.email.setValue(this.email.value.toLowerCase());
     this.service
       .save(this.getFormValue())
       .pipe(
@@ -264,7 +275,9 @@ export class EmployeeComponent
 
   protected onSaveSuccess(result: IResultResponse<IEmployee>) {
     this.EmployeeWarehouseHostComponent.saveAll(result.entity.href).subscribe(() => {});
-    this.EmployeeAccessGroupHostComponent.saveAll(result.entity.href).subscribe(() => {});
+    if (this.enterpriseGuard.canActivate(null, null)) {
+      this.EmployeeAccessGroupHostComponent.saveAll(result.entity.href).subscribe(() => {});
+    }
 
     super.onSaveSuccess(result);
   }

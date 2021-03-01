@@ -33,6 +33,7 @@ import { MarketplaceShippingInfoModalComponent } from './marketplace-shipping-in
 import { MarketplaceChannelInfoModalComponent } from './marketplace-channel-info-modal.component';
 import { ConfirmModalReceivingOrderComponent } from './confirm-modal-receiving-order.component';
 import { ConfirmModalPendingOrderComponent } from './confirm-modal-pending-order.component';
+import { OnlyNumberDirective } from './only-number.directive';
 
 /**
  * The purpose of this module is to make common code (like pipes)
@@ -67,8 +68,9 @@ import { ConfirmModalPendingOrderComponent } from './confirm-modal-pending-order
     ConfirmModalReceivingOrderComponent,
     ConfirmModalPendingOrderComponent,
     MarketplaceChannelInfoModalComponent,
-    MarketplaceStockInfoModalComponent
-  ],
+    MarketplaceStockInfoModalComponent,
+    OnlyNumberDirective
+   ],
   exports: [
     EntityToSlugPipe,
     CamelToHumanizedPipe,
@@ -97,7 +99,8 @@ import { ConfirmModalPendingOrderComponent } from './confirm-modal-pending-order
     ConfirmModalReceivingOrderComponent,
     ConfirmModalPendingOrderComponent,
     MarketplaceChannelInfoModalComponent,
-    MarketplaceStockInfoModalComponent
+    MarketplaceStockInfoModalComponent,
+    OnlyNumberDirective
   ],
   imports: [
     CommonModule,
