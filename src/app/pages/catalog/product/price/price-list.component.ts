@@ -58,7 +58,9 @@ import { RangeComponent } from './range.component';
       <div>
         <label>
           <span>Type</span>
-          <select [formControl]="type">
+          <select [formControl]="type" 
+            name="pricelist-type" 
+            data-qa="pricelist-type">
             <option
               *ngFor="let opt of types"
               [ngValue]="opt.value">{{ opt.displayName }}
@@ -68,7 +70,10 @@ import { RangeComponent } from './range.component';
       </div>
       <div>
         <label class="without-field-errors">
-          <input type="checkbox" [formControl]="isProgressive">
+          <input type="checkbox" 
+            [formControl]="isProgressive" 
+              name="is-progressive" 
+              data-qa="is-progressive">
           Is Progressive
         </label>
       </div>
