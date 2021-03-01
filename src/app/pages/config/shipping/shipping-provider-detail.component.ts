@@ -63,9 +63,6 @@ import { Kgx, ShippingServicesTypes } from './shipping-service/constants';
         <nus-field-errors [control]="description"></nus-field-errors>
       </label>
 
-      <!--      <h2>Services-->
-      <!--        <button type="button">Add</button>-->
-      <!--      </h2>-->
       <ng-container *ngIf="type.value">
         <div class="sosmed-title">
           <h3>

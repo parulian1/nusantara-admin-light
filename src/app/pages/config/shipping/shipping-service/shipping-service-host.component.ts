@@ -15,11 +15,11 @@ import { ActivatedRoute, Router } from '@angular/router';
           </option>
         </select>
       </td>
-      <td *ngIf="shippingType != 'kgx'"><input type="checkbox" [formControl]="isActive"></td>
-      <td *ngIf="shippingType != 'kgx'"><input type="number" [formControl]="minimumWeight"></td>
-      <td *ngIf="shippingType != 'kgx'"><input type="number" [formControl]="handlingFee"></td>
-      <td *ngIf="shippingType != 'kgx'"><input type="number" [formControl]="graceAmount"></td>
-      <td *ngIf="shippingType != 'kgx'">
+      <td *ngIf="!isShipingKgx()"><input type="checkbox" [formControl]="isActive"></td>
+      <td *ngIf="!isShipingKgx()"><input type="number" [formControl]="minimumWeight"></td>
+      <td *ngIf="!isShipingKgx()"><input type="number" [formControl]="handlingFee"></td>
+      <td *ngIf="!isShipingKgx()"><input type="number" [formControl]="graceAmount"></td>
+      <td *ngIf="!isShipingKgx()">
         <input type="text" [formControl]="description" data-qa="description" placeholder="lorem ipsum ..">
       </td>
       <td>
@@ -81,4 +81,9 @@ export class ShippingServiceHostComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
   }
+
+  isShipingKgx() {
+    return this.shippingType === 'kgx';
+  }
+
 }
