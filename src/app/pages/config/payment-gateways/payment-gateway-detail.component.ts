@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 
 import {ToastService, AbstractDetailComponent, NusantaraValidators} from '@nusantara/core';
 import {drf, IPaymentGateway, PaymentTypeSmeClient} from '@nusantara/models';
-import {PaymentGatewayService} from '@nusantara/services';
+import {PaymentGatewayService, SiteConfigService} from '@nusantara/services';
 import * as ClassicEditor from '@gdnnusantara/ckeditor5-build/build/ckeditor';
 import {setAndClearValidators} from './utils';
 import { enumToArray } from '@nusantara/shared/helpers';
@@ -224,6 +224,7 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
               toast: ToastService,
               route: ActivatedRoute,
               public enterpriseGuard: RequireIsEnterpriseGuard,
+              private configSercvice: SiteConfigService,
               router: Router) {
     super(route, router, toast, service);
   }
@@ -405,7 +406,9 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
   }
 
   smeLicensePaymentType() {
-    this.typeChoices = this.typeChoices.filter(opt => enumToArray(PaymentTypeSmeClient).includes(opt.value));
+    if (!this.configSercvice.isEnterpriseLicense()) {
+      this.typeChoices = this.typeChoices.filter(opt => enumToArray(PaymentTypeSmeClient).includes(opt.value));
+    }
   }
 
 }
