@@ -29,13 +29,15 @@ import { IEmployee } from '@nusantara/models/user';
             <a [routerLink]="[entity | entityToSlug]">{{ entity.email }}</a>
           </td>
           <td>{{ entity.identityNumber | emptyData }}</td>
-          <td>{{ entity.lastName | emptyData }}</td>
           <td>{{ entity.firstName | emptyData }}</td>
+          <td>{{ entity.lastName | emptyData }}</td>
           <td class="numeric">{{ entity.dateJoined | date: 'dd/MM/yyyy HH:mm:ss' | emptyData }}</td>
           <td class="numeric">{{ entity.lastLogin | date: 'dd/MM/yyyy HH:mm:ss' | emptyData }}</td>
         </tr>
       </tbody>
     </table>
+
+    <nus-pagination [page]="page"></nus-pagination>
   `,
   styles: [],
 })
