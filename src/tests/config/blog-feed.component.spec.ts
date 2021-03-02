@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { BlogFeedComponent } from '@nusantara/pages/config/blog-feed/blog-feed.component';
 
@@ -6,7 +6,7 @@ describe('BlogFeedComponent', () => {
   let component: BlogFeedComponent;
   let fixture: ComponentFixture<BlogFeedComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ BlogFeedComponent ]
     })
