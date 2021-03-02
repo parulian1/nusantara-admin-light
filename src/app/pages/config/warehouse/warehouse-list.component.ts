@@ -11,7 +11,7 @@ import { SiteConfigService } from '@nusantara/services';
     <nus-list-header
       title="Warehouses"
       description="A warehouse is any location where inventory is held;  This can involved retail locations."
-      [canAddNew]="page.entities.length < 1"
+      [canAddNew]="canAddNew()"
     >
     </nus-list-header>
 
@@ -56,5 +56,9 @@ export class WarehouseListComponent extends AbstractListComponent<IWarehouse> {
 
   isEnterpriseLicense() {
     this.enterprise = this.configService.isEnterpriseLicense();
+  }
+
+  canAddNew() {
+    return (!this.enterprise && this.page.entities.length < 1) || this.enterprise;
   }
 }
