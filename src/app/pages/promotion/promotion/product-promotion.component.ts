@@ -168,8 +168,8 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
           </tbody>
         </table>
 
-        <a class="download-product" href="{{ service.productListDownloadUrl }}" target="_blank">Download Product
-          List</a>
+<!--        <a class="download-product" href="{{ service.productListDownloadUrl }}" target="_blank">Download Product-->
+<!--          List</a>-->
       </div>
 
       <label *ngIf="!isPromoBundling" class="checkbox">
