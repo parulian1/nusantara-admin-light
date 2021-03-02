@@ -2,12 +2,16 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {FormControl, Validators, FormBuilder, FormArray, ValidatorFn, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 
-import {AbstractDetailComponent, DialogResult, ToastService} from '@nusantara/core';
+import {AbstractDetailComponent, DialogResult, Logger, ToastService} from '@nusantara/core';
 import {drf, INamedHrefEntity, IVoucher} from '@nusantara/models';
 import {ProductService, VoucherService} from '@nusantara/services';
 import {IProduct} from '../../../models/products';
 import * as XLSX from 'xlsx';
 import {ProductSelectionModalComponent} from '../../../shared';
+
+declare var window: any; // Needed on Angular 8+
+
+const log = new Logger('ProductPromotionComponent');
 
 
 const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
@@ -145,7 +149,7 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
         </tbody>
       </table>
 
-<!--      <a href="{{ service.productListDownloadUrl }}" target="_blank">Download Product List</a>-->
+      <a href="{{ service.productListDownloadUrl }}" target="_blank" *ngIf="hasProductUrl">Download Product List</a>
 
       <nus-detail-actions
         [component]="this"
@@ -179,6 +183,8 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
     {displayName: 'Only One Time', value: 'one_time'},
     {displayName: 'More Than Once', value: 'more_than_once'},
   ];
+
+  hasProductUrl = false;
 
   public entity: IVoucher;
 
@@ -267,6 +273,11 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
     for (const prod of entity?.products ?? []) {
       this.addProduct(prod);
     }
+
+    if ((window.localStorage.getItem('site_domain') === 'marthatilaarshop.com') || (window.localStorage.getItem('site_domain') === 'www.marthatilaarshop.com')) {
+      // TODO: Bad thing, should get this from API
+      this.hasProductUrl = true;
+    }
   }
 
   ngAfterViewInit() {
@@ -276,7 +287,7 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
   addProduct(product: INamedHrefEntity) {
 
     if ((this.products.value as Array<IProduct>).filter(p => p.href === product.href).length > 0) {
-      console.log('Product already in list -- skipping');
+      log.info('Product already in list -- skipping');
       return;
     }
 
