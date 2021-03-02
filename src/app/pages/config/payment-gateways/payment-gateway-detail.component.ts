@@ -169,8 +169,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
-        (delete)="delete()"
-        [hideDelete]="!entity || !entity.isActive">
+        (delete)="delete()">
       </nus-detail-actions>
     </form>
   `,
