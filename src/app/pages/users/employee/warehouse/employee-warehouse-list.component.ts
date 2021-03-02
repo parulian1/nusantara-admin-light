@@ -8,13 +8,13 @@ import { IWarehouse } from '@nusantara/models';
     <tr [formGroup]="form" class="immediate-error-display">
       <td class="immediate-error-display">
         <select
-          class="warehouse"
+          class="warehouse select-warehouse"
           (change)="changeWarehouse($event)"
           [formControl]="href"
-          style="white-space: pre-wrap; max-width: 250px; text-overflow: ellipsis;"
         >
           <option [ngValue]="''">Choose warehouse</option>
           <option *ngFor="let warehouse of choices" [ngValue]="warehouse.href">
+            <span *ngIf="!warehouse?.isActive">(In-Active)</span>
             {{ warehouse.code }} - {{ warehouse.name }}
           </option>
         </select>
@@ -31,7 +31,17 @@ import { IWarehouse } from '@nusantara/models';
       </td>
     </tr>
   `,
-  styles: [':host { display: contents; }'],
+  styles: [
+    ':host { display: contents; }',
+    `
+      .select-warehouse {
+        white-space: pre;
+        width: 300px;
+        text-overflow: ellipsis;
+        -webkit-appearance: none;
+      }
+    `
+  ],
 })
 export class EmployeeWarehouseListComponent {
   @Input() form: FormGroup;

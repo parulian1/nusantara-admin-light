@@ -3,12 +3,12 @@ import {FormArray, FormBuilder, FormControl, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import * as XLSX from 'xlsx';
 
-import {ProductPromotionService, ProductService} from '@nusantara/services';
-import {AbstractDetailComponent, DialogResult, Logger, ToastService} from '@nusantara/core';
-import {INamedHrefEntity} from '@nusantara/models/base';
-import {IProductBundling, IProductPromotion, ProductPromotionType} from '@nusantara/models';
-import {IProduct} from '@nusantara/models/products';
-import {ProductSelectionModalComponent} from '@nusantara/shared';
+import { ProductPromotionService, ProductService } from '@nusantara/services';
+import { AbstractDetailComponent, DialogResult, Logger, ToastService } from '@nusantara/core';
+import { INamedHrefEntity } from '@nusantara/models/base';
+import { IProductBundling, IProductPromotion, ProductPromotionType } from '@nusantara/models';
+import { IProduct } from '@nusantara/models/products';
+import { ProductSelectionModalComponent } from '@nusantara/shared';
 
 declare var window: any; // Needed on Angular 8+
 

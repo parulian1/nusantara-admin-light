@@ -28,6 +28,8 @@ import { IPaymentGateway } from '@nusantara/models';
       </tr>
       </tbody>
     </table>
+
+    <nus-pagination [page]="page"></nus-pagination>
   `,
   styles: [],
 })

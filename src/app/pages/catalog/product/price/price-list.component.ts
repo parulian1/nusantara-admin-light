@@ -14,7 +14,7 @@ import { Observable, zip } from 'rxjs';
 
 import { AbstractEditingComponent, IResultResponse } from '@nusantara/core';
 import { drf, products } from '@nusantara/models';
-import { PriceListRangeService, PriceListService } from '@nusantara/services';
+import { PriceListRangeService, PriceListService, SiteConfigService } from '@nusantara/services';
 import { RangeComponent } from './range.component';
 
 /**
@@ -58,7 +58,9 @@ import { RangeComponent } from './range.component';
       <div>
         <label>
           <span>Type</span>
-          <select [formControl]="type">
+          <select [formControl]="type" 
+            name="pricelist-type" 
+            data-qa="pricelist-type">
             <option
               *ngFor="let opt of types"
               [ngValue]="opt.value">{{ opt.displayName }}
@@ -68,7 +70,10 @@ import { RangeComponent } from './range.component';
       </div>
       <div>
         <label class="without-field-errors">
-          <input type="checkbox" [formControl]="isProgressive">
+          <input type="checkbox" 
+            [formControl]="isProgressive" 
+              name="is-progressive" 
+              data-qa="is-progressive">
           Is Progressive
         </label>
       </div>
@@ -118,6 +123,7 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
   constructor(protected rangeService: PriceListRangeService,
               protected route: ActivatedRoute,
               protected fb: FormBuilder,
+              private configSercvice: SiteConfigService,
               protected priceListService: PriceListService) { super(); }
 
   get href(): FormControl { return this.form.get('href') as FormControl; }
@@ -132,6 +138,13 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
     this.route.data.subscribe((data: {priceListTypes: drf.IChoice[]}) => {
       this.types = data.priceListTypes;
     });
+    // triggers change
+    if(!this.enterpriseLicense()) {
+      this.toggleExpansion();
+      if(!this.ranges.length) {
+        this.addRange();
+      }
+    }
     this.isProgressive.markAsTouched();
   }
 
@@ -163,6 +176,9 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
       // adding a new range
       let minQuantity = PriceListComponent.MINIMUM_QUANTITY;
       let price = PriceListComponent.DEFAULT_PRICE;
+      if(!this.enterpriseLicense()) {
+        price = 0;
+      }
 
       if (!!this.ranges.length) {
         const terminalRange = this.ranges.controls[this.ranges.length - 1];
@@ -233,7 +249,6 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
    * @param priceList The price list that owns this range.
    */
   saveRanges(priceList: products.IPriceList): Observable<IResultResponse<products.IPriceListRange>[]> {
-
     // ensure ranges have their parent price list set
     this.rangeComponents.forEach((component) => { component.priceList.setValue(priceList.href); });
 
@@ -242,4 +257,9 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
       ...this.deletedRanges.map(range => this.rangeService.delete(range))
     );
   }
+
+  enterpriseLicense() {
+    return this.configSercvice.isEnterpriseLicense();
+  }
+
 }
