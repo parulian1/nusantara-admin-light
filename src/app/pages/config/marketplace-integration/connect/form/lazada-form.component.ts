@@ -23,6 +23,7 @@ import { MarketplaceClientEnum } from '../markeplace-client-enum';
     <form [formGroup]="form" class="fluid">
       <label>
         <span>Seller Email
+          <nus-tooltip [text]="sellerEmailinfo"></nus-tooltip>
         </span>
         <input type="email" formControlName="sellerEmail" placeholder="Input Seller Email"/>
         <nus-field-errors-marketplace
@@ -89,8 +90,8 @@ export class LazadaFormComponent implements OnInit {
   form: FormGroup;
   warehouses: IMarketplaceWarehouse[] = [];
   variantValue : boolean;
-  credentialInfo = "Contact our support by email to integrations.gramedia.digital to get your partner credential (ShopID/PartnerID/Partner Key)";
   shopIdValue: any;
+  sellerEmailinfo = "Seller Email is Registered Seller Email in Lazada";
 
   constructor(
     private service: MarketplaceClientService,

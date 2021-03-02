@@ -21,6 +21,8 @@ import {base} from "../../../../models";
     <form [formGroup]="form" (ngSubmit)="callback()">
       <input type="hidden" [formControl]="code">
       <h3>Please Confirm Lazada and Bhisma Authorization</h3>
+      <h3 style="text-align: center">This process will takes times</h3>
+      <h3 style="text-align: center">Please wait and refresh your store list page until the status is connected</h3>
       <div class="controls-container">
         <button type="submit" [disabled]="!form.valid || isBusy" class="control">
           <span>Confirm</span>
