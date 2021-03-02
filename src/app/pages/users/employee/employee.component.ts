@@ -19,7 +19,7 @@ import {
   ToastService,
 } from '@nusantara/core';
 
-import { AuthService } from '@nusantara/auth';
+import { AuthService, RequireIsEnterpriseGuard } from '@nusantara/auth';
 import { EmployeeWarehouseHostComponent } from './warehouse';
 import { EmployeeAccessGroupHostComponent } from './access-group';
 import { IJwtClaims } from '@nusantara/auth/models';
@@ -32,6 +32,15 @@ import { IJwtClaims } from '@nusantara/auth/models';
     </nus-detail-title>
 
     <form [formGroup]="form" (ngSubmit)="save()">
+      <label class="hidden">
+        <span>Name</span>
+        <input type="text" [formControl]="name"/>
+      </label>
+      <label>
+        <span>Employee ID</span>
+        <input type="text" [formControl]="identityNumber"/>
+      </label>
+
       <label>
         <span>First Name</span>
         <input type="text" [formControl]="firstName"/>
@@ -44,7 +53,12 @@ import { IJwtClaims } from '@nusantara/auth/models';
 
       <label>
         <span>Email Address</span>
-        <input type="email" [formControl]="email"/>
+        <div *ngIf="!entity; else emailReadOnly">
+          <input type="email" [formControl]="email"/>
+        </div>
+        <ng-template #emailReadOnly>
+          <div style="font-size: 0.85rem;">{{ email.value }}</div>
+        </ng-template>
       </label>
 
       <label>
@@ -76,7 +90,7 @@ import { IJwtClaims } from '@nusantara/auth/models';
       >
       </nus-employee-warehouse-host>
 
-      <div style="margin-top: 1rem;">
+      <div style="margin-top: 1rem;" *ngIf="enterpriseGuard.canActivate(null, null)">
         <nus-employee-access-group-host
           [entity]="entity"
           [choices]="accessGroupChoices"
@@ -158,7 +172,8 @@ export class EmployeeComponent
     router: Router,
     toast: ToastService,
     private warehouseService: WarehouseService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public enterpriseGuard: RequireIsEnterpriseGuard
   ) {
     super(route, router, toast, service);
   }
@@ -175,14 +190,17 @@ export class EmployeeComponent
 
   initializeForm(entity?: IEmployee) {
     this.form = this.fb.group({
+      name: [entity?.firstName, []],
+      identityNumber: [entity?.identityNumber, [Validators.required]],
       firstName: [entity?.firstName, [Validators.required]],
       lastName: [entity?.lastName, [Validators.required]],
       email: [entity?.email, [Validators.required]],
       href: [entity?.href, []],
       phoneNumber: [entity?.phoneNumber, []],
       isActive: [entity?.isActive ?? true, [Validators.required]],
-      warehouses: this.fb.array([]),
+      warehouses: this.fb.array([], [Validators.required]),
       accessGroups: this.fb.array([]),
+      title: [entity?.firstName, []], // used as formality when delete data
       canUsePos: [entity?.canUsePos ?? false, []],
       pin: ['', [Validators.maxLength(4)]],
     });
@@ -196,6 +214,12 @@ export class EmployeeComponent
     this.isUsePos = this.canUsePos.value;
   }
 
+  get name(): FormControl {
+    return this.form.get('name') as FormControl;
+  }
+  get identityNumber(): FormControl {
+    return this.form.get('identityNumber') as FormControl;
+  }
   get firstName(): FormControl {
     return this.form.get('firstName') as FormControl;
   }
@@ -224,7 +248,21 @@ export class EmployeeComponent
     return this.form.get('pin') as FormControl;
   }
 
+  getFormValue(): any {
+    const formValue = super.getFormValue();
+    delete formValue?.title;
+
+    if (!this.entity) {
+      return { ...formValue,  email: this.email.value.toLowerCase() };
+    } else {
+      delete formValue?.email;
+      return formValue;
+    }
+  }
+
   save(): void {
+    this.name.setValue(this.firstName.value); // Handle name in success massage
+    this.email.setValue(this.email.value.toLowerCase());
     this.service
       .save(this.getFormValue())
       .pipe(
@@ -251,9 +289,18 @@ export class EmployeeComponent
     this.form.disable();
   }
 
+  delete(): void {
+    const isDelete = confirm('Do you really want delete this data?');
+    if (isDelete) {
+      super.delete();
+    }
+  }
+
   protected onSaveSuccess(result: IResultResponse<IEmployee>) {
     this.EmployeeWarehouseHostComponent.saveAll(result.entity.href).subscribe(() => {});
-    this.EmployeeAccessGroupHostComponent.saveAll(result.entity.href).subscribe(() => {});
+    if (this.enterpriseGuard.canActivate(null, null)) {
+      this.EmployeeAccessGroupHostComponent.saveAll(result.entity.href).subscribe(() => {});
+    }
 
     super.onSaveSuccess(result);
   }

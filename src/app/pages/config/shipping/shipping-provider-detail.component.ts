@@ -3,8 +3,9 @@ import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractDetailComponent, ToastService } from '@nusantara/core';
-import { IShippingProvider, IShippingService, drf } from '@nusantara/models';
+import { IShippingProvider, IShippingService, drf, ISocialMedia } from '@nusantara/models';
 import { ShippingProviderService } from '@nusantara/services';
+import { Kgx, ShippingServicesTypes } from './shipping-service/constants';
 
 @Component({
   selector: 'nus-shipping-provider-detail',
@@ -62,27 +63,59 @@ import { ShippingProviderService } from '@nusantara/services';
         <nus-field-errors [control]="description"></nus-field-errors>
       </label>
 
-      <h2>Services <button type="button" (click)="addService()">Add</button></h2>
-      <table>
-        <thead>
-        <tr>
-          <th>Name</th>
-          <th>Active</th>
-          <th>Min. Weight (kg)</th>
-          <th>Surcharge</th>
-          <th>Grace Amount (kg)</th>
-          <th>Description</th>
-          <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <nus-shipping-service
-          *ngFor="let service of services.controls; let i=index"
-          [form]="service"
-          (remove)="removeService(i)">
-        </nus-shipping-service>
-        </tbody>
-      </table>
+      <ng-container *ngIf="type.value">
+        <div class="sosmed-title">
+          <h3>
+            Shipping Service Settings
+          </h3>
+        </div>
+        <hr/>
+        <table class="line-items">
+          <thead>
+          <tr>
+            <th>Type</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <nus-shipping-service-host
+            *ngFor="let item of services.controls; let i=index"
+            [form]="item"
+            [shippingServiceTypes]="shippingServiceTypes"
+            (remove)="services.removeAt(i)"
+            [shippingType]="type.value"
+          >
+          </nus-shipping-service-host>
+          <tr>
+            <td colspan="9">
+              <button type="button" (click)="addService()" class="add-button">
+                Add Record
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </ng-container>
+      <!--      <table>-->
+      <!--        <thead>-->
+      <!--        <tr>-->
+      <!--          <th>Name</th>-->
+      <!--          <th>Active</th>-->
+      <!--          <th>Min. Weight (kg)</th>-->
+      <!--          <th>Surcharge</th>-->
+      <!--          <th>Grace Amount (kg)</th>-->
+      <!--          <th>Description</th>-->
+      <!--          <th></th>-->
+      <!--        </tr>-->
+      <!--        </thead>-->
+      <!--        <tbody>-->
+      <!--        <nus-shipping-service-->
+      <!--          *ngFor="let service of services.controls; let i=index"-->
+      <!--          [form]="service"-->
+      <!--          (remove)="removeService(i)">-->
+      <!--        </nus-shipping-service>-->
+      <!--        </tbody>-->
+      <!--      </table>-->
 
       <nus-detail-actions
         [component]="this"
@@ -91,13 +124,14 @@ import { ShippingProviderService } from '@nusantara/services';
       </nus-detail-actions>
     </form>
   `,
-  styles: [ ]
+  styles: []
 })
 export class ShippingProviderDetailComponent extends AbstractDetailComponent<IShippingProvider> implements OnInit {
 
   entity?: IShippingProvider;
   types: drf.IChoice[] = [];
   iconPreviewUrl: string;
+  shippingServiceTypes: drf.IChoice[] = [];
 
   constructor(service: ShippingProviderService,
               route: ActivatedRoute,
@@ -109,22 +143,44 @@ export class ShippingProviderDetailComponent extends AbstractDetailComponent<ISh
 
   ngOnInit() {
     super.ngOnInit();
-    this.route.data.subscribe((data: {types: drf.IChoice[]}) => {
+    this.route.data.subscribe((data: { types: drf.IChoice[] }) => {
       this.types = data.types;
+      this.shippingServiceTypes = ShippingServicesTypes;
     });
+    this.originalEntityName = 'Shipping Method';
   }
 
-  get name(): FormControl { return this.form.get('name') as FormControl; }
-  get type(): FormControl { return this.form.get('type') as FormControl; }
-  get services(): FormArray { return this.form.get('services') as FormArray; }
-  get icon(): FormControl { return this.form.get('icon') as FormControl; }
-  get description(): FormControl { return this.form.get('description') as FormControl; }
-  get authUser(): FormControl { return this.form.get('authUser') as FormControl; }
-  get authPass(): FormControl { return this.form.get('authPass') as FormControl; }
+  get name(): FormControl {
+    return this.form.get('name') as FormControl;
+  }
+
+  get type(): FormControl {
+    return this.form.get('type') as FormControl;
+  }
+
+  get services(): FormArray {
+    return this.form.get('services') as FormArray;
+  }
+
+  get icon(): FormControl {
+    return this.form.get('icon') as FormControl;
+  }
+
+  get description(): FormControl {
+    return this.form.get('description') as FormControl;
+  }
+
+  get authUser(): FormControl {
+    return this.form.get('authUser') as FormControl;
+  }
+
+  get authPass(): FormControl {
+    return this.form.get('authPass') as FormControl;
+  }
 
   initializeForm(entity?: IShippingProvider) {
     this.form = this.fb.group({
-      name: [entity?.name, [Validators.required, ]],
+      name: [entity?.name, [Validators.required]],
       href: [entity?.href, []],
       description: [entity?.href ? entity?.description : '', []],
       type: [entity?.type, [Validators.required]],
@@ -132,7 +188,7 @@ export class ShippingProviderDetailComponent extends AbstractDetailComponent<ISh
       authPass: [entity?.authPass, []],
       isActive: [entity?.isActive ?? false, []],
       icon: [entity?.href ? '' : null, entity?.icon ? [] : [Validators.required]],
-      services: this.fb.array([]),
+      services: this.fb.array([])
     });
 
     this.entity = entity;
@@ -153,26 +209,41 @@ export class ShippingProviderDetailComponent extends AbstractDetailComponent<ISh
     const f = this.fb.group({
       href: [service?.href, []],
       isActive: [service?.isActive ?? false, []],
-      name: [service?.name, [Validators.required, ]],
+      name: [service?.name, [Validators.required]],
       icon: [service?.icon ?? '', []],
-      minimumWeight: [service?.minimumWeight ?? 0, [Validators.required, ]],
-      handlingFee: [service?.handlingFee ?? 0, [Validators.required, ]],
-      graceAmount: [service?.graceAmount ?? 0, [Validators.required, ]],
+      minimumWeight: [service?.minimumWeight ?? 0, [Validators.required]],
+      handlingFee: [service?.handlingFee ?? 0, [Validators.required]],
+      graceAmount: [service?.graceAmount ?? 0, [Validators.required]],
+      description: [service?.description ?? '', []]
+    });
+
+    const fKgx = this.fb.group({
+      href: [service?.href, []],
+      isActive: [service?.isActive ?? true, []],
+      name: [service?.name, [Validators.required]],
+      icon: [service?.icon ?? '', []],
+      minimumWeight: [service?.minimumWeight ?? 0, []],
+      handlingFee: [service?.handlingFee ?? 0, []],
+      graceAmount: [service?.graceAmount ?? 0, []],
       description: [service?.description ?? '', []]
     });
 
     // need to mark as touched to make custom styling works
     f.controls.isActive.markAsTouched();
-
-    this.services.push(f);
+    fKgx.controls.isActive.markAsTouched();
+    if (this.form.value.type === Kgx) {
+      this.services.push(fKgx);
+    } else {
+      this.services.push(f);
+    }
   }
 
   removeService(index: number): void {
     this.services.removeAt(index);
   }
 
-  setIconImagePreview(data?: Event|string) {
-    super.setImagePreview(data,  (dataAsUrl) => {
+  setIconImagePreview(data?: Event | string) {
+    super.setImagePreview(data, (dataAsUrl) => {
       this.iconPreviewUrl = dataAsUrl;
     });
   }

@@ -97,13 +97,28 @@ export class SlaComponent extends AbstractDetailComponent<ISla> implements OnIni
     super.setImagePreview(data, (dataAsUrl) => this.imagePreviewUrl = dataAsUrl);
   }
 
-  save() {
-    if (!!this.entity?.href && !!this.entity?.image && !this.form.get('image').value) {
-      this.form.removeControl('image');
+  getFormValue(): any {
+    let formValue = {...this.form.value};
+    formValue = this.formImageValue(formValue);
+    return formValue;
+  }
+
+  /**
+   * handle image in form when create / update instance.
+   */
+  formImageValue(formValue: any, fieldName= 'image'): void {
+    delete formValue[fieldName];
+
+    if (this.entity) {
+      if (this.imagePreviewUrl !== this.entity.image) {
+        formValue =  {...formValue, [fieldName]: this.imagePreviewUrl};
+      }
+    } else {
+      if (this.imagePreviewUrl) {
+        formValue = {...formValue, [fieldName]: this.imagePreviewUrl};
+      }
     }
-    if (!!this.form.get('image') && this.imagePreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
-      this.form.value.image = this.imagePreviewUrl;
-    }
-    super.save();
+
+    return formValue;
   }
 }

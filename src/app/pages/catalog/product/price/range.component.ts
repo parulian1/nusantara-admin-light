@@ -15,7 +15,7 @@ import { products } from '@nusantara/models';
 @Component({
   selector: 'nus-price-list-range',
   template: `
-    <div [formGroup]="form" class="wrapper immediate-error-display">        
+    <div [formGroup]="form" class="wrapper immediate-error-display">
       <div>Min</div>
       <div></div>
       <div>Max</div>
@@ -24,18 +24,27 @@ import { products } from '@nusantara/models';
       <div style="text-align: left;">
         <input type="number"
                [formControl]="minQuantity"
-               [readonly]="isInitialRange">
+               name="min-quantity"
+               [readonly]="isInitialRange"
+               data-qa="min-quantity"/>
       </div>
       <div>To</div>
       <div>
         <input type="number"
                [formControl]="maxQuantity"
-               [readonly]="isTerminalRange">
+               name="max-quantity"
+               [readonly]="isTerminalRange"
+               data-qa="max-quantity" />
       </div>
       <div class="immediate-error-display">
         <span class="currency">
-          <input type="number" [formControl]="price">
-        </span>  
+          <input type="number"
+            min="0"
+            appOnlyNumber
+            [formControl]="price"
+            name="price"
+            data-qa="price"/>
+        </span>
       </div>
       <div>
         <button type="button"

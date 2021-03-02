@@ -1,3 +1,4 @@
+import { RequireIsEnterpriseGuard } from '@nusantara/auth/guards';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -127,6 +128,7 @@ const routes: Routes = [
   },
   {
     path: 'devices',
+    canActivate: [RequireIsEnterpriseGuard],
     children: [
       {
         path: '',
@@ -145,6 +147,7 @@ const routes: Routes = [
   },
   {
     path: 'groups',
+    canActivate: [RequireIsEnterpriseGuard],
     children: [
       {
         path: '',
@@ -169,6 +172,7 @@ const routes: Routes = [
   },
   {
     path: 'reseller',
+    canActivate: [RequireIsEnterpriseGuard],
     component: ResellerComponent,
     resolve: {
       entity: ResellerProviderResolver,

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { combineLatest, forkJoin, Observable } from 'rxjs';
 
@@ -78,7 +78,7 @@ export class EmployeeWarehouseHostComponent implements OnInit {
 
   addToForm(warehouse?: IWarehouse): void {
     const form = this.fb.group({
-      href: [warehouse?.href ?? ''],
+      href: [warehouse?.href ?? '', [Validators.required]],
       name: [warehouse?.name ?? ''],
     });
 
@@ -114,6 +114,6 @@ export class EmployeeWarehouseHostComponent implements OnInit {
       })
     );
 
-    return combineLatest([savedJoin$, deletedJoin$]);
+    return combineLatest([deletedJoin$, savedJoin$]);
   }
 }

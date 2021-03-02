@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AbstractDetailComponent, ToastService } from '@nusantara/core';
 import { ISubLocation, IWarehouse, drf } from '@nusantara/models';
 import { WarehouseService } from '@nusantara/services';
+import { RequireIsEnterpriseGuard } from '@nusantara/auth';
 
 @Component({
   selector: 'nus-warehouse-detail',
@@ -32,7 +33,7 @@ import { WarehouseService } from '@nusantara/services';
         <nus-field-errors [control]="form.get('code')"></nus-field-errors>
       </label>
 
-      <label>Type
+      <label *ngIf="enterpriseGuard.canActivate(null, null)">Type
         <select formControlName="type" name="type">
           <option *ngFor="let opt of types" [ngValue]="opt.value">
             {{opt.displayName}}
@@ -41,7 +42,7 @@ import { WarehouseService } from '@nusantara/services';
         <nus-field-errors [control]="form.get('type')"></nus-field-errors>
       </label>
 
-      <label>
+      <label *ngIf="enterpriseGuard.canActivate(null, null)">
         <span>Financial Reporting As</span>
         <select formControlName="financialReportingAs" name="financialReportingAs">
           <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
@@ -65,7 +66,7 @@ import { WarehouseService } from '@nusantara/services';
         <nus-field-errors [control]="form.get('isActive')"></nus-field-errors>
       </label>
 
-      <div>
+      <div *ngIf="enterpriseGuard.canActivate(null, null)">
         <h2>
           <span>Inventory Locations</span>
           <button type="button" (click)="addSubLocation()" class="add-button">
@@ -121,7 +122,8 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
               router: Router,
               route: ActivatedRoute,
               public fb: FormBuilder,
-              toast: ToastService) {
+              toast: ToastService,
+              public enterpriseGuard: RequireIsEnterpriseGuard) {
     super(route, router, toast, service);
   }
 
@@ -149,7 +151,7 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
       name: [entity?.name, [Validators.required, Validators.maxLength(50), ]],
       code: [entity?.code, [Validators.required, Validators.maxLength(255), ]],
       href: [entity?.href, []],
-      type: [entity?.type, [Validators.required]],
+      type: [entity?.type || 'permanent', [Validators.required]],
       internalNotes: [entity?.internalNotes || '', []],
       financialReportingAs: [entity?.financialReportingAs, []],
       allowReassignmentFrom: this.fb.array([]),
