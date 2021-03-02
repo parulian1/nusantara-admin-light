@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -23,7 +23,7 @@ describe('ProductClassComponent', () => {
     productCount: 0
   };
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
@@ -60,7 +60,7 @@ describe('ProductClassComponent', () => {
     expect(component.form.valid).toBeFalsy();
   });
 
-  it('name field validity', async(() => {
+  it('name field validity', waitForAsync(() => {
     const name = component.form.controls.name;
     const type = component.form.controls.type;
     expect(name.valid).toBeFalsy();
