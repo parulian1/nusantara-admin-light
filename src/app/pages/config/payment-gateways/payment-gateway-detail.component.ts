@@ -328,14 +328,14 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     this.form.controls.isActive.markAsTouched();
     this.form.controls.allowPos.markAsTouched();
 
-    if (entity.meta?.banks) {
+    if (entity?.meta?.banks) {
       const bankValues = JSON.parse(entity.meta.banks.replace(/'/g, '"'));
       for (const bank of bankValues ?? []) {
         this.addLineBank(bank);
       }
     }
 
-    if (entity.meta?.eWallets) {
+    if (entity?.meta?.eWallets) {
       const wallValues =  JSON.parse(entity.meta.eWallets.replace(/'/g, '"'));
       for (const bank of wallValues ?? []) {
         this.addLineWallet(bank);
@@ -344,7 +344,7 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
 
     this.setLogoPreview(entity?.logo);
     this.setCurrentTypeAndValidatorFields(entity?.type);
-    this.onInStoreChange(entity.meta.type);
+    this.onInStoreChange(entity?.meta?.type);
   }
 
   addLineBank(value?: string) {
