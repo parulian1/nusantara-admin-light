@@ -16,7 +16,7 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
       <nus-tabs>
         <nus-tab [title]="'Configuration'">
           <div class="points-config">
- 
+
             <label>
               <span>Points Name</span>
               <input type="text" [formControl]="name" maxlength="50" placeholder="Points Name">
@@ -77,20 +77,20 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
 
             <div class="earning-points">
               <span class="subheading-2">Earning Points Platform</span>
-              <label class="checkbox">
-                <input type="checkbox" [formControl]="appliedOnOnline" name="appliedOnOnline">
-                <span>Online</span>
-              </label>
+<!--              <label class="checkbox">-->
+<!--                <input type="checkbox" [formControl]="appliedOnOnline" name="appliedOnOnline">-->
+<!--                <span>Online (Website)</span>-->
+<!--              </label>-->
 
               <label class="checkbox">
                 <input type="checkbox" [formControl]="appliedOnOffline" name="appliedOnOffline">
-                <span>Offline</span>
+                <span>Offline (POS)</span>
               </label>
 
-              <label class="checkbox">
-                <input type="checkbox" [formControl]="appliedOnApps" name="appliedOnApps">
-                <span>Apps</span>
-              </label>
+<!--              <label class="checkbox">-->
+<!--                <input type="checkbox" [formControl]="appliedOnApps" name="appliedOnApps">-->
+<!--                <span>Apps</span>-->
+<!--              </label>-->
             </div>
 
             <div class="points-expire">
@@ -186,7 +186,7 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
       margin-bottom: 16px;
     }
 
-    .transaction-points, .transaction-points > label, 
+    .transaction-points, .transaction-points > label,
     .transaction-rounding, .transaction-rounding > label {
       align-items: center;
       display: flex;
