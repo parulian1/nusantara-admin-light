@@ -12,10 +12,10 @@ import {
   MarketplaceChannelInfoModalComponent,
   ConfirmModalReceivingOrderComponent
 } from '../../../shared';
-import {catchError} from "rxjs/operators";
-import {HttpErrorResponse} from "@angular/common/http";
-import {of} from "rxjs";
-import {IError} from "../../../models/base/error";
+import {catchError} from 'rxjs/operators';
+import {HttpErrorResponse} from '@angular/common/http';
+import {of} from 'rxjs';
+import {IError} from '../../../models/base/error';
 
 /**
  * Allows a user to receive a new batch of inventory.
@@ -147,17 +147,17 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
 
   warehouses: IWarehouse[];
   availableSubLocations: ISubLocation[] = [];
-  warehouseDetail : IWarehouseDetail[];
+  warehouseDetail: IWarehouseDetail[];
 
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
   @ViewChild(MarketplaceChannelInfoModalComponent) marketplaceChannelInfo: MarketplaceChannelInfoModalComponent;
   @ViewChild(ConfirmModalReceivingOrderComponent) confirmModalReceiving: ConfirmModalReceivingOrderComponent;
 
   currentDate: Date;
-  productValue: number=0;
-  storeValue:number=0;
-  marketplaceValue:number=0;
-  showDetail: boolean=false;
+  productValue = 0;
+  storeValue = 0;
+  marketplaceValue = 0;
+  showDetail = false;
 
   constructor(private fb: FormBuilder,
               public toast: ToastService,
@@ -272,22 +272,29 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     if (this.productSelectionModal.result === DialogResult.OK) {
       // add a new child to the form group based on the modal
 
+      let defaultSubLocations;
+      if (this.availableSubLocations?.length === 1) {
+        defaultSubLocations = this.availableSubLocations[0].href;
+      } else {
+        defaultSubLocations = null;
+      }
+
       const selectedProduct = this.productSelectionModal.product.value as IProduct;
       const oneProduct = this.fb.group({
             inventoryReceiving: [null, []],
             product: [selectedProduct, [Validators.required]],
             href: [null, []],
             location:  this.fb.group({
-              href: [null, Validators.required],
+              href: [defaultSubLocations, Validators.required],
               // name: ['', ],
             }),
-            sku: ['', [Validators.required, ]],
+            sku: ['', []],
             originalQuantity: [1, [Validators.required, Validators.min(1), ]],
-            batchNumber: ['', [Validators.required]],
-            locator: this.fb.array([], [Validators.required, Validators.minLength(1)]),
+            batchNumber: ['', []],
+            locator: this.fb.array([], [Validators.minLength(1)]),
             expiryDate: [null, []]
           });
-          this.stockRecords.push(oneProduct);
+      this.stockRecords.push(oneProduct);
     }
   }
 
@@ -295,10 +302,10 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     const last_name = this.authService.tokenPayload?.last_name ?? '';
     const first_name = this.authService.tokenPayload?.first_name ?? '';
     const email = this.authService.tokenPayload?.email ?? '';
-    const fullname = first_name.concat(" ", last_name);
+    const fullname = first_name.concat(' ', last_name);
 
-    if(last_name && first_name && email){
-      return [fullname,`(${email})`,].join(', ').trim();
+    if (last_name && first_name && email){
+      return [fullname, `(${email})`, ].join(', ').trim();
     } else {
       return email;
     }

@@ -9,12 +9,11 @@ import { CatalogRoutingModule } from './catalog-routing.module';
 import { CategoryListComponent, CategoryComponent } from './category';
 
 import { ProductClassListComponent, ProductClassComponent } from './product-class';
-import { ProductClassAttributesComponent } from './product-class/components';
 
 import * as product from './product';
 import { VendorListComponent, VendorComponent } from './vendor';
-import {ProductOptionListComponent} from './product-options/product-option-list.component';
-import {ProductOptionComponent} from './product-options/product-option.component';
+import { ProductClassAttributesComponent } from './product-class/components';
+import { ProductOptionComponent, ProductOptionListComponent } from './product-options';
 import { StockSearchComponent } from './product/stock-search/stock-search.component';
 
 @NgModule({
