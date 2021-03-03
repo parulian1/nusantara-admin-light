@@ -12,4 +12,5 @@ export class IWarehouse {
   financialReportingAs?: string;
   allowReassignmentFrom?: string[];
   isActive: boolean;
+  phoneNumber: string;
 }
