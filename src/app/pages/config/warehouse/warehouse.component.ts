@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractDetailComponent, ToastService } from '@nusantara/core';
 import { ISubLocation, IWarehouse, drf } from '@nusantara/models';
-import { WarehouseService } from '@nusantara/services';
+import { SiteConfigService, WarehouseService } from '@nusantara/services';
 import { RequireIsEnterpriseGuard } from '@nusantara/auth';
 
 @Component({
@@ -62,7 +62,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
       </nus-address>
 
       <label class="checkbox">
-        <input type="checkbox" formControlName="isActive" name="isActive"> Is Active
+        <input type="checkbox" [attr.disabled]="disableIsActive ? '' : null" formControlName="isActive" name="isActive"> Is Active
         <nus-field-errors [control]="form.get('isActive')"></nus-field-errors>
       </label>
 
@@ -115,6 +115,7 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
 
   types: Array<drf.IChoice>;
   subLocationTypes: Array<drf.IChoice>;
+  disableIsActive: boolean;
 
   warehouses: Array<{ href: string, name: string, code: string }>;
 
@@ -123,6 +124,7 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
               route: ActivatedRoute,
               public fb: FormBuilder,
               toast: ToastService,
+              public configService: SiteConfigService,
               public enterpriseGuard: RequireIsEnterpriseGuard) {
     super(route, router, toast, service);
   }
@@ -140,6 +142,12 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
     }) => {
       this.types = data.types;
       this.subLocationTypes = data.subLocationTypes;
+
+      // Avoid multiple warehouses for SME clients
+      let isWarehouseActive = data.allWarehouses.find(e => e.href === this.href.value);
+      if (data.allWarehouses.length > 0 && !isWarehouseActive && !this.configService.isEnterpriseLicense()) {
+        this.disableIsActive = true;
+      }
 
       this.warehouses = data.allWarehouses;
       this.warehouses.unshift({href: null, name: '---', code: ''});

@@ -178,6 +178,11 @@ import { MarketplaceInfoHostComponent } from './marketplace';
             </div>
           </div>
 
+          <div id="product-subscription" class="wrapper">
+            <h1 class="heading-1">Subscription Information:</h1>
+            <nus-product-subscription [form]="subscription" *ngIf="isProductOptionDomain"></nus-product-subscription>
+          </div>
+
           <div id="product-media" class="wrapper">
             <h1 class="heading-1">Media</h1>
             <nus-product-media-host [form]="media"></nus-product-media-host>
@@ -647,7 +652,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       }
     );
 
-    if(!this.isNew && this.enterpriseLicense()) {
+    if(!this.isNew && this.isPhysical() && this.enterpriseLicense()) {
       this.marketplaceHost.saveAll();
     }
 
