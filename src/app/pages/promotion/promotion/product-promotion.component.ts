@@ -49,13 +49,13 @@ const log = new Logger('ProductPromotionComponent');
       <div class="promo-date">
         <label class="promo-date-label">
           <span class="subtitle">Valid From</span>
-          <input type="datetime-local" [formControl]="validFrom">
+          <nus-field-datetime [control]="validFrom"></nus-field-datetime>
           <nus-field-errors [control]="validFrom"></nus-field-errors>
         </label>
 
         <label class="promo-date-label">
           <span class="subtitle">Valid To</span>
-          <input type="datetime-local" [formControl]="validTo">
+          <nus-field-datetime [control]="validTo"></nus-field-datetime>
           <nus-field-errors [control]="validTo"></nus-field-errors>
         </label>
       </div>
