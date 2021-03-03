@@ -194,11 +194,11 @@ import { ProductSelectionModalComponent } from '@nusantara/shared';
         <span class="subtitle">Platform</span>
         <label class="checkbox">
           <input type="checkbox" [formControl]="appliedOnOnline" name="appliedOnOnline">
-          <span>Online</span>
+          <span>Online (Website)</span>
         </label>
         <label class="checkbox">
           <input type="checkbox" [formControl]="appliedOnOffline" name="appliedOnOffline">
-          <span>Offline</span>
+          <span>Offline (POS)</span>
         </label>
       </label>
 
