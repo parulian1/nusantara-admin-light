@@ -23,7 +23,7 @@ import {IError} from '../../../models/base/error';
 @Component({
   selector: 'nus-inventory-receiving',
   template: `
-    <h1>Receiving Inventory Order</h1>
+    <h1>Delivery Order</h1>
 
     <form [formGroup]="form" (ngSubmit)="saveForm()">
       <div class="container">
@@ -291,7 +291,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
             sku: ['', []],
             originalQuantity: [1, [Validators.required, Validators.min(1), ]],
             batchNumber: ['', []],
-            locator: this.fb.array([], [Validators.minLength(1)]),
+            locator: this.fb.array([]),
             expiryDate: [null, []]
           });
       this.stockRecords.push(oneProduct);
