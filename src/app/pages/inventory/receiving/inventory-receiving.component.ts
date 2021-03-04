@@ -3,19 +3,19 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthService } from '../../../auth';
-import {DialogResult, ToastService, AbstractDetailComponent, ErrorResult} from '../../../core';
-import {inventory, ISubLocation, IWarehouse, IWarehouseDetail, IWarehouseInformation} from '../../../models';
-import {InventoryReceivingService, MarketplaceClientService} from '../../../services';
+import { AbstractDetailComponent, DialogResult, ErrorResult, ToastService } from '../../../core';
+import { inventory, ISubLocation, IWarehouse, IWarehouseDetail, IWarehouseInformation } from '../../../models';
+import { InventoryReceivingService, MarketplaceClientService } from '../../../services';
 import { IProduct } from '../../../models/products';
 import {
-  ProductSelectionModalComponent,
+  ConfirmModalReceivingOrderComponent,
   MarketplaceChannelInfoModalComponent,
-  ConfirmModalReceivingOrderComponent
+  ProductSelectionModalComponent
 } from '../../../shared';
-import {catchError} from "rxjs/operators";
-import {HttpErrorResponse} from "@angular/common/http";
-import {of} from "rxjs";
-import {IError} from "../../../models/base/error";
+import { catchError } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
+import { of } from 'rxjs';
+import { IError } from '../../../models/base/error';
 
 /**
  * Allows a user to receive a new batch of inventory.
@@ -23,7 +23,7 @@ import {IError} from "../../../models/base/error";
 @Component({
   selector: 'nus-inventory-receiving',
   template: `
-    <h1>Receiving Inventory Order</h1>
+    <h1>Delivery Order</h1>
 
     <form [formGroup]="form" (ngSubmit)="saveForm()">
       <div class="container">
@@ -55,8 +55,8 @@ import {IError} from "../../../models/base/error";
                 </option>
               </select>
               <button (click)="confirmWarehouse()" type="button"
-                [disabled]="warehouse.disabled || !warehouse.valid"
-                class="control confirm">
+                      [disabled]="warehouse.disabled || !warehouse.valid"
+                      class="control confirm">
                 Confirm
               </button>
             </div>
@@ -76,8 +76,8 @@ import {IError} from "../../../models/base/error";
             <div>Store</div>
             <div class="count">{{ storeValue }}</div>
           </div>
-          <a  (click)="showMarketplaceDetail()">More Detail</a>
-       </div>
+          <a (click)="showMarketplaceDetail()">More Detail</a>
+        </div>
       </div>
       <div class="product-list" *ngIf="warehouse.disabled">
         <table>
@@ -126,38 +126,38 @@ import {IError} from "../../../models/base/error";
 
   `,
   styles: [
-  'form{ max-width: none;}',
-  'h3 { font-size: 20px; margin: 0; }',
-  'button.confirm { width: auto }',
-  '.container { display: grid; grid-template-columns: 4fr 1fr; grid-gap: 24px; }',
-  '.container > div { border: 1px solid var(--grey); border-radius: 4px; padding: 16px 24px; }',
-  '.general-info > h3 { margin-bottom: 20px; }',
-  '.general-info > div:not(:last-child) { margin-bottom: 23px; }',
-  '.general-info label { min-height: 0; }',
-  '.general-info span{ font-weight: 700; color: var(--darken-grey); }',
-  '.mp-info > h3 { margin-bottom: 16px; }',
-  '.mp-info > div { text-align: center; border: 1px solid var(--grey); border-radius: 4px; padding: 12px 16px; margin-bottom: 12px; }',
-  '.mp-info > a { display: block; margin-top: 16px; }',
-  '.mp-info .count { font-size: 28px; font-weight: 700; }',
-  '.confirm-warehouse { display: grid; grid-template-columns: 5fr 1fr; grid-gap: 24px; }',
-  '.product-list { margin-top: 24px; }',
+    'form{ max-width: none;}',
+    'h3 { font-size: 20px; margin: 0; }',
+    'button.confirm { width: auto }',
+    '.container { display: grid; grid-template-columns: 4fr 1fr; grid-gap: 24px; }',
+    '.container > div { border: 1px solid var(--grey); border-radius: 4px; padding: 16px 24px; }',
+    '.general-info > h3 { margin-bottom: 20px; }',
+    '.general-info > div:not(:last-child) { margin-bottom: 23px; }',
+    '.general-info label { min-height: 0; }',
+    '.general-info span{ font-weight: 700; color: var(--darken-grey); }',
+    '.mp-info > h3 { margin-bottom: 16px; }',
+    '.mp-info > div { text-align: center; border: 1px solid var(--grey); border-radius: 4px; padding: 12px 16px; margin-bottom: 12px; }',
+    '.mp-info > a { display: block; margin-top: 16px; }',
+    '.mp-info .count { font-size: 28px; font-weight: 700; }',
+    '.confirm-warehouse { display: grid; grid-template-columns: 5fr 1fr; grid-gap: 24px; }',
+    '.product-list { margin-top: 24px; }',
   ]
 })
 export class InventoryReceivingComponent extends AbstractDetailComponent<inventory.IReceivingOrder> implements OnInit, AfterViewInit {
 
   warehouses: IWarehouse[];
   availableSubLocations: ISubLocation[] = [];
-  warehouseDetail : IWarehouseDetail[];
+  warehouseDetail: IWarehouseDetail[];
 
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
   @ViewChild(MarketplaceChannelInfoModalComponent) marketplaceChannelInfo: MarketplaceChannelInfoModalComponent;
   @ViewChild(ConfirmModalReceivingOrderComponent) confirmModalReceiving: ConfirmModalReceivingOrderComponent;
 
   currentDate: Date;
-  productValue: number=0;
-  storeValue:number=0;
-  marketplaceValue:number=0;
-  showDetail: boolean=false;
+  productValue = 0;
+  storeValue = 0;
+  marketplaceValue = 0;
+  showDetail = false;
 
   constructor(private fb: FormBuilder,
               public toast: ToastService,
@@ -169,12 +169,17 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     super(route, router, toast, service);
   }
 
-  get warehouse(): FormGroup { return this.form.get('warehouse') as FormGroup; }
-  get stockRecords(): FormArray { return this.form.get('stockRecords') as FormArray; }
+  get warehouse(): FormGroup {
+    return this.form.get('warehouse') as FormGroup;
+  }
+
+  get stockRecords(): FormArray {
+    return this.form.get('stockRecords') as FormArray;
+  }
 
   ngOnInit() {
     super.ngOnInit();
-    this.route.data.subscribe((data: { warehouses: IWarehouse[]}) => {
+    this.route.data.subscribe((data: { warehouses: IWarehouse[] }) => {
       this.warehouses = data.warehouses;
     });
     this.currentDate = new Date();
@@ -195,11 +200,11 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
         href: [null, Validators.required],
         // name: ['', ],
       }),
-      status: ['pending', [Validators.required, ]],
+      status: ['pending', [Validators.required,]],
       createdBy: this.fb.group({
         href: `https://bhisma.cloud/api/iam/${this.authService.tokenPayload.user_id}/`
       }),
-      reviewedBy: [null, ],
+      reviewedBy: [null,],
       stockRecords: this.fb.array([], [Validators.required, Validators.minLength(1)]),
     });
   }
@@ -208,7 +213,16 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     this.productSelectionModal.open();
   }
 
-  saveForm(){
+  saveForm() {
+    // check if sku is empty, set the sku value to be `upc` value
+    for (const [i, val] of this.form.value.stockRecords.entries()) {
+      if (val.sku === '') {
+        this.stockRecords.at(i).patchValue({
+          sku: val.product.upc
+        });
+      }
+    }
+
     this.service.save(this.getFormValue()).pipe(catchError(err => {
       if (err instanceof HttpErrorResponse) {
         return of(new ErrorResult<IError>(err.error, err.status));
@@ -224,8 +238,8 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
           this.storeValue = this.marketplaceValue = this.productValue = 0;
           this.showDetail = false;
           this.warehouseDetail = [];
-          setTimeout(function(){
-             this.navigateToParent(false);
+          setTimeout(function () {
+            this.navigateToParent(false);
           }, 1000);
         }
       }
@@ -246,6 +260,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
       this.resetForm(true);
     }
   }
+
   confirmWarehouse(): void {
     if (!this.warehouse.value) {
       alert('You must first select a warehouse');
@@ -272,22 +287,37 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     if (this.productSelectionModal.result === DialogResult.OK) {
       // add a new child to the form group based on the modal
 
+      let defaultSubLocations;
+      if (this.availableSubLocations?.length === 1) {
+        defaultSubLocations = this.availableSubLocations[0].href;
+      } else {
+        defaultSubLocations = null;
+      }
+
       const selectedProduct = this.productSelectionModal.product.value as IProduct;
+
+      let defaultSku;
+      if (selectedProduct.upc) {
+        defaultSku = selectedProduct.upc;
+      } else {
+        defaultSku = '';
+      }
+
       const oneProduct = this.fb.group({
-            inventoryReceiving: [null, []],
-            product: [selectedProduct, [Validators.required]],
-            href: [null, []],
-            location:  this.fb.group({
-              href: [null, Validators.required],
-              // name: ['', ],
-            }),
-            sku: ['', [Validators.required, ]],
-            originalQuantity: [1, [Validators.required, Validators.min(1), ]],
-            batchNumber: ['', [Validators.required]],
-            locator: this.fb.array([], [Validators.required, Validators.minLength(1)]),
-            expiryDate: [null, []]
-          });
-          this.stockRecords.push(oneProduct);
+        inventoryReceiving: [null, []],
+        product: [selectedProduct, [Validators.required]],
+        href: [null, []],
+        location: this.fb.group({
+          href: [defaultSubLocations, Validators.required],
+          // name: ['', ],
+        }),
+        sku: [defaultSku, []],
+        originalQuantity: [1, [Validators.required, Validators.min(1)]],
+        batchNumber: ['', []],
+        locator: this.fb.array([]),
+        expiryDate: [null, []]
+      });
+      this.stockRecords.push(oneProduct);
     }
   }
 
@@ -295,10 +325,10 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     const last_name = this.authService.tokenPayload?.last_name ?? '';
     const first_name = this.authService.tokenPayload?.first_name ?? '';
     const email = this.authService.tokenPayload?.email ?? '';
-    const fullname = first_name.concat(" ", last_name);
+    const fullname = first_name.concat(' ', last_name);
 
-    if(last_name && first_name && email){
-      return [fullname,`(${email})`,].join(', ').trim();
+    if (last_name && first_name && email) {
+      return [fullname, `(${email})`,].join(', ').trim();
     } else {
       return email;
     }
@@ -313,6 +343,8 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     this.warehouse.enable();
     this.stockRecords.clear();
   }
-  onMarketplaceModalClosed() {}
+
+  onMarketplaceModalClosed() {
+  }
 
 }
