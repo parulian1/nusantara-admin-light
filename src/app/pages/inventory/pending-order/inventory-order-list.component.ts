@@ -35,7 +35,7 @@ import { IInventoryOrderSummary } from '@nusantara/models/inventory';
       <tbody>
       <tr *ngFor="let entity of page.entities">
         <td><a [routerLink]="[getRouterLink(entity)]">{{ entity|entityToSlug }}</a></td>
-        <td>{{ entity.type }}</td>
+        <td>{{ entity.type | orderTypePipe }}</td>
         <td>
           <span class="badge" [ngClass]="{
             'success': entity.status === 'pending',

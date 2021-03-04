@@ -33,6 +33,7 @@ import { MarketplaceShippingInfoModalComponent } from './marketplace-shipping-in
 import { MarketplaceChannelInfoModalComponent } from './marketplace-channel-info-modal.component';
 import { ConfirmModalReceivingOrderComponent } from './confirm-modal-receiving-order.component';
 import { ConfirmModalPendingOrderComponent } from './confirm-modal-pending-order.component';
+import { OrderType } from './order-type.pipe';
 import { OnlyNumberDirective } from './only-number.directive';
 
 /**
@@ -69,8 +70,9 @@ import { OnlyNumberDirective } from './only-number.directive';
     ConfirmModalPendingOrderComponent,
     MarketplaceChannelInfoModalComponent,
     MarketplaceStockInfoModalComponent,
+    OrderType,
     OnlyNumberDirective
-   ],
+  ],
   exports: [
     EntityToSlugPipe,
     CamelToHumanizedPipe,
@@ -100,7 +102,8 @@ import { OnlyNumberDirective } from './only-number.directive';
     ConfirmModalPendingOrderComponent,
     MarketplaceChannelInfoModalComponent,
     MarketplaceStockInfoModalComponent,
-    OnlyNumberDirective
+    OnlyNumberDirective,
+    OrderType
   ],
   imports: [
     CommonModule,

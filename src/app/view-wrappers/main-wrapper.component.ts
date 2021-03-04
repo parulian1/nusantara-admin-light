@@ -47,9 +47,15 @@ import { SubscriptionLike } from 'rxjs';
           <i class="material-icons">assignment</i>
           <span>Inventory Management</span>
         </li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/inventory/orders-list']" routerLinkActive="active" translate>Pending Orders</a></li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/inventory/receiving']" routerLinkActive="active" translate>Receiving</a></li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/inventory/transfer-order']" routerLinkActive="active" translate>Transfer</a></li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null)">
+          <a [routerLink]="['/inventory/orders-list']" routerLinkActive="active" translate>Pending Orders</a>
+        </li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null)">
+          <a [routerLink]="['/inventory/receiving']" routerLinkActive="active" translate>Delivery (Receiving)</a>
+        </li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null)">
+          <a [routerLink]="['/inventory/transfer-order']" routerLinkActive="active" translate>Transfer</a>
+        </li>
 <!--        <li><a [routerLink]="['/inventory/adjustment']" routerLinkActive="active" translate>Adjustment</a></li>-->
 
         <li class="section-header">
@@ -73,8 +79,12 @@ import { SubscriptionLike } from 'rxjs';
         <li><a [routerLink]="['/cms/content-footers']" routerLinkActive="active">Content Footers</a></li>
         <li><a [routerLink]="['/cms/highlights']" routerLinkActive="active">Highlights</a></li>
         <li><a [routerLink]="['/cms/sla']" routerLinkActive="active">SLA</a></li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/cms/video-integration']" routerLinkActive="active">Video Integration</a></li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/cms/onboardingcontent']" routerLinkActive="active">Onboarding</a></li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null)">
+          <a [routerLink]="['/cms/video-integration']" routerLinkActive="active">Video Integration</a>
+        </li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null)">
+          <a [routerLink]="['/cms/onboardingcontent']" routerLinkActive="active">Onboarding</a>
+        </li>
 
 
         <li class="section-header">
@@ -88,7 +98,9 @@ import { SubscriptionLike } from 'rxjs';
           <span>Customers and Users</span>
         </li>
         <li><a [routerLink]="['/users/customer']" routerLinkActive="active" translate>Customers</a></li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/users/customer-groups']" routerLinkActive="active" translate>Customer Groups</a></li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null)">
+          <a [routerLink]="['/users/customer-groups']" routerLinkActive="active" translate>Customer Groups</a>
+        </li>
         <li><a [routerLink]="['/users/employee']" routerLinkActive="active" translate>Employees</a></li>
 
         <li *ngIf="enterpriseGuard.canActivate(null, null)" class="icon-button" translate>

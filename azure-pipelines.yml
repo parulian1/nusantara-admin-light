@@ -1,7 +1,7 @@
 trigger:
   - release/*
   - hotfix/*
-  
+
 pool:
   vmImage: ubuntu-20.04
 
@@ -62,4 +62,4 @@ jobs:
         parameters:
           feedId: $(FEED_ID)
           buildPath: $(BUILD_DEST_PATH)
-          envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=False APM_ENVIRONMENT=Stage-FE APM_URL=$(APM_URL)'
+          envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=False APM_ENVIRONMENT=Staging-FE APM_URL=$(APM_URL)'
