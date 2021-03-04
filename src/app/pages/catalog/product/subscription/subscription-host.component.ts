@@ -10,52 +10,38 @@ import { Observable, zip } from 'rxjs';
 @Component({
   selector: 'nus-product-subscription',
   template: `
-    <h2>Subscription Information:</h2>
-    <table class="subscription">
-      <tbody [formGroup]="form">
-        <tr>
-          <td>
-            Packet
-          </td>
-          <td>
-            <select [formControl]="packet">
-              <option *ngFor="let opt of packetChoices" [ngValue]="opt.value">
-                {{opt.displayName}}
-              </option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td width="170px">
-            Subscription duration*
-          </td>
-          <td>
-            <select [formControl]="duration">
-              <option *ngFor="let opt of durationChoices" [ngValue]="opt.value">
-                {{opt.displayName}}
-              </option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Subscription length*
-          </td>
-          <td>
-            <select [formControl]="length">
-              <option *ngFor="let opt of lengthChoices" [ngValue]="opt.value">
-                {{opt.displayName}}
-              </option>
-            </select>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div [formGroup]="form" class="product-dimension">
+      <label>
+        <span>Packet*</span>
+        <select [formControl]="packet">
+          <option *ngFor="let opt of packetChoices" [ngValue]="opt.value">
+            {{opt.displayName}}
+          </option>
+        </select>
+        <nus-field-errors [control]="packet"></nus-field-errors>
+      </label>
+      <label>
+        <span>Subscription duration*</span>
+        <select [formControl]="duration">
+          <option *ngFor="let opt of durationChoices" [ngValue]="opt.value">
+            {{opt.displayName}}
+          </option>
+        </select>
+        <nus-field-errors [control]="duration"></nus-field-errors>
+      </label>
+      <label>
+        <span>Subscription length*</span>
+        <select [formControl]="length">
+          <option *ngFor="let opt of lengthChoices" [ngValue]="opt.value">
+            {{opt.displayName}}
+          </option>
+        </select>
+        <nus-field-errors [control]="length"></nus-field-errors>
+      </label>
+    </div>
   `,
   styles: [
-    'table.subscription tbody td { text-align: left; }',
-    'table.subscription tbody td label { min-height: auto; }',
-    'table.subscription tbody td input[type="radio"] { width: auto; }',
+    '.product-dimension { display: grid; grid-template-columns: repeat(3, 1fr); grid-column-gap: 16px; }',
   ]
 })
 export class ProductSubscriptonHostComponent extends AbstractEditingComponent implements OnInit {

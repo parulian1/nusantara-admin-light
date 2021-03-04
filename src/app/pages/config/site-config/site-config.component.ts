@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {FormControl, Validators, FormBuilder, FormGroup, FormArray} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ToastService, AbstractDetailComponent } from '@nusantara/core';
+import { ToastService, AbstractDetailComponent, IResultResponse } from '@nusantara/core';
 import { drf, ISiteConfig, ISocialMedia } from '@nusantara/models';
 import { SiteConfigService } from '@nusantara/services';
+import { ConfigChatServiceComponent } from './chat-service';
 
 @Component({
   selector: 'nus-site-config',
@@ -110,6 +111,10 @@ import { SiteConfigService } from '@nusantara/services';
         </tr>
 
       </table>
+
+      <div>
+        <nus-config-chat-service></nus-config-chat-service>
+      </div>
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
@@ -125,6 +130,7 @@ import { SiteConfigService } from '@nusantara/services';
   ]
 })
 export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> implements OnInit {
+  @ViewChild(ConfigChatServiceComponent) chatServiceComponent: ConfigChatServiceComponent;
 
   entity?: ISiteConfig;
   logoPreviewUrl: string;
@@ -246,5 +252,11 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
       url: [socialMedia?.url, [Validators.required, Validators.maxLength(50)]]
     });
     this.socialMedias.push(form);
+  }
+
+  protected onSaveSuccess(result: IResultResponse<ISiteConfig>) {
+    this.chatServiceComponent.save().subscribe(() => {
+      super.onSaveSuccess(result);
+    });
   }
 }

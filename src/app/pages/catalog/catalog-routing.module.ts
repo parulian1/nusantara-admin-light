@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+import * as config from '@nusantara/pages/config';
 import { CategoryComponent, CategoryListComponent, AllCategoryResolver } from './category';
 import { ProductClassListComponent, ProductClassComponent, AllProductClassResolver } from './product-class';
 import { ProductListComponent, ProductComponent, ProductListResolver, ProductResolver, ParentProductResolver  } from './product';
@@ -23,7 +24,8 @@ import { MediaTypeResolver } from './product/media';
 import { PriceListTypeResolver } from './product/price';
 import { ProductOptionListComponent, AllProductOptionResolver, ProductOptionComponent  } from './product-options';
 import { DurationListResolver, LengthListResolver, PacketListResolver } from './product/subscription';
-import {EditShippingComponent} from "../config/marketplace-integration";
+import { RequireIsEnterpriseGuard } from '@nusantara/auth/guards';
+import { EditShippingComponent } from "../config/marketplace-integration";
 
 const routes: Routes = [
   {
@@ -77,6 +79,7 @@ const routes: Routes = [
           subscriptionPacket: PacketListResolver,
           subscriptionDuration: DurationListResolver,
           subscriptionLength: LengthListResolver,
+          warehouses: config.warehouse.AllWarehouseResolver,
         },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },
@@ -94,6 +97,7 @@ const routes: Routes = [
           subscriptionPacket: PacketListResolver,
           subscriptionDuration: DurationListResolver,
           subscriptionLength: LengthListResolver,
+          warehouses: config.warehouse.AllWarehouseResolver,
         },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },
@@ -191,6 +195,7 @@ const routes: Routes = [
   },
   {
     path: 'product-options',
+    canActivate: [RequireIsEnterpriseGuard],
     children: [
       {
         path: '',

@@ -3,12 +3,16 @@ import {FormArray, FormBuilder, FormControl, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import * as XLSX from 'xlsx';
 
-import {ProductPromotionService, ProductService} from '@nusantara/services';
-import {AbstractDetailComponent, DialogResult, ToastService} from '@nusantara/core';
-import {INamedHrefEntity} from '@nusantara/models/base';
-import {IProductBundling, IProductPromotion, ProductPromotionType} from '@nusantara/models';
-import {IProduct} from '@nusantara/models/products';
-import {ProductSelectionModalComponent} from '@nusantara/shared';
+import { ProductPromotionService, ProductService } from '@nusantara/services';
+import { AbstractDetailComponent, DialogResult, Logger, ToastService } from '@nusantara/core';
+import { INamedHrefEntity } from '@nusantara/models/base';
+import { IProductBundling, IProductPromotion, ProductPromotionType } from '@nusantara/models';
+import { IProduct } from '@nusantara/models/products';
+import { ProductSelectionModalComponent } from '@nusantara/shared';
+
+declare var window: any; // Needed on Angular 8+
+
+const log = new Logger('ProductPromotionComponent');
 
 @Component({
   selector: 'nus-product-promotion',
@@ -168,7 +172,7 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
           </tbody>
         </table>
 
-        <a class="download-product" href="{{ service.productListDownloadUrl }}" target="_blank">Download Product
+        <a class="download-product" href="{{ service.productListDownloadUrl }}" target="_blank" *ngIf="hasProductUrl">Download Product
           List</a>
       </div>
 
@@ -278,6 +282,8 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
   imagePreviewUrl: string;
   isPromoBundling = false;
 
+  hasProductUrl = false;
+
   @ViewChild('productModal') productSelectionModal: ProductSelectionModalComponent;
   @ViewChild('conditionModal') productBundlingConditionSelectionModal: ProductSelectionModalComponent;
   @ViewChild('benefitModal') productBundlingBenefitSelectionModal: ProductSelectionModalComponent;
@@ -337,6 +343,11 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
 
 
     this.setImagePromoPreview(entity?.banner);
+
+    if ((window.localStorage.getItem('site_domain') === 'marthatilaarshop.com') || (window.localStorage.getItem('site_domain') === 'www.marthatilaarshop.com')) {
+      // TODO: Bad thing, should get this from API
+      this.hasProductUrl = true;
+    }
   }
 
   setImagePromoPreview(data?: Event | string) {
@@ -367,7 +378,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
 
   addProduct(product: INamedHrefEntity) {
     if ((this.products.value as Array<IProduct>).filter(p => p.href === product.href).length > 0) {
-      console.log('Product already in list -- skipping');
+      log.info('Product already in list -- skipping');
       return;
     }
 

@@ -34,6 +34,7 @@ import { MarketplaceChannelInfoModalComponent } from './marketplace-channel-info
 import { ConfirmModalReceivingOrderComponent } from './confirm-modal-receiving-order.component';
 import { ConfirmModalPendingOrderComponent } from './confirm-modal-pending-order.component';
 import { OrderType } from './order-type.pipe';
+import { OnlyNumberDirective } from './only-number.directive';
 
 /**
  * The purpose of this module is to make common code (like pipes)
@@ -69,7 +70,8 @@ import { OrderType } from './order-type.pipe';
     ConfirmModalPendingOrderComponent,
     MarketplaceChannelInfoModalComponent,
     MarketplaceStockInfoModalComponent,
-    OrderType
+    OrderType,
+    OnlyNumberDirective
   ],
   exports: [
     EntityToSlugPipe,
@@ -100,6 +102,7 @@ import { OrderType } from './order-type.pipe';
     ConfirmModalPendingOrderComponent,
     MarketplaceChannelInfoModalComponent,
     MarketplaceStockInfoModalComponent,
+    OnlyNumberDirective,
     OrderType
   ],
   imports: [

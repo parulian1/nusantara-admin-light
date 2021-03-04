@@ -56,4 +56,5 @@ export { base, drf, google, widgets, products, inventory, device, banner, shipme
 
 export * from './reseller';
 
+export * from './license-sme';
 export * from './onboarding';

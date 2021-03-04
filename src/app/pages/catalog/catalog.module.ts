@@ -15,6 +15,7 @@ import { VendorListComponent, VendorComponent } from './vendor';
 import { ProductClassAttributesComponent } from './product-class/components';
 import { ProductOptionComponent, ProductOptionListComponent } from './product-options';
 import { StockSearchComponent } from './product/stock-search/stock-search.component';
+import { StockInputComponent } from './product/stock-input/stock-input.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { StockSearchComponent } from './product/stock-search/stock-search.compon
     ProductOptionListComponent,
     ProductOptionComponent,
     StockSearchComponent,
+    StockInputComponent,
   ],
   imports: [
     CommonModule,

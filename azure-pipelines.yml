@@ -1,7 +1,7 @@
 trigger:
   - release/*
   - hotfix/*
-  
+
 pool:
   vmImage: ubuntu-20.04
 
