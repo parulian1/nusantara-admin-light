@@ -214,6 +214,15 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
   }
 
   saveForm() {
+    // check if sku is empty, set the sku value to be `upc` value
+    for (const [i, val] of this.form.value.stockRecords.entries()) {
+      if (val.sku === '') {
+        this.stockRecords.at(i).patchValue({
+          sku: val.product.upc
+        });
+      }
+    }
+
     this.service.save(this.getFormValue()).pipe(catchError(err => {
       if (err instanceof HttpErrorResponse) {
         return of(new ErrorResult<IError>(err.error, err.status));
