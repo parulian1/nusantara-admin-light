@@ -178,9 +178,9 @@ import { MarketplaceInfoHostComponent } from './marketplace';
             </div>
           </div>
 
-          <div id="product-subscription" class="wrapper">
+          <div id="product-subscription" class="wrapper" *ngIf="isProductOptionDomain">
             <h1 class="heading-1">Subscription Information:</h1>
-            <nus-product-subscription [form]="subscription" *ngIf="isProductOptionDomain"></nus-product-subscription>
+            <nus-product-subscription [form]="subscription"></nus-product-subscription>
           </div>
 
           <div id="product-media" class="wrapper">
