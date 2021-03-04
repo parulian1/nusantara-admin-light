@@ -63,6 +63,24 @@ import { Kgx, ShippingServicesTypes } from './shipping-service/constants';
         <nus-field-errors [control]="description"></nus-field-errors>
       </label>
 
+      <label>
+        <span>Sender Name</span>
+        <input type="text" formControlName="senderName">
+        <nus-field-errors [control]="senderName"></nus-field-errors>
+      </label>
+
+      <label>
+        <span>Sender Email</span>
+        <input type="text" formControlName="senderEmail">
+        <nus-field-errors [control]="senderEmail"></nus-field-errors>
+      </label>
+
+      <label>
+        <span>Sender Phone</span>
+        <input type="text" formControlName="senderPhone">
+        <nus-field-errors [control]="senderPhone"></nus-field-errors>
+      </label>
+
       <ng-container *ngIf="type.value">
         <div class="sosmed-title">
           <h3>
@@ -134,33 +152,16 @@ export class ShippingProviderDetailComponent extends AbstractDetailComponent<ISh
     this.originalEntityName = 'Shipping Method';
   }
 
-  get name(): FormControl {
-    return this.form.get('name') as FormControl;
-  }
-
-  get type(): FormControl {
-    return this.form.get('type') as FormControl;
-  }
-
-  get services(): FormArray {
-    return this.form.get('services') as FormArray;
-  }
-
-  get icon(): FormControl {
-    return this.form.get('icon') as FormControl;
-  }
-
-  get description(): FormControl {
-    return this.form.get('description') as FormControl;
-  }
-
-  get authUser(): FormControl {
-    return this.form.get('authUser') as FormControl;
-  }
-
-  get authPass(): FormControl {
-    return this.form.get('authPass') as FormControl;
-  }
+  get name(): FormControl { return this.form.get('name') as FormControl; }
+  get type(): FormControl { return this.form.get('type') as FormControl; }
+  get services(): FormArray { return this.form.get('services') as FormArray; }
+  get icon(): FormControl { return this.form.get('icon') as FormControl; }
+  get description(): FormControl { return this.form.get('description') as FormControl; }
+  get authUser(): FormControl { return this.form.get('authUser') as FormControl; }
+  get authPass(): FormControl { return this.form.get('authPass') as FormControl; }
+  get senderName(): FormControl { return this.form.get('senderName') as FormControl; }
+  get senderEmail(): FormControl { return this.form.get('senderEmail') as FormControl; }
+  get senderPhone(): FormControl { return this.form.get('senderPhone') as FormControl; }
 
   initializeForm(entity?: IShippingProvider) {
     this.form = this.fb.group({
@@ -170,6 +171,9 @@ export class ShippingProviderDetailComponent extends AbstractDetailComponent<ISh
       type: [entity?.type, [Validators.required]],
       authUser: [entity?.authUser, []],
       authPass: [entity?.authPass, []],
+      senderName: [entity?.senderName, []],
+      senderEmail: [entity?.senderEmail, []],
+      senderPhone: [entity?.senderPhone, []],
       isActive: [entity?.isActive ?? false, []],
       icon: [entity?.href ? '' : null, entity?.icon ? [] : [Validators.required]],
       services: this.fb.array([])
