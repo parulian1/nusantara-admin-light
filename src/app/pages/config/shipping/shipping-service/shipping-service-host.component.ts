@@ -8,9 +8,11 @@ import { ActivatedRoute, Router } from '@angular/router';
   template: `
     <tr [formGroup]="form">
       <td>
-        <select formControlName="name" data-qa="name" [formControl]="name">
+        <select formControlName="name" data-qa="name" [formControl]="name"
+                (change)="updateSelectedService()">
           <option [ngValue]="null">---</option>
-          <option *ngFor="let type of shippingServiceTypes" [ngValue]="type.value">
+          <option *ngFor="let type of shippingServiceTypes" [ngValue]="type.value"
+                  [disabled]="isSelectedService(type.displayName)">
             {{ type.displayName }}
           </option>
         </select>
@@ -23,7 +25,7 @@ import { ActivatedRoute, Router } from '@angular/router';
         <input type="text" [formControl]="description" data-qa="description" placeholder="lorem ipsum ..">
       </td>
       <td>
-        <button (click)="remove.emit()" type="button" class="remove-button" data-qa="remove-button">
+        <button (click)="removeService()" type="button" class="remove-button" data-qa="remove-button">
           <i class="material-icons">remove_circle_outline</i>
         </button>
       </td>
@@ -39,6 +41,9 @@ export class ShippingServiceHostComponent implements OnInit, AfterViewInit {
   @Input() form: FormGroup;
   @Input() shippingType: string;
   @Output() remove = new EventEmitter<void>();
+  @Input() selectedService: any;
+  @Output() newSelectedService = new EventEmitter<string>();
+  @Output() removeSelectedService = new EventEmitter<string>();
 
   constructor(public route: ActivatedRoute,
               public router: Router) {
@@ -84,6 +89,23 @@ export class ShippingServiceHostComponent implements OnInit, AfterViewInit {
 
   isShipingKgx() {
     return this.shippingType === 'kgx';
+  }
+
+  isSelectedService(serviceName: any) {
+    return this.selectedService.includes(serviceName);
+  }
+
+  updateSelectedService() {
+    const serviceName = this.form.get('name').value;
+    this.newSelectedService.emit(serviceName);
+  }
+
+  removeService() {
+    const serviceName = this.form.get('name').value;
+    this.remove.emit();
+    if (serviceName) {
+      this.removeSelectedService.emit(serviceName);
+    }
   }
 
 }
