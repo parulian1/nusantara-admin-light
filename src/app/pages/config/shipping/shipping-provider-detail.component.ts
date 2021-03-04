@@ -20,7 +20,7 @@ import { Kgx, ShippingServicesTypes } from './shipping-service/constants';
     <form [formGroup]="form" (ngSubmit)="save()" #f>
       <label>
         <span>Name</span>
-        <input type="text" formControlName="name">
+        <input type="text" formControlName="name" maxlength="25">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
@@ -82,11 +82,14 @@ import { Kgx, ShippingServicesTypes } from './shipping-service/constants';
             *ngFor="let item of services.controls; let i=index"
             [form]="item"
             [shippingServiceTypes]="shippingServiceTypes"
+            [selectedService]="selectedService"
             (remove)="services.removeAt(i)"
+            (newSelectedService)="updateSelectedService($event)"
+            (removeSelectedService)="removeSelectedService($event)"
             [shippingType]="type.value"
           >
           </nus-shipping-service-host>
-          <tr>
+          <tr *ngIf="selectedService.length !== shippingServiceTypes.length">
             <td colspan="9">
               <button type="button" (click)="addService()" class="add-button">
                 Add Record
@@ -96,26 +99,6 @@ import { Kgx, ShippingServicesTypes } from './shipping-service/constants';
           </tbody>
         </table>
       </ng-container>
-      <!--      <table>-->
-      <!--        <thead>-->
-      <!--        <tr>-->
-      <!--          <th>Name</th>-->
-      <!--          <th>Active</th>-->
-      <!--          <th>Min. Weight (kg)</th>-->
-      <!--          <th>Surcharge</th>-->
-      <!--          <th>Grace Amount (kg)</th>-->
-      <!--          <th>Description</th>-->
-      <!--          <th></th>-->
-      <!--        </tr>-->
-      <!--        </thead>-->
-      <!--        <tbody>-->
-      <!--        <nus-shipping-service-->
-      <!--          *ngFor="let service of services.controls; let i=index"-->
-      <!--          [form]="service"-->
-      <!--          (remove)="removeService(i)">-->
-      <!--        </nus-shipping-service>-->
-      <!--        </tbody>-->
-      <!--      </table>-->
 
       <nus-detail-actions
         [component]="this"
@@ -132,6 +115,7 @@ export class ShippingProviderDetailComponent extends AbstractDetailComponent<ISh
   types: drf.IChoice[] = [];
   iconPreviewUrl: string;
   shippingServiceTypes: drf.IChoice[] = [];
+  selectedService: any = [];
 
   constructor(service: ShippingProviderService,
               route: ActivatedRoute,
@@ -202,6 +186,7 @@ export class ShippingProviderDetailComponent extends AbstractDetailComponent<ISh
 
     entity?.services.forEach((service) => {
       this.addService(service);
+      this.selectedService.push(service.name);
     });
   }
 
@@ -256,5 +241,16 @@ export class ShippingProviderDetailComponent extends AbstractDetailComponent<ISh
       this.form.value.icon = this.iconPreviewUrl;
     }
     super.save();
+  }
+
+  updateSelectedService(serviceName: string) {
+    this.selectedService.push(serviceName);
+  }
+
+  removeSelectedService(serviceName: string) {
+    const index = this.selectedService.indexOf(serviceName);
+    if (index > -1) {
+      this.selectedService.splice(index, 1);
+    }
   }
 }
