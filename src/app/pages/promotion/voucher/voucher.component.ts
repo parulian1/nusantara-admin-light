@@ -97,13 +97,13 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
 
       <label>
         <span>Valid From</span>
-        <input type="datetime-local" [formControl]="validFrom">
+        <nus-field-datetime [control]="validFrom"></nus-field-datetime>
         <nus-field-errors [control]="validFrom"></nus-field-errors>
       </label>
 
       <label>
         <span>Valid To</span>
-        <input type="datetime-local" [formControl]="validTo">
+        <nus-field-datetime [control]="validTo"></nus-field-datetime>
         <nus-field-errors [control]="validTo"></nus-field-errors>
       </label>
 
@@ -163,7 +163,7 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
     <nus-product-selection-modal></nus-product-selection-modal>
   `,
   styles: [
-    '.eligible-product { display: flex; margin-bottom: 10px; justify-content: space-between; align-item: }',
+    '.eligible-product { display: flex; margin-bottom: 10px; justify-content: space-between; }',
     '.eligible-product button { display: flex; align-items: center; }'
   ]
 })
@@ -373,11 +373,5 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
       reader.readAsBinaryString(target.files[0]);
     };
     input.click();
-  }
-
-  save() {
-    this.form.value.validFrom = this.form.value.validFrom + this.getTimeZone();
-    this.form.value.validTo = this.form.value.validTo + this.getTimeZone();
-    super.save();
   }
 }
