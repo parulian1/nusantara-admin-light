@@ -223,12 +223,10 @@ export class CustomerGroupDetailComponent extends AbstractDetailComponent<ICusto
 
   getFormValue(): any {
     let formValue = super.getFormValue();
-    if (formValue?.timeThreshold) {
-      formValue = {
-        ...formValue,
-        timeThreshold: `P${formValue.timeThreshold || '0'}D`
-      };
-    }
+    formValue = {
+      ...formValue,
+      timeThreshold: `P${formValue.timeThreshold || '0'}D`
+    };
     return formValue;
   }
 }
