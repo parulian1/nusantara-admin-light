@@ -248,4 +248,23 @@ describe('CustomerGroupDetailComponent', () => {
     httpTestingController.verify();
   });
 
+
+  describe('timeThreshold value is iso8601', () => {
+    it('should be timeThreshold default value is `P0D`', () => {
+      const formValue = component.getFormValue();
+      expect(formValue.timeThreshold).toEqual('P0D');
+    });
+
+    it('should be timeThreshold value is 0 is `P0D`', () => {
+      component.timeThreshold.setValue(0);
+      const formValue = component.getFormValue();
+      expect(formValue.timeThreshold).toEqual('P0D');
+    });
+
+    it('should be timeThreshold value is greater than 0 is `P{value}D`', () => {
+      component.timeThreshold.setValue(10);
+      const formValue = component.getFormValue();
+      expect(formValue.timeThreshold).toEqual('P10D');
+    });
+  });
 });
