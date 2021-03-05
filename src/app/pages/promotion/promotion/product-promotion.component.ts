@@ -3,7 +3,7 @@ import {FormArray, FormBuilder, FormControl, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import * as XLSX from 'xlsx';
 
-import { ProductPromotionService, ProductService } from '@nusantara/services';
+import { ProductPromotionService, ProductService, SiteConfigService } from '@nusantara/services';
 import { AbstractDetailComponent, DialogResult, Logger, ToastService } from '@nusantara/core';
 import { INamedHrefEntity } from '@nusantara/models/base';
 import { IProductBundling, IProductPromotion, ProductPromotionType } from '@nusantara/models';
@@ -278,7 +278,7 @@ const log = new Logger('ProductPromotionComponent');
 export class ProductPromotionComponent extends AbstractDetailComponent<IProductPromotion> implements OnInit, AfterViewInit {
 
   entity: IProductPromotion;
-  types: Array<ProductPromotionType> = ['percentage', 'amount_off', 'override_price', 'promo_bundling'];
+  types: Array<ProductPromotionType> = ['percentage', 'amount_off', 'override_price'];
   imagePreviewUrl: string;
   isPromoBundling = false;
 
@@ -293,8 +293,16 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
               router: Router,
               toast: ToastService,
               private fb: FormBuilder,
+              private configSercvice: SiteConfigService,
               private productService: ProductService) {
     super(route, router, toast, service);
+  }
+
+  ngOnInit() {
+    super.ngOnInit();
+    if (this.configSercvice.isEnterpriseLicense()) {
+      this.types.push('promo_bundling');
+    }
   }
 
   initializeForm(entity?: IProductPromotion) {
