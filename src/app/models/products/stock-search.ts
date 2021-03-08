@@ -8,6 +8,10 @@ export interface IStockSearch extends INamedHrefEntity {
   name: string;
   code: string;
   type: string;
-  subLocations?: Array<ISubLocation>;
+  subLocations?: Array<ISubLocationWithQuantity>;
   address?: IAddress;
+}
+
+export interface ISubLocationWithQuantity extends ISubLocation {
+  quantity?: number;
 }
