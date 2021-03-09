@@ -72,6 +72,17 @@ import { IJwtClaims } from '@nusantara/auth/models';
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
+      <label class="checkbox">
+        <span>Use POS</span>
+        <input type="checkbox" [formControl]="canUsePos" (ngModelChange)="onCanUsePosChange($event)"/>
+        <nus-field-errors [control]="canUsePos"></nus-field-errors>
+      </label>
+
+      <label *ngIf="isUsePos">
+        <span>PIN</span>
+        <input type="password" maxlength="4" autocomplete="new-password" [formControl]="pin"/>
+      </label>
+
       <nus-employee-warehouse-host
         [entity]="entity"
         [choices]="warehouseChoices"
@@ -146,6 +157,7 @@ export class EmployeeComponent
   accessGroupChoices: IAccessGroup[] = [];
 
   entity?: IEmployee;
+  isUsePos = false;
 
   /**
    * send email
@@ -189,12 +201,17 @@ export class EmployeeComponent
       warehouses: this.fb.array([], [Validators.required]),
       accessGroups: this.fb.array([]),
       title: [entity?.firstName, []], // used as formality when delete data
+      canUsePos: [entity?.canUsePos ?? false, []],
+      pin: ['', [Validators.maxLength(4)]],
     });
 
     this.entity = entity;
 
     // need to mark as touched to make custom styling works
     this.form.controls.isActive.markAsTouched();
+    this.form.controls.canUsePos.markAsTouched();
+
+    this.isUsePos = this.canUsePos.value;
   }
 
   get name(): FormControl {
@@ -223,6 +240,12 @@ export class EmployeeComponent
   }
   get accessGroups(): FormArray {
     return this.form.get('accessGroups') as FormArray;
+  }
+  get canUsePos(): FormControl {
+    return this.form.get('canUsePos') as FormControl;
+  }
+  get pin(): FormControl {
+    return this.form.get('pin') as FormControl;
   }
 
   getFormValue(): any {
@@ -294,5 +317,9 @@ export class EmployeeComponent
     }, (error) => {
       this.onSaveError(error);
     });
+  }
+
+  onCanUsePosChange($event: boolean) {
+    this.isUsePos = $event;
   }
 }
