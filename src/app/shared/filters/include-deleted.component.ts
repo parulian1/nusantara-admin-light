@@ -11,7 +11,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class IncludeDeletedComponent implements OnInit {
   public applied = false;
-  @Input() text = "Show SoftDeleted";
+  @Input() text = 'Show SoftDeleted';
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute) {

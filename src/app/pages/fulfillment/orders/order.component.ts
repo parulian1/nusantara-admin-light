@@ -106,7 +106,7 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
       this.shipmentService.createAWB({
         orderNumber: getSlugFromHref(childrenData.href)
       }).subscribe((response) => {
-        let foundShipmentInfoIndex = this.shipmentMessageInfo.findIndex((messageInfo) => {
+        const foundShipmentInfoIndex = this.shipmentMessageInfo.findIndex((messageInfo) => {
           return messageInfo.orderHref === childrenData.href;
         });
         if (response instanceof ErrorResult) {
@@ -115,7 +115,7 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
             message: 'Please contact administrator, something went wrong...',
             success: true,
             connoteNumber: '',
-          }
+          };
         } else {
           shipmentInfo = {
             orderHref: childrenData.href,
@@ -125,9 +125,9 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
           };
           if (!childrenData.shipmentHistory) {
             childrenData.shipmentHistory = new Object({
-              'awbNumber': null,
-              'href': null,
-              'shippingLabelUrl': '',
+              awbNumber: null,
+              href: null,
+              shippingLabelUrl: '',
             });
           }
           childrenData.shipmentHistory.href = response.entity.href;

@@ -86,7 +86,7 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> im
               toast: ToastService,
               route: ActivatedRoute,
               router: Router,
-              private changeDetector : ChangeDetectorRef ) {
+              private changeDetector: ChangeDetectorRef ) {
     super(route, router, toast, service);
   }
 
@@ -126,7 +126,7 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> im
   addContent(content?: IOnboardingContent) {
     const form = this.fb.group({
       href: [content?.href ?? '', []],
-      image: ['', content?.image ? []: [Validators.required]],
+      image: ['', content?.image ? [] : [Validators.required]],
       name: [content?.name, [Validators.required, Validators.maxLength(100)]],
       description: [content?.description, [Validators.maxLength(255), Validators.required]],
       buttonStatus: [content?.buttonStatus ?? false, []],
@@ -146,16 +146,16 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> im
 
   cleanData() {
     this.contents.controls.map((contentControl, index) => {
-      let _contentControl = (contentControl as FormGroup);
+      const formContentControl = (contentControl as FormGroup);
       if (!contentControl.value.image.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
-        _contentControl.removeControl('image');
+        formContentControl.removeControl('image');
       }
-      contentControl = _contentControl;
+      contentControl = formContentControl;
     });
 
   }
 
-  preview () {
+  preview() {
     this.onboardingPreviewHostDialogComponent.position = 0;
     this.contentHost.getValue();
     this.onboardingPreviewHostDialogComponent.form = this.contents;

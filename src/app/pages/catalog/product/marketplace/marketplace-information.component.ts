@@ -225,11 +225,11 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
   ngOnInit() {
     this.initializeForm();
 
-    this.productSlug = this.route.snapshot.paramMap.get('slug')
+    this.productSlug = this.route.snapshot.paramMap.get('slug');
     this.mpItemService
       .getItemMarketplaceInformation(this.productSlug)
       .subscribe((data: IMarketplaceItemInformation) => {
-        if(data){
+        if (data){
           this.warehouseCount = data.totalWarehouse;
           this.marketplaceCount = data.totalMarketplace;
           this.storeCount = data.totalStore;
@@ -272,8 +272,8 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
   getAttributes(marketplace: any) {
     this.emptyStore = false;
     this.productClassChanged = false;
-    if(this.selectedTab){
-      if(this.selectedTab !== marketplace.toLowerCase()){
+    if (this.selectedTab){
+      if (this.selectedTab !== marketplace.toLowerCase()){
         this.saveAll();
       }
     }
@@ -282,15 +282,15 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
     this.clearFormArray(this.attributesFormArray);
 
     this.mpItemService
-      .getItemMarketplaceAttribute(this.selectedTab,this.productClassSlug, this.productSlug)
+      .getItemMarketplaceAttribute(this.selectedTab, this.productClassSlug, this.productSlug)
       .subscribe((data: IMarketplaceItemAttributeInformation[]) => {
         this.marketplaceStoreAttributes = data;
-        if(!data){
+        if (!data){
           this.emptyStore = true;
         }
 
         if (!!data) {
-          data.forEach((stores:IMarketplaceItemAttributeInformation,index) => {
+          data.forEach((stores: IMarketplaceItemAttributeInformation, index) => {
             stores.attributes.forEach((attr) => {
               this.attributesFormArray.push(
                 this.fb.group({
@@ -305,7 +305,7 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
                 })
               );
             });
-          })
+          });
         }
     });
   }
@@ -314,7 +314,7 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
     const attr = this.attributesFormArray.at(index).get('newValue');
     if (value === 'addNewAttr') {
       attr.setValidators(Validators.required);
-      attr.setValue(""); // should set string otherwise it will give value addNewAttr
+      attr.setValue(''); // should set string otherwise it will give value addNewAttr
     } else {
       attr.clearValidators();
       attr.reset();
@@ -329,13 +329,13 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
   }
 
   saveAll(): void {
-    const attr = this.attributesFormArray.value.map((attr: any) => {
-      let currVal = attr.value;
-      if(attr.newValue !== null){
-        currVal = attr.newValue;
+    const attr = this.attributesFormArray.value.map((attrVal: any) => {
+      let currVal = attrVal.value;
+      if (attrVal.newValue !== null){
+        currVal = attrVal.newValue;
       }
       return {
-        identifier: attr.identifier,
+        identifier: attrVal.identifier,
         value: currVal,
         product: this.productSlug,
       };

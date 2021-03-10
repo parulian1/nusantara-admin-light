@@ -83,7 +83,7 @@ export class CategoryGroupControlComponent
   implements OnDestroy, OnInit, ControlValueAccessor, Validator {
   @Input() categories: IProductCategory[] = [];
   @Input() formLabel: string;
-  @Input() currentShop : string;
+  @Input() currentShop: string;
 
   shopSlug: string;
   form: FormGroup;

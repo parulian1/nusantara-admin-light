@@ -9,11 +9,11 @@ export interface State {
 export const state = createFeatureSelector('marketplace');
 export const getCurrentShop = createSelector(
   state,
-  (marketplaceState: State): IShop => marketplaceState.currentShop 
+  (marketplaceState: State): IShop => marketplaceState.currentShop
 );
 
 export function reducer(
-  state: State = undefined,
+  state: State,
   action: MarketplaceActions
 ): State {
   switch (action.type) {

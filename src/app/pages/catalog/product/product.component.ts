@@ -508,22 +508,22 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       weight: [entity?.weight, [Validators.required, ]],
       price: [0, [Validators.minLength(0)]],
       dimensions: this.fb.group({
-        currentLength:[entity?.dimensions.currentLength,],
-        currentWidth:[entity?.dimensions.currentWidth,],
-        currentHeight:[entity?.dimensions.currentHeight,]
+        currentLength: [entity?.dimensions.currentLength, ],
+        currentWidth: [entity?.dimensions.currentWidth, ],
+        currentHeight: [entity?.dimensions.currentHeight, ]
       }),
       productClass: this.fb.group({href: [entity?.productClass.href, [Validators.required]]}),
       category: this.fb.group({href: [entity?.category.href, [Validators.required]]}),
       vendor: this.fb.group({href: [entity?.vendor?.href, [Validators.required]]}),
       media: this.fb.array([]),
-      attributes: this.fb.group({}, []),
-      marketplace: this.fb.group({}, []),
+      attributes: this.fb.group({}),
+      marketplace: this.fb.group({}),
       priceLists: this.fb.array([]),
       related: this.fb.array([]),
       seoMeta: [entity?.seoMeta, []],
       seoDescription: [entity?.seoDescription, []],
       tags: this.fb.array([], [NusantaraValidators.preventArrayDuplicates()]),
-      subscription: this.fb.group({}, [])
+      subscription: this.fb.group({})
     });
 
     // new product variant
@@ -652,7 +652,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       }
     );
 
-    if(!this.isNew && this.isPhysical() && this.enterpriseLicense()) {
+    if (!this.isNew && this.isPhysical() && this.enterpriseLicense()) {
       this.marketplaceHost.saveAll();
     }
 

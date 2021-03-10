@@ -47,7 +47,7 @@ import {
             </thead>
             <tbody>
               <tr *ngFor="let entity of processing?.entities">
-                <td> 
+                <td>
                   <a routerLink="{{ entity.encryptId }}">
                     {{ entity.id }}
                   </a>
@@ -92,7 +92,7 @@ import {
             </thead>
             <tbody>
               <tr *ngFor="let entity of completed?.entities">
-                <td> 
+                <td>
                   <a routerLink="{{ entity.encryptId }}">
                     {{ entity.id }}
                   </a>

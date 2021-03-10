@@ -293,7 +293,7 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
       this.typeChoices = data.typeChoices;
     });
     super.ngOnInit();
-    this.smeLicensePaymentType()
+    this.smeLicensePaymentType();
     this.type.valueChanges.subscribe(change => {
       this.setCurrentTypeAndValidatorFields(change);
     });
@@ -316,8 +316,8 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
       meta: this.fb.group(
         {
           type: [entity?.meta.type, []],
-          banks: this.fb.array([], [NusantaraValidators.preventArrayDuplicates(),]),
-          eWallets: this.fb.array([], [NusantaraValidators.preventArrayDuplicates(),]),
+          banks: this.fb.array([], [NusantaraValidators.preventArrayDuplicates(), ]),
+          eWallets: this.fb.array([], [NusantaraValidators.preventArrayDuplicates(), ]),
         }
       )
     });
@@ -392,7 +392,7 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
   }
 
   onInStoreChange($event: any) {
-    this.isMetaDetailAvailable = $event === 'e_wallet'||  $event === 'eWallets' || $event === 'edc';
+    this.isMetaDetailAvailable = $event === 'e_wallet' ||  $event === 'eWallets' || $event === 'edc';
     this.currentMetaType = $event;
 
     if (this.currentMetaType === 'e_wallet') {

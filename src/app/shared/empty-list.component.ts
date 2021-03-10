@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'nus-empty-list',
-  template: ` 
+  template: `
   <div>
     <h1 class="heading-1">{{ title }}</h1>
     <p>{{ description }}</p>
