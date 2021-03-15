@@ -33,6 +33,13 @@ import { VendorService } from '@nusantara/services';
       </label>
 
       <label>
+        <span>Is Active</span>
+        <input id="s2" type="checkbox" [formControl]="isActive" name="is-active"
+               data-qa="is-active"/>
+        <nus-field-errors [control]="isActive"></nus-field-errors>
+      </label>
+
+      <label>
         <span>Icon Image</span>
         <img [src]="iconImagePreviewUrl" id="icon-image-preview" alt="Icon Image" class="preview">
         <input type="file"
@@ -112,6 +119,7 @@ export class VendorComponent extends AbstractDetailComponent<IVendor> {
   get internalNotes(): FormControl { return this.form.get('internalNotes') as FormControl; }
   get iconImage(): FormControl { return this.form.get('iconImage') as FormControl; }
   get bannerImage(): FormControl { return this.form.get('bannerImage') as FormControl; }
+  get isActive(): FormControl { return this.form.get('isActive') as FormControl; }
   get extra(): FormGroup {
     return this.form.get('extra') as FormGroup;
   }
@@ -134,7 +142,8 @@ export class VendorComponent extends AbstractDetailComponent<IVendor> {
       extra: this.fb.group({
         seoDescription: [entity?.extra?.seoDescription ?? '', [Validators.maxLength(160)]],
         seoKeywords: [entity?.extra?.seoKeywords ?? '', [Validators.maxLength(160)]]
-      })
+      }),
+      isActive: [entity?.isActive]
     });
 
     this.setBannerImagePreview(entity?.bannerImage);
