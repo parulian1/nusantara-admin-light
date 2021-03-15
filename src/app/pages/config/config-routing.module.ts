@@ -218,6 +218,27 @@ const routes: Routes = [
       import('./marketplace-integration/marketplace-integration.module').then(
         (m) => m.MarketplaceIntegrationModule
       ),
+  },
+  {
+    path: 'website-settings',
+    loadChildren: () =>
+      import('./website-settings/website-settings.module').then(
+        (m) => m.WebsiteSettingsModule
+      ),
+  },
+  {
+    path: 'pos-integration',
+    loadChildren: () =>
+      import('./pos-integration/pos-integration.module').then(
+        (m) => m.PosIntegrationModule
+      ),
+  },
+  {
+    path: 'general-settings',
+    loadChildren: () =>
+      import('./general-settings/general-settings.module').then(
+        (m) => m.GeneralSettingsModule
+      ),
   }
 ];
 

@@ -32,6 +32,6 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
 export class ConfigHubComponent {
   constructor(
     public enterpriseGuard: RequireIsEnterpriseGuard
-) {
-}
+  ) {
+  }
 }

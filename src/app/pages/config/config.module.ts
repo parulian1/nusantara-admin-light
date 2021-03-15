@@ -44,7 +44,7 @@ import { ShippingServiceHostComponent } from './shipping/shipping-service/shippi
     PaymentGatewayMetaComponent,
     PaymentGatewayInstoreComponent,
     ShippingServiceHostComponent,
-    ConfigChatServiceComponent,
+    ConfigChatServiceComponent
   ],
   imports: [
     CommonModule,
