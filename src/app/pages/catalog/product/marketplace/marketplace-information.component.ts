@@ -91,9 +91,9 @@ import { AbstractEditingComponent } from '@nusantara/core';
                                 </div>
                               </div>
                             </div>
-                            <div *ngIf="client.option === LZD && attributesFormArray.controls[i].value.name === 'SellerSku' || attributesFormArray.controls[i].value.name === 'price'; else nonDisable">
-                              <input formControlName="value" type="text" readonly *ngIf="attributesFormArray.controls[i].value.name === 'SellerSku'"/>
-                              <input formControlName="value" type="number" readonly *ngIf="attributesFormArray.controls[i].value.name === 'price'"/>
+                            <div *ngIf="client.option === LZD && attributesFormArray.controls[i].value.marketplaceAttributeName === 'SellerSku' || attributesFormArray.controls[i].value.marketplaceAttributeName === 'price'; else nonDisable">
+                              <input formControlName="value" type="text" readonly *ngIf="attributesFormArray.controls[i].value.marketplaceAttributeName === 'SellerSku'"/>
+                              <input formControlName="value" type="number" readonly *ngIf="attributesFormArray.controls[i].value.marketplaceAttributeName === 'price'"/>
                             </div>
 
                             <ng-template #nonDisable>
@@ -285,7 +285,6 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
       .getItemMarketplaceAttribute(this.selectedTab,this.productClassSlug, this.productSlug)
       .subscribe((data: IMarketplaceItemAttributeInformation[]) => {
         this.marketplaceStoreAttributes = data;
-        console.log(this.marketplaceStoreAttributes)
         if(!data){
           this.emptyStore = true;
         }
@@ -302,6 +301,7 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
                   option: [attr.option],
                   newValue: null,
                   indexShop: index,
+                  marketplaceAttributeName: [attr.marketplaceAttributeName]
                 })
               );
             });
