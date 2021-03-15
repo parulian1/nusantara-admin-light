@@ -91,14 +91,18 @@ import { AbstractEditingComponent } from '@nusantara/core';
                                 </div>
                               </div>
                             </div>
-                            <div *ngIf="client.option === LZD && attributesFormArray.controls[i].value.name === 'SellerSku'; else nonDisable">
-                              <input formControlName="value" type="text" readonly/>
+                            <div *ngIf="client.option === LZD && attributesFormArray.controls[i].value.name === 'SellerSku' || attributesFormArray.controls[i].value.name === 'price'; else nonDisable">
+                              <input formControlName="value" type="text" readonly *ngIf="attributesFormArray.controls[i].value.name === 'SellerSku'"/>
+                              <input formControlName="value" type="number" readonly *ngIf="attributesFormArray.controls[i].value.name === 'price'"/>
                             </div>
+
                             <ng-template #nonDisable>
                                 <input formControlName="value" type="text" *ngIf="attributesFormArray.controls[i].value.type === 'text'"/>
+                              <input formControlName="value" type="number" *ngIf="attributesFormArray.controls[i].value.type === 'integer'"/>
                             </ng-template>
+
                             <input formControlName="value" type="text" *ngIf="attributesFormArray.controls[i].value.type === 'text' && client.option !== LZD"/>
-                            <input formControlName="value" type="number" *ngIf="attributesFormArray.controls[i].value.type === 'integer'"/>
+                            <input formControlName="value" type="number" *ngIf="attributesFormArray.controls[i].value.type === 'integer' && client.option !== LZD"/>
                           </td>
                         </tr>
                       </tbody>
