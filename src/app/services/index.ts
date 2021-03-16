@@ -64,6 +64,7 @@ export * from './reseller';
 
 export * from './site-config.service';
 export * from './config-chat.service';
+export * from './config-analytic-tool.service';
 export * from './auth-social.service';
 
 export * from './social-media.service';
