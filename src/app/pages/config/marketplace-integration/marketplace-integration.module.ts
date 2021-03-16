@@ -13,6 +13,7 @@ import {
   ShopeeeClientFormComponent,
   TokopediaClientFormComponent,
   TscFormComponent,
+  LazadaFormComponent,
 } from "./connect";
 import {
   ProductClassMappingListComponent,
@@ -39,7 +40,6 @@ import {
   MARKETPLACE_CONFIG_TOKEN,
 } from "./marketplace.tokens";
 import * as fromReducer from "@nusantara/reducers/marketplace.reducers";
-import {LazadaFormComponent} from "./connect/form/lazada-form.component";
 
 export function getMarketplacesConfig(
   saveKeys: string[],
