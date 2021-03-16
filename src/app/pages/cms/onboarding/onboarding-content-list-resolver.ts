@@ -17,7 +17,7 @@ export class OnboardingContentListResolver implements Resolve<PagedResponse<IOnB
     let params = new HttpParams();
     const theQuery = route.queryParams;
     for (const keyParam of Object.keys(theQuery)) {
-      if (['q', 'page', 'per_page', 'include_deleted',].indexOf(keyParam) >= 0) {
+      if (['q', 'page', 'per_page', 'include_deleted', ].indexOf(keyParam) >= 0) {
         if ('page' === keyParam || keyParam === 'per_page') {
           // need to validate number
           if (Number.isInteger(theQuery[keyParam])) {
