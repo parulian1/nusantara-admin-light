@@ -3,10 +3,12 @@ import {FormControl, Validators, FormBuilder, FormArray, FormGroup} from '@angul
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {ToastService, AbstractDetailComponent, NusantaraValidators} from '@nusantara/core';
-import {drf, IPaymentGateway} from '@nusantara/models';
-import {PaymentGatewayService} from '@nusantara/services';
+import {drf, IPaymentGateway, PaymentTypeSmeClient} from '@nusantara/models';
+import {PaymentGatewayService, SiteConfigService} from '@nusantara/services';
 import * as ClassicEditor from '@gdnnusantara/ckeditor5-build/build/ckeditor';
 import {setAndClearValidators} from './utils';
+import { enumToArray } from '@nusantara/shared/helpers';
+import { RequireIsEnterpriseGuard } from '@nusantara/auth';
 
 @Component({
   selector: 'nus-payment-gateway',
@@ -153,7 +155,7 @@ import {setAndClearValidators} from './utils';
         <input type="checkbox" [formControl]="isActive" name="isActive">
       </label>
 
-      <label class="checkbox">
+      <label *ngIf="enterpriseGuard.canActivate(null, null)" class="checkbox">
         <span>Allow POS</span>
         <input type="checkbox" [formControl]="allowPos" name="isActive">
       </label>
@@ -167,7 +169,7 @@ import {setAndClearValidators} from './utils';
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
-        [hideDelete]="!entity || !entity.isActive">
+        (delete)="delete()">
       </nus-detail-actions>
     </form>
   `,
@@ -220,6 +222,8 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
               public fb: FormBuilder,
               toast: ToastService,
               route: ActivatedRoute,
+              public enterpriseGuard: RequireIsEnterpriseGuard,
+              private configSercvice: SiteConfigService,
               router: Router) {
     super(route, router, toast, service);
   }
@@ -289,7 +293,7 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
       this.typeChoices = data.typeChoices;
     });
     super.ngOnInit();
-
+    this.smeLicensePaymentType()
     this.type.valueChanges.subscribe(change => {
       this.setCurrentTypeAndValidatorFields(change);
     });
@@ -324,14 +328,14 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     this.form.controls.isActive.markAsTouched();
     this.form.controls.allowPos.markAsTouched();
 
-    if (entity.meta.banks) {
+    if (entity?.meta?.banks) {
       const bankValues = JSON.parse(entity.meta.banks.replace(/'/g, '"'));
       for (const bank of bankValues ?? []) {
         this.addLineBank(bank);
       }
     }
 
-    if (entity.meta.eWallets) {
+    if (entity?.meta?.eWallets) {
       const wallValues =  JSON.parse(entity.meta.eWallets.replace(/'/g, '"'));
       for (const bank of wallValues ?? []) {
         this.addLineWallet(bank);
@@ -340,7 +344,7 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
 
     this.setLogoPreview(entity?.logo);
     this.setCurrentTypeAndValidatorFields(entity?.type);
-    this.onInStoreChange(entity.meta.type);
+    this.onInStoreChange(entity?.meta?.type);
   }
 
   addLineBank(value?: string) {
@@ -383,6 +387,10 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     super.save();
   }
 
+  delete(): void {
+    super.delete();
+  }
+
   onInStoreChange($event: any) {
     this.isMetaDetailAvailable = $event === 'e_wallet'||  $event === 'eWallets' || $event === 'edc';
     this.currentMetaType = $event;
@@ -395,4 +403,11 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
       this.currentMetaLabel = '';
     }
   }
+
+  smeLicensePaymentType() {
+    if (!this.configSercvice.isEnterpriseLicense()) {
+      this.typeChoices = this.typeChoices.filter(opt => enumToArray(PaymentTypeSmeClient).includes(opt.value));
+    }
+  }
+
 }

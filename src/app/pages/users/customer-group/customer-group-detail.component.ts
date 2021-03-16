@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { parse } from 'iso8601-duration';
@@ -27,8 +27,8 @@ import { UserSelectionModalComponent } from '@nusantara/shared';
     <form [formGroup]="form" (ngSubmit)="save()">
       <label>
         <span>Name</span>
-        <input type="text" formControlName="name">
-        <nus-field-errors [control]="form.get('name')"></nus-field-errors>
+        <input type="text" [formControl]="name">
+        <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
@@ -41,14 +41,14 @@ import { UserSelectionModalComponent } from '@nusantara/shared';
         <nus-field-errors [control]="type"></nus-field-errors>
       </label>
 
-      <label [ngClass]="{ 'hidden': form.get('timeThreshold').disabled }">
+      <label [class.hidden]="timeThreshold.disabled">
         <span>{{ timeThresholdLabel }}</span>
-        <input type="number" formControlName="timeThreshold">
+        <input type="number" [formControl]="timeThreshold">
       </label>
 
-      <label [ngClass]="{ 'hidden': form.get('amountThreshold').disabled }">
+      <label [class.hidden]="amountThreshold.disabled">
         <span>{{ amountThresholdLabel }}</span>
-        <input type="number" formControlName="amountThreshold">
+        <input type="number" [formControl]="amountThreshold">
       </label>
 
       <table *ngIf="type.value === manual">
@@ -79,11 +79,12 @@ import { UserSelectionModalComponent } from '@nusantara/shared';
 
       <nus-user-selection-modal [selectedUsers]="entity?.customers"></nus-user-selection-modal>
 
-      <div class="actions-container">
-        <button type="submit" [disabled]="!form.valid">Save</button>
-        <button type="button" (click)="navigateToParent(true)">Cancel</button>
-        <button type="button" (click)="delete()" *ngIf="!isNew">Delete</button>
-      </div>
+      <nus-detail-actions
+        [component]="this"
+        (cancel)="navigateToParent(true)"
+        (delete)="delete()">
+      </nus-detail-actions>
+
     </form>
   `,
   styles: [
@@ -143,7 +144,7 @@ export class CustomerGroupDetailComponent extends AbstractDetailComponent<ICusto
     // trigger manually so initial state of the form is accurate.
     this.onTypeChanged(this.type.value);
 
-    this.entity.customers.forEach((customer) => {
+    this.entity?.customers.forEach((customer) => {
       this.addUser(customer);
     });
   }
@@ -161,6 +162,7 @@ export class CustomerGroupDetailComponent extends AbstractDetailComponent<ICusto
       case CustomerGroupType.churned:
         return 'Last purchased ago';
       default:
+        this.timeThreshold.disable();
         return '?!';
     }
   }
@@ -170,6 +172,7 @@ export class CustomerGroupDetailComponent extends AbstractDetailComponent<ICusto
       case CustomerGroupType.lifetimeValue:
         return 'Minimum LTV';
       default:
+        this.amountThreshold.disable();
         return '?!';
     }
   }
@@ -216,5 +219,14 @@ export class CustomerGroupDetailComponent extends AbstractDetailComponent<ICusto
       });
       this.customers.push(f);
     }
+  }
+
+  getFormValue(): any {
+    let formValue = super.getFormValue();
+    formValue = {
+      ...formValue,
+      timeThreshold: `P${formValue.timeThreshold || '0'}D`
+    };
+    return formValue;
   }
 }

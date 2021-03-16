@@ -82,7 +82,10 @@ export class PriceListHostComponent extends AbstractEditingComponent<FormArray> 
     }
 
     this.form.push(f);
+  }
 
+  updatePriceList(entity?: products.IPriceList, index?: number) {
+    this.form.at(index).patchValue(entity);
   }
 
   /**

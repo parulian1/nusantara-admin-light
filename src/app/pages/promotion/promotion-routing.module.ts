@@ -10,6 +10,7 @@ import { VoucherResolver } from './voucher/voucher.resolver';
 import { GiftVoucherComponent, GiftVoucherListComponent } from './gift-voucher';
 import { GiftVoucherListResolver } from './gift-voucher/gift-voucher-list.resolver';
 import { GiftVoucherResolver } from './gift-voucher/gift-voucher.resolver';
+import { RequireIsEnterpriseGuard } from '@nusantara/auth';
 
 const routes: Routes = [
   {
@@ -64,6 +65,7 @@ const routes: Routes = [
   },
   {
     path: 'points',
+    canActivate: [RequireIsEnterpriseGuard],
     children: [
       {
         path: '',
@@ -76,6 +78,7 @@ const routes: Routes = [
   },
   {
     path: 'gift-voucher',
+    canActivate: [RequireIsEnterpriseGuard],
     children: [
       {
         path: '',

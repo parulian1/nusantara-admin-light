@@ -10,4 +10,7 @@ export interface IShippingProvider {
   services: IShippingService[];
   authUser?: string;
   authPass?: string;
+  senderName?: string;
+  senderEmail?: string;
+  senderPhone?: string;
 }
