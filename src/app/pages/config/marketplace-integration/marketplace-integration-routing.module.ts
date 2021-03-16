@@ -14,6 +14,7 @@ import {
 } from './setup';
 import { MarketplaceIntegrationComponent } from './marketplace-integration.component';
 import { PublishListComponent, PublishDetailComponent } from './publish';
+
 const routes: Routes = [
   {
     path: '',
@@ -55,7 +56,7 @@ const routes: Routes = [
         ],
       },
     ],
-    
+
   },
   {
     path: 'setup',

@@ -56,6 +56,12 @@ const routes: Routes = [
 
       { path: '',   redirectTo: '/dashboard', pathMatch: 'full' }
     ]
+  },
+  {
+    path: 'callback',
+    component: AnonWrapperComponent,
+    runGuardsAndResolvers: 'always',
+    loadChildren: () => import('./pages/config/marketplace-integration/callback/callback.module').then(m => m.CallbackModule),
   }
 ];
 

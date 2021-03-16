@@ -182,6 +182,7 @@ export interface IAttributeInformation {
   option:string[];
   value: string;
   identifier:string;
+  marketplaceAttributeName: string;
 }
 
 export interface IMarketplaceItemAttributeInformation {
@@ -190,4 +191,16 @@ export interface IMarketplaceItemAttributeInformation {
   shopSlug:string;
   isConnected: boolean;
   attributes: IAttributeInformation[];
+}
+
+
+export interface ILazadaCredential {
+  sellerEmail: string;
+  warehouse: number;
+  marketplace: string;
+}
+
+export interface ILazadaAuthResponse{
+  sellerEmail: string;
+  warehouseId: number;
 }
