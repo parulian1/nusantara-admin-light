@@ -88,7 +88,8 @@ describe('CategoryComponent', () => {
       sourceMappings: [],
       href: '',
       image: '',
-      parent: categoryCreateNewResp.parent
+      parent: categoryCreateNewResp.parent,
+      isActive: true
     });
     // @ts-ignore
     const sm1 = component.fb.control(categoryCreateNewResp.sourceMappings[0]);
@@ -116,7 +117,8 @@ describe('CategoryComponent', () => {
       sourceMappings: [],
       href: categoryUpdateResp.href,
       image: '',
-      parent: categoryUpdateResp.parent
+      parent: categoryUpdateResp.parent,
+      isActive: true
     });
     // @ts-ignore
     const sm1 = component.fb.control(categoryUpdateResp.sourceMappings[0]);

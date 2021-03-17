@@ -142,8 +142,8 @@ describe('ProductPromotionComponent', () => {
       maxAmount: productPromoResponse.maxAmount,
       isExclusive: productPromoResponse.isExclusive,
       isActive: productPromoResponse.isActive,
-      validFrom: productPromoResponse.validFrom,
-      validTo: productPromoResponse.validTo,
+      validFrom: component.convertDateTime(productPromoResponse.validFrom),
+      validTo: component.convertDateTime(productPromoResponse.validTo),
       banner: '',
       products: [],
       priority: 1,
@@ -171,8 +171,8 @@ describe('ProductPromotionComponent', () => {
     expect(mock.request.body.maxAmount).toBe(productPromoResponse.maxAmount);
     expect(mock.request.body.isExclusive).toEqual(productPromoResponse.isExclusive);
     expect(mock.request.body.isActive).toEqual(productPromoResponse.isActive);
-    expect(mock.request.body.validFrom).toEqual(productPromoResponse.validFrom);
-    expect(mock.request.body.validTo).toEqual(productPromoResponse.validTo);
+    expect(mock.request.body.validFrom).toEqual(component.convertDateTime(productPromoResponse.validFrom) + component.getTimeZone());
+    expect(mock.request.body.validTo).toEqual(component.convertDateTime(productPromoResponse.validTo) + component.getTimeZone());
     expect(mock.request.body.products).toEqual(productPromoResponse.products);
     mock.flush(productPromoResponse, {status: 201, statusText: 'CREATED'});
     httpTestingController.verify();
@@ -189,8 +189,8 @@ describe('ProductPromotionComponent', () => {
       maxAmount: productPromoUpdatedResponse.maxAmount,
       isExclusive: productPromoUpdatedResponse.isExclusive,
       isActive: productPromoUpdatedResponse.isActive,
-      validFrom: productPromoUpdatedResponse.validFrom,
-      validTo: productPromoUpdatedResponse.validTo,
+      validFrom: component.convertDateTime(productPromoUpdatedResponse.validFrom),
+      validTo: component.convertDateTime(productPromoUpdatedResponse.validTo),
       products: [],
       priority: productPromoUpdatedResponse.priority,
       banner: ''
@@ -207,8 +207,8 @@ describe('ProductPromotionComponent', () => {
     expect(mock.request.body.maxAmount).toBe(productPromoUpdatedResponse.maxAmount);
     expect(mock.request.body.isExclusive).toEqual(productPromoUpdatedResponse.isExclusive);
     expect(mock.request.body.isActive).toEqual(productPromoUpdatedResponse.isActive);
-    expect(mock.request.body.validFrom).toEqual(productPromoUpdatedResponse.validFrom);
-    expect(mock.request.body.validTo).toEqual(productPromoUpdatedResponse.validTo);
+    expect(mock.request.body.validFrom).toEqual(component.convertDateTime(productPromoUpdatedResponse.validFrom) + component.getTimeZone());
+    expect(mock.request.body.validTo).toEqual(component.convertDateTime(productPromoUpdatedResponse.validTo) + component.getTimeZone());
     mock.flush(productPromoUpdatedResponse, {status: 200, statusText: 'OK'});
     httpTestingController.verify();
   });

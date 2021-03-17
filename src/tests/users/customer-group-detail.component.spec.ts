@@ -18,8 +18,14 @@ describe('CustomerGroupDetailComponent', () => {
     userCount: 0,
     type: 'manual',
     amountThreshold: null,
-    timeThreshold: null
-};
+    timeThreshold: null,
+    customers: [
+      {
+        email: 'thomas123456789@mailinator.com',
+        href: 'https://staging.bhisma.cloud/api/iam/user/thomas123456789/'
+      }
+    ]
+  };
 
   const CustomerGroupNewlyRegisteredTypeResponse = {
     name: 'delete meh',
@@ -133,7 +139,8 @@ describe('CustomerGroupDetailComponent', () => {
       name: CustomerGroupManualTypeResponse.name,
       type: CustomerGroupManualTypeResponse.type,
       amountThreshold: CustomerGroupManualTypeResponse.amountThreshold,
-      timeThreshold: CustomerGroupManualTypeResponse.timeThreshold
+      timeThreshold: CustomerGroupManualTypeResponse.timeThreshold,
+      customers: []
     });
     component.save();
 
@@ -151,7 +158,8 @@ describe('CustomerGroupDetailComponent', () => {
       name: CustomerGroupNewlyRegisteredTypeResponse.name,
       type: CustomerGroupNewlyRegisteredTypeResponse.type,
       amountThreshold: CustomerGroupNewlyRegisteredTypeResponse.amountThreshold,
-      timeThreshold: '1'
+      timeThreshold: CustomerGroupNewlyRegisteredTypeResponse.timeThreshold,
+      customers: []
     });
     component.save();
 
@@ -170,7 +178,8 @@ describe('CustomerGroupDetailComponent', () => {
       name: CustomerGroupBeforeCertainDateTypeResponse.name,
       type: CustomerGroupBeforeCertainDateTypeResponse.type,
       amountThreshold: CustomerGroupBeforeCertainDateTypeResponse.amountThreshold,
-      timeThreshold: '1'
+      timeThreshold: CustomerGroupBeforeCertainDateTypeResponse.timeThreshold,
+      customers: []
     });
     component.save();
 
@@ -189,7 +198,8 @@ describe('CustomerGroupDetailComponent', () => {
       name: CustomerGroupLTVTypeResponse.name,
       type: CustomerGroupLTVTypeResponse.type,
       amountThreshold: CustomerGroupLTVTypeResponse.amountThreshold,
-      timeThreshold: CustomerGroupLTVTypeResponse.timeThreshold
+      timeThreshold: CustomerGroupLTVTypeResponse.timeThreshold,
+      customers: []
     });
     component.save();
 
@@ -208,7 +218,8 @@ describe('CustomerGroupDetailComponent', () => {
       name: CustomerGroupChurnedTypeResponse.name,
       type: CustomerGroupChurnedTypeResponse.type,
       amountThreshold: CustomerGroupChurnedTypeResponse.amountThreshold,
-      timeThreshold: '2'
+      timeThreshold: '2',
+      customers: []
     });
     component.save();
 

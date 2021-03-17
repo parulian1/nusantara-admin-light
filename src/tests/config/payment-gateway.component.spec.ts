@@ -86,6 +86,12 @@ describe('PaymentGatewayDetailComponent', () => {
       accountHoldNumber: '23456',
       code: '3456',
       isActive: true,
+      allowPos: true,
+      meta: {
+        type: 'eWallets',
+        banks: [],
+        eWallets: []
+      }
     });
     component.form.value.logo = image64;
     component.save();
@@ -113,7 +119,13 @@ describe('PaymentGatewayDetailComponent', () => {
       serverKey: 'def',
       accountNumber: 'abcd',
       accountHoldNumber: 'defgh',
-      code: '2345'
+      code: '2345',
+      allowPos: true,
+      meta: {
+        type: 'eWallets',
+        banks: [],
+        eWallets: []
+      }
     };
 
     component.form.setValue({
@@ -127,7 +139,9 @@ describe('PaymentGatewayDetailComponent', () => {
       accountNumber: UpdatePaymentGateway.accountNumber,
       accountHoldNumber: UpdatePaymentGateway.accountHoldNumber,
       code: UpdatePaymentGateway.code,
-      isActive: true
+      isActive: true,
+      allowPos: UpdatePaymentGateway.allowPos,
+      meta: UpdatePaymentGateway.meta
     });
     component.form.value.logo = image64;
     component.save();

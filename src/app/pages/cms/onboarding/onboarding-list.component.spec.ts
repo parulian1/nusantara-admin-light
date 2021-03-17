@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ActivatedRoute } from '@angular/router';
 
 import { OnboardingListComponent } from './onboarding-list.component';
 
@@ -8,7 +10,9 @@ describe('OnboardingListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ OnboardingListComponent ]
+      declarations: [ OnboardingListComponent ],
+      providers: [ HttpClientTestingModule ],
+      imports: [ ActivatedRoute ]
     })
     .compileComponents();
   }));

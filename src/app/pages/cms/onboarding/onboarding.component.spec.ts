@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { FormBuilder } from '@angular/forms';
 
 import { OnboardingComponent } from './onboarding.component';
 
@@ -8,6 +10,7 @@ describe('OnboardingComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      imports: [ HttpClientTestingModule, FormBuilder ],
       declarations: [ OnboardingComponent ]
     })
     .compileComponents();
