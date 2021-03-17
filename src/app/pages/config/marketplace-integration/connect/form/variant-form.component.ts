@@ -6,7 +6,7 @@ import {
   FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR,
 } from '@angular/forms';
 import { MarketplaceClientService } from '@nusantara/services';
-import {IShopeeAuthResponse} from "@nusantara/models";
+import {IShopeeAuthResponse} from '@nusantara/models';
 
 @Component({
   selector: 'nus-variant-client-form',
@@ -19,9 +19,9 @@ import {IShopeeAuthResponse} from "@nusantara/models";
             <div class="variant-option">
               <span *ngFor="let order of variantFormArray.controls;
                 let i = index" [formGroupName]="i">
-                  <input type="radio" 
-                    (change)="onChangeVariant(i)" 
-                    formControlName="variant" 
+                  <input type="radio"
+                    (change)="onChangeVariant(i)"
+                    formControlName="variant"
                     name="variant"
                     [checked]="i === variantChecked"/>
                   <span>{{variantType[i].name}}</span>

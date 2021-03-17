@@ -3,14 +3,16 @@ import {AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Valid
 import { ActivatedRoute, Router } from '@angular/router';
 import {AbstractDetailComponent, ToastLevelEnum, ToastService} from '@nusantara/core';
 import { MarketplaceClientService } from '@nusantara/services';
-import {MarketplaceClientEnum} from "../markeplace-client-enum";
+import {MarketplaceClientEnum} from '../markeplace-client-enum';
 import {
   ILazadaAuthResponse,
   ILazadaCredential,
   IMarketplaceWarehouse,
-  IShopeeAuthResponse, ITokopediaAuthResponse, ITokopediaCredential
-} from "../../../../../models";
-import {HttpErrorResponse} from "@angular/common/http";
+  IShopeeAuthResponse,
+  ITokopediaAuthResponse,
+  ITokopediaCredential
+} from '@nusantara/models';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'nus-tokopedia-form',
