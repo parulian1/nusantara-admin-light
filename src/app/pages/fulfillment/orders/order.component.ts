@@ -177,11 +177,27 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
         selectedOrderDetail.shipmentHistory.shippingLabelUrl = entity.shippingLabelUrl;
       });
     }
-
   }
 
   printConnote(labelUrl: string) {
-    window.open(labelUrl).print();
+    let windowContent = '<!DOCTYPE html>';
+    windowContent += '<html>';
+    windowContent += '<head><title>Print</title></head>';
+    windowContent += '<body>';
+    windowContent += '<img src="' + labelUrl + '">';
+    windowContent += '</body>';
+    windowContent += '</html>';
+
+    const printWin = window.open('', '', 'width=' + screen.availWidth + ',height=' + screen.availHeight);
+    printWin.document.open();
+    printWin.document.write(windowContent);
+
+    printWin.document.addEventListener('load', () => {
+      printWin.focus();
+      printWin.print();
+      printWin.document.close();
+      printWin.close();
+    }, true);
   }
 
   getOrderAddress(): string {
@@ -216,6 +232,7 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
             (response) => {
               // its not correct, IOrder not same as IOrderDetail
               this.orderDetailData = response as any;
+              this.fetchAwbUrl();
             },
             (error) => {
               console.log('Error', error);
