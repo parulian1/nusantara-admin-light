@@ -8,4 +8,5 @@ export interface ISiteConfig extends INamedHrefEntity {
   customerServiceEmail?: string;
   extraConfig: ISiteConfigExtra;
   socialMedias: ISocialMedia[];
+  licenseType?: string;
 }

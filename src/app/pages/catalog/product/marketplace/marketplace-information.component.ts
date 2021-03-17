@@ -69,6 +69,7 @@ import { AbstractEditingComponent } from '@nusantara/core';
                             {{ attributesFormArray.controls[i].value.name }}
                           </td>
                           <td *ngIf="storeIndex === attributesFormArray.controls[i].value.indexShop">
+
                             <div *ngIf="attributesFormArray.controls[i].value.type === 'combo box' || attributesFormArray.controls[i].value.type === 'dropdown'">
                               <select #selecteEditAttr formControlName="value"
                                 (change)="attrChange(selecteEditAttr.value, i)">
@@ -90,14 +91,24 @@ import { AbstractEditingComponent } from '@nusantara/core';
                                 </div>
                               </div>
                             </div>
-                            <input formControlName="value" type="text" *ngIf="attributesFormArray.controls[i].value.type === 'text'"/>
-                            <input formControlName="value" type="number" *ngIf="attributesFormArray.controls[i].value.type === 'integer'"/>
+                            <div *ngIf="client.option === LZD && attributesFormArray.controls[i].value.marketplaceAttributeName === 'SellerSku' || attributesFormArray.controls[i].value.marketplaceAttributeName === 'price'; else nonDisable">
+                              <input formControlName="value" type="text" readonly *ngIf="attributesFormArray.controls[i].value.marketplaceAttributeName === 'SellerSku'"/>
+                              <input formControlName="value" type="number" readonly *ngIf="attributesFormArray.controls[i].value.marketplaceAttributeName === 'price'"/>
+                            </div>
+
+                            <ng-template #nonDisable>
+                                <input formControlName="value" type="text" *ngIf="attributesFormArray.controls[i].value.type === 'text'"/>
+                              <input formControlName="value" type="number" *ngIf="attributesFormArray.controls[i].value.type === 'integer'"/>
+                            </ng-template>
+
+                            <input formControlName="value" type="text" *ngIf="attributesFormArray.controls[i].value.type === 'text' && client.option !== LZD"/>
+                            <input formControlName="value" type="number" *ngIf="attributesFormArray.controls[i].value.type === 'integer' && client.option !== LZD"/>
                           </td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
-                  <ng-template #noAttributeMatch> 
+                  <ng-template #noAttributeMatch>
                     <div class="no-attribute">
                       <div *ngIf="client.option === TSC; else nonTscEmptyInfo">
                         <h3 class="subheading-1">Product class doesn't have attribute.</h3>
@@ -177,6 +188,7 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
   @ViewChild(MarketplaceStockInfoModalComponent) marketplaceStockInfo: MarketplaceStockInfoModalComponent;
 
   readonly TSC = 'tsc';
+  readonly LZD = 'lazada';
 
   productClassChanged: boolean;
   emptyStore: boolean;
@@ -273,7 +285,6 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
       .getItemMarketplaceAttribute(this.selectedTab,this.productClassSlug, this.productSlug)
       .subscribe((data: IMarketplaceItemAttributeInformation[]) => {
         this.marketplaceStoreAttributes = data;
-        console.log(this.marketplaceStoreAttributes)
         if(!data){
           this.emptyStore = true;
         }
@@ -290,6 +301,7 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
                   option: [attr.option],
                   newValue: null,
                   indexShop: index,
+                  marketplaceAttributeName: [attr.marketplaceAttributeName]
                 })
               );
             });

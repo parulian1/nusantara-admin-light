@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import {CallbackComponent} from './callback.component';
-import { RequireAnonymousGuard, RequireLoggedInGuard } from '@nusantara/auth/guards';
+import { RequireLoggedInGuard } from '@nusantara/auth/guards';
 
 const authRoutes: Routes = [
   {

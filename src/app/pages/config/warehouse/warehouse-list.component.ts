@@ -3,20 +3,23 @@ import { ActivatedRoute } from '@angular/router';
 
 import { AbstractListComponent } from '@nusantara/core';
 import { IWarehouse } from '@nusantara/models';
+import { SiteConfigService } from '@nusantara/services';
 
 @Component({
   selector: 'nus-warehouse-list',
   template: `
     <nus-list-header
       title="Warehouses"
-      description="A warehouse is any location where inventory is held;  This can involved retail locations.">
+      description="A warehouse is any location where inventory is held;  This can involved retail locations."
+      [canAddNew]="canAddNew()"
+    >
     </nus-list-header>
 
     <div>
       <nus-include-deleted></nus-include-deleted>
     </div>
 
-    <nus-pagination [page]="page"></nus-pagination>
+    <nus-pagination *ngIf="enterprise" [page]="page"></nus-pagination>
 
     <table>
       <thead>
@@ -41,8 +44,21 @@ import { IWarehouse } from '@nusantara/models';
       </tbody>
     </table>
   `,
-  styles: [],
+  styles: []
 })
 export class WarehouseListComponent extends AbstractListComponent<IWarehouse> {
-  constructor(route: ActivatedRoute) { super(route); }
+  enterprise = true;
+
+  constructor(route: ActivatedRoute, public configService: SiteConfigService) {
+    super(route);
+    this.isEnterpriseLicense();
+  }
+
+  isEnterpriseLicense() {
+    this.enterprise = this.configService.isEnterpriseLicense();
+  }
+
+  canAddNew() {
+    return (!this.enterprise && this.page.entities.length < 1) || this.enterprise;
+  }
 }

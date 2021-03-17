@@ -1,5 +1,5 @@
 import { ReactiveFormsModule } from '@angular/forms';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -20,7 +20,7 @@ describe('LoginComponent', () => {
   let authServiceSpy: jasmine.SpyObj<AuthService>;
   let httpTestingController: HttpTestingController;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
 
     authServiceSpy = jasmine.createSpyObj('AuthService', ['login']);
 

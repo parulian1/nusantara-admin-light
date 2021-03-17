@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
@@ -13,7 +13,7 @@ describe('DashboardComponent', () => {
 
   const fakeResolvedData = { dashboard: { href: 'https://something/?foo=bar&titled=true', } };
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
@@ -41,7 +41,7 @@ describe('DashboardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('sets metabase iframe url and replaces query param titled=true with titled=false', async(() => {
+  it('sets metabase iframe url and replaces query param titled=true with titled=false', waitForAsync(() => {
     // get the full dom rendered by the component
     const iframe = fixture.debugElement.nativeElement.querySelector('iframe');
     expect(iframe.src).toEqual('https://something/?foo=bar&titled=false');

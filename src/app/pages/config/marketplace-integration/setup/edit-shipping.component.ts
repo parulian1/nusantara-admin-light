@@ -66,7 +66,7 @@ import * as fromReducer from '@nusantara/reducers';
             (click)="onSubmit()"
             [disabled]="isBusy">
             Save
-          </button>  
+          </button>
           <button type="button" class="control" (click)="onBack()"
             [ngClass]="{ 'secondary ghost': !readOnly.includes((currentShop$ | async)?.marketplace) }">
             Cancel
@@ -97,7 +97,8 @@ export class EditShippingComponent implements OnInit, OnDestroy {
   subscription: Subscription;
 
   readOnly = [
-    'tsc'
+    'tsc',
+    'lazada'
   ]
 
   constructor(

@@ -182,6 +182,7 @@ export interface IAttributeInformation {
   option:string[];
   value: string;
   identifier:string;
+  marketplaceAttributeName: string;
 }
 
 export interface IMarketplaceItemAttributeInformation {

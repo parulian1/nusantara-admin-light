@@ -14,7 +14,7 @@ import {
 } from './setup';
 import { MarketplaceIntegrationComponent } from './marketplace-integration.component';
 import { PublishListComponent, PublishDetailComponent } from './publish';
-import {CallbackFormComponent} from "./connect/callback-form.component";
+
 const routes: Routes = [
   {
     path: '',
@@ -89,16 +89,6 @@ const routes: Routes = [
         runGuardsAndResolvers: 'always',
       },
     ],
-  },
-  {
-    path: 'callback',
-    children: [
-        {
-          path: '',
-          component: CallbackFormComponent,
-          runGuardsAndResolvers: 'always',
-        }
-      ]
   },
 ];
 
