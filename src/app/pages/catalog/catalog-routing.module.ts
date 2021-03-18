@@ -26,6 +26,7 @@ import { ProductOptionListComponent, AllProductOptionResolver, ProductOptionComp
 import { DurationListResolver, LengthListResolver, PacketListResolver } from './product/subscription';
 import { RequireIsEnterpriseGuard } from '@nusantara/auth/guards';
 import { EditShippingComponent } from '../config/marketplace-integration';
+import { AllVendorResolver } from './product/all-vendor.resolver';
 
 const routes: Routes = [
   {
@@ -72,7 +73,7 @@ const routes: Routes = [
         component: ProductComponent,
         resolve: {
           productClasses: AllProductClassResolver,
-          vendors: VendorListResolver,
+          vendors: AllVendorResolver,
           categories: AllCategoryResolver,
           mediaTypes: MediaTypeResolver,
           priceListTypes: PriceListTypeResolver,
@@ -90,7 +91,7 @@ const routes: Routes = [
         resolve: {
           entity: ProductResolver,
           productClasses: AllProductClassResolver,
-          vendors: VendorListResolver,
+          vendors: AllVendorResolver,
           categories: AllCategoryResolver,
           mediaTypes: MediaTypeResolver,
           priceListTypes: PriceListTypeResolver,
@@ -107,7 +108,7 @@ const routes: Routes = [
         component: ProductComponent,
         resolve: {
           productClasses: AllProductClassResolver,
-          vendors: VendorListResolver,
+          vendors: AllVendorResolver,
           categories: AllCategoryResolver,
           mediaTypes: MediaTypeResolver,
           priceListTypes: PriceListTypeResolver,
@@ -123,7 +124,7 @@ const routes: Routes = [
         resolve: {
           entity: ProductResolver,
           productClasses: AllProductClassResolver,
-          vendors: VendorListResolver,
+          vendors: AllVendorResolver,
           categories: AllCategoryResolver,
           mediaTypes: MediaTypeResolver,
           priceListTypes: PriceListTypeResolver,
