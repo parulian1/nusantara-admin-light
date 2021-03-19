@@ -148,6 +148,7 @@ export class VendorComponent extends AbstractDetailComponent<IVendor> {
 
     this.setBannerImagePreview(entity?.bannerImage);
     this.setIconImagePreview(entity?.iconImage);
+    this.isActive.markAsTouched();
   }
 
   setIconImagePreview(data?: Event|string) {

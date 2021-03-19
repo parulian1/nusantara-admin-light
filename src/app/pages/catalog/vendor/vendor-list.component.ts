@@ -24,6 +24,7 @@ import { ActivatedRoute } from '@angular/router';
         <th class="centered">Has Icon</th>
         <th class="centered">Has Banner</th>
         <th class="numeric">Product Count</th>
+        <th class="centered">Is Active</th>
       </tr>
       </thead>
       <tbody>
@@ -32,6 +33,7 @@ import { ActivatedRoute } from '@angular/router';
         <td class="centered"><nus-true-false [value]="!!entity.iconImage" [showFalseIcon]="false"></nus-true-false></td>
         <td class="centered"><nus-true-false [value]="!!entity.bannerImage" [showFalseIcon]="false"></nus-true-false></td>
         <td class="numeric">{{ entity.productCount }}</td>
+        <td class="centered"><nus-true-false [value]="entity.isActive"></nus-true-false></td>
       </tr>
       </tbody>
     </table>
