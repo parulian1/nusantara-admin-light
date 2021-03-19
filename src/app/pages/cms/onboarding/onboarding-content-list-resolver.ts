@@ -1,15 +1,15 @@
-import {IOnBoarding, products} from '@nusantara/models';
-import {Injectable} from '@angular/core';
-import {Resolve, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {Observable} from 'rxjs';
-import {OnboardingService} from '@nusantara/services';
-import {HttpParams} from "@angular/common/http";
-import {PagedResponse} from "@nusantara/core";
+import { IOnBoarding } from '@nusantara/models';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { Observable } from 'rxjs';
+import { OnboardingService } from '@nusantara/services';
+import { HttpParams } from '@angular/common/http';
+import { PagedResponse } from '@nusantara/core';
 
 @Injectable({
   providedIn: 'root',
 })
-export class OnboardingContentListResolver implements Resolve<PagedResponse<IOnBoarding>>{
+export class OnboardingContentListResolver implements Resolve<PagedResponse<IOnBoarding>> {
   constructor(private service: OnboardingService) {
   }
 

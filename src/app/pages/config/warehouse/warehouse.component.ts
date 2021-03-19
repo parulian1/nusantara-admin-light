@@ -144,7 +144,7 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
       this.subLocationTypes = data.subLocationTypes;
 
       // Avoid multiple warehouses for SME clients
-      let isWarehouseActive = data.allWarehouses.find(e => e.href === this.href.value);
+      const isWarehouseActive = data.allWarehouses.find(e => e.href === this.href.value);
       if (data.allWarehouses.length > 0 && !isWarehouseActive && !this.configService.isEnterpriseLicense()) {
         this.disableIsActive = true;
       }

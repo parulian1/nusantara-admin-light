@@ -9,5 +9,5 @@ export interface INamedHrefEntity extends IHrefEntity {
 
 export interface INamedHrefEntityWarehouse extends IHrefEntity {
   name: string;
-  code:string;
+  code: string;
 }

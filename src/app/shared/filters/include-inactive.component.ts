@@ -15,7 +15,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class IncludeInactiveComponent implements OnInit {
   public applied = false;
-  @Input() text = "Show InActive";
+  @Input() text = 'Show InActive';
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute) {

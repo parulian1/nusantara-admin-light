@@ -47,8 +47,8 @@ export class OrderService extends AbstractCrudService<IOrder> {
     userEmail?: string
   ): Observable<PagedResponse<IOrder>> {
     const rawParams = {
-      'page': page.toFixed(0).toString(),
-      'user': userEmail,
+      page: page.toFixed(0).toString(),
+      user: userEmail,
     };
 
     return this.httpClient

@@ -40,7 +40,7 @@ import { SubFormComponent } from './sub-form.component';
       <div class="wrapper">
         <h1 class="heading-1">Match Attribute (3/3)</h1>
         <p>Choose {{ currentShop }} attributes for your product.</p>
-      
+
         <div class="form">
           <label>
             <span>{{ currentShop }} Category </span>
@@ -63,14 +63,14 @@ import { SubFormComponent } from './sub-form.component';
             <div formArrayName="attributes" class="attributes">
               <div *ngFor="let attr of attributes.controls; let i = index" [formGroupName]="i">
                 <input type="text" formControlName="marketplaceName" readonly />
-                <input type="text" formControlName="marketplaceType" 
+                <input type="text" formControlName="marketplaceType"
                   [ngClass]="attributes.controls[i].get('bhismaType').invalid? 'mismatch': null" readonly/>
                 <div>
                   <select #selectedAttr
                     formControlName="bhismaObj"
                     (change)="attrChange(selectedAttr.value, i)"
                     [ngClass]="{ 'mismatch warning': attributes.controls[i].get('bhismaObj').invalid}">
-                    
+
                     <option [ngValue]="null">Select an option</option>
                     <option *ngFor="let opt of bhismaAttributes" [ngValue]="opt">
                       {{ opt.name }}
@@ -95,7 +95,7 @@ import { SubFormComponent } from './sub-form.component';
                 <div>
                   <select formControlName="bhismaType"
                     [ngClass]="attributes.controls[i].get('bhismaType').valid? 'match': 'mismatch warning'">
-                    
+
                     <option [ngValue]="null">Select an option</option>
                     <option *ngFor="let type of bhismaAttributeTypes">{{ type }}</option>
                   </select>
@@ -111,7 +111,7 @@ import { SubFormComponent } from './sub-form.component';
 
       <button type="button" class="control" (click)="onSubmit()" [disabled]="form.invalid">
         Submit
-      </button>      
+      </button>
       <button type="button" class="control secondary ghost" (click)="confirmModal.open()">
         Previous
       </button>
@@ -127,11 +127,11 @@ import { SubFormComponent } from './sub-form.component';
     'label { margin-bottom: 12px; min-height: 0; }',
     'button:not(:first-of-type) { margin-left: 5px; }',
     '.attribute-group{ display: grid; grid-template-columns: repeat(4, 1fr); grid-gap: 10px; margin-bottom: 4px; };',
-    `.attributes > div { 
-        display: grid; 
-        grid-template-columns: repeat(4, 1fr); 
+    `.attributes > div {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
         grid-gap: 10px;
-        margin-bottom: 8px; 
+        margin-bottom: 8px;
     };`,
     '.new-attr-input { margin-top: 4px; }',
     '.add-new-attr { font-weight: 600; font-size: 16px; }',
@@ -257,7 +257,7 @@ export class AttributeMatchingFormComponent
   }
 
   addAttributeInputs(attrs: IShopAttribute[]) {
-    if(attrs) {
+    if (attrs) {
       attrs.forEach((obj) => {
         const attrGroup = this.fb.group({
           marketplaceName: obj.name,
@@ -302,7 +302,7 @@ export class AttributeMatchingFormComponent
     // form value for marketplace api
     this.save.next(formValue);
 
-    if (this.newAttrFiltered.length != 0) {
+    if (this.newAttrFiltered.length !== 0) {
       const newAttrValue = {
         attributes: this.newAttrFiltered,
       };

@@ -11,7 +11,7 @@ import {
 } from '@nusantara/models';
 import { IReceivingOrder } from '@nusantara/models/inventory';
 import { AbstractDetailComponent } from '@nusantara/core/components';
-import { 
+import {
   InventoryReceivingOrderService,
   MarketplaceClientService
 } from '@nusantara/services';
@@ -139,7 +139,7 @@ import { catchError } from 'rxjs/operators';
 export class InventoryReceivingDetailComponent extends AbstractDetailComponent<IReceivingOrder> implements OnInit {
   entity: IReceivingOrder;
   warehouses: IWarehouse[];
-  warehouseDetail : IWarehouseDetail[];
+  warehouseDetail: IWarehouseDetail[];
   marketplaceValue = 0;
 
   @ViewChild(MarketplaceChannelInfoModalComponent) marketplaceChannelInfo: MarketplaceChannelInfoModalComponent;
@@ -150,7 +150,7 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
               private location: Location,
               public router: Router,
               public clientService: MarketplaceClientService,
-              private fb: FormBuilder, 
+              private fb: FormBuilder,
               public toast: ToastService) {
     super(route, router, toast, service);
   }
@@ -195,8 +195,8 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
         if (resp instanceof ErrorResult) {
           this.onSaveError(resp.errorDetails);
         } else {
-          if(this.getFormValue().status !== "rejected"){
-            if(this.marketplaceValue !== 0){
+          if (this.getFormValue().status !== 'rejected'){
+            if (this.marketplaceValue !== 0){
                 this.marketplaceProgressModal.open();
             } else {
               this.location.back();

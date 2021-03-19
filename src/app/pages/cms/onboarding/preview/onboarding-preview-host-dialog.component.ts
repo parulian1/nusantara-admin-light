@@ -1,8 +1,8 @@
-import {AbstractEditingComponent, DialogResult} from '@nusantara/core';
-import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AfterViewInit, Component, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
-import {NgxSmartModalComponent} from "ngx-smart-modal";
-import {IOnboardingContent} from "@nusantara/models";
+import { AbstractEditingComponent, DialogResult } from '@nusantara/core';
+import { AbstractControl, FormArray, FormBuilder, Validators } from '@angular/forms';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
+import { NgxSmartModalComponent } from 'ngx-smart-modal';
+import { IOnboardingContent } from '@nusantara/models';
 
 @Component({
   selector: 'nus-onboarding-preview-host-dialog',
@@ -103,6 +103,7 @@ import {IOnboardingContent} from "@nusantara/models";
       top: 25px;
       right: 30px;
     }
+
     ::ng-deep .content-container .nsm-content {
       background-color: transparent;
       width: 800px;
@@ -125,8 +126,7 @@ import {IOnboardingContent} from "@nusantara/models";
   `]
 })
 export class OnboardingPreviewHostDialogComponent extends AbstractEditingComponent<FormArray> implements OnInit,
-  AfterViewInit
-{
+  AfterViewInit {
   @Input() form: FormArray;
   @ViewChild('modal') modal: NgxSmartModalComponent;
 
@@ -155,7 +155,7 @@ export class OnboardingPreviewHostDialogComponent extends AbstractEditingCompone
   addContent(content?: IOnboardingContent) {
     const form = this.fb.group({
       href: [content?.href ?? '', []],
-      image: [content?.image, content?.image ? []: [Validators.required]],
+      image: [content?.image, content?.image ? [] : [Validators.required]],
       name: [content?.name, [Validators.required, Validators.maxLength(50)]],
       description: [content?.description, [Validators.maxLength(255)]],
       buttonStatus: [content?.buttonStatus ?? false, []],
@@ -176,35 +176,35 @@ export class OnboardingPreviewHostDialogComponent extends AbstractEditingCompone
     this.modal.close();
   }
 
-  getContentName(formControl?: AbstractControl) : string {
+  getContentName(formControl?: AbstractControl): string {
     if (!!formControl) {
       return formControl.value.name;
     }
     return '';
   }
 
-  getContentDescription(formControl?: AbstractControl) : string {
+  getContentDescription(formControl?: AbstractControl): string {
     if (!!formControl) {
       return formControl.value.description;
     }
     return '';
   }
 
-  getContentImage(formControl?: AbstractControl) : string {
+  getContentImage(formControl?: AbstractControl): string {
     if (!!formControl && !!formControl.get('image')) {
       this.setImagePreview(formControl.value.image);
     }
     return this.imagePreviewUrl;
   }
 
-  getContentButtonStatus(formControl?: AbstractControl) : boolean {
+  getContentButtonStatus(formControl?: AbstractControl): boolean {
     if (!!formControl && !!formControl.value.buttonStatus) {
       return true;
     }
     return false;
   }
 
-  getContentButtonText(formControl?: AbstractControl) : string {
+  getContentButtonText(formControl?: AbstractControl): string {
     if (!!formControl && !!formControl.get('buttonText')) {
       return formControl.value.buttonText;
     }

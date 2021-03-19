@@ -30,7 +30,7 @@ import {
   OnboardingContentImageComponent,
   OnboardingPreviewHostDialogComponent
 } from './onboarding';
-import {DragDropModule} from "@angular/cdk/drag-drop";
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 
 @NgModule({

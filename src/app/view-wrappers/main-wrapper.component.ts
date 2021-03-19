@@ -29,82 +29,82 @@ import { SubscriptionLike } from 'rxjs';
         <li class="icon-button">
           <a [routerLink]="['/dashboard']" routerLinkActive="active">
             <i class="material-icons">dashboard</i>
-            <span translate>Dashboard</span>
+            <span translate i18n>Dashboard</span>
             </a>
         </li>
 
         <li class="section-header">
           <i class="material-icons">store</i>
-          <span>Catalog Management</span>
+          <span i18n>Catalog Management</span>
         </li>
-        <li><a [routerLink]="['/catalog/products']" routerLinkActive="active" translate>Products</a></li>
-        <li><a [routerLink]="['/catalog/categories']" routerLinkActive="active" translate>Categories</a></li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/catalog/product-options']" routerLinkActive="active" translate>Product Options</a></li>
-        <li><a [routerLink]="['/catalog/product-classes']" routerLinkActive="active" translate>Product Classes</a></li>
-        <li><a [routerLink]="['/catalog/vendors']" routerLinkActive="active" translate>Vendors</a></li>
+        <li><a [routerLink]="['/catalog/products']" routerLinkActive="active" translate i18n>Products</a></li>
+        <li><a [routerLink]="['/catalog/categories']" routerLinkActive="active" translate i18n>Categories</a></li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/catalog/product-options']" routerLinkActive="active" translate i18n>Product Options</a></li>
+        <li><a [routerLink]="['/catalog/product-classes']" routerLinkActive="active" translate i18n>Product Classes</a></li>
+        <li><a [routerLink]="['/catalog/vendors']" routerLinkActive="active" translate i18n>Vendors</a></li>
 
         <li class="section-header" *ngIf="enterpriseGuard.canActivate(null, null)">
           <i class="material-icons">assignment</i>
-          <span>Inventory Management</span>
+          <span i18n>Inventory Management</span>
         </li>
         <li *ngIf="enterpriseGuard.canActivate(null, null)">
-          <a [routerLink]="['/inventory/orders-list']" routerLinkActive="active" translate>Pending Orders</a>
+          <a [routerLink]="['/inventory/orders-list']" routerLinkActive="active" translate i18n>Pending Orders</a>
         </li>
         <li *ngIf="enterpriseGuard.canActivate(null, null)">
-          <a [routerLink]="['/inventory/receiving']" routerLinkActive="active" translate>Delivery (Receiving)</a>
+          <a [routerLink]="['/inventory/receiving']" routerLinkActive="active" translate i18n>Delivery (Receiving)</a>
         </li>
         <li *ngIf="enterpriseGuard.canActivate(null, null)">
-          <a [routerLink]="['/inventory/transfer-order']" routerLinkActive="active" translate>Transfer</a>
+          <a [routerLink]="['/inventory/transfer-order']" routerLinkActive="active" translate i18n>Transfer</a>
         </li>
 <!--        <li><a [routerLink]="['/inventory/adjustment']" routerLinkActive="active" translate>Adjustment</a></li>-->
 
         <li class="section-header">
           <i class="material-icons">local_offer</i>
-          <span>Promotion Management</span>
+          <span i18n>Promotion Management</span>
         </li>
-        <li><a [routerLink]="['/promotion/promos']" routerLinkActive="active" translate>Promos</a></li>
-        <li><a [routerLink]="['/promotion/vouchers']" routerLinkActive="active" translate>Vouchers</a></li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/promotion/points']" routerLinkActive="active" translate>Points</a></li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/promotion/gift-voucher']" routerLinkActive="active" translate>Gift Vouchers</a></li>
+        <li><a [routerLink]="['/promotion/promos']" routerLinkActive="active" translate i18n>Promos</a></li>
+        <li><a [routerLink]="['/promotion/vouchers']" routerLinkActive="active" translate i18n>Vouchers</a></li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/promotion/points']" routerLinkActive="active" translate i18n>Points</a></li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/promotion/gift-voucher']" routerLinkActive="active" translate i18n>Gift Vouchers</a></li>
 
         <li class="section-header">
           <i class="material-icons">edit</i>
-          <span>CMS</span>
+          <span i18n>CMS</span>
         </li>
 <!--        <li><a [routerLink]="['/cms/widgets']" routerLinkActive="active" translate>Widgets</a></li>-->
-        <li><a [routerLink]="['/cms/banners']" routerLinkActive="active">Banners</a></li>
-        <li><a [routerLink]="['/cms/testimonials']" routerLinkActive="active">Testimonials</a></li>
-        <li><a [routerLink]="['/cms/flat-pages']" routerLinkActive="active">Pages</a></li>
-        <li><a [routerLink]="['/cms/navigation']" routerLinkActive="active">Header Navigation</a></li>
-        <li><a [routerLink]="['/cms/content-footers']" routerLinkActive="active">Content Footers</a></li>
-        <li><a [routerLink]="['/cms/highlights']" routerLinkActive="active">Highlights</a></li>
-        <li><a [routerLink]="['/cms/sla']" routerLinkActive="active">SLA</a></li>
+        <li><a [routerLink]="['/cms/banners']" routerLinkActive="active" i18n>Banners</a></li>
+        <li><a [routerLink]="['/cms/testimonials']" routerLinkActive="active" i18n>Testimonials</a></li>
+        <li><a [routerLink]="['/cms/flat-pages']" routerLinkActive="active" i18n>Pages</a></li>
+        <li><a [routerLink]="['/cms/navigation']" routerLinkActive="active" i18n>Header Navigation</a></li>
+        <li><a [routerLink]="['/cms/content-footers']" routerLinkActive="active" i18n>Content Footers</a></li>
+        <li><a [routerLink]="['/cms/highlights']" routerLinkActive="active" i18n>Highlights</a></li>
+        <li><a [routerLink]="['/cms/sla']" routerLinkActive="active" i18n>SLA</a></li>
         <li *ngIf="enterpriseGuard.canActivate(null, null)">
-          <a [routerLink]="['/cms/video-integration']" routerLinkActive="active">Video Integration</a>
+          <a [routerLink]="['/cms/video-integration']" routerLinkActive="active" i18n>Video Integration</a>
         </li>
         <li *ngIf="enterpriseGuard.canActivate(null, null)">
-          <a [routerLink]="['/cms/onboardingcontent']" routerLinkActive="active">Onboarding</a>
+          <a [routerLink]="['/cms/onboardingcontent']" routerLinkActive="active" i18n>Onboarding</a>
         </li>
 
 
         <li class="section-header">
           <i class="material-icons">shopping_cart</i>
-          <span>Order Fulfillment</span>
+          <span i18n>Order Fulfillment</span>
         </li>
-        <li><a [routerLink]="['/fulfillment/orders']" routerLinkActive="active" translate>Orders</a></li>
+        <li><a [routerLink]="['/fulfillment/orders']" routerLinkActive="active" translate i18n>Orders</a></li>
 
         <li class="section-header">
           <i class="material-icons">people</i>
-          <span>Customers and Users</span>
+          <span i18n>Customers and Users</span>
         </li>
-        <li><a [routerLink]="['/users/customer']" routerLinkActive="active" translate>Customers</a></li>
+        <li><a [routerLink]="['/users/customer']" routerLinkActive="active" translate i18n>Customers</a></li>
         <li *ngIf="enterpriseGuard.canActivate(null, null)">
-          <a [routerLink]="['/users/customer-groups']" routerLinkActive="active" translate>Customer Groups</a>
+          <a [routerLink]="['/users/customer-groups']" routerLinkActive="active" translate i18n>Customer Groups</a>
         </li>
-        <li><a [routerLink]="['/users/employee']" routerLinkActive="active" translate>Employees</a></li>
+        <li><a [routerLink]="['/users/employee']" routerLinkActive="active" translate i18n>Employees</a></li>
 
         <li *ngIf="enterpriseGuard.canActivate(null, null)" class="icon-button" translate>
-          <a href="https://reports.bhisma.cloud" target="_blank">
+          <a href="https://reports.bhisma.cloud" target="_blank" i18n>
             <i class="material-icons">assessment</i>Reports
           </a>
         </li>
@@ -112,7 +112,7 @@ import { SubscriptionLike } from 'rxjs';
         <li class="icon-button">
           <a [routerLink]="['/config']" routerLinkActive="active">
             <i class="material-icons">settings</i>
-            <span translate>Config</span>
+            <span translate i18n>Config</span>
           </a>
         </li>
 
@@ -303,8 +303,8 @@ export class MainWrapperComponent implements OnInit, OnDestroy {
   isBusy = false;
 
   constructor(public authService: AuthService,
-    public router: Router,
-    public enterpriseGuard: RequireIsEnterpriseGuard) {
+              public router: Router,
+              public enterpriseGuard: RequireIsEnterpriseGuard) {
 
   }
 

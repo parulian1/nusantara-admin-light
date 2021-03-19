@@ -1,17 +1,17 @@
-import {Component,EventEmitter, Input, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, ViewChild} from '@angular/core';
 import { NgxSmartModalComponent } from 'ngx-smart-modal';
 import { DialogResult} from '../core';
 import {IMarketplaceItemDetailInformation} from '../models';
 
 /**
  * Used in Delivery Product Detail Page - Makertplace Integration Section
- * 
+ *
  */
 
 @Component({
   selector: 'nus-marketplace-stock-info-modal',
   template: `
-    <ngx-smart-modal #modal [identifier]="'marketplaceStockInfoModal'" 
+    <ngx-smart-modal #modal [identifier]="'marketplaceStockInfoModal'"
     [customClass]="'wide-modal no-padding-modal'">
       <h2 class="heading-2">Marketplace Information</h2>
       <div class="content">
@@ -28,11 +28,11 @@ import {IMarketplaceItemDetailInformation} from '../models';
               <tbody>
                   <ng-container *ngFor="let mp of warehouseInfoDetail">
                     <tr *ngFor="let store of mp.store">
-                      <td>{{ mp.warehouse }}</td>  
+                      <td>{{ mp.warehouse }}</td>
                       <td>{{ store.marketplace }}</td>
                       <td class="numeric">{{ mp.totalStock }}</td>
                       <td>{{ store.name }}</td>
-                    </tr>                    
+                    </tr>
                   </ng-container>
               </tbody>
           </table>

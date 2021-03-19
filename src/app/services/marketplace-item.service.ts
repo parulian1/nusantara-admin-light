@@ -30,7 +30,7 @@ export class MarketplaceItemService {
 
   patchItemAttribute(formData: FormData, productClassSlug: string): Observable<any> {
     return this.httpClient.patch(
-      `${this.baseUrl}/${productClassSlug}/attribute/`,formData
+      `${this.baseUrl}/${productClassSlug}/attribute/`, formData
     );
   }
 }

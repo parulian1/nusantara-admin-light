@@ -135,7 +135,7 @@ describe('CustomerGroupDetailComponent', () => {
       amountThreshold: CustomerGroupManualTypeResponse.amountThreshold,
       timeThreshold: CustomerGroupManualTypeResponse.timeThreshold
     });
-    component.submit();
+    component.save();
 
     const mock = httpTestingController.expectOne('/api/iam/customer-group/');
     expect(mock.request.method).toEqual('POST');
@@ -153,7 +153,7 @@ describe('CustomerGroupDetailComponent', () => {
       amountThreshold: CustomerGroupNewlyRegisteredTypeResponse.amountThreshold,
       timeThreshold: '1'
     });
-    component.submit();
+    component.save();
 
     const mock = httpTestingController.expectOne('/api/iam/customer-group/');
     expect(mock.request.method).toEqual('POST');
@@ -172,7 +172,7 @@ describe('CustomerGroupDetailComponent', () => {
       amountThreshold: CustomerGroupBeforeCertainDateTypeResponse.amountThreshold,
       timeThreshold: '1'
     });
-    component.submit();
+    component.save();
 
     const mock = httpTestingController.expectOne('/api/iam/customer-group/');
     expect(mock.request.method).toEqual('POST');
@@ -191,7 +191,7 @@ describe('CustomerGroupDetailComponent', () => {
       amountThreshold: CustomerGroupLTVTypeResponse.amountThreshold,
       timeThreshold: CustomerGroupLTVTypeResponse.timeThreshold
     });
-    component.submit();
+    component.save();
 
     const mock = httpTestingController.expectOne('/api/iam/customer-group/');
     expect(mock.request.method).toEqual('POST');
@@ -210,7 +210,7 @@ describe('CustomerGroupDetailComponent', () => {
       amountThreshold: CustomerGroupChurnedTypeResponse.amountThreshold,
       timeThreshold: '2'
     });
-    component.submit();
+    component.save();
 
     const mock = httpTestingController.expectOne('/api/iam/customer-group/');
     expect(mock.request.method).toEqual('POST');
@@ -227,7 +227,7 @@ describe('CustomerGroupDetailComponent', () => {
     component.name.setValue(CustomerGroupChangedTypeResponse.name);
     component.type.setValue(CustomerGroupChangedTypeResponse.type);
     component.amountThreshold.setValue(CustomerGroupChangedTypeResponse.amountThreshold);
-    component.submit();
+    component.save();
 
     const mock = httpTestingController.expectOne(CustomerGroupChangedTypeResponse.href);
     expect(mock.request.method).toEqual('PATCH');

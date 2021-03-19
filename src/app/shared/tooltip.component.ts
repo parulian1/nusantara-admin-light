@@ -29,7 +29,7 @@ import { Component, Input } from '@angular/core';
         padding: 16px;
         border-radius: 4px;
         background-color: white;
-        
+
         /* Position the tooltip text */
         position: absolute;
         z-index: 1;
@@ -55,15 +55,15 @@ import { Component, Input } from '@angular/core';
         border-bottom-color: white;
         filter: drop-shadow(0 -2px 2px var(--shadow-color));
       }
-      
+
       /* Show the tooltip text when you mouse over the tooltip container */
       .tooltip:hover .text {
         visibility: visible;
         opacity: 1;
       }
 
-      .material-icons { 
-        font-size: 13px 
+      .material-icons {
+        font-size: 13px
       },
     `
   ],

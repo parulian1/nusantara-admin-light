@@ -58,8 +58,8 @@ import { RangeComponent } from './range.component';
       <div>
         <label>
           <span>Type</span>
-          <select [formControl]="type" 
-            name="pricelist-type" 
+          <select [formControl]="type"
+            name="pricelist-type"
             data-qa="pricelist-type">
             <option
               *ngFor="let opt of types"
@@ -70,9 +70,9 @@ import { RangeComponent } from './range.component';
       </div>
       <div>
         <label class="without-field-errors">
-          <input type="checkbox" 
-            [formControl]="isProgressive" 
-              name="is-progressive" 
+          <input type="checkbox"
+            [formControl]="isProgressive"
+              name="is-progressive"
               data-qa="is-progressive">
           Is Progressive
         </label>
@@ -139,9 +139,9 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
       this.types = data.priceListTypes;
     });
     // triggers change
-    if(!this.enterpriseLicense()) {
+    if (!this.enterpriseLicense()) {
       this.toggleExpansion();
-      if(!this.ranges.length) {
+      if (!this.ranges.length) {
         this.addRange();
       }
     }
@@ -176,7 +176,7 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
       // adding a new range
       let minQuantity = PriceListComponent.MINIMUM_QUANTITY;
       let price = PriceListComponent.DEFAULT_PRICE;
-      if(!this.enterpriseLicense()) {
+      if (!this.enterpriseLicense()) {
         price = 0;
       }
 

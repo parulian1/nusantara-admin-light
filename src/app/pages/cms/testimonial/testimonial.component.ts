@@ -197,7 +197,7 @@ export class TestimonialComponent extends AbstractDetailComponent<ITestimonial> 
 
     // need to mark as touched to make custom styling works
     this.form.controls.isActive.markAsTouched();
-    
+
     this.setPhotoPreview(entity?.photo);
   }
 

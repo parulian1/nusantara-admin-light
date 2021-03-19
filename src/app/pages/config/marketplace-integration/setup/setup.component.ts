@@ -43,7 +43,7 @@ import * as shopActions from '@nusantara/actions';
 
             <td>
               <a [routerLink]="['edit-shipping/', entity.slug]"
-                (click)="setSelectedShop(entity)" 
+                (click)="setSelectedShop(entity)"
                 [ngClass]="{'disabled': entity.isConnected === false}">
                 Edit Shipping
               </a>

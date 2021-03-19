@@ -99,7 +99,7 @@ export class EditShippingComponent implements OnInit, OnDestroy {
   readOnly = [
     'tsc',
     'lazada'
-  ]
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -136,10 +136,10 @@ export class EditShippingComponent implements OnInit, OnDestroy {
   }
 
   addCheckboxes() {
-    const checkboxes = this.buildCheckboxes(this.logistics)
-    if(checkboxes) {
+    const checkboxes = this.buildCheckboxes(this.logistics);
+    if (checkboxes) {
       checkboxes.forEach((attr: FormControl) => {
-        if(this.readOnly.includes(this.marketplace)) {
+        if (this.readOnly.includes(this.marketplace)) {
           attr.disable();
         }
         this.shipping.push(attr);
@@ -148,7 +148,7 @@ export class EditShippingComponent implements OnInit, OnDestroy {
   }
 
   buildCheckboxes(attributes: ILogistic[]) {
-    if(attributes) {
+    if (attributes) {
       const arr = attributes.map((attr) => {
         return this.fb.control(attr.enabled);
       });

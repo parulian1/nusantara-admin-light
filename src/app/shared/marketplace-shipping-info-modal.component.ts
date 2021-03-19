@@ -1,17 +1,17 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
 import { NgxSmartModalComponent } from 'ngx-smart-modal';
 import { DialogResult } from '../core';
 import { IMarketplaceItemLogisticInformation } from '../models';
-import { MarketplaceShopService } from "@nusantara/services";
+import { MarketplaceShopService } from '@nusantara/services';
 
 /**
  * Used in Delivery Product Detail Page - Makertplace Integration Section
- * 
+ *
  */
 @Component({
   selector: 'nus-marketplace-shipping-info-modal',
   template: `
-    <ngx-smart-modal  #modal [identifier]="'marketplaceShippingInfoModal'" 
+    <ngx-smart-modal  #modal [identifier]="'marketplaceShippingInfoModal'"
       [customClass]="'wide-modal no-padding-modal'">
       <h2 class="heading-2">Shipping</h2>
       <div class="content">
@@ -65,12 +65,12 @@ import { MarketplaceShopService } from "@nusantara/services";
     'td { width: 33.33%; }',
     '.logistic { border: 1px solid var(--grey); border-radius: 4px; margin: 10px 0; }',
     '.subheading-2 { padding: 14px 12px; background: var(--darken-white); }',
-    `.logistic-item { 
-      display: grid; 
-      grid-template-columns: repeat(3, 1fr); 
-      grid-column-gap: 26px; 
-      grid-row-gap: 20px; 
-      padding: 12px; 
+    `.logistic-item {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-column-gap: 26px;
+      grid-row-gap: 20px;
+      padding: 12px;
     }`,
     '.expand { background: none; border: none; outline: none; font-size: 18px; cursor: pointer; }',
     '.toggle { display: flex; justify-content: space-between; align-items: center; }',
@@ -84,9 +84,9 @@ export class MarketplaceShippingInfoModalComponent implements OnInit {
   @ViewChild('modal') modalInfo: NgxSmartModalComponent;
   @Input() shippingDetail: IMarketplaceItemLogisticInformation[];
 
-  isExpanded : boolean[];
+  isExpanded: boolean[];
   result: DialogResult = DialogResult.Cancelled;
-  
+
   constructor(public service: MarketplaceShopService) {}
 
   ngOnInit() {
