@@ -474,11 +474,11 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   ngOnInit(): void {
     this.route.data.subscribe((
       data: {
-        entity: products.IProduct, categories: ICategory[], parent: products.IProduct, vendors: PagedResponse<IVendor>,
+        entity: products.IProduct, categories: ICategory[], parent: products.IProduct, vendors: IVendor[],
         productClasses: products.IProductClass[], mediaTypes: drf.IChoice[]
       }) => {
       this.parentProduct = data.parent;
-      this.vendors = data.vendors?.entities;
+      this.vendors = data.vendors;
       this.categories = data.categories;
       this.productClasses = data.productClasses;
       this.mediaTypes = data.mediaTypes;
