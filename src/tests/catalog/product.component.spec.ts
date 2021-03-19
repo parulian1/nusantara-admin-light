@@ -6,6 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { SharedModule } from '@nusantara/shared';
 import { CategoryComponent } from '@nusantara/pages/catalog/category';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 
 describe('ProductComponent', () => {
   let component: ProductComponent;
@@ -62,7 +63,8 @@ describe('ProductComponent', () => {
       declarations: [
         ProductComponent
       ],
-      providers: []
+      providers: [],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

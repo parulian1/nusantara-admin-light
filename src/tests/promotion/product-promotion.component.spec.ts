@@ -199,7 +199,7 @@ describe('ProductPromotionComponent', () => {
       products: [],
       priority: productPromoUpdatedResponse.priority,
       banner: '',
-      ppliedOnOnline: 1,
+      appliedOnOnline: 1,
       appliedOnOffline: 1,
       productBundlingBenefit: [],
       productBundlingCondition: [],

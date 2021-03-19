@@ -3,6 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { BlogFeedComponent } from '@nusantara/pages/config/blog-feed/blog-feed.component';
 import {RouterTestingModule} from '@angular/router/testing';
+import {FormBuilder} from '@angular/forms';
 
 describe('BlogFeedComponent', () => {
   let component: BlogFeedComponent;
@@ -11,7 +12,10 @@ describe('BlogFeedComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule, RouterTestingModule ],
-      declarations: [ BlogFeedComponent ]
+      declarations: [ BlogFeedComponent ],
+      providers: [
+        FormBuilder,
+      ]
     })
     .compileComponents();
   }));

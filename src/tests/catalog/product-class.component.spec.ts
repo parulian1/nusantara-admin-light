@@ -11,6 +11,7 @@ import {Observable, of, ReplaySubject} from 'rxjs';
 import {drf, products} from '@nusantara/models';
 
 class ActivatedRouteStub implements Partial<ActivatedRoute> {
+  // tslint:disable-next-line:variable-name
   private _paramMap: ParamMap;
   private subject = new ReplaySubject<ParamMap>();
 

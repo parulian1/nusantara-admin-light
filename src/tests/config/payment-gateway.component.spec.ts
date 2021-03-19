@@ -6,10 +6,25 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { SharedModule } from '@nusantara/shared';
 import { PaymentGatewayDetailComponent } from '@nusantara/pages/config/payment-gateways';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import {SiteConfigService} from '@nusantara/services';
+import {of} from 'rxjs';
+
+class SiteConfigServiceStub extends SiteConfigService {
+  // tslint:disable-next-line:variable-name
+  private _licenseType = 'enterprise';
+
+  public get licenseType() {
+        return this._licenseType;
+    }
+    public set licenseType(value) {
+        this._licenseType = value;
+    }
+}
 
 describe('PaymentGatewayDetailComponent', () => {
   let component: PaymentGatewayDetailComponent;
   let fixture: ComponentFixture<PaymentGatewayDetailComponent>;
+  let siteConfigService: jasmine.SpyObj<SiteConfigService>;
 
   let httpTestingController: HttpTestingController;
 
@@ -36,7 +51,9 @@ describe('PaymentGatewayDetailComponent', () => {
       declarations: [
         PaymentGatewayDetailComponent,
       ],
-      providers: []
+      providers: [
+        SiteConfigService
+      ]
     })
       .compileComponents();
   }));
@@ -45,6 +62,8 @@ describe('PaymentGatewayDetailComponent', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(PaymentGatewayDetailComponent);
     component = fixture.componentInstance;
+    siteConfigService = TestBed.inject(SiteConfigService) as jasmine.SpyObj<SiteConfigService>;
+
     fixture.detectChanges();
   });
 
