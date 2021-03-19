@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { VendorService } from '@nusantara/services';
 import { PagedResponse } from '@nusantara/core/pagination';
 import { IVendor } from '@nusantara/models';
-import {HttpParams} from "@angular/common/http";
+import { HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
