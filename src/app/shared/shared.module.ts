@@ -35,6 +35,7 @@ import { ConfirmModalReceivingOrderComponent } from './confirm-modal-receiving-o
 import { ConfirmModalPendingOrderComponent } from './confirm-modal-pending-order.component';
 import { OrderType } from './order-type.pipe';
 import { OnlyNumberDirective } from './only-number.directive';
+import { GetUserDisplayNamePipe } from './get-user-display-name.pipe';
 
 /**
  * The purpose of this module is to make common code (like pipes)
@@ -44,6 +45,7 @@ import { OnlyNumberDirective } from './only-number.directive';
   declarations: [
     EntityToSlugPipe,
     CamelToHumanizedPipe,
+    GetUserDisplayNamePipe,
     PaginationComponent,
     DetailTitleComponent,
     DetailActionsComponent,
@@ -76,6 +78,7 @@ import { OnlyNumberDirective } from './only-number.directive';
   exports: [
     EntityToSlugPipe,
     CamelToHumanizedPipe,
+    GetUserDisplayNamePipe,
     PaginationComponent,
     DetailTitleComponent,
     ListHeaderComponent,

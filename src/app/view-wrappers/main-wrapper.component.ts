@@ -16,7 +16,7 @@ import { SubscriptionLike } from 'rxjs';
       <div class="dropdown">
         <button class="dropbtn">
           <img src="/assets/default-profile-img.svg" alt="Profile Image">
-          {{ userDisplayName }}
+          {{ authService.tokenPayload | getUserDisplayName }}
         </button>
         <div class="dropdown-content">
           <a [routerLink]="['/auth/logout']"><i class="material-icons">exit_to_app</i>Logout</a>
@@ -321,24 +321,6 @@ export class MainWrapperComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (!!this.routerEventsSub) {
       this.routerEventsSub.unsubscribe();
-    }
-  }
-
-  /**
-   * Returns the user's own name that should be displayed to them.
-   */
-  get userDisplayName(): string {
-    // todo: get this garbage out of here and do it through a pipe
-    if (!!this.authService.tokenPayload.first_name) {
-      return this.authService.tokenPayload.first_name;
-    } else if (!!this.authService.tokenPayload.last_name) {
-      return this.authService.tokenPayload.last_name;
-    } else if (!!this.authService.tokenPayload.email) {
-      return this.authService.tokenPayload.email;
-    } else {
-      // this should more-or-less never occur, but if the user's email address
-      // hasn't been set, we're just going to return something.
-      return 'User';
     }
   }
 
