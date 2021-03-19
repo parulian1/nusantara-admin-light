@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {INavigation, IRelativeChoices} from '@nusantara/models';
 import {AbstractCrudService} from '@nusantara/core';
@@ -13,6 +13,16 @@ export class NavigationService extends AbstractCrudService<INavigation> {
 
   constructor(httpClient: HttpClient) {
     super(httpClient);
+  }
+
+  // retrieves a single object from the API based on it's slug
+  fetchDetailWithParam(slug?: string, params?: HttpParams): Observable<INavigation> {
+    let url = `${this.baseUrl}/`;
+    if (!!slug) {
+      url += `${slug}/`;
+    }
+    return this.httpClient
+      .get<INavigation>(`${url}`, {observe: 'body', responseType: 'json', params});
   }
 
   fetchRelativeChoices(slug: string = ''): Observable<IRelativeChoices[]> {

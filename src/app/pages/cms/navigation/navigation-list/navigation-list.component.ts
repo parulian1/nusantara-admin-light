@@ -11,6 +11,10 @@ import {ActivatedRoute} from '@angular/router';
       description="Header Navigation">
     </nus-list-header>
 
+    <div class="filtering">
+      <nus-include-deleted></nus-include-deleted>
+    </div>
+
     <nus-pagination [page]="page"></nus-pagination>
 
     <table>
