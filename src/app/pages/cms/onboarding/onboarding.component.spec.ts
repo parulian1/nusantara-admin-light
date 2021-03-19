@@ -3,6 +3,10 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 
 import { OnboardingComponent } from './onboarding.component';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {of} from 'rxjs';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('OnboardingComponent', () => {
   let component: OnboardingComponent;
@@ -10,8 +14,21 @@ describe('OnboardingComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule, FormBuilder ],
-      declarations: [ OnboardingComponent ]
+      imports: [ HttpClientTestingModule, RouterTestingModule ],
+      declarations: [ OnboardingComponent ],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: of({
+              typeChoices: [],
+              entity: {}
+            })
+          }
+        }
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
   }));

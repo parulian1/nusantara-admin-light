@@ -1,10 +1,38 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {ReactiveFormsModule} from '@angular/forms';
+import {RouterTestingModule} from '@angular/router/testing';
 
-import { SharedModule } from '@nusantara/shared';
-import { ProductClassComponent } from '@nusantara/pages/catalog/product-class';
+import {SharedModule} from '@nusantara/shared';
+import {ProductClassComponent} from '@nusantara/pages/catalog/product-class';
+import {ProductClassAttributesComponent} from '@nusantara/pages/catalog/product-class/components';
+import {ActivatedRoute, ActivatedRouteSnapshot, convertToParamMap, ParamMap, Params} from '@angular/router';
+import {Observable, of, ReplaySubject} from 'rxjs';
+import {drf, products} from '@nusantara/models';
+
+class ActivatedRouteStub implements Partial<ActivatedRoute> {
+  private _paramMap: ParamMap;
+  private subject = new ReplaySubject<ParamMap>();
+
+  paramMap = this.subject.asObservable();
+  get snapshot(): ActivatedRouteSnapshot {
+    const snapshot: Partial<ActivatedRouteSnapshot> = {
+      paramMap: this._paramMap,
+    };
+
+    return snapshot as ActivatedRouteSnapshot;
+  }
+
+  constructor(initialParams?: Params) {
+    this.setParamMap(initialParams);
+  }
+
+  setParamMap(params?: Params) {
+    const paramMap = convertToParamMap(params);
+    this._paramMap = paramMap;
+    this.subject.next(paramMap);
+  }
+}
 
 describe('ProductClassComponent', () => {
   let component: ProductClassComponent;
@@ -33,8 +61,21 @@ describe('ProductClassComponent', () => {
       ],
       declarations: [
         ProductClassComponent,
+        ProductClassAttributesComponent
       ],
-      providers: []
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: of({
+              typeChoices: [],
+              attributeTypeChoices: [],
+              entity: {},
+              optionChoices: []
+            })
+          }
+        }
+      ]
     })
       .compileComponents();
   }));

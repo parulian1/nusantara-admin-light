@@ -147,6 +147,11 @@ describe('ProductPromotionComponent', () => {
       banner: '',
       products: [],
       priority: 1,
+      appliedOnOnline: 1,
+      appliedOnOffline: 1,
+      productBundlingBenefit: [],
+      productBundlingCondition: [],
+      multiplyItem: false
     });
     // @ts-ignore
     const p1 = component.fb.group({
@@ -193,7 +198,12 @@ describe('ProductPromotionComponent', () => {
       validTo: component.convertDateTime(productPromoUpdatedResponse.validTo),
       products: [],
       priority: productPromoUpdatedResponse.priority,
-      banner: ''
+      banner: '',
+      ppliedOnOnline: 1,
+      appliedOnOffline: 1,
+      productBundlingBenefit: [],
+      productBundlingCondition: [],
+      multiplyItem: false
     });
 
     component.save();
