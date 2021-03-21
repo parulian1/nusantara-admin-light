@@ -55,4 +55,5 @@ import { ShippingServiceHostComponent } from './shipping/shipping-service/shippi
     CKEditorModule,
   ],
 })
-export class ConfigModule { }
+
+export class ConfigModule {}

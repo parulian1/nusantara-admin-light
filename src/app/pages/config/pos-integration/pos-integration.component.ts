@@ -9,7 +9,7 @@ import {Component} from '@angular/core';
         <h1 class="heading-1">POS Devices</h1>
       </div>
       <div>
-        <button class="control">Open</button>
+        <button routerLink="devices" class="control">Open</button>
       </div>
     </div>
   `,
