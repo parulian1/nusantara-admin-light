@@ -1,11 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ConfigHubComponent } from './config-hub.component';
 
 
 const routes: Routes = [
-  { path: '', component: ConfigHubComponent },
-
   {
     path: 'marketplace-integration',
     loadChildren: () =>
