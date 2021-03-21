@@ -30,48 +30,6 @@ const routes: Routes = [
       import('./general-settings/general-settings.module').then(
         (m) => m.GeneralSettingsModule
       ),
-  },
-  {
-    path: 'website-settings',
-    loadChildren: () =>
-      import('./website-settings/website-settings.module').then(
-        (m) => m.WebsiteSettingsModule
-      ),
-  },
-  {
-    path: 'pos-integration',
-    loadChildren: () =>
-      import('./pos-integration/pos-integration.module').then(
-        (m) => m.PosIntegrationModule
-      ),
-  },
-  {
-    path: 'general-settings',
-    loadChildren: () =>
-      import('./general-settings/general-settings.module').then(
-        (m) => m.GeneralSettingsModule
-      ),
-  },
-  {
-    path: 'website-settings',
-    loadChildren: () =>
-      import('./website-settings/website-settings.module').then(
-        (m) => m.WebsiteSettingsModule
-      ),
-  },
-  {
-    path: 'pos-integration',
-    loadChildren: () =>
-      import('./pos-integration/pos-integration.module').then(
-        (m) => m.PosIntegrationModule
-      ),
-  },
-  {
-    path: 'general-settings',
-    loadChildren: () =>
-      import('./general-settings/general-settings.module').then(
-        (m) => m.GeneralSettingsModule
-      ),
   }
 ];
 
