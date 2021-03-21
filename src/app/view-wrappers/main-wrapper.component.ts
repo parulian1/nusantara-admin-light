@@ -122,12 +122,6 @@ import { SubscriptionLike } from 'rxjs';
           <a [routerLink]="['/config/pos-integration']" routerLinkActive="active" translate>POS Integration</a>
         </li>
         <li><a [routerLink]="['/config/general-settings']" routerLinkActive="active" translate>General</a></li>
-<!--        <li class="icon-button">-->
-<!--          <a [routerLink]="['/config']" routerLinkActive="active">-->
-<!--            <i class="material-icons">settings</i>-->
-<!--            <span translate>Config</span>-->
-<!--          </a>-->
-<!--        </li>-->
 
         <!-- <li class="section-header">
           <i class="material-icons">palette</i>
