@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
-import { MainWrapperComponent } from '@nusantara/view-wrappers/main-wrapper.component';
+import {MainWrapperComponent} from '@nusantara/view-wrappers/main-wrapper.component';
 import {JwtHelperService, JwtModule} from '@auth0/angular-jwt';
 
 describe('MainWrapperComponent', () => {
@@ -10,11 +10,25 @@ describe('MainWrapperComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule, JwtModule ],
-      declarations: [ MainWrapperComponent ],
+      imports: [HttpClientTestingModule,
+        JwtModule.forRoot({
+          config: {
+            tokenGetter: () => localStorage.getItem('token'),
+            authScheme: 'Bearer ',
+            allowedDomains: [
+              new RegExp('.+')
+            ],
+            disallowedRoutes: [
+              'localhost:8080/api/iam/login/',
+              'localhost:8080/api/iam/reset-password/',
+            ]
+          }
+        }),
+      ],
+      declarations: [MainWrapperComponent],
       providers: [JwtHelperService, ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

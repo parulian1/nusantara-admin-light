@@ -8,7 +8,7 @@ describe('BlogFeedConfigService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ HttpClientTestingModule ]
+      imports: [ HttpClientTestingModule ]
     });
     service = TestBed.inject(BlogFeedConfigService);
   });

@@ -76,12 +76,15 @@ describe('LoginComponent', () => {
 
     component.login();
 
+
+
     const req = httpTestingController.expectOne('/api/iam/auth/login/');
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(
       {email: 'derek.curtis@gramedia.digital', password: 'p@ssw0rd24'}
     );
     req.flush({access: 'fake.token.bro', refresh: 'im.fake.too'});
+    const req2 = httpTestingController.expectOne('/api/client/site-config/');
 
     expect(navigateByUrlSpy).toHaveBeenCalledWith('/');
   });
@@ -106,6 +109,8 @@ describe('LoginComponent', () => {
       {email: 'derek.curtis@gramedia.digital', password: 'p@ssw0rd24'}
     );
     req.flush({access: 'fake.token.bro', refresh: 'im.fake.too'});
+
+    const req2 = httpTestingController.expectOne('/api/client/site-config/');
 
     expect(navigateByUrlSpy).toHaveBeenCalledWith('/pages/another-page');
   });
