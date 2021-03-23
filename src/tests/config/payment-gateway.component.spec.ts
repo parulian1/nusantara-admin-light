@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { ReactiveFormsModule } from '@angular/forms';
+import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { SharedModule } from '@nusantara/shared';
@@ -8,6 +8,8 @@ import { PaymentGatewayDetailComponent } from '@nusantara/pages/config/payment-g
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import {SiteConfigService} from '@nusantara/services';
 import {of} from 'rxjs';
+import {ActivatedRoute} from '@angular/router';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 
 class SiteConfigServiceStub extends SiteConfigService {
   // tslint:disable-next-line:variable-name
@@ -52,8 +54,19 @@ describe('PaymentGatewayDetailComponent', () => {
         PaymentGatewayDetailComponent,
       ],
       providers: [
-        SiteConfigService
-      ]
+        FormBuilder,
+        SiteConfigService,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: of({
+              typeChoices: [],
+              entity: {}
+            })
+          }
+        }
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));
