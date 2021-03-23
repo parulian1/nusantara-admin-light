@@ -9,18 +9,18 @@ import { OnboardingContentComponent } from './onboarding-content.component';
 @Component({
   selector: 'nus-onboarding-content-host',
   template: `
-    <div cdkDropList [cdkDropListData]="form" class="example-list"
-         (cdkDropListDropped)="drop($event)">
-      <div class="onboarding-content-div" *ngFor="let content_control of form.controls; let i=index" cdkDrag>
-        <nus-onboarding-content [form]="content_control"
-                                [entity]="entity?.contents.length > 0 ? entity?.contents[i] : null"
-                                (remove)="form.removeAt(i)">
-        </nus-onboarding-content>
+      <div cdkDropList [cdkDropListData]="form" class="example-list"
+                    (cdkDropListDropped)="drop($event)">
+        <div class="onboarding-content-div" *ngFor="let content_control of form.controls; let i=index" cdkDrag>
+          <nus-onboarding-content [form]="content_control"
+                                  [entity]="entity?.contents.length > 0 ? entity?.contents[i] : null"
+                                  (remove)="form.removeAt(i)" >
+          </nus-onboarding-content>
+        </div>
       </div>
-    </div>
-    <button type="button" (click)="addContent()" class="add-button">
-      Add Record
-    </button>
+      <button type="button" (click)="addContent()" class="add-button">
+        <i class="material-icons">add</i> Add Record
+      </button>
   `,
   styleUrls: ['./onboarding-content-host.css']
 })
