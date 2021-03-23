@@ -63,13 +63,22 @@ import { OnboardingPreviewHostDialogComponent } from './preview';
         border: none;
         background: none;
       }
+      .preview-btn i {
+        margin-right: 12px;
+      }
+      .preview-btn:hover{
+        color: #EA730B;
+      }
       .action-button {
         display: flex;
         justify-content: flex-end;
+        margin-bottom: 20px;
       }
       .action-button button {
         margin-left: 24px;
-        width: 212px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
   `]
 })
@@ -111,7 +120,7 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> im
   initializeForm(entity?: IOnBoarding) {
     this.entity = entity;
     this.form = this.fb.group({
-      name: [entity?.name, [Validators.required, Validators.maxLength(50)]],
+      name: [entity?.name, [Validators.required, Validators.maxLength(100)]],
       href: [entity?.href, []],
       type: [entity?.type ?? OnBoardingTypeEnum.reseller, [Validators.required]],
       isActive: [entity?.isActive ?? true, []],

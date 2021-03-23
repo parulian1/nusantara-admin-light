@@ -71,7 +71,9 @@ import { IOnboardingContent } from '@nusantara/models';
         background: #FFFFFF;
         border: 1px solid #E0E0E0;
         box-sizing: border-box;
-        padding: 10px;
+        padding: 10px 24px;
+        border-radius: 0 0 8px 8px;
+        margin-bottom: 20px;
       }
       div.collapse > img {
         max-height: 10px;
@@ -81,7 +83,7 @@ import { IOnboardingContent } from '@nusantara/models';
 
       img.preview {
         max-height: 300px;
-        max-width: 600px;
+        max-width: 100%;
         object-fit: contain;
       }
       ::ng-deep .nsm-content {
