@@ -57,6 +57,12 @@
         </span>
       </td>
     </tr>
+    <tr *ngIf="orderDetailData?.meta?.shopifyInfo">
+      <td>Order Notes (Shopify)</td>
+      <td>
+          {{ orderDetailData.meta.shopifyInfo.note }}
+      </td>
+    </tr>
 
     <tr *ngIf="canUpdateOrder()">
       <td></td>

@@ -38,5 +38,13 @@ export interface IOrderDetail extends ICoreOrder {
   subtotalCost: number;
   discount: number;
   shippingCost: number;
+  meta: {
+    shopifyInfo?: {
+      note?: string;
+    },
+    orderPromo?: any;
+    subscription?: string;
+    subscriptionId?: number;
+  };
 }
 
