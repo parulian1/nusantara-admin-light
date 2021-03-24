@@ -35,6 +35,8 @@ import { ConfirmModalReceivingOrderComponent } from './confirm-modal-receiving-o
 import { ConfirmModalPendingOrderComponent } from './confirm-modal-pending-order.component';
 import { OrderType } from './order-type.pipe';
 import { OnlyNumberDirective } from './only-number.directive';
+import { Ng2FlatpickrModule } from 'ng2-flatpickr';
+import { FieldDatetimeComponent } from '@nusantara/shared/field-datetime.component';
 import { GetUserDisplayNamePipe } from './get-user-display-name.pipe';
 
 /**
@@ -53,6 +55,7 @@ import { GetUserDisplayNamePipe } from './get-user-display-name.pipe';
     TrueFalseComponent,
     AddressComponent,
     FieldErrorsComponent,
+    FieldDatetimeComponent,
     NonFieldErrorsComponent,
     SpinnerComponent,
     ProductSelectionModalComponent,
@@ -86,6 +89,7 @@ import { GetUserDisplayNamePipe } from './get-user-display-name.pipe';
     TrueFalseComponent,
     AddressComponent,
     FieldErrorsComponent,
+    FieldDatetimeComponent,
     NonFieldErrorsComponent,
     SpinnerComponent,
     ProductSelectionModalComponent,
@@ -106,7 +110,7 @@ import { GetUserDisplayNamePipe } from './get-user-display-name.pipe';
     MarketplaceChannelInfoModalComponent,
     MarketplaceStockInfoModalComponent,
     OnlyNumberDirective,
-    OrderType
+    OrderType,
   ],
   imports: [
     CommonModule,
@@ -115,6 +119,7 @@ import { GetUserDisplayNamePipe } from './get-user-display-name.pipe';
     FormsModule,
     ReactiveFormsModule,
     FormsModule,
+    Ng2FlatpickrModule,
   ],
 })
 export class SharedModule {}

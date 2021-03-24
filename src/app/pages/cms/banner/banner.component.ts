@@ -18,7 +18,6 @@ import { enumToArray } from '@nusantara/shared/helpers';
     <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
 
     <form [formGroup]="form" (ngSubmit)="save()" class="entity-detail-form" #f>
-
       <label>
         <span>Name</span>
         <input type="text" [formControl]="name" name="name">
@@ -40,13 +39,13 @@ import { enumToArray } from '@nusantara/shared/helpers';
 
       <label>
         <span>Valid From</span>
-        <input type="datetime-local" [formControl]="validFrom">
+        <nus-field-datetime [control]="validFrom"></nus-field-datetime>
         <nus-field-errors [control]="validFrom"></nus-field-errors>
       </label>
 
       <label>
         <span>Valid To</span>
-        <input type="datetime-local" [formControl]="validTo">
+        <nus-field-datetime [control]="validTo"></nus-field-datetime>
         <nus-field-errors [control]="validTo"></nus-field-errors>
       </label>
 
