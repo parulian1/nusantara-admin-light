@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 
-import { ILogistic, IShop } from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import { MarketplaceShopService } from '@nusantara/services';
 import { ToastLevelEnum, ToastService } from '@nusantara/core';
 import * as fromReducer from '@nusantara/reducers';
@@ -89,9 +89,9 @@ import * as fromReducer from '@nusantara/reducers';
 export class EditShippingComponent implements OnInit, OnDestroy {
   form: FormGroup;
   shopSlug: string;
-  currentShop$: Observable<IShop>;
+  currentShop$: Observable<marketplace.IShop>;
   marketplace: string;
-  logistics: ILogistic[];
+  logistics: marketplace.ILogistic[];
   isBusy: boolean;
 
   subscription: Subscription;
@@ -119,7 +119,7 @@ export class EditShippingComponent implements OnInit, OnDestroy {
       this.marketplace = shop.marketplace;
     });
 
-    this.route.data.subscribe((data: { logistics: ILogistic[] }) => {
+    this.route.data.subscribe((data: { logistics: marketplace.ILogistic[] }) => {
       this.logistics = data.logistics;
       this.addCheckboxes();
     });
@@ -147,7 +147,7 @@ export class EditShippingComponent implements OnInit, OnDestroy {
     }
   }
 
-  buildCheckboxes(attributes: ILogistic[]) {
+  buildCheckboxes(attributes: marketplace.ILogistic[]) {
     if (attributes) {
       const arr = attributes.map((attr) => {
         return this.fb.control(attr.enabled);

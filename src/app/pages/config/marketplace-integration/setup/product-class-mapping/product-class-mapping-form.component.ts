@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Location } from '@angular/common';
-import { ISelectedCategory, IShopAttribute } from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
@@ -72,8 +72,8 @@ export class ProductClassMappingFormComponent implements OnInit {
   showCategoryForm = true;
   showAttributeForm: boolean;
   showMatchForm: boolean;
-  selectedCategory$ = new BehaviorSubject<ISelectedCategory>(null);
-  selectedAttribute$ = new BehaviorSubject<IShopAttribute[]>(null);
+  selectedCategory$ = new BehaviorSubject<marketplace.ISelectedCategory>(null);
+  selectedAttribute$ = new BehaviorSubject<marketplace.IShopAttribute[]>(null);
   productClassSlug: string;
   shopSlug: string;
   state$: Observable<object>;
@@ -117,11 +117,11 @@ export class ProductClassMappingFormComponent implements OnInit {
     });
   }
 
-  onSelectedCategory(selectedCat: ISelectedCategory) {
+  onSelectedCategory(selectedCat: marketplace.ISelectedCategory) {
     this.selectedCategory$.next(selectedCat);
   }
 
-  onAttributesSubmit(selectedAttr: IShopAttribute[]) {
+  onAttributesSubmit(selectedAttr: marketplace.IShopAttribute[]) {
     this.selectedAttribute$.next(selectedAttr);
   }
 

@@ -2,11 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 
 import { PagedResponse } from '@nusantara/core';
-import {
-  IReceivingOrderDetail,
-  IReceivingProduct,
-  IShopErrorDetail,
-} from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -18,8 +14,8 @@ export class MarketplaceReceivingProductsService {
 
   constructor(private httpClient: HttpClient) {}
 
-  fetch(id: string): Observable<IReceivingOrderDetail> {
-    return this.httpClient.get<IReceivingOrderDetail>(
+  fetch(id: string): Observable<marketplace.IReceivingOrderDetail> {
+    return this.httpClient.get<marketplace.IReceivingOrderDetail>(
       `${this.baseUrl}/${id}/all/products/`,
       {
         observe: 'body',
@@ -32,11 +28,11 @@ export class MarketplaceReceivingProductsService {
     page: number = 1,
     id: string,
     filter: string = 'all'
-  ): Observable<PagedResponse<IReceivingProduct>> {
+  ): Observable<PagedResponse<marketplace.IReceivingProduct>> {
     const params = new HttpParams().set('page', page.toFixed(0).toString());
 
     return this.httpClient
-      .get<IReceivingProduct[]>(`${this.baseUrl}/${id}/${filter}/products/`, {
+      .get<marketplace.IReceivingProduct[]>(`${this.baseUrl}/${id}/${filter}/products/`, {
         observe: 'response',
         responseType: 'json',
         params,
@@ -46,12 +42,12 @@ export class MarketplaceReceivingProductsService {
           const detail = (Object.assign(
             {},
             resp.body
-          ) as unknown) as IReceivingOrderDetail;
+          ) as unknown) as marketplace.IReceivingOrderDetail;
           // retrieve only products as array
           const productResp = { ...resp, body: detail.products };
 
           return new PagedResponse(
-            productResp as HttpResponse<IReceivingProduct[]>
+            productResp as HttpResponse<marketplace.IReceivingProduct[]>
           );
         })
       );
@@ -60,13 +56,13 @@ export class MarketplaceReceivingProductsService {
   fetchShops(
     page: number = 1,
     id: string
-  ): Observable<PagedResponse<IShopErrorDetail>> {
+  ): Observable<PagedResponse<marketplace.IShopErrorDetail>> {
     // fetch shop in reponse using 'error-authentication' filter
     const filter = 'error-authentication';
     const params = new HttpParams().set('page', page.toFixed(0).toString());
 
     return this.httpClient
-      .get<IShopErrorDetail[]>(`${this.baseUrl}/${id}/${filter}/products/`, {
+      .get<marketplace.IShopErrorDetail[]>(`${this.baseUrl}/${id}/${filter}/products/`, {
         observe: 'response',
         responseType: 'json',
         params,
@@ -76,12 +72,12 @@ export class MarketplaceReceivingProductsService {
           const detail = (Object.assign(
             {},
             resp.body
-          ) as unknown) as IReceivingOrderDetail;
+          ) as unknown) as marketplace.IReceivingOrderDetail;
           // retrieve only shops as array
           const productResp = { ...resp, body: detail.shops };
 
           return new PagedResponse(
-            productResp as HttpResponse<IShopErrorDetail[]>
+            productResp as HttpResponse<marketplace.IShopErrorDetail[]>
           );
         })
       );

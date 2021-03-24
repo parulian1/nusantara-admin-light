@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthService } from '../../../auth';
 import { AbstractDetailComponent, DialogResult, ErrorResult, ToastService } from '../../../core';
-import { inventory, ISubLocation, IWarehouse, IWarehouseDetail, IWarehouseInformation } from '../../../models';
+import { inventory, ISubLocation, IWarehouse, marketplace } from '@nusantara/models';
 import { InventoryReceivingService, MarketplaceClientService } from '../../../services';
 import { IProduct } from '../../../models/products';
 import {
@@ -147,7 +147,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
 
   warehouses: IWarehouse[];
   availableSubLocations: ISubLocation[] = [];
-  warehouseDetail: IWarehouseDetail[];
+  warehouseDetail: marketplace.IWarehouseDetail[];
 
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
   @ViewChild(MarketplaceChannelInfoModalComponent) marketplaceChannelInfo: MarketplaceChannelInfoModalComponent;
@@ -270,7 +270,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     if (wh) {
 
       this.clientService.getWarehouseInformation(wh.code).subscribe(
-        (data: IWarehouseInformation) => {
+        (data: marketplace.IWarehouseInfo) => {
           this.storeValue = data.totalStore;
           this.showDetail = true;
           this.marketplaceValue = data.totalMarketplace;

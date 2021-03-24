@@ -12,7 +12,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DialogResult, ToastLevelEnum, ToastService } from '@nusantara/core';
-import { IShopAttribute, ISelectedCategory } from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import { MarketplaceShopService } from '@nusantara/services';
 import { ConfirmModalComponent } from '@nusantara/shared/confirm-modal.component';
 import { SubFormComponent } from './sub-form.component';
@@ -109,21 +109,21 @@ export class AttributeSelectionFormComponent
   confirmModal: ConfirmModalComponent;
 
   @Input() state: any;
-  @Input() category: ISelectedCategory;
+  @Input() category: marketplace.ISelectedCategory;
   @Input() currentShop: string;
   @Output() previous = new EventEmitter<boolean>();
   @Output() next = new EventEmitter<any>();
   @Output() saveNoAttr = new EventEmitter<any>();
-  @Output() selectedAttribute = new EventEmitter<IShopAttribute[]>();
+  @Output() selectedAttribute = new EventEmitter<marketplace.IShopAttribute[]>();
 
   shopSlug: string;
-  marketplaceAttributes: IShopAttribute[];
-  mandatoryAttributes: IShopAttribute[];
-  optionalAttributes: IShopAttribute[];
+  marketplaceAttributes: marketplace.IShopAttribute[];
+  mandatoryAttributes: marketplace.IShopAttribute[];
+  optionalAttributes: marketplace.IShopAttribute[];
   form: FormGroup;
   categoryId: number;
   categoryNames: string;
-  selectedCategory: ISelectedCategory = null;
+  selectedCategory: marketplace.ISelectedCategory = null;
   isBusy: boolean;
 
   constructor(
@@ -141,8 +141,8 @@ export class AttributeSelectionFormComponent
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    const currValue: ISelectedCategory = changes.category.currentValue;
-    const prevValue: ISelectedCategory = changes.category.previousValue;
+    const currValue: marketplace.ISelectedCategory = changes.category.currentValue;
+    const prevValue: marketplace.ISelectedCategory = changes.category.previousValue;
     this.categoryId = currValue?.deepestChildId;
 
     if (currValue && (JSON.stringify(currValue) !== JSON.stringify(prevValue))) {
@@ -150,7 +150,7 @@ export class AttributeSelectionFormComponent
       this.service
         .fetchAttribute(this.shopSlug, currValue.deepestChildId)
         .subscribe(
-          (attributes: IShopAttribute[]) => {
+          (attributes: marketplace.IShopAttribute[]) => {
 
             // if attributes from marketplace not empty
             if (attributes) {
@@ -220,7 +220,7 @@ export class AttributeSelectionFormComponent
     );
   }
 
-  buildCheckboxes(attributes: IShopAttribute[]) {
+  buildCheckboxes(attributes: marketplace.IShopAttribute[]) {
     const arr = attributes.map((attr) => {
       return this.fb.control(attr.isMandatory);
     });

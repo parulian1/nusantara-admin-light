@@ -10,11 +10,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastLevelEnum, ToastService } from '@nusantara/core';
 import {MarketplaceClientService} from '@nusantara/services';
-import {
-  IShopeeCredential,
-  IShopeeAuthResponse,
-  IMarketplaceWarehouse,
-} from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import { MarketplaceClientEnum } from '../markeplace-client-enum';
 
 @Component({
@@ -114,7 +110,7 @@ export class TscFormComponent implements OnInit {
   @Input() shopSlug?: string;
   @Input() isEdit: boolean;
   form: FormGroup;
-  warehouses: IMarketplaceWarehouse[] = [];
+  warehouses: marketplace.IMarketplaceWarehouse[] = [];
   variantValue: boolean;
   credentialInfo = 'Contact our support by email to integrations.gramedia.digital to get your partner credential (ShopID/PartnerID/Partner Key)';
   shopIdValue: number;
@@ -130,7 +126,7 @@ export class TscFormComponent implements OnInit {
   ngOnInit() {
     this.service
       .getWarehouse(MarketplaceClientEnum.shopee)
-      .subscribe((data: IMarketplaceWarehouse[]) => {
+      .subscribe((data: marketplace.IMarketplaceWarehouse[]) => {
         this.warehouses = data;
       });
 
@@ -143,7 +139,7 @@ export class TscFormComponent implements OnInit {
   fillFormDetail(shopId: string) {
     this.service
       .getConnection(shopId)
-      .subscribe((data: IShopeeAuthResponse) => {
+      .subscribe((data: marketplace.IShopeeAuthResponse) => {
         if (data != null) {
           this.form.patchValue({
             partnerId: data.partnerId,
@@ -173,7 +169,7 @@ export class TscFormComponent implements OnInit {
     return this.form.get('warehouseId') as FormControl;
   }
 
-  initializeForm(entity?: IShopeeCredential) {
+  initializeForm(entity?: marketplace.IShopeeCredential) {
     this.form = this.fb.group({
       partnerId: [entity?.partnerId, [Validators.required, Validators.maxLength(100)]],
       partnerKey: [entity?.partnerKey, [Validators.required, Validators.maxLength(100)]],
@@ -221,7 +217,7 @@ export class TscFormComponent implements OnInit {
 
   onConnect() {
     this.service.connect(this.getFormValue()).subscribe(
-      (resp: IShopeeAuthResponse) => {
+      (resp: marketplace.IShopeeAuthResponse) => {
         this.showSignInWindow(resp);
       },
       (err) => {
@@ -232,7 +228,7 @@ export class TscFormComponent implements OnInit {
 
   onUpdate() {
     this.service.updateConnection(this.getFormValue(), this.shopSlug).subscribe(
-      (resp: IShopeeAuthResponse) => {
+      (resp: marketplace.IShopeeAuthResponse) => {
         this.showSignInWindow(resp);
       },
       (err: HttpErrorResponse) => {
@@ -249,7 +245,7 @@ export class TscFormComponent implements OnInit {
     this.toast?.addMessage(resp.error.message, 'error', ToastLevelEnum.error);
   }
 
-  showSignInWindow(resp: IShopeeAuthResponse) {
+  showSignInWindow(resp: marketplace.IShopeeAuthResponse) {
     if (!resp.isConnected) {
       this.toast?.addMessage(
         `Open shopee tab and log in to grant access. Click refresh when you're done.`,

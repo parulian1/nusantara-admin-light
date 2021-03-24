@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { PagedResponse, ToastLevelEnum, ToastService } from '@nusantara/core';
-import {
-  IReceivingOrderDetail,
-  IReceivingProduct,
-  IShopErrorDetail,
-} from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import { MarketplaceReceivingProductsService } from '@nusantara/services';
 
 @Component({
@@ -312,11 +308,11 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
 })
 export class PublishDetailComponent implements OnInit {
   receivingOrderId: string;
-  order: IReceivingOrderDetail;
-  allProducts: PagedResponse<IReceivingProduct>;
-  credentialsError: PagedResponse<IShopErrorDetail>;
-  dataError: PagedResponse<IReceivingProduct>;
-  timeoutError: PagedResponse<IReceivingProduct>;
+  order: marketplace.IReceivingOrderDetail;
+  allProducts: PagedResponse<marketplace.IReceivingProduct>;
+  credentialsError: PagedResponse<marketplace.IShopErrorDetail>;
+  dataError: PagedResponse<marketplace.IReceivingProduct>;
+  timeoutError: PagedResponse<marketplace.IReceivingProduct>;
   isReady = true;
 
   constructor(

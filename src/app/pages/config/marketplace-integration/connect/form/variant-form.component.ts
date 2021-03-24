@@ -6,7 +6,7 @@ import {
   FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR,
 } from '@angular/forms';
 import { MarketplaceClientService } from '@nusantara/services';
-import {IShopeeAuthResponse} from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 
 @Component({
   selector: 'nus-variant-client-form',
@@ -101,7 +101,7 @@ export class VariantFormComponent implements OnInit {
     if (this.isEdit){
       this.service
         .getConnection(this.shopSlug)
-        .subscribe((data: IShopeeAuthResponse) => {
+        .subscribe((data: marketplace.IShopeeAuthResponse) => {
           if (data != null) {
             if (data.splitVariant === true){
               this.variantChecked = 1;
