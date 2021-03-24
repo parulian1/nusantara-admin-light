@@ -1,14 +1,26 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { MarketplaceStockInfoModalComponent, MarketplaceShippingInfoModalComponent, SlideInOutAnimation } from '@nusantara/shared';
-import { IClient, IMarketplaceItemAttributeInformation, IMarketplaceItemInformation, IMarketplaceItemLogisticInformation, products} from '@nusantara/models';
-import { MarketplaceClientService, MarketplaceItemService } from '@nusantara/services';
-import { AbstractEditingComponent } from '@nusantara/core';
-
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from "@angular/core";
+import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute } from "@angular/router";
+import {
+  MarketplaceStockInfoModalComponent,
+  MarketplaceShippingInfoModalComponent
+} from "@nusantara/shared";
+import { marketplace, products } from "@nusantara/models";
+import {
+  MarketplaceClientService,
+  MarketplaceItemService,
+} from "@nusantara/services";
+import { AbstractEditingComponent } from "@nusantara/core";
 @Component({
   selector: 'nus-marketplace-info',
-  animations: [SlideInOutAnimation],
+  animations: [SlideInOutAnimation, ShowHideAnimation],
   template: `
     <div class="wrapper">
       <h1 class="heading-1">Marketplace Information</h1>
@@ -45,75 +57,77 @@ import { AbstractEditingComponent } from '@nusantara/core';
         <nus-tabs (select)="getAttributes($event)" [fluid]="true">
           <nus-tab *ngFor="let client of clientList" [title]="client.marketplaceName">
             <div *ngIf="!productClassChanged">
-              <div *ngFor="let data of marketplaceStoreAttributes; let storeIndex = index">
-                <div class="store">
-                  <div>
-                    <p class="body-2">Store</p>
-                    <h4 class="subheading-2">{{ data.shop }}</h4>
+              <ng-container *ngIf="itemAttributes; else noConnectedStore">
+                <div *ngFor="let data of itemAttributes; let storeIndex = index">
+                  <div class="store">
+                    <div>
+                      <p class="body-2">Store</p>
+                      <h4 class="subheading-2">{{ data.shop }}</h4>
+                    </div>
+                    <button type="button" class="expand" (click)="toggleStore(storeIndex)">
+                      <i class="material-icons" >{{ showedStore === storeIndex && isStoreExpanded? 'expand_less':'expand_more' }}</i>
+                    </button>
                   </div>
-                  <button type="button" class="expand" (click)="toggleStore(storeIndex)">
-                    <i class="material-icons" >{{ showedStore === storeIndex && isStoreExpanded? 'expand_less':'expand_more' }}</i>
-                  </button>
-                </div>
-                <div [@slideInOut]="animationState" *ngIf="showedStore === storeIndex">
-                  <div *ngIf="data.attributes.length; else noAttributeMatch" class="attr-table" [formGroup]="form">
-                    <h4 class="subheading-2">Attribute</h4>
-                    <table>
-                      <thead>
-                        <th>Name</th>
-                        <th>Value</th>
-                      </thead>
-                      <tbody formArrayName="attributes" *ngIf="attributesFormArray.controls.length">
-                        <tr *ngFor=" let attr of attributesFormArray.controls; let i = index" [formGroupName]="i">
-                          <td *ngIf="storeIndex === attributesFormArray.controls[i].value.indexShop">
-                            {{ attributesFormArray.controls[i].value.name }}
-                          </td>
-                          <td *ngIf="storeIndex === attributesFormArray.controls[i].value.indexShop">
-
-                            <div *ngIf="attributesFormArray.controls[i].value.type === 'combo box' || attributesFormArray.controls[i].value.type === 'dropdown'">
-                              <select #selecteEditAttr formControlName="value"
-                                (change)="attrChange(selecteEditAttr.value, i)">
-                                <option [ngValue]="null">
-                                  Select attribute value of {{
-                                  attributesFormArray?.controls[i].value.name }}
-                                </option>
-                                <option *ngFor="let opt of attributesFormArray?.controls[i].value.option" [ngValue]="opt">
-                                  {{ opt }}
-                                </option>
-                                <option class="add-new-attr" value="addNewAttr" *ngIf="attributesFormArray.controls[i].value.type === 'combo box'">
-                                  <i class="material-icons">add</i> Add New Attribute
-                                </option>
-                              </select>
-                              <div *ngIf="selecteEditAttr.value === 'addNewAttr'">
-                                <input type="text" formControlName="newValue" />
-                                <div *ngIf="attributesFormArray.controls[i].get('newValue').invalid && attributesFormArray.controls[i].get('newValue').touched"class="error-detail">
-                                  This field is required
+                  <div [@slideInOut]="animationState" *ngIf="showedStore === storeIndex">
+                    <div *ngIf="data.isMapped; else notMapped">
+                      <div *ngIf="data.attributes.length; else noAttribute" class="attr-table" [formGroup]="form">
+                        <h4 class="subheading-2">Attribute</h4>
+                        <table>
+                          <thead>
+                            <th>Name</th>
+                            <th>Value</th>
+                          </thead>
+                          <tbody formArrayName="attributes" *ngIf="attributesFormArray.controls.length">
+                            <tr *ngFor=" let attr of attributesFormArray.controls; let i = index" [formGroupName]="i">
+                              <td *ngIf="storeIndex === attr.value.indexShop">
+                                {{ attr.value.name }}
+                              </td>
+                              <td *ngIf="storeIndex === attr.value.indexShop">
+                                <div *ngIf="attr.value.type === 'combo box' || attr.value.type === 'dropdown'">
+                                  <select #selecteEditAttr formControlName="value"
+                                    (change)="attrChange(selecteEditAttr.value, i)">
+                                    <option [ngValue]="null">
+                                      Select attribute value of {{
+                                      attributesFormArray?.controls[i].value.name }}
+                                    </option>
+                                    <option *ngFor="let opt of attributesFormArray?.controls[i].value.option" [ngValue]="opt">
+                                      {{ opt }}
+                                    </option>
+                                    <option class="add-new-attr" value="addNewAttr" *ngIf="attr.value.type === 'combo box'">
+                                      <i class="material-icons">add</i> Add New Attribute
+                                    </option>
+                                  </select>
+                                  <div *ngIf="selecteEditAttr.value === 'addNewAttr'">
+                                    <input type="text" formControlName="newValue" />
+                                    <div *ngIf="attr.get('newValue').invalid && attr.get('newValue').touched"class="error-detail">
+                                      This field is required
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
-                            <div *ngIf="client.option === LZD && attributesFormArray.controls[i].value.marketplaceAttributeName === 'SellerSku' || attributesFormArray.controls[i].value.marketplaceAttributeName === 'price'; else nonDisable">
-                              <input formControlName="value" type="text" readonly *ngIf="attributesFormArray.controls[i].value.marketplaceAttributeName === 'SellerSku'"/>
-                              <input formControlName="value" type="number" readonly *ngIf="attributesFormArray.controls[i].value.marketplaceAttributeName === 'price'"/>
-                            </div>
+                                <div *ngIf="client.option === LZD && LzdReadOnlyFields.includes(attr.value.marketplaceAttributeName); else defaultInputField">
+                                  <input *ngIf="attr.value.type === 'text'" formControlName="value" type="text" readonly/>
+                                  <input *ngIf="attr.value.type === 'integer'" formControlName="value" type="number" readonly/>
+                                </div>
 
-                            <ng-template #nonDisable>
-                                <input formControlName="value" type="text" *ngIf="attributesFormArray.controls[i].value.type === 'text'"/>
-                              <input formControlName="value" type="number" *ngIf="attributesFormArray.controls[i].value.type === 'integer'"/>
-                            </ng-template>
-
-                            <input formControlName="value" type="text" *ngIf="attributesFormArray.controls[i].value.type === 'text' && client.option !== LZD"/>
-                            <input formControlName="value" type="number" *ngIf="attributesFormArray.controls[i].value.type === 'integer' && client.option !== LZD"/>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <ng-template #noAttributeMatch>
-                    <div class="no-attribute">
-                      <div *ngIf="client.option === TSC; else nonTscEmptyInfo">
-                        <h3 class="subheading-1">Product class doesn't have attribute.</h3>
+                                <ng-template #defaultInputField>
+                                  <input *ngIf="attr.value.type === 'text'" formControlName="value" type="text"/>
+                                  <input *ngIf="attr.value.type === 'integer'" formControlName="value" type="number"/>
+                                </ng-template>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
-                      <ng-template #nonTscEmptyInfo>
+                      <ng-template #noAttribute>
+                        <div [@showHide]="showHideState" class="no-attribute">
+                          <div *ngIf="data.isMapped else notMapped">
+                            <h3 class="subheading-1">Product class doesn't have attribute.</h3>
+                          </div>
+                        </div>
+                      </ng-template>
+                    </div>
+                    <ng-template #notMapped>
+                      <div [@showHide]="showHideState" *ngIf="!data.isMappe" class="not-mapped">
                         <h1 class="heading-1">Product Class is Not Mapped Yet!</h1>
                         <p>Map Class to sync your product to marketplace.</p>
                         <button [routerLink]="['/config/marketplace-integration/connect/product-class/',
@@ -124,18 +138,20 @@ import { AbstractEditingComponent } from '@nusantara/core';
                           type="button"
                           class="control">Start Mapping
                         </button>
-                      </ng-template>
-                    </div>
-                  </ng-template>
+                      </div>
+                    </ng-template>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div *ngIf="emptyStore" class="no-attribute">
-              <h1 class="heading-1">No Connected Store Yet!</h1>
-              <p>Add a marketplace store to manage all your products in one place.</p>
-              <button type="button" [routerLink]="['/config/marketplace-integration/connect/new']" class="control">
-                <i class="material-icons">add</i>Add Store
-              </button>
+              </ng-container>
+              <ng-template #noConnectedStore>
+                <div class="not-connected">
+                  <h1 class="heading-1">No Connected Store Yet!</h1>
+                  <p>Add a marketplace store to manage all your products in one place.</p>
+                  <button type="button" [routerLink]="['/config/marketplace-integration/connect/new']" class="control">
+                    <i class="material-icons">add</i>Add Store
+                  </button>
+                </div>
+              </ng-template>
             </div>
           </nus-tab>
         </nus-tabs>
@@ -163,8 +179,8 @@ import { AbstractEditingComponent } from '@nusantara/core';
         justify-items: center;  }
     `,
     '.expand { background: none; border: none; outline: none; font-size: 18px; cursor: pointer; }',
-    '.attr-table { padding: 16px 12px; }',
-    `.no-attribute {
+    '.attr-table { padding: 16px 12px; border-bottom: solid 1px var(--grey); }',
+    `.not-connected, .not-mapped, .no-attribute {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -172,10 +188,10 @@ import { AbstractEditingComponent } from '@nusantara/core';
         padding: 16px 0;
         border-bottom: solid 1px var(--grey); }
       `,
-    '.no-attribute h1 { margin-bottom: 10px; }',
-    '.no-attribute p { color : var(--grey); margin-bottom: 24px; }',
-    '.no-attribute button { display: flex; justify-content: center; align-items: center; }',
-    '.no-attribute button > i { font-size: 20px; }',
+    '.not-connected h1, .not-mapped h1 { margin-bottom: 10px; }',
+    '.not-connected p, .not-mapped p { color : var(--grey); margin-bottom: 24px; }',
+    '.not-connected button, .not-mapped button { display: flex; justify-content: center; align-items: center; }',
+    '.not-connected button > i, .not-mapped button > i { font-size: 20px; }',
     '.add-new-attr { font-weight: 600; font-size: 16px; }',
   ]
 })
@@ -190,11 +206,14 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
   readonly TSC = 'tsc';
   readonly LZD = 'lazada';
 
+  // Lazada readonly field
+  LzdReadOnlyFields = ['SellerSku', 'price'];
+
   productClassChanged: boolean;
-  emptyStore: boolean;
   showedStore: number;
   isStoreExpanded = false;
   animationState = 'out';
+  showHideState = 'hide';
   selectedTab: string;
 
   warehouseCount = 0;
@@ -206,9 +225,9 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
   productClassSlug: string;
   shippingDetail: any;
   warehouseInfoDetail: any;
-  marketplaceStoreAttributes: any;
+  itemAttributes: any;
 
-  clientList: IClient[];
+  clientList: marketplace.IClient[];
 
   attributes: any[] = [];
   get attributesFormArray(): FormArray { return this.form.get('attributes') as FormArray; }
@@ -228,7 +247,7 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
     this.productSlug = this.route.snapshot.paramMap.get('slug');
     this.mpItemService
       .getItemMarketplaceInformation(this.productSlug)
-      .subscribe((data: IMarketplaceItemInformation) => {
+      .subscribe((data: marketplace.IItemInfo) => {
         if (data){
           this.warehouseCount = data.totalWarehouse;
           this.marketplaceCount = data.totalMarketplace;
@@ -239,12 +258,12 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
 
     this.mpItemService
       .getItemMarketplaceLogisticInformation(this.productSlug)
-      .subscribe((shipping: IMarketplaceItemLogisticInformation) => {
+      .subscribe((shipping: marketplace.IItemLogisticInfo) => {
         this.shippingDetail = shipping;
       });
 
     this.mpClientService
-      .client.subscribe((clients: IClient[]) => {
+      .client.subscribe((clients: marketplace.IClient[]) => {
         this.clientList = clients;
       });
   }
@@ -267,10 +286,11 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
     this.isStoreExpanded = !this.isStoreExpanded;
     this.showedStore = index;
     this.animationState = this.animationState === 'out' ? 'in' : 'out';
+    this.showHideState = this.showHideState === 'hide' ? 'show' : 'hide';
   }
 
-  getAttributes(marketplace: any) {
-    this.emptyStore = false;
+  getAttributes(marketplace: string) {
+    // console.log(marketplace);
     this.productClassChanged = false;
     if (this.selectedTab){
       if (this.selectedTab !== marketplace.toLowerCase()){
@@ -283,14 +303,11 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
 
     this.mpItemService
       .getItemMarketplaceAttribute(this.selectedTab, this.productClassSlug, this.productSlug)
-      .subscribe((data: IMarketplaceItemAttributeInformation[]) => {
-        this.marketplaceStoreAttributes = data;
-        if (!data){
-          this.emptyStore = true;
-        }
+      .subscribe((data: marketplace.IItemAttributeInfo[]) => {
+        this.itemAttributes = data;
 
         if (!!data) {
-          data.forEach((stores: IMarketplaceItemAttributeInformation, index) => {
+          data.forEach((stores: marketplace.IItemAttributeInfo, index) => {
             stores.attributes.forEach((attr) => {
               this.attributesFormArray.push(
                 this.fb.group({
