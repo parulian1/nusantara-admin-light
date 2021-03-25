@@ -45,7 +45,7 @@ export class OnboardingContentHostComponent extends AbstractEditingComponent<For
   addContent(content?: IOnboardingContent) {
     const form = this.fb.group({
       href: [content?.href ?? '', []],
-      image: ['', content?.image ? [] : [Validators.required]],
+      image: ['', content?.image ? []: [Validators.required]],
       name: [content?.name, [Validators.required, Validators.maxLength(100)]],
       description: [content?.description, [Validators.maxLength(255), Validators.required]],
       buttonStatus: [content?.buttonStatus ?? false, []],
@@ -76,16 +76,6 @@ export class OnboardingContentHostComponent extends AbstractEditingComponent<For
         }
       });
     });
-
-    // code that creates issues for SonarLint
-    // this.form.controls.map((content, index) => {
-    //   content.value.sortPriority = index;
-    //   this.contents.map((contentComponent, subIndex) => {
-    //     if (subIndex === index) {
-    //       content.value.image = contentComponent.imagePreviewUrl;
-    //     }
-    //   });
-    // });
   }
 
 }
