@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, ViewChild } from '@angular/core';
 import {DialogResult} from '@nusantara/core';
 import { NgxSmartModalComponent } from 'ngx-smart-modal';
-import {Location} from "@angular/common";
-import {Router} from "@angular/router";
+import {Location} from '@angular/common';
+import {Router} from '@angular/router';
 
 /**
  * Simple confirmation modal dialog

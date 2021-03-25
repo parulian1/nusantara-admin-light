@@ -28,7 +28,10 @@
               "src/styles.css",
               "src/print.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "@elastic/apm-rum-angular"
+            ]
           },
           "configurations": {
             "production": {
@@ -41,7 +44,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,

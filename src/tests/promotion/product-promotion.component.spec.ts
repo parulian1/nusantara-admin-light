@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -61,7 +61,7 @@ describe('ProductPromotionComponent', () => {
     priority: 1
   };
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
@@ -142,11 +142,16 @@ describe('ProductPromotionComponent', () => {
       maxAmount: productPromoResponse.maxAmount,
       isExclusive: productPromoResponse.isExclusive,
       isActive: productPromoResponse.isActive,
-      validFrom: productPromoResponse.validFrom,
-      validTo: productPromoResponse.validTo,
+      validFrom: component.convertDateTime(productPromoResponse.validFrom) + component.getTimeZone(),
+      validTo: component.convertDateTime(productPromoResponse.validTo) + component.getTimeZone(),
       banner: '',
       products: [],
       priority: 1,
+      appliedOnOnline: 1,
+      appliedOnOffline: 1,
+      productBundlingBenefit: [],
+      productBundlingCondition: [],
+      multiplyItem: false
     });
     // @ts-ignore
     const p1 = component.fb.group({
@@ -171,8 +176,8 @@ describe('ProductPromotionComponent', () => {
     expect(mock.request.body.maxAmount).toBe(productPromoResponse.maxAmount);
     expect(mock.request.body.isExclusive).toEqual(productPromoResponse.isExclusive);
     expect(mock.request.body.isActive).toEqual(productPromoResponse.isActive);
-    expect(mock.request.body.validFrom).toEqual(productPromoResponse.validFrom);
-    expect(mock.request.body.validTo).toEqual(productPromoResponse.validTo);
+    expect(mock.request.body.validFrom).toEqual(component.convertDateTime(productPromoResponse.validFrom) + component.getTimeZone());
+    expect(mock.request.body.validTo).toEqual(component.convertDateTime(productPromoResponse.validTo) + component.getTimeZone());
     expect(mock.request.body.products).toEqual(productPromoResponse.products);
     mock.flush(productPromoResponse, {status: 201, statusText: 'CREATED'});
     httpTestingController.verify();
@@ -189,11 +194,16 @@ describe('ProductPromotionComponent', () => {
       maxAmount: productPromoUpdatedResponse.maxAmount,
       isExclusive: productPromoUpdatedResponse.isExclusive,
       isActive: productPromoUpdatedResponse.isActive,
-      validFrom: productPromoUpdatedResponse.validFrom,
-      validTo: productPromoUpdatedResponse.validTo,
+      validFrom: component.convertDateTime(productPromoUpdatedResponse.validFrom) + component.getTimeZone(),
+      validTo: component.convertDateTime(productPromoUpdatedResponse.validTo) + component.getTimeZone(),
       products: [],
       priority: productPromoUpdatedResponse.priority,
-      banner: ''
+      banner: '',
+      appliedOnOnline: 1,
+      appliedOnOffline: 1,
+      productBundlingBenefit: [],
+      productBundlingCondition: [],
+      multiplyItem: false
     });
 
     component.save();
@@ -207,8 +217,8 @@ describe('ProductPromotionComponent', () => {
     expect(mock.request.body.maxAmount).toBe(productPromoUpdatedResponse.maxAmount);
     expect(mock.request.body.isExclusive).toEqual(productPromoUpdatedResponse.isExclusive);
     expect(mock.request.body.isActive).toEqual(productPromoUpdatedResponse.isActive);
-    expect(mock.request.body.validFrom).toEqual(productPromoUpdatedResponse.validFrom);
-    expect(mock.request.body.validTo).toEqual(productPromoUpdatedResponse.validTo);
+    expect(mock.request.body.validFrom).toEqual(component.convertDateTime(productPromoUpdatedResponse.validFrom) + component.getTimeZone());
+    expect(mock.request.body.validTo).toEqual(component.convertDateTime(productPromoUpdatedResponse.validTo) + component.getTimeZone());
     mock.flush(productPromoUpdatedResponse, {status: 200, statusText: 'OK'});
     httpTestingController.verify();
   });

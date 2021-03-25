@@ -19,14 +19,14 @@ import { products } from '@nusantara/models';
       </tr>
       </thead>
       <tbody *ngIf="!!originalAttributeValues">
-        <nus-product-attribute-value  
+        <nus-product-attribute-value
           *ngFor="let attr of attributeDefinitions; let i=index"
           [attributeDefinition]="attr"
           [control]="getFormControlForAttribute(attr)">
         </nus-product-attribute-value>
         <tr>
           <td colspan="3">
-            <a (click)="goToClass()" class="manage-attr">Manage Attribute</a>          
+            <a (click)="goToClass()" class="manage-attr">Manage Attribute</a>
           </td>
         </tr>
       </tbody>

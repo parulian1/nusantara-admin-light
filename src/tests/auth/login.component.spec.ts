@@ -1,5 +1,5 @@
 import { ReactiveFormsModule } from '@angular/forms';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -20,7 +20,7 @@ describe('LoginComponent', () => {
   let authServiceSpy: jasmine.SpyObj<AuthService>;
   let httpTestingController: HttpTestingController;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
 
     authServiceSpy = jasmine.createSpyObj('AuthService', ['login']);
 
@@ -76,12 +76,15 @@ describe('LoginComponent', () => {
 
     component.login();
 
+
+
     const req = httpTestingController.expectOne('/api/iam/auth/login/');
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(
       {email: 'derek.curtis@gramedia.digital', password: 'p@ssw0rd24'}
     );
     req.flush({access: 'fake.token.bro', refresh: 'im.fake.too'});
+    const req2 = httpTestingController.expectOne('/api/client/site-config/');
 
     expect(navigateByUrlSpy).toHaveBeenCalledWith('/');
   });
@@ -106,6 +109,8 @@ describe('LoginComponent', () => {
       {email: 'derek.curtis@gramedia.digital', password: 'p@ssw0rd24'}
     );
     req.flush({access: 'fake.token.bro', refresh: 'im.fake.too'});
+
+    const req2 = httpTestingController.expectOne('/api/client/site-config/');
 
     expect(navigateByUrlSpy).toHaveBeenCalledWith('/pages/another-page');
   });

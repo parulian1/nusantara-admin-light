@@ -1,16 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DomSanitizer } from '@angular/platform-browser';
-import { MatIconRegistry } from '@angular/material/icon';
-
 import { ICheckedOrder } from '@nusantara/models';
 import { PaginationComponent } from '@nusantara/shared/pagination.component';
-
-const ARROW_DOWN = `
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M8.30453 8.84377L12.0769 12.7502L15.9634 8.97745L17.1226 10.1779L12.0361 15.0898L7.12412 10.0033L8.30453 8.84377Z"/>
-</svg>
-`;
+import { OrderDownloadFileService, OrderReportService, SvgIconService } from '@nusantara/services';
+import { IOrderFilterValue } from '@nusantara/models/order/filter';
 
 @Component({
   selector: 'nus-order-custom-pagination',
@@ -20,7 +13,7 @@ const ARROW_DOWN = `
         <span *ngIf="page?.totalResults > 0 && showLabels">
           <mat-checkbox [(ngModel)]="masterSelected"
           (change)="checkUncheckAll()"> 
-            Selected <strong>{{checkedList? checkedList.length: 0 }}/{{ page.entities.length }} </strong>
+            Selected <strong>{{checkedlist? checkedlist.length: 0 }}/{{ page.entities.length }} </strong>
           </mat-checkbox>
           of<strong> {{ page?.totalResults }}</strong>
         </span>
@@ -32,9 +25,9 @@ const ARROW_DOWN = `
             <mat-icon class="icon-secondary" svgIcon="arrow-down"></mat-icon>
           </button>
           <mat-menu #menu>
-            <button mat-menu-item>Product List</button>
-            <button mat-menu-item>Shopping Label</button>
-            <button mat-menu-item>Order List</button>
+            <button mat-menu-item (click)="downloadProductList()">Product List</button>
+            <!-- <button mat-menu-item>Shipping Label</button> -->
+            <button mat-menu-item (click)="downloadOrderList()">Order List</button>
           </mat-menu>
         </div>
         <div class="pg-button">
@@ -63,38 +56,36 @@ const ARROW_DOWN = `
   ]
 })
 export class OrderCustomPaginationComponent extends PaginationComponent implements OnInit, OnChanges {
-  
   @Input() checklist: Array<ICheckedOrder>;
-  @Input() checkedList: Array<ICheckedOrder>;
+  @Input() checkedlist: Array<string>;
+  @Input() appliedFilters: IOrderFilterValue;
   @Output() masterSelectChanged = new EventEmitter<boolean>();
 
   masterSelected: boolean;
+  q: string = null;
 
   constructor(
     router: Router, 
     route: ActivatedRoute,
-    iconRegistry: MatIconRegistry, 
-    sanitizer: DomSanitizer) { 
+    private orderReportService: OrderReportService,
+    private orderDownloadService: OrderDownloadFileService,
+    svgIconService: SvgIconService) { 
       super(router, route); 
-      iconRegistry.addSvgIconLiteral('arrow-down', sanitizer.bypassSecurityTrustHtml(ARROW_DOWN));
+      svgIconService.registerIcons();
   }
 
   ngOnInit() {
-    this.masterSelected = false;
     super.ngOnInit();
+
+    this.masterSelected = false;
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if(!changes.checkedList){
+    if(!changes.checkedlist){
       this.masterSelected = false;
       this.checkUncheckAll();
     } else {
-      if(changes.checkedList.currentValue){
-        console.log(
-          changes.checkedList.currentValue.map(
-            (item: ICheckedOrder) => item.order.orderNumber
-          )
-        );
+      if(changes.checkedlist.currentValue){
         this.isAllSelected();
       }
     }
@@ -108,5 +99,17 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
 
   checkUncheckAll() {
     this.masterSelectChanged.emit(this.masterSelected);
+  }
+
+  downloadProductList(){
+    this.orderReportService.downloadProductList(this.appliedFilters, this.checkedlist).subscribe((response: string) => {
+      this.orderDownloadService.downloadAsCsv(response, 'product-list');
+    });
+  }
+  
+  downloadOrderList(){
+    this.orderReportService.downloadOrderList(this.appliedFilters, this.checkedlist).subscribe((response: string) => {
+      this.orderDownloadService.downloadAsCsv(response, 'order-list');
+    });
   }
 }

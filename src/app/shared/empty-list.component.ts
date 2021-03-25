@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'nus-empty-list',
-  template: ` 
+  template: `
   <div>
     <h1 class="heading-1">{{ title }}</h1>
     <p>{{ description }}</p>
@@ -20,7 +20,7 @@ import { Component, Input } from '@angular/core';
     'span { padding-right: 10px; }'
   ],
 })
-export class EmptyListCOmponent {
+export class EmptyListComponent {
   @Input() title: string;
   @Input() description: string;
   @Input() cancelUrl: string[];

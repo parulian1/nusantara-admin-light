@@ -123,10 +123,10 @@ export class ShopeeeClientFormComponent implements OnInit {
   @Input() isEdit: boolean;
   form: FormGroup;
   warehouses: IMarketplaceWarehouse[] = [];
-  variantValue : boolean;
-  shopIdInfo = "Go to your Store Profile at Shopee Seller > See column PC Shop > Click on 'See' > Copy the number after /shop/";
-  partnerKeyInfo = "To get your Partner Key, go to Shopee Open Platform and create APP console"
-  partnerIdInfo = "Partner ID is assigned upon registration is successful. Required for all requests."
+  variantValue: boolean;
+  shopIdInfo = 'Go to your Store Profile at Shopee Seller > See column PC Shop > Click on \'See\' > Copy the number after /shop/';
+  partnerKeyInfo = 'To get your Partner Key, go to Shopee Open Platform and create APP console';
+  partnerIdInfo = 'Partner ID is assigned upon registration is successful. Required for all requests.';
 
   shopIdValue: number;
 
@@ -163,7 +163,7 @@ export class ShopeeeClientFormComponent implements OnInit {
             shopId: data.shopId,
             warehouseId: data.warehouseId,
           });
-          this.shopIdValue = data.shopId
+          this.shopIdValue = data.shopId;
         }
       });
   }
@@ -187,34 +187,34 @@ export class ShopeeeClientFormComponent implements OnInit {
   initializeForm(entity?: IShopeeCredential) {
     this.form = this.fb.group({
       partnerId: [entity?.partnerId, [Validators.required, Validators.maxLength(100)]],
-      partnerKey: [entity?.partnerKey, [Validators.required,Validators.maxLength(100)]],
-      redirectUrl: [entity?.redirectUrl, [Validators.required,Validators.maxLength(100)]],
+      partnerKey: [entity?.partnerKey, [Validators.required, Validators.maxLength(100)]],
+      redirectUrl: [entity?.redirectUrl, [Validators.required, Validators.maxLength(100)]],
       shopId: [entity?.shopId, [Validators.required, this.isInteger()]],
       warehouseId: [entity?.warehouse, [Validators.required]],
     });
 
-    if(this.isEdit){
+    if (this.isEdit){
       this.shopId.disable();
     }
   }
 
   check_if_is_integer(value){
-    if(value==""){
-      return true
+    if (value === ''){
+      return true;
     } else {
-      return ((parseFloat(value) == parseInt(value)) && !isNaN(value) && (value.toString().length <= 10));
+      return ((parseFloat(value) === parseInt(value)) && !isNaN(value) && (value.toString().length <= 10));
     }
   }
 
 
   isInteger(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null =>  {
-      if(control.value!==null){
+      if (control.value !== null){
           return this.check_if_is_integer(control.value) ? null : {
                  notNumeric: true
-          }
+          };
       }
-    }
+    };
   }
 
 
@@ -224,7 +224,7 @@ export class ShopeeeClientFormComponent implements OnInit {
       partner_id: this.form.value.partnerId,
       partner_key: this.form.value.partnerKey,
       redirect_url: this.form.value.redirectUrl,
-      shop_id: this.isEdit? this.shopIdValue : this.form.value.shopId,
+      shop_id: this.isEdit ? this.shopIdValue : this.form.value.shopId,
       warehouse_id: this.form.value.warehouseId,
       split_variant: false,
     };

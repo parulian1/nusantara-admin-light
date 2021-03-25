@@ -42,6 +42,11 @@ import { MarketplaceClientEnum } from './markeplace-client-enum';
           [shopSlug]="shopSlug"
           [isEdit]="editMode"
         ></nus-tsc-client-form>
+        <nus-lazada-client-form
+          *ngSwitchCase="marketplaceClient.lazada"
+          [shopSlug]="shopSlug"
+          [isEdit]="editMode"
+        ></nus-lazada-client-form>
       </div>
     </div>
   `,

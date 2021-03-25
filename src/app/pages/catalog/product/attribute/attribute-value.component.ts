@@ -11,7 +11,9 @@ import { IProductAttribute } from '@nusantara/models/products';
         {{ attributeDefinition.name }}
       </td>
       <td class="centered" [ngClass]="{'vertical-aligned': attributeDefinition.type === 'markdown'}">
-        <input type="checkbox" class="toggle"/>
+        <!-- <input type="checkbox" class="toggle"/> -->
+        <mat-slide-toggle>
+        </mat-slide-toggle>
       </td>
 
       <td [ngClass]="{'color-input': attributeDefinition.type === 'color'}">
@@ -54,7 +56,8 @@ import { IProductAttribute } from '@nusantara/models/products';
     '.color-input { text-align: left; }',
     '.color-input input { width: 40px; height: 40px; border-radius: 4px; padding: 0; }',
     'input { height: 40px; }',
-    'td { border-bottom: solid 1px var(--grey) !important; }'
+    'td { border-bottom: solid 1px var(--grey) !important; }',
+    '::ng-deep mat-slide-toggle label { min-height: 40px; }'
   ]
 })
 export class AttributeValueComponent {

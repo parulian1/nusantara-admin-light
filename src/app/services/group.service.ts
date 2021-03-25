@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 
 import {AbstractCrudService, PagedResponse} from '@nusantara/core';
-import {IAccessGroup, IOrder} from '@nusantara/models';
+import {IAccessGroup} from '@nusantara/models';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
@@ -22,8 +22,8 @@ export class GroupService extends AbstractCrudService<IAccessGroup> {
     userEmail?: string
   ): Observable<PagedResponse<IAccessGroup>> {
     const rawParams = {
-      'page': page.toFixed(0).toString(),
-      'email': userEmail,
+      page: page.toFixed(0).toString(),
+      email: userEmail,
     };
 
     return this.httpClient

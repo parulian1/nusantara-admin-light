@@ -1,26 +1,26 @@
-import {AfterViewInit, Component, OnInit, Input, ViewChild, ViewChildren, QueryList} from '@angular/core';
-import {AbstractEditingComponent, moveItemInFormArray} from '@nusantara/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {IOnBoarding, IOnboardingContent} from '@nusantara/models';
-import {CdkDragDrop} from '@angular/cdk/drag-drop';
-import {OnboardingContentComponent} from './onboarding-content.component';
+import { AfterViewInit, Component, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { AbstractEditingComponent, moveItemInFormArray } from '@nusantara/core';
+import { FormArray, FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { IOnBoarding, IOnboardingContent } from '@nusantara/models';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { OnboardingContentComponent } from './onboarding-content.component';
 
 @Component({
   selector: 'nus-onboarding-content-host',
   template: `
-      <div cdkDropList [cdkDropListData]="form" class="example-list"
-                    (cdkDropListDropped)="drop($event)">
-        <div class="onboarding-content-div" *ngFor="let content_control of form.controls; let i=index" cdkDrag>
-          <nus-onboarding-content [form]="content_control"
-                                  [entity]="entity?.contents.length > 0 ? entity?.contents[i] : null"
-                                  (remove)="form.removeAt(i)" >
-          </nus-onboarding-content>
-        </div>
+    <div cdkDropList [cdkDropListData]="form" class="example-list"
+         (cdkDropListDropped)="drop($event)">
+      <div class="onboarding-content-div" *ngFor="let content_control of form.controls; let i=index" cdkDrag>
+        <nus-onboarding-content [form]="content_control"
+                                [entity]="entity?.contents.length > 0 ? entity?.contents[i] : null"
+                                (remove)="form.removeAt(i)">
+        </nus-onboarding-content>
       </div>
-      <button type="button" (click)="addContent()" class="add-button">
-        Add Record
-      </button>
+    </div>
+    <button type="button" (click)="addContent()" class="add-button">
+      Add Record
+    </button>
   `,
   styleUrls: ['./onboarding-content-host.css']
 })
@@ -45,7 +45,7 @@ export class OnboardingContentHostComponent extends AbstractEditingComponent<For
   addContent(content?: IOnboardingContent) {
     const form = this.fb.group({
       href: [content?.href ?? '', []],
-      image: ['', content?.image ? []: [Validators.required]],
+      image: ['', content?.image ? [] : [Validators.required]],
       name: [content?.name, [Validators.required, Validators.maxLength(100)]],
       description: [content?.description, [Validators.maxLength(255), Validators.required]],
       buttonStatus: [content?.buttonStatus ?? false, []],
@@ -66,14 +66,26 @@ export class OnboardingContentHostComponent extends AbstractEditingComponent<For
   }
 
   getValue() {
-    this.form.controls.map((content, index) => {
-      content.value.sortPriority = index;
-      this.contents.map((contentComponent, _index) => {
-        if (_index === index) {
-          content.value.image = contentComponent.imagePreviewUrl;
+
+    // updated code based on SonarLint issues
+    this.form.controls.forEach((value, index) => {
+      value.value.sortPriority = index;
+      this.contents.forEach((valueComponent, subIndex) => {
+        if (subIndex === index) {
+          value.value.image = valueComponent.imagePreviewUrl;
         }
       });
     });
+
+    // code that creates issues for SonarLint
+    // this.form.controls.map((content, index) => {
+    //   content.value.sortPriority = index;
+    //   this.contents.map((contentComponent, subIndex) => {
+    //     if (subIndex === index) {
+    //       content.value.image = contentComponent.imagePreviewUrl;
+    //     }
+    //   });
+    // });
   }
 
 }

@@ -98,7 +98,6 @@ export class LineItemComponent implements OnInit, AfterViewInit {
   get cost(): FormControl { return this.form.get('cost') as FormControl; }
 
   ngOnInit() {
-    this.addLocator();
   }
 
   ngAfterViewInit() {

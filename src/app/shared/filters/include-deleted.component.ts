@@ -3,15 +3,22 @@ import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'nus-include-deleted',
-  template: `<label><input type="checkbox" (click)="applyFilter($event)">{{ text }}</label>`,
+  template: `
+    <label>
+      <mat-checkbox [ngModel]="showDeleted" (ngModelChange)="applyFilter($event)"> 
+        {{ text }}
+      </mat-checkbox>
+    </label>
+  `,
   styles: [
     'label { min-height: auto; padding-bottom: 0; }',
     ':host { padding-right: 20px }'
   ]
 })
 export class IncludeDeletedComponent implements OnInit {
+  showDeleted = false;
   public applied = false;
-  @Input() text = "Show SoftDeleted";
+  @Input() text = 'Show SoftDeleted';
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute) {
@@ -24,8 +31,8 @@ export class IncludeDeletedComponent implements OnInit {
 
   }
 
-  applyFilter(event: any) {
-    const params = {include_deleted: event.target.checked };
+  applyFilter(event: boolean) {
+    const params = {include_deleted: event};
     this.router.navigate(
       ['./'],
       {

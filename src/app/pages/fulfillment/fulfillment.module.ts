@@ -16,7 +16,8 @@ import {
   InputAwbModalComponent,
   OrderCustomPaginationComponent,
   ActivityTrackingModalComponent,
-  OrderDateFilterComponent
+  OrderDateFilterComponent,
+  OrderFiltersComponent
 } from './orders';
 import { OrderPaymentConfirmComponent, OrderPaymentConfirmDialogComponent } from './orders/containers';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
@@ -48,7 +49,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     InputAwbModalComponent,
     ActivityTrackingModalComponent,
     OrderCustomPaginationComponent,
-    OrderDateFilterComponent
+    OrderDateFilterComponent,
+    OrderFiltersComponent
   ],
   imports: [
     CommonModule,

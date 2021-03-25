@@ -1,52 +1,22 @@
-import {AfterContentChecked, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {AfterContentChecked, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 
 import {AbstractListComponent, PagedResponse} from '@nusantara/core';
-import {drf, IOrder, ICheckedOrder } from '@nusantara/models';
-import { FormGroup } from '@angular/forms';
+import {drf, IOrder, ICheckedOrder} from '@nusantara/models';
+import {IOrderFilterValue} from '@nusantara/models/order/filter';
+import { SvgIconService } from '@nusantara/services';
 
 @Component({
   selector: 'nus-order-list',
   template: `
     <nus-list-header title="Order" [canAddNew]="false"></nus-list-header>
-    <div>
-      <label>
-        <span>Filter</span>
-        <div class="filters">
-          <nus-order-date-filter 
-            (startDate)="startDateChange($event)" 
-            (endDate)="endDateChange($event)">
-          </nus-order-date-filter>
-          <mat-form-field>
-            <mat-select [disableOptionCentering]="true" panelClass="mat-select-panel" [(ngModel)]="selectedPlatform">
-              <mat-option value="allPlatform">All Platform</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field>
-            <mat-select 
-              [disableOptionCentering]="true" panelClass="mat-select-panel" 
-              [(ngModel)]="selectedStatus"
-              (ngModelChange)="onStatusChanged($event)">
-              <mat-option 
-                *ngFor="let opt of orderStatuses" 
-                value="opt.value">
-                {{opt.displayName}}            
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field>
-            <mat-select [disableOptionCentering]="true" panelClass="mat-select-panel" [(ngModel)]="selectedLogistics">
-              <mat-option value="allLogistic">All Logistics</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </label>
-    </div>
-
+    <nus-order-filters (filterApplied)="onFilterApplied($event)">
+    </nus-order-filters>
     <nus-order-custom-pagination 
       [page]="page" 
       [checklist]="checklist"
-      [checkedList]="checkedList"
+      [checkedlist]="checkedlist"
+      [appliedFilters]="appliedFilter"
       (masterSelectChanged)="onMasterSelectedChange($event)">
     </nus-order-custom-pagination>
 
@@ -66,19 +36,11 @@ import { FormGroup } from '@angular/forms';
           <th>
             <span class="nowrap">
               Paid Date
-              <nus-sort-toggle [field]="'paidDate'">
-              </nus-sort-toggle>
+              <nus-sort-toggle field="paid_time"></nus-sort-toggle>
             </span>
           </th>
           <th>Logistic</th>
           <th>Status</th>
-          <th>
-            <span class="nowrap">
-              Time Limit
-              <nus-sort-toggle [field]="'timeLimit'">
-              </nus-sort-toggle>
-            </span>
-          </th>
         </tr>
       </thead>
       <tbody>
@@ -90,9 +52,9 @@ import { FormGroup } from '@angular/forms';
               <a [routerLink]="[entity.order|entityToSlug]">{{ entity.order.orderNumber }}</a>
             </span>
           </td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td>{{ entity.order.platform }}</td>
+          <td>{{ entity.order.paidTime | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
+          <td>{{ entity.order.shippingMethods.join(', ') }}</td>
           <td>
             <span class="badge" [ngClass]="{
               'success': statusWithSuccessBadge.includes(entity.order.status),
@@ -101,7 +63,6 @@ import { FormGroup } from '@angular/forms';
               {{ entity.order.status | titlecase }}
             </span>
           </td>
-          <td></td>
         </tr>
       </tbody>
     </table>
@@ -109,20 +70,7 @@ import { FormGroup } from '@angular/forms';
     <nus-pagination [page]="page"></nus-pagination>
 `,
   styles: [
-    '.filters { display: grid; grid-template-columns: repeat(4, 1fr); grid-gap: 16px; }',
-    '.button-action { display: flex; justify-content: space-between; align-items: center; }',
-    '.button-action button:not(:first-child) { margin-left: 16px; }', 
     'thead tr th:first-child, tbody tr td:first-child { min-width: 200px; }',
-    '.select-date { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 20px; }',
-    `.svg {
-        content: "";
-        position: absolute;
-        height: 10px;
-        width: 10%;
-        background-image: url("assets/arrowDown.svg");
-        background-size: 12px; 
-      }`,
-    '.custom-date-filter { display: none; }',
     '.checklist { display: flex; align-items: center; }',
     '.checklist mat-checkbox { margin-right: 10px; margin-bottom: 12px; }',
     '::ng-deep .date-range-footer { padding: 10px 25px; }',
@@ -130,72 +78,34 @@ import { FormGroup } from '@angular/forms';
   ]
 })
 export class OrderListComponent extends AbstractListComponent<IOrder> implements OnInit, AfterContentChecked {
-  @ViewChild("calendar") matCalendar: ElementRef;
-
-  orderStatuses: Array<drf.IChoice>;
-  form: FormGroup;
-  timeoutId: any;
-  reloadTimeout = 650;
-  filterParams: {
-    status: string,
-  } = {
-    status: ''
-  };
 
   statusWithAlertBadge = ['unpaid', 'waiting', 'paid', 'ready', 'shipped'];
   statusWithSuccessBadge = ['complete'];
   statusWithErrorBadge = ['refunded', 'returned', 'cancelled'];
 
-  selectedPlatform = 'allPlatform';
-  selectedStatus = 'paid';
-  selectedLogistics = 'allLogistic';
-
   checklist: Array<ICheckedOrder>;
-  checkedList: Array<ICheckedOrder>;
+  checkedlist: Array<string>;
+  appliedFilter: IOrderFilterValue;
 
   constructor(
-    public route: ActivatedRoute, 
-    public router: Router, 
-    private cdref: ChangeDetectorRef) { super(route); }
+    public route: ActivatedRoute,
+    private cdref: ChangeDetectorRef,
+    private svgIconService: SvgIconService) { super(route); }
 
   ngOnInit(): void {
     this.route.data.subscribe((
-      data: { page: PagedResponse<IOrder>, orderType: drf.IChoice[], orderStatus: drf.IChoice[]}) => {
+      data: { page: PagedResponse<IOrder>, orderType: drf.IChoice[]}) => {
       this.page = data.page;
-      this.orderStatuses = data.orderStatus;
-      
-      const theQuery = this.route.queryParams;
+      this.checklist = this.page.entities.map(  
+        (entity, index) => ({ index: index, order: entity, isSelected: false })
+      )
     });
-
-    this.route.queryParams.subscribe((queryParam: any) => {
-      this.filterParams.status = queryParam.status || '';
-    });
-
-    this.checklist = this.page.entities.map(
-      (entity, index) => ({ index: index, order: entity, isSelected: false })
-    )
-    
     super.ngOnInit();
+    this.svgIconService.registerIcons();
   }
 
   ngAfterContentChecked() {
     this.cdref.detectChanges();
-  }
-
-  public onStatusChanged(event) {
-
-    this.timeoutId = setTimeout(() => {
-      // wait to see if the user is still typing more before navigating
-      const params = {status: event.target.value};
-      this.router.navigate(
-        ['.'],
-        {
-          queryParams: params,
-          relativeTo: this.route
-        }
-      );
-    }, this.reloadTimeout);
-
   }
 
   onMasterSelectedChange(event: boolean){
@@ -205,19 +115,16 @@ export class OrderListComponent extends AbstractListComponent<IOrder> implements
     this.getCheckedItemList();
   }
 
-  getCheckedItemList(){
-    this.checkedList = [];
+  getCheckedItemList() {
+    this.checkedlist = [];
     for (var i = 0; i < this.checklist.length; i++) {
-      if(this.checklist[i].isSelected)
-      this.checkedList.push(this.checklist[i]);
+      if (this.checklist[i].isSelected){
+        this.checkedlist.push(this.checklist[i].order.orderNumber);
+      }
     }
   }
 
-  startDateChange(event: string){
-    console.log(event);
-  }
-
-  endDateChange(event: string){
-    console.log(event);
+  onFilterApplied(event: IOrderFilterValue){
+    this.appliedFilter = event; 
   }
 }

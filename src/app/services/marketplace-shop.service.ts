@@ -85,4 +85,18 @@ export class MarketplaceShopService {
       `${this.baseUrl}/${shopSlug}/`
     );
   }
+
+  shopInAuthCallback(formData: FormData): Observable<any>{
+    return this.httpClient.post(
+      `/api/marketplace/shop-callback/`,
+      formData
+    );
+  }
+
+  shopCallback(formData: FormData, baseurl: string): Observable<any>{
+    return this.httpClient.post(
+      `https://${baseurl}/api/marketplace/shop-callback/`,
+      formData
+    );
+  }
 }

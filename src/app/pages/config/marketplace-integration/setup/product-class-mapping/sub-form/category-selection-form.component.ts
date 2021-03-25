@@ -23,7 +23,7 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 @Component({
   selector: 'nus-category-selection-form',
   template: `
-    <form [formGroup]="form" class="fluid"> 
+    <form [formGroup]="form" class="fluid">
       <div class="wrapper">
         <h1 class="heading-1">Choose Category (1/3)</h1>
         <p>Choose a category that matches your Product Class</p>
@@ -81,7 +81,7 @@ export class CategorySelectionFormComponent
   @Output() cancel = new EventEmitter<boolean>();
   @Output() next = new EventEmitter<boolean>();
   @Output() selectedCategory = new EventEmitter<ISelectedCategory>();
-  @Input() currentShop : string;
+  @Input() currentShop: string;
 
   categories: IProductCategory[] = [];
   shopSlug: string;

@@ -18,7 +18,20 @@ export class OrderListResolver extends AbstractListResolver<IOrder> {
     let params = new HttpParams();
     const theQuery = route.queryParams;
     for (const keyParam of Object.keys(theQuery)) {
-      if (['q', 'ordering', 'status', 'page', 'per_page'].indexOf(keyParam) >= 0) {
+      if (
+        [
+          "q",
+          "ordering",
+          "start_time",
+          "end_time",
+          "store_id",
+          "order_status_admin",
+          "shipping_method",
+          "page",
+          "per_page",
+          "order",
+        ].indexOf(keyParam) >= 0
+      ) {
         if ('page' === keyParam || keyParam === 'per_page') {
           // need to validate number
           if (Number.isInteger(theQuery[keyParam])) {

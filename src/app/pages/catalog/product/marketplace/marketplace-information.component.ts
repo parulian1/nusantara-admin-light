@@ -69,6 +69,7 @@ import { AbstractEditingComponent } from '@nusantara/core';
                             {{ attributesFormArray.controls[i].value.name }}
                           </td>
                           <td *ngIf="storeIndex === attributesFormArray.controls[i].value.indexShop">
+
                             <div *ngIf="attributesFormArray.controls[i].value.type === 'combo box' || attributesFormArray.controls[i].value.type === 'dropdown'">
                               <select #selecteEditAttr formControlName="value"
                                 (change)="attrChange(selecteEditAttr.value, i)">
@@ -90,14 +91,24 @@ import { AbstractEditingComponent } from '@nusantara/core';
                                 </div>
                               </div>
                             </div>
-                            <input formControlName="value" type="text" *ngIf="attributesFormArray.controls[i].value.type === 'text'"/>
-                            <input formControlName="value" type="integer" *ngIf="attributesFormArray.controls[i].value.type === 'integer'"/>
+                            <div *ngIf="client.option === LZD && attributesFormArray.controls[i].value.marketplaceAttributeName === 'SellerSku' || attributesFormArray.controls[i].value.marketplaceAttributeName === 'price'; else nonDisable">
+                              <input formControlName="value" type="text" readonly *ngIf="attributesFormArray.controls[i].value.marketplaceAttributeName === 'SellerSku'"/>
+                              <input formControlName="value" type="number" readonly *ngIf="attributesFormArray.controls[i].value.marketplaceAttributeName === 'price'"/>
+                            </div>
+
+                            <ng-template #nonDisable>
+                                <input formControlName="value" type="text" *ngIf="attributesFormArray.controls[i].value.type === 'text'"/>
+                              <input formControlName="value" type="number" *ngIf="attributesFormArray.controls[i].value.type === 'integer'"/>
+                            </ng-template>
+
+                            <input formControlName="value" type="text" *ngIf="attributesFormArray.controls[i].value.type === 'text' && client.option !== LZD"/>
+                            <input formControlName="value" type="number" *ngIf="attributesFormArray.controls[i].value.type === 'integer' && client.option !== LZD"/>
                           </td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
-                  <ng-template #noAttributeMatch> 
+                  <ng-template #noAttributeMatch>
                     <div class="no-attribute">
                       <div *ngIf="client.option === TSC; else nonTscEmptyInfo">
                         <h3 class="subheading-1">Product class doesn't have attribute.</h3>
@@ -177,6 +188,7 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
   @ViewChild(MarketplaceStockInfoModalComponent) marketplaceStockInfo: MarketplaceStockInfoModalComponent;
 
   readonly TSC = 'tsc';
+  readonly LZD = 'lazada';
 
   productClassChanged: boolean;
   emptyStore: boolean;
@@ -213,14 +225,16 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
   ngOnInit() {
     this.initializeForm();
 
-    this.productSlug = this.route.snapshot.paramMap.get('slug')
+    this.productSlug = this.route.snapshot.paramMap.get('slug');
     this.mpItemService
       .getItemMarketplaceInformation(this.productSlug)
       .subscribe((data: IMarketplaceItemInformation) => {
-        this.warehouseCount = data.totalWarehouse;
-        this.marketplaceCount = data.totalMarketplace;
-        this.storeCount = data.totalStore;
-        this.warehouseInfoDetail = data.details;
+        if (data){
+          this.warehouseCount = data.totalWarehouse;
+          this.marketplaceCount = data.totalMarketplace;
+          this.storeCount = data.totalStore;
+          this.warehouseInfoDetail = data.details;
+        }
       });
 
     this.mpItemService
@@ -258,8 +272,8 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
   getAttributes(marketplace: any) {
     this.emptyStore = false;
     this.productClassChanged = false;
-    if(this.selectedTab){
-      if(this.selectedTab !== marketplace.toLowerCase()){
+    if (this.selectedTab){
+      if (this.selectedTab !== marketplace.toLowerCase()){
         this.saveAll();
       }
     }
@@ -268,16 +282,15 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
     this.clearFormArray(this.attributesFormArray);
 
     this.mpItemService
-      .getItemMarketplaceAttribute(this.selectedTab,this.productClassSlug, this.productSlug)
+      .getItemMarketplaceAttribute(this.selectedTab, this.productClassSlug, this.productSlug)
       .subscribe((data: IMarketplaceItemAttributeInformation[]) => {
         this.marketplaceStoreAttributes = data;
-
-        if(!data){
+        if (!data){
           this.emptyStore = true;
         }
 
         if (!!data) {
-          data.forEach((stores:IMarketplaceItemAttributeInformation,index) => {
+          data.forEach((stores: IMarketplaceItemAttributeInformation, index) => {
             stores.attributes.forEach((attr) => {
               this.attributesFormArray.push(
                 this.fb.group({
@@ -288,10 +301,11 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
                   option: [attr.option],
                   newValue: null,
                   indexShop: index,
+                  marketplaceAttributeName: [attr.marketplaceAttributeName]
                 })
               );
             });
-          })
+          });
         }
     });
   }
@@ -300,7 +314,7 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
     const attr = this.attributesFormArray.at(index).get('newValue');
     if (value === 'addNewAttr') {
       attr.setValidators(Validators.required);
-      attr.setValue(""); // should set string otherwise it will give value addNewAttr
+      attr.setValue(''); // should set string otherwise it will give value addNewAttr
     } else {
       attr.clearValidators();
       attr.reset();
@@ -315,13 +329,13 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
   }
 
   saveAll(): void {
-    const attr = this.attributesFormArray.value.map((attr: any) => {
-      let currVal = attr.value;
-      if(attr.newValue !== null){
-        currVal = attr.newValue;
+    const attr = this.attributesFormArray.value.map((attrVal: any) => {
+      let currVal = attrVal.value;
+      if (attrVal.newValue !== null){
+        currVal = attrVal.newValue;
       }
       return {
-        identifier: attr.identifier,
+        identifier: attrVal.identifier,
         value: currVal,
         product: this.productSlug,
       };

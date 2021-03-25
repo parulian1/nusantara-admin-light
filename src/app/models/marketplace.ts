@@ -158,7 +158,7 @@ export interface IMarketplaceItemDetailStoreInformation{
 export interface IMarketplaceItemDetailInformation{
   warehouse: string;
   totalStock: number;
-  store:IMarketplaceItemDetailStoreInformation[];
+  store: IMarketplaceItemDetailStoreInformation[];
 }
 
 export interface IMarketplaceItemInformation {
@@ -171,7 +171,7 @@ export interface IMarketplaceItemInformation {
 export interface IMarketplaceItemLogisticInformation {
   storeName: string;
   storeMarketplace: string;
-  storeSlug:string;
+  storeSlug: string;
   isConnected: true;
   storeLogistic: string[];
 }
@@ -179,15 +179,28 @@ export interface IMarketplaceItemLogisticInformation {
 export interface IAttributeInformation {
   name: string;
   type: string;
-  option:string[];
+  option: string[];
   value: string;
-  identifier:string;
+  identifier: string;
+  marketplaceAttributeName: string;
 }
 
 export interface IMarketplaceItemAttributeInformation {
   shop: string;
   shopId: number;
-  shopSlug:string;
+  shopSlug: string;
   isConnected: boolean;
   attributes: IAttributeInformation[];
+}
+
+
+export interface ILazadaCredential {
+  sellerEmail: string;
+  warehouse: number;
+  marketplace: string;
+}
+
+export interface ILazadaAuthResponse{
+  sellerEmail: string;
+  warehouseId: number;
 }

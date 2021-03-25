@@ -9,14 +9,16 @@ import { CatalogRoutingModule } from './catalog-routing.module';
 import { CategoryListComponent, CategoryComponent } from './category';
 
 import { ProductClassListComponent, ProductClassComponent } from './product-class';
-import { ProductClassAttributesComponent } from './product-class/components';
 
 import * as product from './product';
 import { VendorListComponent, VendorComponent } from './vendor';
-import {ProductOptionListComponent} from './product-options/product-option-list.component';
-import {ProductOptionComponent} from './product-options/product-option.component';
+import { ProductClassAttributesComponent } from './product-class/components';
+import { ProductOptionComponent, ProductOptionListComponent } from './product-options';
 import { StockSearchComponent } from './product/stock-search/stock-search.component';
+import { StockInputComponent } from './product/stock-input/stock-input.component';
 
+import { MatIconModule } from '@angular/material/icon';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 @NgModule({
   declarations: [
     CategoryListComponent,
@@ -51,6 +53,7 @@ import { StockSearchComponent } from './product/stock-search/stock-search.compon
     ProductOptionListComponent,
     ProductOptionComponent,
     StockSearchComponent,
+    StockInputComponent,
   ],
   imports: [
     CommonModule,
@@ -60,6 +63,10 @@ import { StockSearchComponent } from './product/stock-search/stock-search.compon
     ReactiveFormsModule,
     CKEditorModule,
     CatalogRoutingModule,
+
+    // Angular Material
+    MatIconModule,
+    MatSlideToggleModule,
   ],
 })
 export class CatalogModule { }

@@ -5,7 +5,7 @@ import { IWarehouseDetail } from '../models';
 
 /**
  * Used in Delivery Orders Page / inventory-receiving
- * 
+ *
  */
 @Component({
   selector: 'nus-marketplace-channel-info-modal',
@@ -13,7 +13,7 @@ import { IWarehouseDetail } from '../models';
     <ngx-smart-modal #modal [identifier]="'marketplaceChannelInfoModal'"
       [customClass]="'wide-modal no-padding-modal'">
       <h2 class="heading-2">Marketplace Information</h2>
-      <div class="content">  
+      <div class="content">
         <div class="table">
           <table>
               <thead>

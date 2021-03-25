@@ -3,7 +3,14 @@ import { FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractDetailComponent, ErrorResult, getSlugFromHref, ToastService } from '@nusantara/core';
-import { UserService, ShipmentService, OrderService } from '@nusantara/services';
+import { 
+  UserService,
+  ShipmentService,
+  OrderService,
+  OrderReportService,
+  OrderDownloadFileService,
+  SvgIconService
+} from '@nusantara/services';
 import { drf, order, OrderStatusType } from '@nusantara/models';
 import { 
   TransportToCounterSelectionModalComponent, 
@@ -36,7 +43,7 @@ import {
           </td>
           <td>
             <div class="body-2">Platform</div>
-            <div class="subheading-2">-</div>
+            <div class="subheading-2">{{ orderDetailData.source | uppercase }}</div>
           </td>
           <td></td>
         </tr>
@@ -64,124 +71,177 @@ import {
           </td>
         </tr>
         <tr>
-          <td colspan="5" class="note">
-            <div class="subheading-2">Note</div>
-            <textarea></textarea>
-          </td>
-        </tr>
-        <tr>
           <td colspan="5">
-            <div class="download-button">
-                <button type="button" class="control secondary">Download Product List</button>
-                <button type="button" class="control secondary">Download Shipping Label</button>
-            </div>
+            
           </td>
         </tr>
       </tbody>
     </table>
     </form>
 
-    <table class="order-status">
-      <tbody>
-        <tr>
-          <td>
-            <div class="body-2">Status</div>
-            <div class="subheading-2">{{ orderDetailData.status | titlecase }}</div>
-          </td>
-          <td>
-            <div class="body-2">Logistic</div>
-            <div class="subheading-2">
-              <span *ngFor="let children of orderDetailData.children">
-                <ng-container *ngIf="children.data[0]?.shippingMethod">{{ children.data[0].shippingMethod }}</ng-container>
-              </span>
-            </div>
-          </td>
-          <td>
-            <div class="body-2">AWB</div>
-            <div class="subheading-2">-</div>
-          </td>
-          <td></td>
-        </tr>
-        <tr>
-          <td colspan="4">
-            <span class="button-action">
-              <nus-milestone [steps]="['Ready', 'Ship', 'Complete']" [current]="'Ship'"></nus-milestone>
-              <button type="button" class="control" (click)="setPickupService.open()">Ready</button>
-              <button type="button" class="control secondary" (click)="activityTracking.open()">View Progress</button>
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
 
-    <ng-container *ngFor="let children of orderDetailData.children">
-      <table class="product-list">
-        <tbody>
-        <tr>
-          <td colspan="4">
-            <h3 class="heading-1">Product</h3>
-          </td>
-        </tr>
-        <ng-container *ngFor="let data of children.data">
-          <tr *ngFor="let lineItems of data.lineItems">
-            <td>
-              <div></div>
-            </td>
-            <td>
-              <div class="subheading-2">
-                {{ lineItems.product.name }}
-              </div>
-              <div class="caption-1">
-                {{ lineItems.product.upc }}
-              </div>
-            </td>
-            <td>
-              <div class="body-2">Item Price</div>
-              <div class="subheading-2">{{ lineItems.price | currency: "IDR" }}</div>
-            </td>
-            <td>
-              <div class="body-2">Total Item</div>
-              <div class="subheading-2">{{ lineItems.quantity }}</div>
+    <div class="tab-header">
+      <label [ngClass]="{'active': currentTab === 'orderDetail'}" (click)="currentTab = 'orderDetail'">
+        <i class="material-icons">analytics</i>
+        <input type="radio" id="tab_summary" value="summary"/>
+        Order Detail
+      </label>
+
+      <label *ngIf="isManualTransfer(orderDetailData)"
+            [ngClass]="{'active': currentTab === 'paymentConfirm'}"
+            (click)="currentTab = 'paymentConfirm'">
+        <i class="material-icons">assignment</i>
+        <input type="radio" id="tab_assignment" value="assignment"/>
+        Order Confirm
+      </label>
+    </div>
+
+    <div *ngIf="currentTab === 'orderDetail'" id="orderDetail">
+      <ng-container *ngFor="let children of orderDetailData.children">
+        <table class="order-status">
+          <tbody>
+            <tr>
+              <td>
+                <div class="body-2">Status</div>
+                <div class="subheading-2">{{ (orderDetailData.status ? orderDetailData.status : '-') | titlecase }}</div>
+              </td>
+              <td>
+                <div class="body-2">Logistic</div>
+                <div class="subheading-2">
+                  <ng-container *ngIf="children.data[0]?.shippingMethod">{{ children.data[0].shippingMethod }}</ng-container>
+                </div>
+              </td>
+              <td>
+                <div class="body-2">AWB</div>
+                <div class="subheading-2">
+                  <!-- todo get from shipment API -->
+                </div>
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td colspan="4">
+                <span class="button-status-action">
+                  <nus-milestone [steps]="['ready', 'ship', 'complete']" [current]="currentMilestone"></nus-milestone>
+                  
+                  <ng-container *ngIf="canUpdateOrder">
+                    <div class="update-dropdown">
+                      <select name="status" id="status" [formControl]="status">
+                        <option *ngFor="let orderStatus of statusCanUpdateChoices"
+                                [ngValue]="orderStatus.value">
+                          {{ orderStatus.displayName }}
+                        </option>
+                      </select>
+                      <p *ngIf="status.invalid && (status.touched || status.dirty)"
+                        style="margin: 0; color: red; max-width: 200px;">
+                        <span *ngIf="status.hasError('server')">{{ status.errors['server'] }}</span>
+                        <!-- todo: handle other error need to think again  -->
+                      </p>
+                    </div>
+                  </ng-container>
+
+                  <button *ngIf="orderDetailData.status === 'paid'" type="button" class="control">Ready</button>
+                  <button *ngIf="orderDetailData.status === 'ready'" type="button" class="control">Ship</button>
+                  <button *ngIf="orderDetailData.status === 'shipped'" type="button" class="control">Complete</button>
+
+                  <!-- <button type="button" class="control secondary" 
+                    (click)="activityTracking.open()">
+                    View Progress
+                    </button>
+                  -->
+
+                  <div class="download-button">
+                    <button class="download control secondary" mat-button [matMenuTriggerFor]="menu">
+                      Download
+                      <mat-icon class="icon-secondary" svgIcon="arrow-down"></mat-icon>
+                    </button>
+                    <mat-menu #menu>
+                      <button mat-menu-item (click)="downloadProductList()">Product List</button>
+                      <button mat-menu-item 
+                        [disabled]="!getConnote(children.data[0])" 
+                        (click)="printConnote(children.data[0].shipmentHistory.shippingLabelUrl)">
+                        Shipping Label
+                      </button>
+                    </mat-menu>
+                  </div>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="product-list">
+          <tbody>
+          <tr>
+            <td colspan="4">
+              <h3 class="heading-1">Product</h3>
             </td>
           </tr>
-        </ng-container>
+          <ng-container *ngFor="let data of children.data">
+            <tr *ngFor="let lineItems of data.lineItems">
+              <td>
+                <div><img [src]="lineItems.product.image" alt="Product Image"></div>
+              </td>
+              <td>
+                <div class="subheading-2">
+                  {{ lineItems.product.name }}
+                </div>
+                <div class="caption-1">
+                  {{ lineItems.product.upc }}
+                </div>
+              </td>
+              <td>
+                <div class="body-2">Item Price</div>
+                <div class="subheading-2">{{ lineItems.price | currency: "IDR" }}</div>
+              </td>
+              <td>
+                <div class="body-2">Total Item</div>
+                <div class="subheading-2">{{ lineItems.quantity }}</div>
+              </td>
+            </tr>
+          </ng-container>
+          </tbody>
+        </table>
+      </ng-container>
+      <table class="summary">
+        <thead>
+          <tr>
+            <th colspan="2">
+              <h3 class="heading-1">Order Summary</h3>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Total amount cart (before Disc)</td>
+            <td class="summary-order-value">{{ orderDetailData.subtotalCost | currency: "IDR" }}</td>
+          </tr>
+          <tr>
+            <td>Discount Total</td>
+            <td class="summary-order-value">-{{ orderDetailData.discount | currency: "IDR" }}</td>
+          </tr>
+          <tr>
+            <td>Total amount cart (after Disc)</td>
+            <td class="summary-order-value">
+              {{ orderDetailData.subtotalCost - orderDetailData.discount | currency: "IDR" }}
+            </td>
+          </tr>
+          <tr>
+            <td>Shipping total</td>
+            <td class="summary-order-value">{{ orderDetailData.shippingCost | currency: "IDR" }}</td>
+          </tr>
+          <tr>
+            <td>Order total</td>
+            <td class="summary-order-value">{{ orderDetailData.orderPayment.amount | currency: "IDR" }}</td>
+          </tr>
         </tbody>
       </table>
-    </ng-container>
+    </div>
 
-    <table class="summary">
-      <thead>
-        <tr>
-          <th colspan="2">
-            <h3 class="heading-1">Order Summary</h3>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Total amount cart (before Disc)</td>
-          <td class="summary-order-value">{{ orderDetailData.subtotalCost | currency: "IDR" }}</td>
-        </tr>
-        <tr>
-          <td>Discount Total</td>
-          <td class="summary-order-value">-{{ orderDetailData.discount | currency: "IDR" }}</td>
-        </tr>
-        <tr>
-          <td>Total amount cart (after Disc)</td>
-          <td class="summary-order-value">
-            {{ orderDetailData.subtotalCost - orderDetailData.discount | currency: "IDR" }}
-          </td>
-        </tr>
-        <tr>
-          <td>Shipping total</td>
-          <td class="summary-order-value">{{ orderDetailData.shippingCost | currency: "IDR" }}</td>
-        </tr>
-        <tr>
-          <td>Order total</td>
-          <td class="summary-order-value">{{ orderDetailData.orderPayment.amount | currency: "IDR" }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div *ngIf="currentTab === 'paymentConfirm'" id="paymentConfirm" style="margin-bottom: 20px">
+      <nus-order-confirm [order]="orderDetailData"></nus-order-confirm>
+    </div>
+
     <button type="button" (click)="navigateToParent(true)" class="control">Back</button>
 
     <!-- Modals -->
@@ -202,24 +262,39 @@ import {
     '.detail tr.no-border-bottom td { border-bottom: none; }',
     '.detail tr.more-detail td { padding-top: 3px; }',
     '.detail tr.more-toggle td { padding: 0 24px 18px; }',
-    '.detail td.note { padding: 16px 24px; }',
-    '.detail td.note div { margin-bottom: 4px; }',
-    '.download-button, .button-action { display: flex; justify-content: flex-start; gap: 16px; }',
-    '.download-button button, .button-action button { padding: 0 10px; }',
+    '.update-dropdown > select { min-width: 220px; }',
+    '.button-status-action { display: flex; justify-content: flex-start; gap: 16px; }',
+    '.button-status-action button { padding: 0 10px; }',
     '.subheading-2 { color: var(--lighten-black); margin-bottom: 2px; }',
-    '.product-list td { padding: 14px 24px; }',
+    '.product-list td { padding: 9px 8px; border: none; }',
+    '.product-list td:first-child { width: 64px; padding-left: 24px; }',
     '.product-list tr:first-child > td { padding: 16px 24px; border-bottom: none }',
     '.summary thead { background: transparent; }',
     '.summary th { padding: 20px 24px; }',
     '.summary td { width: 50%; padding: 14px 24px; }',
-    ':host nus-milestone { width: 180px; }'
+    ':host nus-milestone { width: 180px; }',
+    '.tab-header label.active { color: var(--secondary); }', 
+    '.tab-header input:checked { background-color: var(--secondary); }',
+    '.tab-header { margin-bottom: 20px; }', 
+    '.tab-header i { display: block; }', 
+    '.tab-header input[type=radio] { display: none; }',
+    `.tab-header label {
+        display: inline-block; 
+        border-bottom: 2px solid;
+        text-align: center;
+        padding: 0 10px;
+    }`,
+    '.download-button { margin-left: auto; }',
+    '::ng-deep .icon-secondary svg { fill: var(--secondary); }',
+    'img { height: 64px; width: 64px; }',
+    ''
   ]
 })
 export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> implements OnInit {
 
   orderDetailData: order.IOrderDetail;
   shipmentMessageInfo: Array<order.IOrderShipmentInfo> = [];
-  currentTab: 'orderDetail' | 'shipping' | 'history' | 'paymentConfirm' = 'orderDetail';
+  currentTab: 'orderDetail' | 'paymentConfirm' = 'orderDetail';
   orderStatusChoices: Array<drf.IChoice>;
   entity: order.IOrderDetail;
   isRequestShipment = false;
@@ -241,8 +316,12 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
               public toast: ToastService,
               public userService: UserService,
               public shipmentService: ShipmentService,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              private orderReportService: OrderReportService,
+              private orderDonwloadService: OrderDownloadFileService,
+              svgIconService: SvgIconService) {
     super(route, router, toast, service);
+    svgIconService.registerIcons();
   }
 
   ngOnInit(): void {
@@ -264,6 +343,11 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
   }
 
   get status(): FormControl { return this.form.get('status') as FormControl; }
+
+  get currentMilestone(){
+    let status = this.orderDetailData.status === 'shipped'? 'ship': this.orderDetailData.status;
+    return status;
+  }
 
   onSubmit(): void {
     if (this.form.valid) {
@@ -319,7 +403,7 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
       this.shipmentService.createAWB({
         orderNumber: getSlugFromHref(childrenData.href)
       }).subscribe((response) => {
-        let foundShipmentInfoIndex = this.shipmentMessageInfo.findIndex((messageInfo) => {
+        const foundShipmentInfoIndex = this.shipmentMessageInfo.findIndex((messageInfo) => {
           return messageInfo.orderHref === childrenData.href;
         });
         if (response instanceof ErrorResult) {
@@ -328,7 +412,7 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
             message: 'Please contact administrator, something went wrong...',
             success: true,
             connoteNumber: '',
-          }
+          };
         } else {
           shipmentInfo = {
             orderHref: childrenData.href,
@@ -338,9 +422,9 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
           };
           if (!childrenData.shipmentHistory) {
             childrenData.shipmentHistory = new Object({
-              'awbNumber': null,
-              'href': null,
-              'shippingLabelUrl': '',
+              awbNumber: null,
+              href: null,
+              shippingLabelUrl: '',
             });
           }
           childrenData.shipmentHistory.href = response.entity.href;
@@ -390,11 +474,27 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
         selectedOrderDetail.shipmentHistory.shippingLabelUrl = entity.shippingLabelUrl;
       });
     }
-
   }
 
   printConnote(labelUrl: string) {
-    window.open(labelUrl).print();
+    let windowContent = '<!DOCTYPE html>';
+    windowContent += '<html>';
+    windowContent += '<head><title>Print</title></head>';
+    windowContent += '<body>';
+    windowContent += '<img src="' + labelUrl + '">';
+    windowContent += '</body>';
+    windowContent += '</html>';
+
+    const printWin = window.open('', '', 'width=' + screen.availWidth + ',height=' + screen.availHeight);
+    printWin.document.open();
+    printWin.document.write(windowContent);
+
+    printWin.document.addEventListener('load', () => {
+      printWin.focus();
+      printWin.print();
+      printWin.document.close();
+      printWin.close();
+    }, true);
   }
 
   getOrderAddress(): string {
@@ -428,6 +528,7 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
             (response) => {
               // its not correct, IOrder not same as IOrderDetail
               this.orderDetailData = response as any;
+              this.fetchAwbUrl();
             },
             (error) => {
               console.log('Error', error);
@@ -470,25 +571,26 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
   /**
    * return status that can `changed`
    */
-  statusCanUpdateChoices(): Array<drf.IChoice> {
-    const statusCanUpdate = ['unpaid', 'waiting', 'paid', 'cancelled'];
+  get statusCanUpdateChoices(): Array<drf.IChoice> {
+    const statusCanUpdate = ['paid', 'cancelled'];
     return this.orderStatusChoices.filter(status => statusCanUpdate.includes(status.value));
   }
 
   /**
    * check current order status can update or not
    */
-  canUpdateOrder(): boolean {
+  get canUpdateOrder(): boolean {
     const statusCanUpdate = ['unpaid', 'waiting', 'paid', 'cancelled'];
     return (
       this.isManualTransfer(this.orderDetailData) &&
       statusCanUpdate.includes(this.orderDetailData.status)
     );
-  }
+  } 
 
-
-  toggleShowHide(){
-
+  downloadProductList(){
+    this.orderReportService.downloadProductDetail(this.orderDetailData.orderNumber).subscribe((response: string) => {
+      this.orderDonwloadService.downloadAsCsv(response, 'product-list');
+    });
   }
 }
 

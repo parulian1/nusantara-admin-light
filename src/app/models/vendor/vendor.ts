@@ -7,4 +7,5 @@ export interface IVendor extends INamedHrefEntity {
   iconImage: string;
   bannerImage: string;
   extra?: IVendorExtra;
+  isActive?: boolean;
 }

@@ -48,7 +48,7 @@ import * as fromReducer from '@nusantara/reducers';
           </td>
           <!--Action to Match-->
           <td>
-            <a *ngIf="entity.isMapped" class="disabled"> 
+            <a *ngIf="entity.isMapped" class="disabled">
               Edit Mapping
             </a>
             <a *ngIf="!entity.isMapped" [routerLink]="[entity.slug]" [state]="{ productClass: entity }">

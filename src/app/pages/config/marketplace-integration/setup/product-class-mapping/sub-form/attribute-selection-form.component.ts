@@ -21,7 +21,7 @@ import { SubFormComponent } from './sub-form.component';
   selector: 'nus-attribute-selection-form',
   template: `
     <nus-spinner [appBusy]="isBusy"></nus-spinner>
-    
+
     <form [formGroup]="form">
       <div class="wrapper">
         <h1 class="heading-1">Choose Attribute (2/3)</h1>
@@ -30,7 +30,7 @@ import { SubFormComponent } from './sub-form.component';
         <div class="form">
           <label>
             <span>{{ currentShop }} Category</span>
-            <p>{{ categoryNames }}</p>          
+            <p>{{ categoryNames }}</p>
           </label>
 
           <label class="attributes">
@@ -38,7 +38,7 @@ import { SubFormComponent } from './sub-form.component';
             <div *ngIf="mandatoryAttributes">
               <p>Mandatory</p>
               <div class="checkboxes">
-                <div *ngFor="let attr of mandatories.controls; let i = index">  
+                <div *ngFor="let attr of mandatories.controls; let i = index">
                   <input type="checkbox" [formControl]="attr" formArrayName="mandatories"/>
                   <span>{{ mandatoryAttributes[i].name }}</span>
                 </div>
@@ -57,7 +57,7 @@ import { SubFormComponent } from './sub-form.component';
               </div>
             </div>
           </label>
-          
+
         </div>
       </div>
 
@@ -78,7 +78,7 @@ import { SubFormComponent } from './sub-form.component';
     '.form { margin-top: 20px; }',
     'label { margin: 0; padding: 0; min-height: 0; }',
     'label.attributes { margin-top: 19px; }',
-    `.checkboxes { 
+    `.checkboxes {
       width: 40vw;
       margin-top: 8px;
       margin-bottom: 20px;
@@ -115,7 +115,7 @@ export class AttributeSelectionFormComponent
   @Output() next = new EventEmitter<any>();
   @Output() saveNoAttr = new EventEmitter<any>();
   @Output() selectedAttribute = new EventEmitter<IShopAttribute[]>();
- 
+
   shopSlug: string;
   marketplaceAttributes: IShopAttribute[];
   mandatoryAttributes: IShopAttribute[];
@@ -151,11 +151,11 @@ export class AttributeSelectionFormComponent
         .fetchAttribute(this.shopSlug, currValue.deepestChildId)
         .subscribe(
           (attributes: IShopAttribute[]) => {
-            
+
             // if attributes from marketplace not empty
-            if(attributes) {
+            if (attributes) {
               [
-                this.mandatoryAttributes, 
+                this.mandatoryAttributes,
                 this.optionalAttributes,
               ] = attributes.reduce(
                 ([mandatories, optionals], attr) => {

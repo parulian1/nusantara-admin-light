@@ -51,10 +51,14 @@ import * as fromReducer from '@nusantara/reducers';
                 <strong>{{ logistics[i].name }}</strong>
               </td>
               <td class="centered">
-                <input
+                <!-- <input
                   type="checkbox" class="toggle"
                   [formControl]="attr"
-                  formArrayName="shipping"/>
+                  formArrayName="shipping"/> -->
+
+                <mat-slide-toggle
+                  [formControl]="attr">
+                </mat-slide-toggle>
               </td>
             </tr>
           </tbody>
@@ -66,7 +70,7 @@ import * as fromReducer from '@nusantara/reducers';
             (click)="onSubmit()"
             [disabled]="isBusy">
             Save
-          </button>  
+          </button>
           <button type="button" class="control" (click)="onBack()"
             [ngClass]="{ 'secondary ghost': !readOnly.includes((currentShop$ | async)?.marketplace) }">
             Cancel
@@ -84,6 +88,7 @@ import * as fromReducer from '@nusantara/reducers';
     '.toggle { margin-right: 16px }',
     '.action-buttons { margin-top: 30px; }',
     'button:not(:first-of-type) { margin-left: 5px; }',
+    '::ng-deep mat-slide-toggle label { min-height: 40px; }'
   ],
 })
 export class EditShippingComponent implements OnInit, OnDestroy {
@@ -97,8 +102,9 @@ export class EditShippingComponent implements OnInit, OnDestroy {
   subscription: Subscription;
 
   readOnly = [
-    'tsc'
-  ]
+    'tsc',
+    'lazada'
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -135,10 +141,10 @@ export class EditShippingComponent implements OnInit, OnDestroy {
   }
 
   addCheckboxes() {
-    const checkboxes = this.buildCheckboxes(this.logistics)
-    if(checkboxes) {
+    const checkboxes = this.buildCheckboxes(this.logistics);
+    if (checkboxes) {
       checkboxes.forEach((attr: FormControl) => {
-        if(this.readOnly.includes(this.marketplace)) {
+        if (this.readOnly.includes(this.marketplace)) {
           attr.disable();
         }
         this.shipping.push(attr);
@@ -147,7 +153,7 @@ export class EditShippingComponent implements OnInit, OnDestroy {
   }
 
   buildCheckboxes(attributes: ILogistic[]) {
-    if(attributes) {
+    if (attributes) {
       const arr = attributes.map((attr) => {
         return this.fb.control(attr.enabled);
       });

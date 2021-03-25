@@ -16,4 +16,6 @@ export interface IProductPromotion extends INamedHrefEntity {
   productBundlingBenefit?: Array<IProductBundling>;
   productBundlingCondition?: Array<IProductBundling>;
   multiplyItem?: boolean;
+  appliedOnOnline: boolean;
+  appliedOnOffline: boolean;
 }

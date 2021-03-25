@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 
-import { PagedResponse, ToastLevelEnum, ToastService } from '@nusantara/core';
+import { PagedResponse } from '@nusantara/core';
 import { IShop } from '@nusantara/models';
 import * as fromMarketplaces from '@nusantara/reducers/marketplace.reducers';
 import * as shopActions from '@nusantara/actions';
@@ -61,7 +61,7 @@ import * as shopActions from '@nusantara/actions';
           </tr>
         </tbody>
       </table>
-      <nus-pagination [page]="page"></nus-pagination>                  
+      <nus-pagination [page]="page"></nus-pagination>
     </ng-template>
       `,
   styles: [

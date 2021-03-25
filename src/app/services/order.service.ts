@@ -5,6 +5,7 @@ import {AbstractCrudService, PagedResponse} from '@nusantara/core';
 import { IOrder } from '@nusantara/models';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
+import { IOrderFilter } from '@nusantara/models/order/filter';
 
 @Injectable({
   providedIn: 'root'
@@ -47,8 +48,8 @@ export class OrderService extends AbstractCrudService<IOrder> {
     userEmail?: string
   ): Observable<PagedResponse<IOrder>> {
     const rawParams = {
-      'page': page.toFixed(0).toString(),
-      'user': userEmail,
+      page: page.toFixed(0).toString(),
+      user: userEmail,
     };
 
     return this.httpClient
@@ -64,5 +65,9 @@ export class OrderService extends AbstractCrudService<IOrder> {
 
   updateByOrderNumber(orderNumber: string, data: any = {}): Observable<void> {
     return this.httpClient.patch<void>(`${this.baseUrl}/${orderNumber}/`, data);
+  }
+
+  fetchOrderFilter(): Observable<IOrderFilter> {
+    return this.httpClient.get<IOrderFilter>(`/api/order/order-filtering/`);
   }
 }

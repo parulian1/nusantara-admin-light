@@ -6,7 +6,7 @@ import {
   FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR,
 } from '@angular/forms';
 import { MarketplaceClientService } from '@nusantara/services';
-import {IShopeeAuthResponse} from "@nusantara/models";
+import {IShopeeAuthResponse} from '@nusantara/models';
 
 @Component({
   selector: 'nus-variant-client-form',
@@ -19,9 +19,9 @@ import {IShopeeAuthResponse} from "@nusantara/models";
             <div class="variant-option">
               <span *ngFor="let order of variantFormArray.controls;
                 let i = index" [formGroupName]="i">
-                  <input type="radio" 
-                    (change)="onChangeVariant(i)" 
-                    formControlName="variant" 
+                  <input type="radio"
+                    (change)="onChangeVariant(i)"
+                    formControlName="variant"
                     name="variant"
                     [checked]="i === variantChecked"/>
                   <span>{{variantType[i].name}}</span>
@@ -66,15 +66,6 @@ import {IShopeeAuthResponse} from "@nusantara/models";
   ],
 })
 export class VariantFormComponent implements OnInit {
-  @Input() shopSlug?: string;
-  @Input() isEdit: boolean;
-  @Input() splitVar:boolean;
-  @Output() isSplit = new EventEmitter();
-
-  form: FormGroup;
-  showDescriptionMerge: boolean;
-  showDescriptionSplit: boolean;
-  variantChecked: number;
 
   constructor(
     private service: MarketplaceClientService,
@@ -83,32 +74,41 @@ export class VariantFormComponent implements OnInit {
     this.initializeForm();
   }
 
-  ngOnInit() {
-    this.showDescriptionMerge=true;
-    this.showDescriptionSplit= false;
-    this.isSplit.emit(false);
-    this.variantChecked = 0;
-    if(this.isEdit){
-      this.service
-        .getConnection(this.shopSlug)
-        .subscribe((data: IShopeeAuthResponse) => {
-          if (data != null) {
-            if(data.splitVariant == true){
-              this.variantChecked = 1;
-            }
-          }
-        });
-    }
+
+  get variantFormArray() {
+    return this.form.controls.variant as FormArray;
   }
+  @Input() shopSlug?: string;
+  @Input() isEdit: boolean;
+  @Input() splitVar: boolean;
+  @Output() isSplit = new EventEmitter();
+
+  form: FormGroup;
+  showDescriptionMerge: boolean;
+  showDescriptionSplit: boolean;
+  variantChecked: number;
 
   variantType = [
     { id: 1, name: 'Merge Variant' },
     { id: 2, name: 'Split Variant' },
   ];
 
-
-  get variantFormArray() {
-    return this.form.controls.variant as FormArray;
+  ngOnInit() {
+    this.showDescriptionMerge = true;
+    this.showDescriptionSplit = false;
+    this.isSplit.emit(false);
+    this.variantChecked = 0;
+    if (this.isEdit){
+      this.service
+        .getConnection(this.shopSlug)
+        .subscribe((data: IShopeeAuthResponse) => {
+          if (data != null) {
+            if (data.splitVariant === true){
+              this.variantChecked = 1;
+            }
+          }
+        });
+    }
   }
 
   private initializeForm() {
@@ -123,7 +123,7 @@ export class VariantFormComponent implements OnInit {
   }
 
   onChangeVariant(index: number) {
-    if(index==0){
+    if (index === 0){
       this.showDescriptionMerge = true;
       this.showDescriptionSplit = false;
       this.isSplit.emit(false);

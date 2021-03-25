@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { EntityToSlugPipe } from './entity-to-slug.pipe';
 import { PaginationComponent } from './pagination.component';
@@ -22,19 +23,22 @@ import { UserSelectionModalComponent } from '@nusantara/shared/user-selection-mo
 import { CustomerGroupModalComponent } from '@nusantara/shared/customer-group-modal.component';
 import { IncludeDeletedComponent } from './filters/include-deleted.component';
 import { IncludeInactiveComponent } from './filters/include-inactive.component';
-import { SortToggleComponent } from './sorts/sort-toggle.component';
+import { SortToggleComponent } from './sort-toggle.component';
 import { MilestoneComponent } from './milestone.component';
 import { ActivityTrackingComponent } from './activity-tracking.component';
 import { NusTabsComponent, NusTabComponent } from './nus-tabs';
 import { FieldErrorsMarketplaceComponent } from '@nusantara/shared/field-errors-marketplace.component';
 import { ConfirmModalComponent } from './confirm-modal.component';
 import { TooltipComponent } from './tooltip.component';
-import { EmptyListCOmponent } from './empty-list.component';
+import { EmptyListComponent} from './empty-list.component';
 import { MarketplaceStockInfoModalComponent } from './marketplace-stock-info-modal.component';
 import { MarketplaceShippingInfoModalComponent } from './marketplace-shipping-info-modal.component';
 import { MarketplaceChannelInfoModalComponent } from './marketplace-channel-info-modal.component';
 import { ConfirmModalReceivingOrderComponent } from './confirm-modal-receiving-order.component';
 import { ConfirmModalPendingOrderComponent } from './confirm-modal-pending-order.component';
+import { OrderType } from './order-type.pipe';
+import { OnlyNumberDirective } from './only-number.directive';
+import { GetUserDisplayNamePipe } from './get-user-display-name.pipe';
 
 /**
  * The purpose of this module is to make common code (like pipes)
@@ -44,6 +48,7 @@ import { ConfirmModalPendingOrderComponent } from './confirm-modal-pending-order
   declarations: [
     EntityToSlugPipe,
     CamelToHumanizedPipe,
+    GetUserDisplayNamePipe,
     PaginationComponent,
     DetailTitleComponent,
     DetailActionsComponent,
@@ -67,16 +72,19 @@ import { ConfirmModalPendingOrderComponent } from './confirm-modal-pending-order
     FieldErrorsMarketplaceComponent,
     ConfirmModalComponent,
     TooltipComponent,
-    EmptyListCOmponent,
+    EmptyListComponent,
     MarketplaceShippingInfoModalComponent,
     ConfirmModalReceivingOrderComponent,
     ConfirmModalPendingOrderComponent,
     MarketplaceChannelInfoModalComponent,
-    MarketplaceStockInfoModalComponent
+    MarketplaceStockInfoModalComponent,
+    OrderType,
+    OnlyNumberDirective
   ],
   exports: [
     EntityToSlugPipe,
     CamelToHumanizedPipe,
+    GetUserDisplayNamePipe,
     PaginationComponent,
     DetailTitleComponent,
     ListHeaderComponent,
@@ -93,7 +101,6 @@ import { ConfirmModalPendingOrderComponent } from './confirm-modal-pending-order
     SortToggleComponent,
     CustomerGroupModalComponent,
     IncludeInactiveComponent,
-    SortToggleComponent,
     MilestoneComponent,
     ActivityTrackingComponent,
     NusTabsComponent,
@@ -101,12 +108,14 @@ import { ConfirmModalPendingOrderComponent } from './confirm-modal-pending-order
     FieldErrorsMarketplaceComponent,
     ConfirmModalComponent,
     TooltipComponent,
-    EmptyListCOmponent,
+    EmptyListComponent,
     MarketplaceShippingInfoModalComponent,
     ConfirmModalReceivingOrderComponent,
     ConfirmModalPendingOrderComponent,
     MarketplaceChannelInfoModalComponent,
-    MarketplaceStockInfoModalComponent
+    MarketplaceStockInfoModalComponent,
+    OnlyNumberDirective,
+    OrderType
   ],
   imports: [
     CommonModule,
@@ -115,6 +124,7 @@ import { ConfirmModalPendingOrderComponent } from './confirm-modal-pending-order
     FormsModule,
     ReactiveFormsModule,
     FormsModule,
+    MatCheckboxModule
   ],
 })
 export class SharedModule {}

@@ -56,12 +56,18 @@ const routes: Routes = [
 
       { path: '',   redirectTo: '/dashboard', pathMatch: 'full' }
     ]
+  },
+  {
+    path: 'callback',
+    component: AnonWrapperComponent,
+    runGuardsAndResolvers: 'always',
+    loadChildren: () => import('./pages/config/marketplace-integration/callback/callback.module').then(m => m.CallbackModule),
   }
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' }),
+    RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload', relativeLinkResolution: 'legacy' }),
   ],
   exports: [RouterModule]
 })

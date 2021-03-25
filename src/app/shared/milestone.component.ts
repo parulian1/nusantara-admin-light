@@ -6,7 +6,7 @@ import { Component, Input, OnInit } from '@angular/core';
     <div>
       <ul>
         <li *ngFor="let step of steps; let i = index;">
-          <span [ngClass]="{'current': step === current, 'achieved': i < currentIdx}">{{ step }}</span>
+          <span [ngClass]="{'current': step === current, 'achieved': i < currentIdx}">{{ step | titlecase }}</span>
         </li>
       </ul>
     </div>

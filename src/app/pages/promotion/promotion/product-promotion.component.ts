@@ -3,12 +3,16 @@ import {FormArray, FormBuilder, FormControl, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import * as XLSX from 'xlsx';
 
-import {ProductPromotionService, ProductService} from '@nusantara/services';
-import {AbstractDetailComponent, DialogResult, ToastService} from '@nusantara/core';
-import {INamedHrefEntity} from '@nusantara/models/base';
-import {IProductBundling, IProductPromotion, ProductPromotionType} from '@nusantara/models';
-import {IProduct} from '@nusantara/models/products';
-import {ProductSelectionModalComponent} from '@nusantara/shared';
+import { ProductPromotionService, ProductService, SiteConfigService } from '@nusantara/services';
+import { AbstractDetailComponent, DialogResult, Logger, ToastService } from '@nusantara/core';
+import { INamedHrefEntity } from '@nusantara/models/base';
+import { IProductBundling, IProductPromotion, ProductPromotionType } from '@nusantara/models';
+import { IProduct } from '@nusantara/models/products';
+import { ProductSelectionModalComponent } from '@nusantara/shared';
+
+declare var window: any; // Needed on Angular 8+
+
+const log = new Logger('ProductPromotionComponent');
 
 @Component({
   selector: 'nus-product-promotion',
@@ -168,7 +172,7 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
           </tbody>
         </table>
 
-        <a class="download-product" href="{{ service.productListDownloadUrl }}" target="_blank">Download Product
+        <a class="download-product" href="{{ service.productListDownloadUrl }}" target="_blank" *ngIf="hasProductUrl">Download Product
           List</a>
       </div>
 
@@ -188,6 +192,18 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
         <input type="checkbox" class="input-checkbox" [formControl]="multiplyItem">
         <span>Multiply Item</span>
         <nus-field-errors [control]="multiplyItem"></nus-field-errors>
+      </label>
+
+      <label *ngIf="!isPromoBundling" class="promo-platform">
+        <span class="subtitle">Platform</span>
+        <label class="checkbox">
+          <input type="checkbox" [formControl]="appliedOnOnline" name="appliedOnOnline">
+          <span>Online (Website)</span>
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" [formControl]="appliedOnOffline" name="appliedOnOffline">
+          <span>Offline (POS)</span>
+        </label>
       </label>
 
       <label class="checkbox">
@@ -274,9 +290,11 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
 export class ProductPromotionComponent extends AbstractDetailComponent<IProductPromotion> implements OnInit, AfterViewInit {
 
   entity: IProductPromotion;
-  types: Array<ProductPromotionType> = ['percentage', 'amount_off', 'override_price', 'promo_bundling'];
+  types: Array<ProductPromotionType> = ['percentage', 'amount_off', 'override_price'];
   imagePreviewUrl: string;
   isPromoBundling = false;
+
+  hasProductUrl = false;
 
   @ViewChild('productModal') productSelectionModal: ProductSelectionModalComponent;
   @ViewChild('conditionModal') productBundlingConditionSelectionModal: ProductSelectionModalComponent;
@@ -287,8 +305,16 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
               router: Router,
               toast: ToastService,
               private fb: FormBuilder,
+              private configSercvice: SiteConfigService,
               private productService: ProductService) {
     super(route, router, toast, service);
+  }
+
+  ngOnInit() {
+    super.ngOnInit();
+    if (this.configSercvice.isEnterpriseLicense()) {
+      this.types.push('promo_bundling');
+    }
   }
 
   initializeForm(entity?: IProductPromotion) {
@@ -302,6 +328,8 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
       maxAmount: [entity?.maxAmount ?? 1, [Validators.required, Validators.min(0)]],
       isExclusive: [entity?.isExclusive ?? false, [Validators.required]],
       isActive: [entity?.isActive ?? true, [Validators.required]],
+      appliedOnOnline: [entity?.appliedOnOnline ?? false, []],
+      appliedOnOffline: [entity?.appliedOnOffline ?? false, []],
       validFrom: [this.convertDateTime(entity?.validFrom), [Validators.required]],
       validTo: [this.convertDateTime(entity?.validTo), []],
       priority: [entity?.priority ?? 1, [Validators.required]],
@@ -317,6 +345,8 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     this.form.controls.isExclusive.markAsTouched();
     this.form.controls.isActive.markAsTouched();
     this.form.controls.multiplyItem.markAsTouched();
+    this.form.controls.appliedOnOnline.markAsTouched();
+    this.form.controls.appliedOnOffline.markAsTouched();
 
 
     for (const prodBenefit of entity?.productBundlingBenefit ?? []) {
@@ -337,6 +367,11 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
 
 
     this.setImagePromoPreview(entity?.banner);
+
+    if ((window.localStorage.getItem('site_domain') === 'marthatilaarshop.com') || (window.localStorage.getItem('site_domain') === 'www.marthatilaarshop.com')) {
+      // TODO: Bad thing, should get this from API
+      this.hasProductUrl = true;
+    }
   }
 
   setImagePromoPreview(data?: Event | string) {
@@ -360,6 +395,8 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
   get validTo(): FormControl { return this.form.get('validTo') as FormControl; }
   get priority(): FormControl { return this.form.get('priority') as FormControl; }
   get isActive(): FormControl { return this.form.get('isActive') as FormControl; }
+  get appliedOnOnline(): FormControl { return this.form.get('appliedOnOnline') as FormControl; }
+  get appliedOnOffline(): FormControl { return this.form.get('appliedOnOffline') as FormControl; }
   get banner(): FormControl { return this.form.get('banner') as FormControl; }
   get productBundlingBenefit(): FormArray { return this.form.get('productBundlingBenefit') as FormArray; }
   get productBundlingCondition(): FormArray { return this.form.get('productBundlingCondition') as FormArray; }
@@ -367,7 +404,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
 
   addProduct(product: INamedHrefEntity) {
     if ((this.products.value as Array<IProduct>).filter(p => p.href === product.href).length > 0) {
-      console.log('Product already in list -- skipping');
+      log.info('Product already in list -- skipping');
       return;
     }
 

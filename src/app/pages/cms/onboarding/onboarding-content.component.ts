@@ -13,7 +13,7 @@ import { IOnboardingContent } from '@nusantara/models';
           <input type="text" [formControl]="name">
           <nus-field-errors [control]="name"></nus-field-errors>
           <div class="collapse" (click)="toggle()">
-            <img src="/assets/arrowDown.svg">
+            <img src="/assets/arrow-down.svg">
           </div>
         </div>
       </div>
@@ -99,7 +99,7 @@ export class OnboardingContentComponent extends AbstractEditingComponent impleme
   @Input() entity: IOnboardingContent;
   @Output() remove = new EventEmitter<void>();
   imagePreviewUrl: string;
-  show: boolean = true;
+  show = true;
 
   constructor(public route: ActivatedRoute,
               public router: Router) {
@@ -131,8 +131,8 @@ export class OnboardingContentComponent extends AbstractEditingComponent impleme
   }
 
   setAvailabilityAndClearValueButtonProp() {
-    let buttonTextValidators = [Validators.maxLength(100)];
-    let buttonUrlValidators = [Validators.maxLength(160)];
+    const buttonTextValidators = [Validators.maxLength(100)];
+    const buttonUrlValidators = [Validators.maxLength(160)];
 
     if (this.buttonStatus.value === true) {
       this.buttonText.enable();

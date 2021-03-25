@@ -26,6 +26,7 @@ export * from './http-failure';
 export * from './content-footer';
 export * from './relative-choices';
 export * from './sla';
+export * from './video-integration';
 
 export * from './navigation';
 
@@ -55,4 +56,5 @@ export { base, drf, google, widgets, products, inventory, device, banner, shipme
 
 export * from './reseller';
 
+export * from './license-sme';
 export * from './onboarding';
