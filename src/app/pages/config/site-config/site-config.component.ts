@@ -198,7 +198,7 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
       href: [entity?.href],
       logo: [],
       gaAccountId: [entity?.gaAccountId ?? '', []],
-      gaType: [entity?.gaType ?? 'ga', []],
+      gaAccountType: [entity?.gaAccountType ?? 'ga', []],
       favicon: [],
       customerServiceEmail: [entity?.customerServiceEmail ?? '', [Validators.required, Validators.email]],
       tagLine: [entity?.tagLine ?? '', [Validators.maxLength(50)]],

@@ -56,7 +56,7 @@ export class ConfigAnalyticToolComponent implements OnInit {
   }
 
   get type(): FormControl {
-    return this.form.get('gaType') as FormControl;
+    return this.form.get('gaAccountType') as FormControl;
   }
 
   get gaAccountId(): FormControl {
