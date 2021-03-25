@@ -40,7 +40,7 @@ import { forkJoin } from 'rxjs';
 
       <label>
         <span>GA Account ID</span>
-        <nus-config-analytic-tool-service></nus-config-analytic-tool-service>
+        <nus-config-analytic-tool-service [form]="form"></nus-config-analytic-tool-service>
       </label>
 
       <label>
@@ -157,10 +157,6 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
     return this.form.get('logo') as FormControl;
   }
 
-  get gaAccountId(): FormControl {
-    return this.form.get('gaAccountId') as FormControl;
-  }
-
   get favicon(): FormControl {
     return this.form.get('favicon') as FormControl;
   }
@@ -202,6 +198,7 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
       href: [entity?.href],
       logo: [],
       gaAccountId: [entity?.gaAccountId ?? '', []],
+      gaType: [entity?.gaType ?? 'ga', []],
       favicon: [],
       customerServiceEmail: [entity?.customerServiceEmail ?? '', [Validators.required, Validators.email]],
       tagLine: [entity?.tagLine ?? '', [Validators.maxLength(50)]],
@@ -261,7 +258,6 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
   protected onSaveSuccess(result: IResultResponse<ISiteConfig>) {
     forkJoin([
       this.chatServiceComponent.save(),
-      this.analyticToolComponent.save(),
     ]).subscribe(_ => {
       super.onSaveSuccess(result);
     });
