@@ -46,7 +46,7 @@
     <tr>
       <td>Address</td>
       <td>
-        <address [innerHTML]="getOrderAddress()"></address>
+        <address [innerHTML]="shippingAddress"></address>
       </td>
     </tr>
     <tr>
@@ -55,6 +55,12 @@
         <span *ngFor="let children of orderDetailData.children">
           <ng-container *ngIf="children.data[0]?.shippingMethod">{{ children.data[0].shippingMethod }}</ng-container>
         </span>
+      </td>
+    </tr>
+    <tr *ngIf="orderDetailData?.meta?.billingAddress">
+      <td i18n>Billing Address</td>
+      <td>
+        <address [innerHTML]="billingAddress"></address>
       </td>
     </tr>
     <tr *ngIf="orderDetailData?.meta?.shopifyInfo">
