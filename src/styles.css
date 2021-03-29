@@ -396,6 +396,12 @@ label {
   min-height: 61px;
 }
 
+/* special case, ck-editor */
+label.ck-label {
+  padding: 0;
+  min-height: 0;
+}
+
 label.external {
   min-height: 0;
   padding-bottom: 0;
