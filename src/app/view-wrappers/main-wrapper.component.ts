@@ -111,17 +111,17 @@ import { SubscriptionLike } from 'rxjs';
 
         <li class="section-header">
           <i class="material-icons">settings</i>
-          <span>Config</span>
+          <span i18n>Config</span>
         </li>
-        <li><a [routerLink]="['/config/website-settings']" routerLinkActive="active" translate>Website Settings</a></li>
+        <li><a [routerLink]="['/config/website-settings']" routerLinkActive="active" i18n>Website Settings</a></li>
         <li *ngIf="enterpriseGuard.canActivate(null, null)">
-          <a [routerLink]="['/config/marketplace-integration']" routerLinkActive="active" translate>Marketplace
+          <a [routerLink]="['/config/marketplace-integration']" routerLinkActive="active" i18n>Marketplace
             Integration</a>
         </li>
         <li *ngIf="enterpriseGuard.canActivate(null, null)">
-          <a [routerLink]="['/config/pos-integration']" routerLinkActive="active" translate>POS Integration</a>
+          <a [routerLink]="['/config/pos-integration']" routerLinkActive="active" i18n>POS Integration</a>
         </li>
-        <li><a [routerLink]="['/config/general-settings']" routerLinkActive="active" translate>General</a></li>
+        <li><a [routerLink]="['/config/general-settings']" routerLinkActive="active" i18n>General</a></li>
 
         <!-- <li class="section-header">
           <i class="material-icons">palette</i>
