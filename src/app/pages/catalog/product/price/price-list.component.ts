@@ -109,7 +109,7 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
   private static readonly MINIMUM_QUANTITY  = 1;
   private static readonly DEFAULT_PRICE = 10_000;
 
-  isExpanded = false;
+  isExpanded = true;
 
   @Input() form: FormGroup;
   @ViewChildren(RangeComponent) rangeComponents: QueryList<RangeComponent>;
@@ -136,8 +136,10 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
 
   ngOnInit() {
     this.route.data.subscribe((data: {priceListTypes: drf.IChoice[]}) => {
-      this.types = data.priceListTypes;
+      // #97699 and #97726 make type choice only 'default'
+      this.types = data.priceListTypes.filter(priceList => priceList.value === 'default');
     });
+
     // triggers change
     if (!this.enterpriseLicense()) {
       this.toggleExpansion();
@@ -156,7 +158,8 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
   }
 
   toggleExpansion() {
-    this.isExpanded = !this.isExpanded;
+    this.isExpanded = true;
+    // this.isExpanded = !this.isExpanded;
   }
 
   /**
