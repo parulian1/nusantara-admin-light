@@ -216,6 +216,7 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     {displayName: 'Gift Voucher', value: 'gift_voucher'},
     {displayName: 'Point', value: 'point'},
     {displayName: 'Sales', value: 'sales'},
+    {displayName: 'Salary Deduction', value: 'salary_deduction'},
   ];
 
   constructor(service: PaymentGatewayService,
