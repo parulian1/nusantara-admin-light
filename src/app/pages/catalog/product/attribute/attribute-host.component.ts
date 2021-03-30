@@ -40,6 +40,7 @@ import { products } from '@nusantara/models';
 export class ProductAttributeHostComponent extends AbstractEditingComponent implements OnInit {
 
   productClasses: Array<products.IProductClass> = [];
+  productAttributeTypesHide: string[] = ['image', 'markdown'];
 
   @Input() productClass: FormControl; // href
   @Input() originalAttributeValues: {[key: string]: string|number|boolean};
@@ -69,7 +70,11 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
     }
     const productClassHref = this.productClass.value?.href ?? this.productClass.value;
     const productClass = this.productClasses.filter(e => e.href === productClassHref)[0];
-    return productClass.attributes;
+
+    // #69558, image and richText (markdown) be hide
+    return productClass.attributes.filter(
+      attribute => !this.productAttributeTypesHide.includes(attribute.type)
+    );
   }
 
   goToClass(): void {
