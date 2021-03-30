@@ -157,14 +157,15 @@ const dashboardRoutes: Routes = [
       {
         path: 'new',
         component: TestimonialComponent,
-        resolve: { vendors: VendorFullListResolver, products: ProductFullListResolver },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },
       },
       {
         path: ':slug',
         component: TestimonialComponent,
-        resolve: { entity: TestimonialResolver, vendors: VendorFullListResolver, products: ProductFullListResolver },
+        resolve: {
+          entity: TestimonialResolver,
+        },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },
       },

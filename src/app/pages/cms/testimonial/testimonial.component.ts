@@ -1,15 +1,19 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as ClassicEditor from '@gdnnusantara/ckeditor5-build/build/ckeditor';
 
-import { ToastService, AbstractDetailComponent } from '@nusantara/core';
+import {ToastService, AbstractDetailComponent, DialogResult} from '@nusantara/core';
 import { INamedHrefEntity } from '@nusantara/models/base';
 import { ITestimonial } from '@nusantara/models/widgets';
 import { TestimonialService } from '@nusantara/services';
+import {ProductSelectionModalComponent} from '@nusantara/shared';
+import {IProduct} from '@nusantara/models/products';
+import {VendorSelectionModalComponent} from '@nusantara/shared/vendor-selection-modal/vendor-selection-modal.component';
+import {IVendor} from '@nusantara/models';
 
 @Component({
-  selector: 'nus-flat-page',
+  selector: 'nus-testimonial-detail',
   template: `
     <nus-detail-title
       [originalName]="originalEntityName"
@@ -18,7 +22,7 @@ import { TestimonialService } from '@nusantara/services';
 
     <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
 
-    <form [formGroup]="form" (ngSubmit)="save()" #f>
+    <form [formGroup]="form" (ngSubmit)="save()" #f validate-non-visible-controls>
 
       <label>
         <span>Name</span>
@@ -39,17 +43,15 @@ import { TestimonialService } from '@nusantara/services';
 
       <label>
         <span>Product</span>
-        <select [formControl]="product" name="product">
-          <option *ngFor="let p of productChoices" [value]="p.href">{{ p.name }}</option>
-        </select>
+        <input type="hidden" [formControl]="product">
+        <input type="text" (click)="selectProduct()" readonly [value]="selectedProduct?.name">
         <nus-field-errors [control]="product"></nus-field-errors>
       </label>
 
       <label>
         <span>Vendor</span>
-        <select [formControl]="vendor" name="vendor">
-          <option *ngFor="let v of vendorChoices" [value]="v.href">{{ v.name }}</option>
-        </select>
+        <input type="hidden" [formControl]="vendor">
+        <input type="text" (click)="selectVendor()" readonly [value]="selectedVendor?.name">
         <nus-field-errors [control]="vendor"></nus-field-errors>
       </label>
 
@@ -87,15 +89,20 @@ import { TestimonialService } from '@nusantara/services';
         (delete)="delete()">
       </nus-detail-actions>
     </form>
+    <nus-product-selection-modal #productModal></nus-product-selection-modal>
+    <nus-vendor-selection-modal #vendorModal></nus-vendor-selection-modal>
   `,
   styles: [
     '.ck-editor__main { min-height: 150px; }',
     'img { max-height: 240px; max-width: 240px; }'
   ]
 })
-export class TestimonialComponent extends AbstractDetailComponent<ITestimonial> implements OnInit {
+export class TestimonialComponent extends AbstractDetailComponent<ITestimonial> implements OnInit, AfterViewInit {
 
   @ViewChild('f') formView: ElementRef<HTMLFormElement>;
+
+  @ViewChild('productModal') productSelectionModal: ProductSelectionModalComponent;
+  @ViewChild('vendorModal') vendorSelectionModal: VendorSelectionModalComponent;
 
   public Editor = ClassicEditor;
   editorConfig = {
@@ -123,6 +130,8 @@ export class TestimonialComponent extends AbstractDetailComponent<ITestimonial> 
 
   entity?: ITestimonial;
   photoPreviewUrl: string;
+  selectedProduct: INamedHrefEntity = null;
+  selectedVendor: INamedHrefEntity = null;
   productChoices: Array<INamedHrefEntity> = [];
   vendorChoices: Array<INamedHrefEntity> = [];
 
@@ -171,12 +180,12 @@ export class TestimonialComponent extends AbstractDetailComponent<ITestimonial> 
   }
 
   ngOnInit(): void {
-    this.route.data.subscribe((data: { products: INamedHrefEntity[], vendors: INamedHrefEntity[] }) => {
-      this.vendorChoices = data.vendors;
-      this.productChoices = data.products;
-
-    });
     super.ngOnInit();
+  }
+  ngAfterViewInit() {
+    this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
+    this.vendorSelectionModal.onClose.subscribe(() => this.onVendorSelectionModalClosed());
+
   }
 
   initializeForm(entity?: ITestimonial) {
@@ -185,8 +194,8 @@ export class TestimonialComponent extends AbstractDetailComponent<ITestimonial> 
       href: [entity?.href],
       photo: ['', entity?.photo ? [] : [Validators.required]],
       content: [entity?.content, [Validators.required]],
-      vendor: [entity?.vendor?.href, ],
-      product: [entity?.product?.href, ],
+      vendor: [entity?.vendor?.href, [Validators.required] ],
+      product: [entity?.product?.href, [Validators.required]],
       reviewerJobTitle: [entity?.reviewerJobTitle, [Validators.required, ]],
       reviewerName: [entity?.reviewerName, [Validators.required, ]],
       sortPriority: [entity?.sortPriority ?? 0, [Validators.required, Validators.min(0)]],
@@ -194,6 +203,8 @@ export class TestimonialComponent extends AbstractDetailComponent<ITestimonial> 
     });
 
     this.entity = entity;
+    this.selectedProduct = entity?.product;
+    this.selectedVendor = entity?.vendor;
 
     // need to mark as touched to make custom styling works
     this.form.controls.isActive.markAsTouched();
@@ -213,5 +224,28 @@ export class TestimonialComponent extends AbstractDetailComponent<ITestimonial> 
       this.form.value.photo = this.photoPreviewUrl;
     }
     super.save();
+  }
+
+  selectProduct() {
+    this.productSelectionModal.open();
+  }
+
+  onProductSelectionModalClosed() {
+    if (this.productSelectionModal.result === DialogResult.OK) {
+      this.selectedProduct = this.productSelectionModal.product.value as IProduct;
+      this.product.setValue(this.selectedProduct.href);
+
+    }
+  }
+
+  selectVendor() {
+    this.vendorSelectionModal.open();
+  }
+
+  onVendorSelectionModalClosed() {
+    if (this.vendorSelectionModal.result === DialogResult.OK) {
+      this.selectedVendor = this.vendorSelectionModal.vendor.value as IVendor;
+      this.vendor.setValue(this.selectedVendor.href);
+    }
   }
 }
