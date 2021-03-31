@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   Input,
   OnChanges,
@@ -18,9 +19,9 @@ import {
   MarketplaceItemService,
 } from "@nusantara/services";
 import { AbstractEditingComponent } from "@nusantara/core";
+import { IClient } from '@nusantara/models/marketplace';
 @Component({
   selector: 'nus-marketplace-info',
-  animations: [SlideInOutAnimation, ShowHideAnimation],
   template: `
     <div class="wrapper">
       <h1 class="heading-1">Marketplace Information</h1>
@@ -53,22 +54,25 @@ import { AbstractEditingComponent } from "@nusantara/core";
         <h4 class="subheading-2">Marketplace Product Detail</h4>
         <p>This information will be used as specific per marketplace. Skip this if you don't want to publish to marketplace.</p>
       </div>
-      <div class="detail-store">
+      <div *ngIf="isClientListAvailable" class="detail-store">
         <nus-tabs (select)="getAttributes($event)" [fluid]="true">
-          <nus-tab *ngFor="let client of clientList" [title]="client.marketplaceName">
-            <div *ngIf="!productClassChanged">
-              <ng-container *ngIf="itemAttributes; else noConnectedStore">
+          <nus-tab *ngFor="let client of clientList; let marketplaceIndex = index" 
+            [title]="client.marketplaceName"
+            [value]="client.option">
+            <!-- <div *ngIf="!productClassChanged"> -->
+              <ng-container *ngIf="!!itemAttributes; else noConnectedStore">
                 <div *ngFor="let data of itemAttributes; let storeIndex = index">
                   <div class="store">
                     <div>
                       <p class="body-2">Store</p>
                       <h4 class="subheading-2">{{ data.shop }}</h4>
                     </div>
-                    <button type="button" class="expand" (click)="toggleStore(storeIndex)">
-                      <i class="material-icons" >{{ showedStore === storeIndex && isStoreExpanded? 'expand_less':'expand_more' }}</i>
+                    <button type="button" class="expand" 
+                      (click)="toggleStore(marketplaceIndex, storeIndex)">
+                      <i class="material-icons" >{{ isStoreExpanded(marketplaceIndex, storeIndex)? 'expand_less':'expand_more' }}</i>
                     </button>
                   </div>
-                  <div [@slideInOut]="animationState" *ngIf="showedStore === storeIndex">
+                  <div *ngIf="isStoreExpanded(marketplaceIndex, storeIndex)">
                     <div *ngIf="data.isMapped; else notMapped">
                       <div *ngIf="data.attributes.length; else noAttribute" class="attr-table" [formGroup]="form">
                         <h4 class="subheading-2">Attribute</h4>
@@ -119,7 +123,7 @@ import { AbstractEditingComponent } from "@nusantara/core";
                         </table>
                       </div>
                       <ng-template #noAttribute>
-                        <div [@showHide]="showHideState" class="no-attribute">
+                        <div class="no-attribute">
                           <div *ngIf="data.isMapped else notMapped">
                             <h3 class="subheading-1">Product class doesn't have attribute.</h3>
                           </div>
@@ -127,7 +131,7 @@ import { AbstractEditingComponent } from "@nusantara/core";
                       </ng-template>
                     </div>
                     <ng-template #notMapped>
-                      <div [@showHide]="showHideState" *ngIf="!data.isMappe" class="not-mapped">
+                      <div class="not-mapped">
                         <h1 class="heading-1">Product Class is Not Mapped Yet!</h1>
                         <p>Map Class to sync your product to marketplace.</p>
                         <button [routerLink]="['/config/marketplace-integration/connect/product-class/',
@@ -152,7 +156,7 @@ import { AbstractEditingComponent } from "@nusantara/core";
                   </button>
                 </div>
               </ng-template>
-            </div>
+            <!-- </div> -->
           </nus-tab>
         </nus-tabs>
       </div>
@@ -209,13 +213,6 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
   // Lazada readonly field
   LzdReadOnlyFields = ['SellerSku', 'price'];
 
-  productClassChanged: boolean;
-  showedStore: number;
-  isStoreExpanded = false;
-  animationState = 'out';
-  showHideState = 'hide';
-  selectedTab: string;
-
   warehouseCount = 0;
   storeCount = 0;
   marketplaceCount = 0;
@@ -226,15 +223,19 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
   shippingDetail: any;
   warehouseInfoDetail: any;
   itemAttributes: any;
+  selectedTab: string;
 
-  clientList: marketplace.IClient[];
+  clientList: Array<marketplace.IClient>;
+  isClientListAvailable = false;
 
-  attributes: any[] = [];
   get attributesFormArray(): FormArray { return this.form.get('attributes') as FormArray; }
+
+  isExpanded: Array<{ client: string; expanded: Array<boolean> }> = [];
 
   constructor(
     protected route: ActivatedRoute,
     protected fb: FormBuilder,
+    private cdRef: ChangeDetectorRef,
     private mpClientService: MarketplaceClientService,
     private mpItemService: MarketplaceItemService,
   ) {
@@ -262,51 +263,53 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
         this.shippingDetail = shipping;
       });
 
-    this.mpClientService
+    setTimeout(() => {
+      this.mpClientService
       .client.subscribe((clients: marketplace.IClient[]) => {
         this.clientList = clients;
+        this.clientList.map((client: IClient) => {
+          this.isExpanded.push({client: client.option, expanded: null});
+        });
+        this.isClientListAvailable = true;
       });
+    })
   }
-
-  ngOnChanges(changes: SimpleChanges) {
-    this.productClassChanged = true;
-    const productClassValue = changes.productClass.currentValue.href;
-    const slugs = productClassValue.split('/').reverse();
-    this.productClassSlug = slugs[0] ? slugs[0] : slugs[1];
-    this.productClassName =  changes.productClass.currentValue.name;
-  }
-
+  
   private initializeForm() {
     this.form = this.fb.group({
       attributes: this.fb.array([]),
     });
   }
 
-  toggleStore(index: number) {
-    this.isStoreExpanded = !this.isStoreExpanded;
-    this.showedStore = index;
-    this.animationState = this.animationState === 'out' ? 'in' : 'out';
-    this.showHideState = this.showHideState === 'hide' ? 'show' : 'hide';
+  ngOnChanges(changes: SimpleChanges) {
+    const productClassValue = changes.productClass.currentValue.href;
+    const slugs = productClassValue.split('/').reverse();
+    this.productClassSlug = slugs[0] ? slugs[0] : slugs[1];
+    this.productClassName =  changes.productClass.currentValue.name;
+
+    this.getAttributes(this.selectedTab);
   }
 
-  getAttributes(marketplace: string) {
-    // console.log(marketplace);
-    this.productClassChanged = false;
-    if (this.selectedTab){
-      if (this.selectedTab !== marketplace.toLowerCase()){
-        this.saveAll();
-      }
+  getAttributes(marketplaceOption: string) {
+    if (
+      this.selectedTab &&
+      this.selectedTab !== marketplaceOption &&
+      this.itemAttributes
+    ) {
+      this.saveAll();
     }
 
-    this.selectedTab = marketplace.toLowerCase();
     this.clearFormArray(this.attributesFormArray);
 
     this.mpItemService
-      .getItemMarketplaceAttribute(this.selectedTab, this.productClassSlug, this.productSlug)
+      .getItemMarketplaceAttribute(
+        marketplaceOption,
+        this.productClassSlug,
+        this.productSlug
+      )
       .subscribe((data: marketplace.IItemAttributeInfo[]) => {
-        this.itemAttributes = data;
-
         if (!!data) {
+          this.itemAttributes = data;
           data.forEach((stores: marketplace.IItemAttributeInfo, index) => {
             stores.attributes.forEach((attr) => {
               this.attributesFormArray.push(
@@ -318,13 +321,25 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
                   option: [attr.option],
                   newValue: null,
                   indexShop: index,
-                  marketplaceAttributeName: [attr.marketplaceAttributeName]
+                  marketplaceAttributeName: [attr.marketplaceAttributeName],
                 })
               );
             });
           });
+
+          // fill value for isExpanded
+          const index = this.isExpanded.findIndex(
+            (obj) => obj.client === marketplaceOption
+          );
+          this.isExpanded[index].expanded = Array(data.length).fill(false);
         }
-    });
+      },
+      (error) => {
+        this.itemAttributes = null;
+      });
+
+    this.selectedTab = marketplaceOption;
+    this.cdRef.detectChanges();
   }
 
   attrChange(value: string, index: number) {
@@ -340,8 +355,10 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
   }
 
   clearFormArray(formArray: FormArray) {
-    while (formArray.length !== 0) {
-      formArray.removeAt(0);
+    if(!!formArray) {
+      while (formArray.length !== 0) {
+        formArray.removeAt(0);
+      }
     }
   }
 
@@ -369,5 +386,17 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
           console.log(err);
         }
       );
+  }
+
+  toggleStore(marketplaceIndex: number, storeIndex: number) {
+    this.isExpanded[marketplaceIndex].expanded[storeIndex] = !this.isExpanded[marketplaceIndex].expanded[storeIndex];
+  }
+
+  isStoreExpanded(marketplaceIndex: number, storeIndex: number): boolean {
+    if(!!this.isExpanded[marketplaceIndex].expanded) {
+      return this.isExpanded[marketplaceIndex].expanded[storeIndex];
+    } else {
+      return false;
+    }
   }
 }

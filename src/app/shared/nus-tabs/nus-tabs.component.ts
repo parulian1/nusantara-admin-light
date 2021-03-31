@@ -61,6 +61,6 @@ export class NusTabsComponent implements AfterContentInit {
 
     // activate the tab the user has clicked on.
     tab.active = true;
-    this.select.next(tab.title);
+    this.select.next(tab.value);
   }
 }
