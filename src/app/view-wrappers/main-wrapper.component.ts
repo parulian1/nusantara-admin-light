@@ -54,6 +54,9 @@ import { SubscriptionLike } from 'rxjs';
           <a [routerLink]="['/inventory/receiving']" routerLinkActive="active" translate i18n>Delivery (Receiving)</a>
         </li>
         <li *ngIf="enterpriseGuard.canActivate(null, null)">
+          <a [routerLink]="['/inventory/adjustment']" routerLinkActive="active" translate i18n>Issuing</a>
+        </li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null)">
           <a [routerLink]="['/inventory/transfer-order']" routerLinkActive="active" translate i18n>Transfer</a>
         </li>
 <!--        <li><a [routerLink]="['/inventory/adjustment']" routerLinkActive="active" translate>Adjustment</a></li>-->

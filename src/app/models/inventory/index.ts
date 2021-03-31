@@ -4,6 +4,8 @@ export * from './receiving-order.type';
 export * from './receiving-order-status.type';
 export * from './inventory-order-status.type';
 
+export * from './adjustment';
+
 export * from './inventory-order.type';
 
 export * from './receiving-order';
