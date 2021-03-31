@@ -78,6 +78,10 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
             <div class="earning-points">
               <span class="subheading-2">Earning Points Platform</span>
               <label class="checkbox">
+                <input type="checkbox" [formControl]="appliedOnOnline" name="appliedOnOnline">
+                <span>Online (Website)</span>
+              </label>
+              <label class="checkbox">
                 <input type="checkbox" [formControl]="appliedOnOffline" name="appliedOnOffline">
                 <span>Offline (POS)</span>
               </label>
