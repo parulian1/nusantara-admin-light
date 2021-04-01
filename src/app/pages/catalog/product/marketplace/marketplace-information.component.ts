@@ -24,139 +24,151 @@ import { IClient } from '@nusantara/models/marketplace';
   selector: 'nus-marketplace-info',
   template: `
     <div class="wrapper">
-      <h1 class="heading-1">Marketplace Information</h1>
+      <h1 class="heading-1" i18n>Marketplace Information</h1>
       <div class="subinfo">
-        <div class="subheading-2">Marketplace Publish Summary</div>
-        <a (click)="marketplaceStockInfo.open()">More Detail</a>
+        <div class="subheading-2" i18n>Marketplace Publish Summary</div>
+        <a (click)="marketplaceStockInfo.open()" i18n>More Detail</a>
       </div>
       <div class="summary">
         <div class="wrapper">
-          <p class="body-2">Warehouse</p>
+          <p class="body-2" i18n>Warehouse</p>
           <p class="title-1">{{ warehouseCount }}</p>
         </div>
         <div class="wrapper">
-          <p class="body-2">Marketplace</p>
+          <p class="body-2" i18n>Marketplace</p>
           <p class="title-1">{{ marketplaceCount }}</p>
         </div>
         <div class="wrapper">
-          <p class="body-2">Store</p>
+          <p class="body-2" i18n>Store</p>
           <p class="title-1">{{ storeCount }}</p>
         </div>
       </div>
       <div class="subinfo">
         <div>
-          <h4 class="subheading-2">Shipping</h4>
-          <p>View shipping method for your marketplace stores.</p>
+          <h4 class="subheading-2" i18n>Shipping</h4>
+          <p i18n>View shipping method for your marketplace stores.</p>
         </div>
-        <a (click)="shippingInfo.open();">More Detail</a>
+        <a (click)="shippingInfo.open();" i18n>More Detail</a>
       </div>
       <div class="detail">
-        <h4 class="subheading-2">Marketplace Product Detail</h4>
-        <p>This information will be used as specific per marketplace. Skip this if you don't want to publish to marketplace.</p>
+        <h4 class="subheading-2" i18n>Marketplace Product Detail</h4>
+        <p i18n>This information will be used as specific per marketplace. Skip this if you don't want to publish to marketplace.</p>
       </div>
       <div *ngIf="isClientListAvailable" class="detail-store">
         <nus-tabs (select)="getAttributes($event)" [fluid]="true">
           <nus-tab *ngFor="let client of clientList; let marketplaceIndex = index" 
             [title]="client.marketplaceName"
             [value]="client.option">
-            <!-- <div *ngIf="!productClassChanged"> -->
-              <ng-container *ngIf="!!itemAttributes; else noConnectedStore">
-                <div *ngFor="let data of itemAttributes; let storeIndex = index">
-                  <div class="store">
-                    <div>
-                      <p class="body-2">Store</p>
-                      <h4 class="subheading-2">{{ data.shop }}</h4>
+            <ng-container *ngIf="isProductClassMappedAvailable">
+              <div *ngIf="isProductClassMapped; else productClassMappingNotFound">
+                <ng-container *ngIf="!!itemAttributes; else noConnectedStore">
+                  <div *ngFor="let data of itemAttributes; let storeIndex = index">
+                    <div class="store">
+                      <div>
+                        <p class="body-2" i18n>Store</p>
+                        <h4 class="subheading-2">{{ data.shop }}</h4>
+                      </div>
+                      <button type="button" class="expand" 
+                        (click)="toggleStore(marketplaceIndex, storeIndex)">
+                        <i class="material-icons" >{{ isStoreExpanded(marketplaceIndex, storeIndex)? 'expand_less':'expand_more' }}</i>
+                      </button>
                     </div>
-                    <button type="button" class="expand" 
-                      (click)="toggleStore(marketplaceIndex, storeIndex)">
-                      <i class="material-icons" >{{ isStoreExpanded(marketplaceIndex, storeIndex)? 'expand_less':'expand_more' }}</i>
-                    </button>
-                  </div>
-                  <div *ngIf="isStoreExpanded(marketplaceIndex, storeIndex)">
-                    <div *ngIf="data.isMapped; else notMapped">
-                      <div *ngIf="data.attributes.length; else noAttribute" class="attr-table" [formGroup]="form">
-                        <h4 class="subheading-2">Attribute</h4>
-                        <table>
-                          <thead>
-                            <th>Name</th>
-                            <th>Value</th>
-                          </thead>
-                          <tbody formArrayName="attributes" *ngIf="attributesFormArray.controls.length">
-                            <tr *ngFor=" let attr of attributesFormArray.controls; let i = index" [formGroupName]="i">
-                              <td *ngIf="storeIndex === attr.value.indexShop">
-                                {{ attr.value.name }}
-                              </td>
-                              <td *ngIf="storeIndex === attr.value.indexShop">
-                                <div *ngIf="attr.value.type === 'combo box' || attr.value.type === 'dropdown'">
-                                  <select #selecteEditAttr formControlName="value"
-                                    (change)="attrChange(selecteEditAttr.value, i)">
-                                    <option [ngValue]="null">
-                                      Select attribute value of {{
-                                      attributesFormArray?.controls[i].value.name }}
-                                    </option>
-                                    <option *ngFor="let opt of attributesFormArray?.controls[i].value.option" [ngValue]="opt">
-                                      {{ opt }}
-                                    </option>
-                                    <option class="add-new-attr" value="addNewAttr" *ngIf="attr.value.type === 'combo box'">
-                                      <i class="material-icons">add</i> Add New Attribute
-                                    </option>
-                                  </select>
-                                  <div *ngIf="selecteEditAttr.value === 'addNewAttr'">
-                                    <input type="text" formControlName="newValue" />
-                                    <div *ngIf="attr.get('newValue').invalid && attr.get('newValue').touched"class="error-detail">
-                                      This field is required
+                    <div *ngIf="isStoreExpanded(marketplaceIndex, storeIndex)">
+                      <div *ngIf="data.isMapped; else notMapped">
+                        <div *ngIf="data.attributes.length; else noAttribute" class="attr-table" [formGroup]="form">
+                          <h4 class="subheading-2" i18n>Attribute</h4>
+                          <table>
+                            <thead>
+                              <th i18n>Name</th>
+                              <th i18n>Value</th>
+                            </thead>
+                            <tbody formArrayName="attributes" *ngIf="attributesFormArray.controls.length">
+                              <tr *ngFor=" let attr of attributesFormArray.controls; let i = index" [formGroupName]="i">
+                                <td *ngIf="storeIndex === attr.value.indexShop">
+                                  {{ attr.value.name }}
+                                </td>
+                                <td *ngIf="storeIndex === attr.value.indexShop">
+                                  <div *ngIf="attr.value.type === 'combo box' || attr.value.type === 'dropdown'">
+                                    <select #selecteEditAttr formControlName="value"
+                                      (change)="attrChange(selecteEditAttr.value, i)">
+                                      <option [ngValue]="null">
+                                        Select attribute value of {{
+                                        attributesFormArray?.controls[i].value.name }}
+                                      </option>
+                                      <option *ngFor="let opt of attributesFormArray?.controls[i].value.option" [ngValue]="opt">
+                                        {{ opt }}
+                                      </option>
+                                      <option class="add-new-attr" value="addNewAttr" *ngIf="attr.value.type === 'combo box'">
+                                        <i class="material-icons">add</i> Add New Attribute
+                                      </option>
+                                    </select>
+                                    <div *ngIf="selecteEditAttr.value === 'addNewAttr'">
+                                      <input type="text" formControlName="newValue" />
+                                      <div *ngIf="attr.get('newValue').invalid && attr.get('newValue').touched"class="error-detail">
+                                        This field is required
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                                <div *ngIf="client.option === LZD && LzdReadOnlyFields.includes(attr.value.marketplaceAttributeName); else defaultInputField">
-                                  <input *ngIf="attr.value.type === 'text'" formControlName="value" type="text" readonly/>
-                                  <input *ngIf="attr.value.type === 'integer'" formControlName="value" type="number" readonly/>
-                                </div>
+                                  <div *ngIf="client.option === LZD && LzdReadOnlyFields.includes(attr.value.marketplaceAttributeName); else defaultInputField">
+                                    <input *ngIf="attr.value.type === 'text'" formControlName="value" type="text" readonly/>
+                                    <input *ngIf="attr.value.type === 'integer'" formControlName="value" type="number" readonly/>
+                                  </div>
 
-                                <ng-template #defaultInputField>
-                                  <input *ngIf="attr.value.type === 'text'" formControlName="value" type="text"/>
-                                  <input *ngIf="attr.value.type === 'integer'" formControlName="value" type="number"/>
-                                </ng-template>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <ng-template #noAttribute>
-                        <div class="no-attribute">
-                          <div *ngIf="data.isMapped else notMapped">
-                            <h3 class="subheading-1">Product class doesn't have attribute.</h3>
+                                  <ng-template #defaultInputField>
+                                    <input *ngIf="attr.value.type === 'text'" formControlName="value" type="text"/>
+                                    <input *ngIf="attr.value.type === 'integer'" formControlName="value" type="number"/>
+                                  </ng-template>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <ng-template #noAttribute>
+                          <div class="no-attribute">
+                            <div *ngIf="data.isMapped else notMapped">
+                              <h3 class="subheading-1" i18n>Product class doesn't have attribute.</h3>
+                            </div>
                           </div>
+                        </ng-template>
+                      </div>
+                      <ng-template #notMapped>
+                        <div class="not-mapped">
+                          <h1 class="heading-1" i18n>Product Class is Not Mapped Yet!</h1>
+                          <p i18n>Map Class to sync your product to marketplace.</p>
+                          <button [routerLink]="['/config/marketplace-integration/connect/product-class/',
+                                data.shopSlug,
+                                productClassSlug
+                              ]"
+                            [state]="{ productClass: { name: productClassName, slug: productClassSlug } }"
+                            type="button"
+                            class="control" i18n>Start Mapping
+                          </button>
                         </div>
                       </ng-template>
                     </div>
-                    <ng-template #notMapped>
-                      <div class="not-mapped">
-                        <h1 class="heading-1">Product Class is Not Mapped Yet!</h1>
-                        <p>Map Class to sync your product to marketplace.</p>
-                        <button [routerLink]="['/config/marketplace-integration/connect/product-class/',
-                              data.shopSlug,
-                              productClassSlug
-                            ]"
-                          [state]="{ productClass: { name: productClassName, slug: productClassSlug } }"
-                          type="button"
-                          class="control">Start Mapping
-                        </button>
-                      </div>
-                    </ng-template>
                   </div>
-                </div>
-              </ng-container>
-              <ng-template #noConnectedStore>
-                <div class="not-connected">
-                  <h1 class="heading-1">No Connected Store Yet!</h1>
-                  <p>Add a marketplace store to manage all your products in one place.</p>
-                  <button type="button" [routerLink]="['/config/marketplace-integration/connect/new']" class="control">
-                    <i class="material-icons">add</i>Add Store
-                  </button>
-                </div>
-              </ng-template>
-            <!-- </div> -->
+                </ng-container>
+                <ng-template #noConnectedStore>
+                  <div class="not-connected">
+                    <h1 class="heading-1" i18n>No Connected Store Yet!</h1>
+                    <p i18n>Add a marketplace store to manage all your products in one place.</p>
+                    <button type="button" [routerLink]="['/config/marketplace-integration/connect/new']" class="control" i18n>
+                      <i class="material-icons">add</i>Add Store
+                    </button>
+                  </div>
+                </ng-template>
+              </div>
+            </ng-container>
+            <ng-template #productClassMappingNotFound>
+              <div class="not-mapped">
+                <h1 class="heading-1" i18n>Product Class is Not Mapped Yet!</h1>
+                <p i18n>Map Class to sync your product to marketplace.</p>
+                <button [routerLink]="['/config/marketplace-integration/connect/']"
+                  type="button"
+                  class="control" i18n>Start Mapping
+                </button>
+              </div>
+            </ng-template>
           </nus-tab>
         </nus-tabs>
       </div>
@@ -227,6 +239,8 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
 
   clientList: Array<marketplace.IClient>;
   isClientListAvailable = false;
+  isProductClassMapped: boolean;
+  isProductClassMappedAvailable = false;
 
   get attributesFormArray(): FormArray { return this.form.get('attributes') as FormArray; }
 
@@ -263,16 +277,17 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
         this.shippingDetail = shipping;
       });
 
-    setTimeout(() => {
-      this.mpClientService
-      .client.subscribe((clients: marketplace.IClient[]) => {
-        this.clientList = clients;
-        this.clientList.map((client: IClient) => {
-          this.isExpanded.push({client: client.option, expanded: null});
-        });
-        this.isClientListAvailable = true;
+      setTimeout(() => {
+        this.mpClientService.client.subscribe(
+          (clients: marketplace.IClient[]) => {
+            this.clientList = clients;
+            this.clientList.map((client: IClient) => {
+              this.isExpanded.push({ client: client.option, expanded: null });
+            });
+            this.isClientListAvailable = true;
+          }
+        );
       });
-    })
   }
   
   private initializeForm() {
@@ -297,6 +312,7 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
       this.itemAttributes
     ) {
       this.saveAll();
+      this.isProductClassMappedAvailable = false;
     }
 
     this.clearFormArray(this.attributesFormArray);
@@ -308,6 +324,9 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
         this.productSlug
       )
       .subscribe((data: marketplace.IItemAttributeInfo[]) => {
+        // if not return 404 means product class already mapped
+        this.isProductClassMapped = true;
+        
         if (!!data) {
           this.itemAttributes = data;
           data.forEach((stores: marketplace.IItemAttributeInfo, index) => {
@@ -332,12 +351,17 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
             (obj) => obj.client === marketplaceOption
           );
           this.isExpanded[index].expanded = Array(data.length).fill(false);
+        } else {
+          this.itemAttributes = null;  
         }
       },
-      (error) => {
+      // for error fetch data i.e 404 not found
+      () => { 
+        this.isProductClassMapped = false;
         this.itemAttributes = null;
       });
 
+    this.isProductClassMappedAvailable = true;
     this.selectedTab = marketplaceOption;
     this.cdRef.detectChanges();
   }
