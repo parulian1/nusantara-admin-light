@@ -85,7 +85,6 @@ import { OnboardingPreviewHostDialogComponent } from './preview';
 export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> implements OnInit, AfterViewChecked {
   entity: IOnBoarding;
   typeChoices: drf.IChoice[] = [];
-  contentsValue: IOnboardingContent[];
 
   @ViewChild(OnboardingContentHostComponent) contentHost!: OnboardingContentHostComponent;
   @ViewChild(OnboardingPreviewHostDialogComponent) onboardingPreviewHostDialogComponent: OnboardingPreviewHostDialogComponent;
@@ -119,6 +118,7 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> im
 
   initializeForm(entity?: IOnBoarding) {
     this.entity = entity;
+
     this.form = this.fb.group({
       name: [entity?.name, [Validators.required, Validators.maxLength(100)]],
       href: [entity?.href, []],
@@ -148,20 +148,16 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> im
   }
 
   save() {
-    this.contentHost.getValue();
-    this.cleanData();
-    super.save();
-  }
-
-  cleanData() {
-    this.contents.controls.map((contentControl, index) => {
-      const formContentControl = (contentControl as FormGroup);
-      if (!contentControl.value.image.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
-        formContentControl.removeControl('image');
-      }
-      contentControl = formContentControl;
-    });
-
+    if (!this.form.invalid) {
+      const contentValues = this.contentHost.getValue();
+      contentValues.map((value) => {
+        if (!value['image'].match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
+          delete value['image'];
+        }
+      });
+      this.form.value.contents = contentValues;
+      super.save();
+    }
   }
 
   preview() {
