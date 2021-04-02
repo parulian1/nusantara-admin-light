@@ -12,6 +12,14 @@ import {Component} from '@angular/core';
         <button routerLink="devices" class="control">Open</button>
       </div>
     </div>
+    <div class="wrapper">
+      <div>
+        <h1 class="heading-1">Config Cart Discount</h1>
+      </div>
+      <div>
+        <button routerLink="config-cart-discount" class="control">Open</button>
+      </div>
+    </div>
   `,
   styles: [
     `

@@ -18,6 +18,7 @@ import { AuthSocialListComponent } from './auth-social';
 import { PaymentGatewayMetaComponent } from './payment-gateways/payment-gateway-meta/payment-gateway-meta.component';
 import { PaymentGatewayInstoreComponent } from './payment-gateways/payment-gateway-instore/payment-gateway-instore.component';
 import { ShippingServiceHostComponent } from './shipping/shipping-service/shipping-service-host.component';
+import { ConfigCartDiscountComponent } from '@nusantara/pages/config/config-cart-discount';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { ShippingServiceHostComponent } from './shipping/shipping-service/shippi
     PaymentGatewayMetaComponent,
     PaymentGatewayInstoreComponent,
     ShippingServiceHostComponent,
-    ConfigChatServiceComponent
+    ConfigChatServiceComponent,
+    ConfigCartDiscountComponent
   ],
   imports: [
     CommonModule,
