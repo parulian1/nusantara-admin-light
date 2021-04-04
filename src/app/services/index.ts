@@ -18,6 +18,7 @@ export * from './inventory-receiving.service';
 export * from './inventory-transfer.service';
 export * from './inventory-receiving-order.service';
 export * from './inventory-transfer-order.service';
+export * from './inventory-adjustment-order.service';
 
 export * from './vendor.service';
 export * from './category.service';

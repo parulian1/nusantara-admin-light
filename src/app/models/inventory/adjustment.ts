@@ -1,6 +1,26 @@
-import { IHrefEntity, INamedHrefEntity } from '@nusantara/models/base';
+import { IHrefEntity, INamedHrefEntity, INamedHrefEntityWarehouse } from '@nusantara/models/base';
+import { IStockRecord } from '@nusantara/models/inventory/stock-record';
+
+
+export type AdjustmentOrderStatusType =
+  'pending' |
+  'approved' |
+  'rejected';
+
+export type AdjustmentOrderType = 'manual' | 'automatic';
+
+
+export interface IAdjustmentUser extends INamedHrefEntity {
+  username?: string;
+}
+
 
 export interface IAdjustment extends IHrefEntity {
-  createdBy?: INamedHrefEntity;
-  reviewedBy?: INamedHrefEntity;
+  type: AdjustmentOrderType;
+  status: AdjustmentOrderStatusType;
+  warehouse: INamedHrefEntityWarehouse;
+  createdBy?: IAdjustmentUser;
+  reviewedBy?: IAdjustmentUser;
+  created: string;
+  stockRecords: IStockRecord[];
 }

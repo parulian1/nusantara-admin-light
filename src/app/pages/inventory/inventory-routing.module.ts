@@ -14,7 +14,12 @@ import { InventoryTransferOrderComponent } from './transfer-order';
 import { InventoryTransferOrderDetailResolver } from './transfer-order/inventory-transfer-order-detail.resolver';
 
 import {PublishListComponent} from '../config/marketplace-integration';
-import { AdjustmentComponent } from '@nusantara/pages/inventory/adjustment';
+import {
+  AdjustmentComponent,
+  AdjustmentDetailComponent,
+  AdjustmentDetailResolver
+} from '@nusantara/pages/inventory/adjustment';
+
 
 const routes: Routes = [
   {
@@ -85,6 +90,14 @@ const routes: Routes = [
           warehouses: config.warehouse.AllWarehouseResolver,
           productClasses: AllProductClassResolver,
         },
+      },
+      {
+        path: ':slug',
+        component: AdjustmentDetailComponent,
+        runGuardsAndResolvers: 'always',
+        resolve: {
+          entity: AdjustmentDetailResolver,
+        }
       }
     ]
   },

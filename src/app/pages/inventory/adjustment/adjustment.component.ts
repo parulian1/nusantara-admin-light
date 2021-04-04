@@ -10,7 +10,7 @@ import {ConfirmModalReceivingOrderComponent, ProductSelectionModalComponent} fro
 import { IProduct } from '@nusantara/models/products';
 
 @Component({
-  selector: 'nus-adjustment-list',
+  selector: 'nus-adjustment',
   template: `
     <h1>Adjustment Order</h1>
 
@@ -80,6 +80,7 @@ import { IProduct } from '@nusantara/models/products';
           <tr id="mp-add-product-head">
             <th>Receiving ID / Product Name / Location</th>
             <th>SKU</th>
+            <th>Location</th>
             <th>Receiving Date</th>
             <th>Available Stock In Product Record</th>
             <th>Adjusted Qty</th>
@@ -94,6 +95,7 @@ import { IProduct } from '@nusantara/models/products';
           <nus-adjustment-line
             *ngFor="let rec of stockRecords.controls; let i=index"
             [form]="rec"
+            [expiryDate]="currentDate"
             [warehouse]="warehouse.value"
             [availableSubLocations]="availableSubLocations"
             (remove)="stockRecords.removeAt(i)"
@@ -101,7 +103,7 @@ import { IProduct } from '@nusantara/models/products';
           </nus-adjustment-line>
 
           <tr>
-            <td colspan="9">
+            <td colspan="10">
               <button type="button" (click)="addLine()" class="new-add-button wide">
                 <i class="material-icons">add</i> Add Record
               </button>
@@ -245,10 +247,9 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
       const oneProduct = this.fb.group({
         href: [null, []],
         product: [selectedProduct, [Validators.required]],
-        receivingDate: { value: this.currentDate, disabled: true },
         sku: { value: defaultSku, disabled: true },
         availableStockQty: { value: 0, disabled: true },
-        adjustmentQty: [0, [Validators.required]],
+        originalQuantity: [0, [Validators.required]], // adjustment qty
         differenceQty: [null, [Validators.required]],
 
         reason: [null, [Validators.required]],

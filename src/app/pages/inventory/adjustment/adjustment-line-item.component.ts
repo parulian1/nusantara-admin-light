@@ -14,21 +14,22 @@ import { IChoice } from '@nusantara/models/drf';
     <tr [formGroup]="form">
       <td><a>{{ displayedProductName }}</a></td>
 
-      <!--  <td class="immediate-error-display" [formGroup]="location">-->
-      <!--    <select formControlName="href" data-qa="location">-->
-      <!--      <option [ngValue]="null">-&#45;&#45;</option>-->
-      <!--      <option *ngFor="let loc of availableSubLocations" [ngValue]="loc.href">-->
-      <!--        {{ loc.name }} ({{ loc.code }})-->
-      <!--      </option>-->
-      <!--    </select>-->
-      <!--  </td>-->
-
       <td class="immediate-error-display">
         <input type="text" [formControl]="sku" data-qa="sku">
       </td>
 
+      <td class="immediate-error-display" [formGroup]="location">
+        <select formControlName="href" data-qa="location">
+          <option [ngValue]="null">---</option>
+
+          <option *ngFor="let loc of availableSubLocations" [ngValue]="loc.href">
+            {{ loc.name }} ({{ loc.code }})
+          </option>
+        </select>
+      </td>
+
       <td class="immediate-error-display">
-        <input type="date" [formControl]="receivingDate" data-qa="expiry-date">
+        <div>{{ expiryDate | date }}</div>
       </td>
 
       <td>
@@ -36,7 +37,7 @@ import { IChoice } from '@nusantara/models/drf';
       </td>
 
       <td>
-        <input type="number" min="0" [formControl]="adjustmentQty" (keyup)="onKeyUpAdjustment()">
+        <input type="number" min="0" [formControl]="originalQuantity" (keyup)="onKeyUpAdjustment()">
       </td>
 
       <td>
@@ -82,6 +83,7 @@ export class AdjustmentLineItemComponent implements OnInit, AfterViewInit {
   @Input() availableSubLocations: ISubLocation[] = [];
   @Input() productClasses: IProductClass[];
   @Input() form: FormGroup;
+  @Input() expiryDate: Date;
   @Output() remove = new EventEmitter<void>();
 
   signDifferentQty: string;
@@ -119,11 +121,12 @@ export class AdjustmentLineItemComponent implements OnInit, AfterViewInit {
   // }
 
   get product(): FormControl { return this.form.get('product') as FormControl; }
-  get receivingDate(): FormControl { return this.form.get('receivingDate') as FormControl; }
   get location(): FormGroup { return this.form.get('location') as FormGroup; }
   get sku(): FormControl { return this.form.get('sku') as FormControl; }
+
   get availableStockQty(): FormControl { return this.form.get('availableStockQty') as FormControl; }
-  get adjustmentQty(): FormControl { return this.form.get('adjustmentQty') as FormControl; }
+  // original = adjustment
+  get originalQuantity(): FormControl { return this.form.get('originalQuantity') as FormControl; }
   get differenceQty(): FormControl { return this.form.get('differenceQty') as FormControl; }
 
   get reason(): FormControl { return this.form.get('reason') as FormControl; }
@@ -163,7 +166,7 @@ export class AdjustmentLineItemComponent implements OnInit, AfterViewInit {
   }
 
   calculateDifferentQty(): void {
-    const differentQty = parseInt(this.adjustmentQty.value || 0, 10)
+    const differentQty = parseInt(this.originalQuantity.value || 0, 10)
       - parseInt(this.availableStockQty.value, 10);
 
     this.differenceQty.setValue(differentQty || 0, { onlySelf: true });

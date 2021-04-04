@@ -12,7 +12,11 @@ import {
 import { InventoryRoutingModule } from './inventory-routing.module';
 import { InventoryOrderListComponent } from './pending-order';
 import {InventoryTransferOrderComponent} from './transfer-order';
-import { AdjustmentComponent, AdjustmentLineItemComponent } from './adjustment';
+import {
+  AdjustmentComponent,
+  AdjustmentDetailComponent,
+  AdjustmentLineItemComponent,
+} from './adjustment';
 
 @NgModule({
   declarations: [
@@ -22,8 +26,10 @@ import { AdjustmentComponent, AdjustmentLineItemComponent } from './adjustment';
 
     InventoryOrderListComponent,
     InventoryTransferOrderComponent,
+
     AdjustmentComponent,
     AdjustmentLineItemComponent,
+    AdjustmentDetailComponent,
   ],
   imports: [
     CommonModule,
