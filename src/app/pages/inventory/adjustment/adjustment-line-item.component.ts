@@ -36,11 +36,14 @@ import { IChoice } from '@nusantara/models/drf';
       </td>
 
       <td>
-        <input type="text" [formControl]="adjustmentQty">
+        <input type="number" min="0" [formControl]="adjustmentQty" (keyup)="onKeyUpAdjustment()">
       </td>
 
       <td>
-        <input type="text" [formControl]="differenceQty" readonly>
+        <div style="display: flex; justify-items: center; align-items: center;">
+          <input type="text" [formControl]="differenceQty" readonly>
+          <div>{{ signDifferentQty }}</div>
+        </div>
       </td>
 
 
@@ -80,6 +83,8 @@ export class AdjustmentLineItemComponent implements OnInit, AfterViewInit {
   @Input() productClasses: IProductClass[];
   @Input() form: FormGroup;
   @Output() remove = new EventEmitter<void>();
+
+  signDifferentQty: string;
 
   reasonChoices: IChoice[] = [
     { value: 'opname', displayName: 'OpName' },
@@ -125,6 +130,8 @@ export class AdjustmentLineItemComponent implements OnInit, AfterViewInit {
   get notes(): FormControl { return this.form.get('notes') as FormControl; }
 
   ngOnInit(): void {
+    this.calculateDifferentQty();
+
     // find stock by product and warehouse
     this.warehouseService.warehouseStockSearch(this.product.value.href)
       .pipe(map(warehouses => {
@@ -135,6 +142,7 @@ export class AdjustmentLineItemComponent implements OnInit, AfterViewInit {
       .subscribe(warehouses => {
         if (warehouses?.length > 0) {
           this.availableStockQty.setValue(warehouses[0].quantity || 0, { onlySelf: true });
+          this.calculateDifferentQty();
         }
       });
   }
@@ -150,4 +158,22 @@ export class AdjustmentLineItemComponent implements OnInit, AfterViewInit {
   // addLocator() {
   //   this.locator.push(new FormControl(''));
   // }
+  onKeyUpAdjustment(): void {
+    this.calculateDifferentQty();
+  }
+
+  calculateDifferentQty(): void {
+    const differentQty = parseInt(this.adjustmentQty.value || 0, 10)
+      - parseInt(this.availableStockQty.value, 10);
+
+    this.differenceQty.setValue(differentQty || 0, { onlySelf: true });
+
+    if (Math.sign(differentQty) === 0) {
+      this.signDifferentQty = '';
+    } else if (Math.sign(differentQty) === 1) {
+      this.signDifferentQty = '(+)';
+    } else {
+      this.signDifferentQty = '(-)';
+    }
+  }
 }

@@ -14,7 +14,7 @@ import { InventoryTransferOrderComponent } from './transfer-order';
 import { InventoryTransferOrderDetailResolver } from './transfer-order/inventory-transfer-order-detail.resolver';
 
 import {PublishListComponent} from '../config/marketplace-integration';
-import { AdjustmentListComponent } from '@nusantara/pages/inventory/adjustment';
+import { AdjustmentComponent } from '@nusantara/pages/inventory/adjustment';
 
 const routes: Routes = [
   {
@@ -79,7 +79,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: AdjustmentListComponent,
+        component: AdjustmentComponent,
         runGuardsAndResolvers: 'always',
         resolve: {
           warehouses: config.warehouse.AllWarehouseResolver,

@@ -6,13 +6,13 @@ import { IAdjustment } from '@nusantara/models/inventory';
 import { AuthService } from '@nusantara/auth';
 import { InventoryReceivingService, MarketplaceClientService} from '@nusantara/services';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProductSelectionModalComponent } from '@nusantara/shared';
+import {ConfirmModalReceivingOrderComponent, ProductSelectionModalComponent} from '@nusantara/shared';
 import { IProduct } from '@nusantara/models/products';
 
 @Component({
   selector: 'nus-adjustment-list',
   template: `
-    <h1>Delivery Order</h1>
+    <h1>Adjustment Order</h1>
 
     <form>
       <div class="container">
@@ -111,8 +111,15 @@ import { IProduct } from '@nusantara/models/products';
       </div>
     </form>
 
+    <nus-detail-actions
+      [component]="this"
+      (cancel)="confirmModal()"
+      (delete)="delete()">
+    </nus-detail-actions>
+
     <!-- Modals -->
     <nus-product-selection-modal></nus-product-selection-modal>
+    <nus-confirm-receiving-modal></nus-confirm-receiving-modal>
   `,
   styles: [
     'h1 { margin-bottom: 0.75rem; }',
@@ -133,10 +140,11 @@ import { IProduct } from '@nusantara/models/products';
     '.product-list { margin-top: 24px; }',
   ]
 })
-export class AdjustmentListComponent extends AbstractDetailComponent<inventory.IAdjustment> implements OnInit, AfterViewInit {
+export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdjustment> implements OnInit, AfterViewInit {
   form: FormGroup;
 
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
+  @ViewChild(ConfirmModalReceivingOrderComponent) confirmModalReceiving: ConfirmModalReceivingOrderComponent;
 
   warehouses: IWarehouse[];
   availableSubLocations: ISubLocation[] = [];
@@ -168,6 +176,7 @@ export class AdjustmentListComponent extends AbstractDetailComponent<inventory.I
 
   ngAfterViewInit() {
     this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
+    this.confirmModalReceiving.onClose.subscribe(() => this.onConfirmModalClosed());
   }
 
   initializeForm(entity?: IAdjustment): void {
@@ -218,8 +227,14 @@ export class AdjustmentListComponent extends AbstractDetailComponent<inventory.I
 
   onProductSelectionModalClosed(): void {
     if (this.productSelectionModal.result === DialogResult.OK) {
-      // add a new child to the form group based on the modal
+      const selectedProduct = this.productSelectionModal.product.value as IProduct;
+      const defaultSku = selectedProduct?.upc || '';
 
+      // available stock
+      if (!selectedProduct.inStock) { alert('selected product doesnt have stock'); }
+
+      // add a new child to the form group based on the modal
+      // get first subLocation as `main` warehouse
       let defaultSubLocations;
       if (this.availableSubLocations?.length === 1) {
         defaultSubLocations = this.availableSubLocations[0].href;
@@ -227,16 +242,13 @@ export class AdjustmentListComponent extends AbstractDetailComponent<inventory.I
         defaultSubLocations = null;
       }
 
-      const selectedProduct = this.productSelectionModal.product.value as IProduct;
-      const defaultSku = selectedProduct?.upc || '';
-
       const oneProduct = this.fb.group({
         href: [null, []],
         product: [selectedProduct, [Validators.required]],
         receivingDate: { value: this.currentDate, disabled: true },
         sku: { value: defaultSku, disabled: true },
         availableStockQty: { value: 0, disabled: true },
-        adjustmentQty: [null, [Validators.required]],
+        adjustmentQty: [0, [Validators.required]],
         differenceQty: [null, [Validators.required]],
 
         reason: [null, [Validators.required]],
@@ -245,5 +257,21 @@ export class AdjustmentListComponent extends AbstractDetailComponent<inventory.I
 
       this.stockRecords.push(oneProduct);
     }
+  }
+
+  onConfirmModalClosed() {
+    if (this.confirmModalReceiving.result === DialogResult.OK) {
+      this.resetForm(true);
+    }
+  }
+
+  resetForm(warnOnDirty = false) {
+    this.form.reset();
+    this.warehouse.enable();
+    this.stockRecords.clear();
+  }
+
+  confirmModal() {
+    this.confirmModalReceiving.open();
   }
 }
