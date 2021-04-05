@@ -2,56 +2,44 @@ import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { products, ISubLocation } from '@nusantara/models';
+import { products, ISubLocation, drf } from '@nusantara/models';
 import { IProductClass } from '@nusantara/models/products';
-import { WarehouseService } from '@nusantara/services';
-import { map } from 'rxjs/operators';
-import { IChoice } from '@nusantara/models/drf';
+import { InventoryAdjustmentOrderService } from '@nusantara/services';
+import { getSlugFromHref } from '@nusantara/core';
 
 @Component({
   selector: 'nus-adjustment-line',
   template: `
     <tr [formGroup]="form">
-      <td><a>{{ displayedProductName }}</a></td>
+      <td><a>{{ displayedName }}</a></td>
 
       <td class="immediate-error-display">
         <input type="text" [formControl]="sku" data-qa="sku">
       </td>
 
-      <td class="immediate-error-display" [formGroup]="location">
-        <select formControlName="href" data-qa="location">
-          <option [ngValue]="null">---</option>
-
-          <option *ngFor="let loc of availableSubLocations" [ngValue]="loc.href">
-            {{ loc.name }} ({{ loc.code }})
-          </option>
-        </select>
-      </td>
-
       <td class="immediate-error-display">
-        <div>{{ expiryDate | date }}</div>
+        <div>{{ created.value | date }}</div>
       </td>
 
       <td>
-        <input type="number" [formControl]="availableStockQty" data-qa="original-quantity">
+        <input type="number" [formControl]="originalQuantity" data-qa="original-quantity">
       </td>
 
       <td>
-        <input type="number" min="0" [formControl]="originalQuantity" (keyup)="onKeyUpAdjustment()">
+        <input type="number" [formControl]="adjustedQty" (keyup)="onKeyUpAdjustment()" data-qa="adjusted-qty">
       </td>
 
       <td>
         <div style="display: flex; justify-items: center; align-items: center;">
-          <input type="text" [formControl]="differenceQty" readonly>
-          <div>{{ signDifferentQty }}</div>
+          <input type="text" [formControl]="differenceQty" data-qa="difference-qty" readonly>
+          <!-- <div>{{ signDifferentQty }}</div>-->
         </div>
       </td>
 
 
       <td>
-        <select [formControl]="reason" data-qa="location">
-          <option [ngValue]="null">---</option>
-          <option *ngFor="let r of reasonChoices" [ngValue]="r.value">
+        <select [formControl]="reason" data-qa="reason">
+          <option *ngFor="let r of reasons" [ngValue]="r.value">
             {{ r.displayName }}
           </option>
         </select>
@@ -83,91 +71,52 @@ export class AdjustmentLineItemComponent implements OnInit, AfterViewInit {
   @Input() availableSubLocations: ISubLocation[] = [];
   @Input() productClasses: IProductClass[];
   @Input() form: FormGroup;
-  @Input() expiryDate: Date;
+  @Input() reasons: drf.IChoice[] = [];
+
   @Output() remove = new EventEmitter<void>();
 
   signDifferentQty: string;
 
-  reasonChoices: IChoice[] = [
-    { value: 'opname', displayName: 'OpName' },
-    { value: 'damage', displayName: 'Damage' },
-    { value: 'missing', displayName: 'Missing' },
-    { value: 'misplace', displayName: 'Found/Misplace' },
-  ];
-
   constructor(
     public route: ActivatedRoute,
     public router: Router,
-    public warehouseService: WarehouseService,
+    private inventoryAdjustmentService: InventoryAdjustmentOrderService,
   ) { }
 
-  get displayedProductName(): string {
+  get displayedName(): string {
+    const receivingId = getSlugFromHref(this.receivingOrder.value.href);
+    const locationName = getSlugFromHref(this.location.value.href);
     const p = this.product.value as products.IProduct;
-    return `${p.name} (${p.upc})`;
+    return `${receivingId} / ${p.name} / ${locationName}`;
   }
-
-  // get isPerishable(): boolean {
-  //   const p = this.product.value as products.IProduct;
-  //   let currentPc = [];
-  //   if (!!this.productClasses) {
-  //     currentPc = this.productClasses.filter(pc => pc.href === p.productClass.href);
-  //   }
-  //
-  //   if (currentPc.length > 0) {
-  //     return currentPc[0].isPerishable;
-  //   } else {
-  //     return false;
-  //   }
-  // }
 
   get product(): FormControl { return this.form.get('product') as FormControl; }
   get location(): FormGroup { return this.form.get('location') as FormGroup; }
   get sku(): FormControl { return this.form.get('sku') as FormControl; }
+  get receivingOrder(): FormControl { return this.form.get('receivingOrder') as FormControl; }
 
-  get availableStockQty(): FormControl { return this.form.get('availableStockQty') as FormControl; }
-  // original = adjustment
+  // get availableStockQty(): FormControl { return this.form.get('availableStockQty') as FormControl; }
   get originalQuantity(): FormControl { return this.form.get('originalQuantity') as FormControl; }
   get differenceQty(): FormControl { return this.form.get('differenceQty') as FormControl; }
+  get adjustedQty(): FormControl { return this.form.get('adjustedQty') as FormControl; }
 
+  get created(): FormControl { return this.form.get('created') as FormControl; }
   get reason(): FormControl { return this.form.get('reason') as FormControl; }
   get notes(): FormControl { return this.form.get('notes') as FormControl; }
 
   ngOnInit(): void {
     this.calculateDifferentQty();
-
-    // find stock by product and warehouse
-    this.warehouseService.warehouseStockSearch(this.product.value.href)
-      .pipe(map(warehouses => {
-        return warehouses.filter(
-          warehouse => warehouse.href === this.warehouse.href
-        );
-      }))
-      .subscribe(warehouses => {
-        if (warehouses?.length > 0) {
-          this.availableStockQty.setValue(warehouses[0].quantity || 0, { onlySelf: true });
-          this.calculateDifferentQty();
-        }
-      });
   }
 
-  ngAfterViewInit(): void {
-    // if (this.isPerishable) {
-    //   this.expiryDate.setValidators([Validators.required, ]);
-    // } else {
-    //   this.expiryDate.clearValidators();
-    // }
-  }
+  ngAfterViewInit(): void { }
 
-  // addLocator() {
-  //   this.locator.push(new FormControl(''));
-  // }
   onKeyUpAdjustment(): void {
     this.calculateDifferentQty();
   }
 
   calculateDifferentQty(): void {
-    const differentQty = parseInt(this.originalQuantity.value || 0, 10)
-      - parseInt(this.availableStockQty.value, 10);
+    const differentQty = parseInt(this.adjustedQty.value || 0, 10)
+      - parseInt(this.originalQuantity.value, 10);
 
     this.differenceQty.setValue(differentQty || 0, { onlySelf: true });
 

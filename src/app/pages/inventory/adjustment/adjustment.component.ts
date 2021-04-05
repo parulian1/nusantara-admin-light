@@ -1,13 +1,12 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AbstractDetailComponent, DialogResult, ToastService } from '@nusantara/core';
-import { inventory, ISubLocation, IWarehouse, IWarehouseDetail } from '@nusantara/models';
-import { IAdjustment } from '@nusantara/models/inventory';
+import { AbstractDetailComponent, DialogResult, getSlugFromHref, ToastService } from '@nusantara/core';
+import { drf, inventory, ISubLocation, IWarehouse, IWarehouseDetail } from '@nusantara/models';
+import { IAdjustment, IStockRecord } from '@nusantara/models/inventory';
 import { AuthService } from '@nusantara/auth';
 import { InventoryReceivingService, MarketplaceClientService} from '@nusantara/services';
 import { ActivatedRoute, Router } from '@angular/router';
-import {ConfirmModalReceivingOrderComponent, ProductSelectionModalComponent} from '@nusantara/shared';
-import { IProduct } from '@nusantara/models/products';
+import { ConfirmModalReceivingOrderComponent, StockRecordSelectionModalComponent } from '@nusantara/shared';
 
 @Component({
   selector: 'nus-adjustment',
@@ -80,7 +79,6 @@ import { IProduct } from '@nusantara/models/products';
           <tr id="mp-add-product-head">
             <th>Receiving ID / Product Name / Location</th>
             <th>SKU</th>
-            <th>Location</th>
             <th>Receiving Date</th>
             <th>Available Stock In Product Record</th>
             <th>Adjusted Qty</th>
@@ -95,9 +93,9 @@ import { IProduct } from '@nusantara/models/products';
           <nus-adjustment-line
             *ngFor="let rec of stockRecords.controls; let i=index"
             [form]="rec"
-            [expiryDate]="currentDate"
             [warehouse]="warehouse.value"
             [availableSubLocations]="availableSubLocations"
+            [reasons]="reasonChoices"
             (remove)="stockRecords.removeAt(i)"
           >
           </nus-adjustment-line>
@@ -120,7 +118,7 @@ import { IProduct } from '@nusantara/models/products';
     </nus-detail-actions>
 
     <!-- Modals -->
-    <nus-product-selection-modal></nus-product-selection-modal>
+    <nus-stock-record-selection-modal></nus-stock-record-selection-modal>
     <nus-confirm-receiving-modal></nus-confirm-receiving-modal>
   `,
   styles: [
@@ -145,18 +143,21 @@ import { IProduct } from '@nusantara/models/products';
 export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdjustment> implements OnInit, AfterViewInit {
   form: FormGroup;
 
-  @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
+  @ViewChild(StockRecordSelectionModalComponent) stockRecordSelectionModal: StockRecordSelectionModalComponent;
   @ViewChild(ConfirmModalReceivingOrderComponent) confirmModalReceiving: ConfirmModalReceivingOrderComponent;
 
   warehouses: IWarehouse[];
   availableSubLocations: ISubLocation[] = [];
-  warehouseDetail: IWarehouseDetail[];
+  reasonChoices: drf.IChoice[] = [
+    { value: 'opname', displayName: 'OpName' },
+    { value: 'damaged', displayName: 'Damaged' },
+    { value: 'missed', displayName: 'Missing' },
+    { value: 'misplace', displayName: 'Found/Misplace' },
+  ];
 
   currentDate: Date;
   productValue = 0;
   storeValue = 0;
-  marketplaceValue = 0;
-  showDetail = false;
 
   constructor(private fb: FormBuilder,
               public toast: ToastService,
@@ -177,7 +178,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   }
 
   ngAfterViewInit() {
-    this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
+    this.stockRecordSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
     this.confirmModalReceiving.onClose.subscribe(() => this.onConfirmModalClosed());
   }
 
@@ -212,7 +213,12 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   }
 
   addLine() {
-    this.productSelectionModal.open();
+    this.stockRecordSelectionModal.filters = {
+      warehouse: getSlugFromHref(this.warehouse.value?.href),
+    };
+    this.stockRecordSelectionModal.displayedResults = null;
+    this.stockRecordSelectionModal.onSearchTextChanged('');
+    this.stockRecordSelectionModal.open();
   }
 
   confirmWarehouse(): void {
@@ -228,35 +234,27 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   }
 
   onProductSelectionModalClosed(): void {
-    if (this.productSelectionModal.result === DialogResult.OK) {
-      const selectedProduct = this.productSelectionModal.product.value as IProduct;
-      const defaultSku = selectedProduct?.upc || '';
+    if (this.stockRecordSelectionModal.result === DialogResult.OK) {
+      const selectedStock = this.stockRecordSelectionModal.stockRecord.value as IStockRecord;
 
       // available stock
-      if (!selectedProduct.inStock) { alert('selected product doesnt have stock'); }
+      if (selectedStock.originalQuantity <= 0) { alert('selected receiving order doesnt have stock'); }
 
-      // add a new child to the form group based on the modal
-      // get first subLocation as `main` warehouse
-      let defaultSubLocations;
-      if (this.availableSubLocations?.length === 1) {
-        defaultSubLocations = this.availableSubLocations[0].href;
-      } else {
-        defaultSubLocations = null;
-      }
-
-      const oneProduct = this.fb.group({
+      const newReceiving = this.fb.group({
         href: [null, []],
-        product: [selectedProduct, [Validators.required]],
-        sku: { value: defaultSku, disabled: true },
-        availableStockQty: { value: 0, disabled: true },
-        originalQuantity: [0, [Validators.required]], // adjustment qty
+        receivingOrder: [selectedStock.receivingOrder, [Validators.required]],
+        location: [selectedStock.location, []],
+        product: [selectedStock.product, [Validators.required]],
+        sku: [{value: selectedStock.sku, disabled: true}],
+        originalQuantity: [{value: selectedStock.originalQuantity, disabled: true}],
         differenceQty: [null, [Validators.required]],
-
-        reason: [null, [Validators.required]],
-        notes: [null, [Validators.required]],
+        adjustedQty: [null, [Validators.required]],
+        created: [{value: selectedStock.created, disabled: true}],
+        reason: [this.reasonChoices[0].value, []],
+        notes: [null, []],
       });
 
-      this.stockRecords.push(oneProduct);
+      this.stockRecords.push(newReceiving);
     }
   }
 
