@@ -18,10 +18,6 @@ import {ActivatedRoute, Router} from '@angular/router';
     </ul>
 
     <form [formGroup]="form" (ngSubmit)="save()">
-<!--      <label class="checkbox">-->
-<!--        <span>Open Discount</span>-->
-<!--        <input type="checkbox" [formControl]="openDiscount">-->
-<!--      </label>-->
       <input type="checkbox" class="toggle" [formControl]="openDiscount"/>
 
       <p>Activating cart discount will allow offline customers to get additional discount </p>
