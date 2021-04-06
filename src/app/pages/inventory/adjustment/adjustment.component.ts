@@ -1,10 +1,17 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AbstractDetailComponent, DialogResult, getSlugFromHref, ToastService } from '@nusantara/core';
-import { drf, inventory, ISubLocation, IWarehouse, IWarehouseDetail } from '@nusantara/models';
+import {
+  AbstractDetailComponent,
+  DialogResult,
+  getSlugFromHref,
+  IResultResponse,
+  ToastLevelEnum,
+  ToastService,
+} from '@nusantara/core';
+import { drf, inventory, ISubLocation, IWarehouse } from '@nusantara/models';
 import { IAdjustment, IStockRecord } from '@nusantara/models/inventory';
 import { AuthService } from '@nusantara/auth';
-import { InventoryReceivingService, MarketplaceClientService} from '@nusantara/services';
+import { InventoryAdjustmentOrderService, MarketplaceClientService } from '@nusantara/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmModalReceivingOrderComponent, StockRecordSelectionModalComponent } from '@nusantara/shared';
 
@@ -13,7 +20,7 @@ import { ConfirmModalReceivingOrderComponent, StockRecordSelectionModalComponent
   template: `
     <h1>Adjustment Order</h1>
 
-    <form>
+    <form [formGroup]="form" (ngSubmit)="save()">
       <div class="container">
         <div class="general-info">
           <h3>General Information</h3>
@@ -109,13 +116,14 @@ import { ConfirmModalReceivingOrderComponent, StockRecordSelectionModalComponent
           </tr>
         </table>
       </div>
-    </form>
 
-    <nus-detail-actions
-      [component]="this"
-      (cancel)="confirmModal()"
-      (delete)="delete()">
-    </nus-detail-actions>
+
+      <nus-detail-actions
+        [component]="this"
+        (cancel)="confirmModal()"
+        (delete)="delete()">
+      </nus-detail-actions>
+    </form>
 
     <!-- Modals -->
     <nus-stock-record-selection-modal></nus-stock-record-selection-modal>
@@ -162,7 +170,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   constructor(private fb: FormBuilder,
               public toast: ToastService,
               public authService: AuthService,
-              public service: InventoryReceivingService,
+              public service: InventoryAdjustmentOrderService,
               public clientService: MarketplaceClientService,
               public route: ActivatedRoute,
               public router: Router) {
@@ -248,7 +256,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
         sku: [{value: selectedStock.sku, disabled: true}],
         originalQuantity: [{value: selectedStock.originalQuantity, disabled: true}],
         differenceQty: [null, [Validators.required]],
-        adjustedQty: [null, [Validators.required]],
+        adjustmentQuantity: [null, [Validators.required]],
         created: [{value: selectedStock.created, disabled: true}],
         reason: [this.reasonChoices[0].value, []],
         notes: [null, []],
@@ -272,5 +280,22 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
 
   confirmModal() {
     this.confirmModalReceiving.open();
+  }
+
+  getFormValue() {
+    return {
+      ...this.form.getRawValue(),
+      createdBy: {
+        href: `https://${this.authService.tokenPayload?.site}/users/${this.authService.tokenPayload?.user_id}/`
+      },
+      reviewedBy: {}
+    };
+  }
+
+  protected onSaveSuccess(result: IResultResponse<inventory.IAdjustment>) {
+    this.form.reset();
+    this.storeValue = this.productValue = 0;
+    this.toast?.addMessage(`"${this.form.get('name')?.value ?? 'data'}" was saved successfully.`, 'Saved', ToastLevelEnum.success);
+    this.navigateToParent(false);
   }
 }

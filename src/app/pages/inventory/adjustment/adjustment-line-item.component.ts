@@ -26,7 +26,7 @@ import { getSlugFromHref } from '@nusantara/core';
       </td>
 
       <td>
-        <input type="number" [formControl]="adjustedQty" (keyup)="onKeyUpAdjustment()" data-qa="adjusted-qty">
+        <input type="number" [formControl]="adjustmentQuantity" (keyup)="onKeyUpAdjustment()" data-qa="adjusted-qty">
       </td>
 
       <td>
@@ -95,10 +95,11 @@ export class AdjustmentLineItemComponent implements OnInit, AfterViewInit {
   get sku(): FormControl { return this.form.get('sku') as FormControl; }
   get receivingOrder(): FormControl { return this.form.get('receivingOrder') as FormControl; }
 
-  // get availableStockQty(): FormControl { return this.form.get('availableStockQty') as FormControl; }
   get originalQuantity(): FormControl { return this.form.get('originalQuantity') as FormControl; }
-  get differenceQty(): FormControl { return this.form.get('differenceQty') as FormControl; }
-  get adjustedQty(): FormControl { return this.form.get('adjustedQty') as FormControl; }
+
+  // difference = adjustmentQty, adjustment qty = adjustedQty
+  get differenceQty(): FormControl { return this.form.get('adjustmentQuantity') as FormControl; }
+  get adjustmentQuantity(): FormControl { return this.form.get('differenceQty') as FormControl; }
 
   get created(): FormControl { return this.form.get('created') as FormControl; }
   get reason(): FormControl { return this.form.get('reason') as FormControl; }
@@ -115,7 +116,7 @@ export class AdjustmentLineItemComponent implements OnInit, AfterViewInit {
   }
 
   calculateDifferentQty(): void {
-    const differentQty = parseInt(this.adjustedQty.value || 0, 10)
+    const differentQty = parseInt(this.adjustmentQuantity.value || 0, 10)
       - parseInt(this.originalQuantity.value, 10);
 
     this.differenceQty.setValue(differentQty || 0, { onlySelf: true });

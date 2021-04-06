@@ -14,6 +14,12 @@ export interface IAdjustmentUser extends INamedHrefEntity {
   username?: string;
 }
 
+export interface IAdjustmentStockRecordReadOnly extends IStockRecord {
+  reason: string;
+  notes: string;
+  adjustmentQuantity: number;
+}
+
 
 export interface IAdjustment extends IHrefEntity {
   type: AdjustmentOrderType;
@@ -23,4 +29,8 @@ export interface IAdjustment extends IHrefEntity {
   reviewedBy?: IAdjustmentUser;
   created: string;
   stockRecords: IStockRecord[];
+}
+
+export interface IAdjustmentReadOnly extends IAdjustment {
+  stockRecords: IAdjustmentStockRecordReadOnly[];
 }

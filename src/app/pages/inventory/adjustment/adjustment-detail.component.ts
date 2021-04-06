@@ -1,9 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractDetailComponent, ToastService } from '@nusantara/core';
-import { IAdjustment, IReceivingOrder } from '@nusantara/models/inventory';
-import { InventoryReceivingOrderService } from '@nusantara/services';
+import {AbstractDetailComponent, ErrorResult, getSlugFromHref, ToastService} from '@nusantara/core';
+import { IAdjustmentReadOnly } from '@nusantara/models/inventory';
+import {InventoryAdjustmentOrderService, InventoryReceivingOrderService} from '@nusantara/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
+import { Location } from '@angular/common';
+import { catchError } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
+import { of } from 'rxjs';
+import { IError } from '@nusantara/models';
 
 
 @Component({
@@ -50,9 +55,8 @@ import { FormBuilder } from '@angular/forms';
         <thead>
         <tr>
           <th>
-            Product
+            Receiving ID / Product Name / Location
           </th>
-          <th>Location</th>
           <th>sku</th>
           <th>Receiving Date</th>
           <th>Available Stock in Product Record</th>
@@ -65,25 +69,24 @@ import { FormBuilder } from '@angular/forms';
         <tbody>
         <tr *ngFor="let stock_record of entity.stockRecords">
           <td data-qa="product">
-            <div>{{ stock_record.product.name }}</div>
+            <div>
+              {{ displayedName(stock_record.receivingOrder.href, stock_record.product.name, stock_record.location.href) }}
+            </div>
           </td>
-          <td>
-            <div>{{ stock_record.location.name }}</div>
-          </td>
-          <td>
+          <td data-qa="sku">
             <div>{{ stock_record.sku }}</div>
           </td>
-          <td>
-            {{ stock_record.expiryDate|date: 'dd MMM yyyy HH:mm' }}
+          <td data-qa="created">
+            {{ stock_record.created|date: 'dd MMM yyyy HH:mm' }}
           </td>
-          <td data-qa="original-quantity">
+          <td data-qa="available-quantity">
             {{ stock_record.originalQuantity }} <!-- is it current quantity ?? -->
           </td>
-          <td data-qa="stock-original">
-            {{ stock_record.originalQuantity }}
+          <td data-qa="adjusted-quantity">
+            {{ adjustedQty(stock_record.originalQuantity, stock_record.adjustmentQuantity) }}
           </td>
-          <td data-qa="stock-requested">
-            {{ stock_record.requestingStock }} <!-- manual calculation ?? -->
+          <td data-qa="difference-quantity">
+            {{ stock_record.adjustmentQuantity }} <!-- manual calculation ?? -->
           </td>
           <td data-qa="stock-reason">
             {{ stock_record.reason }}
@@ -124,14 +127,16 @@ import { FormBuilder } from '@angular/forms';
     'button.danger { margin-left: auto }'
   ]
 })
-export class AdjustmentDetailComponent  extends AbstractDetailComponent<IAdjustment> implements OnInit {
-  entity: IAdjustment;
+export class AdjustmentDetailComponent  extends AbstractDetailComponent<IAdjustmentReadOnly> implements OnInit {
+  entity: IAdjustmentReadOnly;
 
-  constructor(public service: InventoryReceivingOrderService,
+  constructor(public service: InventoryAdjustmentOrderService,
               public route: ActivatedRoute,
               public fb: FormBuilder,
               public router: Router,
-              public toast: ToastService) {
+              public toast: ToastService,
+              public location: Location,
+  ) {
     super(route, router, toast, service);
   }
 
@@ -139,7 +144,7 @@ export class AdjustmentDetailComponent  extends AbstractDetailComponent<IAdjustm
     super.ngOnInit();
   }
 
-  initializeForm(entity: IReceivingOrder): void {
+  initializeForm(entity: IAdjustmentReadOnly): void {
     this.entity = entity;
     this.form = this.fb.group({
       href: [entity.href, []],
@@ -149,7 +154,43 @@ export class AdjustmentDetailComponent  extends AbstractDetailComponent<IAdjustm
 
   showWarehouseDetail(): void {}
 
-  approve(): void { alert('approve'); }
-  cancel(): void { alert('cancel'); }
-  reject(): void { alert('reject'); }
+  approve(): void {
+    this.form.value.status = 'approved';
+    this.save();
+  }
+
+  reject(): void {
+    this.form.value.status = 'rejected';
+    this.save();
+  }
+
+  cancel(): void {
+    this.location.back();
+  }
+
+  displayedName(receivingHref: string, productName: string, locationHref: string): string {
+    return `${getSlugFromHref(receivingHref)} / ${productName} / ${getSlugFromHref(locationHref)}`;
+  }
+
+  adjustedQty(originalQty: number, differenceQty: number): number {
+    return differenceQty + originalQty;
+  }
+
+  save(): void {
+    this.service.save(this.getFormValue()).pipe(catchError(err => {
+      if (err instanceof HttpErrorResponse) {
+        return of(new ErrorResult<IError>(err.error, err.status));
+      } else {
+        return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, err.status));
+      }
+    })).subscribe(
+      resp => {
+        if (resp instanceof ErrorResult) {
+          this.onSaveError(resp.errorDetails);
+        } else {
+          this.location.back();
+        }
+      }
+    );
+  }
 }
