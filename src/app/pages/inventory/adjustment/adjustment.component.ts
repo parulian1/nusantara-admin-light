@@ -57,28 +57,28 @@ import { ConfirmModalReceivingOrderComponent, StockRecordSelectionModalComponent
             </div>
           </div>
         </div>
-        <div class="mp-info">
-          <h3>Marketplace Information</h3>
-          <div>
-            <div>Product</div>
-            <div class="count">
-              0
-            </div>
-          </div>
-          <div>
-            <div>Marketplace</div>
-            <div class="count">
-              0
-            </div>
-          </div>
-          <div>
-            <div>Store</div>
-            <div class="count">
-              0
-            </div>
-          </div>
+        <!-- <div class="mp-info">-->
+          <!--  <h3>Marketplace Information</h3>-->
+          <!--  <div>-->
+          <!--    <div>Product</div>-->
+          <!--    <div class="count">-->
+          <!--      0-->
+          <!--    </div>-->
+          <!--  </div>-->
+          <!--  <div>-->
+          <!--    <div>Marketplace</div>-->
+          <!--    <div class="count">-->
+          <!--      0-->
+          <!--    </div>-->
+          <!--  </div>-->
+          <!--  <div>-->
+          <!--    <div>Store</div>-->
+          <!--    <div class="count">-->
+          <!--      0-->
+          <!--    </div>-->
+          <!--  </div>-->
           <!--  <a >More Detail</a>-->
-        </div>
+        <!-- </div>-->
       </div>
       <div class="product-list" *ngIf="warehouse.disabled">
         <table>
@@ -136,6 +136,7 @@ import { ConfirmModalReceivingOrderComponent, StockRecordSelectionModalComponent
     'button.confirm { width: auto }',
     '.container { display: grid; grid-template-columns: 4fr 1fr; grid-gap: 24px; }',
     '.container > div { border: 1px solid var(--grey); border-radius: 4px; padding: 16px 24px; }',
+    '.general-info { width: 100%; }',
     '.general-info > h3 { margin-bottom: 20px; }',
     '.general-info > div:not(:last-child) { margin-bottom: 23px; }',
     '.general-info label { min-height: 0; }',
