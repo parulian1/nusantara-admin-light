@@ -109,12 +109,19 @@ import { SubscriptionLike } from 'rxjs';
           </a>
         </li>
 
-        <li class="icon-button">
-          <a [routerLink]="['/config']" routerLinkActive="active">
-            <i class="material-icons">settings</i>
-            <span translate i18n>Config</span>
-          </a>
+        <li class="section-header">
+          <i class="material-icons">settings</i>
+          <span i18n>Config</span>
         </li>
+        <li><a [routerLink]="['/config/website-settings']" routerLinkActive="active" i18n>Website Settings</a></li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null)">
+          <a [routerLink]="['/config/marketplace-integration']" routerLinkActive="active" i18n>Marketplace
+            Integration</a>
+        </li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null)">
+          <a [routerLink]="['/config/pos-integration']" routerLinkActive="active" i18n>POS Integration</a>
+        </li>
+        <li><a [routerLink]="['/config/general-settings']" routerLinkActive="active" i18n>General</a></li>
 
         <!-- <li class="section-header">
           <i class="material-icons">palette</i>
@@ -256,7 +263,6 @@ import { SubscriptionLike } from 'rxjs';
       nav > ul a {
         color: white;
         display: block;
-        padding-left: 30px;
         text-decoration: none;
         padding-left: 56px;
       }

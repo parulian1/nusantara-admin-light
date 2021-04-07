@@ -5,7 +5,6 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 import { SharedModule } from '@nusantara/shared';
 import { ConfigRoutingModule } from './config-routing.module';
-import { ConfigHubComponent } from './config-hub.component';
 import { WarehouseListComponent, WarehouseComponent } from './warehouse';
 import { PaymentGatewayListComponent, PaymentGatewayDetailComponent } from './payment-gateways';
 import { ShippingMethodListComponent, ShippingProviderDetailComponent, ShippingServiceComponent } from './shipping';
@@ -19,10 +18,10 @@ import { AuthSocialListComponent } from './auth-social';
 import { PaymentGatewayMetaComponent } from './payment-gateways/payment-gateway-meta/payment-gateway-meta.component';
 import { PaymentGatewayInstoreComponent } from './payment-gateways/payment-gateway-instore/payment-gateway-instore.component';
 import { ShippingServiceHostComponent } from './shipping/shipping-service/shipping-service-host.component';
+import { ConfigCartDiscountComponent } from '@nusantara/pages/config/config-cart-discount';
 
 @NgModule({
   declarations: [
-    ConfigHubComponent,
     WarehouseListComponent,
     WarehouseComponent,
     PaymentGatewayListComponent,
@@ -45,6 +44,7 @@ import { ShippingServiceHostComponent } from './shipping/shipping-service/shippi
     PaymentGatewayInstoreComponent,
     ShippingServiceHostComponent,
     ConfigChatServiceComponent,
+    ConfigCartDiscountComponent
   ],
   imports: [
     CommonModule,
@@ -55,4 +55,5 @@ import { ShippingServiceHostComponent } from './shipping/shipping-service/shippi
     CKEditorModule,
   ],
 })
-export class ConfigModule { }
+
+export class ConfigModule {}
