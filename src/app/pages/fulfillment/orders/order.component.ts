@@ -307,6 +307,7 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
       `${orderAddress.city} <br>` +
       `${orderAddress.state} <br>` +
       `${orderAddress.zipcode} <br>` +
+      `${orderAddress.country} <br>` +
       `${orderAddress.phoneNumber}`;
   }
 }
