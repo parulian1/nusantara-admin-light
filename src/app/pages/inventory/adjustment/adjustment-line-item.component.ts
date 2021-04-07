@@ -116,7 +116,7 @@ export class AdjustmentLineItemComponent implements OnInit, AfterViewInit {
   }
 
   calculateDifferentQty(): void {
-    const differentQty = parseInt(this.adjustmentQuantity.value || 0, 10)
+    const differentQty = parseInt(this.adjustmentQuantity.value || this.originalQuantity.value, 10)
       - parseInt(this.originalQuantity.value, 10);
 
     this.differenceQty.setValue(differentQty || 0, { onlySelf: true });

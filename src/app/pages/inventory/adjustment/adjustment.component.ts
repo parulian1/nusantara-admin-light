@@ -255,7 +255,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
         product: [selectedStock.product, [Validators.required]],
         sku: [{value: selectedStock.sku, disabled: true}],
         originalQuantity: [{value: selectedStock.originalQuantity, disabled: true}],
-        differenceQty: [null, [Validators.required]],
+        differenceQty: [selectedStock.originalQuantity, [Validators.required, Validators.min(0)]],
         adjustmentQuantity: [null, [Validators.required]],
         created: [{value: selectedStock.created, disabled: true}],
         reason: [this.reasonChoices[0].value, []],
@@ -268,11 +268,11 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
 
   onConfirmModalClosed() {
     if (this.confirmModalReceiving.result === DialogResult.OK) {
-      this.resetForm(true);
+      this.resetForm();
     }
   }
 
-  resetForm(warnOnDirty = false) {
+  resetForm() {
     this.form.reset();
     this.warehouse.enable();
     this.stockRecords.clear();
@@ -293,7 +293,8 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   }
 
   protected onSaveSuccess(result: IResultResponse<inventory.IAdjustment>) {
-    this.form.reset();
+    this.resetForm();
+
     this.storeValue = this.productValue = 0;
     this.toast?.addMessage(`"${this.form.get('name')?.value ?? 'data'}" was saved successfully.`, 'Saved', ToastLevelEnum.success);
     this.navigateToParent(false);
