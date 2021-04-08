@@ -82,12 +82,13 @@ import { IClient } from '@nusantara/models/marketplace';
                               <th i18n>Name</th>
                               <th i18n>Value</th>
                             </thead>
-                            <tbody formArrayName="attributes" *ngIf="attributesFormArray.controls.length">
-                              <tr *ngFor=" let attr of attributesFormArray.controls; let i = index" [formGroupName]="i">
-                                <td *ngIf="storeIndex === attr.value.indexShop">
+                            <tbody formArrayName="attributes" *ngIf="attributesFormArray.controls.length"> 
+                              <ng-container *ngFor="let attr of attributesFormArray.controls; let i = index" [formGroupName]="i">
+                              <tr *ngIf="storeIndex === attr.value.indexShop">
+                                <td>
                                   {{ attr.value.name }}
                                 </td>
-                                <td *ngIf="storeIndex === attr.value.indexShop">
+                                <td>
                                   <div *ngIf="attr.value.type === 'combo box' || attr.value.type === 'dropdown'">
                                     <select #selecteEditAttr formControlName="value"
                                       (change)="attrChange(selecteEditAttr.value, i)">
@@ -120,6 +121,7 @@ import { IClient } from '@nusantara/models/marketplace';
                                   </ng-template>
                                 </td>
                               </tr>
+                              </ng-container>
                             </tbody>
                           </table>
                         </div>
