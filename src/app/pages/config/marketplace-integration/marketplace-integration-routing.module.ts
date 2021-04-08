@@ -14,6 +14,12 @@ import {
 } from './setup';
 import { MarketplaceIntegrationComponent } from './marketplace-integration.component';
 import { PublishListComponent, PublishDetailComponent } from './publish';
+import {ShopifyMessageListComponent} from '@nusantara/pages/config/shopify/shopify-message-list.component';
+import {ShopifyMessageListResolver} from '@nusantara/pages/config/shopify/resolvers/shopify-message-list-resolver.service';
+import {ShopifyWebhookComponent} from '@nusantara/pages/config/shopify/shopify-webhook.component';
+import {ShopifyWebhookResolver} from '@nusantara/pages/config/shopify/resolvers/shopify-webhook.resolver';
+import {ShopifyCarrierResolver} from '@nusantara/pages/config/shopify/resolvers/shopify-carrier.resolver';
+import {ShopifyHubComponent} from '@nusantara/pages/config/shopify/shopify-hub.component';
 
 const routes: Routes = [
   {
@@ -90,6 +96,31 @@ const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'shopify',
+    children: [
+      {
+        path: '',
+        component: ShopifyHubComponent,
+        runGuardsAndResolvers: 'always'
+      },
+      {
+        path: 'message',
+        component: ShopifyMessageListComponent,
+        resolve: {page: ShopifyMessageListResolver},
+        runGuardsAndResolvers: 'always'
+      },
+      {
+        path: 'webhook',
+        component: ShopifyWebhookComponent,
+        resolve: {
+          page: ShopifyWebhookResolver,
+          carrier: ShopifyCarrierResolver
+        },
+        runGuardsAndResolvers: 'always'
+      },
+    ]
+  }
 ];
 
 @NgModule({

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RequireIsEnterpriseGuard } from '@nusantara/auth';
+import { RequireIsEnterpriseGuard } from '@nusantara/auth/guards';
 
 @Component({
   selector: 'nus-website-settings',

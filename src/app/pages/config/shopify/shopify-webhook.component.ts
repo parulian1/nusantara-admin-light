@@ -32,6 +32,7 @@ import {IShopifyCarrier} from '@nusantara/models/shopify/shopify-carrier';
       </tbody>
     </table>
 
+    <div>&nbsp;</div>
 
     <table>
       <thead>
@@ -54,7 +55,7 @@ import {IShopifyCarrier} from '@nusantara/models/shopify/shopify-carrier';
       </tbody>
     </table>
 
-    <a (click)="registerWebhook()" class="control" ><i class="material-icons">add</i> Register Order Webhook</a>
+<!--    <a (click)="registerWebhook()" class="control" ><i class="material-icons">add</i> Register Order Webhook</a>-->
   `,
   styles: []
 })

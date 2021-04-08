@@ -23,6 +23,7 @@ import { ShopifyComponent } from './shopify/shopify.component';
 import { ShopifyMessageListComponent } from './shopify/shopify-message-list.component';
 import { ReindexingComponent } from './reindexing/reindexing.component';
 import { ShopifyWebhookComponent } from './shopify/shopify-webhook.component';
+import { ShopifyHubComponent } from './shopify/shopify-hub.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { ShopifyWebhookComponent } from './shopify/shopify-webhook.component';
     ShopifyMessageListComponent,
     ReindexingComponent,
     ShopifyWebhookComponent,
+    ShopifyHubComponent,
   ],
   imports: [
     CommonModule,
