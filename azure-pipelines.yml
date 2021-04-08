@@ -32,6 +32,8 @@ jobs:
           testArgs: ''
 
   - job: build_prod
+    pool:
+      name: docker-agent
     displayName: Build & Packaging PROD
     dependsOn: unit_test
     condition: |
@@ -50,6 +52,8 @@ jobs:
 
   # Staging Build
   - job: build_staging
+    pool:
+      name: docker-agent
     displayName: Build & Packaging STAGING
     dependsOn: unit_test
     condition: |
