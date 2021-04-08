@@ -4,7 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthService } from '../../../auth';
 import { AbstractDetailComponent, DialogResult, ErrorResult, ToastService } from '../../../core';
-import { inventory, ISubLocation, IWarehouse, marketplace } from '@nusantara/models';
+import {
+  inventory,
+  ISubLocation,
+  IWarehouse,
+  marketplace
+} from '@nusantara/models';
 import { InventoryReceivingService, MarketplaceClientService } from '../../../services';
 import { IProduct } from '../../../models/products';
 import {
@@ -16,6 +21,8 @@ import { catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 import { IError } from '../../../models/base/error';
+import { isObject } from 'rxjs/internal-compatibility';
+import { convertStringToObject, keysToCamel } from '@nusantara/shared/helpers';
 
 /**
  * Allows a user to receive a new batch of inventory.
@@ -31,7 +38,7 @@ import { IError } from '../../../models/base/error';
           <h3>General Information</h3>
           <div>
             <label>Received By</label>
-            <span>{{userDisplayName}}</span>
+            <span>{{ userDisplayName }}</span>
           </div>
           <div>
             <label>Approved By</label>
@@ -98,7 +105,7 @@ import { IError } from '../../../models/base/error';
 
           <nus-inventory-receiving-line
             *ngFor="let rec of stockRecords.controls; let i=index"
-            [form]="rec"
+            [formGroup]="rec"
             [availableSubLocations]="availableSubLocations"
             (remove)="stockRecords.removeAt(i)">
           </nus-inventory-receiving-line>
@@ -232,7 +239,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     })).subscribe(
       resp => {
         if (resp instanceof ErrorResult) {
-          this.onSaveError(resp.errorDetails);
+          this.onSaveError(resp);
         } else {
           this.onSaveSuccess(resp);
           this.storeValue = this.marketplaceValue = this.productValue = 0;
@@ -244,7 +251,6 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
         }
       }
     );
-    this.form.disable();
   }
 
   showMarketplaceDetail() {
@@ -271,11 +277,11 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
 
       this.clientService.getWarehouseInformation(wh.code).subscribe(
         (data: marketplace.IWarehouseInfo) => {
-          this.storeValue = data.totalStore;
+          this.storeValue = data?.totalStore ?? 0;
           this.showDetail = true;
-          this.marketplaceValue = data.totalMarketplace;
-          this.productValue = data.totalProduct;
-          this.warehouseDetail = data.details;
+          this.marketplaceValue = data?.totalMarketplace ?? 0;
+          this.productValue = data?.totalProduct ?? 0;
+          this.warehouseDetail = data?.details ?? [];
         }
       );
       this.availableSubLocations = wh.subLocations;
@@ -315,7 +321,8 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
         originalQuantity: [1, [Validators.required, Validators.min(1)]],
         batchNumber: ['', []],
         locator: this.fb.array([]),
-        expiryDate: [null, []]
+        expiryDate: [null, []],
+        cost: [0, [Validators.required]]
       });
       this.stockRecords.push(oneProduct);
     }

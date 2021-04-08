@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ControlContainer, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { products, ISubLocation } from '@nusantara/models';
@@ -9,7 +9,7 @@ import { IProductClass } from '../../../models/products';
   selector: 'nus-inventory-receiving-line',
   template: `
     <tr [formGroup]="form">
-      <td><a>{{ displayedProductName }}</a></td>
+      <td><a>{{ displayedProductName }} {{form.hasError('apiError') ? form.getError('apiError')[0]: 'false'}}</a></td>
       <td class="immediate-error-display" [formGroup]="location">
         <select formControlName="href" data-qa="location">
           <option [ngValue]="null">---</option>
@@ -20,16 +20,19 @@ import { IProductClass } from '../../../models/products';
       </td>
       <td>
         <input type="number" min="1" [formControl]="originalQuantity" data-qa="original-quantity">
+        <nus-field-errors [control]="originalQuantity"></nus-field-errors>
       </td>
       <td class="immediate-error-display">
         <input type="text" [formControl]="sku" data-qa="sku">
+        <nus-field-errors [control]="sku"></nus-field-errors>
       </td>
       <td>
         <input type="text" [formControl]="batchNumber" data-qa="batch-number">
       </td>
       <td>
-        <div *ngFor="let control of locator.controls; index as ctr">
-          <input [formControl]="control" name="locator" data-qa="locator">
+        <div *ngFor="let child_control of locator.controls; index as ctr">
+          <input [formControl]="child_control" name="locator" data-qa="locator">
+          <nus-field-errors [control]="child_control"></nus-field-errors>
           <button (click)="locator.removeAt(ctr)" type="button" class="remove-button" data-qa="remove-locator-button">
             <i class="material-icons">remove_circle_outline</i>
           </button>
@@ -38,9 +41,11 @@ import { IProductClass } from '../../../models/products';
       </td>
       <td class="immediate-error-display">
         <input *ngIf="isPerishable" type="date" [formControl]="expiryDate" data-qa="expiry-date">
+        <nus-field-errors [control]="expiryDate"></nus-field-errors>
       </td>
       <td>
         <input type="number" [formControl]="cost" data-qa="cost">
+        <nus-field-errors [control]="cost"></nus-field-errors>
       </td>
       <td>
         <button (click)="remove.emit()" type="button" class="remove-button" data-qa="remove-button">
@@ -62,11 +67,12 @@ export class LineItemComponent implements OnInit, AfterViewInit {
 
   @Input() availableSubLocations: ISubLocation[] = [];
   @Input() productClasses: IProductClass[];
-  @Input() form: FormGroup;
+  // @Input() form: FormGroup;
   @Output() remove = new EventEmitter<void>();
+  form: FormGroup;
 
-  constructor(public route: ActivatedRoute,
-              public router: Router) {
+
+  constructor(private controlContainer: ControlContainer) {
   }
 
   get displayedProductName(): string {
@@ -98,6 +104,7 @@ export class LineItemComponent implements OnInit, AfterViewInit {
   get cost(): FormControl { return this.form.get('cost') as FormControl; }
 
   ngOnInit() {
+    this.form = <FormGroup>this.controlContainer.control;
   }
 
   ngAfterViewInit() {
@@ -109,6 +116,6 @@ export class LineItemComponent implements OnInit, AfterViewInit {
   }
 
   addLocator() {
-    this.locator.push(new FormControl(''));
+    this.locator.push(new FormControl('', []));
   }
 }
