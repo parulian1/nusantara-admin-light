@@ -14,7 +14,6 @@ import { AnalyticToolChoices, IConfigAnalyticTool } from '@nusantara/models';
         <div class="analytic-wrapper">
           <div class="analytic-item">
             <select name="" id="" [formControl]="type" (change)="onTypeChange($event)">
-              <option value="" selected>-- Choose --</option>
               <option *ngFor="let t of types" [ngValue]="t.value">
                 {{ t.name }}
               </option>
