@@ -3,6 +3,7 @@ import { INamedHrefEntity, ISiteConfigExtra, ISocialMedia } from '@nusantara/mod
 export interface ISiteConfig extends INamedHrefEntity {
   logo?: string;
   gaAccountId?: string;
+  gaAccountType?: 'ga' | 'gtm';
   favicon?: string;
   tagLine?: string;
   customerServiceEmail?: string;

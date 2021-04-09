@@ -10,7 +10,7 @@ import { PaymentGatewayListComponent, PaymentGatewayDetailComponent } from './pa
 import { ShippingMethodListComponent, ShippingProviderDetailComponent, ShippingServiceComponent } from './shipping';
 import { DeviceListComponent, DeviceComponent } from './device';
 import { GroupComponent, GroupListComponent, UserGroupComponent } from './group';
-import { SiteConfigComponent, SocialMediaHostComponent, ConfigChatServiceComponent } from './site-config';
+import { SiteConfigComponent, SocialMediaHostComponent, ConfigChatServiceComponent, ConfigAnalyticToolComponent } from './site-config';
 import { ResellerComponent } from './reseller';
 import { BlogFeedComponent } from './blog-feed';
 import { AuthSocialComponent } from './auth-social';
@@ -44,7 +44,8 @@ import { ConfigCartDiscountComponent } from '@nusantara/pages/config/config-cart
     PaymentGatewayInstoreComponent,
     ShippingServiceHostComponent,
     ConfigChatServiceComponent,
-    ConfigCartDiscountComponent
+    ConfigAnalyticToolComponent,
+    ConfigCartDiscountComponent,
   ],
   imports: [
     CommonModule,
@@ -55,5 +56,4 @@ import { ConfigCartDiscountComponent } from '@nusantara/pages/config/config-cart
     CKEditorModule,
   ],
 })
-
-export class ConfigModule {}
+export class ConfigModule { }
