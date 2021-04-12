@@ -36,9 +36,14 @@ import { AbstractDetailComponent, ToastService } from '@nusantara/core';
         </select>
       </label>
 
-      <label class="checkbox">
+      <label class="checkbox" style="min-height: 1rem;">
         <input type="checkbox" [formControl]="isActive" name="isActive"> Is Active
         <nus-field-errors [control]="isActive"></nus-field-errors>
+      </label>
+
+      <label class="checkbox" style="min-height: 1rem;">
+        <input type="checkbox" [formControl]="isInterestedCategory" name="isInterestedCategory"> Interest Categories ?
+        <nus-field-errors [control]="isInterestedCategory"></nus-field-errors>
       </label>
 
       <label>
@@ -124,6 +129,7 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
     this.form = this.fb.group({
       name: [entity?.name, [Validators.required, Validators.maxLength(50)]],
       isActive: [entity?.isActive, []],
+      isInterestedCategory: [entity?.isInterestedCategory, []],
       href: [entity?.href, []],
       image: ['', []],
       parent: [{value: entity?.parent ?? null, disabled: !!entity?.href }, []],
@@ -144,6 +150,7 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
 
   get name(): FormControl { return this.form.get('name') as FormControl; }
   get isActive(): FormControl { return this.form.get('isActive') as FormControl; }
+  get isInterestedCategory(): FormControl { return this.form.get('isInterestedCategory') as FormControl; }
   get image(): FormControl { return this.form.get('image') as FormControl; }
   get parent(): FormControl { return this.form.get('parent') as FormControl; }
   get sourceMappings(): FormArray { return this.form.get('sourceMappings') as FormArray; }
