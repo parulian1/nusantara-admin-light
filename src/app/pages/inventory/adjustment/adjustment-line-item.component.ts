@@ -31,8 +31,13 @@ import { getSlugFromHref } from '@nusantara/core';
 
       <td>
         <div style="display: flex; justify-items: center; align-items: center;">
-          <input type="text" [formControl]="differenceQty" data-qa="difference-qty" readonly>
-          <!-- <div>{{ signDifferentQty }}</div>-->
+          <div>
+            <input type="text" [formControl]="differenceQty" data-qa="difference-qty" readonly><br />
+            <div style="color: red; font-size: 0.7rem;" *ngIf="differenceQty.errors">
+              <div *ngIf="differenceQty.hasError('max')">max 32767</div>
+              <div *ngIf="differenceQty.hasError('min')">min 32767</div>
+            </div>
+          </div>
         </div>
       </td>
 

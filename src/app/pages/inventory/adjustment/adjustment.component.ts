@@ -258,7 +258,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
         sku: [{value: selectedStock.sku, disabled: true}],
         originalQuantity: [{value: selectedStock.originalQuantity, disabled: true}],
         differenceQty: [selectedStock.originalQuantity, [Validators.required, Validators.min(0)]],
-        adjustmentQuantity: [null, [Validators.required, Validators.min(0), Validators.max(9e10)]],
+        adjustmentQuantity: [null, [Validators.required, Validators.min(-32767), Validators.max(32767)]],
         created: [{value: selectedStock.created, disabled: true}],
         reason: [this.reasonChoices[0].value, []],
         notes: [null, []],
