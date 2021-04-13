@@ -9,7 +9,7 @@ import {
   ToastService,
 } from '@nusantara/core';
 import { drf, inventory, ISubLocation, IWarehouse } from '@nusantara/models';
-import { IAdjustment, IStockRecord } from '@nusantara/models/inventory';
+import { IAdjustment, IStockRecord, ReceivingOrderStatusChoices } from '@nusantara/models/inventory';
 import { AuthService } from '@nusantara/auth';
 import { InventoryAdjustmentOrderService, MarketplaceClientService } from '@nusantara/services';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -223,7 +223,9 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   addLine() {
     this.stockRecordSelectionModal.filters = {
       warehouse: getSlugFromHref(this.warehouse.value?.href),
+      receiving_order_status: ReceivingOrderStatusChoices.APPROVED,
     };
+
     this.stockRecordSelectionModal.displayedResults = null;
     this.stockRecordSelectionModal.onSearchTextChanged('');
     this.stockRecordSelectionModal.open();
@@ -256,7 +258,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
         sku: [{value: selectedStock.sku, disabled: true}],
         originalQuantity: [{value: selectedStock.originalQuantity, disabled: true}],
         differenceQty: [selectedStock.originalQuantity, [Validators.required, Validators.min(0)]],
-        adjustmentQuantity: [null, [Validators.required]],
+        adjustmentQuantity: [null, [Validators.required, Validators.min(0), Validators.max(9e10)]],
         created: [{value: selectedStock.created, disabled: true}],
         reason: [this.reasonChoices[0].value, []],
         notes: [null, []],

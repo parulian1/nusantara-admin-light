@@ -4,10 +4,10 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
 import { Subscription } from 'rxjs';
 
 import { DialogResult, PagedResponse } from '../core';
-import {InventoryReceivingOrderService, InventoryStockRecordService, ProductService} from '../services';
-import { products } from '../models';
-import {IReceivingOrder, IStockRecord} from '@nusantara/models/inventory';
-import {getSlugFromHref} from '@nusantara/shared/helpers';
+import { InventoryStockRecordService } from '../services';
+import { IStockRecord } from '@nusantara/models/inventory';
+import { getSlugFromHref } from '@nusantara/shared/helpers';
+import { map } from 'rxjs/operators';
 
 /**
  * Shows the user a list of products they can select from.
@@ -108,6 +108,8 @@ export class StockRecordSelectionModalComponent implements OnInit, AfterViewInit
   originalValue: string = null;
   filters = {};
 
+  isInStock = true;
+
   //
   constructor(
     protected fb: FormBuilder,
@@ -184,7 +186,16 @@ export class StockRecordSelectionModalComponent implements OnInit, AfterViewInit
     }
 
     this.timeoutId = setTimeout(() => {
-      this.service.fetchListWithFilter(this.searchText.value, 1, 10, this.filters).subscribe((page) => {
+      this.service.fetchListWithFilter(this.searchText.value, 1, 10, this.filters)
+        .pipe(map(stockRecords => {
+          // show only stock record with original quantity more than 0
+          if (this.isInStock) {
+            stockRecords.entities = stockRecords.entities.filter(
+              entity => entity.originalQuantity > 0
+            );
+          }
+          return stockRecords;
+        })).subscribe((page) => {
         this.displayedResults = page;
       });
       }, this.reloadTimeout);
