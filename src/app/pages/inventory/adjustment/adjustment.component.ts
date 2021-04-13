@@ -115,14 +115,13 @@ import { ConfirmModalReceivingOrderComponent, StockRecordSelectionModalComponent
             </td>
           </tr>
         </table>
+
+        <nus-detail-actions
+          [component]="this"
+          (cancel)="confirmModal()"
+          (delete)="delete()">
+        </nus-detail-actions>
       </div>
-
-
-      <nus-detail-actions
-        [component]="this"
-        (cancel)="confirmModal()"
-        (delete)="delete()">
-      </nus-detail-actions>
     </form>
 
     <!-- Modals -->
