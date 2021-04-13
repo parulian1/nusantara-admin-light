@@ -140,6 +140,7 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
 
     // need to mark as touched to make custom styling works
     this.form.controls.isActive.markAsTouched();
+    this.form.controls.isInterestedCategory.markAsTouched();
 
     this.setIconImagePreview(entity?.image);
 
