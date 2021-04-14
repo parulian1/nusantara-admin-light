@@ -688,10 +688,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   onProductClassChanged(newValue: any) {
     // protect against triggering during initialization
     if (!newValue || !this.productClasses) { return; }
-    const pc = this.productClasses.filter(e => e.href === newValue)[0];
-    this.selectedProductClass =  pc;
+    const productClass = this.productClasses.filter(e => e.href === newValue)[0];
+    this.selectedProductClass =  productClass;
 
-    if (pc.type === 'physical') {
+    if (productClass?.type === 'physical') {
       this.weight.enable();
       Object.keys(this.dimensions.controls).forEach(key => {
         this.dimensions.controls[key].enable();
@@ -705,7 +705,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   isPhysical() {
-    return this.selectedProductClass.type === 'physical';
+    return this.selectedProductClass?.type === 'physical';
   }
 
   enterpriseLicense() {

@@ -72,7 +72,7 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
     const productClass = this.productClasses.filter(e => e.href === productClassHref)[0];
 
     // #69558, image and richText (markdown) be hide
-    return productClass.attributes.filter(
+    return productClass?.attributes?.filter(
       attribute => !this.productAttributeTypesHide.includes(attribute.type)
     );
   }
