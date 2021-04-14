@@ -26,11 +26,10 @@ export class WarehouseService extends AbstractCrudService<IWarehouse> {
   }
 
   warehouseStockSearchWithDetails(href: string): Observable<Array<IStockSearch>> {
-    const params = new HttpParams({fromObject: {details: 'true'}});
     return this.httpClient
       .post<Array<IStockSearch>>(`/api/fulfillment/warehouse-stock/search/`,
-        { product: href },
-        { observe: 'body', responseType: 'json', params: params }
+        { product: href, details: true },
+        { observe: 'body', responseType: 'json' }
         );
   }
 
