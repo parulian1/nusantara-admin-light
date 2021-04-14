@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -6,6 +6,7 @@ import { OrderService, UserService } from '@nusantara/services';
 import { AbstractDetailComponent, PagedResponse, ToastService } from '@nusantara/core';
 import { ICustomer, ICustomerGroup, IOrder } from '@nusantara/models';
 import { RequireIsEnterpriseGuard } from '@nusantara/auth';
+import { CustomerPointModalComponent } from '@nusantara/pages/users/customer/customer-point-modal.component';
 
 /**
  * Displays basic information about a customer, their profile, purchase history,
@@ -112,7 +113,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
             <span>{{ userPoint | number }} Point</span>
           </div>
           <div>
-            <a>Points History</a>
+            <a (click)="pointHistory()">Points History</a>
           </div>
         </section>
         <table>
@@ -177,6 +178,11 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
         (cancel)="navigateToParent(true)"
         (delete)="delete()">
       </nus-detail-actions>
+
+      <nus-customer-point-modal
+        [entity]="entity"
+        #pointHistoryModal
+      ></nus-customer-point-modal>
 
     </form>
 
@@ -267,6 +273,7 @@ export class CustomerDetailComponent extends AbstractDetailComponent<ICustomer> 
   customerGroups: ICustomerGroup[];
   orders: IOrder[];
   userPoint: number;
+  entity?: ICustomer;
 
   page: PagedResponse<any>;
 
@@ -275,6 +282,8 @@ export class CustomerDetailComponent extends AbstractDetailComponent<ICustomer> 
   get currentTab(): string {
     return this.form.get('currentTab').value;
   }
+
+  @ViewChild('pointHistoryModal') pointHistoryModal: CustomerPointModalComponent;
 
   constructor(service: UserService,
               route: ActivatedRoute,
@@ -317,6 +326,11 @@ export class CustomerDetailComponent extends AbstractDetailComponent<ICustomer> 
     this.customerGroups = entity.customerGroups;
     this.userEmail = entity.email;
     this.userPoint = entity.userPoint ? entity.userPoint : 0;
+    this.entity = entity;
+  }
+
+  pointHistory() {
+    this.pointHistoryModal.open();
   }
 
 }
