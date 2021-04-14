@@ -218,7 +218,7 @@ input.ng-untouched {
   background: url('assets/warning-24px.svg') no-repeat scroll right 15px center !important;
 }
 
-input.ng-invalid {
+input:not([type="checkbox"]) .ng-invalid {
   border-color: var(--error);
   outline-color: var(--error);
   background: url('assets/warning-24px.svg') no-repeat scroll right 5px center;
