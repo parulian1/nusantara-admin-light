@@ -36,6 +36,7 @@ export * from './widget.service';
 export * from './widget-block.service';
 export * from './sla.service';
 export * from './video-integration.service';
+export * from './company-story.service';
 
 export * from './google.service';
 

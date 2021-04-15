@@ -32,6 +32,8 @@ import {
 } from './onboarding';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 
+import * as companyStory from './company-story';
+
 
 @NgModule({
     declarations: [
@@ -69,6 +71,9 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
         OnboardingContentHostComponent,
         OnboardingContentImageComponent,
         OnboardingPreviewHostDialogComponent,
+
+        companyStory.CompanyStoryListComponent,
+        companyStory.CompanyStoryDetailComponent,
     ],
   imports: [
     CommonModule,

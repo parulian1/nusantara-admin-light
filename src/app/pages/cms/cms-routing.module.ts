@@ -48,6 +48,8 @@ import {
   VideoIntegrationResolver
 } from './video-integration';
 
+import * as companyStory from './company-story';
+
 
 const dashboardRoutes: Routes = [
   {
@@ -339,6 +341,31 @@ const dashboardRoutes: Routes = [
       { path: ':slug',
         component: VideoIntegrationComponent,
         resolve: { entity: VideoIntegrationResolver },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail' }
+      }
+    ]
+  },
+  {
+    path: 'company-story',
+    children: [
+      { path: '',
+        component: companyStory.CompanyStoryListComponent,
+        resolve: { page: companyStory.CompanyStoryListResolver },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'List' }
+      },
+      {
+        path: 'new',
+        component: companyStory.CompanyStoryDetailComponent,
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+      { path: ':slug',
+        component: companyStory.CompanyStoryDetailComponent,
+        resolve: {
+          entity: companyStory.CompanyStoryDetailResolver,
+        },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail' }
       }
