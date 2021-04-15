@@ -14,8 +14,6 @@ import { IError } from '@nusantara/models';
 @Component({
   selector: 'nus-adjustment-detail',
   template: `
-    <h1></h1>
-
     <h1 class="title-1">
       Stock Adjustment {{entity.href|entityToSlug}}
     </h1>

@@ -25,7 +25,7 @@ import { ConfirmModalReceivingOrderComponent, StockRecordSelectionModalComponent
         <div class="general-info">
           <h3>General Information</h3>
           <div>
-            <label>Received By</label>
+            <label>Adjusted By</label>
             <span>{{ userDisplayName }}</span>
           </div>
           <div>
@@ -33,7 +33,7 @@ import { ConfirmModalReceivingOrderComponent, StockRecordSelectionModalComponent
             <span>-</span>
           </div>
           <div>
-            <label>Receiving Date</label>
+            <label>Adjustment Date</label>
             <span>{{ currentDate|date }}</span>
           </div>
           <div>
