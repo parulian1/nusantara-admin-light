@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {AbstractDetailComponent, ToastService} from '@nusantara/core';
-import {ICompanyStory, ISla} from '@nusantara/models';
-import {CompanyStoryService, SlaService} from '@nusantara/services';
-import {FormBuilder, FormControl, Validators} from '@angular/forms';
+import { AbstractDetailComponent, ToastService } from '@nusantara/core';
+import { ICompanyStory } from '@nusantara/models';
+import { CompanyStoryService } from '@nusantara/services';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
@@ -27,12 +27,6 @@ import {ActivatedRoute, Router} from '@angular/router';
         <span>Description</span>
         <input type="text" [formControl]="description" name="description">
         <nus-field-errors [control]="description"></nus-field-errors>
-      </label>
-
-      <label>
-        <span>Sort Priority</span>
-        <input type="number" [formControl]="priority" name="priority">
-        <nus-field-errors [control]="priority"></nus-field-errors>
       </label>
 
       <label class="checkbox">
@@ -99,7 +93,6 @@ export class CompanyStoryDetailComponent extends AbstractDetailComponent<ICompan
       description: [entity?.description, [Validators.maxLength(255)]],
       image: ['', []],
       isActive: [entity?.isActive ?? true, []],
-      priority: [entity?.priority ?? 0, [Validators.required, Validators.min(0)]],
     });
 
     this.entity = entity;
@@ -125,9 +118,6 @@ export class CompanyStoryDetailComponent extends AbstractDetailComponent<ICompan
   }
   get image(): FormControl {
     return this.form.get('image') as FormControl;
-  }
-  get priority(): FormControl {
-    return this.form.get('priority') as FormControl;
   }
   get isActive(): FormControl {
     return this.form.get('isActive') as FormControl;

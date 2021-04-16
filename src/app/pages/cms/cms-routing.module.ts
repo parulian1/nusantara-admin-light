@@ -351,7 +351,7 @@ const dashboardRoutes: Routes = [
     children: [
       { path: '',
         component: companyStory.CompanyStoryListComponent,
-        resolve: { page: companyStory.CompanyStoryListResolver },
+        resolve: { page: companyStory.CompanyStoryListIncludeInactiveResolver },
         runGuardsAndResolvers: 'always',
         data: { animation: 'List' }
       },
@@ -360,6 +360,12 @@ const dashboardRoutes: Routes = [
         component: companyStory.CompanyStoryDetailComponent,
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },
+      },
+      {
+        path: 'ordering',
+        component: companyStory.CompanyStoryListOrderingComponent,
+        resolve: { companyStories: companyStory.AllCompanyStoryResolver },
+        data: { animation: 'List' }
       },
       { path: ':slug',
         component: companyStory.CompanyStoryDetailComponent,

@@ -74,6 +74,7 @@ import * as companyStory from './company-story';
 
         companyStory.CompanyStoryListComponent,
         companyStory.CompanyStoryDetailComponent,
+        companyStory.CompanyStoryListOrderingComponent,
     ],
   imports: [
     CommonModule,

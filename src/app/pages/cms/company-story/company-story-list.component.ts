@@ -8,10 +8,15 @@ import { ActivatedRoute } from '@angular/router';
   template: `
     <nus-list-header
       title="Company Story List"
+      [canSearch]="false"
       description="Static content for pages such as 'About-Us'">
     </nus-list-header>
 
-    <nus-pagination [page]="page"></nus-pagination>
+    <div style="margin-bottom: 1rem;">
+      <a class="control" [routerLink]="['ordering']" style="padding: 0.5rem 1rem;">
+        Reordering
+      </a>
+    </div>
 
     <table>
       <thead>
@@ -33,8 +38,6 @@ import { ActivatedRoute } from '@angular/router';
       </tr>
       </tbody>
     </table>
-
-    <nus-pagination [page]="page"></nus-pagination>
   `,
   styles: [``]
 })
