@@ -225,4 +225,5 @@ export interface ITokopediaAuthResponse {
   marketplace: string;
   href: string;
   splitVariant: boolean;
+  fsId: number;
 }

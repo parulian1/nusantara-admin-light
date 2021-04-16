@@ -6,7 +6,6 @@ import { MarketplaceClientService } from '@nusantara/services';
 import {MarketplaceClientEnum} from '../markeplace-client-enum';
 import {
   ILazadaAuthResponse,
-  ILazadaCredential,
   IMarketplaceWarehouse,
   IShopeeAuthResponse,
   ITokopediaAuthResponse,
@@ -38,7 +37,7 @@ import {HttpErrorResponse} from '@angular/common/http';
         ></nus-field-errors-marketplace>
       </label>
 
-      <label>
+      <label *ngIf="!isEdit">
         <span>FS ID
           <nus-tooltip [text]="fsIdInfo"></nus-tooltip>
         </span>
@@ -151,11 +150,13 @@ export class TokopediaClientFormComponent
   fillFormDetail(sellerEmail: string) {
     this.service
       .getConnection(sellerEmail)
-      .subscribe((data: ILazadaAuthResponse) => {
+      .subscribe((data: ITokopediaAuthResponse) => {
         if (data != null) {
           this.form.patchValue({
-            sellerEmail: data.sellerEmail,
+            partnerId: data.partnerId,
+            partnerKey: data.partnerKey,
             warehouseId: data.warehouseId,
+            fsId: data.fsId,
           });
         }
       });
