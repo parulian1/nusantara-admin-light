@@ -60,6 +60,7 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
         attrDefinition.href,
         new FormControl(this.originalAttributeValues[attrDefinition.href])
       );
+      this.form.markAsTouched();
     }
     return this.form.controls[attrDefinition.href] as FormControl;
   }
