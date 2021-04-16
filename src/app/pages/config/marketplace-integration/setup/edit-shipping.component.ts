@@ -103,8 +103,9 @@ export class EditShippingComponent implements OnInit, OnDestroy {
 
   readOnly = [
     'tsc',
-    'lazada'
-  ];
+    'lazada',
+    'tokopedia'
+  ]
 
   constructor(
     private fb: FormBuilder,

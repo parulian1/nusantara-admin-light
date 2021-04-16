@@ -268,8 +268,4 @@ export class ShopeeeClientFormComponent implements OnInit {
     }
     this.onCancel();
   }
-
-  isSplitValue(event: any) {
-    this.variantValue = event;
-  }
 }

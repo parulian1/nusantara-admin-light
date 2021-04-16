@@ -8,3 +8,4 @@ export * from './marketplace-shop';
 export * from './marketplace-warehouse';
 export * from './lazada';
 export * from './shopee';
+export * from './tokopedia';

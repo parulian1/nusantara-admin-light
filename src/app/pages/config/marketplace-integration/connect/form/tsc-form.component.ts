@@ -248,16 +248,12 @@ export class TscFormComponent implements OnInit {
   showSignInWindow(resp: marketplace.IShopeeAuthResponse) {
     if (!resp.isConnected) {
       this.toast?.addMessage(
-        `Open shopee tab and log in to grant access. Click refresh when you're done.`,
-        'Log in to your marketplace',
+        `Successfully connected with your Tsc Store`,
+        'Connected',
         ToastLevelEnum.info
       );
       window.open(resp.authenticationUrl, '_blank');
     }
     this.onCancel();
-  }
-
-  isSplitValue(event: any) {
-    this.variantValue = event;
   }
 }

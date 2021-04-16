@@ -36,6 +36,8 @@ import { MarketplaceClientEnum } from './markeplace-client-enum';
         ></nus-shopee-client-form>
         <nus-tokopedia-form
           *ngSwitchCase="marketplaceClient.tokopedia"
+          [shopSlug]="shopSlug"
+          [isEdit]="editMode"
         ></nus-tokopedia-form>
         <nus-tsc-client-form
           *ngSwitchCase="marketplaceClient.tsc"

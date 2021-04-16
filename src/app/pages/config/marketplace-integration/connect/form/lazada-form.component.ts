@@ -85,7 +85,6 @@ export class LazadaFormComponent implements OnInit {
   @Input() isEdit: boolean;
   form: FormGroup;
   warehouses: marketplace.IMarketplaceWarehouse[] = [];
-  variantValue : boolean;
   shopIdValue: any;
   sellerEmailinfo = "Seller Email is Registered Seller Email in Lazada";
 
@@ -210,9 +209,5 @@ export class LazadaFormComponent implements OnInit {
       window.open(resp.authenticationUrl, '_blank');
     }
     this.onCancel();
-  }
-
-  isSplitValue(event: any) {
-    this.variantValue = event;
   }
 }
