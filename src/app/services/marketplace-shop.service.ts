@@ -2,12 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { PagedResponse } from '@nusantara/core';
-import {
-  IShop,
-  IProductCategory,
-  ILogistic,
-  IAttributesMapping,
-} from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -22,14 +17,14 @@ export class MarketplaceShopService {
   fetchList(
     page: number = 1,
     perPage?: number
-  ): Observable<PagedResponse<IShop>> {
+  ): Observable<PagedResponse<marketplace.IShop>> {
     let params = new HttpParams().set('page', page.toFixed(0).toString());
     if (perPage) {
       params = params.set('per_page', perPage.toFixed(0).toString());
     }
 
     return this.httpClient
-      .get<IShop[]>(`${this.baseUrl}/`, {
+      .get<marketplace.IShop[]>(`${this.baseUrl}/`, {
         observe: 'response',
         responseType: 'json',
         params,
@@ -40,12 +35,12 @@ export class MarketplaceShopService {
   fetchCategory(
     shopSlug: string,
     parentId?: number
-  ): Observable<IProductCategory[]> {
+  ): Observable<marketplace.IProductCategory[]> {
     return parentId
-      ? this.httpClient.get<IProductCategory[]>(
+      ? this.httpClient.get<marketplace.IProductCategory[]>(
           `${this.baseUrl}/${shopSlug}/item-category/${parentId}/`
         )
-      : this.httpClient.get<IProductCategory[]>(
+      : this.httpClient.get<marketplace.IProductCategory[]>(
           `${this.baseUrl}/${shopSlug}/item-category/`
         );
   }
@@ -57,7 +52,7 @@ export class MarketplaceShopService {
   }
 
   mapAttribute(
-    formData: IAttributesMapping,
+    formData: marketplace.IAttributesMapping,
     shopSlug: string,
     productClassSlug: string
   ): Observable<any> {
@@ -67,8 +62,8 @@ export class MarketplaceShopService {
     );
   }
 
-  fetchLogistic(shopSlug: string): Observable<ILogistic[]> {
-    return this.httpClient.get<ILogistic[]>(
+  fetchLogistic(shopSlug: string): Observable<marketplace.ILogistic[]> {
+    return this.httpClient.get<marketplace.ILogistic[]>(
       `${this.baseUrl}/${shopSlug}/logistic/`
     );
   }
@@ -81,7 +76,7 @@ export class MarketplaceShopService {
   }
 
   getShopDetail(shopSlug: string): Observable<any> {
-    return this.httpClient.get<IShop[]>(
+    return this.httpClient.get<marketplace.IShop[]>(
       `${this.baseUrl}/${shopSlug}/`
     );
   }

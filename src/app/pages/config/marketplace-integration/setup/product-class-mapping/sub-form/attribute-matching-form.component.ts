@@ -24,11 +24,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DialogResult } from '@nusantara/core';
-import {
-  IShopAttribute,
-  ISelectedCategory,
-  IShopAttributeMapping,
-} from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import { MarketplaceProductClassService } from '@nusantara/services';
 import { ConfirmModalComponent } from '@nusantara/shared/confirm-modal.component';
 import { SubFormComponent } from './sub-form.component';
@@ -160,8 +156,8 @@ export class AttributeMatchingFormComponent
   confirmModal: ConfirmModalComponent;
 
   @Input() state: any;
-  @Input() category: ISelectedCategory;
-  @Input() attribute: IShopAttribute[];
+  @Input() category: marketplace.ISelectedCategory;
+  @Input() attribute: marketplace.IShopAttribute[];
   @Input() currentShop: string;
   @Output() previous = new EventEmitter<boolean>();
   @Output() save = new EventEmitter<any>();
@@ -173,10 +169,10 @@ export class AttributeMatchingFormComponent
   categoryId: number;
   categoryNames: string;
   attributeNames: string;
-  selectedCategory: ISelectedCategory = null;
-  bhismaAttributes: IShopAttribute[];
+  selectedCategory: marketplace.ISelectedCategory = null;
+  bhismaAttributes: marketplace.IShopAttribute[];
   bhismaAttributeTypes: string[];
-  marketplaceAttributes: IShopAttribute[];
+  marketplaceAttributes: marketplace.IShopAttribute[];
   productClassAttrId: number;
   isShowSelectBhismaAttr: boolean;
   isShowSInputBhismaAttr: boolean;
@@ -213,7 +209,7 @@ export class AttributeMatchingFormComponent
       if (this.productClassSlug) {
         this.service
           .fetchAttribute(this.productClassSlug)
-          .subscribe((data: IShopAttributeMapping) => {
+          .subscribe((data: marketplace.IShopAttributeMapping) => {
             this.bhismaAttributes = data.attributes;
             this.bhismaAttributeTypes = data.attributeType;
           });
@@ -256,7 +252,7 @@ export class AttributeMatchingFormComponent
     return this.form.get('attributes') as FormArray;
   }
 
-  addAttributeInputs(attrs: IShopAttribute[]) {
+  addAttributeInputs(attrs: marketplace.IShopAttribute[]) {
     if (attrs) {
       attrs.forEach((obj) => {
         const attrGroup = this.fb.group({

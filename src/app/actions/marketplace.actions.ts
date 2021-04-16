@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { IShop } from '../models';
+import { marketplace } from '../models';
 
 
 export enum MarketplaceActionTypes {
@@ -9,7 +9,7 @@ export enum MarketplaceActionTypes {
 export class SetCurrentShop implements Action {
   readonly type = MarketplaceActionTypes.SetCurrentShop;
 
-  constructor(public payload: IShop) {}
+  constructor(public payload: marketplace.IShop) {}
 }
 
 export type MarketplaceActions = SetCurrentShop;

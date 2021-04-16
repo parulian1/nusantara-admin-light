@@ -3,13 +3,13 @@ import { Router, Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { MarketplaceShopService } from '@nusantara/services';
-import { ILogistic, IShop } from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MarketplaceLogisticListResolver
-  implements Resolve<ILogistic[]> {
+  implements Resolve<marketplace.ILogistic[]> {
   constructor(
     private service: MarketplaceShopService,
     private router: Router
@@ -17,7 +17,7 @@ export class MarketplaceLogisticListResolver
 
   resolve(
     route: ActivatedRouteSnapshot
-  ): Observable<ILogistic[]> | Observable<never> {
+  ): Observable<marketplace.ILogistic[]> | Observable<never> {
     const shopSlug = route.paramMap.get('shop-slug');
     return this.service.fetchLogistic(shopSlug);
   }

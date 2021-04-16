@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, ViewChild} from '@angular/core';
 import { NgxSmartModalComponent } from 'ngx-smart-modal';
 import { DialogResult} from '../core';
-import {IMarketplaceItemDetailInformation} from '../models';
+import { marketplace } from '@nusantara/models';
 
 /**
  * Used in Delivery Product Detail Page - Makertplace Integration Section
@@ -50,7 +50,7 @@ import {IMarketplaceItemDetailInformation} from '../models';
 })
 export class MarketplaceStockInfoModalComponent {
   @ViewChild('modal') modalInfo: NgxSmartModalComponent;
-  @Input() warehouseInfoDetail: IMarketplaceItemDetailInformation[];
+  @Input() warehouseInfoDetail: marketplace.IItemDetailInfo[];
 
   result: DialogResult = DialogResult.Cancelled;
 

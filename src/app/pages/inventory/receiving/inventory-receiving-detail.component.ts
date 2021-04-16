@@ -5,8 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import {
   IWarehouse,
-  IWarehouseDetail,
-  IWarehouseInformation,
+  marketplace,
   IError
 } from '@nusantara/models';
 import { IReceivingOrder } from '@nusantara/models/inventory';
@@ -139,7 +138,7 @@ import { catchError } from 'rxjs/operators';
 export class InventoryReceivingDetailComponent extends AbstractDetailComponent<IReceivingOrder> implements OnInit {
   entity: IReceivingOrder;
   warehouses: IWarehouse[];
-  warehouseDetail: IWarehouseDetail[];
+  warehouseDetail: marketplace.IWarehouseDetail[];
   marketplaceValue = 0;
 
   @ViewChild(MarketplaceChannelInfoModalComponent) marketplaceChannelInfo: MarketplaceChannelInfoModalComponent;
@@ -158,7 +157,7 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
   ngOnInit() {
     super.ngOnInit();
     this.clientService.getWarehouseInformation(this.entity.warehouse.code).subscribe(
-        (data: IWarehouseInformation) => {
+        (data: marketplace.IWarehouseInfo) => {
           this.warehouseDetail = data.details;
           this.marketplaceValue = data.totalMarketplace;
         }
