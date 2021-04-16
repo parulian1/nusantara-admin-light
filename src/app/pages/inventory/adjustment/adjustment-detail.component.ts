@@ -36,11 +36,11 @@ import { AuthService } from '@nusantara/auth';
         <a (click)="showWarehouseDetail()">{{entity.warehouse.name}}</a>
       </td>
 
-      <td *ngIf="!entity.createdBy?.username">-</td>
-      <td *ngIf="entity.createdBy?.username">{{entity.createdBy?.username}}</td>
+      <td *ngIf="!entity.createdBy?.name">-</td>
+      <td *ngIf="entity.createdBy?.name">{{entity.createdBy?.name}}</td>
 
-      <td *ngIf="!entity.reviewedBy?.username">-</td>
-      <td *ngIf="entity.reviewedBy?.username">{{entity.reviewedBy?.username}}</td>
+      <td *ngIf="!entity.reviewedBy?.name">-</td>
+      <td *ngIf="entity.reviewedBy?.name">{{entity.reviewedBy?.name}}</td>
 
       <td>{{entity.created | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
       </tbody>
