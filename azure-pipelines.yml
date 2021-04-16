@@ -1,6 +1,7 @@
 trigger:
   - release/*
   - hotfix/*
+  - master
 
 pool:
   vmImage: ubuntu-20.04
@@ -14,6 +15,10 @@ variables:
 
   - name: APM_NAME
     value: Nusantara-Web-Admin
+
+  # runtime variables, automatically defined by agent when pipeline running
+  - name: IS_NON_MASTER_BRANCH
+    value: $[ne(variables['Build.SourceBranch'], 'refs/heads/master')]
 
 resources:
   repositories:
@@ -32,11 +37,14 @@ jobs:
           testArgs: ''
 
   - job: build_prod
-    displayName: Build & Packaging PROD
     dependsOn: unit_test
+    pool:
+      name: docker-agent
+    displayName: Build & Packaging PROD
     condition: |
       and(
         succeeded(),
+        eq('True', variables.IS_NON_MASTER_BRANCH),
         ne(variables['Build.Reason'], 'PullRequest')
       )
     steps:
@@ -50,11 +58,14 @@ jobs:
 
   # Staging Build
   - job: build_staging
+    dependsOn: build_prod
+    pool:
+      name: docker-agent
     displayName: Build & Packaging STAGING
-    dependsOn: unit_test
     condition: |
       and(
         succeeded(),
+        eq('True', variables.IS_NON_MASTER_BRANCH),
         ne(variables['Build.Reason'], 'PullRequest')
       )
     steps:

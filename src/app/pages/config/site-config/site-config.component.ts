@@ -6,6 +6,8 @@ import { ToastService, AbstractDetailComponent, IResultResponse } from '@nusanta
 import { drf, ISiteConfig, ISocialMedia } from '@nusantara/models';
 import { SiteConfigService } from '@nusantara/services';
 import { ConfigChatServiceComponent } from './chat-service';
+import { ConfigAnalyticToolComponent } from './analytic-tool';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'nus-site-config',
@@ -38,8 +40,7 @@ import { ConfigChatServiceComponent } from './chat-service';
 
       <label>
         <span>GA Account ID</span>
-        <input type="text" [formControl]="gaAccountId" name="googleAnalyticAccountId">
-        <nus-field-errors [control]="gaAccountId"></nus-field-errors>
+        <nus-config-analytic-tool-service [form]="form"></nus-config-analytic-tool-service>
       </label>
 
       <label>
@@ -115,6 +116,8 @@ import { ConfigChatServiceComponent } from './chat-service';
       <div>
         <nus-config-chat-service></nus-config-chat-service>
       </div>
+
+
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
@@ -131,6 +134,7 @@ import { ConfigChatServiceComponent } from './chat-service';
 })
 export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> implements OnInit {
   @ViewChild(ConfigChatServiceComponent) chatServiceComponent: ConfigChatServiceComponent;
+  @ViewChild(ConfigAnalyticToolComponent) analyticToolComponent: ConfigAnalyticToolComponent;
 
   entity?: ISiteConfig;
   logoPreviewUrl: string;
@@ -151,10 +155,6 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
 
   get logo(): FormControl {
     return this.form.get('logo') as FormControl;
-  }
-
-  get gaAccountId(): FormControl {
-    return this.form.get('gaAccountId') as FormControl;
   }
 
   get favicon(): FormControl {
@@ -189,7 +189,7 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
       this.entity = data.entity;
       this.socialMediaTypes = data.typeChoices;
     });
-    this.originalEntityName = 'General Settings';
+    this.originalEntityName = 'Company Information';
   }
 
   initializeForm(entity?: ISiteConfig) {
@@ -198,6 +198,7 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
       href: [entity?.href],
       logo: [],
       gaAccountId: [entity?.gaAccountId ?? '', []],
+      gaAccountType: [entity?.gaAccountType ?? 'ga', []],
       favicon: [],
       customerServiceEmail: [entity?.customerServiceEmail ?? '', [Validators.required, Validators.email]],
       tagLine: [entity?.tagLine ?? '', [Validators.maxLength(50)]],
@@ -255,7 +256,9 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
   }
 
   protected onSaveSuccess(result: IResultResponse<ISiteConfig>) {
-    this.chatServiceComponent.save().subscribe(() => {
+    forkJoin([
+      this.chatServiceComponent.save(),
+    ]).subscribe(_ => {
       super.onSaveSuccess(result);
     });
   }

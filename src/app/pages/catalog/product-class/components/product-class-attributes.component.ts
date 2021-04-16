@@ -68,9 +68,22 @@ export class ProductClassAttributesComponent implements OnInit {
   @Input() choices: drf.IChoice[] = [];
   @Input() form: FormArray;
 
+  attributeTypesHide: string[] = ['markdown', 'image'];
+
   constructor(private fb: FormBuilder) {}
+
   ngOnInit(): void {
     this.initialFormValue();
+    this.initialChoices();
+  }
+
+  initialChoices(): void {
+    if (this.choices.length > 0) {
+      // #69558, image and richText (markdown) be hide
+      this.choices = this.choices.filter(
+          choice => !this.attributeTypesHide.includes(choice.value)
+      );
+    }
   }
 
   initialFormValue(): void {
