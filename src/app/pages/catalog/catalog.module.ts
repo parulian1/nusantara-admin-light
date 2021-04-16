@@ -17,6 +17,8 @@ import { ProductOptionComponent, ProductOptionListComponent } from './product-op
 import { StockSearchComponent } from './product/stock-search/stock-search.component';
 import { StockInputComponent } from './product/stock-input/stock-input.component';
 
+import { MatIconModule } from '@angular/material/icon';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 @NgModule({
   declarations: [
     CategoryListComponent,
@@ -61,6 +63,10 @@ import { StockInputComponent } from './product/stock-input/stock-input.component
     ReactiveFormsModule,
     CKEditorModule,
     CatalogRoutingModule,
+
+    // Angular Material
+    MatIconModule,
+    MatSlideToggleModule,
   ],
 })
 export class CatalogModule { }

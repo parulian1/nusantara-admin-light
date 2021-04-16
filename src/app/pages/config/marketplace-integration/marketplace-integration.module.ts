@@ -41,6 +41,9 @@ import {
 } from './marketplace.tokens';
 import * as fromReducer from '@nusantara/reducers/marketplace.reducers';
 
+import { MatIconModule } from '@angular/material/icon';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+
 export function getMarketplacesConfig(
   saveKeys: string[],
   localStorageKey: string,
@@ -55,24 +58,30 @@ export function getMarketplacesConfig(
 
 @NgModule({
   declarations: [
+    // conmect
     ConnectComponent,
     ConnectionFormComponent,
     VariantFormComponent,
     ShopeeeClientFormComponent,
     TokopediaClientFormComponent,
     TscFormComponent,
-    SetupComponent,
-    ProductClassMappingListComponent,
-    ProductClassMappingFormComponent,
+    LazadaFormComponent,
     CategorySelectionFormComponent,
     CategoryGroupControlComponent,
     AttributeSelectionFormComponent,
     AttributeMatchingFormComponent,
+
+    // setup
+    SetupComponent,
+    ProductClassMappingListComponent,
+    ProductClassMappingFormComponent,
     EditShippingComponent,
+
+    // publish
     PublishListComponent,
     PublishDetailComponent,
-    MarketplaceIntegrationComponent,
-    LazadaFormComponent,
+
+    MarketplaceIntegrationComponent, 
   ],
   imports: [
     CommonModule,
@@ -85,6 +94,11 @@ export function getMarketplacesConfig(
       fromReducer.reducer,
       MARKETPLACE_CONFIG_TOKEN
     ),
+
+    // Angular Material
+    MatIconModule,
+    MatSlideToggleModule,
+  
     MarketplaceIntegrationRoutingModule,
   ],
   providers: [

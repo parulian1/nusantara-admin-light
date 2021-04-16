@@ -32,3 +32,7 @@ export * from './active-product-option.resolver';
 export * from './marketplace-shop-list.resolver';
 export * from './marketplace-product-class-list.resolver';
 export * from './marketplace-logistic-list.resolver';
+
+export * from './order-status.resolver';
+export * from './order-type.resolver';
+export * from './order-filter.resolver';
