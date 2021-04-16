@@ -9,6 +9,7 @@ import { catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 import { IError } from '@nusantara/models';
+import { AuthService } from '@nusantara/auth';
 
 
 @Component({
@@ -132,6 +133,7 @@ export class AdjustmentDetailComponent  extends AbstractDetailComponent<IAdjustm
               public route: ActivatedRoute,
               public fb: FormBuilder,
               public router: Router,
+              public authService: AuthService,
               public toast: ToastService,
               public location: Location,
   ) {
@@ -147,6 +149,7 @@ export class AdjustmentDetailComponent  extends AbstractDetailComponent<IAdjustm
     this.form = this.fb.group({
       href: [entity.href, []],
       status: [entity?.status, []],
+      reviewedBy: [entity?.reviewedBy, []],
     });
   }
 
@@ -172,6 +175,15 @@ export class AdjustmentDetailComponent  extends AbstractDetailComponent<IAdjustm
 
   adjustedQty(originalQty: number, differenceQty: number): number {
     return differenceQty + originalQty;
+  }
+
+  getFormValue(): any {
+    return {
+      ...super.getFormValue(),
+      reviewedBy: {
+        href: `https://${this.authService.tokenPayload?.site}/users/${this.authService.tokenPayload?.user_id}/`
+      },
+    };
   }
 
   save(): void {
