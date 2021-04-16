@@ -1,6 +1,6 @@
 {
   "name": "nusantara-admin",
-  "version": "2.0.1",
+  "version": "2.9.1",
   "scripts": {
     "ng": "ng",
     "start": "npm run env && ng serve --port=4201",
@@ -32,8 +32,10 @@
     "@ngrx/store-devtools": "^11.0.1",
     "@ngx-rocket/scripts": "^5.0.0",
     "core-js": "^3.6.5",
+    "flatpickr": "^4.6.9",
     "iso8601-duration": "^1.2.0",
     "lodash-es": "^4.17.15",
+    "ng2-flatpickr": "^9.0.0",
     "ngx-smart-modal": "^7.4.1",
     "rxjs": "~6.6.6",
     "tslib": "^2.0.0",
@@ -45,6 +47,7 @@
     "@angular/cli": "~11.2.2",
     "@angular/compiler-cli": "~11.2.3",
     "@angular/language-service": "~11.2.3",
+    "@angular/localize": "^11.2.3",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",

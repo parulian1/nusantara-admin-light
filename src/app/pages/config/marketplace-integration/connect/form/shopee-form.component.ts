@@ -10,11 +10,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastLevelEnum, ToastService } from '@nusantara/core';
 import {MarketplaceClientService} from '@nusantara/services';
-import {
-  IShopeeCredential,
-  IShopeeAuthResponse,
-  IMarketplaceWarehouse,
-} from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import { MarketplaceClientEnum } from '../markeplace-client-enum';
 
 @Component({
@@ -122,11 +118,11 @@ export class ShopeeeClientFormComponent implements OnInit {
   @Input() shopSlug?: string;
   @Input() isEdit: boolean;
   form: FormGroup;
-  warehouses: IMarketplaceWarehouse[] = [];
-  variantValue : boolean;
-  shopIdInfo = "Go to your Store Profile at Shopee Seller > See column PC Shop > Click on 'See' > Copy the number after /shop/";
-  partnerKeyInfo = "To get your Partner Key, go to Shopee Open Platform and create APP console"
-  partnerIdInfo = "Partner ID is assigned upon registration is successful. Required for all requests."
+  warehouses: marketplace.IMarketplaceWarehouse[] = [];
+  variantValue: boolean;
+  shopIdInfo = 'Go to your Store Profile at Shopee Seller > See column PC Shop > Click on \'See\' > Copy the number after /shop/';
+  partnerKeyInfo = 'To get your Partner Key, go to Shopee Open Platform and create APP console';
+  partnerIdInfo = 'Partner ID is assigned upon registration is successful. Required for all requests.';
 
   shopIdValue: number;
 
@@ -141,7 +137,7 @@ export class ShopeeeClientFormComponent implements OnInit {
   ngOnInit() {
     this.service
       .getWarehouse(MarketplaceClientEnum.shopee)
-      .subscribe((data: IMarketplaceWarehouse[]) => {
+      .subscribe((data: marketplace.IMarketplaceWarehouse[]) => {
         this.warehouses = data;
       });
 
@@ -154,7 +150,7 @@ export class ShopeeeClientFormComponent implements OnInit {
   fillFormDetail(shopId: string) {
     this.service
       .getConnection(shopId)
-      .subscribe((data: IShopeeAuthResponse) => {
+      .subscribe((data: marketplace.IShopeeAuthResponse) => {
         if (data != null) {
           this.form.patchValue({
             partnerId: data.partnerId,
@@ -163,7 +159,7 @@ export class ShopeeeClientFormComponent implements OnInit {
             shopId: data.shopId,
             warehouseId: data.warehouseId,
           });
-          this.shopIdValue = data.shopId
+          this.shopIdValue = data.shopId;
         }
       });
   }
@@ -184,37 +180,37 @@ export class ShopeeeClientFormComponent implements OnInit {
     return this.form.get('warehouseId') as FormControl;
   }
 
-  initializeForm(entity?: IShopeeCredential) {
+  initializeForm(entity?: marketplace.IShopeeCredential) {
     this.form = this.fb.group({
       partnerId: [entity?.partnerId, [Validators.required, Validators.maxLength(100)]],
-      partnerKey: [entity?.partnerKey, [Validators.required,Validators.maxLength(100)]],
-      redirectUrl: [entity?.redirectUrl, [Validators.required,Validators.maxLength(100)]],
+      partnerKey: [entity?.partnerKey, [Validators.required, Validators.maxLength(100)]],
+      redirectUrl: [entity?.redirectUrl, [Validators.required, Validators.maxLength(100)]],
       shopId: [entity?.shopId, [Validators.required, this.isInteger()]],
       warehouseId: [entity?.warehouse, [Validators.required]],
     });
 
-    if(this.isEdit){
+    if (this.isEdit){
       this.shopId.disable();
     }
   }
 
   check_if_is_integer(value){
-    if(value==""){
-      return true
+    if (value === ''){
+      return true;
     } else {
-      return ((parseFloat(value) == parseInt(value)) && !isNaN(value) && (value.toString().length <= 10));
+      return ((parseFloat(value) === parseInt(value)) && !isNaN(value) && (value.toString().length <= 10));
     }
   }
 
 
   isInteger(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null =>  {
-      if(control.value!==null){
+      if (control.value !== null){
           return this.check_if_is_integer(control.value) ? null : {
                  notNumeric: true
-          }
+          };
       }
-    }
+    };
   }
 
 
@@ -224,7 +220,7 @@ export class ShopeeeClientFormComponent implements OnInit {
       partner_id: this.form.value.partnerId,
       partner_key: this.form.value.partnerKey,
       redirect_url: this.form.value.redirectUrl,
-      shop_id: this.isEdit? this.shopIdValue : this.form.value.shopId,
+      shop_id: this.isEdit ? this.shopIdValue : this.form.value.shopId,
       warehouse_id: this.form.value.warehouseId,
       split_variant: false,
     };
@@ -233,7 +229,7 @@ export class ShopeeeClientFormComponent implements OnInit {
 
   onConnect() {
     this.service.connect(this.getFormValue()).subscribe(
-      (resp: IShopeeAuthResponse) => {
+      (resp: marketplace.IShopeeAuthResponse) => {
         this.showSignInWindow(resp);
       },
       (err) => {
@@ -244,7 +240,7 @@ export class ShopeeeClientFormComponent implements OnInit {
 
   onUpdate() {
     this.service.updateConnection(this.getFormValue(), this.shopSlug).subscribe(
-      (resp: IShopeeAuthResponse) => {
+      (resp: marketplace.IShopeeAuthResponse) => {
         this.showSignInWindow(resp);
       },
       (err: HttpErrorResponse) => {
@@ -261,7 +257,7 @@ export class ShopeeeClientFormComponent implements OnInit {
     this.toast?.addMessage(resp.error.message, 'error', ToastLevelEnum.error);
   }
 
-  showSignInWindow(resp: IShopeeAuthResponse) {
+  showSignInWindow(resp: marketplace.IShopeeAuthResponse) {
     if (!resp.isConnected) {
       this.toast?.addMessage(
         `Open shopee tab and log in to grant access. Click refresh when you're done.`,
@@ -271,9 +267,5 @@ export class ShopeeeClientFormComponent implements OnInit {
       window.open(resp.authenticationUrl, '_blank');
     }
     this.onCancel();
-  }
-
-  isSplitValue(event: any) {
-    this.variantValue = event;
   }
 }

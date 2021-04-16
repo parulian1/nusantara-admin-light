@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, ViewChild} from '@angular/core';
 import { NgxSmartModalComponent } from 'ngx-smart-modal';
 import { DialogResult } from '../core';
-import { IWarehouseDetail } from '../models';
+import { marketplace } from '@nusantara/models';
 
 /**
  * Used in Delivery Orders Page / inventory-receiving
- * 
+ *
  */
 @Component({
   selector: 'nus-marketplace-channel-info-modal',
@@ -13,7 +13,7 @@ import { IWarehouseDetail } from '../models';
     <ngx-smart-modal #modal [identifier]="'marketplaceChannelInfoModal'"
       [customClass]="'wide-modal no-padding-modal'">
       <h2 class="heading-2">Marketplace Information</h2>
-      <div class="content">  
+      <div class="content">
         <div class="table">
           <table>
               <thead>
@@ -46,7 +46,7 @@ import { IWarehouseDetail } from '../models';
 })
 export class MarketplaceChannelInfoModalComponent {
   @ViewChild('modal') modalInfo: NgxSmartModalComponent;
-  @Input() warehouseInfoDetail: IWarehouseDetail[];
+  @Input() warehouseInfoDetail: marketplace.IWarehouseDetail[];
 
   result: DialogResult = DialogResult.Cancelled;
 

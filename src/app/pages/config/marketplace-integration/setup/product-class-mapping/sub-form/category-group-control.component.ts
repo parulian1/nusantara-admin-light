@@ -18,7 +18,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { IProductCategory } from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import { MarketplaceShopService } from '@nusantara/services';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -81,14 +81,14 @@ export interface IGroupControlComponentData {
 })
 export class CategoryGroupControlComponent
   implements OnDestroy, OnInit, ControlValueAccessor, Validator {
-  @Input() categories: IProductCategory[] = [];
+  @Input() categories: marketplace.IProductCategory[] = [];
   @Input() formLabel: string;
-  @Input() currentShop : string;
+  @Input() currentShop: string;
 
   shopSlug: string;
   form: FormGroup;
-  selectedCategory: IProductCategory;
-  childCategories: Observable<IProductCategory[]> = null;
+  selectedCategory: marketplace.IProductCategory;
+  childCategories: Observable<marketplace.IProductCategory[]> = null;
 
   private onChange: (
     value: IGroupControlComponentData | null | undefined
@@ -171,7 +171,7 @@ export class CategoryGroupControlComponent
     });
   }
 
-  addChild(categoryObj: IProductCategory) {
+  addChild(categoryObj: marketplace.IProductCategory) {
     // delete all child first defore re-adding child
     this.deleteGroupFromArray(0);
     this.selectedCategory = categoryObj;
@@ -180,14 +180,14 @@ export class CategoryGroupControlComponent
     this.changeDetectorRef.detectChanges();
   }
 
-  getchildCategories(): Observable<IProductCategory[]> {
+  getchildCategories(): Observable<marketplace.IProductCategory[]> {
     return this.service.fetchCategory(
       this.shopSlug,
       this.selectedCategory.categoryId
     );
   }
 
-  onSelect(category: IProductCategory) {
+  onSelect(category: marketplace.IProductCategory) {
     if (category.hasChildren) {
       this.addChild(category);
     }

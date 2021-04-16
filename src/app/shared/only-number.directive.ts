@@ -1,3 +1,4 @@
+/* tslint:disable:no-string-literal */
 import { Directive, ElementRef, HostListener, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 @Directive({

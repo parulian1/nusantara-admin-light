@@ -71,7 +71,9 @@ import { IOnboardingContent } from '@nusantara/models';
         background: #FFFFFF;
         border: 1px solid #E0E0E0;
         box-sizing: border-box;
-        padding: 10px;
+        padding: 10px 24px;
+        border-radius: 0 0 8px 8px;
+        margin-bottom: 20px;
       }
       div.collapse > img {
         max-height: 10px;
@@ -81,7 +83,7 @@ import { IOnboardingContent } from '@nusantara/models';
 
       img.preview {
         max-height: 300px;
-        max-width: 600px;
+        max-width: 100%;
         object-fit: contain;
       }
       ::ng-deep .nsm-content {
@@ -99,7 +101,7 @@ export class OnboardingContentComponent extends AbstractEditingComponent impleme
   @Input() entity: IOnboardingContent;
   @Output() remove = new EventEmitter<void>();
   imagePreviewUrl: string;
-  show: boolean = true;
+  show = true;
 
   constructor(public route: ActivatedRoute,
               public router: Router) {
@@ -131,8 +133,8 @@ export class OnboardingContentComponent extends AbstractEditingComponent impleme
   }
 
   setAvailabilityAndClearValueButtonProp() {
-    let buttonTextValidators = [Validators.maxLength(100)];
-    let buttonUrlValidators = [Validators.maxLength(160)];
+    const buttonTextValidators = [Validators.maxLength(100)];
+    const buttonUrlValidators = [Validators.maxLength(160)];
 
     if (this.buttonStatus.value === true) {
       this.buttonText.enable();

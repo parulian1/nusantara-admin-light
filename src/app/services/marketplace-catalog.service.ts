@@ -10,9 +10,9 @@ export class MarketplaceCatalogService {
 
   constructor(private httpClient: HttpClient) {}
 
-  patchNewAttribute(formData: FormData, productClassSlug:string): Observable<any> {
+  patchNewAttribute(formData: FormData, productClassSlug: string): Observable<any> {
     return this.httpClient.patch(
-      `${this.baseUrl}/product-class-attribute/${productClassSlug}/`,formData
+      `${this.baseUrl}/product-class-attribute/${productClassSlug}/`, formData
     );
   }
 }

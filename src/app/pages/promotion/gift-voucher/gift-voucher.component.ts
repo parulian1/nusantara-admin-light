@@ -2,7 +2,7 @@ import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {AbstractDetailComponent, ToastService} from '@nusantara/core';
 import {IGiftVoucher} from '@nusantara/models';
 import {GiftVoucherService} from '@nusantara/services';
-import {FormArray, FormBuilder, FormControl, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
@@ -113,7 +113,7 @@ export class GiftVoucherComponent extends AbstractDetailComponent<IGiftVoucher> 
       validTo: [this.convertDateTime(entity?.validTo), [Validators.required]],
       isActive: [entity?.isActive, []],
     });
-    
+
     // need to mark as touched to make custom styling works
     this.form.controls.isActive.markAsTouched();
   }

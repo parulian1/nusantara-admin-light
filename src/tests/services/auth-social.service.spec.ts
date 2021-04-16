@@ -1,12 +1,15 @@
 import { TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import {AuthSocialService} from '@nusantara/services';
 
-import { AuthSocialService } from './auth-social.service';
 
 describe('AuthSocialService', () => {
   let service: AuthSocialService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      imports: [ HttpClientTestingModule ]
+    });
     service = TestBed.inject(AuthSocialService);
   });
 

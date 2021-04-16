@@ -6,6 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { SharedModule } from '@nusantara/shared';
 import { CategoryComponent } from '@nusantara/pages/catalog/category';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 
 describe('ProductComponent', () => {
   let component: ProductComponent;
@@ -32,7 +33,7 @@ describe('ProductComponent', () => {
       name: 'default product class'
     },
     media: [],
-    marketPlaces: [],
+    marketplace: [],
     weight: 1.0,
     attributes: {},
     parent: null,
@@ -62,7 +63,8 @@ describe('ProductComponent', () => {
       declarations: [
         ProductComponent
       ],
-      providers: []
+      providers: [],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));
@@ -132,6 +134,8 @@ describe('ProductComponent', () => {
       seoDescription: addProductResp.seoDescription,
       tags: addProductResp.tags,
       subscription: addProductResp.subscription,
+      dimensions: addProductResp.dimensions,
+      marketplace: addProductResp.marketplace,
       href: ''
     });
     component.save();
@@ -180,7 +184,7 @@ describe('ProductComponent', () => {
         name: 'default product class'
       },
       media: [],
-      marketPlaces: [],
+      marketplace: [],
       weight: 1.0,
       attributes: {},
       parent: null,
@@ -218,6 +222,8 @@ describe('ProductComponent', () => {
       seoDescription: addProductResp.seoDescription,
       tags: addProductResp.tags,
       subscription: addProductResp.subscription,
+      dimensions: addProductResp.dimensions,
+      marketplace: addProductResp.marketplace,
       href: editProductResp.href
     });
     component.save();
@@ -240,6 +246,7 @@ describe('ProductComponent', () => {
     expect(mock.request.body.seoMeta).toBe(addProductResp.seoMeta);
     expect(mock.request.body.seoDescription).toBe(addProductResp.seoDescription);
     expect(mock.request.body.tags).toBe(addProductResp.tags);
+    expect(mock.request.body.dimensions).toBe(addProductResp.dimensions);
     expect(mock.request.body.subscription).toBe(addProductResp.subscription);
     expect(mock.request.body.isActive).toEqual(true);
     mock.flush(addProductResp, {status: 201, statusText: 'CREATED'});

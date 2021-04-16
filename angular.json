@@ -25,9 +25,13 @@
             ],
             "styles": [
               "src/styles.css",
-              "src/print.css"
+              "src/print.css",
+              "node_modules/flatpickr/dist/flatpickr.min.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "@elastic/apm-rum-angular"
+            ]
           },
           "configurations": {
             "production": {

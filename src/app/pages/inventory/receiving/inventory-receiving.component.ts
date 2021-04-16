@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthService } from '../../../auth';
 import { AbstractDetailComponent, DialogResult, ErrorResult, ToastService } from '../../../core';
-import { inventory, ISubLocation, IWarehouse, IWarehouseDetail, IWarehouseInformation } from '../../../models';
+import { inventory, ISubLocation, IWarehouse, marketplace } from '@nusantara/models';
 import { InventoryReceivingService, MarketplaceClientService } from '../../../services';
 import { IProduct } from '../../../models/products';
 import {
@@ -147,7 +147,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
 
   warehouses: IWarehouse[];
   availableSubLocations: ISubLocation[] = [];
-  warehouseDetail: IWarehouseDetail[];
+  warehouseDetail: marketplace.IWarehouseDetail[];
 
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
   @ViewChild(MarketplaceChannelInfoModalComponent) marketplaceChannelInfo: MarketplaceChannelInfoModalComponent;
@@ -200,11 +200,11 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
         href: [null, Validators.required],
         // name: ['', ],
       }),
-      status: ['pending', [Validators.required,]],
+      status: ['pending', [Validators.required, ]],
       createdBy: this.fb.group({
         href: `https://bhisma.cloud/api/iam/${this.authService.tokenPayload.user_id}/`
       }),
-      reviewedBy: [null,],
+      reviewedBy: [null, ],
       stockRecords: this.fb.array([], [Validators.required, Validators.minLength(1)]),
     });
   }
@@ -238,7 +238,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
           this.storeValue = this.marketplaceValue = this.productValue = 0;
           this.showDetail = false;
           this.warehouseDetail = [];
-          setTimeout(function () {
+          setTimeout(function() {
             this.navigateToParent(false);
           }, 1000);
         }
@@ -270,7 +270,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     if (wh) {
 
       this.clientService.getWarehouseInformation(wh.code).subscribe(
-        (data: IWarehouseInformation) => {
+        (data: marketplace.IWarehouseInfo) => {
           this.storeValue = data.totalStore;
           this.showDetail = true;
           this.marketplaceValue = data.totalMarketplace;
@@ -322,13 +322,13 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
   }
 
   get userDisplayName(): string {
-    const last_name = this.authService.tokenPayload?.last_name ?? '';
-    const first_name = this.authService.tokenPayload?.first_name ?? '';
+    const lastName = this.authService.tokenPayload?.last_name ?? '';
+    const firstName = this.authService.tokenPayload?.first_name ?? '';
     const email = this.authService.tokenPayload?.email ?? '';
-    const fullname = first_name.concat(' ', last_name);
+    const fullname = firstName.concat(' ', lastName);
 
-    if (last_name && first_name && email) {
-      return [fullname, `(${email})`,].join(', ').trim();
+    if (lastName && firstName && email) {
+      return [fullname, `(${email})`, ].join(', ').trim();
     } else {
       return email;
     }

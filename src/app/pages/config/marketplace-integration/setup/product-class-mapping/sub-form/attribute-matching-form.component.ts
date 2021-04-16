@@ -24,11 +24,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DialogResult } from '@nusantara/core';
-import {
-  IShopAttribute,
-  ISelectedCategory,
-  IShopAttributeMapping,
-} from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import { MarketplaceProductClassService } from '@nusantara/services';
 import { ConfirmModalComponent } from '@nusantara/shared/confirm-modal.component';
 import { SubFormComponent } from './sub-form.component';
@@ -40,7 +36,7 @@ import { SubFormComponent } from './sub-form.component';
       <div class="wrapper">
         <h1 class="heading-1">Match Attribute (3/3)</h1>
         <p>Choose {{ currentShop }} attributes for your product.</p>
-      
+
         <div class="form">
           <label>
             <span>{{ currentShop }} Category </span>
@@ -63,14 +59,14 @@ import { SubFormComponent } from './sub-form.component';
             <div formArrayName="attributes" class="attributes">
               <div *ngFor="let attr of attributes.controls; let i = index" [formGroupName]="i">
                 <input type="text" formControlName="marketplaceName" readonly />
-                <input type="text" formControlName="marketplaceType" 
+                <input type="text" formControlName="marketplaceType"
                   [ngClass]="attributes.controls[i].get('bhismaType').invalid? 'mismatch': null" readonly/>
                 <div>
                   <select #selectedAttr
                     formControlName="bhismaObj"
                     (change)="attrChange(selectedAttr.value, i)"
                     [ngClass]="{ 'mismatch warning': attributes.controls[i].get('bhismaObj').invalid}">
-                    
+
                     <option [ngValue]="null">Select an option</option>
                     <option *ngFor="let opt of bhismaAttributes" [ngValue]="opt">
                       {{ opt.name }}
@@ -95,7 +91,7 @@ import { SubFormComponent } from './sub-form.component';
                 <div>
                   <select formControlName="bhismaType"
                     [ngClass]="attributes.controls[i].get('bhismaType').valid? 'match': 'mismatch warning'">
-                    
+
                     <option [ngValue]="null">Select an option</option>
                     <option *ngFor="let type of bhismaAttributeTypes">{{ type }}</option>
                   </select>
@@ -111,7 +107,7 @@ import { SubFormComponent } from './sub-form.component';
 
       <button type="button" class="control" (click)="onSubmit()" [disabled]="form.invalid">
         Submit
-      </button>      
+      </button>
       <button type="button" class="control secondary ghost" (click)="confirmModal.open()">
         Previous
       </button>
@@ -127,11 +123,11 @@ import { SubFormComponent } from './sub-form.component';
     'label { margin-bottom: 12px; min-height: 0; }',
     'button:not(:first-of-type) { margin-left: 5px; }',
     '.attribute-group{ display: grid; grid-template-columns: repeat(4, 1fr); grid-gap: 10px; margin-bottom: 4px; };',
-    `.attributes > div { 
-        display: grid; 
-        grid-template-columns: repeat(4, 1fr); 
+    `.attributes > div {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
         grid-gap: 10px;
-        margin-bottom: 8px; 
+        margin-bottom: 8px;
     };`,
     '.new-attr-input { margin-top: 4px; }',
     '.add-new-attr { font-weight: 600; font-size: 16px; }',
@@ -160,8 +156,8 @@ export class AttributeMatchingFormComponent
   confirmModal: ConfirmModalComponent;
 
   @Input() state: any;
-  @Input() category: ISelectedCategory;
-  @Input() attribute: IShopAttribute[];
+  @Input() category: marketplace.ISelectedCategory;
+  @Input() attribute: marketplace.IShopAttribute[];
   @Input() currentShop: string;
   @Output() previous = new EventEmitter<boolean>();
   @Output() save = new EventEmitter<any>();
@@ -173,10 +169,10 @@ export class AttributeMatchingFormComponent
   categoryId: number;
   categoryNames: string;
   attributeNames: string;
-  selectedCategory: ISelectedCategory = null;
-  bhismaAttributes: IShopAttribute[];
+  selectedCategory: marketplace.ISelectedCategory = null;
+  bhismaAttributes: marketplace.IShopAttribute[];
   bhismaAttributeTypes: string[];
-  marketplaceAttributes: IShopAttribute[];
+  marketplaceAttributes: marketplace.IShopAttribute[];
   productClassAttrId: number;
   isShowSelectBhismaAttr: boolean;
   isShowSInputBhismaAttr: boolean;
@@ -213,7 +209,7 @@ export class AttributeMatchingFormComponent
       if (this.productClassSlug) {
         this.service
           .fetchAttribute(this.productClassSlug)
-          .subscribe((data: IShopAttributeMapping) => {
+          .subscribe((data: marketplace.IShopAttributeMapping) => {
             this.bhismaAttributes = data.attributes;
             this.bhismaAttributeTypes = data.attributeType;
           });
@@ -256,8 +252,8 @@ export class AttributeMatchingFormComponent
     return this.form.get('attributes') as FormArray;
   }
 
-  addAttributeInputs(attrs: IShopAttribute[]) {
-    if(attrs) {
+  addAttributeInputs(attrs: marketplace.IShopAttribute[]) {
+    if (attrs) {
       attrs.forEach((obj) => {
         const attrGroup = this.fb.group({
           marketplaceName: obj.name,
@@ -302,7 +298,7 @@ export class AttributeMatchingFormComponent
     // form value for marketplace api
     this.save.next(formValue);
 
-    if (this.newAttrFiltered.length != 0) {
+    if (this.newAttrFiltered.length !== 0) {
       const newAttrValue = {
         attributes: this.newAttrFiltered,
       };

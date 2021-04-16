@@ -1,15 +1,32 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { ReactiveFormsModule } from '@angular/forms';
+import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { SharedModule } from '@nusantara/shared';
 import { PaymentGatewayDetailComponent } from '@nusantara/pages/config/payment-gateways';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import {SiteConfigService} from '@nusantara/services';
+import {of} from 'rxjs';
+import {ActivatedRoute} from '@angular/router';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+
+class SiteConfigServiceStub extends SiteConfigService {
+  // tslint:disable-next-line:variable-name
+  private _licenseType = 'enterprise';
+
+  public get licenseType() {
+        return this._licenseType;
+    }
+    public set licenseType(value) {
+        this._licenseType = value;
+    }
+}
 
 describe('PaymentGatewayDetailComponent', () => {
   let component: PaymentGatewayDetailComponent;
   let fixture: ComponentFixture<PaymentGatewayDetailComponent>;
+  let siteConfigService: jasmine.SpyObj<SiteConfigService>;
 
   let httpTestingController: HttpTestingController;
 
@@ -36,7 +53,20 @@ describe('PaymentGatewayDetailComponent', () => {
       declarations: [
         PaymentGatewayDetailComponent,
       ],
-      providers: []
+      providers: [
+        FormBuilder,
+        SiteConfigService,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: of({
+              typeChoices: [],
+              entity: {}
+            })
+          }
+        }
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));
@@ -45,6 +75,8 @@ describe('PaymentGatewayDetailComponent', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(PaymentGatewayDetailComponent);
     component = fixture.componentInstance;
+    siteConfigService = TestBed.inject(SiteConfigService) as jasmine.SpyObj<SiteConfigService>;
+
     fixture.detectChanges();
   });
 
@@ -86,6 +118,12 @@ describe('PaymentGatewayDetailComponent', () => {
       accountHoldNumber: '23456',
       code: '3456',
       isActive: true,
+      allowPos: true,
+      meta: {
+        type: 'eWallets',
+        banks: [],
+        eWallets: []
+      }
     });
     component.form.value.logo = image64;
     component.save();
@@ -113,7 +151,13 @@ describe('PaymentGatewayDetailComponent', () => {
       serverKey: 'def',
       accountNumber: 'abcd',
       accountHoldNumber: 'defgh',
-      code: '2345'
+      code: '2345',
+      allowPos: true,
+      meta: {
+        type: 'eWallets',
+        banks: [],
+        eWallets: []
+      }
     };
 
     component.form.setValue({
@@ -127,7 +171,9 @@ describe('PaymentGatewayDetailComponent', () => {
       accountNumber: UpdatePaymentGateway.accountNumber,
       accountHoldNumber: UpdatePaymentGateway.accountHoldNumber,
       code: UpdatePaymentGateway.code,
-      isActive: true
+      isActive: true,
+      allowPos: UpdatePaymentGateway.allowPos,
+      meta: UpdatePaymentGateway.meta
     });
     component.form.value.logo = image64;
     component.save();

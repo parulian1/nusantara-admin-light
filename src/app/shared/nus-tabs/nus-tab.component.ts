@@ -4,10 +4,10 @@
  * and ngTemplateOutletContext directives.
  */
 
-import { Component, Input } from '@angular/core';
+import { Component, Input } from "@angular/core";
 
 @Component({
-  selector: 'nus-tab',
+  selector: "nus-tab",
   template: `
     <div [hidden]="!active" class="pane">
       <ng-content></ng-content>
@@ -15,6 +15,15 @@ import { Component, Input } from '@angular/core';
   `,
 })
 export class NusTabComponent {
-  @Input() title: string;
+  inputTitle: string = null;
+  @Input() set title(value: string) {
+    this.value = value;
+    this.inputTitle = value;
+  }
+  @Input() value: string;
   @Input() active = false;
+
+  get title() {
+    return this.inputTitle;
+  }
 }

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { PagedResponse } from '@nusantara/core';
-import { IShop } from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import * as fromMarketplaces from '@nusantara/reducers/marketplace.reducers';
 import * as shopActions from '@nusantara/actions';
 
@@ -43,7 +43,7 @@ import * as shopActions from '@nusantara/actions';
 
             <td>
               <a [routerLink]="['edit-shipping/', entity.slug]"
-                (click)="setSelectedShop(entity)" 
+                (click)="setSelectedShop(entity)"
                 [ngClass]="{'disabled': entity.isConnected === false}">
                 Edit Shipping
               </a>
@@ -61,7 +61,7 @@ import * as shopActions from '@nusantara/actions';
   ],
 })
 export class SetupComponent implements OnInit {
-  page: PagedResponse<IShop>;
+  page: PagedResponse<marketplace.IShop>;
 
   constructor(
     private route: ActivatedRoute,
@@ -70,13 +70,13 @@ export class SetupComponent implements OnInit {
 
   ngOnInit() {
     this.route.data.subscribe(
-      (data: { page: PagedResponse<IShop> }) => {
+      (data: { page: PagedResponse<marketplace.IShop> }) => {
         this.page = data.page;
       }
     );
   }
 
-  setSelectedShop(shop: IShop) {
+  setSelectedShop(shop: marketplace.IShop) {
     this.store.dispatch(new shopActions.SetCurrentShop(shop));
   }
 }

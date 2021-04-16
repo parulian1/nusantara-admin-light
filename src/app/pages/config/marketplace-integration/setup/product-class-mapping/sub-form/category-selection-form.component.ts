@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MarketplaceShopService } from '@nusantara/services';
-import { IProductCategory, ISelectedCategory } from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import {
   FormArray,
   FormBuilder,
@@ -23,7 +23,7 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 @Component({
   selector: 'nus-category-selection-form',
   template: `
-    <form [formGroup]="form" class="fluid"> 
+    <form [formGroup]="form" class="fluid">
       <div class="wrapper">
         <h1 class="heading-1">Choose Category (1/3)</h1>
         <p>Choose a category that matches your Product Class</p>
@@ -80,10 +80,10 @@ export class CategorySelectionFormComponent
   @Input() state: any;
   @Output() cancel = new EventEmitter<boolean>();
   @Output() next = new EventEmitter<boolean>();
-  @Output() selectedCategory = new EventEmitter<ISelectedCategory>();
-  @Input() currentShop : string;
+  @Output() selectedCategory = new EventEmitter<marketplace.ISelectedCategory>();
+  @Input() currentShop: string;
 
-  categories: IProductCategory[] = [];
+  categories: marketplace.IProductCategory[] = [];
   shopSlug: string;
   productClassName: string;
   form: FormGroup;
@@ -107,7 +107,7 @@ export class CategorySelectionFormComponent
 
     this.service
       .fetchCategory(this.shopSlug)
-      .subscribe((data: IProductCategory[]) => {
+      .subscribe((data: marketplace.IProductCategory[]) => {
         this.categories = data;
       });
 
@@ -153,7 +153,7 @@ export class CategorySelectionFormComponent
 
   onNext() {
     this.next.next(true);
-    const selectedCat: ISelectedCategory = {
+    const selectedCat: marketplace.ISelectedCategory = {
       categoryNames: this.getSelectedCategoryNames(this.form.value.categories),
       deepestChildId: this.getChildCatgoryId(this.form.value.categories),
     };

@@ -31,7 +31,7 @@ import { NusTabComponent } from '@nusantara/shared/nus-tabs/nus-tab.component';
     '.tab div { outline: none; cursor: pointer; padding: 12px 50px; transition: 0.3s; }',
     '.tab div:hover { background: var(--darken-white); }',
     '.tab div.active { border-bottom: 2px solid var(--secondary); }',
-    
+
     '.tab.wide { justify-content: center; }',
     '.tab.wide div { flex-grow: 1; }',
     '.fluid { flex-grow: 1; text-align: center; }'
@@ -41,7 +41,7 @@ export class NusTabsComponent implements AfterContentInit {
   @ContentChildren(NusTabComponent) tabs: QueryList<NusTabComponent>;
   @Output() select = new EventEmitter<any>();
   @Input() fluid = false;
-  
+
   // contentChildren are set
   ngAfterContentInit() {
     // get all active tabs
@@ -49,7 +49,7 @@ export class NusTabsComponent implements AfterContentInit {
 
     // if there is no active tab set, activate the first
     if (activeTabs.length === 0) {
-      if(this.tabs.length){
+      if (this.tabs.length){
         this.selectTab(this.tabs.first);
       }
     }
@@ -61,6 +61,6 @@ export class NusTabsComponent implements AfterContentInit {
 
     // activate the tab the user has clicked on.
     tab.active = true;
-    this.select.next(tab.title);
+    this.select.next(tab.value);
   }
 }

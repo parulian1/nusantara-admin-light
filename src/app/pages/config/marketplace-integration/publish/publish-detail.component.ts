@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { PagedResponse, ToastLevelEnum, ToastService } from '@nusantara/core';
-import {
-  IReceivingOrderDetail,
-  IReceivingProduct,
-  IShopErrorDetail,
-} from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import { MarketplaceReceivingProductsService } from '@nusantara/services';
 
 @Component({
@@ -79,9 +75,9 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
             <tbody>
               <tr *ngFor="let product of allProducts?.entities">
                 <td>
-                  <a [routerLink]="['/catalog/products', product.slug]"> 
+                  <a [routerLink]="['/catalog/products', product.slug]">
                     <div>{{ product.name}}</div>
-                    <div>({{ product.sku }})</div> 
+                    <div>({{ product.sku }})</div>
                   </a>
                 </td>
                 <td>{{ product.sku }}</td>
@@ -170,7 +166,7 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
             <div>
               <h2 class="heading-2"> {{ order?.totalRecord.errorMetadata }} Products Can't be Published</h2>
               <p>Click "Fix" on each product below.</p>
-            </div>          
+            </div>
           </div>
           <nus-pagination-child
             *ngIf="dataError?.entities?.length"
@@ -191,9 +187,9 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
             <tbody>
               <tr *ngFor="let product of dataError?.entities">
                 <td>
-                  <a [routerLink]="['/catalog/products', product.slug]"> 
+                  <a [routerLink]="['/catalog/products', product.slug]">
                     <div>{{ product.name}}</div>
-                    <div>({{ product.sku }})</div> 
+                    <div>({{ product.sku }})</div>
                   </a>
                 </td>
                 <td>{{ product.sku }}</td>
@@ -248,9 +244,9 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
             <tbody>
               <tr *ngFor="let product of timeoutError?.entities">
                 <td>
-                  <a [routerLink]="['/catalog/products', product.slug]"> 
+                  <a [routerLink]="['/catalog/products', product.slug]">
                     <div>{{ product.name}}</div>
-                    <div>({{ product.sku }})</div> 
+                    <div>({{ product.sku }})</div>
                   </a>
                 </td>
                 <td>{{ product.sku }}</td>
@@ -298,7 +294,7 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
     '.wrapper .warehouse{ color: var(--quinary) }',
     '.progress-info { padding: 16px 24px; margin-bottom: 24px; background: var(--darken-white); border-radius: 4px; }',
     '.progress-info > span { margin-right: 8px; }',
-    `.error-info { 
+    `.error-info {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -312,11 +308,11 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
 })
 export class PublishDetailComponent implements OnInit {
   receivingOrderId: string;
-  order: IReceivingOrderDetail;
-  allProducts: PagedResponse<IReceivingProduct>;
-  credentialsError: PagedResponse<IShopErrorDetail>;
-  dataError: PagedResponse<IReceivingProduct>;
-  timeoutError: PagedResponse<IReceivingProduct>;
+  order: marketplace.IReceivingOrderDetail;
+  allProducts: PagedResponse<marketplace.IReceivingProduct>;
+  credentialsError: PagedResponse<marketplace.IShopErrorDetail>;
+  dataError: PagedResponse<marketplace.IReceivingProduct>;
+  timeoutError: PagedResponse<marketplace.IReceivingProduct>;
   isReady = true;
 
   constructor(

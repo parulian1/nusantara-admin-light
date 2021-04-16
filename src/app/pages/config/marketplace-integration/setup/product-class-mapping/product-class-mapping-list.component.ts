@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IProductClass, IShop } from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -48,7 +48,7 @@ import * as fromReducer from '@nusantara/reducers';
           </td>
           <!--Action to Match-->
           <td>
-            <a *ngIf="entity.isMapped" class="disabled"> 
+            <a *ngIf="entity.isMapped" class="disabled">
               Edit Mapping
             </a>
             <a *ngIf="!entity.isMapped" [routerLink]="[entity.slug]" [state]="{ productClass: entity }">
@@ -69,10 +69,10 @@ import * as fromReducer from '@nusantara/reducers';
   ],
 })
 export class ProductClassMappingListComponent implements OnInit {
-  productClasses: IProductClass[];
-  currentShop$: Observable<IShop>;
+  productClasses: marketplace.IProductClass[];
+  currentShop$: Observable<marketplace.IShop>;
   isBusy: boolean;
-  page: PagedResponse<IProductClass>;
+  page: PagedResponse<marketplace.IProductClass>;
 
   constructor(
     private route: ActivatedRoute,
@@ -85,7 +85,7 @@ export class ProductClassMappingListComponent implements OnInit {
   ngOnInit() {
     this.isBusy = true;
     this.route.data.subscribe(
-      (data: { page: PagedResponse<IProductClass> }) => {
+      (data: { page: PagedResponse<marketplace.IProductClass> }) => {
         this.page = data.page;
         this.isBusy = false;
       }

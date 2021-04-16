@@ -1,10 +1,10 @@
-import {AfterViewInit, Component, OnInit, Input, ViewChild, ViewChildren, QueryList} from '@angular/core';
-import {AbstractEditingComponent, moveItemInFormArray} from '@nusantara/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {IOnBoarding, IOnboardingContent} from '@nusantara/models';
-import {CdkDragDrop} from '@angular/cdk/drag-drop';
-import {OnboardingContentComponent} from './onboarding-content.component';
+import { AfterViewInit, Component, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { AbstractEditingComponent, moveItemInFormArray } from '@nusantara/core';
+import { FormArray, FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { IOnBoarding, IOnboardingContent } from '@nusantara/models';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { OnboardingContentComponent } from './onboarding-content.component';
 
 @Component({
   selector: 'nus-onboarding-content-host',
@@ -19,7 +19,7 @@ import {OnboardingContentComponent} from './onboarding-content.component';
         </div>
       </div>
       <button type="button" (click)="addContent()" class="add-button">
-        Add Record
+        <i class="material-icons">add</i> Add Record
       </button>
   `,
   styleUrls: ['./onboarding-content-host.css']
@@ -66,11 +66,13 @@ export class OnboardingContentHostComponent extends AbstractEditingComponent<For
   }
 
   getValue() {
-    this.form.controls.map((content, index) => {
-      content.value.sortPriority = index;
-      this.contents.map((contentComponent, _index) => {
-        if (_index === index) {
-          content.value.image = contentComponent.imagePreviewUrl;
+
+    // updated code based on SonarLint issues
+    this.form.controls.forEach((value, index) => {
+      value.value.sortPriority = index;
+      this.contents.forEach((valueComponent, subIndex) => {
+        if (subIndex === index) {
+          value.value.image = valueComponent.imagePreviewUrl;
         }
       });
     });

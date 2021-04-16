@@ -25,4 +25,16 @@ export class ContentFooterService extends AbstractCrudService<IContentFooter> {
         {observe: 'body', responseType: 'json'}
       );
   }
+
+  // retrieves a single object from the API based on it's slug
+  fetch(slug?: string): Observable<IContentFooter> {
+    const params = new HttpParams().set('include_deleted', 'true');
+
+    let url = `${this.baseUrl}/`;
+    if (!!slug) {
+      url += `${slug}/`;
+    }
+    return this.httpClient
+      .get<IContentFooter>(`${url}`, {observe: 'body', responseType: 'json', params});
+  }
 }

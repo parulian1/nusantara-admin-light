@@ -52,7 +52,7 @@ export class StockInputComponent extends AbstractEditingComponent implements OnI
   availableSubLocations: ISubLocation[] = [];
 
   entity: IStockSearch[];
-  currentQuantity: number = 0;
+  currentQuantity = 0;
   validStock = true;
 
 
@@ -70,8 +70,9 @@ export class StockInputComponent extends AbstractEditingComponent implements OnI
   ngOnInit(): void {
     this.route.data.subscribe((data: { warehouses: IWarehouse[]}) => {
       this.warehouses = data.warehouses.filter(wh => wh.isActive);
-      if (this.warehouses.length > 0)
+      if (this.warehouses.length > 0) {
         this.availableSubLocations = this.warehouses[0].subLocations;
+      }
     });
 
     if (this.productHref) {
@@ -81,7 +82,7 @@ export class StockInputComponent extends AbstractEditingComponent implements OnI
           this.currentQuantity += +e.quantity;
           this.originalQuantity.setValue(this.currentQuantity);
           this.originalQuantity.setValidators([Validators.min(this.currentQuantity)]);
-        })
+        });
       });
 
     }
@@ -131,7 +132,7 @@ export class StockInputComponent extends AbstractEditingComponent implements OnI
    * @param product The parent product which should own all the inventory.
    */
   save(product: IProduct): Observable<IResultResponse[]> {
-    let stock = this.originalQuantity.value - this.currentQuantity;
+    const stock = this.originalQuantity.value - this.currentQuantity;
     if (this.warehouses.length > 0 && stock > 0) {
       // Update stock receiving
       this.originalQuantity.setValue(stock);

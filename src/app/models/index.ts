@@ -9,7 +9,6 @@ export * from './vendor';
 
 export * from './order';
 
-
 export * from './promotion';
 
 export * from './widget';
@@ -34,11 +33,7 @@ export * from './highlight';
 
 export * from './email-href-user-entity';
 
-
-
 export * from './site';
-
-export * from './marketplace';
 
 import * as google from './google';
 import * as base from './base';
@@ -51,8 +46,22 @@ import * as banner from './banner';
 import * as shipment from './shipment';
 import * as themes from './themes';
 import * as order from './order';
+import * as marketplace from './marketplace';
 
-export { base, drf, google, widgets, products, inventory, device, banner, shipment, themes, order };
+export {
+  base,
+  drf,
+  google,
+  widgets,
+  products,
+  inventory,
+  device,
+  banner,
+  shipment,
+  themes,
+  order,
+  marketplace,
+};
 
 export * from './reseller';
 

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 
-import { PagedResponse, ToastLevelEnum, ToastService } from '@nusantara/core';
-import { IShop } from '@nusantara/models';
+import { PagedResponse } from '@nusantara/core';
+import { marketplace } from '@nusantara/models';
 import * as fromMarketplaces from '@nusantara/reducers/marketplace.reducers';
 import * as shopActions from '@nusantara/actions';
 
@@ -61,7 +61,7 @@ import * as shopActions from '@nusantara/actions';
           </tr>
         </tbody>
       </table>
-      <nus-pagination [page]="page"></nus-pagination>                  
+      <nus-pagination [page]="page"></nus-pagination>
     </ng-template>
       `,
   styles: [
@@ -72,7 +72,7 @@ import * as shopActions from '@nusantara/actions';
   ],
 })
 export class ConnectComponent implements OnInit {
-  page: PagedResponse<IShop>;
+  page: PagedResponse<marketplace.IShop>;
 
   constructor(
     private route: ActivatedRoute,
@@ -81,13 +81,13 @@ export class ConnectComponent implements OnInit {
 
   ngOnInit() {
     this.route.data.subscribe(
-      (data: { page: PagedResponse<IShop> }) => {
+      (data: { page: PagedResponse<marketplace.IShop> }) => {
         this.page = data.page;
       }
     );
   }
 
-  setSelectedShop(shop: IShop) {
+  setSelectedShop(shop: marketplace.IShop) {
     this.store.dispatch(new shopActions.SetCurrentShop(shop));
   }
 }

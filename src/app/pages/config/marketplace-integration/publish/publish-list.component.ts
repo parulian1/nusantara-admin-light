@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PagedResponse } from '@nusantara/core';
-import { IReceivingOrder, IShop } from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import {
   MarketplaceReceivingOrderService,
   MarketplaceShopService,
@@ -47,7 +47,7 @@ import {
             </thead>
             <tbody>
               <tr *ngFor="let entity of processing?.entities">
-                <td> 
+                <td>
                   <a routerLink="{{ entity.encryptId }}">
                     {{ entity.id }}
                   </a>
@@ -92,7 +92,7 @@ import {
             </thead>
             <tbody>
               <tr *ngFor="let entity of completed?.entities">
-                <td> 
+                <td>
                   <a routerLink="{{ entity.encryptId }}">
                     {{ entity.id }}
                   </a>
@@ -126,9 +126,9 @@ import {
     ]
 })
 export class PublishListComponent implements OnInit {
-  processing: PagedResponse<IReceivingOrder>;
-  completed: PagedResponse<IReceivingOrder>;
-  shops: PagedResponse<IShop>;
+  processing: PagedResponse<marketplace.IReceivingOrder>;
+  completed: PagedResponse<marketplace.IReceivingOrder>;
+  shops: PagedResponse<marketplace.IShop>;
 
   constructor(
     private receivingOrderService: MarketplaceReceivingOrderService,

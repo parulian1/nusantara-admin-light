@@ -9,9 +9,6 @@ import { ISiteConfig, LicenseTypeChoices } from '@nusantara/models';
 })
 export class SiteConfigService extends AbstractCrudService<ISiteConfig> {
 
-  baseUrl = '/api/client/site-config';
-  static readonly LICENSE_TYPE = 'license';
-
   constructor(httpClient: HttpClient) {
     super(httpClient);
   }
@@ -30,6 +27,9 @@ export class SiteConfigService extends AbstractCrudService<ISiteConfig> {
       localStorage.setItem(SiteConfigService.LICENSE_TYPE, value);
     }
   }
+  static readonly LICENSE_TYPE = 'license';
+
+  baseUrl = '/api/client/site-config';
 
   /**
    * Writes the license type to localStorage.

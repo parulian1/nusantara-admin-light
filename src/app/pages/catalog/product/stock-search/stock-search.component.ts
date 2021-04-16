@@ -7,7 +7,7 @@ import { IStockSearch } from '@nusantara/models/products/stock-search';
   template: `
     <h3>Product Inventory</h3>
     <table *ngIf="!!entity">
-      <thead>  
+      <thead>
         <tr>
           <th>Warehouse</th>
           <th>Quantity</th>
@@ -22,7 +22,7 @@ import { IStockSearch } from '@nusantara/models/products/stock-search';
     </table>
 
   `,
-  styles: [ 
+  styles: [
     'h3 { font-size: 20px; margin: 0 0 20px 0; }',
   ]
 })

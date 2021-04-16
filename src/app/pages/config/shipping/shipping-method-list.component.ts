@@ -11,6 +11,11 @@ import { AbstractListComponent } from '@nusantara/core';
       description="A way which orders can be fulfilled to the customer.">
     </nus-list-header>
 
+    <div class="filtering">
+      <!-- Soft deleted product but change the wording into InActive -->
+      <nus-include-deleted text="Show Inactive Shipping"></nus-include-deleted>
+    </div>
+
     <nus-pagination [page]="page"></nus-pagination>
 
     <table>
@@ -25,6 +30,8 @@ import { AbstractListComponent } from '@nusantara/core';
       </tr>
       </tbody>
     </table>
+
+    <nus-pagination [page]="page"></nus-pagination>
   `,
   styles: [],
 })

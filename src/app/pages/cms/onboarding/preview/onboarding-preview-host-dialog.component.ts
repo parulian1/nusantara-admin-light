@@ -1,8 +1,8 @@
-import {AbstractEditingComponent, DialogResult} from '@nusantara/core';
-import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AfterViewInit, Component, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
-import {NgxSmartModalComponent} from "ngx-smart-modal";
-import {IOnboardingContent} from "@nusantara/models";
+import { AbstractEditingComponent, DialogResult } from '@nusantara/core';
+import { AbstractControl, FormArray, FormBuilder, Validators } from '@angular/forms';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
+import { NgxSmartModalComponent } from 'ngx-smart-modal';
+import { IOnboardingContent } from '@nusantara/models';
 
 @Component({
   selector: 'nus-onboarding-preview-host-dialog',
@@ -26,14 +26,14 @@ import {IOnboardingContent} from "@nusantara/models";
           </div>
           <div class="slider">
             <input type="radio" name="slider-radio" *ngFor="let formControl of form.controls; let i=index"
-                   [value]="i" [checked]="i === position" [disabled]="true">
+                   [value]="i" [checked]="i === position" (click)="changePosition(i)">
           </div>
           <div class="action-button">
             <button type="button" class="button-action" *ngIf="getContentButtonStatus(form.controls[position])"
                     (click)="executeButtonAction(form.controls[position])">
               {{ getContentButtonText(form.controls[position]) }}
             </button>
-            <button (click)="next()" type="button" class="button-next">Selanjutnya</button>
+            <button *ngIf="!getContentButtonStatus(form.controls[position])" (click)="next()" type="button" class="button-next">Selanjutnya</button>
           </div>
         </div>
       </div>
@@ -48,15 +48,14 @@ import {IOnboardingContent} from "@nusantara/models";
     .background-header {
       background: #00AEEF;
       height: 152px;
-      background: #00AEEF;
-      border-radius: 24px 24px 0px 0px;
+      border-radius: 24px 24px 0 0;
       padding: 10px;
     }
 
     .body {
       background: #FFFFFF;
-      padding: 20px 0px;
-      border-radius: 0px 0px 24px 24px;
+      padding: 20px 0;
+      border-radius: 0 0 24px 24px;
       height: 361px;
       display: flex;
       justify-content: center;
@@ -69,30 +68,54 @@ import {IOnboardingContent} from "@nusantara/models";
 
     .body .content {
       position: absolute;
-      top: 80px;
+      top: 100px;
     }
 
     .body .content .content-img {
       height: 184px;
+      margin-bottom: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .body .content .slider {
-      padding-bottom: 20px;
+      padding-bottom: 6px;
     }
 
     .body .content .content-value {
-      padding: 0px 20px;
-      height: 160px;
+      padding: 0 20px;
+      height: 140px;
       width: auto;
+    }
+
+    h1 {
+      font-size: 24px;
+    }
+
+    .body .content .content-value label {
+      padding: 0 20px;
     }
 
     .body .content .content-img img {
       max-height: 184px;
-      max-width: 295px;
+      max-width: 70%;
     }
 
-    .slider input {
-      width: 30px;
+    input[type="radio"] {
+      width: 9px;
+      height: 9px;
+      background-color: var(--bc, var(--border));
+    }
+
+    input[type="radio"]:after {
+      width: 11px;
+      height: 11px;
+      background-color: #EFB103;
+    }
+
+    .slider input+input {
+      margin-left: 8px;
     }
 
     ::ng-deep .nsm-dialog {
@@ -103,17 +126,24 @@ import {IOnboardingContent} from "@nusantara/models";
       top: 25px;
       right: 30px;
     }
+
     ::ng-deep .content-container .nsm-content {
       background-color: transparent;
       width: 800px;
       box-shadow: none;
     }
 
+    input[type="radio"]:after {
+      transform: none;
+    }
+
     .button-action {
       width: 208px;
-      padding: 20px;
+      height: 47px;
       background: #F0BE00;
       border-radius: 40px;
+      border: none;
+      color: white;
     }
 
     .button-next {
@@ -121,12 +151,13 @@ import {IOnboardingContent} from "@nusantara/models";
       height: 47px;
       background: #00AEEF;
       border-radius: 40px;
+      border: none;
+      color: white;
     }
   `]
 })
 export class OnboardingPreviewHostDialogComponent extends AbstractEditingComponent<FormArray> implements OnInit,
-  AfterViewInit
-{
+  AfterViewInit {
   @Input() form: FormArray;
   @ViewChild('modal') modal: NgxSmartModalComponent;
 
@@ -155,7 +186,7 @@ export class OnboardingPreviewHostDialogComponent extends AbstractEditingCompone
   addContent(content?: IOnboardingContent) {
     const form = this.fb.group({
       href: [content?.href ?? '', []],
-      image: [content?.image, content?.image ? []: [Validators.required]],
+      image: [content?.image, content?.image ? [] : [Validators.required]],
       name: [content?.name, [Validators.required, Validators.maxLength(50)]],
       description: [content?.description, [Validators.maxLength(255)]],
       buttonStatus: [content?.buttonStatus ?? false, []],
@@ -176,35 +207,35 @@ export class OnboardingPreviewHostDialogComponent extends AbstractEditingCompone
     this.modal.close();
   }
 
-  getContentName(formControl?: AbstractControl) : string {
+  getContentName(formControl?: AbstractControl): string {
     if (!!formControl) {
       return formControl.value.name;
     }
     return '';
   }
 
-  getContentDescription(formControl?: AbstractControl) : string {
+  getContentDescription(formControl?: AbstractControl): string {
     if (!!formControl) {
       return formControl.value.description;
     }
     return '';
   }
 
-  getContentImage(formControl?: AbstractControl) : string {
+  getContentImage(formControl?: AbstractControl): string {
     if (!!formControl && !!formControl.get('image')) {
       this.setImagePreview(formControl.value.image);
     }
     return this.imagePreviewUrl;
   }
 
-  getContentButtonStatus(formControl?: AbstractControl) : boolean {
+  getContentButtonStatus(formControl?: AbstractControl): boolean {
     if (!!formControl && !!formControl.value.buttonStatus) {
       return true;
     }
     return false;
   }
 
-  getContentButtonText(formControl?: AbstractControl) : string {
+  getContentButtonText(formControl?: AbstractControl): string {
     if (!!formControl && !!formControl.get('buttonText')) {
       return formControl.value.buttonText;
     }
@@ -220,6 +251,10 @@ export class OnboardingPreviewHostDialogComponent extends AbstractEditingCompone
     if (this.position < (this.form.controls.length - 1)) {
       this.position += 1;
     }
+  }
+
+  changePosition(i:number) {
+    this.position = i;
   }
 
   setImagePreview(data: Event | string) {

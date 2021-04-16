@@ -12,7 +12,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DialogResult, ToastLevelEnum, ToastService } from '@nusantara/core';
-import { IShopAttribute, ISelectedCategory } from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import { MarketplaceShopService } from '@nusantara/services';
 import { ConfirmModalComponent } from '@nusantara/shared/confirm-modal.component';
 import { SubFormComponent } from './sub-form.component';
@@ -21,7 +21,7 @@ import { SubFormComponent } from './sub-form.component';
   selector: 'nus-attribute-selection-form',
   template: `
     <nus-spinner [appBusy]="isBusy"></nus-spinner>
-    
+
     <form [formGroup]="form">
       <div class="wrapper">
         <h1 class="heading-1">Choose Attribute (2/3)</h1>
@@ -30,7 +30,7 @@ import { SubFormComponent } from './sub-form.component';
         <div class="form">
           <label>
             <span>{{ currentShop }} Category</span>
-            <p>{{ categoryNames }}</p>          
+            <p>{{ categoryNames }}</p>
           </label>
 
           <label class="attributes">
@@ -38,7 +38,7 @@ import { SubFormComponent } from './sub-form.component';
             <div *ngIf="mandatoryAttributes">
               <p>Mandatory</p>
               <div class="checkboxes">
-                <div *ngFor="let attr of mandatories.controls; let i = index">  
+                <div *ngFor="let attr of mandatories.controls; let i = index">
                   <input type="checkbox" [formControl]="attr" formArrayName="mandatories"/>
                   <span>{{ mandatoryAttributes[i].name }}</span>
                 </div>
@@ -57,7 +57,7 @@ import { SubFormComponent } from './sub-form.component';
               </div>
             </div>
           </label>
-          
+
         </div>
       </div>
 
@@ -78,7 +78,7 @@ import { SubFormComponent } from './sub-form.component';
     '.form { margin-top: 20px; }',
     'label { margin: 0; padding: 0; min-height: 0; }',
     'label.attributes { margin-top: 19px; }',
-    `.checkboxes { 
+    `.checkboxes {
       width: 40vw;
       margin-top: 8px;
       margin-bottom: 20px;
@@ -109,21 +109,21 @@ export class AttributeSelectionFormComponent
   confirmModal: ConfirmModalComponent;
 
   @Input() state: any;
-  @Input() category: ISelectedCategory;
+  @Input() category: marketplace.ISelectedCategory;
   @Input() currentShop: string;
   @Output() previous = new EventEmitter<boolean>();
   @Output() next = new EventEmitter<any>();
   @Output() saveNoAttr = new EventEmitter<any>();
-  @Output() selectedAttribute = new EventEmitter<IShopAttribute[]>();
- 
+  @Output() selectedAttribute = new EventEmitter<marketplace.IShopAttribute[]>();
+
   shopSlug: string;
-  marketplaceAttributes: IShopAttribute[];
-  mandatoryAttributes: IShopAttribute[];
-  optionalAttributes: IShopAttribute[];
+  marketplaceAttributes: marketplace.IShopAttribute[];
+  mandatoryAttributes: marketplace.IShopAttribute[];
+  optionalAttributes: marketplace.IShopAttribute[];
   form: FormGroup;
   categoryId: number;
   categoryNames: string;
-  selectedCategory: ISelectedCategory = null;
+  selectedCategory: marketplace.ISelectedCategory = null;
   isBusy: boolean;
 
   constructor(
@@ -141,8 +141,8 @@ export class AttributeSelectionFormComponent
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    const currValue: ISelectedCategory = changes.category.currentValue;
-    const prevValue: ISelectedCategory = changes.category.previousValue;
+    const currValue: marketplace.ISelectedCategory = changes.category.currentValue;
+    const prevValue: marketplace.ISelectedCategory = changes.category.previousValue;
     this.categoryId = currValue?.deepestChildId;
 
     if (currValue && (JSON.stringify(currValue) !== JSON.stringify(prevValue))) {
@@ -150,12 +150,12 @@ export class AttributeSelectionFormComponent
       this.service
         .fetchAttribute(this.shopSlug, currValue.deepestChildId)
         .subscribe(
-          (attributes: IShopAttribute[]) => {
-            
+          (attributes: marketplace.IShopAttribute[]) => {
+
             // if attributes from marketplace not empty
-            if(attributes) {
+            if (attributes) {
               [
-                this.mandatoryAttributes, 
+                this.mandatoryAttributes,
                 this.optionalAttributes,
               ] = attributes.reduce(
                 ([mandatories, optionals], attr) => {
@@ -220,7 +220,7 @@ export class AttributeSelectionFormComponent
     );
   }
 
-  buildCheckboxes(attributes: IShopAttribute[]) {
+  buildCheckboxes(attributes: marketplace.IShopAttribute[]) {
     const arr = attributes.map((attr) => {
       return this.fb.control(attr.isMandatory);
     });

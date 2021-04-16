@@ -49,13 +49,13 @@ const log = new Logger('ProductPromotionComponent');
       <div class="promo-date">
         <label class="promo-date-label">
           <span class="subtitle">Valid From</span>
-          <input type="datetime-local" [formControl]="validFrom">
+          <nus-field-datetime [control]="validFrom"></nus-field-datetime>
           <nus-field-errors [control]="validFrom"></nus-field-errors>
         </label>
 
         <label class="promo-date-label">
           <span class="subtitle">Valid To</span>
-          <input type="datetime-local" [formControl]="validTo">
+          <nus-field-datetime [control]="validTo"></nus-field-datetime>
           <nus-field-errors [control]="validTo"></nus-field-errors>
         </label>
       </div>
@@ -194,6 +194,18 @@ const log = new Logger('ProductPromotionComponent');
         <nus-field-errors [control]="multiplyItem"></nus-field-errors>
       </label>
 
+      <label *ngIf="!isPromoBundling" class="promo-platform">
+        <span class="subtitle">Platform</span>
+        <label class="checkbox">
+          <input type="checkbox" [formControl]="appliedOnOnline" name="appliedOnOnline">
+          <span>Online (Website)</span>
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" [formControl]="appliedOnOffline" name="appliedOnOffline">
+          <span>Offline (POS)</span>
+        </label>
+      </label>
+
       <label class="checkbox">
         <span class="subtitle">Priority</span>
         <input type="number" [formControl]="priority">
@@ -316,6 +328,8 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
       maxAmount: [entity?.maxAmount ?? 1, [Validators.required, Validators.min(0)]],
       isExclusive: [entity?.isExclusive ?? false, [Validators.required]],
       isActive: [entity?.isActive ?? true, [Validators.required]],
+      appliedOnOnline: [entity?.appliedOnOnline ?? false, []],
+      appliedOnOffline: [entity?.appliedOnOffline ?? false, []],
       validFrom: [this.convertDateTime(entity?.validFrom), [Validators.required]],
       validTo: [this.convertDateTime(entity?.validTo), []],
       priority: [entity?.priority ?? 1, [Validators.required]],
@@ -331,6 +345,8 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     this.form.controls.isExclusive.markAsTouched();
     this.form.controls.isActive.markAsTouched();
     this.form.controls.multiplyItem.markAsTouched();
+    this.form.controls.appliedOnOnline.markAsTouched();
+    this.form.controls.appliedOnOffline.markAsTouched();
 
 
     for (const prodBenefit of entity?.productBundlingBenefit ?? []) {
@@ -379,6 +395,8 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
   get validTo(): FormControl { return this.form.get('validTo') as FormControl; }
   get priority(): FormControl { return this.form.get('priority') as FormControl; }
   get isActive(): FormControl { return this.form.get('isActive') as FormControl; }
+  get appliedOnOnline(): FormControl { return this.form.get('appliedOnOnline') as FormControl; }
+  get appliedOnOffline(): FormControl { return this.form.get('appliedOnOffline') as FormControl; }
   get banner(): FormControl { return this.form.get('banner') as FormControl; }
   get productBundlingBenefit(): FormArray { return this.form.get('productBundlingBenefit') as FormArray; }
   get productBundlingCondition(): FormArray { return this.form.get('productBundlingCondition') as FormArray; }

@@ -4,13 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {AbstractDetailComponent, ToastLevelEnum, ToastService} from '@nusantara/core';
 import { MarketplaceClientService } from '@nusantara/services';
 import {MarketplaceClientEnum} from '../markeplace-client-enum';
-import {
-  ILazadaAuthResponse,
-  IMarketplaceWarehouse,
-  IShopeeAuthResponse,
-  ITokopediaAuthResponse,
-  ITokopediaCredential
-} from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
@@ -94,8 +88,7 @@ export class TokopediaClientFormComponent
   form: FormGroup;
   @Input() shopSlug?: string;
   @Input() isEdit: boolean;
-  variantValue : boolean;
-  warehouses: IMarketplaceWarehouse[] = [];
+  warehouses: marketplace.IMarketplaceWarehouse[] = [];
   fsIdInfo = "FS ID is Application ID (APP ID)";
 
   constructor(
@@ -112,7 +105,7 @@ export class TokopediaClientFormComponent
    ngOnInit() {
       this.service
         .getWarehouse(MarketplaceClientEnum.lazada)
-        .subscribe((data: IMarketplaceWarehouse[]) => {
+        .subscribe((data: marketplace.IMarketplaceWarehouse[]) => {
           this.warehouses = data;
         });
 
@@ -138,7 +131,7 @@ export class TokopediaClientFormComponent
     return this.form.get('warehouseId') as FormControl;
   }
 
-  initializeForm(entity?: ITokopediaCredential) {
+  initializeForm(entity?: marketplace.ITokopediaCredential) {
     this.form = this.fb.group({
       partnerId: [entity?.partnerId, [Validators.required, Validators.maxLength(100)]],
       partnerKey: [entity?.partnerKey, [Validators.required,Validators.maxLength(100)]],
@@ -150,7 +143,7 @@ export class TokopediaClientFormComponent
   fillFormDetail(sellerEmail: string) {
     this.service
       .getConnection(sellerEmail)
-      .subscribe((data: ITokopediaAuthResponse) => {
+      .subscribe((data: marketplace.ITokopediaAuthResponse) => {
         if (data != null) {
           this.form.patchValue({
             partnerId: data.partnerId,
@@ -196,7 +189,7 @@ export class TokopediaClientFormComponent
 
   onConnect() {
     this.service.connect(this.getFormValue()).subscribe(
-      (resp: ITokopediaAuthResponse) => {
+      (resp: marketplace.ITokopediaAuthResponse) => {
         this.showSignInWindow(resp);
       },
       (err) => {
@@ -207,7 +200,7 @@ export class TokopediaClientFormComponent
 
   onUpdate() {
     this.service.updateConnection(this.getFormValue(), this.shopSlug).subscribe(
-      (resp: IShopeeAuthResponse) => {
+      (resp: marketplace.ITokopediaAuthResponse) => {
         this.showSignInWindow(resp);
       },
       (err: HttpErrorResponse) => {
@@ -224,19 +217,15 @@ export class TokopediaClientFormComponent
     this.toast?.addMessage(resp.error.message, 'error', ToastLevelEnum.error);
   }
 
-  showSignInWindow(resp: IShopeeAuthResponse) {
+  showSignInWindow(resp: marketplace.ITokopediaAuthResponse) {
     if (!resp.isConnected) {
       this.toast?.addMessage(
-        `Confirm Lazada Authorization Page to grant access. Click refresh when you're done.`,
-        'Log in to your marketplace',
+        `Successfully connected with your Tokopedia Store`,
+        'Connected',
         ToastLevelEnum.info
       );
       window.open(resp.authenticationUrl, '_blank');
     }
     this.onCancel();
-  }
-
-  isSplitValue(event: any) {
-    this.variantValue = event;
   }
 }

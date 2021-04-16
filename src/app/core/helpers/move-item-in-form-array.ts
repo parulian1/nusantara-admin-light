@@ -1,4 +1,4 @@
-import { FormArray } from "@angular/forms";
+import { FormArray } from '@angular/forms';
 
 export function moveItemInFormArray(formArray: FormArray, fromIndex: number, toIndex: number): void {
   const dir = toIndex > fromIndex ? 1 : -1;
