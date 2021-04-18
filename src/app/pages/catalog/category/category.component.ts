@@ -128,8 +128,8 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
   initializeForm(entity?: ICategory) {
     this.form = this.fb.group({
       name: [entity?.name, [Validators.required, Validators.maxLength(50)]],
-      isActive: [entity?.isActive, []],
-      isInterestedCategory: [entity?.isInterestedCategory, []],
+      isActive: [entity?.isActive ?? true, []],
+      isInterestedCategory: [entity?.isInterestedCategory ?? false, []],
       href: [entity?.href, []],
       image: ['', []],
       parent: [{value: entity?.parent ?? null, disabled: !!entity?.href }, []],
