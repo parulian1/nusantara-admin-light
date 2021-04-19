@@ -17,9 +17,10 @@ import {
   OrderCustomPaginationComponent,
   ActivityTrackingModalComponent,
   OrderDateFilterComponent,
-  OrderFiltersComponent
+  OrderFiltersComponent,
+  OrderListHeaderComponent
 } from './orders';
-import { OrderPaymentConfirmComponent, OrderPaymentConfirmDialogComponent } from './orders/containers';
+import { OrderPaymentConfirmComponent, OrderPaymentConfirmDialogComponent } from './orders/payment-confirm';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule} from '@angular/material/datepicker';
@@ -48,9 +49,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     DeliverToCounterManualInputAwbComponent,
     InputAwbModalComponent,
     ActivityTrackingModalComponent,
-    OrderCustomPaginationComponent,
+    OrderListHeaderComponent,
     OrderDateFilterComponent,
-    OrderFiltersComponent
+    OrderFiltersComponent,
+    OrderCustomPaginationComponent,
   ],
   imports: [
     CommonModule,

@@ -9,8 +9,9 @@ import { SvgIconService } from '@nusantara/services';
 @Component({
   selector: 'nus-order-list',
   template: `
-    <nus-list-header title="Order" [canAddNew]="false"></nus-list-header>
-    <nus-order-filters (filterApplied)="onFilterApplied($event)">
+    <nus-order-list-header title="Order"></nus-order-list-header>
+    <nus-order-filters 
+      (filterApplied)="onFilterApplied($event)">
     </nus-order-filters>
     <nus-order-custom-pagination 
       [page]="page" 

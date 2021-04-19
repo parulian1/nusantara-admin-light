@@ -51,8 +51,8 @@ export class OrderReportService {
   getAppliedFilters(filters: IOrderFilterValue) {
     let params: any = {};
     if(filters){
-      if (filters.startDate) params.start_time = filters.startDate;
-      if (filters.endDate) params.end_time = filters.endDate;
+      if (filters.date.start) params.start_time = filters.date.start;
+      if (filters.date.end) params.end_time = filters.date.end;
       if (filters.platform) params.store_id = filters.platform;
       if (filters.status) params.order_status_admin = filters.status;
       if (filters.logistic) params.shipping_method = filters.logistic;

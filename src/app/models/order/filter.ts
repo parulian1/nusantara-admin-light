@@ -10,8 +10,11 @@ export interface IOrderFilter {
 }
 
 export interface IOrderFilterValue {
-  startDate: string,
-  endDate: string,
+  date: {
+    type: string,
+    start: string,
+    end: string,
+  }
   platform: number,
   status: string,
   logistic: string,

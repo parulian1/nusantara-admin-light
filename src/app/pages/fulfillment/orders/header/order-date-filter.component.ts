@@ -1,4 +1,4 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
 import {
@@ -88,9 +88,9 @@ const apiDateFormat = "YYYY-MM-DDTHH:mm:ss";
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-error *ngIf="date.value === 'customRange' && customRange.errors?.range">Allowed range are within 14 days</mat-error>
-    <mat-error *ngIf="date.value === 'customRange' && customRange.errors?.empty">Start date and end date on custom range cannot be empty</mat-error>
-  </div>`,
+    <mat-error *ngIf="date.value === 'customRange' && customRange.errors?.empty">Please select start date and end date.</mat-error>
+  </div>
+  `,
   styles: [
     '.select-date { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 20px; }',
     `.svg {
@@ -110,7 +110,7 @@ const apiDateFormat = "YYYY-MM-DDTHH:mm:ss";
   ],
 })
 export class OrderDateFilterComponent implements OnInit {
-  @Output() selectedDate = new EventEmitter<{startDate: string; endDate: string}>();
+  @Output() selectedDate = new EventEmitter<{type: string, startDate: string; endDate: string}>();
 
   date = new FormControl("allDate");
   customDate = new FormControl();
@@ -118,7 +118,7 @@ export class OrderDateFilterComponent implements OnInit {
     start: new FormControl(''),
     end: new FormControl('')
   }, {
-    validators: this.dateRangeValidator(14)
+    validators: this.dateRangeValidator()
   });
 
   readonly today = this.setTimeToZero(moment());
@@ -126,7 +126,7 @@ export class OrderDateFilterComponent implements OnInit {
   readonly threeDaysbefore = this.setTimeToZero(moment(moment().subtract(3, "days")));
   readonly sevenDaysbefore = this.setTimeToZero(moment(moment().subtract(7, "days")));
 
-  constructor(public route: ActivatedRoute) {}
+  constructor(public route: ActivatedRoute, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.route.queryParamMap.subscribe((value) => {
@@ -148,44 +148,46 @@ export class OrderDateFilterComponent implements OnInit {
           } else if (startTime === this.sevenDaysbefore) {
             this.date.setValue("last7Days");
           } else {
-            this.customRange.controls.start.setValue(selectedStartTime);
-            this.customRange.controls.start.setValue(selectedEndTime);
-            this.date.setValue("customRange");
+            this.updateDateRangeForm(selectedStartTime, selectedEndTime);
           }
         } else if (moment(endTime).diff(moment(startTime), "days") === 1) {
           this.customDate.setValue(selectedStartTime);
           this.date.setValue("customDate");
         } else {
-          this.customRange.controls.start.setValue(selectedStartTime);
-          this.customRange.controls.end.setValue(selectedEndTime);
-          this.date.setValue("customRange");
+          this.updateDateRangeForm(selectedStartTime, selectedEndTime);
         }
       }
     });
   }
 
   onDateOptionsSelected(event: MatSelectChange) {
+    this.resetDatePicker();
+    this.resetDateRangePicker();
+
     switch (event.value) {
       case "allDate":
-        this.selectedDate.emit({startDate: null, endDate: null})
+        this.selectedDate.emit({type: 'allDate', startDate: null, endDate: null})
         break;
       case "today":
-        this.selectedDate.emit({startDate: this.today, endDate: this.today})
+        this.selectedDate.emit({type: 'today', startDate: this.today, endDate: this.today})
         break;
       case "yesterday":
         this.selectedDate.emit({
+          type: 'yesterday',
           startDate: this.yesterday,
           endDate: this.today,
         });
         break;
       case "last3Days":
         this.selectedDate.emit({
+          type: 'last3Days',
           startDate: this.threeDaysbefore,
           endDate: this.today,
         });
         break;
       case "last7Days":
         this.selectedDate.emit({
+          type: 'last7Days',
           startDate: this.sevenDaysbefore,
           endDate: this.today,
         });
@@ -197,14 +199,16 @@ export class OrderDateFilterComponent implements OnInit {
 
   onCustomDateFilterChange() {
     this.selectedDate.emit({
+      type: 'customDate',
       startDate: moment(this.customDate.value).format(apiDateFormat),
       endDate: moment(this.customDate.value).add(24, 'hours').format(apiDateFormat)
     });
   }
 
   onCustomDateRangeEndChange() {
-    if(!!this.customRange.get('start').value && !!this.customRange.get('end').value){
+    if(this.customRange.valid){
       this.selectedDate.emit({
+        type: 'customRange',
         startDate: moment(this.customRange.get('start').value).format(apiDateFormat),
         endDate: moment(this.customRange.get('end').value).format(apiDateFormat)
       });
@@ -221,16 +225,12 @@ export class OrderDateFilterComponent implements OnInit {
     return date;
   }
 
-  dateRangeValidator(maxDiff: number) {
+  dateRangeValidator() {
     return (fg: FormGroup) => {
       const start = fg.get("start").value;
       const end = fg.get("end").value;
 
-      if (start !== null && end !== null) {
-        return moment(end).diff(moment(start), "days") <= maxDiff
-          ? null
-          : { range: true };
-      } else {
+      if (start === null || end === null) {
         return { empty: true };
       }
     };
@@ -249,5 +249,19 @@ export class OrderDateFilterComponent implements OnInit {
     const text = document.createTextNode("*Select up to 14 days");
     footer.appendChild(text);
     matCalendar.appendChild(footer);
+  }
+
+  resetDatePicker(){
+    this.customDate.reset();
+  }
+
+  resetDateRangePicker(){
+    this.customRange.reset();
+  }
+
+  updateDateRangeForm(start: Date, end: Date){
+    this.customRange.controls.start.setValue(start);
+    this.customRange.controls.end.setValue(end);
+    this.date.setValue("customRange");
   }
 }

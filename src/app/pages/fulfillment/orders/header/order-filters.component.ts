@@ -77,8 +77,11 @@ export class OrderFiltersComponent implements OnInit {
 
   filtersForm: FormGroup;
   filtersValue: IOrderFilterValue = {
-    startDate: null,
-    endDate: null,
+    date : {
+      type: null,
+      start: null,
+      end: null,
+    },
     platform: null,
     status: null,
     logistic: null,
@@ -107,44 +110,46 @@ export class OrderFiltersComponent implements OnInit {
     this.initializeForm();
 
     this.route.queryParamMap.subscribe((value) => {
-      const startTime = value.get(this.START_TIME_PARAM);
-      const endTime = value.get(this.END_TIME_PARAM);
+      const startTime = moment(value.get(this.START_TIME_PARAM)).isValid
+      ? value.get(this.START_TIME_PARAM)
+      : null;
+      
+      const endTime = moment(value.get(this.END_TIME_PARAM)).isValid
+      ? value.get(this.END_TIME_PARAM)
+      : null;
 
       const platform = value.get(this.PLATFORM_PARAM)
       ? this.getValidOption(
           +value.get(this.PLATFORM_PARAM),
           this.orderFilter.platform
         )
-      : "";
+      : null;
 
       const status =  value.get(this.STATUS_PARAM)
       ? this.getValidOption(
           value.get(this.STATUS_PARAM),
           this.orderFilter.orderStatus
         )
-      : "";
+      : null;
 
       const logistic = value.get(this.LOGISTIC_PARAM)
       ? this.getValidOption(
           decodeURI(value.get(this.LOGISTIC_PARAM)),
           this.orderFilter.logistics
         )
-      : "";
-
-      const q = value.get('q');
-
-      if (startTime && endTime && moment(startTime).isValid && moment(endTime).isValid) {
-        this.updateDate(startTime, endTime);
-      }
-      if(platform){ this.updatePlatform(platform); }
-      if(status){ this.updateStatus(status); }
-      if(logistic){ this.updateLogistic(logistic); }
-      if(q){ this.updateQuery(q); }
+      : null;
+      const q = value.get('q')? value.get('q') : null;
       
+      this.updateDate(startTime, endTime);
+      this.updatePlatform(platform)
+      this.updateStatus(status)
+      this.updateLogistic(logistic)
+      this.updateQuery(q);
+       
       this.filtersForm.patchValue({
-        platform: platform,
-        status: status,
-        logistic: logistic,
+        platform: platform? platform : '',
+        status: status? status : '',
+        logistic: logistic? logistic: '',
       });
 
       this.filtersForm.valueChanges.subscribe((newValue) => {
@@ -169,15 +174,20 @@ export class OrderFiltersComponent implements OnInit {
     })
   }
 
-  onSelectedDateChanged(selectedDate: { startDate: string; endDate: string }) {
-    if(selectedDate.startDate){
-      this.filtersValue.startDate = selectedDate.startDate;
+  onSelectedDateChanged(selectedDate: { type: string, startDate: string; endDate: string }) {
+    if(selectedDate){
+      this.filtersValue.date.type = selectedDate.type;
+      if(selectedDate.startDate){
+        this.filtersValue.date.start = selectedDate.startDate;
+      }
+      if(selectedDate.endDate){
+        this.filtersValue.date.end = selectedDate.startDate;
+      }
+    } else {
+      this.filtersValue.date = null;
     }
-    if(selectedDate.endDate){
-      this.filtersValue.endDate = selectedDate.endDate;
-    }
-    this.filterApplied.next(this.filtersValue);
 
+    this.filterApplied.next(this.filtersValue);
     this.updateRoute({
       start_time: selectedDate.startDate,
       end_time: selectedDate.endDate,
@@ -198,8 +208,8 @@ export class OrderFiltersComponent implements OnInit {
   }
 
   updateDate(startDate: string, endDate: string) {
-    this.filtersValue.startDate = startDate;
-    this.filtersValue.endDate = endDate;
+    this.filtersValue.date.start = startDate;
+    this.filtersValue.date.end = endDate;
     this.filterApplied.next(this.filtersValue)    
   }
   updatePlatform(platform: number) {
