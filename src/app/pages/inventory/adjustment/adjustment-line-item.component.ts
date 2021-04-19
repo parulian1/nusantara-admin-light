@@ -26,16 +26,18 @@ import { getSlugFromHref } from '@nusantara/core';
       </td>
 
       <td>
-        <input type="number" [formControl]="adjustmentQuantity" (keyup)="onKeyUpAdjustment()" data-qa="adjusted-qty">
+        <input type="number" [formControl]="differenceQty" (keyup)="onKeyUpDifferentQty()" data-qa="adjusted-qty">
       </td>
 
       <td>
         <div style="display: flex; justify-items: center; align-items: center;">
-          <div>
-            <input type="text" [formControl]="differenceQty" data-qa="difference-qty" readonly><br />
-            <div style="color: red; font-size: 0.7rem;" *ngIf="differenceQty.errors">
-              <div *ngIf="differenceQty.hasError('max')">max 32767</div>
-              <div *ngIf="differenceQty.hasError('min')">min 32767</div>
+          <div style="position: relative;">
+            <input type="text" [formControl]="adjustmentQuantity" data-qa="difference-qty" readonly><br />
+            <div
+              *ngIf="adjustmentQuantity.errors"
+              style="color: red; position: absolute; bottom: -1.1rem;">
+              <span *ngIf="adjustmentQuantity.hasError('min')">min -32767</span>
+              <span *ngIf="adjustmentQuantity.hasError('max')">max 32767</span>
             </div>
           </div>
         </div>
@@ -80,12 +82,9 @@ export class AdjustmentLineItemComponent implements OnInit, AfterViewInit {
 
   @Output() remove = new EventEmitter<void>();
 
-  signDifferentQty: string;
-
   constructor(
     public route: ActivatedRoute,
     public router: Router,
-    private inventoryAdjustmentService: InventoryAdjustmentOrderService,
   ) { }
 
   get displayedName(): string {
@@ -101,10 +100,8 @@ export class AdjustmentLineItemComponent implements OnInit, AfterViewInit {
   get receivingOrder(): FormControl { return this.form.get('receivingOrder') as FormControl; }
 
   get originalQuantity(): FormControl { return this.form.get('originalQuantity') as FormControl; }
-
-  // difference = adjustmentQty, adjustment qty = adjustedQty
-  get differenceQty(): FormControl { return this.form.get('adjustmentQuantity') as FormControl; }
-  get adjustmentQuantity(): FormControl { return this.form.get('differenceQty') as FormControl; }
+  get adjustmentQuantity(): FormControl { return this.form.get('adjustmentQuantity') as FormControl; }
+  get differenceQty(): FormControl { return this.form.get('differenceQty') as FormControl; }
 
   get created(): FormControl { return this.form.get('created') as FormControl; }
   get reason(): FormControl { return this.form.get('reason') as FormControl; }
@@ -116,22 +113,15 @@ export class AdjustmentLineItemComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void { }
 
-  onKeyUpAdjustment(): void {
+  onKeyUpDifferentQty(): void {
     this.calculateDifferentQty();
   }
 
   calculateDifferentQty(): void {
-    const differentQty = parseInt(this.adjustmentQuantity.value || this.originalQuantity.value, 10)
-      - parseInt(this.originalQuantity.value, 10);
-
-    this.differenceQty.setValue(differentQty || 0, { onlySelf: true });
-
-    if (Math.sign(differentQty) === 0) {
-      this.signDifferentQty = '';
-    } else if (Math.sign(differentQty) === 1) {
-      this.signDifferentQty = '(+)';
-    } else {
-      this.signDifferentQty = '(-)';
+    let differentQty = 0;
+    if (this.differenceQty.value !== null) {
+      differentQty = +this.differenceQty.value - +this.originalQuantity.value;
     }
+    this.adjustmentQuantity.setValue(differentQty);
   }
 }
