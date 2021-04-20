@@ -48,7 +48,7 @@ import { takeUntil } from 'rxjs/operators';
                 Klik Disini
               </a>
             </td>
-            <td>
+            <td class="button-action">
               <button
                 type="button"
                 class="control"
@@ -91,6 +91,7 @@ import { takeUntil } from 'rxjs/operators';
         margin-top: 1rem;
       }
     `,
+    'td.button-action { display: flex; }',
   ],
 })
 export class OrderPaymentConfirmComponent implements OnInit, OnDestroy {

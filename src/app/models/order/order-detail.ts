@@ -35,6 +35,9 @@ export interface IOrderDetail extends ICoreOrder {
     zipcode: string;
   };
 
+  source: string;
+  sourceName: string;
+
   subtotalCost: number;
   discount: number;
   shippingCost: number;

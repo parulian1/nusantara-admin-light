@@ -76,6 +76,7 @@
  * ---------------------
  * Site-wide styling -- not specific to any single type of page
  */
+html, body { height: 100%; }
 html {
   scroll-behavior: smooth;
 }
@@ -205,146 +206,6 @@ input.ng-untouched {
 ::placeholder {
   color: var(--grey);
   opacity: 1;
-}
-
-/** Custom input for checkbox, radio and toggle **/
-@supports (-webkit-appearance: none) or (-moz-appearance: none) {
-  input[type="checkbox"], input[type="radio"] {
-    --active: var(--secondary);
-    --active-inner: var(--white);
-    --focus: 1px rgba(39, 94, 254, 0.3);
-    --border: var(--grey);
-    --border-hover: var(--input-hover-color);
-    --background: var(--white);
-    --disabled: var(--darken-white);
-    --disabled-inner: var(--lighten-grey);
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    outline: none;
-    display: inline-block;
-    vertical-align: top;
-    position: relative;
-    margin: 0;
-    cursor: pointer;
-    border: 1px solid var(--bc, var(--border));
-    background: var(--b, var(--background));
-    transition: background 0.3s, border-color 0.3s, box-shadow 0.2s;
- }
-  input[type="checkbox"]:after, input[type="radio"]:after {
-    content: "";
-    display: block;
-    position: absolute;
-    transition: transform var(--d-t, 0.3s) var(--d-t-e, ease), opacity var(--d-o, 0.2s);
- }
-  input[type="checkbox"]:checked, input[type="radio"]:checked {
-    --b: var(--active);
-    --bc: var(--active);
-    --d-o: 0.3s;
-    --d-t: 0.6s;
-    --d-t-e: cubic-bezier(0.2, 0.85, 0.32, 1.2);
- }
-  input[type="checkbox"]:disabled, input[type="radio"]:disabled {
-    cursor: not-allowed;
-    opacity: 0.9;
- }
-  input[type="checkbox"]:hover:not(:checked):not(:disabled), input[type="radio"]:hover:not(:checked):not(:disabled) {
-    --bc: var(--border-hover);
- }
-  input[type="checkbox"]:focus, input[type="radio"]:focus {
-    box-shadow: 0 0 0 var(--focus);
- }
-  input[type="checkbox"]:not(.toggle):after, input[type="radio"]:not(.toggle):after {
-    opacity: var(--o, 0);
- }
-  input[type="checkbox"]:not(.toggle):checked, input[type="radio"]:not(.toggle):checked {
-    --o: 1 !important;
- }
-  input[type="checkbox"]:not(.toggle) {
-    top: 2px;
-    width: 16px;
-    height: 16px;
-    margin-right: 13.5px;
- }
-  input[type="checkbox"]:not(.toggle):after {
-    width: 4px;
-    height: 9px;
-    border: 2px solid var(--active-inner);
-    border-top: 0;
-    border-left: 0;
-    top: 1px;
-    left: 5px;
-    transform: rotate(var(--r, 20deg));
- }
-  input[type="checkbox"]:not(.toggle):checked {
-    --r: 43deg !important;
-    --bc: none !important;
- }
-  input[type="checkbox"]:not(.toggle):disabled:checked {
-    --b: var(--disabled-inner);
-    --bc: var(--border);
- }
-  input[type="checkbox"]:not(.toggle):disabled:checked:after {
-    top: 1px;
-    left: 4px;
- }
-  input[type="checkbox"].toggle {
-    top: 4px;
-    left: 2px;
-    width: 34px;
-    height: 14px;
-    border-radius: 11px;
-    border: none;
-    background: var(--lighten-grey) !important;
- }
-  input[type="checkbox"].toggle:after {
-    top: -3px;
-    left: -3px;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    background: var(--disabled);
-    transform: translateX(var(--x, 0));
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.16), 0px -2px 6px rgba(0, 0, 0, 0.08);
- }
-  input[type="checkbox"].toggle:checked {
-    --x: 19px;
-    background: rgba(255, 125, 9, 0.5) !important;
- }
-  input[type="checkbox"].toggle:not([disabled]):checked:after {
-    background: var(--active);
- }
-  input[type="checkbox"].toggle:disabled {
-    background: var(--disabled-inner) !important;
- }
-  input[type="checkbox"].toggle:disabled:after {
-    background: var(--border);
- }
-  input[type="radio"] {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    border: 2px solid var(--bc, var(--border));
-    background: var(--active-inner);
- }
-  input[type="radio"]:after {
-    width: 20px;
-    height: 20px;
-    top: -3px;
-    left: -3px;
-    border-radius: 50%;
-    background: var(--active);
-    opacity: 0;
-    transform: scale(var(--s, 0.7));
- }
-  input[type="radio"]:checked {
-    --s: 0.5;
- }
-  input[type="radio"]:disabled {
-    border: 2px solid var(--border);
- }
-  input[type="radio"]:disabled:after {
-    background: var(--border);
- }
 }
 
 /* For input fields that should immediately show when they are invalid */
@@ -589,7 +450,7 @@ button.control, a.control {
   font-weight: bold;
   font-size: 1em;
   text-decoration: none;
-  height: 40px;
+  min-height: 40px;
   min-width: 120px;
   line-height: 31px;
   box-sizing: border-box;
@@ -797,6 +658,10 @@ button.control:hover:not([disabled]), a.control:hover:not([disabled]), a.control
 
 .wide-modal.nsm-dialog {
   max-width: 684px;
+}
+
+.medium-modal.nsm-dialog {
+  max-width: 566px;
 }
 
 .no-padding-modal .nsm-body {

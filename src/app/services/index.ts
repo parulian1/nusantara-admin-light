@@ -39,6 +39,8 @@ export * from './google.service';
 
 export * from './order.service';
 export * from './order-payment-confirm.service';
+export * from './order-report.service';
+export * from './order-download-file.service';
 export * from './review.service';
 
 export * from './reporting.service';
@@ -80,3 +82,5 @@ export * from './marketplace-item.service';
 export * from './local-storage.service';
 
 export * from './onboarding.service';
+
+export * from './svg-icon.service';
