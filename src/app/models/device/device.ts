@@ -8,4 +8,6 @@ export interface IDevice extends IHrefEntity{
   warehouse: INamedHrefEntity;
   data: IDeviceData;
   isApproved: boolean;
+  notes: string;
+  created: string;
 }
