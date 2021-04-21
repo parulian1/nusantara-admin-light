@@ -1,4 +1,4 @@
-import { INamedHrefEntity, ISiteConfigExtra, ISocialMedia } from '@nusantara/models';
+import {ICompanyAddress, INamedHrefEntity, ISiteConfigExtra, ISocialMedia} from '@nusantara/models';
 
 export interface ISiteConfig extends INamedHrefEntity {
   logo?: string;
@@ -10,4 +10,7 @@ export interface ISiteConfig extends INamedHrefEntity {
   extraConfig: ISiteConfigExtra;
   socialMedias: ISocialMedia[];
   licenseType?: string;
+  companyName?: string;
+  phoneNumber?: string;
+  companyAddress?: ICompanyAddress;
 }
