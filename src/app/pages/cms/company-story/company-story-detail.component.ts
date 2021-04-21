@@ -25,7 +25,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 
       <label>
         <span>Description</span>
-        <input type="text" [formControl]="description" name="description">
+        <textarea type="text" [formControl]="description" name="description"></textarea>
         <nus-field-errors [control]="description"></nus-field-errors>
       </label>
 
@@ -37,7 +37,7 @@ import {ActivatedRoute, Router} from '@angular/router';
       <label>
         <span>Image</span>
         <img [src]="imageData.base64 || imageData.url" alt="Company Story Picture" class="preview">
-        <small>Recommended: A size</small>
+        <small>Recommended: Format .jpg, Size min 540px x 402px, file size max. 500kb</small>
         <input type="file"
                [formControl]="image"
                (change)="setImageFromEvent($event)"
