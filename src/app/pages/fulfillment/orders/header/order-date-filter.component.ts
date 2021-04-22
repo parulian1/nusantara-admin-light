@@ -135,7 +135,7 @@ export class OrderDateFilterComponent implements OnInit {
 
       if (startTime && endTime && moment(startTime).isValid && moment(endTime).isValid) {
         const selectedStartTime = moment(startTime, apiDateFormat).toDate();
-        const selectedEndTime = moment(startTime, apiDateFormat).toDate();
+        const selectedEndTime = moment(endTime, apiDateFormat).toDate();
 
         // today - last 7 days
         if (endTime === this.today) {
@@ -150,7 +150,7 @@ export class OrderDateFilterComponent implements OnInit {
           } else {
             this.updateDateRangeForm(selectedStartTime, selectedEndTime);
           }
-        } else if (moment(endTime).diff(moment(startTime), "days") === 1) {
+        } else if (moment(endTime).diff(moment(startTime), "days") === 0) {
           this.customDate.setValue(selectedStartTime);
           this.date.setValue("customDate");
         } else {
@@ -201,7 +201,7 @@ export class OrderDateFilterComponent implements OnInit {
     this.selectedDate.emit({
       type: 'customDate',
       startDate: moment(this.customDate.value).format(apiDateFormat),
-      endDate: moment(this.customDate.value).add(24, 'hours').format(apiDateFormat)
+      endDate: moment(this.customDate.value).format(apiDateFormat)
     });
   }
 

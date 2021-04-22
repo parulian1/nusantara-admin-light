@@ -7,6 +7,7 @@ import {
 import {
   OrderPaymentConfirmService,
   PaymentGatewayService,
+  SvgIconService,
 } from '@nusantara/services';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { Subject } from 'rxjs';
@@ -15,20 +16,20 @@ import { takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'nus-order-confirm',
   template: `
-    <div class="payment-confirm--actions">
-      <button (click)="openModal()" class="control" [disabled]="!canDoCRUD()">Create New</button>
-    </div>
-
-    <div class="payment-confirm--list">
+    <div class="wrapper">
+      <button (click)="openModal()" class="control add-payment-confirm" [disabled]="!canDoCRUD()">
+        <i class="material-icons">add</i>Add
+      </button>
       <table>
         <thead>
           <tr>
-            <th>Date</th>
             <th>Sender Name</th>
-            <th>Amount Transfer</th>
+            <th class="numeric">Date</th>
+            <th class="numeric">Transfer Amount</th>
             <th>Payment To</th>
             <th>Receipt File</th>
             <th>Action</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -37,33 +38,31 @@ import { takeUntil } from 'rxjs/operators';
           </tr>
 
           <tr *ngFor="let paymentConfirm of paymentConfirms">
-            <td>
+            <td>{{ paymentConfirm.shippingName }}</td>
+            <td class="numeric">
               {{ paymentConfirm.orderDate | date: "dd/MM/yyyy HH:mm:ss" }}
             </td>
-            <td>{{ paymentConfirm.shippingName }}</td>
-            <td>{{ paymentConfirm.transferAmount }}</td>
+            <td class="numeric">{{ paymentConfirm.transferAmount | currency: "IDR" }}</td>
             <td>{{ paymentConfirm.paymentGateway.accountHoldNumber }}</td>
             <td>
               <a href="{{ paymentConfirm.proofImage }}" target="_blank">
-                Klik Disini
+                Click Here
               </a>
             </td>
-            <td class="button-action">
-              <button
-                type="button"
-                class="control"
+            <td>
+              <a
                 (click)="openModal(paymentConfirm)"
-                [disabled]="!canDoCRUD()"
-              >
-                Edit</button
-              >&nbsp;
+                [ngClass]="{'disabled': !canDoCRUD()}">
+                Edit
+              </a>
+            </td>
+            <td>
               <button
                 type="button"
-                class="control ghost"
+                class="delete-button"
                 (click)="onDelete(paymentConfirm)"
-                [disabled]="!canDoCRUD()"
-              >
-                Delete
+                [disabled]="!canDoCRUD()">
+                <mat-icon svgIcon="trash"></mat-icon>
               </button>
             </td>
           </tr>
@@ -81,17 +80,17 @@ import { takeUntil } from 'rxjs/operators';
     </nus-order-payment-confirm-dialog>
   `,
   styles: [
-    `
-      .payment-confirm--actions {
-        margin-top: 1.5rem;
-      }
-      .payment-confirm--actions a {
-      }
-      .payment-confirm--list {
-        margin-top: 1rem;
+    '.wrapper { margin: 16px 0; }',
+    `.add-payment-confirm {
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        margin-left: auto;
+        margin-bottom: 16px;
       }
     `,
-    'td.button-action { display: flex; }',
+    '.add-payment-confirm > i { line-height: 31px; font-size: 20px; }',
+    '.delete-button { background: none; border: none; }'
   ],
 })
 export class OrderPaymentConfirmComponent implements OnInit, OnDestroy {
@@ -107,8 +106,11 @@ export class OrderPaymentConfirmComponent implements OnInit, OnDestroy {
   constructor(
     private service: OrderPaymentConfirmService,
     private paymentGatewayService: PaymentGatewayService,
-    public ngxSmartModalService: NgxSmartModalService
-  ) {}
+    public ngxSmartModalService: NgxSmartModalService,
+    svgIconService: SvgIconService, 
+  ) {
+    svgIconService.registerIcons();
+  }
 
   ngOnInit(): void {
     this.service.baseUrl = `/api/order/order/${this.order.orderNumber}/payment-confirm`;

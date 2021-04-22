@@ -64,7 +64,7 @@ import * as moment from 'moment';
         background: var(--darken-white);
         border-top: var(--grey) solid 1px;
       }`,
-    '::ng-deep .mat-menu-panel{min-width: 200px !important; }'
+    '::ng-deep .mat-menu-panel{min-width: 248px !important; }'
   ]
 })
 export class OrderCustomPaginationComponent extends PaginationComponent implements OnInit, OnChanges {
@@ -151,9 +151,9 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
 
       let text = "";
       if (filters.date.type === "allDate") {
-        text = "*Download is limited to last 14 days.";
+        text = "Download is limited to last 14 days.";
       } else if (filters.date.type === "customRange") {
-        text = "*Download is limited to last 14 days since end date.";
+        text = "Download is limited to last 14 days since end date.";
       }
       footer.appendChild(document.createTextNode(text));
       matMenu.appendChild(footer);

@@ -71,16 +71,31 @@ import {
           </td>
         </tr>
         <tr>
-          <td colspan="5">
-            
-          </td>
+          <ng-container *ngIf="canUpdateOrder">
+            <td>
+              <div>
+                <div class="body-2">Status</div>
+                <div class="subheading-2">{{ orderStatusDisplayName }}</div>
+              </div>
+            </td>
+            <td>
+              <button type="submit" class="control confirm-payment">Confirm Payment</button>
+            </td>
+            <td colspan="3">
+              <button class="download-button control secondary" (click)="downloadProductList()">Download Product List</button>
+            </td>
+          </ng-container>
+          <ng-container *ngIf="!canUpdateOrder">
+            <td colspan="5">
+              <button class="download-button control secondary" (click)="downloadProductList()">Download Product List</button>
+            </td>
+          </ng-container>
         </tr>
       </tbody>
     </table>
     </form>
 
-
-    <div class="tab-header">
+    <!-- <div class="tab-header">
       <label [ngClass]="{'active': currentTab === 'orderDetail'}" (click)="currentTab = 'orderDetail'">
         <i class="material-icons">analytics</i>
         <input type="radio" id="tab_summary" value="summary"/>
@@ -94,155 +109,140 @@ import {
         <input type="radio" id="tab_assignment" value="assignment"/>
         Order Confirm
       </label>
-    </div>
+    </div> -->
 
-    <div *ngIf="currentTab === 'orderDetail'" id="orderDetail">
-      <ng-container *ngFor="let children of orderDetailData.children">
-        <table class="order-status">
-          <tbody>
-            <tr>
-              <td>
-                <div class="body-2">Status</div>
-                <div class="subheading-2">{{ (orderDetailData.status ? orderDetailData.status : '-') | titlecase }}</div>
-              </td>
-              <td>
-                <div class="body-2">Logistic</div>
-                <div class="subheading-2">
-                  <ng-container *ngIf="children.data[0]?.shippingMethod">{{ children.data[0].shippingMethod }}</ng-container>
-                </div>
-              </td>
-              <td>
-                <div class="body-2">AWB</div>
-                <div class="subheading-2">
-                  <!-- todo get from shipment API -->
-                </div>
-              </td>
-              <td></td>
-            </tr>
-            <tr>
-              <td colspan="4">
-                <span class="button-status-action">
-                  <nus-milestone [steps]="['ready', 'ship', 'complete']" [current]="currentMilestone"></nus-milestone>
-                  
-                  <ng-container *ngIf="canUpdateOrder">
-                    <div class="update-dropdown">
-                      <select name="status" id="status" [formControl]="status">
-                        <option *ngFor="let orderStatus of statusCanUpdateChoices"
-                                [ngValue]="orderStatus.value">
-                          {{ orderStatus.displayName }}
-                        </option>
-                      </select>
-                      <p *ngIf="status.invalid && (status.touched || status.dirty)"
-                        style="margin: 0; color: red; max-width: 200px;">
-                        <span *ngIf="status.hasError('server')">{{ status.errors['server'] }}</span>
-                        <!-- todo: handle other error need to think again  -->
-                      </p>
+    <nus-tabs>
+      <nus-tab title="Order Detail">
+        <div class="wrapper">
+          <ng-container *ngFor="let children of orderDetailData.children">
+            <table class="order-status">
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="body-2">Status</div>
+                    <div class="subheading-2">{{ (orderDetailData.status ? orderDetailData.status : '-') | titlecase }}</div>
+                  </td>
+                  <td>
+                    <div class="body-2">Logistic</div>
+                    <div class="subheading-2">
+                      <ng-container *ngIf="children.data[0]?.shippingMethod">{{ children.data[0].shippingMethod }}</ng-container>
                     </div>
-                  </ng-container>
+                  </td>
+                  <td>
+                    <div class="body-2">AWB</div>
+                    <div class="subheading-2">
+                      {{ getConnote(children.data[0])? getConnote(children.data[0]) : '-' }}
+                    </div>
+                  </td>
+                  <td>
+                    <ng-container *ngIf="isManualTransfer(orderDetailData)">
+                      <div class="body-2">Warehouse</div>
+                      <div class="subheading-2">
+                        {{ children.warehouse.name }}
+                      </div>
+                    </ng-container>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="4">
+                    <span class="button-status-action">
+                      <nus-milestone [steps]="['ready', 'ship', 'complete']" [current]="currentMilestone"></nus-milestone>
 
-                  <button *ngIf="orderDetailData.status === 'paid'" type="button" class="control">Ready</button>
-                  <button *ngIf="orderDetailData.status === 'ready'" type="button" class="control">Ship</button>
-                  <button *ngIf="orderDetailData.status === 'shipped'" type="button" class="control">Complete</button>
+                      <button *ngIf="orderDetailData.status === 'paid'" type="button" class="control">Ready</button>
+                      <button *ngIf="orderDetailData.status === 'ready'" type="button" class="control">Ship</button>
+                      <button *ngIf="orderDetailData.status === 'shipped'" type="button" class="control">Complete</button>
 
-                  <!-- <button type="button" class="control secondary" 
-                    (click)="activityTracking.open()">
-                    View Progress
-                    </button>
-                  -->
+                      <!-- <button type="button" class="control secondary" 
+                        (click)="activityTracking.open()">
+                        View Progress
+                        </button>
+                      -->
 
-                  <div class="download-button">
-                    <button class="download control secondary" mat-button [matMenuTriggerFor]="menu">
-                      Download
-                      <mat-icon class="icon-secondary" svgIcon="arrow-down"></mat-icon>
-                    </button>
-                    <mat-menu #menu>
-                      <button mat-menu-item (click)="downloadProductList()">Product List</button>
-                      <button mat-menu-item 
+                      <button class="download-button control secondary"
                         [disabled]="!getConnote(children.data[0])" 
                         (click)="printConnote(children.data[0].shipmentHistory.shippingLabelUrl)">
-                        Shipping Label
+                        Download Shipping Label
                       </button>
-                    </mat-menu>
-                  </div>
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
 
-        <table class="product-list">
-          <tbody>
-          <tr>
-            <td colspan="4">
-              <h3 class="heading-1">Product</h3>
-            </td>
-          </tr>
-          <ng-container *ngFor="let data of children.data">
-            <tr *ngFor="let lineItems of data.lineItems">
-              <td>
-                <div><img [src]="lineItems.product.image" alt="Product Image"></div>
-              </td>
-              <td>
-                <div class="subheading-2">
-                  {{ lineItems.product.name }}
-                </div>
-                <div class="caption-1">
-                  {{ lineItems.product.upc }}
-                </div>
-              </td>
-              <td>
-                <div class="body-2">Item Price</div>
-                <div class="subheading-2">{{ lineItems.price | currency: "IDR" }}</div>
-              </td>
-              <td>
-                <div class="body-2">Total Item</div>
-                <div class="subheading-2">{{ lineItems.quantity }}</div>
-              </td>
-            </tr>
+            <table class="product-list">
+              <tbody>
+              <tr>
+                <td colspan="4">
+                  <h3 class="heading-1">Product</h3>
+                </td>
+              </tr>
+              <ng-container *ngFor="let data of children.data">
+                <tr *ngFor="let lineItems of data.lineItems">
+                  <td>
+                    <div><img [src]="lineItems.product.image" alt="Product Image"></div>
+                  </td>
+                  <td>
+                    <div class="subheading-2">
+                      {{ lineItems.product.name }}
+                    </div>
+                    <div class="caption-1">
+                      {{ lineItems.product.upc }}
+                    </div>
+                  </td>
+                  <td>
+                    <div class="body-2">Item Price</div>
+                    <div class="subheading-2">{{ lineItems.price | currency: "IDR" }}</div>
+                  </td>
+                  <td>
+                    <div class="body-2">Total Item</div>
+                    <div class="subheading-2">{{ lineItems.quantity }}</div>
+                  </td>
+                </tr>
+              </ng-container>
+              </tbody>
+            </table>
           </ng-container>
-          </tbody>
-        </table>
-      </ng-container>
-      <table class="summary">
-        <thead>
-          <tr>
-            <th colspan="2">
-              <h3 class="heading-1">Order Summary</h3>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Total amount cart (before Disc)</td>
-            <td class="summary-order-value">{{ orderDetailData.subtotalCost | currency: "IDR" }}</td>
-          </tr>
-          <tr>
-            <td>Discount Total</td>
-            <td class="summary-order-value">-{{ orderDetailData.discount | currency: "IDR" }}</td>
-          </tr>
-          <tr>
-            <td>Total amount cart (after Disc)</td>
-            <td class="summary-order-value">
-              {{ orderDetailData.subtotalCost - orderDetailData.discount | currency: "IDR" }}
-            </td>
-          </tr>
-          <tr>
-            <td>Shipping total</td>
-            <td class="summary-order-value">{{ orderDetailData.shippingCost | currency: "IDR" }}</td>
-          </tr>
-          <tr>
-            <td>Order total</td>
-            <td class="summary-order-value">{{ orderDetailData.orderPayment.amount | currency: "IDR" }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+          <table class="summary">
+            <thead>
+              <tr>
+                <th colspan="2">
+                  <h3 class="heading-1">Order Summary</h3>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Total amount cart (before Disc)</td>
+                <td class="summary-order-value">{{ orderDetailData.subtotalCost | currency: "IDR" }}</td>
+              </tr>
+              <tr>
+                <td>Discount Total</td>
+                <td class="summary-order-value">-{{ orderDetailData.discount | currency: "IDR" }}</td>
+              </tr>
+              <tr>
+                <td>Total amount cart (after Disc)</td>
+                <td class="summary-order-value">
+                  {{ orderDetailData.subtotalCost - orderDetailData.discount | currency: "IDR" }}
+                </td>
+              </tr>
+              <tr>
+                <td>Shipping total</td>
+                <td class="summary-order-value">{{ orderDetailData.shippingCost | currency: "IDR" }}</td>
+              </tr>
+              <tr>
+                <td>Order total</td>
+                <td class="summary-order-value">{{ orderDetailData.orderPayment.amount | currency: "IDR" }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </nus-tab>
+      <nus-tab title="Order Confirmation">
+        <nus-order-confirm [order]="orderDetailData"></nus-order-confirm>      
+      </nus-tab>
+    </nus-tabs>
 
-    <div *ngIf="currentTab === 'paymentConfirm'" id="paymentConfirm" style="margin-bottom: 20px">
-      <nus-order-confirm [order]="orderDetailData"></nus-order-confirm>
-    </div>
-
-    <button type="button" (click)="navigateToParent(true)" class="control">Back</button>
+    <button type="button" (click)="navigateToParent(true)" class="control secondary">Back</button>
 
     <!-- Modals -->
     <nus-transport-to-counter-selection-modal></nus-transport-to-counter-selection-modal>
@@ -262,7 +262,7 @@ import {
     '.detail tr.no-border-bottom td { border-bottom: none; }',
     '.detail tr.more-detail td { padding-top: 3px; }',
     '.detail tr.more-toggle td { padding: 0 24px 18px; }',
-    '.update-dropdown > select { min-width: 220px; }',
+    '.confirm-payment { min-width: 160px }',
     '.button-status-action { display: flex; justify-content: flex-start; gap: 16px; }',
     '.button-status-action button { padding: 0 10px; }',
     '.subheading-2 { color: var(--lighten-black); margin-bottom: 2px; }',
@@ -284,10 +284,10 @@ import {
         text-align: center;
         padding: 0 10px;
     }`,
-    '.download-button { margin-left: auto; }',
+    '.download-button { min-width: 200px; display: block; margin-left: auto; }',
     '::ng-deep .icon-secondary svg { fill: var(--secondary); }',
     'img { height: 64px; width: 64px; }',
-    ''
+    '.wrapper { margin: 16px 0; }',
   ]
 })
 export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> implements OnInit {
@@ -569,11 +569,10 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
   }
 
   /**
-   * return status that can `changed`
-   */
-  get statusCanUpdateChoices(): Array<drf.IChoice> {
-    const statusCanUpdate = ['paid', 'cancelled'];
-    return this.orderStatusChoices.filter(status => statusCanUpdate.includes(status.value));
+  * return display name from order status
+  */
+  get orderStatusDisplayName(): string {
+    return this.orderStatusChoices.find((status) => status.value === this.orderDetailData.status ).displayName;
   }
 
   /**
