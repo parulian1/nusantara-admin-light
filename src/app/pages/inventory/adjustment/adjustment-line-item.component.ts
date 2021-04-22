@@ -26,7 +26,17 @@ import { getSlugFromHref } from '@nusantara/core';
       </td>
 
       <td>
-        <input type="number" min="0" [formControl]="differenceQty" (keyup)="onKeyUpDifferentQty()" data-qa="adjusted-qty">
+        <div style="display: flex; justify-items: center; align-items: center;">
+          <div style="position: relative;">
+            <input type="number" min="0" [formControl]="differenceQty" (keyup)="onKeyUpDifferentQty()" data-qa="adjusted-qty">
+            <br />
+            <div
+              *ngIf="differenceQty.errors"
+              style="color: red; position: absolute; bottom: -1.1rem;">
+              <span *ngIf="differenceQty.hasError('min')">min 0</span>
+            </div>
+          </div>
+        </div>
       </td>
 
       <td>
