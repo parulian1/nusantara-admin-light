@@ -26,7 +26,7 @@ import { getSlugFromHref } from '@nusantara/core';
       </td>
 
       <td>
-        <input type="number" [formControl]="differenceQty" (keyup)="onKeyUpDifferentQty()" data-qa="adjusted-qty">
+        <input type="number" min="0" [formControl]="differenceQty" (keyup)="onKeyUpDifferentQty()" data-qa="adjusted-qty">
       </td>
 
       <td>
