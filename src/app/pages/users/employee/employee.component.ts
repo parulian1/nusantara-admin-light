@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
+  AbstractControl,
   FormArray,
   FormBuilder,
-  FormControl,
+  FormControl, ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -179,6 +180,18 @@ export class EmployeeComponent
     super(route, router, toast, service);
   }
 
+  setWarehouseValidator() {
+    const warehouses = this.form.get('warehouses');
+
+    // Update warehouse form. set to required if user can use pos
+    this.form.get('canUsePos').valueChanges.subscribe(canUsePos => {
+      if (canUsePos === true) {
+        warehouses.setValidators([Validators.required]);
+      }
+      warehouses.updateValueAndValidity();
+    });
+  }
+
   ngOnInit(): void {
     this.route.data.subscribe((data: { warehouses: IWarehouse[], accessGroups: IAccessGroup[] }) => {
       this.warehouseChoices = data.warehouses;
@@ -187,6 +200,7 @@ export class EmployeeComponent
 
     super.ngOnInit();
     this.handleCurrentUser();
+    this.setWarehouseValidator();
   }
 
   initializeForm(entity?: IEmployee) {
@@ -197,9 +211,14 @@ export class EmployeeComponent
       lastName: [entity?.lastName, [Validators.required]],
       email: [entity?.email, [Validators.required]],
       href: [entity?.href, []],
-      phoneNumber: [entity?.phoneNumber, []],
+      phoneNumber: [entity?.phoneNumber,
+        [
+          Validators.required, Validators.pattern('^[0-9]*$'),
+          Validators.minLength(9), Validators.maxLength(14)
+        ]
+      ],
       isActive: [entity?.isActive ?? true, [Validators.required]],
-      warehouses: this.fb.array([], [Validators.required]),
+      warehouses: this.fb.array([], []),
       accessGroups: this.fb.array([]),
       title: [entity?.firstName, []], // used as formality when delete data
       canUsePos: [entity?.canUsePos ?? false, []],

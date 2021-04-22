@@ -7,7 +7,7 @@ import { IEmployee } from '@nusantara/models/user';
 @Component({
   selector: 'nus-employee-list',
   template: `
-    <nus-list-header title="Employees" description="Users who can actually meh">
+    <nus-list-header title="Employees">
     </nus-list-header>
 
     <nus-pagination [page]="page"></nus-pagination>
