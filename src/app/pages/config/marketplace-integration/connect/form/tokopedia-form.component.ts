@@ -13,6 +13,7 @@ import {HttpErrorResponse} from '@angular/common/http';
     <form [formGroup]="form">
       <label>
         <span>Partner ID
+          <nus-tooltip [text]="partnerIdInfo"></nus-tooltip>
         </span>
         <input type="text" formControlName="partnerId" placeholder="Input Partner ID"/>
         <nus-field-errors-marketplace
@@ -23,6 +24,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 
       <label>
         <span>Partner Key
+          <nus-tooltip [text]="partnerKeyInfo"></nus-tooltip>
         </span>
         <input type="email" formControlName="partnerKey" placeholder="Input Partner Key"/>
         <nus-field-errors-marketplace
@@ -89,7 +91,9 @@ export class TokopediaClientFormComponent
   @Input() shopSlug?: string;
   @Input() isEdit: boolean;
   warehouses: marketplace.IMarketplaceWarehouse[] = [];
-  fsIdInfo = "FS ID is Application ID (APP ID)";
+  fsIdInfo = "FS ID is Application ID (APP ID) from App Console";
+  partnerKeyInfo = "Tokopedia Partner Key is Client Secret from App Console"
+  partnerIdInfo = "Tokopedia Partner ID is Client ID from App Console"
 
   constructor(
     public service: MarketplaceClientService,
@@ -218,14 +222,22 @@ export class TokopediaClientFormComponent
   }
 
   showSignInWindow(resp: marketplace.ITokopediaAuthResponse) {
-    if (!resp.isConnected) {
+    if (resp){
+      if (!resp.isConnected) {
+        this.toast?.addMessage(
+          `Successfully connected with your Tokopedia Store`,
+          'Connected',
+          ToastLevelEnum.info
+        );
+      }
+      this.onCancel();
+    } else {
       this.toast?.addMessage(
-        `Successfully connected with your Tokopedia Store`,
-        'Connected',
+        `Please recheck the credential in Tokopedia Authentication Management.`,
+        'Marketplace Configuration Failed.',
         ToastLevelEnum.info
       );
-      window.open(resp.authenticationUrl, '_blank');
     }
-    this.onCancel();
+
   }
 }
