@@ -294,6 +294,12 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     };
   }
 
+  save(): void {
+    if (this.form.valid) {
+      super.save();
+    }
+  }
+
   protected onSaveSuccess(result: IResultResponse<inventory.IAdjustment>) {
     this.resetForm();
 

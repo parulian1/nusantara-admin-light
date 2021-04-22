@@ -92,24 +92,22 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
   }
 
   save() {
-    if (this.form.valid) {
-      this.service.save(this.getFormValue()).pipe(catchError(err => {
-        if (err instanceof HttpErrorResponse) {
-          return of(new ErrorResult<IHttpFailure>(err.error, err.status));
+    this.service.save(this.getFormValue()).pipe(catchError(err => {
+      if (err instanceof HttpErrorResponse) {
+        return of(new ErrorResult<IHttpFailure>(err.error, err.status));
+      } else {
+        return of(new ErrorResult<IHttpFailure>({detail: 'Network error.. probably?'}, err.status));
+      }
+    })).subscribe(
+      resp => {
+        if (resp.success) {
+          this.onSaveSuccess(resp);
         } else {
-          return of(new ErrorResult<IHttpFailure>({detail: 'Network error.. probably?'}, err.status));
+          this.onSaveError(resp);
         }
-      })).subscribe(
-        resp => {
-          if (resp.success) {
-            this.onSaveSuccess(resp);
-          } else {
-            this.onSaveError(resp);
-          }
-        }
-      );
-      this.form.disable();
-    }
+      }
+    );
+    this.form.disable();
   }
 
   /**
