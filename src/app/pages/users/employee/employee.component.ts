@@ -187,6 +187,8 @@ export class EmployeeComponent
     this.form.get('canUsePos').valueChanges.subscribe(canUsePos => {
       if (canUsePos === true) {
         warehouses.setValidators([Validators.required]);
+      } else {
+        warehouses.setValidators([]);
       }
       warehouses.updateValueAndValidity();
     });
