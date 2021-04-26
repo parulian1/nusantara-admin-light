@@ -31,10 +31,26 @@ import { DeviceService } from '@nusantara/services';
       </label>
 
       <label>
+        <span>Device Model</span>
+        <input type="text" [value]="entity.data.model? entity.data.model: ''" readonly>
+      </label>
+
+      <label>
         <span>
           Device Id
         </span>
         <input type="text" [value]="entity.data.firebaseId" readonly>
+      </label>
+
+      <label>
+        <span>Register Date</span>
+        <input type="datetime-local" [value]="convertDateTime(entity.created)" readonly>
+      </label>
+
+      <label>
+        <span>Notes</span>
+        <textarea [formControl]="notes" name="notes"></textarea>
+        <nus-field-errors [control]="notes"></nus-field-errors>
       </label>
 
       <label class="checkbox">
@@ -62,6 +78,7 @@ export class DeviceComponent extends AbstractDetailComponent<device.IDevice> imp
               toast: ToastService) { super(route, router, toast, service); }
 
   get isApproved(): FormControl { return this.form.get('isApproved') as FormControl; }
+  get notes(): FormControl { return this.form.get('notes') as FormControl; }
 
   ngOnInit() {
     super.ngOnInit();
@@ -72,10 +89,32 @@ export class DeviceComponent extends AbstractDetailComponent<device.IDevice> imp
     this.form = this.fb.group({
       href: [entity?.href],
       isApproved: [entity?.isApproved ?? true],
+      notes: [entity?.notes ?? '', []],
     });
 
     // need to mark as touched to make custom styling works
     this.form.controls.isApproved.markAsTouched();
+  }
+
+  convertDateTime(timestamp: string) {
+    if (timestamp) {
+      const date = new Date(timestamp);
+
+      const year = date.getFullYear();
+      let month: string | number = date.getMonth() + 1; // getMonth() is zero-indexed, so we'll increment to get the correct month number
+      let day: string | number = date.getDate();
+      let hours: string | number = date.getHours();
+      let minutes: string | number = date.getMinutes();
+      let seconds: string | number = date.getSeconds();
+
+      month = (month < 10) ? '0' + month : month;
+      day = (day < 10) ? '0' + day : day;
+      hours = (hours < 10) ? '0' + hours : hours;
+      minutes = (minutes < 10) ? '0' + minutes : minutes;
+      seconds = (seconds < 10) ? '0' + seconds : seconds;
+      return (`${year}-${month}-${day}T${hours}:${minutes}:${seconds}`);
+    }
+    return '';
   }
 }
 
