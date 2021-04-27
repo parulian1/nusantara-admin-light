@@ -58,6 +58,13 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
         <nus-field-errors [control]="form.get('internalNotes')"></nus-field-errors>
       </label>
 
+      <label>
+        <span>Phone Number</span>
+        <input type="text" formControlName="phoneNumber" name="phoneNumber">
+        <nus-field-errors [control]="form.get('phoneNumber')"></nus-field-errors>
+      </label>
+
+
       <nus-address [form]="form.get('address')" formGroupName="address">
       </nus-address>
 
@@ -177,6 +184,7 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
         latitude: [entity?.address?.latitude, []],
         longitude: [entity?.address?.longitude, []],
       }),
+      phoneNumber: [entity?.phoneNumber, [Validators.maxLength(50), ]],
     });
 
     // need to mark as touched to make custom styling works

@@ -27,6 +27,12 @@ import { forkJoin } from 'rxjs';
       </label>
 
       <label>
+        <span>Company Name</span>
+        <input type="text" [formControl]="companyName" name="companyName">
+        <nus-field-errors [control]="companyName"></nus-field-errors>
+      </label>
+
+      <label>
         <span>Logo</span>
         <img [src]="logoPreviewUrl" alt="Shop Logo" class="preview" id="logo">
         <small>Recommended: 120x120</small>
@@ -79,6 +85,15 @@ import { forkJoin } from 'rxjs';
         <input type="text" [formControl]="keywords">
         <nus-field-errors [control]="keywords"></nus-field-errors>
       </label>
+
+      <label>
+        <span>Phone Number / Telephone (Optional)</span>
+        <input type="text" [formControl]="phoneNumber" name="phoneNumber">
+        <nus-field-errors [control]="phoneNumber"></nus-field-errors>
+      </label>
+
+      <nus-company-address [form]="companyAddress" formGroupName="companyAddress">
+      </nus-company-address>
 
       <div class="sosmed-title">
         <h3>
@@ -183,6 +198,18 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
 
   get socialMedias(): FormArray { return this.form.get('socialMedias') as FormArray; }
 
+  get companyName(): FormControl {
+    return this.form.get('companyName') as FormControl;
+  }
+
+  get phoneNumber(): FormControl {
+    return this.form.get('phoneNumber') as FormControl;
+  }
+
+  get companyAddress(): FormGroup {
+    return this.form.get('companyAddress') as FormGroup;
+  }
+
   ngOnInit(): void {
     super.ngOnInit();
     this.route.data.subscribe((data: { entity: ISiteConfig, typeChoices: drf.IChoice[]}) => {
@@ -195,6 +222,7 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
   initializeForm(entity?: ISiteConfig) {
     this.form = this.fb.group({
       name: [entity?.name, [Validators.required]],
+      companyName: [entity?.companyName, []],
       href: [entity?.href],
       logo: [],
       gaAccountId: [entity?.gaAccountId ?? '', []],
@@ -207,6 +235,16 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
         keywords: [entity?.extraConfig?.keywords, [Validators.maxLength(160)]]
       }),
       socialMedias: this.fb.array([], []),
+      companyAddress: this.fb.group({
+        country: [entity?.companyAddress?.street || 'id', []],
+        province: [entity?.companyAddress?.province, []],
+        city: [entity?.companyAddress?.city, []],
+        district: [entity?.companyAddress?.district, []],
+        subDistrict: [entity?.companyAddress?.subDistrict, []],
+        street: [entity?.companyAddress?.street, []],
+        postalCode: [entity?.companyAddress?.postalCode, []],
+      }),
+      phoneNumber: [entity?.phoneNumber, [Validators.maxLength(50), ]],
     });
 
     this.entity = entity;

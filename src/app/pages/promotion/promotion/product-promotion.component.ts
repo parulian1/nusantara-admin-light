@@ -1,6 +1,6 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as XLSX from 'xlsx';
 
 import { ProductPromotionService, ProductService, SiteConfigService } from '@nusantara/services';
@@ -153,7 +153,7 @@ const log = new Logger('ProductPromotionComponent');
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let control of products.controls; let i=index">
+          <tr *ngFor="let control of products?.controls; let i=index">
             <td class="numeric">{{ i + 1 }}</td>
             <td>{{ control.get('name').value }}</td>
             <td>

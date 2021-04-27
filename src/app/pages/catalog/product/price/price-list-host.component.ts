@@ -26,11 +26,11 @@ import { PriceListComponent } from './price-list.component';
       [form]="priceList" (removePriceList)="removePriceList(i)">
     </nus-price-list>
 
-    <div>
-      <button (click)="addPriceList()" type="button" class="new-add-button wide">
-        <i class="material-icons">add</i> Add Price List
-      </button>
-    </div>
+<!--    <div>-->
+<!--      <button (click)="addPriceList()" type="button" class="new-add-button wide">-->
+<!--        <i class="material-icons">add</i> Add Price List-->
+<!--      </button>-->
+<!--    </div>-->
   `,
   styles: [
     `div { padding: 12px; border: solid 1px var(--grey); }`,

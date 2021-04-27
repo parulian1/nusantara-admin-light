@@ -19,6 +19,7 @@ import { device } from '@nusantara/models';
         <tr>
           <th>Warehouse</th>
           <th>Device Name</th>
+          <th>Register Data</th>
           <th class="centered">Is Approved</th>
         </tr>
       </thead>
@@ -26,6 +27,7 @@ import { device } from '@nusantara/models';
       <tr *ngFor="let entity of page.entities">
         <td><a [routerLink]="[entity.href|entityToSlug]">{{ entity.warehouse.name }} </a></td>
         <td>{{ entity.data.name }}</td>
+        <td>{{ entity.created|date: 'dd/MM/yyyy HH:mm:ss' }}</td>
         <td class="centered"><nus-true-false [value]="entity.isApproved"></nus-true-false></td>
       </tr>
       </tbody>
