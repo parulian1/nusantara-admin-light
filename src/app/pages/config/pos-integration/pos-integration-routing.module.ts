@@ -4,6 +4,7 @@ import { PosIntegrationComponent } from './pos-integration.component';
 import {RequireIsEnterpriseGuard} from '@nusantara/auth';
 import {DeviceComponent, DeviceListComponent, DeviceListResolver, DeviceResolver} from '@nusantara/pages/config/device';
 import {ConfigCartDiscountResolver, ConfigCartDiscountComponent} from '@nusantara/pages/config/config-cart-discount';
+import {DefaultPinConfigComponent, DefaultPinConfigResolver} from "@nusantara/pages/config/default-pin-config";
 
 const routes: Routes = [
   {
@@ -36,6 +37,13 @@ const routes: Routes = [
     canActivate: [RequireIsEnterpriseGuard],
     component: ConfigCartDiscountComponent,
     resolve: { entity: ConfigCartDiscountResolver },
+    runGuardsAndResolvers: 'always'
+  },
+  {
+    path: 'default-pin-config',
+    canActivate: [RequireIsEnterpriseGuard],
+    component: DefaultPinConfigComponent,
+    resolve: { entity: DefaultPinConfigResolver },
     runGuardsAndResolvers: 'always'
   }
 ];

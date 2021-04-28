@@ -7,6 +7,7 @@ import {Component} from '@angular/core';
     <div class="wrapper">
       <div>
         <h1 class="heading-1">POS Devices</h1>
+        <p>Set Up Device Name</p>
       </div>
       <div>
         <button routerLink="devices" class="control">Open</button>
@@ -15,9 +16,19 @@ import {Component} from '@angular/core';
     <div class="wrapper">
       <div>
         <h1 class="heading-1">Config Cart Discount</h1>
+        <p>Turn on / off Cart Discount</p>
       </div>
       <div>
         <button routerLink="config-cart-discount" class="control">Open</button>
+      </div>
+    </div>
+    <div class="wrapper">
+      <div>
+        <h1 class="heading-1">PIN</h1>
+        <p>Set Up Default PIN for POS Account</p>
+      </div>
+      <div>
+        <button routerLink="default-pin-config" class="control">Open</button>
       </div>
     </div>
   `,
