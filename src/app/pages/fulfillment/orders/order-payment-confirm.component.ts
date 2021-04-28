@@ -1,4 +1,5 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ToastLevelEnum, ToastService } from '@nusantara/core';
 import {
   IOrderPaymentConfirm,
   IPaymentGateway,
@@ -12,6 +13,7 @@ import {
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { DeleteConfirmInfoDialogComponent } from './modals';
 
 @Component({
   selector: 'nus-order-confirm',
@@ -34,7 +36,10 @@ import { takeUntil } from 'rxjs/operators';
         </thead>
         <tbody>
           <tr *ngIf="paymentConfirms?.length == 0">
-            <td rowspan="6"><i>Belum ada Payment Konfirmasi</i></td>
+            <td colspan="7" class="empty-table">
+              <div class="heading-1">No Payment Confirmation Yet</div>
+              <div class="body-2">Payment confirmation information will appear here once the customer confirm the order.</div>
+            </td>
           </tr>
 
           <tr *ngFor="let paymentConfirm of paymentConfirms">
@@ -60,7 +65,7 @@ import { takeUntil } from 'rxjs/operators';
               <button
                 type="button"
                 class="delete-button"
-                (click)="onDelete(paymentConfirm)"
+                (click)="deleteConfirm.open()"
                 [disabled]="!canDoCRUD()">
                 <mat-icon svgIcon="trash"></mat-icon>
               </button>
@@ -71,13 +76,14 @@ import { takeUntil } from 'rxjs/operators';
     </div>
 
     <!-- Dialog to used for create / update payment confirm -->
-    <nus-order-payment-confirm-dialog
+    <nus-payment-confirm-form-modal
       (action)="onSubmit($event)"
       [order]="order"
       [paymentConfirm]="currentPaymentConfirm"
       [paymentGateways]="paymentGateways"
     >
-    </nus-order-payment-confirm-dialog>
+    </nus-payment-confirm-form-modal>
+    <nus-delete-confirm-info></nus-delete-confirm-info>
   `,
   styles: [
     '.wrapper { margin: 16px 0; }',
@@ -89,6 +95,8 @@ import { takeUntil } from 'rxjs/operators';
         margin-bottom: 16px;
       }
     `,
+    '.empty-table { padding: 20px; text-align:center }',
+    '.heading-1 { font-weight: 700 }',
     '.add-payment-confirm > i { line-height: 31px; font-size: 20px; }',
     '.delete-button { background: none; border: none; }'
   ],
@@ -96,6 +104,7 @@ import { takeUntil } from 'rxjs/operators';
 export class OrderPaymentConfirmComponent implements OnInit, OnDestroy {
   @Input() order: order.IOrderDetail;
 
+  @ViewChild(DeleteConfirmInfoDialogComponent) deleteConfirm: DeleteConfirmInfoDialogComponent;
   private unsubscribe$ = new Subject<void>();
 
   paymentConfirms: order.IOrderPaymentConfirm[] = [];
@@ -107,6 +116,7 @@ export class OrderPaymentConfirmComponent implements OnInit, OnDestroy {
     private service: OrderPaymentConfirmService,
     private paymentGatewayService: PaymentGatewayService,
     public ngxSmartModalService: NgxSmartModalService,
+    private toast: ToastService,
     svgIconService: SvgIconService, 
   ) {
     svgIconService.registerIcons();
@@ -141,7 +151,11 @@ export class OrderPaymentConfirmComponent implements OnInit, OnDestroy {
   onDelete(orderPaymentConfirm: IOrderPaymentConfirm) {
     this.service.delete(orderPaymentConfirm).subscribe(
       () => {
-        alert('success delete payment confirm');
+        this.toast?.addMessage(
+          'Payment confirmation information has been deleted.',
+          'Payment Confirmation Deleted!',
+          ToastLevelEnum.info
+        );
         this.reFetch();
       },
       (error) => this.handleError(`error to delete a payment confirm`)
@@ -160,7 +174,11 @@ export class OrderPaymentConfirmComponent implements OnInit, OnDestroy {
 
   handleError(error: any): void {
     if (typeof error === 'string') {
-      alert(error);
+      this.toast?.addMessage(
+        'Unable to delete payment confirmation. Please try again.',
+        'Failed to Delete Payment Confirmation',
+        ToastLevelEnum.error
+      );
     }
   }
 

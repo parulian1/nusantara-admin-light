@@ -8,3 +8,6 @@ export * from './order-list.resolver';
 
 export * from './order.component';
 export * from './order.resolver';
+
+export * from './order-detail.component';
+export * from './order-payment-confirm.component';

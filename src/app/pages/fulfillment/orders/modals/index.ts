@@ -8,3 +8,7 @@ export * from './manual-input-awb/input-awb-modal.component';
 export * from './manual-input-awb/deliver-to-counter-manual-awb-modal.component';
 
 export * from './activity-tracking-modal.component';
+
+export * from './payment-confirm-modal.component';
+export * from './payment-confirm-form-modal.component';
+export * from './delete-confirm-info-dialog.component';

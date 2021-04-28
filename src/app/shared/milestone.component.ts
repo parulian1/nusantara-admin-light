@@ -13,7 +13,16 @@ import { Component, Input, OnInit } from '@angular/core';
   `,
   styles: [
     'div { display: flex; width: 100%; justify-content: center; align-items: center; counter-reset: step; }',
-    'ul { padding-top: 12px; width: 100%; display: flex; justify-content: space-between; flex-wrap: nowrap; overflow: auto; }',
+    `ul {
+      list-style: none;
+      padding-inline-start: unset;
+      padding-top: 12px; 
+      width: 100%; 
+      display: flex; 
+      justify-content: space-between; 
+      flex-wrap: nowrap; 
+      overflow: auto; 
+    }`,
     'li { padding-top: 10px; width: 100%; position: relative; text-align: center; min-width: 20px; }',
     'li:last-child::after, li:first-child::before { display: none; }',
     `li::before, li::after { content: ''; position: absolute; top: 0; width: 50%; border: 1px solid var(--grey); }`,

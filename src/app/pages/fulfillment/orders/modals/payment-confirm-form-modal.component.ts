@@ -21,6 +21,7 @@ import {
 } from '@nusantara/models';
 import { OrderPaymentConfirmService } from '@nusantara/services';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ToastLevelEnum, ToastService } from '@nusantara/core';
 
 interface IPaymentConfirmDialog {
   action: 'create' | 'update';
@@ -28,12 +29,12 @@ interface IPaymentConfirmDialog {
 }
 
 @Component({
-  selector: 'nus-order-payment-confirm-dialog',
+  selector: 'nus-payment-confirm-form-modal',
   template: `
     <ngx-smart-modal #myModal identifier="myModal" [escapable]="false">
       <h1>
         {{
-          isUpdate() ? "Update Payment Confirm" : "Create new Payment Confirm"
+          isUpdate() ? "Update Payment Confirmation" : "Create new Payment Confirm"
         }}
       </h1>
 
@@ -41,7 +42,7 @@ interface IPaymentConfirmDialog {
       <form [formGroup]="form" (ngSubmit)="save()">
         <label>
           <span>Sender Name</span>
-          <input type="text" [formControl]="shippingName" name="name" />
+          <input type="text" [formControl]="shippingName" name="name"  placeholder="Input Sender Name"/>
 
           <div *ngIf="shippingName.invalid && (shippingName.touched || shippingName.dirty)" class="error-detail">
             <div *ngIf="shippingName.hasError('required')">Required</div>
@@ -51,7 +52,7 @@ interface IPaymentConfirmDialog {
 
         <label>
           <span>Transfer Amount</span>
-          <input type="number" [formControl]="transferAmount" name="name" />
+          <input type="number" [formControl]="transferAmount" name="name" placeholder="Input Transfer Amount"/>
 
           <div *ngIf="transferAmount.invalid && (transferAmount.touched || transferAmount.dirty)" class="error-detail">
             <div *ngIf="transferAmount.hasError('required')">Required</div>
@@ -80,12 +81,12 @@ interface IPaymentConfirmDialog {
         </label>
 
         <label>
-          <span>Proof Image</span>
+          <span>Receipt File</span>
           <img
             *ngIf="proofImageHelpers?.url || proofImageHelpers?.base64"
             [src]="proofImageHelpers?.url || proofImageHelpers?.base64"
-            style="width: 80%; height: 150px;"
-            alt="Proof Image"
+            style="width: 126px; height: 126px;"
+            alt="Receipt File"
             class="preview"
           />
           <input
@@ -112,16 +113,14 @@ interface IPaymentConfirmDialog {
     .is-error {
       border: 1px solid #af3b6e;
     }
-
     .select-wrapper {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 250px;
     }
   `],
 })
-export class OrderPaymentConfirmDialogComponent implements OnChanges, OnInit {
+export class PaymentConfirmFormModalComponent implements OnChanges, OnInit {
   @ViewChild('myModal') myModal: any;
   @Input() paymentConfirm: order.IOrderPaymentConfirm;
   @Input() paymentGateways: IPaymentGateway[];
@@ -141,6 +140,7 @@ export class OrderPaymentConfirmDialogComponent implements OnChanges, OnInit {
   constructor(
     private fb: FormBuilder,
     private service: OrderPaymentConfirmService,
+    private toast: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -239,7 +239,11 @@ export class OrderPaymentConfirmDialogComponent implements OnChanges, OnInit {
   }
 
   handleSuccess(): void {
-    alert(`success ${this.isUpdate() ? 'update' : 'create'} payment confirm`);
+    this.toast?.addMessage(
+      `You have successfully ${this.isUpdate() ? 'updated' : 'added'} a new payment confirmation information.`,
+      `Payment Confirmation ${this.isUpdate() ? 'Updated' : 'Added'}!`,
+      ToastLevelEnum.info
+    );
 
     this.action.emit({
       action: this.isUpdate() ? 'update' : 'create',

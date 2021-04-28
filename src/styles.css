@@ -236,7 +236,7 @@ form.fluid {
   max-width: unset;
 }
 input[type=file] {
-  border: none;
+  border: none !important;
 }
 input {
   width: 100%;

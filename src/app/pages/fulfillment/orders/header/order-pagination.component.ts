@@ -132,8 +132,8 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
 
   dateRangeValidation(filters: IOrderFilterValue){
     if(moment(filters.date.end).diff(moment(filters.date.start), "days") > 14) {
-      const newEndDate = moment(moment(filters.date.start).add(14, "days"));
-      filters.date.end = newEndDate.format("YYYY-MM-DDTHH:mm:ss"); 
+      const newStartDate = moment(moment(filters.date.end).subtract(14, "days"));
+      filters.date.start = newStartDate.format("YYYY-MM-DDTHH:mm:ss"); 
       return filters;
     }
     return filters;
