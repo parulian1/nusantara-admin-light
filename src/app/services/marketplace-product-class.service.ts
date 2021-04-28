@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { PagedResponse } from '@nusantara/core';
-import { IShop, IShopAttributeMapping } from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -18,14 +18,14 @@ export class MarketplaceProductClassService {
     shopSlug: string,
     page: number = 1,
     perPage?: number
-  ): Observable<PagedResponse<IShop>> {
+  ): Observable<PagedResponse<marketplace.IShop>> {
     let params = new HttpParams().set('page', page.toFixed(0).toString());
     if (perPage) {
       params = params.set('per_page', perPage.toFixed(0).toString());
     }
 
     return this.httpClient
-      .get<IShop[]>(`${this.baseUrl}/${shopSlug}/`, {
+      .get<marketplace.IShop[]>(`${this.baseUrl}/${shopSlug}/`, {
         observe: 'response',
         responseType: 'json',
         params,
@@ -35,8 +35,8 @@ export class MarketplaceProductClassService {
 
   fetchAttribute(
     productClassSlug: string
-  ): Observable<IShopAttributeMapping> {
-    return this.httpClient.get<IShopAttributeMapping>(
+  ): Observable<marketplace.IShopAttributeMapping> {
+    return this.httpClient.get<marketplace.IShopAttributeMapping>(
       `${this.baseUrl}/${productClassSlug}/attribute/`
     );
   }

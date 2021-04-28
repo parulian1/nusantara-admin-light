@@ -2,25 +2,25 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { AbstractCrudService } from '@nusantara/core';
-import { IClient, IMarketplaceWarehouse, IShop } from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
-export class MarketplaceClientService extends AbstractCrudService<IShop> {
+export class MarketplaceClientService extends AbstractCrudService<marketplace.IShop> {
   baseUrl = '/api/marketplace';
 
   constructor(httpClient: HttpClient) {
     super(httpClient);
   }
 
-  get client(): Observable<IClient[]> {
-    return this.httpClient.get<IClient[]>(`${this.baseUrl}/client/`);
+  get client(): Observable<marketplace.IClient[]> {
+    return this.httpClient.get<marketplace.IClient[]>(`${this.baseUrl}/client/`);
   }
 
-  getWarehouse(marketplace: string): Observable<IMarketplaceWarehouse[]> {
-    return this.httpClient.get<IMarketplaceWarehouse[]>(
+  getWarehouse(marketplace: string): Observable<marketplace.IMarketplaceWarehouse[]> {
+    return this.httpClient.get<marketplace.IMarketplaceWarehouse[]>(
       `${this.baseUrl}/warehouse/${marketplace}/`
     );
   }

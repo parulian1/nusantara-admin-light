@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { PagedResponse } from '@nusantara/core';
-import { IReceivingOrder } from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -17,7 +17,7 @@ export class MarketplaceReceivingOrderService {
   fetchList(
     page: number = 1,
     isPublishedOnly?: boolean
-  ): Observable<PagedResponse<IReceivingOrder>> {
+  ): Observable<PagedResponse<marketplace.IReceivingOrder>> {
     let params = new HttpParams().set('page', page.toFixed(0).toString());
 
     if (isPublishedOnly) {
@@ -27,7 +27,7 @@ export class MarketplaceReceivingOrderService {
     }
 
     return this.httpClient
-      .get<IReceivingOrder[]>(`${this.baseUrl}/`, {
+      .get<marketplace.IReceivingOrder[]>(`${this.baseUrl}/`, {
         observe: 'response',
         responseType: 'json',
         params,

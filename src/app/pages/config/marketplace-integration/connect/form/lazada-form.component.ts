@@ -10,11 +10,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastLevelEnum, ToastService } from '@nusantara/core';
 import {MarketplaceClientService} from '@nusantara/services';
-import {
-  IShopeeCredential,
-  IShopeeAuthResponse,
-  IMarketplaceWarehouse, ILazadaCredential, ILazadaAuthResponse,
-} from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import { MarketplaceClientEnum } from '../markeplace-client-enum';
 
 @Component({
@@ -88,8 +84,7 @@ export class LazadaFormComponent implements OnInit {
   @Input() shopSlug?: string;
   @Input() isEdit: boolean;
   form: FormGroup;
-  warehouses: IMarketplaceWarehouse[] = [];
-  variantValue : boolean;
+  warehouses: marketplace.IMarketplaceWarehouse[] = [];
   shopIdValue: any;
   sellerEmailinfo = "Seller Email is Registered Seller Email in Lazada";
 
@@ -106,7 +101,7 @@ export class LazadaFormComponent implements OnInit {
   ngOnInit() {
     this.service
       .getWarehouse(MarketplaceClientEnum.lazada)
-      .subscribe((data: IMarketplaceWarehouse[]) => {
+      .subscribe((data: marketplace.IMarketplaceWarehouse[]) => {
         this.warehouses = data;
       });
 
@@ -118,7 +113,7 @@ export class LazadaFormComponent implements OnInit {
   fillFormDetail(sellerEmail: string) {
     this.service
       .getConnection(sellerEmail)
-      .subscribe((data: ILazadaAuthResponse) => {
+      .subscribe((data: marketplace.ILazadaAuthResponse) => {
         if (data != null) {
           this.form.patchValue({
             sellerEmail: data.sellerEmail,
@@ -137,7 +132,7 @@ export class LazadaFormComponent implements OnInit {
     return this.form.get('warehouseId') as FormControl;
   }
 
-  initializeForm(entity?: ILazadaCredential) {
+  initializeForm(entity?: marketplace.ILazadaCredential) {
     this.form = this.fb.group({
       sellerEmail: [entity?.sellerEmail ?? '', [Validators.required, Validators.email]],
       warehouseId: [entity?.warehouse, [Validators.required]],
@@ -176,7 +171,7 @@ export class LazadaFormComponent implements OnInit {
 
   onConnect() {
     this.service.connect(this.getFormValue()).subscribe(
-      (resp: IShopeeAuthResponse) => {
+      (resp: marketplace.IShopeeAuthResponse) => {
         this.showSignInWindow(resp);
       },
       (err) => {
@@ -187,7 +182,7 @@ export class LazadaFormComponent implements OnInit {
 
   onUpdate() {
     this.service.updateConnection(this.getFormValue(), this.shopSlug).subscribe(
-      (resp: IShopeeAuthResponse) => {
+      (resp: marketplace.IShopeeAuthResponse) => {
         this.showSignInWindow(resp);
       },
       (err: HttpErrorResponse) => {
@@ -204,7 +199,7 @@ export class LazadaFormComponent implements OnInit {
     this.toast?.addMessage(resp.error.message, 'error', ToastLevelEnum.error);
   }
 
-  showSignInWindow(resp: IShopeeAuthResponse) {
+  showSignInWindow(resp: marketplace.IShopeeAuthResponse) {
     if (!resp.isConnected) {
       this.toast?.addMessage(
         `Confirm Lazada Authorization Page to grant access. Click refresh when you're done.`,
@@ -214,9 +209,5 @@ export class LazadaFormComponent implements OnInit {
       window.open(resp.authenticationUrl, '_blank');
     }
     this.onCancel();
-  }
-
-  isSplitValue(event: any) {
-    this.variantValue = event;
   }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MarketplaceClientService } from '@nusantara/services';
-import { IClient, IShopeeAuthResponse } from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import { Observable } from 'rxjs';
 import { MarketplaceClientEnum } from './markeplace-client-enum';
 
@@ -36,6 +36,8 @@ import { MarketplaceClientEnum } from './markeplace-client-enum';
         ></nus-shopee-client-form>
         <nus-tokopedia-form
           *ngSwitchCase="marketplaceClient.tokopedia"
+          [shopSlug]="shopSlug"
+          [isEdit]="editMode"
         ></nus-tokopedia-form>
         <nus-tsc-client-form
           *ngSwitchCase="marketplaceClient.tsc"
@@ -58,7 +60,7 @@ import { MarketplaceClientEnum } from './markeplace-client-enum';
   ],
 })
 export class ConnectionFormComponent implements OnInit {
-  marketplaces: IClient[];
+  marketplaces: marketplace.IClient[];
   selectedClient: string;
   slug$: Observable<string>;
   selectedMarketplace: string;
@@ -73,14 +75,14 @@ export class ConnectionFormComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.service.client.subscribe((data: IClient[]) => {
+    this.service.client.subscribe((data: marketplace.IClient[]) => {
       this.marketplaces = data;
     });
 
     this.shopSlug = this.route.snapshot.paramMap.get('shop-slug');
     if (this.shopSlug) {
       this.service.getConnection(this.shopSlug).subscribe(
-        (data: IShopeeAuthResponse) => {
+        (data: marketplace.IShopeeAuthResponse) => {
           this.selectedMarketplace = data.marketplace;
           if (this.selectedMarketplace) {
             this.selectedClient = this.selectedMarketplace;

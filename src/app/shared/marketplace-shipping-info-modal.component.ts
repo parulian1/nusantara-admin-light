@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
 import { NgxSmartModalComponent } from 'ngx-smart-modal';
 import { DialogResult } from '../core';
-import { IMarketplaceItemLogisticInformation } from '../models';
+import { marketplace } from '@nusantara/models';
 import { MarketplaceShopService } from '@nusantara/services';
 
 /**
@@ -82,7 +82,7 @@ import { MarketplaceShopService } from '@nusantara/services';
 })
 export class MarketplaceShippingInfoModalComponent implements OnInit {
   @ViewChild('modal') modalInfo: NgxSmartModalComponent;
-  @Input() shippingDetail: IMarketplaceItemLogisticInformation[];
+  @Input() shippingDetail: marketplace.IItemLogisticInfo[];
 
   isExpanded: boolean[];
   result: DialogResult = DialogResult.Cancelled;

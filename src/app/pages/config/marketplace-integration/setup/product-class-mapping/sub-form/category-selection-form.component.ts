@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MarketplaceShopService } from '@nusantara/services';
-import { IProductCategory, ISelectedCategory } from '@nusantara/models';
+import { marketplace } from '@nusantara/models';
 import {
   FormArray,
   FormBuilder,
@@ -80,10 +80,10 @@ export class CategorySelectionFormComponent
   @Input() state: any;
   @Output() cancel = new EventEmitter<boolean>();
   @Output() next = new EventEmitter<boolean>();
-  @Output() selectedCategory = new EventEmitter<ISelectedCategory>();
+  @Output() selectedCategory = new EventEmitter<marketplace.ISelectedCategory>();
   @Input() currentShop: string;
 
-  categories: IProductCategory[] = [];
+  categories: marketplace.IProductCategory[] = [];
   shopSlug: string;
   productClassName: string;
   form: FormGroup;
@@ -107,7 +107,7 @@ export class CategorySelectionFormComponent
 
     this.service
       .fetchCategory(this.shopSlug)
-      .subscribe((data: IProductCategory[]) => {
+      .subscribe((data: marketplace.IProductCategory[]) => {
         this.categories = data;
       });
 
@@ -153,7 +153,7 @@ export class CategorySelectionFormComponent
 
   onNext() {
     this.next.next(true);
-    const selectedCat: ISelectedCategory = {
+    const selectedCat: marketplace.ISelectedCategory = {
       categoryNames: this.getSelectedCategoryNames(this.form.value.categories),
       deepestChildId: this.getChildCatgoryId(this.form.value.categories),
     };
