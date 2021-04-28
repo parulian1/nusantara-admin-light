@@ -126,6 +126,6 @@ export class OrderListComponent extends AbstractListComponent<IOrder> implements
   }
 
   onFilterApplied(event: IOrderFilterValue){
-    this.appliedFilter = event; 
+    this.appliedFilter = event;
   }
 }

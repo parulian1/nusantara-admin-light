@@ -89,7 +89,6 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
 
   ngOnInit() {
     super.ngOnInit();
-
     this.masterSelected = false;
   }
 

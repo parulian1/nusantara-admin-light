@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { IOrderFilterValue } from "@nusantara/models/order/filter";
 import * as moment from 'moment';
+import { order } from '@nusantara/models';
 
 const apiDateFormat = "YYYY-MM-DDTHH:mm:ss";
 @Injectable({
@@ -54,7 +55,8 @@ export class OrderReportService {
     let params: any = {};
     if(filters){
       // applied date range limit if not specify custom order numbers
-      if(orderNumbers.length == 0){
+      if (orderNumbers === undefined || orderNumbers?.length == 0) {
+        // array empty or does not exist
         if(!!filters.date.start && !!filters.date.start){
           params.start_time = filters.date.start;
           params.end_time = filters.date.end;

@@ -1,6 +1,6 @@
-import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { MatSelectChange } from "@angular/material/select";
+import { MatSelect } from "@angular/material/select";
 import {
   ORDER_CUSTOM_DATE_FORMATS,
   DATE_DISPLAY_FORMAT,
@@ -9,6 +9,8 @@ import {
 import { DateAdapter, MAT_DATE_FORMATS } from "@angular/material/core";
 import * as moment from "moment";
 import { ActivatedRoute } from '@angular/router';
+import { Utils } from './utils';
+import { until } from 'selenium-webdriver';
 
 const apiDateFormat = "YYYY-MM-DDTHH:mm:ss";
 
@@ -17,9 +19,10 @@ const apiDateFormat = "YYYY-MM-DDTHH:mm:ss";
   template: `
   <div>
     <mat-form-field>
-      <mat-select 
+      <mat-select #select="matSelect"
         [disableOptionCentering]="true" 
-        panelClass="mat-select-panel" [formControl]="date" (selectionChange)="onDateOptionsSelected($event)">
+        panelClass="mat-select-panel" [formControl]="date"
+        (selectionChange)="onDateOptionsSelected($event)">
         <mat-select-trigger>
           <ng-template [ngIf]="date.value === 'allDate'">
             All Date
@@ -111,6 +114,7 @@ const apiDateFormat = "YYYY-MM-DDTHH:mm:ss";
 })
 export class OrderDateFilterComponent implements OnInit {
   @Output() selectedDate = new EventEmitter<{type: string, startDate: string; endDate: string}>();
+  @ViewChild('select') select: MatSelect;  
 
   date = new FormControl("allDate");
   customDate = new FormControl();
@@ -121,76 +125,77 @@ export class OrderDateFilterComponent implements OnInit {
     validators: this.dateRangeValidator()
   });
 
-  readonly today = this.setTimeToZero(moment());
-  readonly yesterday = this.setTimeToZero(moment(moment().subtract(1, "days")));
-  readonly threeDaysbefore = this.setTimeToZero(moment(moment().subtract(3, "days")));
-  readonly sevenDaysbefore = this.setTimeToZero(moment(moment().subtract(7, "days")));
+  startTime: string;
+  endTime: string;
 
-  constructor(public route: ActivatedRoute, private cdr: ChangeDetectorRef) {}
+  today: string;
+  yesterday: string;
+  threeDaysbefore: string;
+  sevenDaysbefore: string
+
+  constructor(public route: ActivatedRoute) {}
 
   ngOnInit() {
+    var utils = new Utils();
+    this.today = utils.today;
+    this.yesterday = utils.yesterday;
+    this.threeDaysbefore = utils.threeDaysbefore;
+    this.sevenDaysbefore = utils.sevenDaysbefore;
+
+
     this.route.queryParamMap.subscribe((value) => {
-      const startTime = value.get("start_time");
-      const endTime = value.get("end_time");
+      this.startTime = value.get("start_time");
+      this.endTime = value.get("end_time");
 
-      if (startTime && endTime && moment(startTime).isValid && moment(endTime).isValid) {
-        const selectedStartTime = moment(startTime, apiDateFormat).toDate();
-        const selectedEndTime = moment(endTime, apiDateFormat).toDate();
+      if (this.startTime && this.endTime && moment(this.startTime).isValid && moment(this.endTime).isValid) {
+        const selectedStartTime = moment(this.startTime, apiDateFormat).toDate();
+        const selectedEndTime = moment(this.endTime, apiDateFormat).toDate();
 
-        // today - last 7 days
-        if (endTime === this.today) {
-          if (startTime === this.today) {
+        switch(utils.getDateOption(this.startTime, this.endTime)){
+          case "today":
             this.date.setValue("today");
-          } else if (startTime === this.yesterday) {
+            break;
+          case "yesterday":
             this.date.setValue("yesterday");
-          } else if (startTime === this.threeDaysbefore) {
+            break;
+          case "last3Days":
             this.date.setValue("last3Days");
-          } else if (startTime === this.sevenDaysbefore) {
+            break;
+          case "last7Days":
             this.date.setValue("last7Days");
-          } else {
+            break;
+          case "customDate":
+            this.customDate.setValue(selectedStartTime);
+            this.date.setValue("customDate");
+            break;
+          case "customRange": 
             this.updateDateRangeForm(selectedStartTime, selectedEndTime);
-          }
-        } else if (moment(endTime).diff(moment(startTime), "days") === 0) {
-          this.customDate.setValue(selectedStartTime);
-          this.date.setValue("customDate");
-        } else {
-          this.updateDateRangeForm(selectedStartTime, selectedEndTime);
+            break; 
+          default:
+            break;
         }
       }
     });
   }
-
-  onDateOptionsSelected(event: MatSelectChange) {
+  
+  onDateOptionsSelected(event) {
     this.resetDatePicker();
     this.resetDateRangePicker();
-
     switch (event.value) {
       case "allDate":
-        this.selectedDate.emit({type: 'allDate', startDate: null, endDate: null})
+        this.updateSelectedDate("allDate", null, null);
         break;
       case "today":
-        this.selectedDate.emit({type: 'today', startDate: this.today, endDate: this.today})
+        this.updateSelectedDate("today", this.today, this.today);
         break;
       case "yesterday":
-        this.selectedDate.emit({
-          type: 'yesterday',
-          startDate: this.yesterday,
-          endDate: this.today,
-        });
+        this.updateSelectedDate("yesterday", this.yesterday, this.today);
         break;
       case "last3Days":
-        this.selectedDate.emit({
-          type: 'last3Days',
-          startDate: this.threeDaysbefore,
-          endDate: this.today,
-        });
+        this.updateSelectedDate("last3Days", this.threeDaysbefore, this.today);
         break;
       case "last7Days":
-        this.selectedDate.emit({
-          type: 'last7Days',
-          startDate: this.sevenDaysbefore,
-          endDate: this.today,
-        });
+        this.updateSelectedDate("last7Days", this.sevenDaysbefore, this.today);
         break;
       default:
         break;
@@ -198,20 +203,20 @@ export class OrderDateFilterComponent implements OnInit {
   }
 
   onCustomDateFilterChange() {
-    this.selectedDate.emit({
-      type: 'customDate',
-      startDate: moment(this.customDate.value).format(apiDateFormat),
-      endDate: moment(this.customDate.value).format(apiDateFormat)
-    });
+    this.updateSelectedDate(
+      "customDate",
+      moment(this.customDate.value).format(apiDateFormat),
+      moment(this.customDate.value).format(apiDateFormat)
+    );
   }
 
   onCustomDateRangeEndChange() {
     if(this.customRange.valid){
-      this.selectedDate.emit({
-        type: 'customRange',
-        startDate: moment(this.customRange.get('start').value).format(apiDateFormat),
-        endDate: moment(this.customRange.get('end').value).format(apiDateFormat)
-      });
+      this.updateSelectedDate(
+        "customRange",
+        moment(this.customRange.get('start').value).format(apiDateFormat),
+        moment(this.customRange.get('end').value).format(apiDateFormat)
+      );
     }
   }
 
@@ -236,12 +241,6 @@ export class OrderDateFilterComponent implements OnInit {
     };
   }
 
-  setTimeToZero(date: moment.Moment): string {
-    return date
-      .set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
-      .format(apiDateFormat);
-  }
-
   displayMaxRangeInfo() {
     var matCalendar = document.getElementsByClassName("mat-calendar")[0];
     let footer = document.createElement("div") as HTMLDivElement;
@@ -263,5 +262,13 @@ export class OrderDateFilterComponent implements OnInit {
     this.customRange.controls.start.setValue(start);
     this.customRange.controls.end.setValue(end);
     this.date.setValue("customRange");
+  }
+
+  updateSelectedDate(type: string, startDate: string, endDate: string){
+    this.selectedDate.emit({
+      type: type,
+      startDate: startDate,
+      endDate: endDate
+    });
   }
 }

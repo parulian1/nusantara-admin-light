@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IOption, IOrderFilter, IOrderFilterValue } from '@nusantara/models/order/filter';
 import * as moment from "moment";
+import { Utils } from './utils';
 
 @Component({
   selector: 'nus-order-filters',
@@ -110,6 +111,7 @@ export class OrderFiltersComponent implements OnInit {
     this.initializeForm();
 
     this.route.queryParamMap.subscribe((value) => {
+      // date
       const startTime = moment(value.get(this.START_TIME_PARAM)).isValid
       ? value.get(this.START_TIME_PARAM)
       : null;
@@ -117,6 +119,11 @@ export class OrderFiltersComponent implements OnInit {
       const endTime = moment(value.get(this.END_TIME_PARAM)).isValid
       ? value.get(this.END_TIME_PARAM)
       : null;
+
+      var utils = new Utils();
+      const dateType = utils.getDateOption(startTime, endTime);
+      this.updateDate(dateType, startTime, endTime);
+
 
       const platform = value.get(this.PLATFORM_PARAM)
       ? this.getValidOption(
@@ -139,12 +146,19 @@ export class OrderFiltersComponent implements OnInit {
         )
       : null;
       const q = value.get('q')? value.get('q') : null;
-      
-      this.updateDate(startTime, endTime);
-      this.updatePlatform(platform)
-      this.updateStatus(status)
-      this.updateLogistic(logistic)
-      this.updateQuery(q);
+  
+      if(platform){
+        this.updatePlatform(platform)
+      }
+      if(status){
+        this.updateStatus(status)
+      }
+      if(logistic){
+        this.updateLogistic(logistic)
+      }
+      if(q){
+        this.updateQuery(q);
+      }
        
       this.filtersForm.patchValue({
         platform: platform? platform : '',
@@ -207,7 +221,8 @@ export class OrderFiltersComponent implements OnInit {
     return result? param : '';
   }
 
-  updateDate(startDate: string, endDate: string) {
+  updateDate(type: string, startDate: string, endDate: string) {
+    this.filtersValue.date.type = type;
     this.filtersValue.date.start = startDate;
     this.filtersValue.date.end = endDate;
     this.filterApplied.next(this.filtersValue)    
