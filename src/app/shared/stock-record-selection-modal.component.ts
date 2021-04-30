@@ -36,10 +36,10 @@ import { map } from 'rxjs/operators';
           </colgroup>
           <thead>
           <tr style="background-color: #F4F4F4;">
-            <th>Receiving ID / Product Name / Location</th>
-            <th>SKU</th>
-            <th>Receiving Date</th>
-            <th>Original Qty</th>
+            <th class="product-name">Receiving ID / Product Name / Location</th>
+            <th class="product-sku">SKU</th>
+            <th class="stock-date">Receiving Date</th>
+            <th class="product-original-qty">Original Qty</th>
             <th class="centered">Action</th>
           </tr>
           </thead>
@@ -73,6 +73,16 @@ import { map } from 'rxjs/operators';
     'h2 { padding-bottom: 16px }',
     'p { color : var(--darken-grey); margin-bottom: 16px; }',
     'td { white-space: nowrap;  overflow: hidden; text-overflow: ellipsis; }',
+    ` .product-sku {
+        width: 15%;
+      }
+      .product-original-qty, .centered {
+        width: 10%;
+      }
+      .stock-date {
+        width: 15%;
+      }
+    `,
     ` .search {
         display: flex;
         border: solid 1px var(--lighter-nav-bg);
@@ -88,6 +98,9 @@ import { map } from 'rxjs/operators';
       }
       .search > input[type=search] {
         border: none !important;
+      }
+      ::ng-deep .wide-modal.nsm-dialog {
+        max-width: 70%;
       }
     `,
     'table { table-layout: fixed }',
