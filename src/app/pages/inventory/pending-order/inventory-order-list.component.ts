@@ -64,7 +64,10 @@ export class InventoryOrderListComponent extends AbstractListComponent<IInventor
       return `/inventory/receiving/${getSlugFromHref(entity.href)}`;
     } else if (entity.type === 'transfer_order') {
       return `/inventory/transfer-order/${getSlugFromHref(entity.href)}`;
+    } else if (entity.type === 'adjustment_order') {
+      return `/inventory/adjustment/${getSlugFromHref(entity.href)}`;
     }
+
     return '';
   }
 }

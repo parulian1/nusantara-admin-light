@@ -38,6 +38,7 @@ import { OnlyNumberDirective } from './only-number.directive';
 import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 import { FieldDatetimeComponent } from '@nusantara/shared/field-datetime.component';
 import { GetUserDisplayNamePipe } from './get-user-display-name.pipe';
+import { StockRecordSelectionModalComponent } from '@nusantara/shared/stock-record-selection-modal.component';
 
 /**
  * The purpose of this module is to make common code (like pipes)
@@ -59,6 +60,7 @@ import { GetUserDisplayNamePipe } from './get-user-display-name.pipe';
     NonFieldErrorsComponent,
     SpinnerComponent,
     ProductSelectionModalComponent,
+    StockRecordSelectionModalComponent,
     PaginationChildComponent,
     UserSelectionModalComponent,
     IncludeDeletedComponent,
@@ -93,6 +95,7 @@ import { GetUserDisplayNamePipe } from './get-user-display-name.pipe';
     NonFieldErrorsComponent,
     SpinnerComponent,
     ProductSelectionModalComponent,
+    StockRecordSelectionModalComponent,
     PaginationChildComponent,
     UserSelectionModalComponent,
     IncludeDeletedComponent,

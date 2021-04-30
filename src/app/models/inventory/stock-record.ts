@@ -9,4 +9,8 @@ export interface IStockRecord extends IHrefEntity {
   batchNumber: string;
   expiryDate: string;
   requestingStock?: number;
+  notes?: string;
+  reason?: string;
+  created?: string;
+  receivingOrder?: INamedHrefEntity; // hmm
 }

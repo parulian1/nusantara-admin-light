@@ -37,4 +37,5 @@ export interface IProduct extends INamedHrefEntity {
   subscription: IProductSubscription;
   isActive?: boolean;
   dimensions: IDimensions;
+  inStock?: boolean;
 }
