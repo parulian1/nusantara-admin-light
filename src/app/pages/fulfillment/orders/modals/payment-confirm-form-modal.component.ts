@@ -32,11 +32,11 @@ interface IPaymentConfirmDialog {
   selector: 'nus-payment-confirm-form-modal',
   template: `
     <ngx-smart-modal #myModal identifier="myModal" [escapable]="false">
-      <h1>
+      <h2 class="title-2">
         {{
           isUpdate() ? "Update Payment Confirmation" : "Create new Payment Confirm"
         }}
-      </h1>
+      </h2>
 
       <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
       <form [formGroup]="form" (ngSubmit)="save()">
@@ -109,16 +109,15 @@ interface IPaymentConfirmDialog {
       </form>
     </ngx-smart-modal>
   `,
-  styles: [`
-    .is-error {
-      border: 1px solid #af3b6e;
-    }
-    .select-wrapper {
+  styles: [
+    'h2 { margin-bottom: 16px; }',
+    '.is-error { border: 1px solid #af3b6e; }',
+    `.select-wrapper {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-    }
-  `],
+    }`
+  ],
 })
 export class PaymentConfirmFormModalComponent implements OnChanges, OnInit {
   @ViewChild('myModal') myModal: any;
@@ -242,7 +241,7 @@ export class PaymentConfirmFormModalComponent implements OnChanges, OnInit {
     this.toast?.addMessage(
       `You have successfully ${this.isUpdate() ? 'updated' : 'added'} a new payment confirmation information.`,
       `Payment Confirmation ${this.isUpdate() ? 'Updated' : 'Added'}!`,
-      ToastLevelEnum.info
+      ToastLevelEnum.success
     );
 
     this.action.emit({
@@ -250,6 +249,7 @@ export class PaymentConfirmFormModalComponent implements OnChanges, OnInit {
       data: this.getFormValue() as IOrderPaymentConfirm,
     });
 
+    this.form.reset();
     this.resetProofImage();
     this.myModal.close();
   }

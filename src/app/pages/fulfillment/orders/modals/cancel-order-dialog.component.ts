@@ -1,20 +1,21 @@
 import { Component, EventEmitter, ViewChild } from '@angular/core';
 import { DialogResult } from '@nusantara/core';
+import { IOrderPaymentConfirm } from '@nusantara/models';
 import { NgxSmartModalComponent } from 'ngx-smart-modal';
 
 @Component({
-  selector: 'nus-payment-confirm-modal',
+  selector: 'nus-cancel-order-dialog',
   template: `
-    <ngx-smart-modal [identifier]="'orderPaymentConfirm'" #modal [customClass]="'no-close-icon-modal no-padding-modal'">
+    <ngx-smart-modal [identifier]="'deleteConfirmInfo'" #modal [customClass]="'no-close-icon-modal no-padding-modal'">
       <div class="wrapper">
         <div class="message">
-          <h2 class="heading-2">Confirm Payment?</h2>
-          <p class="body-2">Make sure payment information matches the amount received on the designated bank account. If there's a mismatch, please contact the customer.</p>
+          <h2 class="heading-2">Cancel Order Confirmation</h2>
+          <p class="body-2">Are you sure you want to cancel this order?</p>
         </div>
         <div class="action">
-          <button class="control" (click)="close()" type="button">Confirm</button>
+          <button class="control" (click)="close()" type="button">Yes</button>
           <button class="control secondary ghost" (click)="cancel()" type="button">
-            Cancel
+            No
           </button>
         </div>
       </div>
@@ -30,7 +31,7 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
     'button:not(:first-of-type) { margin-left: 5px; }',
   ],
 })
-export class PaymentConfirmModalComponent {
+export class CancelOrderDialogComponent {
   @ViewChild('modal') modal: NgxSmartModalComponent;
   result: DialogResult = DialogResult.Cancelled;
 

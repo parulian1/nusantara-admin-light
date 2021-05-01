@@ -1,7 +1,7 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { ErrorResult, getSlugFromHref } from '@nusantara/core';
+import { ErrorResult, getSlugFromHref, ToastLevelEnum, ToastService } from '@nusantara/core';
 import { OrderService, ShipmentService } from '@nusantara/services';
 import { drf, order, OrderStatusType } from '@nusantara/models';
 import { 
@@ -25,7 +25,7 @@ import {
             <tr>
               <td>
                 <div class="body-2">Status</div>
-                <div class="subheading-2">{{ (orderDetailData.status ? orderDetailData.status : '-') | titlecase }}</div>
+                <div class="subheading-2">{{ (children.data[0]?.status ? children.data[0]?.status : '-') | titlecase }}</div>
               </td>
               <td>
                 <div class="body-2">Logistic</div>
@@ -47,17 +47,37 @@ import {
                   </div>
                 </ng-container>
               </td>
+              <td></td>
             </tr>
             <tr>
-              <td colspan="4">
+              <td colspan="5" class="status-action-row">
                 <span class="button-status-action">
-                  <nus-milestone [steps]="['ready', 'ship', 'complete']" [current]="currentMilestone"></nus-milestone>
+                  <nus-milestone 
+                    [steps]="['ready', 'ship', 'complete']" 
+                    [current]="getcurrentMilestone(children.data[0]?.status)"
+                    [isCompleted]="getcurrentMilestone(children.data[0]?.status) === 'complete'">
+                  </nus-milestone>
 
                   <ng-container *ngIf="isShippableOrder">
-                    <button *ngIf="orderDetailData.status === 'unpaid'" type="button" class="control" disabled>Ready</button>
-                    <button *ngIf="orderDetailData.status === 'paid'" type="button" class="control">Ready</button>
-                    <button *ngIf="orderDetailData.status === 'ready'" type="button" class="control">Ship</button>
-                    <button *ngIf="orderDetailData.status === 'shipped'" type="button" class="control">Complete</button>
+                    <button 
+                      *ngIf="!isReadyButtonHidden(children.data[0])"
+                      type="button" class="control"
+                      (click)="updateOrder(children.data[0], 'ready')"
+                      [disabled]="isReadyButtonDisabled(children.data[0])">
+                        Ready
+                    </button>
+                    <button 
+                      *ngIf="!isShipButtonHidden(children.data[0])"
+                      type="button" class="control"
+                      (click)="requestShipmentAndUpdateOrder(children.data[0])">
+                        Ship
+                    </button>
+                    <button
+                      *ngIf="!isCompleteButtonHidden(children.data[0])"
+                      type="button" class="control"
+                      (click)="updateOrder(children.data[0], 'complete')">
+                        Complete
+                    </button>
 
                     <!-- <button type="button" class="control secondary" 
                       (click)="activityTracking.open()">
@@ -74,48 +94,48 @@ import {
                 </span>
               </td>
             </tr>
-          </tbody>
-        </table>
-
-        <table class="product-list">
-          <tbody>
-          <tr>
-            <td colspan="5">
-              <h3 class="heading-1">Product</h3>
-            </td>
-          </tr>
-          <ng-container *ngFor="let data of children.data">
-            <tr *ngFor="let lineItems of data.lineItems">
-              <td>
-                <div *ngIf="lineItems.product.image; else noImage">
-                  <img [src]="lineItems.product.image" alt="Product Image">
-                </div>
-                <ng-template #noImage>
-                  <img class="no-image" src="/assets/no-image_en.png" alt="Product Image">
-                </ng-template>
+            <tr class="product-title">
+              <td colspan="5" class="product-title">
+                <h3 class="heading-1">Product</h3>
               </td>
-              <td>
-                <div class="subheading-2">
-                  {{ lineItems.product.name }}
-                </div>
-                <div class="caption-1">
-                  {{ lineItems.product.upc }}
-                </div>
-              </td>
-              <td>
-                <div class="body-2">Item Price</div>
-                <div class="subheading-2">{{ lineItems.price | currency: "IDR" }}</div>
-              </td>
-              <td>
-                <div class="body-2">Total Item</div>
-                <div class="subheading-2">{{ lineItems.quantity }}</div>
-              </td>
-              <td></td>
             </tr>
-          </ng-container>
+            <ng-container *ngFor="let data of children.data">
+              <tr *ngFor="let lineItems of data.lineItems" class="product-item">
+                <td colspan="4">
+                  <div class="product-item-detail">
+                    <span>
+                      <div *ngIf="lineItems.product.image; else noImage">
+                        <img [src]="lineItems.product.image" alt="Product Image">
+                      </div>
+                      <ng-template #noImage>
+                        <img class="no-image" src="/assets/no-image_en.png" alt="Product Image">
+                      </ng-template>
+                    </span>   
+                    <span>
+                      <div class="subheading-2">
+                        {{ lineItems.product.name }}
+                      </div>
+                      <div class="caption-1">
+                        {{ lineItems.product.upc }}
+                      </div>
+                    </span>
+                    <span>
+                      <div class="body-2">Item Price</div>
+                      <div class="subheading-2">{{ lineItems.price | currency: "IDR" }}</div>
+                    </span>
+                    <span>
+                      <div class="body-2">Total Item</div>
+                      <div class="subheading-2">{{ lineItems.quantity }}</div>
+                    </span>
+                  </div>
+                </td>
+                <td coslpan="1"></td>
+              </tr>
+            </ng-container>
           </tbody>
         </table>
       </ng-container>
+      
       <table class="summary">
         <thead>
           <tr>
@@ -165,15 +185,17 @@ import {
     '.wrapper { margin: 16px 0; }',
     'table { margin-bottom: 24px; }',
     'h3 { color: var(--lighten-black); margin-bottom: 0; }',
-    '.order-status td { padding: 20px 24px; vertical-align: top; width: 25%; }',
+    '.order-status td { padding: 20px 24px; vertical-align: top; width: 20%; }',
+    '.status-action-row { padding-left: 10px !important; }',
     '.button-status-action { display: flex; align-items: center; gap: 16px; }',
     '.button-status-action button { padding: 0 10px; }',
     '.subheading-2 { color: var(--lighten-black); margin-bottom: 2px; }',
-    '.product-list td { padding: 9px 8px; border: none; }',
-    '.product-list td:first-child { width: 64px; padding-left: 24px; }',
-    '.product-list td:nth-child(2) { width: 390px; }',
-    '.product-list td:nth-child(3) { width: 120px; }',
-    '.product-list tr:first-child > td { padding: 16px 24px; border-bottom: none }',
+    '.product-item td { border-bottom: none; padding: 8px 24px; }',
+    '.product-item-detail { display: flex; gap: 16px; align-items: center; }',
+    '.product-item-detail > span:first-child { width: 64px; }',
+    '.product-item-detail > span:nth-child(2) { min-width: 240px; flex-basis: 390px;}',
+    '.product-item-detail > span:nth-child(3) { min-width: 120px; flex-basis: 200px; }',
+    'tr.product-title > td { padding: 16px 24px; border-bottom: none; width: 100%; }',
     '.summary thead { background: transparent; }',
     '.summary th { padding: 20px 24px; }',
     '.summary td { width: 50%; padding: 14px 24px; }',
@@ -184,12 +206,6 @@ import {
   ]
 })
 export class OrderDetailComponent {
-  orderDetailData: order.IOrderDetail;
-  shipmentMessageInfo: Array<order.IOrderShipmentInfo> = [];
-  isShippableOrder = true;
-  isDetailShowed = false;
-  isRequestShipment = false;
-
   @ViewChild(TransportToCounterSelectionModalComponent) transferOrderSelection: TransportToCounterSelectionModalComponent;
   @ViewChild(DeliverToCounterAutogeneratedAwbComponent) deliverToCounterAutogeneratedAwb: DeliverToCounterAutogeneratedAwbComponent;
   @ViewChild(DeliverToCounterManualInputAwbComponent) deliverToCounterManualAwb: DeliverToCounterManualInputAwbComponent;
@@ -199,9 +215,18 @@ export class OrderDetailComponent {
   @ViewChild(InputAwbModalComponent) inputAwb: InputAwbModalComponent;
   @ViewChild(ActivityTrackingModalComponent) activityTracking: ActivityTrackingModalComponent;
 
+  @Output() enableCancelOrder =  new EventEmitter<boolean>();
+  @Output() updateOrderStatus = new EventEmitter();
+
+  orderDetailData: order.IOrderDetail;
+  isShippableOrder = true;
+  isDetailShowed = false;
+  isRequestShipment = false;
+
   constructor(public route: ActivatedRoute,
               public service: OrderService,
-              public shipmentService: ShipmentService) {
+              public shipmentService: ShipmentService,
+              private toast: ToastService,) {
   }
 
   ngOnInit(): void {
@@ -213,9 +238,8 @@ export class OrderDetailComponent {
     this.fetchAwbUrl();
   }
 
-  get currentMilestone(){
-    let status = this.orderDetailData.status === 'shipped'? 'ship': this.orderDetailData.status;
-    return status;
+  getcurrentMilestone(status: string){
+    return status === 'shipped'? 'ship': status;
   }
 
   getConnote(childrenData: any) {
@@ -273,7 +297,6 @@ export class OrderDetailComponent {
   }
 
   updateOrder(childrenData: any, status: OrderStatusType) {
-    const children: Array<string> = [];
     if (status === 'ready' && childrenData.status !== 'paid') {
       alert('Cannot change unpaid order');
     } else if (status === 'shipped' && childrenData.status !== 'ready') {
@@ -286,13 +309,14 @@ export class OrderDetailComponent {
         status,
         href: childrenData.href
       };
-
+  
       this.service.update(entity as any).subscribe((resp) => {
           this.service.fetch(this.orderDetailData.orderNumber).subscribe(
             (response) => {
-              // its not correct, IOrder not same as IOrderDetail
               this.orderDetailData = response as any;
               this.fetchAwbUrl();
+              this.updateCanCancelOrder();
+              this.updateOrderStatus.emit();
             },
             (error) => {
               console.log('Error', error);
@@ -301,7 +325,6 @@ export class OrderDetailComponent {
         console.log('error', error);
       });
     }
-
   }
 
   requestShipmentAndUpdateOrder(childrenData: any) {
@@ -311,33 +334,22 @@ export class OrderDetailComponent {
       alert(`Order already shipped`);
     } else {
       this.isRequestShipment = true;
-      let shipmentInfo = {
-            orderHref: childrenData.href,
-            message: 'Please wait...',
-            success: true,
-            connoteNumber: '',
-          };
-      this.shipmentMessageInfo.push(shipmentInfo);
       this.shipmentService.createAWB({
         orderNumber: getSlugFromHref(childrenData.href)
       }).subscribe((response) => {
-        const foundShipmentInfoIndex = this.shipmentMessageInfo.findIndex((messageInfo) => {
-          return messageInfo.orderHref === childrenData.href;
-        });
         if (response instanceof ErrorResult) {
-          shipmentInfo = {
-            orderHref: childrenData.href,
-            message: 'Please contact administrator, something went wrong...',
-            success: true,
-            connoteNumber: '',
-          };
+          this.toast?.addMessage(
+            'Please try again or contact the administrator.',
+            'Unable to Proceed',
+            ToastLevelEnum.error
+          );
         } else {
-          shipmentInfo = {
-            orderHref: childrenData.href,
-            message: response.messages[0],
-            success: response.success,
-            connoteNumber: response.entity.airwayBillNumber,
-          };
+          // shipmentInfo = {
+          //   orderHref: childrenData.href,
+          //   message: response.messages[0],
+          //   success: response.success,
+          //   connoteNumber: response.entity.airwayBillNumber,
+          // };
           if (!childrenData.shipmentHistory) {
             childrenData.shipmentHistory = new Object({
               awbNumber: null,
@@ -350,57 +362,43 @@ export class OrderDetailComponent {
           this.fetchAwbUrl(childrenData);
           this.updateOrder(childrenData, 'shipped');
         }
-        if (foundShipmentInfoIndex !== -1) {
-          this.shipmentMessageInfo[foundShipmentInfoIndex] = shipmentInfo;
-        } else {
-          this.shipmentMessageInfo.push(shipmentInfo);
-        }
         this.isRequestShipment = false;
       });
     }
   }
 
-  getShipmentMessageInfo(orderHref: string) {
-    if (this.shipmentMessageInfo.length) {
-      const shipMessage = this.shipmentMessageInfo.filter(info => info.orderHref === orderHref)[0];
-      return shipMessage?.message ?? '';
-    }
-    return '';
+  isReadyButtonDisabled(childrenData: any): boolean {
+    return childrenData === 'unpaid';
   }
 
-  getIsDisabledForReady(childrenData: any): boolean {
+  isReadyButtonHidden(childrenData: any): boolean {
     if (childrenData.status !== 'paid' || childrenData.status === 'ready' || childrenData.status === 'waiting') {
       return true;
     }
     return false;
   }
 
-  getIsDisabledForShipment(childrenData: any): boolean {
+  isShipButtonHidden(childrenData: any): boolean {
     if (childrenData.status !== 'ready' || childrenData.status === 'shipped' || this.isRequestShipment) {
       return true;
     }
     return false;
   }
 
-  getIsDisabledForComplete(childrenData: any): boolean {
+  isCompleteButtonHidden(childrenData: any): boolean {
     if (childrenData.status !== 'shipped' || childrenData.status === 'complete') {
       return true;
     }
     return false;
   }
 
-  showKirim(orderDetailData: any) {
-    if (orderDetailData.shipmentHistory) {
-      return false;
+  // trigger cancel button on main order page
+  updateCanCancelOrder() {
+    if(['unpaid', 'waiting', 'ready'].includes(this.orderDetailData.status)){
+      this.enableCancelOrder.emit(true);
+    } else {
+      this.enableCancelOrder.emit(false);
     }
-    if (this.orderDetailData.orderPayment.status !== 'paid') {
-      return false;
-    }
-    if (this.shipmentMessageInfo.length > 0) {
-      const showMessage = this.shipmentMessageInfo.filter(info => info.orderHref === orderDetailData.href)[0];
-      return !showMessage?.success;
-    }
-    return true;
   }
 }
 

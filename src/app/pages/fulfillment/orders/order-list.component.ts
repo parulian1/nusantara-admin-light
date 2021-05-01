@@ -53,8 +53,8 @@ import { SvgIconService } from '@nusantara/services';
               <a [routerLink]="[entity.order|entityToSlug]">{{ entity.order.orderNumber }}</a>
             </span>
           </td>
-          <td>{{ entity.order.platform }}</td>
-          <td>{{ entity.order.paidTime | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
+          <td>{{ entity.order.platform? entity.order.platform : '-'  }}</td>
+          <td>{{ entity.order.paidTime? (entity.order.paidTime | date: 'dd/MM/yyyy HH:mm:ss') : '-' }}</td>
           <td>{{ entity.order.shippingMethods.join(', ') }}</td>
           <td>
             <span class="badge" [ngClass]="{

@@ -1,9 +1,10 @@
 import { Component, EventEmitter, ViewChild } from '@angular/core';
 import { DialogResult } from '@nusantara/core';
+import { IOrderPaymentConfirm } from '@nusantara/models';
 import { NgxSmartModalComponent } from 'ngx-smart-modal';
 
 @Component({
-  selector: 'nus-delete-confirm-info',
+  selector: 'nus-delete-confirm-dialog',
   template: `
     <ngx-smart-modal [identifier]="'deleteConfirmInfo'" #modal [customClass]="'no-close-icon-modal no-padding-modal'">
       <div class="wrapper">
@@ -30,11 +31,14 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
     'button:not(:first-of-type) { margin-left: 5px; }',
   ],
 })
-export class DeleteConfirmInfoDialogComponent {
+export class DeleteConfirmDialogComponent {
   @ViewChild('modal') modal: NgxSmartModalComponent;
   result: DialogResult = DialogResult.Cancelled;
 
-  open() {
+  orderPaymentConfirm: IOrderPaymentConfirm
+
+  open(orderPaymentConfirm: IOrderPaymentConfirm) {
+    this.orderPaymentConfirm = orderPaymentConfirm;
     this.modal.open();
   }
 

@@ -1,10 +1,6 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ToastLevelEnum, ToastService } from '@nusantara/core';
-import {
-  IOrderPaymentConfirm,
-  IPaymentGateway,
-  order, PaymentTypeChoices,
-} from '@nusantara/models';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { DialogResult, ToastLevelEnum, ToastService } from '@nusantara/core';
+import { IPaymentGateway, order, PaymentTypeChoices } from '@nusantara/models';
 import {
   OrderPaymentConfirmService,
   PaymentGatewayService,
@@ -13,13 +9,13 @@ import {
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { DeleteConfirmInfoDialogComponent } from './modals';
+import { DeleteConfirmDialogComponent } from './modals';
 
 @Component({
   selector: 'nus-order-confirm',
   template: `
     <div class="wrapper">
-      <button (click)="openModal()" class="control add-payment-confirm" [disabled]="!canDoCRUD()">
+      <button (click)="openModal()" class="control add-payment-confirm" [disabled]="!canUpdateConfirmData()">
         <i class="material-icons">add</i>Add
       </button>
       <table>
@@ -57,18 +53,25 @@ import { DeleteConfirmInfoDialogComponent } from './modals';
             <td>
               <a
                 (click)="openModal(paymentConfirm)"
-                [ngClass]="{'disabled': !canDoCRUD()}">
+                [ngClass]="{'disabled': !canUpdateConfirmData()}">
                 Edit
               </a>
             </td>
             <td>
-              <button
+              <button *ngIf="canUpdateConfirmData(); else disableDelete"
                 type="button"
                 class="delete-button"
-                (click)="deleteConfirm.open()"
-                [disabled]="!canDoCRUD()">
+                (click)="deleteConfirmModal.open(paymentConfirm)">
                 <mat-icon svgIcon="trash"></mat-icon>
               </button>
+              <ng-template #disableDelete>
+                <button
+                  type="button"
+                  class="delete-button"
+                  disabled>
+                    <mat-icon svgIcon="trash-disabled"></mat-icon>
+                </button>
+              </ng-template>
             </td>
           </tr>
         </tbody>
@@ -83,7 +86,7 @@ import { DeleteConfirmInfoDialogComponent } from './modals';
       [paymentGateways]="paymentGateways"
     >
     </nus-payment-confirm-form-modal>
-    <nus-delete-confirm-info></nus-delete-confirm-info>
+    <nus-delete-confirm-dialog></nus-delete-confirm-dialog>
   `,
   styles: [
     '.wrapper { margin: 16px 0; }',
@@ -103,8 +106,9 @@ import { DeleteConfirmInfoDialogComponent } from './modals';
 })
 export class OrderPaymentConfirmComponent implements OnInit, OnDestroy {
   @Input() order: order.IOrderDetail;
+  @Output() updatePaymentConfirm = new EventEmitter();
 
-  @ViewChild(DeleteConfirmInfoDialogComponent) deleteConfirm: DeleteConfirmInfoDialogComponent;
+  @ViewChild(DeleteConfirmDialogComponent) deleteConfirmModal: DeleteConfirmDialogComponent;
   private unsubscribe$ = new Subject<void>();
 
   paymentConfirms: order.IOrderPaymentConfirm[] = [];
@@ -139,6 +143,10 @@ export class OrderPaymentConfirmComponent implements OnInit, OnDestroy {
       });
   }
 
+  ngAfterViewInit() {
+    this.deleteConfirmModal.onClose.subscribe(() => this.ondeleteConfirmModalClosed());
+  }
+
   openModal(paymentConfirm?: order.IOrderPaymentConfirm): void {
     this.currentPaymentConfirm = paymentConfirm;
     this.ngxSmartModalService.getModal('myModal').open();
@@ -146,20 +154,24 @@ export class OrderPaymentConfirmComponent implements OnInit, OnDestroy {
 
   onSubmit(event: any): void {
     this.reFetch();
+    this.updatePaymentConfirm.emit();
   }
 
-  onDelete(orderPaymentConfirm: IOrderPaymentConfirm) {
-    this.service.delete(orderPaymentConfirm).subscribe(
-      () => {
-        this.toast?.addMessage(
-          'Payment confirmation information has been deleted.',
-          'Payment Confirmation Deleted!',
-          ToastLevelEnum.info
-        );
-        this.reFetch();
-      },
-      (error) => this.handleError(`error to delete a payment confirm`)
-    );
+  ondeleteConfirmModalClosed() {
+    if (this.deleteConfirmModal.result === DialogResult.OK) {
+      this.service.delete(this.deleteConfirmModal.orderPaymentConfirm).subscribe(
+        () => {
+          this.toast?.addMessage(
+            'Payment confirmation information has been deleted.',
+            'Payment Confirmation Deleted!',
+            ToastLevelEnum.success
+          );
+          this.reFetch();
+          this.updatePaymentConfirm.emit();
+        },
+        () => this.handleError()
+      );
+    }
   }
 
   reFetch(): void {
@@ -172,14 +184,12 @@ export class OrderPaymentConfirmComponent implements OnInit, OnDestroy {
       });
   }
 
-  handleError(error: any): void {
-    if (typeof error === 'string') {
-      this.toast?.addMessage(
-        'Unable to delete payment confirmation. Please try again.',
-        'Failed to Delete Payment Confirmation',
-        ToastLevelEnum.error
-      );
-    }
+  handleError(): void {
+    this.toast?.addMessage(
+      'Unable to delete payment confirmation. Please try again.',
+      'Failed to Delete Payment Confirmation',
+      ToastLevelEnum.error
+    );
   }
 
   ngOnDestroy(): void {
@@ -187,7 +197,7 @@ export class OrderPaymentConfirmComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  canDoCRUD(): boolean {
+  canUpdateConfirmData(): boolean {
     const statusChoices = ['cancelled', 'unpaid', 'waiting'];
     return statusChoices.includes(this.order.status);
   }

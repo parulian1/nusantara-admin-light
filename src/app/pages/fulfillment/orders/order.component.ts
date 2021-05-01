@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { AbstractDetailComponent, ErrorResult, getSlugFromHref, ToastService } from '@nusantara/core';
+import { AbstractDetailComponent, DialogResult, getSlugFromHref, ToastLevelEnum, ToastService } from '@nusantara/core';
 import { 
   UserService,
   ShipmentService,
@@ -11,7 +10,7 @@ import {
   OrderDownloadFileService
 } from '@nusantara/services';
 import { drf, order } from '@nusantara/models';
-import { PaymentConfirmModalComponent } from './modals';
+import { CancelOrderDialogComponent, PaymentConfirmModalComponent } from './modals';
 @Component({
   selector: 'nus-order',
   template: `  
@@ -33,7 +32,7 @@ import { PaymentConfirmModalComponent } from './modals';
             <div class="body-2">Platform</div>
             <div class="subheading-2">{{ (orderDetailData.source? orderDetailData.source : '-') | uppercase }}</div>
           </td>
-          <td></td>
+          <td class="wide-column"></td>
         </tr>
         <tr *ngIf="isDetailShowed" class="no-border-bottom more-detail">
           <td>
@@ -46,9 +45,9 @@ import { PaymentConfirmModalComponent } from './modals';
           </td>
           <td>
             <div class="body-2">Email</div>
-            <div class="subheading-2">{{ orderDetailData.customer.name }}</div>
+            <div class="subheading-2">{{ orderDetailData.customer.email }}</div>
           </td>
-          <td>
+          <td class="wide-column">
             <div class="body-2">Address</div>
             <div class="subheading-2"> {{ getOrderAddress() }} </div>
           </td>
@@ -59,13 +58,13 @@ import { PaymentConfirmModalComponent } from './modals';
           </td>
         </tr>
         <tr>
+          <td>
+            <div>
+              <div class="body-2">Status</div>
+              <div class="subheading-2">{{ orderStatusDisplayName }}</div>
+            </div>
+          </td>
           <ng-container *ngIf="canUpdateOrder">
-            <td>
-              <div>
-                <div class="body-2">Status</div>
-                <div class="subheading-2">{{ orderStatusDisplayName }}</div>
-              </div>
-            </td>
             <td>
               <button *ngIf="this.orderDetailData.status === 'unpaid'" 
                 type="button" 
@@ -75,61 +74,84 @@ import { PaymentConfirmModalComponent } from './modals';
               <button *ngIf="this.orderDetailData.status === 'waiting'" 
                 type="button" 
                 class="control confirm-payment" 
-                (click)="paymentConfirm.open()">
+                (click)="paymentConfirmModal.open()">
                   Confirm Payment
               </button>
             </td>
-            <td colspan="3">
-              <button class="download-button control secondary" (click)="downloadProductList()">Download Product List</button>
-            </td>
           </ng-container>
-          <ng-container *ngIf="!canUpdateOrder">
-            <td colspan="5">
-              <button class="download-button control secondary" (click)="downloadProductList()">Download Product List</button>
-            </td>
-          </ng-container>
+          <td colspan="3">
+            <button class="download-button control secondary" (click)="downloadProductList()">Download Product List</button>
+          </td>
         </tr>
       </tbody>
     </table>
 
     <nus-tabs *ngIf="isManualTransfer(orderDetailData); else noManualTransfer">
       <nus-tab title="Order Detail">
-        <nus-order-detail></nus-order-detail>
+        <nus-order-detail
+          (enableCancelOrder)="onEnableCancelOrder($event)"
+          (updateOrderStatus)="onUpdateOrderStatus()">
+        </nus-order-detail>
       </nus-tab>
       <nus-tab title="Order Confirmation">
-        <nus-order-confirm [order]="orderDetailData"></nus-order-confirm>      
+        <nus-order-confirm 
+          [order]="orderDetailData"
+          (updatePaymentConfirm)="onUpdateOrderStatus()"></nus-order-confirm>      
       </nus-tab>
     </nus-tabs>
 
     <ng-template #noManualTransfer>
-      <nus-order-detail></nus-order-detail>
+      <nus-order-detail
+        (enableCancelOrder)="onEnableCancelOrder($event)"
+        (updateOrderStatus)="onUpdateOrderStatus()">
+      </nus-order-detail>
     </ng-template>
 
-    <button type="button" (click)="navigateToParent(true)" class="control secondary">Back</button>
+    <div class="action-button">
+      <button type="button" (click)="navigateToParent(true)" class="control secondary">Back</button>
+      <button 
+        *ngIf="canCancelOrder"
+        type="button"
+        class="control danger ghost"
+        (click)="cancelOrderModal.open()">
+          Cancel Order
+        </button>
+    </div>
 
     <!-- Modal -->
     <nus-payment-confirm-modal></nus-payment-confirm-modal>
+    <nus-cancel-order-dialog></nus-cancel-order-dialog>
     `,
   styles: [
-    'table { margin-bottom: 24px; }',
-    'h3 { color: var(--lighten-black); margin-bottom: 0; }',
-    '.detail td { padding: 20px 24px; vertical-align: top; width: 25%; }',
+    'table { margin-bottom: 24px; width: 100%; table-layout: fixed; }',
+    '.detail td { width: 20%; }',
+    `.detail td:not(:last-child) div {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap; }`,
+    '.detail td.wide-column { width: 40% }',
+    '.detail td { padding: 20px 24px; vertical-align: top; }',
     '.detail tr.no-border-bottom td { border-bottom: none; }',
     '.detail tr.more-detail td { padding-top: 3px; }',
     '.detail tr.more-toggle td { padding: 0 24px 18px; }',
+    'h3 { color: var(--lighten-black); margin-bottom: 0; }',
     '.confirm-payment { min-width: 160px }',
     '.subheading-2 { color: var(--lighten-black); margin-bottom: 2px; }',
     '.download-button { min-width: 200px; display: block; margin-left: auto; }',
+    '.action-button { display: flex; justify-content: space-between; }'
   ]
 })
 export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> implements OnInit {
-  @ViewChild(PaymentConfirmModalComponent) paymentConfirm: PaymentConfirmModalComponent;
+  @ViewChild(PaymentConfirmModalComponent) paymentConfirmModal: PaymentConfirmModalComponent;
+  @ViewChild(CancelOrderDialogComponent) cancelOrderModal: CancelOrderDialogComponent;
 
   orderDetailData: order.IOrderDetail;
   currentTab: 'orderDetail' | 'paymentConfirm' = 'orderDetail';
   orderStatusChoices: Array<drf.IChoice>;
   entity: order.IOrderDetail;
   isDetailShowed = false;
+  canCancelOrder = false;
+  canConfirmPayment = false;
 
   constructor(public service: OrderService,
               public route: ActivatedRoute,
@@ -137,7 +159,6 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
               public toast: ToastService,
               public userService: UserService,
               public shipmentService: ShipmentService,
-              private fb: FormBuilder,
               private orderReportService: OrderReportService,
               private orderDonwloadService: OrderDownloadFileService) {
     super(route, router, toast, service);
@@ -149,47 +170,71 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
       data: { entity: order.IOrderDetail, orderStatus: Array<drf.IChoice> }) => {
       this.orderDetailData = data.entity;
       this.orderStatusChoices = data.orderStatus;
+    })
 
-      console.log(this.orderDetailData.status);
-    });
-    this.fetchAwbUrl();
+    // set initial value for canCancelOrder using this criteria
+    if(['unpaid', 'waiting', 'paid', 'ready'].includes(this.orderDetailData.status)){
+      this.canCancelOrder = true;
+    }
+
+    // can confirm payment for manual transfer if status waiting
+    this.canConfirmPayment = this.orderDetailData.status === 'waiting';
+    
+    this.fetchAwbUrl()
+  }
+
+  ngAfterViewInit() {
+    this.paymentConfirmModal.onClose.subscribe(() => this.onPaymentConfirmModalClosed());
+    this.cancelOrderModal.onClose.subscribe(() => this.oncancelOrderModalClosed());
+  }
+
+  onPaymentConfirmModalClosed() {
+    if (this.paymentConfirmModal.result === DialogResult.OK) {
+      this.service.updateByOrderNumber(this.entity.orderNumber, {status: 'paid'}).subscribe(() => {
+        this.toast?.addMessage(
+          'You can now process the order.',
+          'Payment Confirmed!',
+          ToastLevelEnum.success
+        );
+        this.router.navigate([]);
+      }, error => { 
+        this.toast?.addMessage(
+          'Unable to confirm payment. Please try again.',
+          'Failed to Confirm Payment',
+          ToastLevelEnum.error
+        );
+        console.log(error) 
+      });
+    }
+  }
+
+  oncancelOrderModalClosed(){
+    if (this.cancelOrderModal.result === DialogResult.OK) {
+      this.service.updateByOrderNumber(this.orderDetailData.orderNumber, {status: 'cancelled'}).subscribe(() => {
+        this.toast?.addMessage(
+          `Order ${this.orderDetailData.orderNumber} has just been cancelled.`,
+          'Order Cancelled!',
+          ToastLevelEnum.success
+        );
+        this.router.navigate([]);
+      }, error => { 
+        this.toast?.addMessage(
+          'Unable to cancel order. Please try again.',
+          'Failed to Cancel Order',
+          ToastLevelEnum.error
+        );
+        console.log(error) 
+      });
+    }
   }
 
   initializeForm(entity?: order.IOrderDetail) {
-    this.form = this.fb.group({
-      status: [entity?.status ?? 'unpaid', []],
-    });
     this.entity = entity;
   }
-
-  get status(): FormControl { return this.form.get('status') as FormControl; }
 
   get currentMilestone(){
     let status = this.orderDetailData.status === 'shipped'? 'ship': this.orderDetailData.status;
     return status;
-  }
-
-  onSubmit(): void {
-    if (this.form.valid) {
-      this.service.updateByOrderNumber(this.entity.orderNumber, this.form.value).subscribe(() => {
-        alert('success update order');
-        this.router.navigate([]);
-      }, error => this._handleError(error));
-    }
-  }
-
-  _handleError(error: any) {
-    if (error.status === 400) {
-      this.setErrorsMessage(error.error);
-    }
-  }
-
-  setErrorsMessage(error: any) {
-    Object.keys(error).forEach((fieldName: any) => {
-      if (this.form.controls[fieldName]) {
-        this.form.controls[fieldName].setErrors({server: error[fieldName]});
-      }
-    });
   }
 
   fetchAwbUrl(selectedOrderDetail?: any) {
@@ -266,12 +311,25 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
       this.isManualTransfer(this.orderDetailData) &&
       statusCanUpdate.includes(this.orderDetailData.status)
     );
-  } 
+  }
 
   downloadProductList(){
     this.orderReportService.downloadProductDetail(this.orderDetailData.orderNumber).subscribe((response: string) => {
       this.orderDonwloadService.downloadAsCsv(response, 'product-list');
     });
   }
+
+  onEnableCancelOrder(isAble: boolean){
+    this.canCancelOrder = isAble;
+  }
+
+  onUpdateOrderStatus(){
+    console.log('trigerred');
+    this.service.fetch(this.orderDetailData.orderNumber).subscribe(
+      (response: any) => {
+        this.orderDetailData = response;
+      });
+  }
+
 }
 

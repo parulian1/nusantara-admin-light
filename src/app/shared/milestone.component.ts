@@ -6,7 +6,10 @@ import { Component, Input, OnInit } from '@angular/core';
     <div>
       <ul>
         <li *ngFor="let step of steps; let i = index;">
-          <span [ngClass]="{'current': step === current, 'achieved': i < currentIdx}">{{ step | titlecase }}</span>
+          <span *ngIf="isCompleted; else notCompleted" class="achieved">{{ step | titlecase }}</span>
+          <ng-template #notCompleted>
+            <span [ngClass]="{'current': step === current, 'achieved': i < currentIdx}">{{ step | titlecase }}</span>
+          </ng-template>
         </li>
       </ul>
     </div>
@@ -61,6 +64,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class MilestoneComponent implements OnInit {
   @Input() steps: Array<string>;
   @Input() current: string;
+  @Input() isCompleted?: boolean;
   currentIdx = -1;
 
   ngOnInit() {

@@ -23,7 +23,8 @@ import {
   ActivityTrackingModalComponent,
   PaymentConfirmModalComponent,
   PaymentConfirmFormModalComponent,
-  DeleteConfirmInfoDialogComponent,
+  DeleteConfirmDialogComponent,
+  CancelOrderDialogComponent,
 } from './orders';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { MatSelectModule } from '@angular/material/select';
@@ -59,7 +60,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     ActivityTrackingModalComponent,
     PaymentConfirmModalComponent,
     PaymentConfirmFormModalComponent,
-    DeleteConfirmInfoDialogComponent
+    DeleteConfirmDialogComponent,
+    CancelOrderDialogComponent
   ],
   imports: [
     CommonModule,
