@@ -414,12 +414,12 @@ export class EmployeeComponent
       this.isLoadingResetPIN = true;
       this.authService.resetPin(this.entity.href).subscribe(() => {
         this.isLoadingResetPIN = false;
-        this.toast?.addMessage(`PIN was successfully changed to default.`,
+        this.toast?.addMessage(`Employee's PIN has been reset to default successfully.`,
           'Reset PIN', ToastLevelEnum.success);
       }, (error) => {
         console.log(error);
         this.isLoadingResetPIN = false;
-        this.toast?.addMessage(`An error occurred while changing the PIN to default.`,
+        this.toast?.addMessage(`Reset PIN failed. Please try again.`,
           'Reset PIN', ToastLevelEnum.error);
       });
     }
