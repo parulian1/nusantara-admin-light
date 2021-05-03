@@ -86,7 +86,6 @@ export class DefaultPinConfigComponent extends AbstractDetailComponent<IDefaultP
   }
 
   ngOnInit(): void {
-    console.log('ngOnInit');
     super.ngOnInit();
     this.route.data.subscribe((data: { entity: IDefaultPinConfig}) => {
       this.entity = data.entity;
@@ -98,12 +97,10 @@ export class DefaultPinConfigComponent extends AbstractDetailComponent<IDefaultP
   get pin(): FormControl { return this.form.get('pin') as FormControl; }
 
   initializeForm(entity?: IDefaultPinConfig) {
-    console.log('initializeForm');
     this.entity = entity;
     this.form = this.fb.group({
       pin: ['', [Validators.required, Validators.pattern('^[0-9]*$'), Validators.maxLength(4)]],
     });
-    console.log(this.entity);
   }
 
   // Start toggle password visibility function

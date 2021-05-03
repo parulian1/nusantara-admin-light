@@ -5,5 +5,4 @@ export interface IEmployee extends ICustomer {
   identityNumber: string;
   accessGroups: Array<INamedHrefEntity>;
   canUsePos?: boolean;
-  pin: string;
 }

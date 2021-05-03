@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -13,9 +13,9 @@ import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { IAccessGroup, IEmployee, IHttpFailure, IWarehouse } from '@nusantara/models';
-import { EmployeeService, SiteConfigService, WarehouseService } from '@nusantara/services';
+import { EmployeeService, SiteConfigService, WarehouseService, DefaultPinConfigService } from '@nusantara/services';
 import {
-  AbstractDetailComponent,
+  AbstractDetailComponent, DialogResult,
   ErrorResult, IResultResponse, ToastLevelEnum,
   ToastService,
 } from '@nusantara/core';
@@ -24,6 +24,7 @@ import { AuthService, RequireIsEnterpriseGuard } from '@nusantara/auth';
 import { EmployeeWarehouseHostComponent } from './warehouse';
 import { EmployeeAccessGroupHostComponent } from './access-group';
 import { IJwtClaims } from '@nusantara/auth/models';
+import { ConfirmModalResetPinComponent } from '@nusantara/shared/confirm-modal-reset-pin.component';
 
 
 @Component({
@@ -32,64 +33,87 @@ import { IJwtClaims } from '@nusantara/auth/models';
     <nus-detail-title [originalName]="originalEntityName" typeName="Employee">
     </nus-detail-title>
 
-    <form [formGroup]="form" (ngSubmit)="save()">
-      <label class="hidden">
-        <span>Name</span>
-        <input type="text" [formControl]="name"/>
-      </label>
-      <label>
-        <span>Employee ID</span>
-        <input type="text" [formControl]="identityNumber"/>
-      </label>
+    <form [formGroup]="form" (ngSubmit)="save()" class="fluid">
+      <div id="personal-info" class="wrapper">
+        <h1 class="heading-1">Personal Information</h1>
+        <label class="hidden">
+          <span>Name</span>
+          <input type="text" [formControl]="name"/>
+        </label>
+        <label>
+          <span>Employee ID</span>
+          <input type="text" [formControl]="identityNumber"/>
+        </label>
 
-      <label>
-        <span>First Name</span>
-        <input type="text" [formControl]="firstName"/>
-      </label>
+        <label>
+          <span>First Name</span>
+          <input type="text" [formControl]="firstName"/>
+        </label>
 
-      <label>
-        <span>Last Name</span>
-        <input type="text" [formControl]="lastName"/>
-      </label>
+        <label>
+          <span>Last Name</span>
+          <input type="text" [formControl]="lastName"/>
+        </label>
 
-      <label>
-        <span>Email Address</span>
-        <div *ngIf="!entity; else emailReadOnly">
-          <input type="email" [formControl]="email"/>
+        <label>
+          <span>Email Address</span>
+          <div *ngIf="!entity; else emailReadOnly">
+            <input type="email" [formControl]="email"/>
+          </div>
+          <ng-template #emailReadOnly>
+            <div style="font-size: 0.85rem;">{{ email.value }}</div>
+          </ng-template>
+        </label>
+
+        <label>
+          <span>Phone Number</span>
+          <input type="tel" [formControl]="phoneNumber"/>
+        </label>
+
+        <label class="toggle">
+          <input type="checkbox"
+                 class="toggle"
+                 [formControl]="isActive"
+                 name="is-active"/>
+          <span>Is Active</span>
+          <nus-field-errors [control]="isActive"></nus-field-errors>
+        </label>
+      </div>
+
+      <div id="pos-info" class="wrapper"  *ngIf="enterpriseLicense()">
+        <h1 class="heading-1">Point Of Sales (Optional)</h1>
+        <label class="toggle">
+          <input type="checkbox"
+                 class="toggle"
+                 [formControl]="canUsePos"
+                 name="is-active"
+                 (ngModelChange)="onCanUsePosChange($event)"/>
+          <span>Use Pos</span>
+          <nus-field-errors [control]="canUsePos"></nus-field-errors>
+        </label>
+
+        <p *ngIf="isCreateForm && hasDefaultPinConfig">Login to BHISMA POS using Default PIN</p>
+        <p *ngIf="isCreateForm && !hasDefaultPinConfig">Default PIN has not been filled, please fill in <a
+          routerLink="/config/pos-integration/default-pin-config" style="color:#EA730B;">here</a></p>
+
+        <button *ngIf="!isCreateForm && isUsePos"
+                (click)="confirmModalResetPinComponent.open()"
+                type="button" class="new-add-button wide control secondary"
+                [class.button-email--disabled]="isLoadingResetPIN"
+                [disabled]="isLoadingResetPIN"
+        >
+          Reset to Default PIN
+        </button>
+
+        <div *ngIf="isUsePos" style="margin-top: 16px;">
+          <nus-employee-warehouse-host
+            [entity]="entity"
+            [choices]="warehouseChoices"
+            [form]="warehouses"
+          >
+          </nus-employee-warehouse-host>
         </div>
-        <ng-template #emailReadOnly>
-          <div style="font-size: 0.85rem;">{{ email.value }}</div>
-        </ng-template>
-      </label>
-
-      <label>
-        <span>Phone Number</span>
-        <input type="tel" [formControl]="phoneNumber"/>
-      </label>
-
-      <label class="checkbox">
-        <span>Is Active</span>
-        <input type="checkbox" [formControl]="isActive"/>
-        <nus-field-errors [control]="isActive"></nus-field-errors>
-      </label>
-
-      <label class="checkbox" *ngIf="enterpriseLicense()">
-        <span>Use POS</span>
-        <input type="checkbox" [formControl]="canUsePos" (ngModelChange)="onCanUsePosChange($event)"/>
-        <nus-field-errors [control]="canUsePos"></nus-field-errors>
-      </label>
-
-      <label *ngIf="isUsePos">
-        <span>PIN</span>
-        <input type="password" maxlength="4" autocomplete="new-password" [formControl]="pin"/>
-      </label>
-
-      <nus-employee-warehouse-host
-        [entity]="entity"
-        [choices]="warehouseChoices"
-        [form]="warehouses"
-      >
-      </nus-employee-warehouse-host>
+      </div>
 
       <div style="margin-top: 1rem;" *ngIf="enterpriseGuard.canActivate(null, null)">
         <nus-employee-access-group-host
@@ -106,7 +130,7 @@ import { IJwtClaims } from '@nusantara/auth/models';
             type="button"
             (click)="sendResetPassword()"
             class="button-email"
-            [class.button-email--disabled]="isLoadingResetPassword"
+            [class.button-reset-pin--disabled]="isLoadingResetPassword"
             [disabled]="isLoadingResetPassword"
           >
             Send Reset Password
@@ -121,8 +145,15 @@ import { IJwtClaims } from '@nusantara/auth/models';
       >
       </nus-detail-actions>
     </form>
+
+    <!-- Modals -->
+    <nus-confirm-modal-reset-pin></nus-confirm-modal-reset-pin>
   `,
   styles: [`
+    .wrapper { padding: 16px 24px; border: solid 1px var(--grey); border-radius: 4px; margin-bottom: 24px; }
+    .heading-1 { margin-bottom: 16px; }
+    label.toggle { padding-bottom: 20px; width: fit-content; min-height: 0; }
+    label.toggle > input { margin-right: 16px }
     .button-email {
       border-radius: 2px;
       border: none;
@@ -139,7 +170,7 @@ import { IJwtClaims } from '@nusantara/auth/models';
       color: white;
     }
 
-    .button-email--disabled {
+    .button-email--disabled, .button-reset-pin--disabled {
       background-color: #7b869b;
       color: #dedede;
       cursor: not-allowed;
@@ -148,11 +179,12 @@ import { IJwtClaims } from '@nusantara/auth/models';
 })
 export class EmployeeComponent
   extends AbstractDetailComponent<IEmployee>
-  implements OnInit {
+  implements OnInit, AfterViewInit {
   @ViewChild(EmployeeWarehouseHostComponent)
   EmployeeWarehouseHostComponent: EmployeeWarehouseHostComponent;
   @ViewChild(EmployeeAccessGroupHostComponent)
   EmployeeAccessGroupHostComponent: EmployeeAccessGroupHostComponent;
+  @ViewChild(ConfirmModalResetPinComponent) confirmModalResetPinComponent: ConfirmModalResetPinComponent;
 
   warehouseChoices: IWarehouse[] = [];
   accessGroupChoices: IAccessGroup[] = [];
@@ -160,11 +192,17 @@ export class EmployeeComponent
   entity?: IEmployee;
   isUsePos = false;
 
+  isCreateForm = true;
+  currentActive = 'personal-info';
+  hasDefaultPinConfig: boolean;
+
   /**
    * send email
    */
   isLoadingResetPassword = false;
   currentUser: IJwtClaims;
+
+  isLoadingResetPIN = false;
 
   constructor(
     service: EmployeeService,
@@ -176,6 +214,7 @@ export class EmployeeComponent
     private fb: FormBuilder,
     public enterpriseGuard: RequireIsEnterpriseGuard,
     private configService: SiteConfigService,
+    protected defaultPinService: DefaultPinConfigService,
   ) {
     super(route, router, toast, service);
   }
@@ -203,9 +242,17 @@ export class EmployeeComponent
     super.ngOnInit();
     this.handleCurrentUser();
     this.setWarehouseValidator();
+    this.checkDefaultPinConfig();
+  }
+
+  ngAfterViewInit() {
+    this.confirmModalResetPinComponent.onClose.subscribe(() => this.onConfirmModalClosed());
   }
 
   initializeForm(entity?: IEmployee) {
+    this.originalEntityName = entity ? 'Edit Employee' : 'Add Employee';
+    this.isCreateForm = !entity;
+
     this.form = this.fb.group({
       name: [entity?.firstName, []],
       identityNumber: [entity?.identityNumber, [Validators.required]],
@@ -224,14 +271,9 @@ export class EmployeeComponent
       accessGroups: this.fb.array([]),
       title: [entity?.firstName, []], // used as formality when delete data
       canUsePos: [entity?.canUsePos ?? false, []],
-      pin: ['', [Validators.maxLength(4)]],
     });
 
     this.entity = entity;
-
-    // need to mark as touched to make custom styling works
-    this.form.controls.isActive.markAsTouched();
-    this.form.controls.canUsePos.markAsTouched();
 
     this.isUsePos = this.canUsePos.value;
   }
@@ -274,10 +316,6 @@ export class EmployeeComponent
 
   get canUsePos(): FormControl {
     return this.form.get('canUsePos') as FormControl;
-  }
-
-  get pin(): FormControl {
-    return this.form.get('pin') as FormControl;
   }
 
   getFormValue(): any {
@@ -329,8 +367,9 @@ export class EmployeeComponent
   }
 
   protected onSaveSuccess(result: IResultResponse<IEmployee>) {
-    this.EmployeeWarehouseHostComponent.saveAll(result.entity.href).subscribe(() => {
-    });
+    if (this.isUsePos) {
+      this.EmployeeWarehouseHostComponent.saveAll(result.entity.href).subscribe(() => {});
+    }
     if (this.enterpriseGuard.canActivate(null, null)) {
       this.EmployeeAccessGroupHostComponent.saveAll(result.entity.href).subscribe(() => {
       });
@@ -353,11 +392,36 @@ export class EmployeeComponent
     });
   }
 
+  checkDefaultPinConfig(): void {
+    this.defaultPinService.fetch().subscribe((data) => {
+      this.hasDefaultPinConfig = !!data.pin;
+    }, (error) => {
+      this.hasDefaultPinConfig = false;
+      this.onSaveError(error);
+    });
+  }
+
   onCanUsePosChange($event: boolean) {
     this.isUsePos = $event;
   }
 
   enterpriseLicense() {
     return this.configService.isEnterpriseLicense();
+  }
+
+  onConfirmModalClosed() {
+    if (this.confirmModalResetPinComponent.result === DialogResult.OK) {
+      this.isLoadingResetPIN = true;
+      this.authService.resetPin(this.entity.href).subscribe(() => {
+        this.isLoadingResetPIN = false;
+        this.toast?.addMessage(`PIN was successfully changed to default.`,
+          'Reset PIN', ToastLevelEnum.success);
+      }, (error) => {
+        console.log(error);
+        this.isLoadingResetPIN = false;
+        this.toast?.addMessage(`An error occurred while changing the PIN to default.`,
+          'Reset PIN', ToastLevelEnum.error);
+      });
+    }
   }
 }

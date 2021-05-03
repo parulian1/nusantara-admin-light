@@ -42,6 +42,7 @@ import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 import { FieldDatetimeComponent } from '@nusantara/shared/field-datetime.component';
 import { GetUserDisplayNamePipe } from './get-user-display-name.pipe';
 import { StockRecordSelectionModalComponent } from '@nusantara/shared/stock-record-selection-modal.component';
+import { ConfirmModalResetPinComponent } from '@nusantara/shared/confirm-modal-reset-pin.component';
 
 /**
  * The purpose of this module is to make common code (like pipes)
@@ -84,7 +85,8 @@ import { StockRecordSelectionModalComponent } from '@nusantara/shared/stock-reco
     MarketplaceChannelInfoModalComponent,
     MarketplaceStockInfoModalComponent,
     OrderType,
-    OnlyNumberDirective
+    OnlyNumberDirective,
+    ConfirmModalResetPinComponent,
   ],
   exports: [
     EntityToSlugPipe,
@@ -123,6 +125,7 @@ import { StockRecordSelectionModalComponent } from '@nusantara/shared/stock-reco
     MarketplaceStockInfoModalComponent,
     OnlyNumberDirective,
     OrderType,
+    ConfirmModalResetPinComponent,
   ],
   imports: [
     CommonModule,
