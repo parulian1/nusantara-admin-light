@@ -88,6 +88,7 @@ export class DefaultPinConfigComponent extends AbstractDetailComponent<IDefaultP
   ngOnInit(): void {
     super.ngOnInit();
     this.route.data.subscribe((data: { entity: IDefaultPinConfig}) => {
+      console.log(data.entity);
       this.entity = data.entity;
     });
     this.formLabel = this.entity.pin ? 'Update' : 'Set';
@@ -99,6 +100,7 @@ export class DefaultPinConfigComponent extends AbstractDetailComponent<IDefaultP
   initializeForm(entity?: IDefaultPinConfig) {
     this.entity = entity;
     this.form = this.fb.group({
+      href: [entity?.href],
       pin: ['', [Validators.required, Validators.pattern('^[0-9]*$'), Validators.maxLength(4)]],
     });
   }
