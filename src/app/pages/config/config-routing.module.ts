@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {RequireIsEnterpriseGuard} from '@nusantara/auth';
-
+import {ReindexingComponent} from './reindexing/reindexing.component';
 
 const routes: Routes = [
   {
@@ -33,7 +33,21 @@ const routes: Routes = [
       import('./general-settings/general-settings.module').then(
         (m) => m.GeneralSettingsModule
       ),
-  }
+  },
+  {
+    path: 'reindex',
+    children: [
+      {
+        path: ':slug',
+        component: ReindexingComponent,
+        resolve: {
+
+        },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      }
+    ]
+  },
 ];
 
 @NgModule({
