@@ -51,12 +51,19 @@ import { MarketplaceInfoHostComponent } from './marketplace';
               <nus-field-errors [control]="name"></nus-field-errors>
             </label>
             <label class="toggle">
-              <input id="s2" type="checkbox"
+              <!-- <input id="s2" type="checkbox"
                 class="toggle"
                 [formControl]="isActive"
                 name="is-active"
                 data-qa="is-active"/>
-              <span>Is Active</span>
+              <span>Is Active</span> -->
+
+              <mat-slide-toggle
+                [formControl]="isActive"
+                name="is-active"
+                data-qa="is-active">
+                Is Active
+              </mat-slide-toggle>
               <nus-field-errors [control]="isActive"></nus-field-errors>
             </label>
 

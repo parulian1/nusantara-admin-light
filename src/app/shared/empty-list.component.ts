@@ -20,7 +20,7 @@ import { Component, Input } from '@angular/core';
     'span { padding-right: 10px; }'
   ],
 })
-export class EmptyListCOmponent {
+export class EmptyListComponent {
   @Input() title: string;
   @Input() description: string;
   @Input() cancelUrl: string[];

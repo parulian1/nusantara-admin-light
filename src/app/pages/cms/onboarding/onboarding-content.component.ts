@@ -13,7 +13,7 @@ import { IOnboardingContent } from '@nusantara/models';
           <input type="text" [formControl]="name">
           <nus-field-errors [control]="name"></nus-field-errors>
           <div class="collapse" (click)="toggle()">
-            <img src="/assets/arrowDown.svg">
+            <img src="/assets/arrow-down.svg">
           </div>
         </div>
       </div>
