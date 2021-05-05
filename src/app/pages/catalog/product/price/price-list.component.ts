@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, zip } from 'rxjs';
+import { Observable, zip} from 'rxjs';
 
 import { AbstractEditingComponent, IResultResponse } from '@nusantara/core';
 import { drf, products } from '@nusantara/models';
@@ -264,6 +264,16 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
 
   enterpriseLicense() {
     return this.configSercvice.isEnterpriseLicense();
+  }
+
+  validatePriceList(): boolean {
+    let isValid = true;
+    this.rangeComponents.forEach((component) => {
+      if(!component.validatePriceRange()) {
+        isValid = false;
+      }
+    });
+    return this.form.valid && isValid;
   }
 
 }

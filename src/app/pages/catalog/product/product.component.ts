@@ -11,10 +11,10 @@ import { catchError } from 'rxjs/operators';
 import {
   ToastService,
   AbstractDetailComponent,
-  PagedResponse,
   getSlugFromHref,
   NusantaraValidators,
-  ErrorResult
+  ErrorResult,
+  Logger
 } from '@nusantara/core';
 import { ICategory, IVendor, drf, products } from '@nusantara/models';
 import { IError } from '@nusantara/models/base/error';
@@ -24,6 +24,8 @@ import { ProductMediaHostComponent } from './media';
 import { ProductAttributeHostComponent } from './attribute';
 import { ProductSubscriptonHostComponent } from './subscription';
 import { MarketplaceInfoHostComponent } from './marketplace';
+
+const log = new Logger('ProductComponent');
 
 /**
  * Allows the user to edit/create a single product.
@@ -685,52 +687,67 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   save() {
-    console.log('formvalue', this.getFormValue());
-    this.service.save(this.getFormValue()).pipe(catchError(err => {
-      if (err instanceof HttpErrorResponse) {
-        return of(new ErrorResult<IError>(err.error, err.status));
-      } else {
-        return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, err.status));
-      }
-    })).subscribe(resp => {
-        if (resp instanceof ErrorResult) {
-          this.onSaveError(resp);
+    if (this.isValidForm()) {
+      this.service.save(this.getFormValue()).pipe(catchError(err => {
+        if (err instanceof HttpErrorResponse) {
+          return of(new ErrorResult<IError>(err.error, err.status));
         } else {
-          if (this.isProductOptionDomain) {
-            this.subscriptionHost.save(resp.entity).subscribe(() => {
-            });
-          }
-
-          if (!this.enterpriseLicense()) {
-            this.stockInput.save(resp.entity).subscribe(() => {
-            });
-          }
-
-          this.mediaHost.saveAll(resp.entity).subscribe(() => {
-          });
-          this.priceListHost.saveAll(resp.entity).pipe(catchError(childErr => {
-            if (childErr instanceof HttpErrorResponse) {
-              return of(new ErrorResult<IError>(childErr.error, childErr.status));
-            } else {
-              return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, childErr.status));
-            }
-          })).subscribe((childResp) => {
-              if (childResp instanceof ErrorResult) {
-                this.onSaveError(childResp);
-              } else {
-                this.onSaveSuccess(resp);
-              }
-            }
-          );
+          return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, err.status));
         }
+      })).subscribe(resp => {
+          if (resp instanceof ErrorResult) {
+            this.onSaveError(resp);
+          } else {
+            if (this.isProductOptionDomain) {
+              this.subscriptionHost.save(resp.entity).subscribe(() => {
+              });
+            }
+
+            if (!this.enterpriseLicense()) {
+              this.stockInput.save(resp.entity).subscribe(() => {
+              });
+            }
+
+            this.mediaHost.saveAll(resp.entity).subscribe(() => {
+            });
+            this.priceListHost.priceLists.forEach((priceList) => {
+              log.debug('pricelist', priceList.validatePriceList());
+              priceList.rangeComponents.forEach((component) => {
+                log.debug('validate', component.validatePriceRange(), component.maxQuantity.value);
+              });
+            });
+            if (this.priceListHost.validatePriceListHost()) {
+              this.priceListHost.saveAll(resp.entity).pipe(catchError(childErr => {
+                if (childErr instanceof HttpErrorResponse) {
+                  return of(new ErrorResult<IError>(childErr.error, childErr.status));
+                } else {
+                  return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, childErr.status));
+                }
+              })).subscribe((childResp) => {
+                  if (childResp instanceof ErrorResult) {
+                    this.onSaveError(childResp);
+                  } else {
+                    this.onSaveSuccess(resp);
+                  }
+                }
+              );
+            }
+          }
+        }
+      );
+      if (!this.isNew && this.isPhysical() && this.enterpriseLicense()) {
+        this.marketplaceHost.saveAll();
+      } else {
+        window.alert('Please check your input.');
+        this.priceListHost.priceLists.forEach((priceList) => {
+          log.debug('pricelist', priceList.validatePriceList());
+          priceList.rangeComponents.forEach((component) => {
+            log.debug('validate', component.validatePriceRange(), component.maxQuantity.value);
+          });
+        });
       }
-    );
-
-    if (!this.isNew && this.isPhysical() && this.enterpriseLicense()) {
-      this.marketplaceHost.saveAll();
     }
-
-    this.form.disable();
+    this.form.enable();
   }
 
   addVariant() {
@@ -826,5 +843,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       inline: 'nearest',
     });
     this.currentActive = id;
+  }
+
+  isValidForm(): boolean {
+    return this.form.valid && this.priceListHost.validatePriceListHost();
   }
 }

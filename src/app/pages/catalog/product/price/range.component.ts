@@ -204,4 +204,16 @@ export class RangeComponent extends AbstractEditingComponent implements OnInit {
     this.suspendQuantityChangedEmitter = false;
   }
 
+  validatePriceRange(): boolean {
+    let isValid = true;
+    const firstCase = this.minQuantity.value === 0;
+    const secondCase = this.maxQuantity.value !== null && this.maxQuantity.value < this.minQuantity.value;
+    if (firstCase) {
+      isValid = false;
+    }
+    if (secondCase) {
+      isValid = false;
+    }
+    return isValid;
+  }
 }

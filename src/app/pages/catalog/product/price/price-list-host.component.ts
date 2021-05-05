@@ -43,6 +43,7 @@ export class PriceListHostComponent extends AbstractEditingComponent<FormArray> 
   @ViewChildren(PriceListComponent) priceLists!: QueryList<PriceListComponent>;
 
   types: Array<drf.IChoice>;
+  isValid = true;
 
   protected deletedPriceLists: Array<products.IPriceList> = [];
 
@@ -122,6 +123,16 @@ export class PriceListHostComponent extends AbstractEditingComponent<FormArray> 
       ...saveResults,
       ...this.deletedPriceLists.map(priceList => this.service.delete(priceList))
     );
+  }
+
+  validatePriceListHost(): boolean {
+    this.isValid = true;
+    this.priceLists.forEach((value) => {
+      if (!value.validatePriceList()) {
+        this.isValid = false;
+      }
+    });
+    return this.form.valid && this.isValid;
   }
 
 }
