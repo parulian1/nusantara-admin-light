@@ -19,6 +19,11 @@ import { PaymentGatewayMetaComponent } from './payment-gateways/payment-gateway-
 import { PaymentGatewayInstoreComponent } from './payment-gateways/payment-gateway-instore/payment-gateway-instore.component';
 import { ShippingServiceHostComponent } from './shipping/shipping-service/shipping-service-host.component';
 import { ConfigCartDiscountComponent } from '@nusantara/pages/config/config-cart-discount';
+import { ShopifyComponent } from './shopify/shopify.component';
+import { ShopifyMessageListComponent } from './shopify/shopify-message-list.component';
+import { ReindexingComponent } from './reindexing/reindexing.component';
+import { ShopifyWebhookComponent } from './shopify/shopify-webhook.component';
+import { ShopifyHubComponent } from './shopify/shopify-hub.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +52,11 @@ import { ConfigCartDiscountComponent } from '@nusantara/pages/config/config-cart
     ConfigAnalyticToolComponent,
     ConfigCartDiscountComponent,
     CompanyAddressComponent,
+    ShopifyComponent,
+    ShopifyMessageListComponent,
+    ReindexingComponent,
+    ShopifyWebhookComponent,
+    ShopifyHubComponent,
   ],
   imports: [
     CommonModule,
@@ -55,6 +65,7 @@ import { ConfigCartDiscountComponent } from '@nusantara/pages/config/config-cart
     ReactiveFormsModule,
     ConfigRoutingModule,
     CKEditorModule,
+    FormsModule,
   ],
 })
 export class ConfigModule { }

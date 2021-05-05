@@ -67,3 +67,5 @@ export * from './reseller';
 
 export * from './license-sme';
 export * from './onboarding';
+export * from './shopify';
+export * from './site/config-chat';

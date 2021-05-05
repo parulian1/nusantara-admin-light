@@ -22,6 +22,9 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
   isRequestShipment = false;
   isShippableOrder = true;
 
+  billingAddress = '';
+  shippingAddress = '';
+
   constructor(public service: OrderService,
               public route: ActivatedRoute,
               public router: Router,
@@ -39,6 +42,13 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
       this.orderDetailData = data.entity;
       this.orderStatusChoices = data.orderStatus;
       this.isShippableOrder = !!this.orderDetailData.orderAddress;
+      if (!!this.orderDetailData.meta?.billingAddress) {
+        this.billingAddress = this.formatAddress(this.orderDetailData.meta.billingAddress);
+      }
+      if (!!this.isShippableOrder) {
+        this.shippingAddress = this.formatAddress(this.orderDetailData.orderAddress);
+      }
+
     });
     this.fetchAwbUrl();
   }
@@ -289,6 +299,16 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
       this.isManualTransfer(this.orderDetailData) &&
       statusCanUpdate.includes(this.orderDetailData.status)
     );
+  }
+
+  formatAddress(orderAddress): string {
+    return `${orderAddress.shipToName} <br>` +
+      `${orderAddress.street} <br>` +
+      `${orderAddress.city} <br>` +
+      `${orderAddress.state} <br>` +
+      `${orderAddress.zipcode} <br>` +
+      `${orderAddress.country} <br>` +
+      `${orderAddress.phoneNumber}`;
   }
 }
 

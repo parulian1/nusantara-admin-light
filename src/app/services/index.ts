@@ -82,3 +82,4 @@ export * from './marketplace-item.service';
 export * from './local-storage.service';
 
 export * from './onboarding.service';
+export * from './shopify';
