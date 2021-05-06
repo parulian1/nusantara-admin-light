@@ -53,7 +53,7 @@ import { SvgIconService } from '@nusantara/services';
               <a [routerLink]="[entity.order|entityToSlug]">{{ entity.order.orderNumber }}</a>
             </span>
           </td>
-          <td>{{ entity.order.platform? entity.order.platform : '-'  }}</td>
+          <td>{{ getPlatform(entity.order) }}</td>
           <td>{{ entity.order.paidTime? (entity.order.paidTime | date: 'dd/MM/yyyy HH:mm:ss') : '-' }}</td>
           <td>{{ entity.order.shippingMethods.join(', ') }}</td>
           <td>
@@ -127,5 +127,17 @@ export class OrderListComponent extends AbstractListComponent<IOrder> implements
 
   onFilterApplied(event: IOrderFilterValue){
     this.appliedFilter = event;
+  }
+
+  getPlatform(orderItem: IOrder): string {
+    if (orderItem.source) {
+      if (orderItem.source === "marketplace") {
+        return `${orderItem.sourceName.toUpperCase()} (${orderItem.storeName})`;
+      } else {
+        return orderItem.source.toUpperCase();
+      }
+    } else {
+      return "-";
+    }
   }
 }

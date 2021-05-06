@@ -30,26 +30,39 @@ import { CancelOrderDialogComponent, PaymentConfirmModalComponent } from './moda
           </td>
           <td>
             <div class="body-2">Platform</div>
-            <div class="subheading-2">{{ (orderDetailData.source? orderDetailData.source : '-') | uppercase }}</div>
+            <div class="subheading-2">{{ platform }}</div>
           </td>
           <td class="wide-column"></td>
         </tr>
         <tr *ngIf="isDetailShowed" class="no-border-bottom more-detail">
           <td>
             <div class="body-2">Customer Name</div>
-            <div class="subheading-2">{{ orderDetailData.customer.name }}</div>
+            <div class="subheading-2">
+              {{ orderDetailData.customer.name? orderDetailData.customer.name : '-' }}
+            </div>
           </td>
           <td>
             <div class="body-2">Phone Number</div>
-            <div class="subheading-2">{{ orderDetailData.orderAddress.phoneNumber }}</div>
+            <div class="subheading-2">
+              {{ orderDetailData.orderAddress.phoneNumber? orderDetailData.orderAddress.phoneNumber : '-' }}
+            </div>
           </td>
           <td>
             <div class="body-2">Email</div>
-            <div class="subheading-2">{{ orderDetailData.customer.email }}</div>
+            <div class="subheading-2">
+              {{ orderDetailData.customer.email? orderDetailData.customer.email : '-' }}
+            </div>
           </td>
           <td class="wide-column">
             <div class="body-2">Address</div>
-            <div class="subheading-2"> {{ getOrderAddress() }} </div>
+            <div class="subheading-2">
+              <ng-container *ngIf="this.orderDetailData && this.orderDetailData.orderAddress; else noAddress">
+                <div>{{ orderDetailData.orderAddress.shipToName }}</div>
+                <div>{{ orderDetailData.orderAddress.street +' '+ orderDetailData.orderAddress.city }}</div>
+                <div>{{ orderDetailData.orderAddress.state +' - '+ orderDetailData.orderAddress.zipcode }}</div>
+              </ng-container>
+              <ng-template #noAddress>-</ng-template>
+            </div>
           </td>
         </tr>
         <tr class="more-toggle">
@@ -179,8 +192,6 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
 
     // can confirm payment for manual transfer if status waiting
     this.canConfirmPayment = this.orderDetailData.status === 'waiting';
-    
-    this.fetchAwbUrl()
   }
 
   ngAfterViewInit() {
@@ -232,62 +243,6 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
     this.entity = entity;
   }
 
-  get currentMilestone(){
-    let status = this.orderDetailData.status === 'shipped'? 'ship': this.orderDetailData.status;
-    return status;
-  }
-
-  fetchAwbUrl(selectedOrderDetail?: any) {
-    if (!selectedOrderDetail) {
-      this.orderDetailData.children.forEach((children) => {
-        children.data.forEach((childrenData) => {
-          if (childrenData.shipmentHistory?.href) {
-            this.shipmentService.fetch(getSlugFromHref(childrenData.shipmentHistory?.href)).subscribe((entity) => {
-              childrenData.shipmentHistory.shippingLabelUrl = entity.shippingLabelUrl;
-            });
-          }
-
-        });
-      });
-    } else {
-      this.shipmentService.fetch(getSlugFromHref(selectedOrderDetail.shipmentHistory.href)).subscribe((entity) => {
-        selectedOrderDetail.shipmentHistory.shippingLabelUrl = entity.shippingLabelUrl;
-      });
-    }
-  }
-
-  printConnote(labelUrl: string) {
-    let windowContent = '<!DOCTYPE html>';
-    windowContent += '<html>';
-    windowContent += '<head><title>Print</title></head>';
-    windowContent += '<body>';
-    windowContent += '<img src="' + labelUrl + '">';
-    windowContent += '</body>';
-    windowContent += '</html>';
-
-    const printWin = window.open('', '', 'width=' + screen.availWidth + ',height=' + screen.availHeight);
-    printWin.document.open();
-    printWin.document.write(windowContent);
-
-    printWin.document.addEventListener('load', () => {
-      printWin.focus();
-      printWin.print();
-      printWin.document.close();
-      printWin.close();
-    }, true);
-  }
-
-  getOrderAddress(): string {
-    if (!this.orderDetailData || !this.orderDetailData.orderAddress) {
-      return '';
-    }
-    return `${this.orderDetailData.orderAddress.shipToName} ` +
-      `${this.orderDetailData.orderAddress.street} ` +
-      `${this.orderDetailData.orderAddress.city} ` +
-      `${this.orderDetailData.orderAddress.state} ` +
-      `${this.orderDetailData.orderAddress.zipcode}`;
-  }
-
   /**
    * Check manual transfer or not
    */
@@ -330,5 +285,16 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
       });
   }
 
+  get platform(): string {
+    if(this.orderDetailData.source){
+      if(this.orderDetailData.source === 'marketplace'){
+        return `${this.orderDetailData.sourceName.toUpperCase()} (${this.orderDetailData.storeName})` ;
+      } else {
+        return this.orderDetailData.source.toUpperCase();
+      }
+    } else {
+      return '-';
+    }
+  }
 }
 

@@ -38,8 +38,12 @@ export interface IOrderDetail extends ICoreOrder {
   source: string;
   sourceName: string;
 
+  storeId: number;
+  storeName: string;
+
   subtotalCost: number;
   discount: number;
   shippingCost: number;
+
 }
 

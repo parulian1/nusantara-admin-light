@@ -30,7 +30,9 @@ import {
               <td>
                 <div class="body-2">Logistic</div>
                 <div class="subheading-2">
-                  <ng-container *ngIf="children.data[0]?.shippingMethod">{{ children.data[0].shippingMethod }}</ng-container>
+                  <ng-container *ngIf="children.data[0]?.shippingMethod">
+                    {{ children.data[0].shippingMethod? children.data[0].shippingMethod : '-'}}
+                  </ng-container>
                 </div>
               </td>
               <td>
@@ -351,8 +353,6 @@ export class OrderDetailComponent {
               shippingLabelUrl: '',
             });
           }
-          childrenData.shipmentHistory.href = response.entity.href;
-          childrenData.shipmentHistory.awbNumber = response.entity.awbNumber;
           this.fetchAwbUrl(childrenData);
           this.updateOrder(childrenData, 'shipped');
         }

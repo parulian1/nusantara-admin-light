@@ -34,8 +34,11 @@ export interface IOrder extends ICoreOrder {
     paymentType: string; // actually a type?
     vaNumber: string;
     dateExpired: string;
-
   };
 
+  platform: string;
+  source: string;
+  sourceName: string;
+  storeName: string;
 }
 
