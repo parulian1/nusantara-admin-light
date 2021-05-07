@@ -10,20 +10,25 @@ import {
   selector: 'nus-marketplace-publish',
   template: `
     <h1 class="title-1">Publish List</h1>
-    <nus-empty-list
-      *ngIf="!shops?.entities?.length && !processing?.entities?.length && !completed?.entities?.length"
-      title="Add Store Before Publishing Products"
-      description="Add a marketplace store to manage all your products in one place."
-      [addUrl]="['/config', 'marketplace-integration', 'connect', 'new']"
-      addText="Add Store">
-    </nus-empty-list>
-    <nus-empty-list
-      *ngIf="shops?.entities?.length && !processing?.entities?.length && !completed?.entities?.length"
-      title="No Published Product Yet!"
-      description="Go to &quot;Receiving&quot; menu to publish your products."
-      [addUrl]="['/inventory', 'receiving']"
-      addText="Receiving Inventory">
-    </nus-empty-list>
+    <div class="empty-list">
+      <nus-empty-list
+        *ngIf="!shops?.entities?.length && !processing?.entities?.length && !completed?.entities?.length"
+        title="Add Store Before Publishing Products"
+        description="Add a marketplace store to manage all your products in one place."
+        [addUrl]="['/config', 'marketplace-integration', 'connect', 'new']"
+        addText="Add Store">
+      </nus-empty-list>
+    </div>
+
+    <div class="empty-list">
+      <nus-empty-list
+        *ngIf="shops?.entities?.length && !processing?.entities?.length && !completed?.entities?.length"
+        title="No Published Product Yet!"
+        description="Go to &quot;Receiving&quot; menu to publish your products."
+        [addUrl]="['/inventory', 'receiving']"
+        addText="Receiving Inventory">
+      </nus-empty-list>
+    <div class="empty-list">
 
     <div *ngIf="processing?.entities?.length || completed?.entities?.length">
       <p></p>
@@ -121,8 +126,9 @@ import {
       </nus-tabs>
     </div>`,
     styles: [
-    'table { table-layout: fixed }',
-    'td { width: 12.5%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }',
+      'table { table-layout: fixed }',
+      'td { width: 12.5%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }',
+      ':host ::ng-deep nus-empty-list div { height: 100vh }'
     ]
 })
 export class PublishListComponent implements OnInit {

@@ -15,16 +15,20 @@ import {
   TscFormComponent,
   LazadaFormComponent,
 } from './connect';
-import {
-  ProductClassMappingListComponent,
-  ProductClassMappingFormComponent,
-} from './setup/product-class-mapping';
 
 import {
   CategorySelectionFormComponent,
   CategoryGroupControlComponent,
   AttributeSelectionFormComponent,
   AttributeMatchingFormComponent,
+
+  ProductClassMappingListComponent,
+  ProductClassMappingFormComponent,
+
+  ShowcaseListHeaderComponent,
+  ShowcaseListComponent,
+  ShowcaseComponent,
+  AddNewShowcaseModalComponent,
 } from './setup';
 
 import { PublishListComponent, PublishDetailComponent } from './publish';
@@ -76,6 +80,10 @@ export function getMarketplacesConfig(
     ProductClassMappingListComponent,
     ProductClassMappingFormComponent,
     EditShippingComponent,
+    ShowcaseListHeaderComponent,
+    ShowcaseListComponent,
+    ShowcaseComponent,
+    AddNewShowcaseModalComponent,
 
     // publish
     PublishListComponent,

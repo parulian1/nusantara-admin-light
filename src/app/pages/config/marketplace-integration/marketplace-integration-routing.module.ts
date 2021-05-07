@@ -11,9 +11,12 @@ import {
   EditShippingComponent,
   ProductClassMappingListComponent,
   ProductClassMappingFormComponent,
+  ShowcaseComponent,
+  ShowcaseListComponent
 } from './setup';
 import { MarketplaceIntegrationComponent } from './marketplace-integration.component';
 import { PublishListComponent, PublishDetailComponent } from './publish';
+import { MarketplaceEtalaseListResolver } from '@nusantara/resolvers/marketplace-etalase-list.resolver';
 
 const routes: Routes = [
   {
@@ -72,6 +75,27 @@ const routes: Routes = [
         component: EditShippingComponent,
         resolve: { logistics: MarketplaceLogisticListResolver },
         runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'showcase/:shop-slug',
+        children: [
+          {
+            path: '',
+            component: ShowcaseListComponent,
+            resolve: { showcases: MarketplaceEtalaseListResolver },
+            runGuardsAndResolvers: 'always',
+          },
+          {
+            path: 'new',
+            component: ShowcaseComponent,
+            runGuardsAndResolvers: 'always',
+          },
+          {
+            path: ':showcase-slug',
+            component: ShowcaseComponent,
+            runGuardsAndResolvers: 'always',
+          },
+        ]
       },
     ],
   },

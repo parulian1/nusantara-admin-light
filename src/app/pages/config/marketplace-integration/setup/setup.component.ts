@@ -49,7 +49,11 @@ import * as shopActions from '@nusantara/actions';
               </a>
             </td>
             <td>
-              <a class="disabled">Set Up Showcase</a>
+              <a [routerLink]="['showcase/', entity.slug]"
+                (click)="setSelectedShop(entity)"
+                [ngClass]="{'disabled': entity.isConnected === false}">
+                Set Up Showcase
+              </a>
             </td>
           </tr>
         </tbody>
@@ -57,7 +61,8 @@ import * as shopActions from '@nusantara/actions';
       <nus-pagination [page]="page"></nus-pagination>
     </ng-template>`,
   styles: [
-    'thead th, tbody td { text-align: left }'
+    'thead th, tbody td { text-align: left }',
+    ':host ::ng-deep nus-empty-list div { height: 100vh }'
   ],
 })
 export class SetupComponent implements OnInit {
