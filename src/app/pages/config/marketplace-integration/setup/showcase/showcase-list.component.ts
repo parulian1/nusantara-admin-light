@@ -5,6 +5,7 @@ import { ConfirmModalComponent } from "@nusantara/shared/confirm-modal.component
 import { AddNewShowcaseModalComponent } from "./modals";
 import { DialogResult } from "@nusantara/core";
 import { marketplace } from '@nusantara/models';
+import { MarketplaceClientEnum } from "../../connect/markeplace-client-enum";
 import { Store } from '@ngrx/store';
 import * as fromReducer from '@nusantara/reducers';
 import { SvgIconService } from '@nusantara/services';
@@ -66,16 +67,22 @@ import { MarketplaceEtalaseService } from '@nusantara/services/marketplace-showc
         <ng-template #elseBlock>
           <tr *ngFor="let entity of data">
             <td><a [routerLink]="">{{ entity.name }}</a></td>
-            <td>{{ entity.author }}</td>
+            <td *ngIf='!entity.isDefault'>Admin</td>
+            <td *ngIf='entity.isDefault'>System</td>
             <td class="centered">
               <div>
                 <mat-slide-toggle
-                  [checked]="entity.isActive">
+                  [checked]="false" [disabled]=true 
+                  *ngIf='entity.marketplace==marketplaceClient.tokopedia;'>
+                </mat-slide-toggle>
+                <mat-slide-toggle
+                  [checked]="entity.isConnected" 
+                  *ngIf='entity.marketplace!==marketplaceClient.tokopedia;'>
                 </mat-slide-toggle>
               </div>
             </td>
             <td class="centered">
-              <button class="remove" (click)="confirmDeleteModal.open()">
+              <button class="remove" (click)="confirmDeleteModal.open()" [disabled]='!entity.isDefault'>
                 <mat-icon class="icon" svgIcon="trash"></mat-icon>
               </button>
             </td>
@@ -120,7 +127,7 @@ export class ShowcaseListComponent implements OnInit, AfterViewInit, OnDestroy {
   currentShop$: Observable<marketplace.IShop>;
   isBusy: boolean;
   data = null;
-
+  marketplaceClient = MarketplaceClientEnum;
   subscription: Subscription;
 
   @ViewChild(ConfirmModalComponent)

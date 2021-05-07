@@ -6,6 +6,7 @@ import { PagedResponse } from '@nusantara/core';
 import { marketplace } from '@nusantara/models';
 import * as fromMarketplaces from '@nusantara/reducers/marketplace.reducers';
 import * as shopActions from '@nusantara/actions';
+import { MarketplaceClientEnum } from '../connect/markeplace-client-enum';
 
 @Component({
   selector: 'nus-marketplace-setup',
@@ -51,7 +52,7 @@ import * as shopActions from '@nusantara/actions';
             <td>
               <a [routerLink]="['showcase/', entity.slug]"
                 (click)="setSelectedShop(entity)"
-                [ngClass]="{'disabled': entity.isConnected === false}">
+                [ngClass]="{'disabled': entity.marketplace === marketplaceClient.shopee}">
                 Set Up Showcase
               </a>
             </td>
@@ -67,6 +68,7 @@ import * as shopActions from '@nusantara/actions';
 })
 export class SetupComponent implements OnInit {
   page: PagedResponse<marketplace.IShop>;
+  marketplaceClient = MarketplaceClientEnum;
 
   constructor(
     private route: ActivatedRoute,
