@@ -1,4 +1,5 @@
 import { Component, EventEmitter, ViewChild } from "@angular/core";
+import { DialogResult } from '@nusantara/core';
 import { NgxSmartModalComponent } from "ngx-smart-modal";
 
 @Component({
@@ -10,11 +11,11 @@ import { NgxSmartModalComponent } from "ngx-smart-modal";
         <h2>Add Showcase</h2>
         <label>
           <span>Showcase Display Name</span>
-          <input type="text" name="add-showcase" placeholder="Input Name" />
+          <input [(ngModel)]="name" #ctrl="ngModel" type="text" name="add-showcase" placeholder="Input Name" required/>
         </label>
       </div>
       <div class="action">
-        <button class="control" type="button">Save</button>
+        <button class="control" type="button" [disabled]="ctrl.invalid" (click)="save()">Save</button>
       </div>
     </div>
   </ngx-smart-modal>
@@ -31,6 +32,8 @@ import { NgxSmartModalComponent } from "ngx-smart-modal";
 })
 export class AddNewShowcaseModalComponent {
   @ViewChild("modal") modal: NgxSmartModalComponent;
+  result: DialogResult = DialogResult.Cancelled;
+  name: string = "";
 
   open() {
     this.modal.open();
@@ -45,6 +48,7 @@ export class AddNewShowcaseModalComponent {
   }
 
   save() {
+    this.result = DialogResult.OK;
     this.modal.close();
   }
 }

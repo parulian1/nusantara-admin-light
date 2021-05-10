@@ -1,15 +1,15 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Observable, Subscription } from "rxjs";
-import { ConfirmModalComponent } from "@nusantara/shared/confirm-modal.component";
-import { AddNewShowcaseModalComponent } from "./modals";
-import { DialogResult } from "@nusantara/core";
+import { AddNewShowcaseModalComponent, DeleteShowcaseModalComponent } from "./modals";
+import { DialogResult, ToastLevelEnum, ToastService } from "@nusantara/core";
 import { marketplace } from '@nusantara/models';
 import { MarketplaceClientEnum } from "../../connect/markeplace-client-enum";
 import { Store } from '@ngrx/store';
 import * as fromReducer from '@nusantara/reducers';
 import { SvgIconService } from '@nusantara/services';
 import { MarketplaceEtalaseService } from '@nusantara/services/marketplace-showcase.service';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: "nus-showcase",
@@ -72,19 +72,26 @@ import { MarketplaceEtalaseService } from '@nusantara/services/marketplace-showc
             <td class="centered">
               <div>
                 <mat-slide-toggle
-                  [checked]="false" [disabled]=true 
-                  *ngIf='entity.marketplace==marketplaceClient.tokopedia;'>
+                  [checked]="false" [disabled]="true" 
+                  *ngIf='entity.marketplace === marketplaceClient.tokopedia;'>
                 </mat-slide-toggle>
                 <mat-slide-toggle
                   [checked]="entity.isConnected" 
-                  *ngIf='entity.marketplace!==marketplaceClient.tokopedia;'>
+                  *ngIf='entity.marketplace !== marketplaceClient.tokopedia;'>
                 </mat-slide-toggle>
               </div>
             </td>
             <td class="centered">
-              <button class="remove" (click)="confirmDeleteModal.open()" [disabled]='!entity.isDefault'>
+              <button *ngIf="!entity.isDefault; else deleteDisabled"
+                class="remove"
+                (click)="deleteShowcaseModal.open(entity.etalaseId)">
                 <mat-icon class="icon" svgIcon="trash"></mat-icon>
               </button>
+              <ng-template #deleteDisabled>
+                <button class="remove" disabled>
+                  <mat-icon class="icon" svgIcon="trash-disabled"></mat-icon>
+                </button>
+              </ng-template>
             </td>
           </tr>
         </ng-template>
@@ -92,10 +99,7 @@ import { MarketplaceEtalaseService } from '@nusantara/services/marketplace-showc
     </table>
 
     <!-- Modals -->
-    <nus-confirm-modal
-      [title]="confirmDeleteTitle"
-      [content]="confirmDeleteText">
-    </nus-confirm-modal>
+    <nus-delete-showcase-modal></nus-delete-showcase-modal>
 
     <!-- Modals -->
     <nus-add-showcase-modal></nus-add-showcase-modal>
@@ -130,20 +134,17 @@ export class ShowcaseListComponent implements OnInit, AfterViewInit, OnDestroy {
   marketplaceClient = MarketplaceClientEnum;
   subscription: Subscription;
 
-  @ViewChild(ConfirmModalComponent)
-  confirmDeleteModal: ConfirmModalComponent;
+  @ViewChild(DeleteShowcaseModalComponent)
+  deleteShowcaseModal: DeleteShowcaseModalComponent;
 
   @ViewChild(AddNewShowcaseModalComponent)
-  addShowcaseModal: ConfirmModalComponent;
-
-  confirmDeleteTitle = "Delete Showcase?";
-  confirmDeleteText =
-    "Deleting this showcase will not delete the product. Deleted showcase can't be recovered.";
+  addShowcaseModal: AddNewShowcaseModalComponent;
 
   constructor(
     private route: ActivatedRoute,
     private store: Store<fromReducer.State>,
     private service: MarketplaceEtalaseService,
+    private toast: ToastService,
     svgIconService: SvgIconService, 
     ) {
       this.currentShop$ = this.store.select(fromReducer.getCurrentShop);
@@ -161,8 +162,12 @@ export class ShowcaseListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.confirmDeleteModal.onClose.subscribe(() =>
-      this.onConfirmModalClosed()
+    this.deleteShowcaseModal.onClose.subscribe(() =>
+      this.ondeleteShowcaseModalClosed()
+    );
+
+    this.addShowcaseModal.onClose.subscribe(() =>
+      this.onAddShowcaseModalClosed()
     );
   }
 
@@ -170,9 +175,58 @@ export class ShowcaseListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  onConfirmModalClosed() {
-    if (this.confirmDeleteModal.result === DialogResult.OK) {
-      console.log("delete");
+  ondeleteShowcaseModalClosed() {
+    if (this.deleteShowcaseModal.result === DialogResult.OK) {
+      const etalaseId = this.deleteShowcaseModal.etalaseId;
+      this.service.delete(this.shopSlug, etalaseId).subscribe(
+        (resp: HttpResponse<any>) => {
+          this.refetch();
+          this.toast?.addMessage(
+            resp.body.data.message,
+            'Success',
+            ToastLevelEnum.success
+          );
+        },
+        (errorResp: HttpErrorResponse) => {
+          this.toast?.addMessage(
+            errorResp.error.message,
+            'Error',
+            ToastLevelEnum.error
+          );
+        }
+      );
     }
+  }
+
+  onAddShowcaseModalClosed() {
+    if (this.addShowcaseModal.result === DialogResult.OK) {
+      const name = this.addShowcaseModal.name;
+      this.service.create(this.shopSlug, name).subscribe(
+        (resp) => {
+          this.addShowcaseModal.name = null;
+          this.refetch();
+          this.toast?.addMessage(
+            `${name} was saved successfully.`,
+            'Saved',
+            ToastLevelEnum.success
+          );
+        },
+        (error) => {
+          this.toast?.addMessage(
+            'Error message.',
+            'Error',
+            ToastLevelEnum.error
+          );
+        }
+      );
+    }
+  }
+
+  refetch(): void {
+    this.service
+      .fetchList(this.shopSlug)
+      .subscribe((showcases: marketplace.IEtalase[]) => {
+        this.data = showcases;
+      });
   }
 }

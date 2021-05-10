@@ -29,6 +29,7 @@ import {
   ShowcaseListComponent,
   ShowcaseComponent,
   AddNewShowcaseModalComponent,
+  DeleteShowcaseModalComponent,
 } from './setup';
 
 import { PublishListComponent, PublishDetailComponent } from './publish';
@@ -84,6 +85,7 @@ export function getMarketplacesConfig(
     ShowcaseListComponent,
     ShowcaseComponent,
     AddNewShowcaseModalComponent,
+    DeleteShowcaseModalComponent,
 
     // publish
     PublishListComponent,

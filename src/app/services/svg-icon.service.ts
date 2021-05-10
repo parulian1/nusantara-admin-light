@@ -4,6 +4,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 
 const Icons = {
   arrowDown: 'arrow-down',
+  add: 'add',
   trash: 'trash',
   tashDisabled: 'trash-disabled' 
 }
@@ -11,6 +12,9 @@ const Icons = {
 const IconSvgs = {
   "arrow-down": `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path fill-rule="evenodd" clip-rule="evenodd" d="M8.30453 8.84377L12.0769 12.7502L15.9634 8.97745L17.1226 10.1779L12.0361 15.0898L7.12412 10.0033L8.30453 8.84377Z"/>
+    </svg>`,
+  "add": `<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M18.14 12.64H13.14V17.64H11.5V12.64H6.5V11H11.5V6H13.14V11H18.14V12.64Z" fill="#485368"/>
     </svg>`,
   "trash": `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M12.2857 8.42857C12.2857 8.03409 11.9659 7.71429 11.5714 7.71429C11.1769 7.71429 10.8571 8.03409 10.8571 8.42857V18.4286C10.8571 18.8231 11.1769 19.1429 11.5714 19.1429C11.9659 19.1429 12.2857 18.8231 12.2857 18.4286V8.42857Z" fill="#5A5A5A"/>
