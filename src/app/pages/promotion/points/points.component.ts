@@ -345,12 +345,22 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
     return this.form.get('products') as FormArray;
   }
 
+  clearExpiredInput() {
+    // Clear expire-at input when expire type change
+    this.form.get('expireType').valueChanges.subscribe(canUsePos => {
+      this.expireAtAfterEarning.reset();
+      this.expireAtCustomerNotActive.reset();
+      this.expireAtEveryYear.reset();
+    });
+  }
+
   ngOnInit(): void {
     super.ngOnInit();
     this.route.data.subscribe((data: { entity: IPoints }) => {
       this.entity = data.entity;
       this.productPoints = data.entity.products;
     });
+    this.clearExpiredInput();
   }
 
   ngAfterViewInit() {
