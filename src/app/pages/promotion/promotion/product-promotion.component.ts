@@ -172,7 +172,8 @@ const log = new Logger('ProductPromotionComponent');
           </tbody>
         </table>
 
-        <a class="download-product" href="{{ service.productListDownloadUrl }}" target="_blank" *ngIf="hasProductUrl">Download Product
+        <a class="download-product" href="{{ service.productListDownloadUrl }}" target="_blank" *ngIf="hasProductUrl">Download
+          Product
           List</a>
       </div>
 
@@ -200,7 +201,7 @@ const log = new Logger('ProductPromotionComponent');
           <input type="checkbox" [formControl]="appliedOnOnline" name="appliedOnOnline">
           <span>Online (Website)</span>
         </label>
-        <label class="checkbox">
+        <label class="checkbox" *ngIf="enterpriseLicense()">
           <input type="checkbox" [formControl]="appliedOnOffline" name="appliedOnOffline">
           <span>Offline (POS)</span>
         </label>
@@ -334,7 +335,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
       validTo: [this.convertDateTime(entity?.validTo), []],
       priority: [entity?.priority ?? 1, [Validators.required]],
       products: this.fb.array([]),
-      banner: ['',  []],
+      banner: ['', []],
       productBundlingBenefit: this.fb.array([]),
       productBundlingCondition: this.fb.array([]),
       multiplyItem: [entity?.multiplyItem ?? false, []]
@@ -384,23 +385,73 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     this.productBundlingBenefitSelectionModal.onClose.subscribe(() => this.onProductBundlingBenefitSelectionModalClosed());
   }
 
-  get name(): FormControl { return this.form.get('name') as FormControl; }
-  get products(): FormArray { return this.form.get('products') as FormArray; }
-  get type(): FormControl { return this.form.get('type') as FormControl; }
-  get amount(): FormControl { return this.form.get('amount') as FormControl; }
-  get minimumOrderAmount(): FormControl { return this.form.get('minimumOrderAmount') as FormControl; }
-  get maxAmount(): FormControl { return this.form.get('maxAmount') as FormControl; }
-  get isExclusive(): FormControl { return this.form.get('isExclusive') as FormControl; }
-  get validFrom(): FormControl { return this.form.get('validFrom') as FormControl; }
-  get validTo(): FormControl { return this.form.get('validTo') as FormControl; }
-  get priority(): FormControl { return this.form.get('priority') as FormControl; }
-  get isActive(): FormControl { return this.form.get('isActive') as FormControl; }
-  get appliedOnOnline(): FormControl { return this.form.get('appliedOnOnline') as FormControl; }
-  get appliedOnOffline(): FormControl { return this.form.get('appliedOnOffline') as FormControl; }
-  get banner(): FormControl { return this.form.get('banner') as FormControl; }
-  get productBundlingBenefit(): FormArray { return this.form.get('productBundlingBenefit') as FormArray; }
-  get productBundlingCondition(): FormArray { return this.form.get('productBundlingCondition') as FormArray; }
-  get multiplyItem(): FormControl { return this.form.get('multiplyItem') as FormControl; }
+  get name(): FormControl {
+    return this.form.get('name') as FormControl;
+  }
+
+  get products(): FormArray {
+    return this.form.get('products') as FormArray;
+  }
+
+  get type(): FormControl {
+    return this.form.get('type') as FormControl;
+  }
+
+  get amount(): FormControl {
+    return this.form.get('amount') as FormControl;
+  }
+
+  get minimumOrderAmount(): FormControl {
+    return this.form.get('minimumOrderAmount') as FormControl;
+  }
+
+  get maxAmount(): FormControl {
+    return this.form.get('maxAmount') as FormControl;
+  }
+
+  get isExclusive(): FormControl {
+    return this.form.get('isExclusive') as FormControl;
+  }
+
+  get validFrom(): FormControl {
+    return this.form.get('validFrom') as FormControl;
+  }
+
+  get validTo(): FormControl {
+    return this.form.get('validTo') as FormControl;
+  }
+
+  get priority(): FormControl {
+    return this.form.get('priority') as FormControl;
+  }
+
+  get isActive(): FormControl {
+    return this.form.get('isActive') as FormControl;
+  }
+
+  get appliedOnOnline(): FormControl {
+    return this.form.get('appliedOnOnline') as FormControl;
+  }
+
+  get appliedOnOffline(): FormControl {
+    return this.form.get('appliedOnOffline') as FormControl;
+  }
+
+  get banner(): FormControl {
+    return this.form.get('banner') as FormControl;
+  }
+
+  get productBundlingBenefit(): FormArray {
+    return this.form.get('productBundlingBenefit') as FormArray;
+  }
+
+  get productBundlingCondition(): FormArray {
+    return this.form.get('productBundlingCondition') as FormArray;
+  }
+
+  get multiplyItem(): FormControl {
+    return this.form.get('multiplyItem') as FormControl;
+  }
 
   addProduct(product: INamedHrefEntity) {
     if ((this.products.value as Array<IProduct>).filter(p => p.href === product.href).length > 0) {
@@ -609,6 +660,10 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
 
   onPromoTypeChange($event: any) {
     this.isPromoBundling = $event === 'promo_bundling';
+  }
+
+  enterpriseLicense() {
+    return this.configSercvice.isEnterpriseLicense();
   }
 
 

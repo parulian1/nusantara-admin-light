@@ -12,7 +12,7 @@ import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { IAccessGroup, IEmployee, IHttpFailure, IWarehouse } from '@nusantara/models';
-import { EmployeeService, WarehouseService } from '@nusantara/services';
+import { EmployeeService, SiteConfigService, WarehouseService } from '@nusantara/services';
 import {
   AbstractDetailComponent,
   ErrorResult, IResultResponse, ToastLevelEnum,
@@ -72,7 +72,7 @@ import { IJwtClaims } from '@nusantara/auth/models';
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
-      <label class="checkbox">
+      <label class="checkbox" *ngIf="enterpriseLicense()">
         <span>Use POS</span>
         <input type="checkbox" [formControl]="canUsePos" (ngModelChange)="onCanUsePosChange($event)"/>
         <nus-field-errors [control]="canUsePos"></nus-field-errors>
@@ -173,7 +173,8 @@ export class EmployeeComponent
     toast: ToastService,
     private warehouseService: WarehouseService,
     private fb: FormBuilder,
-    public enterpriseGuard: RequireIsEnterpriseGuard
+    public enterpriseGuard: RequireIsEnterpriseGuard,
+    private configService: SiteConfigService,
   ) {
     super(route, router, toast, service);
   }
@@ -217,33 +218,43 @@ export class EmployeeComponent
   get name(): FormControl {
     return this.form.get('name') as FormControl;
   }
+
   get identityNumber(): FormControl {
     return this.form.get('identityNumber') as FormControl;
   }
+
   get firstName(): FormControl {
     return this.form.get('firstName') as FormControl;
   }
+
   get lastName(): FormControl {
     return this.form.get('lastName') as FormControl;
   }
+
   get email(): FormControl {
     return this.form.get('email') as FormControl;
   }
+
   get phoneNumber(): FormControl {
     return this.form.get('phoneNumber') as FormControl;
   }
+
   get isActive(): FormControl {
     return this.form.get('isActive') as FormControl;
   }
+
   get warehouses(): FormArray {
     return this.form.get('warehouses') as FormArray;
   }
+
   get accessGroups(): FormArray {
     return this.form.get('accessGroups') as FormArray;
   }
+
   get canUsePos(): FormControl {
     return this.form.get('canUsePos') as FormControl;
   }
+
   get pin(): FormControl {
     return this.form.get('pin') as FormControl;
   }
@@ -253,7 +264,7 @@ export class EmployeeComponent
     delete formValue?.title;
 
     if (!this.entity) {
-      return { ...formValue,  email: this.email.value.toLowerCase() };
+      return {...formValue, email: this.email.value.toLowerCase()};
     } else {
       delete formValue?.email;
       return formValue;
@@ -272,7 +283,7 @@ export class EmployeeComponent
           } else {
             return of(
               new ErrorResult<IHttpFailure>(
-                { detail: 'Network error.. probably?' },
+                {detail: 'Network error.. probably?'},
                 err.status
               )
             );
@@ -297,9 +308,11 @@ export class EmployeeComponent
   }
 
   protected onSaveSuccess(result: IResultResponse<IEmployee>) {
-    this.EmployeeWarehouseHostComponent.saveAll(result.entity.href).subscribe(() => {});
+    this.EmployeeWarehouseHostComponent.saveAll(result.entity.href).subscribe(() => {
+    });
     if (this.enterpriseGuard.canActivate(null, null)) {
-      this.EmployeeAccessGroupHostComponent.saveAll(result.entity.href).subscribe(() => {});
+      this.EmployeeAccessGroupHostComponent.saveAll(result.entity.href).subscribe(() => {
+      });
     }
 
     super.onSaveSuccess(result);
@@ -321,5 +334,9 @@ export class EmployeeComponent
 
   onCanUsePosChange($event: boolean) {
     this.isUsePos = $event;
+  }
+
+  enterpriseLicense() {
+    return this.configService.isEnterpriseLicense();
   }
 }
