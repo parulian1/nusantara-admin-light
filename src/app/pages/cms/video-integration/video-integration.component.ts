@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
-import { IVideoIntegrationItem, VideoIntegrationItemChoices } from '@nusantara/models';
+import {IVideoIntegrationItem, VideoIntegrationItemChoices} from '@nusantara/models';
 import { AbstractDetailComponent, ToastService } from '@nusantara/core';
 import { VideoIntegrationService } from '@nusantara/services';
 
@@ -56,7 +56,9 @@ import { getYoutubeIdFromUrl, youtubeUrl, youtubeUrlValidator } from './utils';
         <div style="margin: 0.1rem 0 0.5rem; font-size: 0.7rem;">
           example: <span style="font-weight: bold;">https://www.youtube.com/watch?v=bWXazVhlyxQ</span>
         </div>
-
+        <div class="video-preview">
+            <img [src]="getVideoThumbnail()" [alt]="name.value">
+        </div>
         <nus-field-errors [control]="embededUrl"></nus-field-errors>
 
         <!-- extra error messages -->
@@ -98,6 +100,7 @@ export class VideoIntegrationComponent extends AbstractDetailComponent<IVideoInt
     { value: VideoIntegrationItemChoices.youtube, displayName: 'Youtube' }
   ];
   contentGroup: string;
+
 
   constructor(service: VideoIntegrationService,
               private service1: VideoIntegrationService,
@@ -144,12 +147,7 @@ export class VideoIntegrationComponent extends AbstractDetailComponent<IVideoInt
     };
   }
 
-  /**
-   * get youtube url include id
-   * youtubeId: simpl3b3tt3r
-   * ex: https://www.youtube.com/watch?v=simpl3b3tt3r
-   */
-  youtube(youtubeId: string): string | null {
-    return youtubeUrl(youtubeId, false);
+  getVideoThumbnail() {
+    return `https://img.youtube.com/vi/${getYoutubeIdFromUrl(this.embededUrl.value)}/mqdefault.jpg`
   }
 }
