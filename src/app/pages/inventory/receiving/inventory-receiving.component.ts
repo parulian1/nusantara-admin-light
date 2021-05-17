@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthService } from '../../../auth';
@@ -51,6 +51,14 @@ import { convertStringToObject, keysToCamel } from '@nusantara/shared/helpers';
           <div>
             <label>Status</label>
             <span>Pending</span>
+          </div>
+          <div>
+            <label>DO Number</label>
+            <input type="text" [formControl]="doNumber">
+          </div>
+          <div>
+            <label for="">DC PIC</label>
+            <input type="text" [formControl]="dcPic">
           </div>
           <div [formGroup]="warehouse">
             <label>Warehouse</label>
@@ -199,6 +207,14 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     this.confirmModalReceiving.onClose.subscribe(() => this.onConfirmModalClosed());
   }
 
+  get doNumber(): FormControl {
+    return this.form.get('doNumber') as FormControl;
+  }
+
+  get dcPic(): FormControl {
+    return this.form.get('dcPic') as FormControl;
+  }
+
   initializeForm(entity?: inventory.IReceivingOrder) {
     // TODO: replace this! maybe embed href identity in token claims?
     this.form = this.fb.group({
@@ -213,6 +229,8 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
       }),
       reviewedBy: [null, ],
       stockRecords: this.fb.array([], [Validators.required, Validators.minLength(1)]),
+      doNumber: ['', []],
+      dcPic: ['', []],
     });
   }
 

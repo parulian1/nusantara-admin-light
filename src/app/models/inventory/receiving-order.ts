@@ -13,4 +13,6 @@ export interface IReceivingOrder extends IBaseInventoryOrder {
   type: ReceivingOrderType;
   notes: string;
   stockRecords: Array<IStockRecord>;
+  doNumber: string;
+  dcPic: string;
 }

@@ -32,27 +32,37 @@ import { catchError } from 'rxjs/operators';
     <p style="margin-bottom: 24px;">Edit shipping method for each product. Skip this step if you don't want to change anything.</p>
     <table id="general-table-info">
       <thead>
-            <th>Type</th>
-            <th>Status</th>
-            <th>Warehouse</th>
-            <th>Created By</th>
-            <th>Reviewed By</th>
-            <th>Date</th>
+        <th>DO Number</th>
+        <th>PIC Sender</th>
+        <th>Type</th>
+        <th>Status</th>
+        <th>Warehouse</th>
+        <th>Created By</th>
+        <th>Reviewed By</th>
+        <th>Date</th>
       </thead>
       <tbody>
-            <td>{{entity.type}}</td>
-            <td>{{entity.status}}</td>
-            <td>
-              <a (click)="showWarehouseDetail()">{{entity.warehouse.name}}</a>
-            </td>
+        <td>
+          <span *ngIf="!entity.doNumber">-</span>
+          <span>{{entity.doNumber}}</span>
+        </td>
+        <td>
+          <span *ngIf="!entity.dcPic">-</span>
+          <span>{{entity.dcPic}}</span>
+        </td>
+        <td>{{entity.type}}</td>
+        <td>{{entity.status}}</td>
+        <td>
+          <a (click)="showWarehouseDetail()">{{entity.warehouse.name}}</a>
+        </td>
 
-            <td *ngIf="!entity.createdBy?.name">-</td>
-            <td *ngIf="entity.createdBy?.name">{{entity.createdBy?.name}}</td>
+        <td *ngIf="!entity.createdBy?.name">-</td>
+        <td *ngIf="entity.createdBy?.name">{{entity.createdBy?.name}}</td>
 
-            <td *ngIf="!entity.reviewedBy?.name">-</td>
-            <td *ngIf="entity.reviewedBy?.name">{{entity.reviewedBy?.name}}</td>
+        <td *ngIf="!entity.reviewedBy?.name">-</td>
+        <td *ngIf="entity.reviewedBy?.name">{{entity.reviewedBy?.name}}</td>
 
-            <td>{{entity.created | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+        <td>{{entity.created | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
       </tbody>
     </table>
     <ul class="non-field-errors" *ngIf="!!nonFieldErrors.length">
@@ -81,7 +91,7 @@ import { catchError } from 'rxjs/operators';
             <div>{{ stock_record.product.name }}</div>
           </td>
           <td>
-            <div>{{ stock_record.location.name }}</div>
+            <div>{{ stock_record.location?.name }}</div>
           </td>
           <td>
             <div>{{ stock_record.sku }}</div>
