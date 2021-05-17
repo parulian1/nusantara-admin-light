@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ProductSelectionModalComponent } from '@nusantara/shared';
 import { IProduct } from '@nusantara/models/products';
-import { DialogResult } from '@nusantara/core';
+import { DialogResult, ToastLevelEnum, ToastService } from '@nusantara/core';
 import { ConfirmModalComponent } from '@nusantara/shared/confirm-modal.component';
 import { SvgIconService } from '@nusantara/services';
+import { ActivatedRoute } from '@angular/router';
+import { MarketplaceShowcaseService } from '@nusantara/services/marketplace-showcase.service';
 
 @Component({
   selector: 'nus-showcase-detail',
@@ -58,7 +60,7 @@ import { SvgIconService } from '@nusantara/services';
             <td>{{ entity?.name }}</td>
             <td>{{ entity?.upc }}</td>
             <td class="centered">
-              <button class="remove" (click)="remove(i)">
+              <button class="remove" (click)="entity?.upc">
                 <mat-icon class="icon" svgIcon="trash"></mat-icon>
               </button>
             </td>
@@ -121,6 +123,8 @@ import { SvgIconService } from '@nusantara/services';
 })
 export class ShowcaseComponent implements OnInit {
   data: Array<IProduct> = [];
+  shopSlug: string;
+  showcaseId: number;
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
   @ViewChild(ConfirmModalComponent)confirmModal: ConfirmModalComponent;
 
@@ -130,11 +134,21 @@ export class ShowcaseComponent implements OnInit {
   confirmOk = 'Go Back';
   confirmCancel = 'Cancel Anyway';
 
-  constructor(svgIconService: SvgIconService) {
+  constructor(
+    private route: ActivatedRoute, 
+    private service: MarketplaceShowcaseService,
+    private toast: ToastService,
+    svgIconService: SvgIconService) {
     svgIconService.registerIcons();
   }
   
-  ngOnInit() {}
+  ngOnInit() {
+    this.shopSlug = this.route.snapshot.paramMap.get("shop-slug");
+    this.showcaseId = +this.route.snapshot.paramMap.get("showcase-id");
+    this.route.data.subscribe((data: { entity: any }) => {
+;     console.log(data);
+    });
+  }
 
   ngAfterViewInit() {
     // wire-up modal closed callback
@@ -144,11 +158,44 @@ export class ShowcaseComponent implements OnInit {
   onProductSelectionModalClosed() {
     if (this.productSelectionModal.result === DialogResult.OK) {
       const selectedProduct = this.productSelectionModal.product.value as IProduct;
-      this.data.push(selectedProduct);
+      console.log(selectedProduct);
+      
+      // this.data.push(selectedProduct);
+      this.service.addProduct(this.shopSlug, this.showcaseId, +selectedProduct.upc).subscribe(
+        (resp) => {
+          this.toast?.addMessage(
+            `Success message.`,
+            'Success',
+            ToastLevelEnum.success
+          );
+        },
+        (error) => {
+          this.toast?.addMessage(
+            'Error message.',
+            'Error',
+            ToastLevelEnum.error
+          );
+        }
+      );;
     }
   }
 
-  remove(index: number){
-    this.data.splice(index, 1);
+  remove(upc: number){
+    this.service.addProduct(this.shopSlug, this.showcaseId, upc).subscribe(
+      (resp) => {
+        this.toast?.addMessage(
+          `Success message.`,
+          'Success',
+          ToastLevelEnum.success
+        );
+      },
+      (error) => {
+        this.toast?.addMessage(
+          'Error message.',
+          'Error',
+          ToastLevelEnum.error
+        );
+      }
+    );
   }
 }

@@ -8,7 +8,7 @@ import { MarketplaceClientEnum } from "../../connect/markeplace-client-enum";
 import { Store } from '@ngrx/store';
 import * as fromReducer from '@nusantara/reducers';
 import { SvgIconService } from '@nusantara/services';
-import { MarketplaceEtalaseService } from '@nusantara/services/marketplace-showcase.service';
+import { MarketplaceShowcaseService } from '@nusantara/services/marketplace-showcase.service';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
 @Component({
@@ -66,11 +66,11 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
         </tr>
         <ng-template #elseBlock>
           <tr *ngFor="let entity of data">
-            <td><a [routerLink]="">{{ entity.name }}</a></td>
+            <td><a [routerLink]="entity.etalaseId">{{ entity.name }}</a></td>
             <td *ngIf='!entity.isDefault'>Admin</td>
             <td *ngIf='entity.isDefault'>System</td>
             <td class="centered">
-              <div>
+              <div> 
                 <mat-slide-toggle
                   [checked]="false" [disabled]="true" 
                   *ngIf='entity.marketplace === marketplaceClient.tokopedia;'>
@@ -143,7 +143,7 @@ export class ShowcaseListComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private store: Store<fromReducer.State>,
-    private service: MarketplaceEtalaseService,
+    private service: MarketplaceShowcaseService,
     private toast: ToastService,
     svgIconService: SvgIconService, 
     ) {
@@ -154,7 +154,7 @@ export class ShowcaseListComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     this.shopSlug = this.route.snapshot.paramMap.get("shop-slug");
 
-    this.route.data.subscribe((data: { showcases: marketplace.IEtalase[] }) => {
+    this.route.data.subscribe((data: { showcases: marketplace.IShowcase[] }) => {
       this.data = data.showcases;
     });
 
@@ -225,7 +225,7 @@ export class ShowcaseListComponent implements OnInit, AfterViewInit, OnDestroy {
   refetch(): void {
     this.service
       .fetchList(this.shopSlug)
-      .subscribe((showcases: marketplace.IEtalase[]) => {
+      .subscribe((showcases: marketplace.IShowcase[]) => {
         this.data = showcases;
       });
   }
