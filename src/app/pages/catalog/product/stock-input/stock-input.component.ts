@@ -140,7 +140,6 @@ export class StockInputComponent extends AbstractEditingComponent implements OnI
       this.product.setValue(product);
       this.location.get('href').setValue(this.availableSubLocations[0].href);
       this.stockRecords.push(this.fm);
-
       this.inventory.push(this.form.value);
     }
 

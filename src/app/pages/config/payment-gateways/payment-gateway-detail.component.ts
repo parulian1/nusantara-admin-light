@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, Validators, FormBuilder, FormArray, FormGroup} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, Validators, FormBuilder, FormArray, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import {ToastService, AbstractDetailComponent, NusantaraValidators} from '@nusantara/core';
-import {drf, IPaymentGateway, PaymentTypeSmeClient} from '@nusantara/models';
-import {PaymentGatewayService, SiteConfigService} from '@nusantara/services';
+import { ToastService, AbstractDetailComponent, NusantaraValidators } from '@nusantara/core';
+import { drf, IPaymentGateway, PaymentTypeSmeClient } from '@nusantara/models';
+import { PaymentGatewayService, SiteConfigService } from '@nusantara/services';
 import * as ClassicEditor from '@gdnnusantara/ckeditor5-build/build/ckeditor';
-import {setAndClearValidators} from './utils';
+import { setAndClearValidators } from './utils';
 import { enumToArray } from '@nusantara/shared/helpers';
 import { RequireIsEnterpriseGuard } from '@nusantara/auth';
 
@@ -23,7 +23,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
     <form [formGroup]="form" (ngSubmit)="save()" #f>
       <label>
         <span>Name</span>
-        <input type="text" [formControl]="name" name="name">
+        <input type="text" [formControl]="name" name="name" maxlength="50">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
@@ -52,19 +52,19 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
       <ng-template [ngIf]="currentType && (currentType !== 'manual_transfer') && (currentType !== 'in_store') ">
         <label>
           <span>Client Key</span>
-          <input type="text" [formControl]="clientKey" name="clientKey">
+          <input type="text" [formControl]="clientKey" name="clientKey" maxlength="255">
           <nus-field-errors [control]="clientKey"></nus-field-errors>
         </label>
 
         <label>
           <span>Server Key</span>
-          <input type="text" [formControl]="serverKey" name="serverKey">
+          <input type="text" [formControl]="serverKey" name="serverKey" maxlength="255">
           <nus-field-errors [control]="serverKey"></nus-field-errors>
         </label>
 
         <label>
           <span>Code</span>
-          <input type="text" [formControl]="code" name="code">
+          <input type="text" [formControl]="code" name="code" maxlength="25">
           <nus-field-errors [control]="code"></nus-field-errors>
         </label>
       </ng-template>
@@ -73,13 +73,13 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
       <ng-template [ngIf]="currentType && (currentType === 'manual_transfer')">
         <label>
           <span>Account Number</span>
-          <input type="text" [formControl]="accountNumber" name="accountNumber">
+          <input type="text" [formControl]="accountNumber" name="accountNumber" maxlength="255">
           <nus-field-errors [control]="clientKey"></nus-field-errors>
         </label>
 
         <label>
           <span>Account Hold Number</span>
-          <input type="text" [formControl]="accountHoldNumber" name="accountHoldNumber">
+          <input type="text" [formControl]="accountHoldNumber" name="accountHoldNumber" maxlength="255">
           <nus-field-errors [control]="serverKey"></nus-field-errors>
         </label>
       </ng-template>
@@ -163,7 +163,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
       <div>
         <label for="description" class="external"><span>Description</span></label>
         <ckeditor [editor]="Editor" [config]="editorConfig"
-                  [formControl]="description" id="description"></ckeditor>
+                  [formControl]="description" id="description" maxlength="255"></ckeditor>
         <nus-field-errors [control]="description"></nus-field-errors>
       </div>
       <nus-detail-actions
@@ -306,10 +306,10 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
       href: [entity?.href],
       logo: [''],
       type: [entity?.type, [Validators.required]],
-      clientKey: [entity?.clientKey ?? ''],
-      serverKey: [entity?.serverKey ?? ''],
-      accountNumber: [entity?.accountNumber ?? ''],
-      accountHoldNumber: [entity?.accountHoldNumber ?? ''],
+      clientKey: [entity?.clientKey ?? '', [Validators.maxLength(255)]],
+      serverKey: [entity?.serverKey ?? '', [Validators.maxLength(255)]],
+      accountNumber: [entity?.accountNumber ?? '', [Validators.maxLength(255)]],
+      accountHoldNumber: [entity?.accountHoldNumber ?? '', [Validators.maxLength(255)]],
       isActive: [entity?.isActive ?? true],
       description: [entity?.description ?? ''],
       code: [entity?.code],
@@ -317,8 +317,8 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
       meta: this.fb.group(
         {
           type: [entity?.meta.type, []],
-          banks: this.fb.array([], [NusantaraValidators.preventArrayDuplicates(), ]),
-          eWallets: this.fb.array([], [NusantaraValidators.preventArrayDuplicates(), ]),
+          banks: this.fb.array([], [NusantaraValidators.preventArrayDuplicates(),]),
+          eWallets: this.fb.array([], [NusantaraValidators.preventArrayDuplicates(),]),
         }
       )
     });
@@ -337,7 +337,7 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     }
 
     if (entity?.meta?.eWallets) {
-      const wallValues =  JSON.parse(entity.meta.eWallets.replace(/'/g, '"'));
+      const wallValues = JSON.parse(entity.meta.eWallets.replace(/'/g, '"'));
       for (const bank of wallValues ?? []) {
         this.addLineWallet(bank);
       }
@@ -378,12 +378,12 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     }
     if (!!this.entity?.meta.type && this.entity?.meta.type === 'edc') {
       (this.form.get('meta') as FormGroup).removeControl('meta.eWallets');
-      delete (this.form.value.meta.eWallet) ;
+      delete (this.form.value.meta.eWallet);
     }
 
     if (!!this.entity?.meta.type && this.entity?.meta.type === 'e_wallet') {
       (this.form.get('meta') as FormGroup).removeControl('meta.eWallets');
-      delete (this.form.value.meta.banks) ;
+      delete (this.form.value.meta.banks);
     }
     super.save();
   }
@@ -393,7 +393,7 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
   }
 
   onInStoreChange($event: any) {
-    this.isMetaDetailAvailable = $event === 'e_wallet' ||  $event === 'eWallets' || $event === 'edc';
+    this.isMetaDetailAvailable = $event === 'e_wallet' || $event === 'eWallets' || $event === 'edc';
     this.currentMetaType = $event;
 
     if (this.currentMetaType === 'e_wallet') {
