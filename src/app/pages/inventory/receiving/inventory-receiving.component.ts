@@ -332,7 +332,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
         product: [selectedProduct, [Validators.required]],
         href: [null, []],
         location: this.fb.group({
-          href: [defaultSubLocations, Validators.required],
+          href: [defaultSubLocations, []],
           // name: ['', ],
         }),
         sku: [defaultSku, []],
