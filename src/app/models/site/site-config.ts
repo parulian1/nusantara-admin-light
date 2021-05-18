@@ -4,6 +4,7 @@ export interface ISiteConfig extends INamedHrefEntity {
   logo?: string;
   gaAccountId?: string;
   gaAccountType?: 'ga' | 'gtm';
+  jixieAccountId?: string;
   favicon?: string;
   tagLine?: string;
   customerServiceEmail?: string;
