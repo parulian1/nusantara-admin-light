@@ -94,7 +94,6 @@ const routes: Routes = [
           {
             path: ':showcase-id',
             component: ShowcaseComponent,
-            resolve: { entity: MarketplaceShowcaseResolver },
             runGuardsAndResolvers: 'always',
           },
         ]

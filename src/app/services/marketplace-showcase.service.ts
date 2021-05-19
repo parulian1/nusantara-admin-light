@@ -4,7 +4,7 @@ import { marketplace } from "@nusantara/models";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { PagedResponse } from "@nusantara/core";
-import { IShowcase } from "@nusantara/models/marketplace";
+import { IShowcase, IShowcaseDetail, IshowcaseProduct } from "@nusantara/models/marketplace";
 
 @Injectable({
   providedIn: "root",
@@ -20,13 +20,29 @@ export class MarketplaceShowcaseService {
     );
   }
 
-  fetch(shopSlug: string, showcaseId: number): Observable<any> {
-    return this.httpClient.get<IShowcase>(
-      `${this.baseUrl}/${shopSlug}/etalase-product/${showcaseId}/`,
-      { observe: "body", responseType: "json" }
+  fetchDetail(shopSlug: string, showcaseId: number): Observable<any> {
+    return this.httpClient.get<IShowcaseDetail>(
+      `${this.baseUrl}/${shopSlug}/etalase/${showcaseId}/`,
     );
   }
 
+  fetch(shopSlug: string, showcaseId: number, query?: string, page: number = 1, perPage?: number): Observable<PagedResponse<marketplace.IshowcaseProduct>> {
+    let params = new HttpParams().set('page', page.toFixed(0).toString());
+
+    if (perPage) {
+      params = params.set('per_page', perPage.toFixed(0).toString());
+    }
+
+    if (query) {
+      params = params.set('q', query);
+    }
+
+    return this.httpClient
+      .get<marketplace.IshowcaseProduct[]>(`${this.baseUrl}/${shopSlug}/etalase-product/`,
+      { observe: "response", responseType: "json", params })
+      .pipe(map(resp => new PagedResponse(resp)));
+  }
+  
   public fetchParams(shopSlug: string, params: HttpParams): Observable<marketplace.IShowcase[]> {
     return this.httpClient
       .get<IShowcase[]>(`${this.baseUrl}/${shopSlug}/etalase/`, {
@@ -43,6 +59,13 @@ export class MarketplaceShowcaseService {
     });
   }
 
+  update(shopSlug: string, showcaseId: number, name: string): Observable<any>{
+    console.log(name, showcaseId);
+    return this.httpClient.put(`${this.baseUrl}/${shopSlug}/etalase/${showcaseId}/`, {
+      name: name, id: showcaseId
+    });
+  }
+
   delete(shopSlug: string, etalaseId: number): Observable<any> {
     return this.httpClient.delete(
       `${this.baseUrl}/${shopSlug}/etalase/${etalaseId}/`,
@@ -50,22 +73,28 @@ export class MarketplaceShowcaseService {
     );
   }
 
-  addProduct(shopSlug: string, showcaseId: number, upc: number) {
+  addProduct(shopSlug: string, showcaseId: number, marketplaceProductId: number) {
     return this.httpClient.post(`${this.baseUrl}/${shopSlug}/etalase-product/`, {
-      item_id: [upc],
+      item_id: [marketplaceProductId],
       etalase_id: showcaseId,
     });
+  }
+
+  getProductListShowcase(shopSlug: string, showcaseId: number): Observable<any> {
+    return this.httpClient.get<IshowcaseProduct>(
+      `${this.baseUrl}/${shopSlug}/etalase-product/${showcaseId}/`,
+    );
   }
 
   removeProduct(
     shopSlug: string,
     showcaseId: number,
-    upc: number
+    marketplaceProductId: number
   ): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({ "Content-Type": "application/json" }),
       body: {
-        item_id: [upc],
+        item_id: [marketplaceProductId],
         etalase_id: showcaseId,
       },
     };

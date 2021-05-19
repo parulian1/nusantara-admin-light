@@ -9,5 +9,6 @@
       ".run/": true,
       "dist": true,
       "coverage": true
-    }
+    },
+    "python.pythonPath": "/Users/prisiacalista/.pyenv/versions/3.7.3/bin/python"
 }

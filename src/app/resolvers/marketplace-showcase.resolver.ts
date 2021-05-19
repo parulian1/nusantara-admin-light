@@ -13,6 +13,6 @@ export class MarketplaceShowcaseResolver implements Resolve<IShowcase> {
   resolve(route: ActivatedRouteSnapshot): Observable<any> | Observable<never> {
     const shopSlug = route.paramMap.get("shop-slug");
     const showcaseId = route.paramMap.get("showcase-id");
-    return this.service.fetch(shopSlug, +showcaseId);
+    return this.service.fetchDetail(shopSlug, +showcaseId);
   }
 }

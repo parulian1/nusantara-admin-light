@@ -66,7 +66,8 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
         </tr>
         <ng-template #elseBlock>
           <tr *ngFor="let entity of data">
-            <td><a [routerLink]="entity.etalaseId">{{ entity.name }}</a></td>
+            <td *ngIf='!entity.isDefault'><a [routerLink]="entity.etalaseId">{{ entity.name }}</a></td>
+            <td *ngIf='entity.isDefault'>{{ entity.name }}</td>
             <td *ngIf='!entity.isDefault'>Admin</td>
             <td *ngIf='entity.isDefault'>System</td>
             <td class="centered">
