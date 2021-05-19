@@ -37,11 +37,11 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
               <p>{{totalProduct}}</p>
             </label>
           </div>
-          <div>
+          <div *ngIf="!isDisabled">
             <label>
               <span>Display On/Off</span>
               <div class="switcher">
-                <mat-slide-toggle [disabled]=isDisabled>
+                <mat-slide-toggle>
                 </mat-slide-toggle>
               </div>
             </label>
@@ -237,9 +237,9 @@ export class ShowcaseComponent implements OnInit {
           ToastLevelEnum.success
         );
       },
-      (error) => {
+      (errorResp) => {
         this.toast?.addMessage(
-          'Error message.',
+          errorResp.error.details[0].message,
           'Error',
           ToastLevelEnum.error
         );
@@ -266,10 +266,10 @@ export class ShowcaseComponent implements OnInit {
           );
           this.refetch();
         },
-        (error) => {
+        (errorResp) => {
           this.toast?.addMessage(
-            'Error message.',
-            'Error',
+            errorResp.error.message,
+            'Failed',
             ToastLevelEnum.error
           );
         }

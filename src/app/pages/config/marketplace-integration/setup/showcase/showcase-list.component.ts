@@ -48,7 +48,7 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
         <tr>
           <th>Showcase Display Name</th>
           <th>Author</th>
-          <th class="centered">Display On/Off</th>
+          <th class="centered" *ngIf="(currentShop$ | async)?.marketplace !== marketplaceClient.tokopedia">Display On/Off</th>
           <th class="centered">Remove</th>
         </tr>
       </thead>
@@ -70,15 +70,10 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
             <td *ngIf='entity.isDefault'>{{ entity.name }}</td>
             <td *ngIf='!entity.isDefault'>Admin</td>
             <td *ngIf='entity.isDefault'>System</td>
-            <td class="centered">
+            <td class="centered" *ngIf='entity.marketplace !== marketplaceClient.tokopedia;'>
               <div> 
                 <mat-slide-toggle
-                  [checked]="false" [disabled]="true" 
-                  *ngIf='entity.marketplace === marketplaceClient.tokopedia;'>
-                </mat-slide-toggle>
-                <mat-slide-toggle
-                  [checked]="entity.isConnected" 
-                  *ngIf='entity.marketplace !== marketplaceClient.tokopedia;'>
+                  [checked]="entity.isConnected">
                 </mat-slide-toggle>
               </div>
             </td>
@@ -212,9 +207,9 @@ export class ShowcaseListComponent implements OnInit, AfterViewInit, OnDestroy {
             ToastLevelEnum.success
           );
         },
-        (error) => {
+        (errorResp) => {
           this.toast?.addMessage(
-            'Error message.',
+            errorResp.error.details[0].message,
             'Error',
             ToastLevelEnum.error
           );
