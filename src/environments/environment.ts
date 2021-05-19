@@ -6,7 +6,7 @@ import { env } from '@env/.env';
 
 export const environment = {
   production: false,
-  apiBaseUrl: 'https://dev-marketplace.bhisma.cloud',
+  apiBaseUrl: '/api',
   googleApiKey: env.YOUTUBE_KEY || 'AIzaSyB7m0r7paaV5I5U6vjf0pDmocvD8-K-D-w',
   appVersion: version,
   elasticAPM: {
