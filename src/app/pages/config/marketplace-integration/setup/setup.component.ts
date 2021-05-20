@@ -52,7 +52,7 @@ import { MarketplaceClientEnum } from '../connect/markeplace-client-enum';
             <td>
               <a [routerLink]="['showcase/', entity.slug]"
                 (click)="setSelectedShop(entity)"
-                [ngClass]="{'disabled': entity.marketplace === marketplaceClient.shopee}">
+                [ngClass]="{'disabled': entity.marketplace === marketplaceClient.shopee || entity.isConnected === false}">
                 Set Up Showcase
               </a>
             </td>
