@@ -118,13 +118,14 @@ import { convertStringToObject, keysToCamel } from '@nusantara/shared/helpers';
             (remove)="stockRecords.removeAt(i)">
           </nus-inventory-receiving-line>
 
-          <tr>
-            <td colspan="9">
-              <button type="button" (click)="addLine()" class="new-add-button wide">
-                <i class="material-icons">add</i> Add Record
-              </button>
-            </td>
-          </tr>
+            <tr>
+              <td colspan="9">
+                <button type="button" (click)="addLine()" class="new-add-button wide">
+                  <i class="material-icons">add</i> Add Record
+                </button>
+              </td>
+            </tr>
+          </tbody>
         </table>
 
         <nus-detail-actions
@@ -195,6 +196,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
   ngOnInit() {
     super.ngOnInit();
     this.route.data.subscribe((data: { warehouses: IWarehouse[] }) => {
+      console.log(data.warehouses);
       this.warehouses = data.warehouses;
     });
     this.currentDate = new Date();
@@ -292,7 +294,6 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     }
     const wh = this.warehouses.filter(e => e.href === this.warehouse.get('href').value)[0];
     if (wh) {
-
       this.clientService.getWarehouseInformation(wh.code).subscribe(
         (data: marketplace.IWarehouseInfo) => {
           this.storeValue = data?.totalStore ?? 0;
