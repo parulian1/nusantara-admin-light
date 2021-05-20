@@ -10,7 +10,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 @Component({
   selector: 'nus-tokopedia-form',
   template: `
-    <form [formGroup]="form">
+    <form [formGroup]="form" class="fluid">
       <label>
         <span>Partner ID
           <nus-tooltip [text]="partnerIdInfo"></nus-tooltip>
@@ -82,7 +82,10 @@ import {HttpErrorResponse} from '@angular/common/http';
       </div>
     </form>
   `,
-  styles: [``],
+  styles: [
+    'button:not(:first-of-type) { margin-left: 5px; }',
+    '.action-buttons { margin-top: 20px; }'
+  ],
 })
 export class TokopediaClientFormComponent
   extends AbstractDetailComponent<any>
