@@ -28,7 +28,7 @@ import {IProductClass} from '@nusantara/models/products';
       </td>
       <td>
         <div *ngFor="let control of locator.controls; index as ctr" style="display:flex; margin-bottom: 15px;">
-          <input [formControl]="control" name="locator" data-qa="locator">
+          <input [formControl]="control" name="locator" data-qa="locator" maxlength="5">
           <button (click)="locator.removeAt(ctr)" type="button" class="remove-button" data-qa="remove-locator-button">
             <i class="material-icons">remove_circle_outline</i>
           </button>
