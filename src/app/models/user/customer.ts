@@ -9,4 +9,5 @@ export interface ICustomer extends IUser {
   profile: ICustomerProfile;
   customerGroups: ICustomerGroup[];
   isActive?: boolean;
+  userPoint: number;
 }

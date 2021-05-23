@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '@nusantara/shared';
 import { UsersRoutingModule } from './users-routing.module';
 
-import { CustomerListComponent, CustomerDetailComponent } from './customer';
+import { CustomerListComponent, CustomerDetailComponent, CustomerPointModalComponent } from './customer';
 import { CustomerGroupListComponent, CustomerGroupDetailComponent } from './customer-group';
 import {
   EmployeeAccessGroupHostComponent, EmployeeAccessGroupListComponent,
@@ -13,11 +13,13 @@ import {
   EmployeeWarehouseHostComponent, EmployeeWarehouseListComponent,
 } from './employee';
 import { EmptyDataPipe } from './empty-data.pipe';
+import {NgxSmartModalModule} from 'ngx-smart-modal';
 
 @NgModule({
   declarations: [
     CustomerListComponent,
     CustomerDetailComponent,
+    CustomerPointModalComponent,
 
     EmployeeComponent,
     EmployeeListComponent,
@@ -38,6 +40,7 @@ import { EmptyDataPipe } from './empty-data.pipe';
     FormsModule,
     ReactiveFormsModule,
     UsersRoutingModule,
+    NgxSmartModalModule,
   ],
 })
 export class UsersModule { }
