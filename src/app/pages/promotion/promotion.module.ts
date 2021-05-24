@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask';
 
 import { SharedModule } from '@nusantara/shared';
@@ -32,6 +32,7 @@ import { GiftVoucherComponent, GiftVoucherListComponent } from './gift-voucher';
     ReactiveFormsModule,
     PromotionRoutingModule,
     NgxMaskModule.forRoot(),
+    FormsModule
   ],
 })
 export class PromotionModule { }
