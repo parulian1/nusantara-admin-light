@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -6,6 +6,7 @@ import { OrderService, UserService } from '@nusantara/services';
 import { AbstractDetailComponent, PagedResponse, ToastService } from '@nusantara/core';
 import { ICustomer, ICustomerGroup, IOrder } from '@nusantara/models';
 import { RequireIsEnterpriseGuard } from '@nusantara/auth';
+import { CustomerPointModalComponent } from '@nusantara/pages/users/customer/customer-point-modal.component';
 
 /**
  * Displays basic information about a customer, their profile, purchase history,
@@ -106,6 +107,15 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
       </div>
 
       <div *ngIf="currentTab === 'profile'" id="profile">
+        <section id="customer-point-summary">
+          <div id="customer-total-point">
+            <img src="/assets/point-icon.svg" alt="Profile Image">
+            <span>{{ userPoint | number }} Point</span>
+          </div>
+          <div>
+            <a (click)="pointHistory()">Points History</a>
+          </div>
+        </section>
         <table>
           <thead>
           <tr>
@@ -169,6 +179,11 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
         (delete)="delete()">
       </nus-detail-actions>
 
+      <nus-customer-point-modal
+        [entity]="entity"
+        #pointHistoryModal
+      ></nus-customer-point-modal>
+
     </form>
 
   `,
@@ -225,6 +240,28 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
     .shadow-box {
       margin: 5px;
     }
+    #customer-point-summary {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      border: 1px solid #B4B4B4;
+      box-sizing: border-box;
+      border-radius: 4px;
+      margin: 16px 0;
+    }
+    #customer-point-summary span{
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 24px;
+    }
+    #customer-total-point {
+      display: flex;
+    }
+    #customer-total-point img{
+      margin-inline-end: 8px;
+    }
   `]
 })
 export class CustomerDetailComponent extends AbstractDetailComponent<ICustomer> implements OnInit{
@@ -235,6 +272,8 @@ export class CustomerDetailComponent extends AbstractDetailComponent<ICustomer> 
   profile: any;
   customerGroups: ICustomerGroup[];
   orders: IOrder[];
+  userPoint: number;
+  entity?: ICustomer;
 
   page: PagedResponse<any>;
 
@@ -243,6 +282,8 @@ export class CustomerDetailComponent extends AbstractDetailComponent<ICustomer> 
   get currentTab(): string {
     return this.form.get('currentTab').value;
   }
+
+  @ViewChild('pointHistoryModal') pointHistoryModal: CustomerPointModalComponent;
 
   constructor(service: UserService,
               route: ActivatedRoute,
@@ -284,6 +325,12 @@ export class CustomerDetailComponent extends AbstractDetailComponent<ICustomer> 
     this.profile = entity.profile;
     this.customerGroups = entity.customerGroups;
     this.userEmail = entity.email;
+    this.userPoint = entity.userPoint ? entity.userPoint : 0;
+    this.entity = entity;
+  }
+
+  pointHistory() {
+    this.pointHistoryModal.open();
   }
 
 }
