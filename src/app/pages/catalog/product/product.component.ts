@@ -667,7 +667,6 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     if (!formValue.hasOwnProperty('attributes')) {
       formValue['attributes'] = {};
     }
-    console.log(`formvalue`, formValue);
     // delete sub entities that shouldn't be saved on the primary object
     // like price-lists, media, dll.
     delete (formValue as products.IProduct).media;
