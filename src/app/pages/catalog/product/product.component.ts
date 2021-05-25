@@ -666,7 +666,14 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     Object.assign(formValue, this.form.value);
     if (!formValue.hasOwnProperty('attributes')) {
       formValue['attributes'] = {};
+    } else {
+      Object.keys(formValue['attributes']).forEach((key) => {
+        if (typeof formValue['attributes'][key] === 'boolean') {
+          formValue['attributes'][key] = formValue['attributes'][key].toString();
+        }
+      });
     }
+
     // delete sub entities that shouldn't be saved on the primary object
     // like price-lists, media, dll.
     delete (formValue as products.IProduct).media;
@@ -678,6 +685,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   save() {
+    console.log('formvalue', this.getFormValue());
     this.service.save(this.getFormValue()).pipe(catchError(err => {
       if (err instanceof HttpErrorResponse) {
         return of(new ErrorResult<IError>(err.error, err.status));
