@@ -44,26 +44,19 @@ import { MarketplaceInfoHostComponent } from './marketplace';
             <label>
               <span>Name</span>
               <input type="text"
-                [formControl]="name"
-                name="name"
-                placeholder="Input Name"
-                data-qa="name"/>
+                     [formControl]="name"
+                     name="name"
+                     placeholder="Input Name"
+                     data-qa="name"/>
               <nus-field-errors [control]="name"></nus-field-errors>
             </label>
             <label class="toggle">
-              <!-- <input id="s2" type="checkbox"
-                class="toggle"
-                [formControl]="isActive"
-                name="is-active"
-                data-qa="is-active"/>
-              <span>Is Active</span> -->
-
-              <mat-slide-toggle
-                [formControl]="isActive"
-                name="is-active"
-                data-qa="is-active">
-                Is Active
-              </mat-slide-toggle>
+              <input id="s2" type="checkbox"
+                     class="toggle"
+                     [formControl]="isActive"
+                     name="is-active"
+                     data-qa="is-active"/>
+              <span>Is Active</span>
               <nus-field-errors [control]="isActive"></nus-field-errors>
             </label>
 
@@ -113,10 +106,10 @@ import { MarketplaceInfoHostComponent } from './marketplace';
             <div class="rich-text-container">
               <label for="content" class="external"><span>Description</span></label>
               <ckeditor [editor]="Editor" [config]="editorConfig"
-                  [formControl]="description"
-                  id="description"
-                  name="description"
-                  data-qa="description">
+                        [formControl]="description"
+                        id="description"
+                        name="description"
+                        data-qa="description">
               </ckeditor>
               <nus-field-errors [control]="description"></nus-field-errors>
             </div>
@@ -144,21 +137,23 @@ import { MarketplaceInfoHostComponent } from './marketplace';
                 <span>Variant Table</span>
                 <table>
                   <thead>
-                    <tr><th>Name</th></tr>
+                  <tr>
+                    <th>Name</th>
+                  </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let v of variants">
-                      <td>
-                        <a [routerLink]="['variants', v.href | entityToSlug]">{{ v.name}}</a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style="padding: 14px;">
-                        <button [disabled]="isNew" (click)="addVariant()" type="button" class="new-add-button wide">
-                          <i class="material-icons">add</i> Add Variant
-                        </button>
-                      </td>
-                    </tr>
+                  <tr *ngFor="let v of variants">
+                    <td>
+                      <a [routerLink]="['variants', v.href | entityToSlug]">{{ v.name}}</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 14px;">
+                      <button [disabled]="isNew" (click)="addVariant()" type="button" class="new-add-button wide">
+                        <i class="material-icons">add</i> Add Variant
+                      </button>
+                    </td>
+                  </tr>
                   </tbody>
                 </table>
               </label>
@@ -167,16 +162,17 @@ import { MarketplaceInfoHostComponent } from './marketplace';
             <label>
               <span>UPC</span>
               <input type="text"
-                [formControl]="upc"
-                name="upc"
-                placeholder="Input UPC"
-                data-qa="upc"/>
+                     [formControl]="upc"
+                     name="upc"
+                     placeholder="Input UPC"
+                     data-qa="upc"/>
               <nus-field-errors [control]="upc"></nus-field-errors>
             </label>
 
             <label class="single-price" *ngIf="!enterpriseLicense()">
               <span>Price</span>
-              <input type="number" [formControl]="price" name="price" min="0" appOnlyNumber decimal="true" (change)="setSinglePrice($event)">
+              <input type="number" [formControl]="price" name="price" min="0" appOnlyNumber decimal="true"
+                     (change)="setSinglePrice($event)">
               <nus-field-errors [control]="price"></nus-field-errors>
             </label>
 
@@ -200,9 +196,9 @@ import { MarketplaceInfoHostComponent } from './marketplace';
             <label>
               <span>Package Weight (kg)</span>
               <input type="number" [formControl]="weight"
-                name="weight"
-                placeholder="Input Weight"
-                data-qa="weight"/>
+                     name="weight"
+                     placeholder="Input Weight"
+                     data-qa="weight"/>
               <nus-field-errors [control]="weight"></nus-field-errors>
             </label>
             <div formGroupName="dimensions" class="product-dimension">
@@ -215,7 +211,7 @@ import { MarketplaceInfoHostComponent } from './marketplace';
                   formControlName="currentLength"
                   placeholder="Input Length"
                   data-qa="length"/>
-                  <nus-field-errors [control]="dimensions.get('currentLength')"></nus-field-errors>
+                <nus-field-errors [control]="dimensions.get('currentLength')"></nus-field-errors>
               </label>
               <label>
                 <span>Width (cm)</span>
@@ -237,7 +233,7 @@ import { MarketplaceInfoHostComponent } from './marketplace';
                   formControlName="currentHeight"
                   placeholder="Input Height"
                   data-qa="height"/>
-                  <nus-field-errors [control]="dimensions.get('currentHeight')"></nus-field-errors>
+                <nus-field-errors [control]="dimensions.get('currentHeight')"></nus-field-errors>
               </label>
             </div>
           </div>
@@ -273,17 +269,17 @@ import { MarketplaceInfoHostComponent } from './marketplace';
             <label>
               <span>Meta Keywords</span>
               <input type="text"
-                [formControl]="seoMeta"
-                name="seo-meta"
-                data-qa="seo-meta"/>
+                     [formControl]="seoMeta"
+                     name="seo-meta"
+                     data-qa="seo-meta"/>
               <nus-field-errors [control]="seoMeta"></nus-field-errors>
             </label>
           </div>
 
           <nus-marketplace-info id="marketplace-information"
-            *ngIf="!isNew && isPhysical() && enterpriseLicense()"
-            [form]="marketplace"
-            [productClass]="selectedProductClass">
+                                *ngIf="!isNew && isPhysical() && enterpriseLicense()"
+                                [form]="marketplace"
+                                [productClass]="selectedProductClass">
           </nus-marketplace-info>
 
           <div *ngIf="!isNew && enterpriseLicense()" class="wrapper" id="product-inventory">
@@ -330,7 +326,8 @@ import { MarketplaceInfoHostComponent } from './marketplace';
           <li [ngClass]="{ active: currentActive === 'product-other' }">
             <a (click)="scrollTo('product-other')">Other</a>
           </li>
-          <li *ngIf="!isNew && isPhysical() && enterpriseLicense()" [ngClass]="{ active: currentActive === 'marketplace-information' }">
+          <li *ngIf="!isNew && isPhysical() && enterpriseLicense()"
+              [ngClass]="{ active: currentActive === 'marketplace-information' }">
             <a (click)="scrollTo('marketplace-information')">Marketplace Information</a>
           </li>
           <li *ngIf="!isNew" [ngClass]="{ active: currentActive === 'product-inventory' }">
@@ -442,29 +439,89 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     super(route, router, toast, service);
   }
 
-  get name(): FormControl { return this.form.get('name') as FormControl; }
-  get isActive(): FormControl { return this.form.get('isActive') as FormControl; }
-  get upc(): FormControl { return this.form.get('upc') as FormControl; }
-  get productClass(): FormControl { return this.form.get('productClass').get('href') as FormControl; }
-  get category(): FormControl { return this.form.get('category').get('href') as FormControl; }
-  get vendor(): FormControl { return this.form.get('vendor').get('href') as FormControl; }
-  get description(): FormControl { return this.form.get('description') as FormControl; }
-  get media(): FormArray { return this.form.get('media') as FormArray; }
-  get priceLists(): FormArray { return this.form.get('priceLists') as FormArray; }
-  get attributes(): FormGroup { return this.form.get('attributes') as FormGroup; }
-  get related(): FormArray { return this.form.get('related') as FormArray; }
-  get weight(): FormControl { return this.form.get('weight') as FormControl; }
-  get price(): FormControl { return this.form.get('price') as FormControl; }
+  get name(): FormControl {
+    return this.form.get('name') as FormControl;
+  }
 
-  get dimensions(): FormGroup { return this.form.get('dimensions') as FormGroup; }
+  get isActive(): FormControl {
+    return this.form.get('isActive') as FormControl;
+  }
 
-  get parent(): FormControl { return this.form.get('parent') as FormControl; }
-  get structure(): FormControl { return this.form.get('structure') as FormControl; }
-  get tags(): FormArray { return this.form.get('tags') as FormArray; }
-  get seoMeta(): FormControl { return this.form.get('seoMeta') as FormControl; }
-  get seoDescription(): FormControl { return this.form.get('seoDescription') as FormControl; }
-  get subscription(): FormControl { return this.form.get('subscription') as FormControl; }
-  get marketplace(): FormGroup { return this.form.get('marketplace') as FormGroup; }
+  get upc(): FormControl {
+    return this.form.get('upc') as FormControl;
+  }
+
+  get productClass(): FormControl {
+    return this.form.get('productClass').get('href') as FormControl;
+  }
+
+  get category(): FormControl {
+    return this.form.get('category').get('href') as FormControl;
+  }
+
+  get vendor(): FormControl {
+    return this.form.get('vendor').get('href') as FormControl;
+  }
+
+  get description(): FormControl {
+    return this.form.get('description') as FormControl;
+  }
+
+  get media(): FormArray {
+    return this.form.get('media') as FormArray;
+  }
+
+  get priceLists(): FormArray {
+    return this.form.get('priceLists') as FormArray;
+  }
+
+  get attributes(): FormGroup {
+    return this.form.get('attributes') as FormGroup;
+  }
+
+  get related(): FormArray {
+    return this.form.get('related') as FormArray;
+  }
+
+  get weight(): FormControl {
+    return this.form.get('weight') as FormControl;
+  }
+
+  get price(): FormControl {
+    return this.form.get('price') as FormControl;
+  }
+
+  get dimensions(): FormGroup {
+    return this.form.get('dimensions') as FormGroup;
+  }
+
+  get parent(): FormControl {
+    return this.form.get('parent') as FormControl;
+  }
+
+  get structure(): FormControl {
+    return this.form.get('structure') as FormControl;
+  }
+
+  get tags(): FormArray {
+    return this.form.get('tags') as FormArray;
+  }
+
+  get seoMeta(): FormControl {
+    return this.form.get('seoMeta') as FormControl;
+  }
+
+  get seoDescription(): FormControl {
+    return this.form.get('seoDescription') as FormControl;
+  }
+
+  get subscription(): FormControl {
+    return this.form.get('subscription') as FormControl;
+  }
+
+  get marketplace(): FormGroup {
+    return this.form.get('marketplace') as FormGroup;
+  }
 
 
   get isProductOptionDomain(): boolean {
@@ -509,15 +566,15 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       isActive: [entity?.isActive, []],
       parent: [entity?.parent],
       href: [entity?.href],
-      upc: [entity?.upc, [Validators.required, ]],
-      structure: [entity?.structure ?? 'parent', [Validators.required, ]],
-      description: [entity?.description, [Validators.required, ]],
-      weight: [entity?.weight, [Validators.required, ]],
+      upc: [entity?.upc, [Validators.required,]],
+      structure: [entity?.structure ?? 'parent', [Validators.required,]],
+      description: [entity?.description, [Validators.required,]],
+      weight: [entity?.weight, [Validators.required,]],
       price: [0, [Validators.minLength(0)]],
       dimensions: this.fb.group({
-        currentLength: [entity?.dimensions.currentLength, ],
-        currentWidth: [entity?.dimensions.currentWidth, ],
-        currentHeight: [entity?.dimensions.currentHeight, ]
+        currentLength: [entity?.dimensions.currentLength,],
+        currentWidth: [entity?.dimensions.currentWidth,],
+        currentHeight: [entity?.dimensions.currentHeight,]
       }),
       productClass: this.fb.group({href: [entity?.productClass.href, [Validators.required]]}),
       category: this.fb.group({href: [entity?.category.href, [Validators.required]]}),
@@ -685,7 +742,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     if (this.structure.value === 'parent') {
       super.navigateToParent(warnOnDirty);
     } else {
-      this.router.navigate([`/catalog/products/${getSlugFromHref(this.parentProduct.href)}`]);
+      this.router.navigateByUrl('/catalog/products', );
     }
   }
 
@@ -694,9 +751,11 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
    */
   onProductClassChanged(newValue: any) {
     // protect against triggering during initialization
-    if (!newValue || !this.productClasses) { return; }
+    if (!newValue || !this.productClasses) {
+      return;
+    }
     const productClass = this.productClasses.filter(e => e.href === newValue)[0];
-    this.selectedProductClass =  productClass;
+    this.selectedProductClass = productClass;
 
     if (productClass?.type === 'physical') {
       this.weight.enable();
@@ -729,11 +788,17 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         locations: [],
         isProgressive: false,
         ranges: [
-          { href: null, priceList: null, price: this.price.value, minQuantity: 1, maxQuantity: null }
+          {href: null, priceList: null, price: this.price.value, minQuantity: 1, maxQuantity: null}
         ]
       }, 0);
-    } else if (!this.entity?.priceLists[0].ranges.length){
-      this.entity?.priceLists[0].ranges.push( { href: null, priceList: null, price: this.price.value, minQuantity: 1, maxQuantity: null });
+    } else if (!this.entity?.priceLists[0].ranges.length) {
+      this.entity?.priceLists[0].ranges.push({
+        href: null,
+        priceList: null,
+        price: this.price.value,
+        minQuantity: 1,
+        maxQuantity: null
+      });
       this.priceListHost.updatePriceList(this.entity?.priceLists[0], 0);
     } else {
       for (const priceList of this.entity?.priceLists ?? []) {

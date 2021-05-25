@@ -78,6 +78,10 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
             <div class="earning-points">
               <span class="subheading-2">Earning Points Platform</span>
               <label class="checkbox">
+                <input type="checkbox" [formControl]="appliedOnOnline" name="appliedOnOnline">
+                <span>Online (Website)</span>
+              </label>
+              <label class="checkbox">
                 <input type="checkbox" [formControl]="appliedOnOffline" name="appliedOnOffline">
                 <span>Offline (POS)</span>
               </label>
@@ -92,9 +96,9 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
               <label [ngClass]="{'active': expireType === 'after_earning'}" class="radio">
                 <input type="radio" id="tab_after_earning" value="after_earning" formControlName="expireType">
                 After earning
-                <input type="number" class="expire-at" [formControl]="expireAt"
-                        [hidden]="expireType !== 'after_earning'"
-                        placeholder="x Days">
+                <input type="number" class="expire-at" [(ngModel)]="expireAtAfterEarning"
+                       [ngModelOptions]="{standalone: true}" [hidden]="expireType !== 'after_earning'"
+                       placeholder="x Days">
                 <span class="subheading-2" [hidden]="expireType !== 'after_earning'">Days</span>
               </label>
 
@@ -102,16 +106,18 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
                 <input type="radio" id="tab_customer_not_active" value="customer_not_active"
                         formControlName="expireType">
                 If customer not active
-                <input type="number" class="expire-at" [formControl]="expireAt"
-                        [hidden]="expireType !== 'customer_not_active'" placeholder=" x Days">
+                <input type="number" class="expire-at" [(ngModel)]="expireAtCustomerNotActive"
+                       [ngModelOptions]="{standalone: true}" [hidden]="expireType !== 'customer_not_active'"
+                       placeholder=" x Days">
                 <span class="subheading-2" [hidden]="expireType !== 'customer_not_active'">Days</span>
               </label>
 
               <label [ngClass]="{'active': expireType === 'every_year'}" class="radio">
                 <input type="radio" id="tab_every_year" value="every_year" formControlName="expireType">
                 Every year on
-                <input type="text" mask="d0-m0" [dropSpecialCharacters]="false" class="expire-at" [formControl]="expireAt"
-                        [hidden]="expireType !== 'every_year'" placeholder="dd-mm">
+                <input type="text" mask="d0-m0" [dropSpecialCharacters]="false" class="expire-at"
+                       [(ngModel)]="expireAtEveryYear" [ngModelOptions]="{standalone: true}"
+                       [hidden]="expireType !== 'every_year'" placeholder="dd-mm">
               </label>
             </div>
           </div>
@@ -285,6 +291,10 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
   productPoints: Array<IProductPoints>;
   control: FormGroup;
 
+  expireAtAfterEarning: string;
+  expireAtCustomerNotActive: string;
+  expireAtEveryYear: string;
+
   constructor(route: ActivatedRoute,
               router: Router,
               service: PointsService,
@@ -325,12 +335,17 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
     return this.form.get('expireType').value;
   }
 
-  get expireAt(): FormControl {
-    return this.form.get('expireAt') as FormControl;
-  }
-
   get products(): FormArray {
     return this.form.get('products') as FormArray;
+  }
+
+  clearExpiredInput() {
+    // Clear expire-at input when expire type change
+    this.form.get('expireType').valueChanges.subscribe(canUsePos => {
+      this.expireAtAfterEarning = '';
+      this.expireAtCustomerNotActive = '';
+      this.expireAtEveryYear = '';
+    });
   }
 
   ngOnInit(): void {
@@ -339,6 +354,7 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
       this.entity = data.entity;
       this.productPoints = data.entity.products;
     });
+    this.clearExpiredInput();
   }
 
   ngAfterViewInit() {
@@ -364,13 +380,16 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
       this.addProduct(value);
     });
 
-
     // need to mark as touched to make custom styling works
     this.form.controls.rounding.markAsTouched();
     this.form.controls.appliedOnOnline.markAsTouched();
     this.form.controls.appliedOnOffline.markAsTouched();
     this.form.controls.appliedOnApps.markAsTouched();
     this.form.controls.expireType.markAsTouched();
+
+    this.expireAtAfterEarning = entity?.expireAt;
+    this.expireAtCustomerNotActive = entity?.expireAt;
+    this.expireAtEveryYear = entity?.expireAt;
   }
 
   selectProduct() {
@@ -407,6 +426,20 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
   }
 
   save() {
+
+    if (this.expireType === 'never') {
+      this.form.value.expireAt = '';
+    }
+    if (this.expireType === 'after_earning') {
+      this.form.value.expireAt = this.expireAtAfterEarning;
+    }
+    if (this.expireType === 'customer_not_active') {
+      this.form.value.expireAt = this.expireAtCustomerNotActive;
+    }
+    if (this.expireType === 'every_year') {
+      this.form.value.expireAt = this.expireAtEveryYear;
+    }
+
     super.save();
   }
 

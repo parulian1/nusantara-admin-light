@@ -31,7 +31,17 @@ import { Component } from '@angular/core';
       <div>
         <button routerLink="publish" class="control">Open</button>
       </div>
-    </div>`,
+    </div>
+    <div class="wrapper">
+      <div>
+        <h1 class="heading-1">Shopify</h1>
+        <p>Shopify Integration</p>
+      </div>
+      <div>
+        <button routerLink="shopify" class="control">Open</button>
+      </div>
+    </div>
+  `,
   styles: [
     `
       .wrapper {

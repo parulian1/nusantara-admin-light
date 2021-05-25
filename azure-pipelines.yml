@@ -14,7 +14,7 @@ variables:
     value: dist/nusantara-admin
 
   - name: APM_NAME
-    value: Nusantara-Web-Admin
+    value: web-admin
 
   # runtime variables, automatically defined by agent when pipeline running
   - name: IS_NON_MASTER_BRANCH
@@ -54,7 +54,7 @@ jobs:
           appEnv: production
           feedId: $(FEED_ID)
           buildPath: $(BUILD_DEST_PATH)
-          envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=True APM_ENVIRONMENT=Prod-FE APM_URL=$(APM_URL)'
+          envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=True APM_ENVIRONMENT=production APM_URL=$(APM_URL)'
 
   # Staging Build
   - job: build_staging
@@ -73,4 +73,4 @@ jobs:
         parameters:
           feedId: $(FEED_ID)
           buildPath: $(BUILD_DEST_PATH)
-          envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=False APM_ENVIRONMENT=Staging-FE APM_URL=$(APM_URL)'
+          envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=False APM_ENVIRONMENT=staging APM_URL=$(APM_URL)'

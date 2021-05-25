@@ -2,18 +2,20 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractDetailComponent, DialogResult, getSlugFromHref, ToastLevelEnum, ToastService } from '@nusantara/core';
-import { 
+import {
   UserService,
   ShipmentService,
   OrderService,
   OrderReportService,
-  OrderDownloadFileService
+  OrderDownloadFileService,
 } from '@nusantara/services';
-import { drf, order } from '@nusantara/models';
+import { ErrorResult } from '@nusantara/core';
+import { drf, order, OrderStatusType } from '@nusantara/models';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { CancelOrderDialogComponent, PaymentConfirmModalComponent } from './modals';
 @Component({
   selector: 'nus-order',
-  template: `  
+  template: `
     <h1 class="title-1">Order Detail</h1>
     <table class="detail">
       <tbody>
@@ -79,14 +81,14 @@ import { CancelOrderDialogComponent, PaymentConfirmModalComponent } from './moda
           </td>
           <ng-container *ngIf="canUpdateOrder">
             <td>
-              <button *ngIf="this.orderDetailData.status === 'unpaid'" 
-                type="button" 
+              <button *ngIf="this.orderDetailData.status === 'unpaid'"
+                type="button"
                 class="control confirm-payment" disabled>
                   Confirm Payment
               </button>
-              <button *ngIf="this.orderDetailData.status === 'waiting'" 
-                type="button" 
-                class="control confirm-payment" 
+              <button *ngIf="this.orderDetailData.status === 'waiting'"
+                type="button"
+                class="control confirm-payment"
                 (click)="paymentConfirmModal.open()">
                   Confirm Payment
               </button>
@@ -107,9 +109,9 @@ import { CancelOrderDialogComponent, PaymentConfirmModalComponent } from './moda
         </nus-order-detail>
       </nus-tab>
       <nus-tab title="Order Confirmation">
-        <nus-order-confirm 
+        <nus-order-confirm
           [order]="orderDetailData"
-          (updatePaymentConfirm)="onUpdateOrderStatus()"></nus-order-confirm>      
+          (updatePaymentConfirm)="onUpdateOrderStatus()"></nus-order-confirm>
       </nus-tab>
     </nus-tabs>
 
@@ -122,7 +124,7 @@ import { CancelOrderDialogComponent, PaymentConfirmModalComponent } from './moda
 
     <div class="action-button">
       <button type="button" (click)="navigateToParent(true)" class="control secondary">Back</button>
-      <button 
+      <button
         *ngIf="canCancelOrder"
         type="button"
         class="control danger ghost"
@@ -159,12 +161,18 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
   @ViewChild(CancelOrderDialogComponent) cancelOrderModal: CancelOrderDialogComponent;
 
   orderDetailData: order.IOrderDetail;
+  shipmentMessageInfo: Array<order.IOrderShipmentInfo> = [];
   currentTab: 'orderDetail' | 'paymentConfirm' = 'orderDetail';
   orderStatusChoices: Array<drf.IChoice>;
   entity: order.IOrderDetail;
+  isRequestShipment = false;
+  isShippableOrder = true;
   isDetailShowed = false;
   canCancelOrder = false;
   canConfirmPayment = false;
+
+  billingAddress = '';
+  shippingAddress = '';
 
   constructor(public service: OrderService,
               public route: ActivatedRoute,
@@ -172,6 +180,7 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
               public toast: ToastService,
               public userService: UserService,
               public shipmentService: ShipmentService,
+              private fb: FormBuilder,
               private orderReportService: OrderReportService,
               private orderDonwloadService: OrderDownloadFileService) {
     super(route, router, toast, service);
@@ -181,17 +190,24 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
     super.ngOnInit();
     this.route.data.subscribe((
       data: { entity: order.IOrderDetail, orderStatus: Array<drf.IChoice> }) => {
-      this.orderDetailData = data.entity;
-      this.orderStatusChoices = data.orderStatus;
-    })
+          this.orderDetailData = data.entity;
+          this.orderStatusChoices = data.orderStatus;
+          this.isShippableOrder = !!this.orderDetailData.orderAddress;
+          if (!!this.orderDetailData.meta?.billingAddress) {
+            this.billingAddress = this.formatAddress(this.orderDetailData.meta.billingAddress);
+          }
+          if (!!this.isShippableOrder) {
+              this.shippingAddress = this.formatAddress(this.orderDetailData.orderAddress);
+            }
+      });
 
-    // set initial value for canCancelOrder using this criteria
-    if(['unpaid', 'waiting', 'paid', 'ready'].includes(this.orderDetailData.status)){
-      this.canCancelOrder = true;
-    }
+      // set initial value for canCancelOrder using this criteria
+      if(['unpaid', 'waiting', 'paid', 'ready'].includes(this.orderDetailData.status)){
+        this.canCancelOrder = true;
+      }
 
-    // can confirm payment for manual transfer if status waiting
-    this.canConfirmPayment = this.orderDetailData.status === 'waiting';
+      // can confirm payment for manual transfer if status waiting
+      this.canConfirmPayment = this.orderDetailData.status === 'waiting';
   }
 
   ngAfterViewInit() {
@@ -208,13 +224,13 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
           ToastLevelEnum.success
         );
         this.router.navigate([]);
-      }, error => { 
+      }, error => {
         this.toast?.addMessage(
           'Unable to confirm payment. Please try again.',
           'Failed to Confirm Payment',
           ToastLevelEnum.error
         );
-        console.log(error) 
+        console.log(error)
       });
     }
   }
@@ -228,13 +244,13 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
           ToastLevelEnum.success
         );
         this.router.navigate([]);
-      }, error => { 
+      }, error => {
         this.toast?.addMessage(
           'Unable to cancel order. Please try again.',
           'Failed to Cancel Order',
           ToastLevelEnum.error
         );
-        console.log(error) 
+        console.log(error)
       });
     }
   }
@@ -266,6 +282,17 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
       this.isManualTransfer(this.orderDetailData) &&
       statusCanUpdate.includes(this.orderDetailData.status)
     );
+  }
+
+
+  formatAddress(orderAddress): string {
+    return `${orderAddress.shipToName} <br>` +
+      `${orderAddress.street} <br>` +
+      `${orderAddress.city} <br>` +
+      `${orderAddress.state} <br>` +
+      `${orderAddress.zipcode} <br>` +
+      `${orderAddress.country} <br>` +
+      `${orderAddress.phoneNumber}`;
   }
 
   downloadProductList(){

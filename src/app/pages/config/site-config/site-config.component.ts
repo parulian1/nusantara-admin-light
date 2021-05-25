@@ -50,6 +50,11 @@ import { forkJoin } from 'rxjs';
       </label>
 
       <label>
+        <span>Jixie Account ID</span>
+        <input type="text" [formControl]="jixieAccountId">
+      </label>
+
+      <label>
         <span>Favicon</span>
         <img [src]="faviconPreviewUrl" alt="Favicon Logo" class="preview" id="favicon">
         <small>Recommended: 48x48</small>
@@ -188,6 +193,10 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
     return this.form.get('extraConfig') as FormGroup;
   }
 
+  get jixieAccountId(): FormControl {
+    return this.form.get('jixieAccountId') as FormControl;
+  }
+
   get description(): FormControl {
     return this.extraConfig.get('description') as FormControl;
   }
@@ -227,6 +236,7 @@ export class SiteConfigComponent extends AbstractDetailComponent<ISiteConfig> im
       logo: [],
       gaAccountId: [entity?.gaAccountId ?? '', []],
       gaAccountType: [entity?.gaAccountType ?? 'ga', []],
+      jixieAccountId: [entity?.jixieAccountId ?? '', [Validators.maxLength(150)]],
       favicon: [],
       customerServiceEmail: [entity?.customerServiceEmail ?? '', [Validators.required, Validators.email]],
       tagLine: [entity?.tagLine ?? '', [Validators.maxLength(50)]],

@@ -44,6 +44,24 @@ export interface IOrderDetail extends ICoreOrder {
   subtotalCost: number;
   discount: number;
   shippingCost: number;
+  meta: {
+    shopifyInfo?: {
+      note?: string;
+    },
+    billingAddress?: {
+      city?: string;
+      country?: string;
+      district?: string;
+      phoneNumber?: string;
+      shipToName?: string;
+      state?: string;
+      street?: string;
+      zipcode?: string;
+    };
+    orderPromo?: any;
+    subscription?: string;
+    subscriptionId?: number;
+  };
 
 }
 
