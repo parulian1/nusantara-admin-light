@@ -130,14 +130,18 @@ export class OrderListComponent extends AbstractListComponent<IOrder> implements
   }
 
   getPlatform(orderItem: IOrder): string {
-    if (orderItem.source) {
-      if (orderItem.source === "marketplace") {
-        return `${orderItem.sourceName.toUpperCase()} (${orderItem.storeName})`;
+    if(orderItem.source){
+      if(orderItem.sourceName === 'shopify'){
+        return orderItem.sourceName.toUpperCase();
       } else {
-        return orderItem.source.toUpperCase();
+        if(orderItem.source === 'marketplace'){
+          return `${orderItem.sourceName.toUpperCase()} (${orderItem.storeName})` ;
+        } else {
+          return orderItem.source.toUpperCase();
+        }
       }
     } else {
-      return "-";
+      return '-';
     }
   }
 }

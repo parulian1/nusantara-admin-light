@@ -173,9 +173,9 @@ export class OrderFiltersComponent implements OnInit {
           [this.LOGISTIC_PARAM]: newValue.logistic ? newValue.logistic : null,
         });
 
-        if(newValue.platform){ this.updatePlatform(newValue.platform); }
-        if(newValue.status){ this.updateStatus(newValue.status); }
-        if(newValue.logistic){ this.updateLogistic(newValue.logistic); }
+        this.updatePlatform(newValue.platform);
+        this.updateStatus(newValue.status);
+        this.updateLogistic(newValue.logistic);
       });
     });
   }

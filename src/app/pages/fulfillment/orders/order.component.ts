@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { AbstractDetailComponent, DialogResult, getSlugFromHref, ToastLevelEnum, ToastService } from '@nusantara/core';
+import { AbstractDetailComponent, DialogResult, ToastLevelEnum, ToastService } from '@nusantara/core';
 import {
   UserService,
   ShipmentService,
@@ -9,9 +9,8 @@ import {
   OrderReportService,
   OrderDownloadFileService,
 } from '@nusantara/services';
-import { ErrorResult } from '@nusantara/core';
-import { drf, order, OrderStatusType } from '@nusantara/models';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { drf, order } from '@nusantara/models';
+import { FormBuilder } from '@angular/forms';
 import { CancelOrderDialogComponent, PaymentConfirmModalComponent } from './modals';
 @Component({
   selector: 'nus-order',
@@ -37,7 +36,7 @@ import { CancelOrderDialogComponent, PaymentConfirmModalComponent } from './moda
           <td class="wide-column" *ngIf="orderDetailData?.meta?.shopifyInfo">
             <div class="body-2">Order Notes (Shopify)</div>
             <div class="subheading-2">
-                <div>{{ orderDetailData.meta.shopifyInfo.note }}</div>
+                <div>{{ orderDetailData.meta.shopifyInfo.note? orderDetailData.meta.shopifyInfo.note: '-' }}</div>
             </div>
           </td>
         </tr>
@@ -78,6 +77,7 @@ import { CancelOrderDialogComponent, PaymentConfirmModalComponent } from './moda
               <div class="subheading-2">
                   <div><address [innerHTML]="billingAddress"></address></div>
               </div>
+              <ng-template #noBillingAddress>-</ng-template>
           </td>
         </tr>
         <tr class="more-toggle">
@@ -166,7 +166,8 @@ import { CancelOrderDialogComponent, PaymentConfirmModalComponent } from './moda
     '.confirm-payment { min-width: 160px }',
     '.subheading-2 { color: var(--lighten-black); margin-bottom: 2px; }',
     '.download-button { min-width: 200px; display: block; margin-left: auto; }',
-    '.action-button { display: flex; justify-content: space-between; }'
+    '.action-button { display: flex; justify-content: space-between; }',
+    'address { font-style: normal; }'
   ]
 })
 export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> implements OnInit {
@@ -327,10 +328,14 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
 
   get platform(): string {
     if(this.orderDetailData.source){
-      if(this.orderDetailData.source === 'marketplace'){
-        return `${this.orderDetailData.sourceName.toUpperCase()} (${this.orderDetailData.storeName})` ;
+      if(this.orderDetailData.sourceName === 'shopify'){
+        return this.orderDetailData.sourceName.toUpperCase();
       } else {
-        return this.orderDetailData.source.toUpperCase();
+        if(this.orderDetailData.source === 'marketplace'){
+          return `${this.orderDetailData.sourceName.toUpperCase()} (${this.orderDetailData.storeName})` ;
+        } else {
+          return this.orderDetailData.source.toUpperCase();
+        }
       }
     } else {
       return '-';
