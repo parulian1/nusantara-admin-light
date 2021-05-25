@@ -76,7 +76,7 @@ import { CancelOrderDialogComponent, PaymentConfirmModalComponent } from './moda
           <td>
               <div class="body-2">Billing Address</div>
               <div class="subheading-2">
-                  <div>{{ orderDetailData.meta?.billingAddress }}</div>
+                  <div><address [innerHTML]="billingAddress"></address></div>
               </div>
           </td>
         </tr>
