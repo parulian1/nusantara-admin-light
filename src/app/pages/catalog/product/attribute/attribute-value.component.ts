@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { IProductAttribute } from '@nusantara/models/products';
@@ -11,7 +11,7 @@ import { IProductAttribute } from '@nusantara/models/products';
         {{ attributeDefinition.name }}
       </td>
       <td class="centered" [ngClass]="{'vertical-aligned': attributeDefinition.type === 'markdown'}">
-        <input type="checkbox" class="toggle"/>
+        <input type="checkbox" class="toggle" [(ngModel)]="isEnabled" (click)="setInputDisabledProp()"/>
       </td>
 
       <td [ngClass]="{'color-input': attributeDefinition.type === 'color'}">
@@ -45,6 +45,7 @@ import { IProductAttribute } from '@nusantara/models/products';
         <input type="checkbox"
                *ngIf="attributeDefinition.type === 'boolean'"
                [formControl]="control">
+
       </td>
     </tr>
   `,
@@ -57,11 +58,34 @@ import { IProductAttribute } from '@nusantara/models/products';
     'td { border-bottom: solid 1px var(--grey) !important; }'
   ]
 })
-export class AttributeValueComponent {
+export class AttributeValueComponent implements OnChanges {
 
   @Input() attributeDefinition: IProductAttribute;
   @Input() control: FormControl;
+  isEnabled = false;
 
-  constructor() {  }
+  constructor() {
+  }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (!!this.control.value) {
+      this.isEnabled = true;
+    }
+    if (!this.isEnabled) {
+      this.control.disable();
+    } else {
+      this.control.enable();
+    }
+    this.control.markAsTouched();
+  }
+
+  setInputDisabledProp() {
+    this.isEnabled = !this.isEnabled;
+    if (!this.isEnabled) {
+      this.control.setValue(null);
+      this.control.disable();
+    } else {
+      this.control.enable();
+    }
+  }
 }

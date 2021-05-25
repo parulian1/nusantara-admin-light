@@ -663,19 +663,21 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
    */
   getFormValue(): any {
     const formValue = {};
-
     Object.assign(formValue, this.form.value);
+    if (!formValue.hasOwnProperty('attributes')) {
+      formValue['attributes'] = {};
+    }
     // delete sub entities that shouldn't be saved on the primary object
     // like price-lists, media, dll.
     delete (formValue as products.IProduct).media;
     delete (formValue as products.IProduct).priceLists;
     delete (this.form.value.marketplace);
 
+
     return formValue;
   }
 
   save() {
-
     this.service.save(this.getFormValue()).pipe(catchError(err => {
       if (err instanceof HttpErrorResponse) {
         return of(new ErrorResult<IError>(err.error, err.status));
