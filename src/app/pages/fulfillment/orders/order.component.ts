@@ -34,7 +34,12 @@ import { CancelOrderDialogComponent, PaymentConfirmModalComponent } from './moda
             <div class="body-2">Platform</div>
             <div class="subheading-2">{{ platform }}</div>
           </td>
-          <td class="wide-column"></td>
+          <td class="wide-column" *ngIf="orderDetailData?.meta?.shopifyInfo">
+            <div class="body-2">Order Notes (Shopify)</div>
+            <div class="subheading-2">
+                <div>{{ orderDetailData.meta.shopifyInfo.note }}</div>
+            </div>
+          </td>
         </tr>
         <tr *ngIf="isDetailShowed" class="no-border-bottom more-detail">
           <td>
@@ -65,6 +70,14 @@ import { CancelOrderDialogComponent, PaymentConfirmModalComponent } from './moda
               </ng-container>
               <ng-template #noAddress>-</ng-template>
             </div>
+          </td>
+        </tr>
+        <tr *ngIf="isDetailShowed && orderDetailData?.meta?.billingAddress" class="no-border-bottom more-detail">
+          <td>
+              <div class="body-2">Billing Address</div>
+              <div class="subheading-2">
+                  <div>{{ orderDetailData.meta?.billingAddress }}</div>
+              </div>
           </td>
         </tr>
         <tr class="more-toggle">
