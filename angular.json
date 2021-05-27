@@ -24,6 +24,7 @@
               "src/assets"
             ],
             "styles": [
+              "src/custom-theme.scss",
               "src/styles.css",
               "src/print.css",
               "node_modules/flatpickr/dist/flatpickr.min.css"

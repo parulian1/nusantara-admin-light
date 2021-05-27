@@ -10,7 +10,7 @@ import { MarketplaceShopService } from '@nusantara/services';
 import { ToastLevelEnum, ToastService } from '@nusantara/core';
 import * as fromReducer from '@nusantara/reducers';
 @Component({
-  selector: 'nus-product-class-mapping-form',
+  selector: 'nus-edit-shipping',
   template: `
     <h1 class="title-1">Edit Shipping</h1>
     <div class="container">
@@ -51,10 +51,14 @@ import * as fromReducer from '@nusantara/reducers';
                 <strong>{{ logistics[i].name }}</strong>
               </td>
               <td class="centered">
-                <input
+                <!-- <input
                   type="checkbox" class="toggle"
                   [formControl]="attr"
-                  formArrayName="shipping"/>
+                  formArrayName="shipping"/> -->
+
+                <mat-slide-toggle
+                  [formControl]="attr">
+                </mat-slide-toggle>
               </td>
             </tr>
           </tbody>
@@ -84,6 +88,7 @@ import * as fromReducer from '@nusantara/reducers';
     '.toggle { margin-right: 16px }',
     '.action-buttons { margin-top: 30px; }',
     'button:not(:first-of-type) { margin-left: 5px; }',
+    '::ng-deep mat-slide-toggle label { min-height: 40px; }'
   ],
 })
 export class EditShippingComponent implements OnInit, OnDestroy {

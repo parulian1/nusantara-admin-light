@@ -25,28 +25,38 @@ import { products } from '../models';
           <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Product Name or SKU">
         </div>
         <input type="hidden" [formControl]="product">
-        <p>Showing 10 recently added products. Search product name or SKU to find more products.</p>
-        <table>
-          <colgroup>
-            <col class="product-name">
-            <col class="product-sku">
-            <col>
-          </colgroup>
-          <thead>
-          <tr style="background-color: #F4F4F4;">
-            <th>Product Name</th>
-            <th>SKU</th>
-            <th class="centered">Action</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let p of displayedResults?.entities">
-            <td class="product-name">{{ p.name }}</td>
-            <td class="product-sku">{{ p.upc }}</td>
-            <td class="centered"><a href="#" (click)="selectProduct(p)">Add</a></td>
-          </tr>
-          </tbody>
-        </table>
+        <div *ngIf="displayedResults?.entities.length; else notFound">
+          <p>Showing 10 recently added products. Search product name or SKU to find more products.</p>
+          <table>
+            <colgroup>
+              <col class="product-name">
+              <col class="product-sku">
+              <col>
+            </colgroup>
+            <thead>
+            <tr>
+              <th>Product Name</th>
+              <th>SKU</th>
+              <th class="centered">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let p of displayedResults?.entities">
+              <td class="product-name">{{ p.name }}</td>
+              <td class="product-sku">{{ p.upc }}</td>
+              <td class="centered"><a href="#" (click)="selectProduct(p)">Add</a></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <ng-template #notFound>
+          <div class="not-found">
+            <h1 class="heading-1">
+              Product Not Found
+            </h1>
+            <p class="body-2">Try searching another name or SKU again.</p>
+          </div>
+        </ng-template>
       </form>
     </ngx-smart-modal>
   `,
@@ -74,7 +84,8 @@ import { products } from '../models';
     'table { table-layout: fixed }',
     'td { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }',
     '.product-name { width: 50%; }',
-    '.product-sku { width: 30%; }'
+    '.product-sku { width: 30%; }',
+    '.not-found { display: flex; flex-flow: column; align-items: center; padding: 64px 0; }'
   ]
 })
 export class ProductSelectionModalComponent implements OnInit, AfterViewInit {

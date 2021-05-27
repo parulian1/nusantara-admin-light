@@ -5,7 +5,9 @@ import {ActivatedRoute, Router} from '@angular/router';
   selector: 'nus-include-inactive',
   template: `
     <label>
-      <input type="checkbox" (click)="applyFilter($event)">{{ text }}
+      <mat-checkbox [ngModel]="showInactive" (ngModelChange)="applyFilter($event)"> 
+        {{ text }}
+      </mat-checkbox>
     </label>
   `,
   styles: [
@@ -14,6 +16,7 @@ import {ActivatedRoute, Router} from '@angular/router';
   ]
 })
 export class IncludeInactiveComponent implements OnInit {
+  showInactive = false;
   public applied = false;
   @Input() text = 'Show InActive';
 
@@ -28,8 +31,8 @@ export class IncludeInactiveComponent implements OnInit {
 
   }
 
-  applyFilter(event: any) {
-    const params = {include_inactive: event.target.checked };
+  applyFilter(event: boolean) {
+    const params = {include_deleted: event};
     this.router.navigate(
       ['./'],
       {

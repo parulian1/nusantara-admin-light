@@ -69,6 +69,7 @@ import * as shopActions from '@nusantara/actions';
     'p { color: var(--darken-grey); }',
     'button { display: flex; justify-content: center; align-items: center; }',
     '.material-icons { font-size: 20px; }',
+    ':host ::ng-deep nus-empty-list div { height: 100vh }'
   ],
 })
 export class ConnectComponent implements OnInit {

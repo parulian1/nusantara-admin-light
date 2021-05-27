@@ -2,8 +2,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 import { OrderComponent, OrderListComponent, OrderListResolver, OrderResolver } from './orders';
-import {OrderTypeResolver} from '../../resolvers/order-type.resolver';
-import {OrderStatusResolver} from '../../resolvers/order-status.resolver';
+import { OrderTypeResolver, OrderStatusResolver, OrderFilterResolver } from '@nusantara/resolvers';
 
 const routes: Routes = [
   {
@@ -16,6 +15,7 @@ const routes: Routes = [
           page: OrderListResolver,
           orderType: OrderTypeResolver,
           orderStatus: OrderStatusResolver,
+          orderFilter: OrderFilterResolver,
         },
         runGuardsAndResolvers: 'always',
       },

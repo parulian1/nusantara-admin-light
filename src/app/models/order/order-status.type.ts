@@ -1,5 +1,6 @@
 export type OrderStatusType =
   'unpaid' |
+  'waiting' |
   'paid' |
   'ready' |
   'shipped' |

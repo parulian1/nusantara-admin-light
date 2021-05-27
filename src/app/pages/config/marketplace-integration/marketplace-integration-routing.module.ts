@@ -4,6 +4,7 @@ import {
   MarketplaceLogisticListResolver,
   MarketplaceProductClassListResolver,
   MarketplaceShopListResolver,
+  MarketplaceShowcaseResolver,
 } from '@nusantara/resolvers';
 import { ConnectComponent, ConnectionFormComponent } from './connect';
 import {
@@ -11,9 +12,12 @@ import {
   EditShippingComponent,
   ProductClassMappingListComponent,
   ProductClassMappingFormComponent,
+  ShowcaseComponent,
+  ShowcaseListComponent
 } from './setup';
 import { MarketplaceIntegrationComponent } from './marketplace-integration.component';
 import { PublishListComponent, PublishDetailComponent } from './publish';
+import { MarketplaceShowcaseListResolver } from '@nusantara/resolvers/marketplace-showcase-list.resolver';
 import {ShopifyMessageListComponent} from '@nusantara/pages/config/shopify/shopify-message-list.component';
 import {ShopifyMessageListResolver} from '@nusantara/pages/config/shopify/resolvers/shopify-message-list-resolver.service';
 import {ShopifyWebhookComponent} from '@nusantara/pages/config/shopify/shopify-webhook.component';
@@ -78,6 +82,27 @@ const routes: Routes = [
         component: EditShippingComponent,
         resolve: { logistics: MarketplaceLogisticListResolver },
         runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'showcase/:shop-slug',
+        children: [
+          {
+            path: '',
+            component: ShowcaseListComponent,
+            resolve: { showcases: MarketplaceShowcaseListResolver },
+            runGuardsAndResolvers: 'always',
+          },
+          {
+            path: 'new',
+            component: ShowcaseComponent,
+            runGuardsAndResolvers: 'always',
+          },
+          {
+            path: ':showcase-id',
+            component: ShowcaseComponent,
+            runGuardsAndResolvers: 'always',
+          },
+        ]
       },
     ],
   },

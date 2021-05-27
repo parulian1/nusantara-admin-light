@@ -6,6 +6,7 @@ export * from './marketplace-product';
 export * from './marketplace-receiving-order';
 export * from './marketplace-shop';
 export * from './marketplace-warehouse';
+export * from './marketplace-showcase';
 export * from './lazada';
 export * from './shopee';
 export * from './tokopedia';

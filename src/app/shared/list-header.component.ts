@@ -33,7 +33,7 @@ import { FormControl } from '@angular/forms';
 
       .search {
         display: flex;
-        border: solid 1px var(--lighter-nav-bg);
+        border: solid 1px var(--grey);
         background-color: transparent;
         align-items: center
       }

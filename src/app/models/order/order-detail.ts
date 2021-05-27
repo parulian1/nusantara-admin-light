@@ -35,6 +35,12 @@ export interface IOrderDetail extends ICoreOrder {
     zipcode: string;
   };
 
+  source: string;
+  sourceName: string;
+
+  storeId: number;
+  storeName: string;
+
   subtotalCost: number;
   discount: number;
   shippingCost: number;
@@ -56,5 +62,6 @@ export interface IOrderDetail extends ICoreOrder {
     subscription?: string;
     subscriptionId?: number;
   };
+
 }
 

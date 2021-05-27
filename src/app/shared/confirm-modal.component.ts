@@ -16,9 +16,9 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
           <p class="body-2">{{ content }}</p>
         </div>
         <div class="action">
-          <button class="control" (click)="close()" type="button">Yes</button>
+          <button class="control" (click)="close()" type="button">{{ okText}}</button>
           <button class="control secondary ghost" (click)="cancel()" type="button">
-            Cancel
+            {{ cancelText }}
           </button>
         </div>
       </div>
@@ -39,6 +39,8 @@ export class ConfirmModalComponent {
   result: DialogResult = DialogResult.Cancelled;
   @Input() title = 'Go Back to Previous Page?';
   @Input() content = 'Changes you made on this form will not be saved.';
+  @Input() okText = 'Yes';
+  @Input() cancelText = 'Cancel' 
 
   open() {
     this.modal.open();
