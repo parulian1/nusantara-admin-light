@@ -270,7 +270,7 @@ export class EmployeeComponent
       warehouses: this.fb.array([], []),
       accessGroups: this.fb.array([]),
       title: [entity?.firstName, []], // used as formality when delete data
-      canUsePos: [entity?.canUsePos ?? false, []],
+      canUsePos: [{value: entity?.canUsePos ?? false, disabled: !this.hasDefaultPinConfig}, []],
     });
 
     this.entity = entity;
