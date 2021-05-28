@@ -47,9 +47,12 @@ import {ActivatedRoute, Router} from '@angular/router';
         <nus-field-errors [control]="validTo"></nus-field-errors>
       </label>
 
-      <label class="checkbox">
+      <label class="toggle">
+        <input type="checkbox"
+               class="toggle"
+               [formControl]="isActive"
+               name="is-active"/>
         <span>Is Active</span>
-        <input type="checkbox" [formControl]="isActive">
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 

@@ -32,10 +32,14 @@ import { VendorService } from '@nusantara/services';
         <nus-field-errors [control]="description"></nus-field-errors>
       </label>
 
-      <label>
-        <span>Is Active</span>
-        <input id="s2" type="checkbox" [formControl]="isActive" name="is-active"
+      <label class="toggle">
+        <input id="s2"
+               type="checkbox"
+               class="toggle"
+               [formControl]="isActive"
+               name="is-active"
                data-qa="is-active"/>
+        <span>Is Active</span>
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 

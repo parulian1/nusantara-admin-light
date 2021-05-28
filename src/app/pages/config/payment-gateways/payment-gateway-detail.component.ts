@@ -150,14 +150,22 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
 
       </ng-template>
 
-      <label class="checkbox">
+      <label class="toggle">
+        <input type="checkbox"
+               class="toggle"
+               [formControl]="isActive"
+               name="is-active"/>
         <span>Is Active</span>
-        <input type="checkbox" [formControl]="isActive" name="isActive">
+        <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
-      <label *ngIf="enterpriseGuard.canActivate(null, null)" class="checkbox">
+      <label *ngIf="enterpriseGuard.canActivate(null, null)" class="toggle">
+        <input type="checkbox"
+               class="toggle"
+               [formControl]="allowPos"
+               name="allow-pos"/>
         <span>Allow POS</span>
-        <input type="checkbox" [formControl]="allowPos" name="isActive">
+        <nus-field-errors [control]="allowPos"></nus-field-errors>
       </label>
 
       <div>
@@ -317,17 +325,13 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
       meta: this.fb.group(
         {
           type: [entity?.meta.type, []],
-          banks: this.fb.array([], [NusantaraValidators.preventArrayDuplicates(),]),
-          eWallets: this.fb.array([], [NusantaraValidators.preventArrayDuplicates(),]),
+          banks: this.fb.array([], [NusantaraValidators.preventArrayDuplicates(), ]),
+          eWallets: this.fb.array([], [NusantaraValidators.preventArrayDuplicates(), ]),
         }
       )
     });
 
     this.entity = entity;
-
-    // need to mark as touched to make custom styling works
-    this.form.controls.isActive.markAsTouched();
-    this.form.controls.allowPos.markAsTouched();
 
     if (entity?.meta?.banks) {
       const bankValues = JSON.parse(entity.meta.banks.replace(/'/g, '"'));

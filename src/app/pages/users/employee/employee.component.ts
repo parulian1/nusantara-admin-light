@@ -152,8 +152,6 @@ import { ConfirmModalResetPinComponent } from '@nusantara/shared/confirm-modal-r
   styles: [`
     .wrapper { padding: 16px 24px; border: solid 1px var(--grey); border-radius: 4px; margin-bottom: 24px; }
     .heading-1 { margin-bottom: 16px; }
-    label.toggle { padding-bottom: 20px; width: fit-content; min-height: 0; }
-    label.toggle > input { margin-right: 16px }
     .button-email {
       border-radius: 2px;
       border: none;
@@ -169,7 +167,6 @@ import { ConfirmModalResetPinComponent } from '@nusantara/shared/confirm-modal-r
       cursor: pointer;
       color: white;
     }
-
     .button-email--disabled, .button-reset-pin--disabled {
       background-color: #7b869b;
       color: #dedede;
@@ -371,8 +368,7 @@ export class EmployeeComponent
       this.EmployeeWarehouseHostComponent.saveAll(result.entity.href).subscribe(() => {});
     }
     if (this.enterpriseGuard.canActivate(null, null)) {
-      this.EmployeeAccessGroupHostComponent.saveAll(result.entity.href).subscribe(() => {
-      });
+      this.EmployeeAccessGroupHostComponent.saveAll(result.entity.href).subscribe(() => {});
     }
 
     super.onSaveSuccess(result);
@@ -419,7 +415,7 @@ export class EmployeeComponent
         this.isLoadingResetPIN = false;
         this.toast?.addMessage(`Employee's PIN has been reset to default successfully.`,
           'Reset PIN', ToastLevelEnum.success);
-      }, (error) => {
+      }, () => {
         this.isLoadingResetPIN = false;
         this.toast?.addMessage(`Reset PIN failed. Please try again.`,
           'Reset PIN', ToastLevelEnum.error);
