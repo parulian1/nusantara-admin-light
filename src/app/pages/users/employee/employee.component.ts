@@ -270,7 +270,7 @@ export class EmployeeComponent
       warehouses: this.fb.array([], []),
       accessGroups: this.fb.array([]),
       title: [entity?.firstName, []], // used as formality when delete data
-      canUsePos: [{value: entity?.canUsePos ?? false, disabled: !this.hasDefaultPinConfig}, []],
+      canUsePos: [entity?.canUsePos ?? false, []],
     });
 
     this.entity = entity;
@@ -395,6 +395,9 @@ export class EmployeeComponent
   checkDefaultPinConfig(): void {
     this.defaultPinService.fetch().subscribe((data) => {
       this.hasDefaultPinConfig = !!data.pin;
+      if (!this.hasDefaultPinConfig){
+        this.form.get('canUsePos').disable();
+      }
     }, (error) => {
       this.hasDefaultPinConfig = false;
       this.onSaveError(error);
@@ -417,7 +420,6 @@ export class EmployeeComponent
         this.toast?.addMessage(`Employee's PIN has been reset to default successfully.`,
           'Reset PIN', ToastLevelEnum.success);
       }, (error) => {
-        console.log(error);
         this.isLoadingResetPIN = false;
         this.toast?.addMessage(`Reset PIN failed. Please try again.`,
           'Reset PIN', ToastLevelEnum.error);
