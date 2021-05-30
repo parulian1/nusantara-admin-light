@@ -17,6 +17,7 @@ describe('CategoryComponent', () => {
     pathName: '',
     productCount: 0,
     depth: 1,
+    isInterestedCategory: true,
     sourceMappings: ['Hi',
       'Yes this is another mapping.'],
     href: 'https://staging.bhisma.cloud/api/catalog/category/test-add-category/',
@@ -30,6 +31,7 @@ describe('CategoryComponent', () => {
     pathName: 'can you update meh',
     productCount: 0,
     depth: 1,
+    isInterestedCategory: false,
     sourceMappings: ['Hallo',
       'Yes this is another mapping.'],
     href: 'https://staging.bhisma.cloud/api/catalog/category/test-add-category/',
@@ -89,6 +91,7 @@ describe('CategoryComponent', () => {
       href: '',
       image: '',
       parent: categoryCreateNewResp.parent,
+      isInterestedCategory: categoryCreateNewResp.isInterestedCategory,
       isActive: true
     });
     // @ts-ignore
@@ -118,6 +121,7 @@ describe('CategoryComponent', () => {
       href: categoryUpdateResp.href,
       image: '',
       parent: categoryUpdateResp.parent,
+      isInterestedCategory: categoryUpdateResp.isInterestedCategory,
       isActive: true
     });
     // @ts-ignore
