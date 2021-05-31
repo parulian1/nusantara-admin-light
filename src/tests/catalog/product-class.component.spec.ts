@@ -6,9 +6,8 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {SharedModule} from '@nusantara/shared';
 import {ProductClassComponent} from '@nusantara/pages/catalog/product-class';
 import {ProductClassAttributesComponent} from '@nusantara/pages/catalog/product-class/components';
-import {ActivatedRoute, ActivatedRouteSnapshot, convertToParamMap, ParamMap, Params} from '@angular/router';
-import {Observable, of, ReplaySubject} from 'rxjs';
-import {drf, products} from '@nusantara/models';
+import {ActivatedRoute, ActivatedRouteSnapshot, convertToParamMap, ParamMap, Params, Router} from '@angular/router';
+import { of, ReplaySubject} from 'rxjs';
 
 class ActivatedRouteStub implements Partial<ActivatedRoute> {
   // tslint:disable-next-line:variable-name
@@ -40,6 +39,9 @@ describe('ProductClassComponent', () => {
   let fixture: ComponentFixture<ProductClassComponent>;
 
   let httpTestingController: HttpTestingController;
+  const mockRouter = {
+    navigate: jasmine.createSpy('navigate')
+  };
 
   const productClassResponse = {
     name: 'sasa3',
@@ -53,6 +55,7 @@ describe('ProductClassComponent', () => {
   };
 
   beforeEach(waitForAsync(() => {
+
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
@@ -65,6 +68,7 @@ describe('ProductClassComponent', () => {
         ProductClassAttributesComponent
       ],
       providers: [
+        { provide: Router, useValue: mockRouter},
         {
           provide: ActivatedRoute,
           useValue: {

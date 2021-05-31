@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ShopifyComponent} from '@nusantara/pages/config/shopify/shopify.component';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {of} from 'rxjs';
 
-import { ShopifyComponent } from './shopify.component';
 
 describe('ShopifyComponent', () => {
   let component: ShopifyComponent;
@@ -8,7 +11,18 @@ describe('ShopifyComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ShopifyComponent ]
+      declarations: [ ShopifyComponent ],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: of({
+
+            })
+          }
+        }
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
   });
