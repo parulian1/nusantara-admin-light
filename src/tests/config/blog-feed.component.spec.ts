@@ -4,6 +4,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BlogFeedComponent } from '@nusantara/pages/config/blog-feed/blog-feed.component';
 import {RouterTestingModule} from '@angular/router/testing';
 import {FormBuilder} from '@angular/forms';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 
 describe('BlogFeedComponent', () => {
   let component: BlogFeedComponent;
@@ -15,7 +16,8 @@ describe('BlogFeedComponent', () => {
       declarations: [ BlogFeedComponent ],
       providers: [
         FormBuilder,
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
   }));

@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import {OnboardingListComponent} from '@nusantara/pages/cms/onboarding';
 import {of} from 'rxjs';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 
 describe('OnboardingListComponent', () => {
   let component: OnboardingListComponent;
@@ -21,6 +22,7 @@ describe('OnboardingListComponent', () => {
             })
           }
         }],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
   }));

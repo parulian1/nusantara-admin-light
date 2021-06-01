@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { FormBuilder } from '@angular/forms';
+import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
 
 import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
@@ -14,7 +14,9 @@ describe('OnboardingComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule, RouterTestingModule ],
+      imports: [ HttpClientTestingModule,
+        ReactiveFormsModule,
+        RouterTestingModule ],
       declarations: [ OnboardingComponent ],
       providers: [
         FormBuilder,
