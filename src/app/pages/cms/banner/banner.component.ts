@@ -32,9 +32,13 @@ import { enumToArray } from '@nusantara/shared/helpers';
         <nus-field-errors [control]="type"></nus-field-errors>
       </label>
 
-      <label class="checkbox">
+      <label class="toggle">
+        <input type="checkbox"
+               class="toggle"
+               [formControl]="isActive"
+               name="is-active"/>
         <span>Is Active</span>
-        <input type="checkbox" [formControl]="isActive" name="isActive">
+        <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
       <label>
@@ -106,7 +110,6 @@ import { enumToArray } from '@nusantara/shared/helpers';
   `,
   styles: [
     '.rich-text-container { padding-bottom: 14px; }', // double standard label padding
-    `.checkbox { width: fit-content; }`
   ]
 })
 export class BannerComponent extends AbstractDetailComponent<banner.IBanner> implements OnInit {

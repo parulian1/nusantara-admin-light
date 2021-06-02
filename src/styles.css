@@ -13,7 +13,7 @@
  */
 :root {
   /** Color Pallete  **/
-  
+
   /* UI */
   --info: #BCE7FD;
   --error: #C83228;
@@ -25,7 +25,7 @@
   --alert: #F0BE00;
   --alert-lighten: #FFF8DB;
   --alert-darken: #8F7200;
-  
+
   /* Greyscale */
   --black: #000000;
   --lighten-black: #282828;
@@ -106,24 +106,24 @@ h1, h2, h3, h4, .subheading-1, .subheading-2 {
 }
 
 /* admin / title 1 */
-.title-1 { 
+.title-1 {
   font-size: 28px;
   line-height: 36px;
   margin: 0 0 24px;
 }
 /* admin / title 2 */
-.title-2 { 
+.title-2 {
   font-size: 24px;
   line-height: 32px;
 }
 /* admin / heading 1 */
-.heading-1 { 
+.heading-1 {
   font-size: 20px;
   line-height: 28px;
   margin-bottom: 4px;
 }
 /* admin / heading 2 */
-.heading-2 { 
+.heading-2 {
   font-size: 18px;
   line-height: 24px;
 }
@@ -187,10 +187,10 @@ input:disabled, select:disabled {
 
 /** Hide spinner on input type number **/
  /* for Chrome, Safari, Edge, Opera */
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
  /* for Firefox */
@@ -206,6 +206,147 @@ input.ng-untouched {
 ::placeholder {
   color: var(--grey);
   opacity: 1;
+}
+
+
+/** Custom input for checkbox, radio and toggle **/
+@supports (-webkit-appearance: none) or (-moz-appearance: none) {
+  input[type="checkbox"], input[type="radio"] {
+    --active: var(--secondary);
+    --active-inner: var(--white);
+    --focus: 1px rgba(39, 94, 254, 0.3);
+    --border: var(--grey);
+    --border-hover: var(--input-hover-color);
+    --background: var(--white);
+    --disabled: var(--darken-white);
+    --disabled-inner: var(--lighten-grey);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    margin: 0;
+    cursor: pointer;
+    border: 1px solid var(--bc, var(--border));
+    background: var(--b, var(--background));
+    transition: background 0.3s, border-color 0.3s, box-shadow 0.2s;
+  }
+  input[type="checkbox"]:after, input[type="radio"]:after {
+    content: "";
+    display: block;
+    position: absolute;
+    transition: transform 0.3s var(--d-t-e, ease), opacity var(--d-o, 0.2s);
+  }
+  input[type="checkbox"]:checked, input[type="radio"]:checked {
+    --b: var(--active);
+    --bc: var(--active);
+    --d-o: 0.3s;
+    --d-t: 0.6s;
+    --d-t-e: cubic-bezier(0.2, 0.85, 0.32, 1.2);
+  }
+  input[type="checkbox"]:disabled, input[type="radio"]:disabled {
+    cursor: not-allowed;
+    opacity: 0.9;
+  }
+  input[type="checkbox"]:hover:not(:checked):not(:disabled), input[type="radio"]:hover:not(:checked):not(:disabled) {
+    --bc: var(--border-hover);
+  }
+  input[type="checkbox"]:focus, input[type="radio"]:focus {
+    box-shadow: 0 0 0 var(--focus);
+  }
+  input[type="checkbox"]:not(.toggle):after, input[type="radio"]:not(.toggle):after {
+    opacity: var(--o, 0);
+  }
+  input[type="checkbox"]:not(.toggle):checked, input[type="radio"]:not(.toggle):checked {
+    --o: 1 !important;
+  }
+  input[type="checkbox"]:not(.toggle):not(.mat-checkbox-input) {
+    top: 2px;
+    width: 16px;
+    height: 16px;
+    margin-right: 13.5px;
+  }
+  input[type="checkbox"]:not(.toggle):after {
+    width: 4px;
+    height: 9px;
+    border: 2px solid var(--active-inner);
+    border-top: 0;
+    border-left: 0;
+    top: 1px;
+    left: 5px;
+    transform: rotate(var(--r, 20deg));
+  }
+  input[type="checkbox"]:not(.toggle):checked {
+    --r: 43deg !important;
+    --bc: none !important;
+  }
+  input[type="checkbox"]:not(.toggle):disabled:checked {
+    --b: var(--disabled-inner);
+    --bc: var(--border);
+  }
+  input[type="checkbox"]:not(.toggle):disabled:checked:after {
+    top: 1px;
+    left: 4px;
+  }
+  input[type="checkbox"].toggle {
+    top: 4px;
+    left: 2px;
+    width: 34px;
+    height: 14px;
+    border-radius: 11px;
+    border: none;
+    background: var(--lighten-grey) !important;
+  }
+  input[type="checkbox"].toggle:after {
+    top: -3px;
+    left: -3px;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    background: var(--disabled);
+    transform: translateX(var(--x, 0));
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.16), 0 -2px 6px rgba(0, 0, 0, 0.08);
+  }
+  input[type="checkbox"].toggle:checked {
+    --x: 19px;
+    background: rgba(255, 125, 9, 0.5) !important;
+  }
+  input[type="checkbox"].toggle:not([disabled]):checked:after {
+    background: var(--active);
+  }
+  input[type="checkbox"].toggle:disabled {
+    background: var(--disabled-inner) !important;
+  }
+  input[type="checkbox"].toggle:disabled:after {
+    background: var(--border);
+  }
+  input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--bc, var(--border));
+    background: var(--active-inner);
+  }
+  input[type="radio"]:after {
+    width: 20px;
+    height: 20px;
+    top: -3px;
+    left: -3px;
+    border-radius: 50%;
+    background: var(--active);
+    opacity: 0;
+    transform: scale(var(--s, 0.7));
+  }
+  input[type="radio"]:checked {
+    --s: 0.5;
+  }
+  input[type="radio"]:disabled {
+    border: 2px solid var(--border);
+  }
+  input[type="radio"]:disabled:after {
+    background: var(--border);
+  }
 }
 
 /* For input fields that should immediately show when they are invalid */
@@ -282,6 +423,16 @@ label small {
   display: block;
 }
 
+label.toggle {
+  padding-bottom: 20px;
+  width: fit-content;
+  min-height: 0;
+}
+
+label.toggle > input {
+  margin-right: 16px
+}
+
 /* Make sure click area not to wide for checkbox and radio */
 label.checkbox, label.radio {
   width: fit-content;
@@ -302,7 +453,7 @@ button:hover:not([disabled]) { cursor: pointer; }
 
 input[type="text"]:read-only, input[type="number"]:read-only {
   color: var(--grey);
-} 
+}
 
 /* 2.1 Generic Form Components */
 .control {
@@ -361,7 +512,7 @@ button.control.secondary.ghost, a.control.secondary.ghost {
 }
 
 /* Button disabled */
-button.control.secondary:disabled, button.control.danger:disabled, 
+button.control.secondary:disabled, button.control.danger:disabled,
 a.control.secondary:disabled, a.control.danger:disabled {
   color: var(--grey);
   background-color: white;
@@ -408,17 +559,17 @@ ul.non-field-errors {
  * 2.2 List Pages
  */
 .list-page-header { margin-bottom: 25px; }
-table { 
-  width: 100%; 
-  border-collapse: separate; 
-  border: solid 1px var(--grey); 
+table {
+  width: 100%;
+  border-collapse: separate;
+  border: solid 1px var(--grey);
   border-radius: 4px;  border-spacing: 0;
 }
 table thead tr th:first-child { border-top-left-radius: 3px; }
 table thead tr th:last-child { border-top-right-radius: 3px; }
-table tbody td { 
-  border-bottom: solid 1px var(--grey); 
-  transition: background-color 0.3s;  
+table tbody td {
+  border-bottom: solid 1px var(--grey);
+  transition: background-color 0.3s;
   vertical-align: middle;
 }
 th { padding: 14px; }
@@ -740,22 +891,22 @@ span.badge {
 
 
 /* New Add Button */
-.new-add-button {  
+.new-add-button {
   height: 40px;
   padding: 0 48px;
-  background-color: white; 
-  border: solid 2px var(--senary); 
-  border-radius: 4px; font-weight: 700; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
+  background-color: white;
+  border: solid 2px var(--senary);
+  border-radius: 4px; font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .new-add-button i {
   font-size: 12px;
 }
 .new-add-button:disabled {
   color: var(--grey);
-  border-color: var(--grey); 
+  border-color: var(--grey);
 }
 
 .new-add-button.wide {

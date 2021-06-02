@@ -107,9 +107,12 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
         <nus-field-errors [control]="validTo"></nus-field-errors>
       </label>
 
-      <label class="checkbox">
+      <label class="toggle">
+        <input type="checkbox"
+               class="toggle"
+               [formControl]="isActive"
+               name="is-active"/>
         <span>Is Active</span>
-        <input type="checkbox" [formControl]="isActive">
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
@@ -164,7 +167,7 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
   `,
   styles: [
     '.eligible-product { display: flex; margin-bottom: 10px; justify-content: space-between; }',
-    '.eligible-product button { display: flex; align-items: center; }'
+    '.eligible-product button { display: flex; align-items: center; }',
   ]
 })
 export class VoucherComponent extends AbstractDetailComponent<IVoucher> implements OnInit, AfterViewInit {

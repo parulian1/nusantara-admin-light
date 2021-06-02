@@ -75,12 +75,13 @@ import { getYoutubeIdFromUrl, youtubeUrl, youtubeUrlValidator } from './utils';
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
-      <label>
+      <label class="toggle">
+        <input type="checkbox"
+               class="toggle"
+               [formControl]="isActive"
+               name="is-active"/>
         <span>Is Active</span>
-        <select [formControl]="isActive">
-          <option [ngValue]="true">True</option>
-          <option [ngValue]="false">False</option>
-        </select>
+        <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
       <nus-detail-actions

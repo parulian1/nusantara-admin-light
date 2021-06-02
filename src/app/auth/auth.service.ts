@@ -271,4 +271,29 @@ export class AuthService {
         )
     );
   }
+
+  /**
+   * Attempts to submit reset user pin.
+   *
+   * @param user the user's href.
+   */
+  public resetPin(user: string): Observable<IResultResponse> {
+
+    return this.httpClient.put<IError>(
+      '/api/iam/auth/pin-reset/',
+      { user },
+      { responseType: 'json', observe: 'response' }
+    ).pipe(
+      map(
+        (response) => {
+          if (response.status === HttpStatusCode.ACCEPTED) {
+            return new SuccessResult([], response.body);
+          } else {
+            return new ErrorResult<IError>(response.body as IError, response.status);
+          }
+        }
+      )
+    );
+  }
+
 }

@@ -24,6 +24,7 @@ import { ShopifyMessageListComponent } from './shopify/shopify-message-list.comp
 import { ReindexingComponent } from './reindexing/reindexing.component';
 import { ShopifyWebhookComponent } from './shopify/shopify-webhook.component';
 import { ShopifyHubComponent } from './shopify/shopify-hub.component';
+import { DefaultPinConfigComponent } from '@nusantara/pages/config/default-pin-config';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { ShopifyHubComponent } from './shopify/shopify-hub.component';
     ReindexingComponent,
     ShopifyWebhookComponent,
     ShopifyHubComponent,
+    DefaultPinConfigComponent,
   ],
   imports: [
     CommonModule,

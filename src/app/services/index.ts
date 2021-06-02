@@ -87,3 +87,5 @@ export * from './onboarding.service';
 export * from './shopify';
 
 export * from './svg-icon.service';
+
+export  * from './default-pin-config.service';
