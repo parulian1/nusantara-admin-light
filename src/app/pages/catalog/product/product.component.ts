@@ -440,87 +440,87 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   get name(): FormControl {
-    return this.form.get('name') as FormControl;
+    return this.form?.get('name') as FormControl;
   }
 
   get isActive(): FormControl {
-    return this.form.get('isActive') as FormControl;
+    return this.form?.get('isActive') as FormControl;
   }
 
   get upc(): FormControl {
-    return this.form.get('upc') as FormControl;
+    return this.form?.get('upc') as FormControl;
   }
 
   get productClass(): FormControl {
-    return this.form.get('productClass').get('href') as FormControl;
+    return this.form?.get('productClass').get('href') as FormControl;
   }
 
   get category(): FormControl {
-    return this.form.get('category').get('href') as FormControl;
+    return this.form?.get('category').get('href') as FormControl;
   }
 
   get vendor(): FormControl {
-    return this.form.get('vendor').get('href') as FormControl;
+    return this.form?.get('vendor').get('href') as FormControl;
   }
 
   get description(): FormControl {
-    return this.form.get('description') as FormControl;
+    return this.form?.get('description') as FormControl;
   }
 
   get media(): FormArray {
-    return this.form.get('media') as FormArray;
+    return this.form?.get('media') as FormArray;
   }
 
   get priceLists(): FormArray {
-    return this.form.get('priceLists') as FormArray;
+    return this.form?.get('priceLists') as FormArray;
   }
 
   get attributes(): FormGroup {
-    return this.form.get('attributes') as FormGroup;
+    return this.form?.get('attributes') as FormGroup;
   }
 
   get related(): FormArray {
-    return this.form.get('related') as FormArray;
+    return this.form?.get('related') as FormArray;
   }
 
   get weight(): FormControl {
-    return this.form.get('weight') as FormControl;
+    return this.form?.get('weight') as FormControl;
   }
 
   get price(): FormControl {
-    return this.form.get('price') as FormControl;
+    return this.form?.get('price') as FormControl;
   }
 
   get dimensions(): FormGroup {
-    return this.form.get('dimensions') as FormGroup;
+    return this.form?.get('dimensions') as FormGroup;
   }
 
   get parent(): FormControl {
-    return this.form.get('parent') as FormControl;
+    return this.form?.get('parent') as FormControl;
   }
 
   get structure(): FormControl {
-    return this.form.get('structure') as FormControl;
+    return this.form?.get('structure') as FormControl;
   }
 
   get tags(): FormArray {
-    return this.form.get('tags') as FormArray;
+    return this.form?.get('tags') as FormArray;
   }
 
   get seoMeta(): FormControl {
-    return this.form.get('seoMeta') as FormControl;
+    return this.form?.get('seoMeta') as FormControl;
   }
 
   get seoDescription(): FormControl {
-    return this.form.get('seoDescription') as FormControl;
+    return this.form?.get('seoDescription') as FormControl;
   }
 
   get subscription(): FormControl {
-    return this.form.get('subscription') as FormControl;
+    return this.form?.get('subscription') as FormControl;
   }
 
   get marketplace(): FormGroup {
-    return this.form.get('marketplace') as FormGroup;
+    return this.form?.get('marketplace') as FormGroup;
   }
 
 

@@ -6,6 +6,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 import { SharedModule } from '@nusantara/shared';
 import { TestimonialComponent } from '@nusantara/pages/cms/testimonial';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 
 describe('TestimonialComponent', () => {
   let component: TestimonialComponent;
@@ -45,7 +46,8 @@ describe('TestimonialComponent', () => {
       declarations: [
         TestimonialComponent,
       ],
-      providers: []
+      providers: [],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

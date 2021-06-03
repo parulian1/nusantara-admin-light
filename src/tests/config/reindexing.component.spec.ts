@@ -5,6 +5,7 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {ActivatedRoute} from '@angular/router';
 import {of} from 'rxjs';
+import {MockActivatedRoute} from '../helpers';
 
 
 describe('ReindexingComponent', () => {
@@ -21,16 +22,17 @@ describe('ReindexingComponent', () => {
       declarations: [ReindexingComponent],
       providers: [
         ReindexingService,
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            paramMap: of({
-              data: {
-                get: () => ''
-              },
-            }),
-          }
-        }
+        { provide: ActivatedRoute, useClass: MockActivatedRoute },
+        // {
+        //   provide: ActivatedRoute,
+        //   useValue: {
+        //     paramMap: of({
+        //       data: {
+        //         get: () => ''
+        //       },
+        //     }),
+        //   }
+        // }
       ]
     })
       .compileComponents();
@@ -44,6 +46,8 @@ describe('ReindexingComponent', () => {
   });
 
   it('should create', () => {
+    const activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
+    activatedRoute.testParamMap = { data: {get: () => ''} };
     expect(component).toBeTruthy();
   });
 });

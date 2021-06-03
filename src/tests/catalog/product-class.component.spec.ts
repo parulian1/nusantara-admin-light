@@ -72,6 +72,7 @@ describe('ProductClassComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: {
+            snapshot: {},
             data: of({
               typeChoices: [],
               attributeTypeChoices: [],

@@ -62,6 +62,8 @@ describe('LoginComponent', () => {
   });
 
   it('sets afterLoginUrl to "/" if "next" query param missing', () => {
+    const activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
+    activatedRoute.testQueryParamMap = {};
     expect(component.afterLoginUrl).toBe('/');
   });
 

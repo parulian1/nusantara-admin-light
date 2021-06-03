@@ -6,6 +6,7 @@ import { of } from 'rxjs';
 
 import { DashboardModule } from '@nusantara/pages/dashboard';
 import { DashboardComponent } from '@nusantara/pages/dashboard/dashboard.component';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -26,7 +27,8 @@ describe('DashboardComponent', () => {
           useValue: { data: of(fakeResolvedData) },
         }
       ],
-      declarations: [ DashboardComponent ]
+      declarations: [ DashboardComponent ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
   }));

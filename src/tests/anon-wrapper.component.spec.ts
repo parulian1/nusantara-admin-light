@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { AnonWrapperComponent } from '@nusantara/view-wrappers/anon-wrapper.component';
 import { AuthModule } from '@nusantara/auth';
 import { RouterTestingModule } from '@angular/router/testing';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 
 describe('AnonWrapperComponent', () => {
   let component: AnonWrapperComponent;
@@ -11,7 +12,8 @@ describe('AnonWrapperComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [AuthModule, RouterTestingModule, ],
-      declarations: [ AnonWrapperComponent ]
+      declarations: [ AnonWrapperComponent ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
   }));

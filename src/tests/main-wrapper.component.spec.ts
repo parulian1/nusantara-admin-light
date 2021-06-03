@@ -33,10 +33,14 @@ describe('MainWrapperComponent', () => {
         }),
       ],
       declarations: [MainWrapperComponent, GetUserDisplayNamePipe],
-      providers: [JwtHelperService, ],
+      providers: [JwtHelperService, {
+        provide: AuthService,
+        useValue: authServiceSpy
+      }],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
+
   }));
 
   beforeEach(() => {
