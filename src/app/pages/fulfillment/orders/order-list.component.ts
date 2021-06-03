@@ -28,7 +28,6 @@ import { SvgIconService } from '@nusantara/services';
         <col width="16%">
         <col width="16%">
         <col width="16%">
-        <col width="16%">
       </colgroup>
       <thead>
         <tr>
