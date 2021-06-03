@@ -737,15 +737,15 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       );
       if (!this.isNew && this.isPhysical() && this.enterpriseLicense()) {
         this.marketplaceHost.saveAll();
-      } else {
-        window.alert('Please check your input.');
-        this.priceListHost.priceLists.forEach((priceList) => {
-          log.debug('pricelist', priceList.validatePriceList());
-          priceList.rangeComponents.forEach((component) => {
-            log.debug('validate', component.validatePriceRange(), component.maxQuantity.value);
-          });
-        });
       }
+    } else {
+      window.alert('Please check your input.');
+      this.priceListHost.priceLists.forEach((priceList) => {
+        log.debug('pricelist', priceList.validatePriceList());
+        priceList.rangeComponents.forEach((component) => {
+          log.debug('validate', component.validatePriceRange(), component.maxQuantity.value);
+        });
+      });
     }
     this.form.enable();
   }
