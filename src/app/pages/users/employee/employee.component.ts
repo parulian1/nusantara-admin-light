@@ -365,12 +365,9 @@ export class EmployeeComponent
   }
 
   protected onSaveSuccess(result: IResultResponse<IEmployee>) {
-    console.log('isUsePos: ', this.isUsePos);
-    console.log('canUsePos: ', result.entity.canUsePos);
     if (this.isUsePos) {
       this.EmployeeWarehouseHostComponent.saveAll(result.entity.href).subscribe(() => {});
     } else {
-      console.log('isUsePos false');
       this.warehouseService.deleteAllEmployeeWarehouse(getSlugFromHref(result.entity.href)).subscribe(() => {});
     }
     if (this.enterpriseGuard.canActivate(null, null)) {
