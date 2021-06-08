@@ -27,38 +27,38 @@ resources:
       name: Operations/pipeline-templates
 
 jobs:
-  - job: unit_test
-    displayName: Run Unit Test
-    steps:
-      # https://dev.azure.com/gramediadigital/Operations/_git/pipeline-templates?path=%2Fweb%2Funit_test.yml
-      - template: web/unit_test.yml@templates
-        parameters:
-          feedId: $(FEED_ID)
-          testArgs: ''
+  # - job: unit_test
+  #   displayName: Run Unit Test
+  #   steps:
+  #     # https://dev.azure.com/gramediadigital/Operations/_git/pipeline-templates?path=%2Fweb%2Funit_test.yml
+  #     - template: web/unit_test.yml@templates
+  #       parameters:
+  #         feedId: $(FEED_ID)
+  #         testArgs: ''
 
-  - job: build_prod
-    dependsOn: unit_test
-    pool:
-      name: docker-agent
-    displayName: Build & Packaging PROD
-    condition: |
-      and(
-        succeeded(),
-        eq('True', variables.IS_NON_MASTER_BRANCH),
-        ne(variables['Build.Reason'], 'PullRequest')
-      )
-    steps:
-      # https://dev.azure.com/gramediadigital/Operations/_git/pipeline-templates?path=%2Fweb%2Fbuild.yml
-      - template: web/build.yml@templates
-        parameters:
-          appEnv: production
-          feedId: $(FEED_ID)
-          buildPath: $(BUILD_DEST_PATH)
-          envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=True APM_ENVIRONMENT=production APM_URL=$(APM_URL)'
+  # - job: build_prod
+  #   dependsOn: unit_test
+  #   pool:
+  #     name: docker-agent
+  #   displayName: Build & Packaging PROD
+  #   condition: |
+  #     and(
+  #       succeeded(),
+  #       eq('True', variables.IS_NON_MASTER_BRANCH),
+  #       ne(variables['Build.Reason'], 'PullRequest')
+  #     )
+  #   steps:
+  #     # https://dev.azure.com/gramediadigital/Operations/_git/pipeline-templates?path=%2Fweb%2Fbuild.yml
+  #     - template: web/build.yml@templates
+  #       parameters:
+  #         appEnv: production
+  #         feedId: $(FEED_ID)
+  #         buildPath: $(BUILD_DEST_PATH)
+  #         envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=True APM_ENVIRONMENT=production APM_URL=$(APM_URL)'
 
   # Staging Build
   - job: build_staging
-    dependsOn: build_prod
+    # dependsOn: build_prod
     pool:
       name: docker-agent
     displayName: Build & Packaging STAGING
@@ -69,8 +69,35 @@ jobs:
         ne(variables['Build.Reason'], 'PullRequest')
       )
     steps:
-      - template: web/build.yml@templates
-        parameters:
-          feedId: $(FEED_ID)
-          buildPath: $(BUILD_DEST_PATH)
-          envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=False APM_ENVIRONMENT=staging APM_URL=$(APM_URL)'
+      # - template: web/build.yml@templates
+      #   parameters:
+      #     feedId: $(FEED_ID)
+      #     buildPath: $(BUILD_DEST_PATH)
+      #     envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=False APM_ENVIRONMENT=staging APM_URL=$(APM_URL)'
+        
+      - task: Bash@3
+        displayName: Compare with master branch
+        inputs:
+          targetType: 'inline'
+          script: |
+            sed -i 's/BUILD_PATH/$(BUILD_DEST_PATH)/g' Dockerfile
+            cat Dockerfile
+
+      # - task: Docker@2
+      #   displayName: Docker Build
+      #   inputs:
+      #     repository: $(DOCKER_REPO)
+      #     command: build
+      #     tags: |
+      #       $(Build.BuildId)
+
+      # - task: ECRPushImage@1
+      #   displayName: Docker Push to ECR (Version Tags)
+      #   inputs:
+      #     awsCredentials: $(AWS_CREDENTIAL_NAME)
+      #     regionName: $(AWS_REGION)
+      #     sourceImageName: $(DOCKER_REPO)
+      #     sourceImageTag: '$(Build.BuildId)'
+      #     repositoryName: $(DOCKER_REPO)
+      #     pushTag: gramedia.io
+      #     autoCreateRepository: true
