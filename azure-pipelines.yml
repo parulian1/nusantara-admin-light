@@ -80,7 +80,7 @@ jobs:
         inputs:
           targetType: 'inline'
           script: |
-            sed -i 's/BUILD_PATH/$(BUILD_DEST_PATH)/g' Dockerfile
+            sed -i -r "s/BUILD_PATH/$BUILD_DEST_PATH/g" Dockerfile
             cat Dockerfile
 
       # - task: Docker@2
