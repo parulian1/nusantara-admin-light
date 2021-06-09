@@ -137,5 +137,5 @@ jobs:
           sourceImageName: $(DOCKER_REPO)
           sourceImageTag: '$(Build.BuildId)'
           repositoryName: $(DOCKER_REPO)
-          pushTag: $(DOCKER_TAG)
+          pushTag: ${{ DOCKER_TAG }}
           autoCreateRepository: true
