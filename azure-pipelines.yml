@@ -7,6 +7,7 @@ pool:
   vmImage: ubuntu-20.04
 
 variables:
+  - group: Aws-Programatic
   - group: nusantara-web-pipeline-build
 
   # Don't forget add trailing slash ('/').
