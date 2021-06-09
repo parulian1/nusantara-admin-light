@@ -74,10 +74,11 @@ jobs:
             echo $APP_VERSION | tee VERSION
 
       - task: ECRPullImage@1
+        displayName: Pull base image
         inputs:
           awsCredentials: 'Aws-Ecs (New Account)'
           regionName: 'ap-southeast-1'
-          repository: 'gramedia/nginx'
+          repository: '377981621342.dkr.ecr.ap-southeast-1.amazonaws.com/gramedia/nginx'
           imageSource: 'imagetag'
           imageTag: 'gramedia.io'
           
@@ -97,7 +98,7 @@ jobs:
           sourceImageName: $(DOCKER_REPO)
           sourceImageTag: '$(Build.BuildId)'
           repositoryName: $(DOCKER_REPO)
-          pushTag: $APP_VERSION
+          pushTag: $(APP_VERSION)
           autoCreateRepository: true
 
   # Staging Build
@@ -133,10 +134,11 @@ jobs:
             echo $APP_VERSION | tee VERSION
 
       - task: ECRPullImage@1
+        displayName: Pull base image
         inputs:
           awsCredentials: 'Aws-Ecs (New Account)'
           regionName: 'ap-southeast-1'
-          repository: 'gramedia/nginx'
+          repository: '377981621342.dkr.ecr.ap-southeast-1.amazonaws.com/gramedia/nginx'
           imageSource: 'imagetag'
           imageTag: 'gramedia.io'
           
@@ -156,5 +158,5 @@ jobs:
           sourceImageName: $(DOCKER_REPO)
           sourceImageTag: '$(Build.BuildId)'
           repositoryName: $(DOCKER_REPO)
-          pushTag: $APP_VERSION
+          pushTag: $(APP_VERSION)
           autoCreateRepository: true
