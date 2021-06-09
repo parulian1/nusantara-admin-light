@@ -17,6 +17,9 @@ variables:
   - name: APM_NAME
     value: web-admin
 
+  - name: DOCKER_REPO
+    value: gramedia/nginx
+
   # runtime variables, automatically defined by agent when pipeline running
   - name: IS_NON_MASTER_BRANCH
     value: $[ne(variables['Build.SourceBranch'], 'refs/heads/master')]
