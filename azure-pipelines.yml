@@ -113,7 +113,7 @@ jobs:
         inputs:
           targetType: 'inline'
           script: |
-            export APP_VERSION="$(Build.SourceBranchName)"
+            export APP_VERSION="admin-$(Build.SourceBranchName)"
             
             echo "Current version of app is $APP_VERSION"
 
@@ -137,5 +137,5 @@ jobs:
           sourceImageName: $(DOCKER_REPO)
           sourceImageTag: '$(Build.BuildId)'
           repositoryName: $(DOCKER_REPO)
-          pushTag: admin-$DOCKER_TAG
+          pushTag: $(DOCKER_TAG)
           autoCreateRepository: true
