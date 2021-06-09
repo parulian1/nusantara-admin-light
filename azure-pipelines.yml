@@ -80,7 +80,7 @@ jobs:
         inputs:
           targetType: 'inline'
           script: |
-            awk '{sub(/BUILD_PATH/,$BUILD_DEST_PATH); print}' Dockerfile
+            awk '{sub(/BUILD_PATH/,$BUILD_DEST_PATH); print . "Dockerfile" }' Dockerfile
             cat Dockerfile
 
       # - task: Docker@2
