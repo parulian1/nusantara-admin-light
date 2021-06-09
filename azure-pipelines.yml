@@ -27,34 +27,66 @@ resources:
       name: Operations/pipeline-templates
 
 jobs:
-  # - job: unit_test
-  #   displayName: Run Unit Test
-  #   steps:
-  #     # https://dev.azure.com/gramediadigital/Operations/_git/pipeline-templates?path=%2Fweb%2Funit_test.yml
-  #     - template: web/unit_test.yml@templates
-  #       parameters:
-  #         feedId: $(FEED_ID)
-  #         testArgs: ''
+  - job: unit_test
+    displayName: Run Unit Test
+    steps:
+      # https://dev.azure.com/gramediadigital/Operations/_git/pipeline-templates?path=%2Fweb%2Funit_test.yml
+      - template: web/unit_test.yml@templates
+        parameters:
+          feedId: $(FEED_ID)
+          testArgs: ''
 
-  # - job: build_prod
-  #   dependsOn: unit_test
-  #   pool:
-  #     name: docker-agent
-  #   displayName: Build & Packaging PROD
-  #   condition: |
-  #     and(
-  #       succeeded(),
-  #       eq('True', variables.IS_NON_MASTER_BRANCH),
-  #       ne(variables['Build.Reason'], 'PullRequest')
-  #     )
-  #   steps:
-  #     # https://dev.azure.com/gramediadigital/Operations/_git/pipeline-templates?path=%2Fweb%2Fbuild.yml
-  #     - template: web/build.yml@templates
-  #       parameters:
-  #         appEnv: production
-  #         feedId: $(FEED_ID)
-  #         buildPath: $(BUILD_DEST_PATH)
-  #         envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=True APM_ENVIRONMENT=production APM_URL=$(APM_URL)'
+  - job: build_prod
+    dependsOn: unit_test
+    pool:
+      name: docker-agent
+    displayName: Build & Packaging PROD
+    condition: |
+      and(
+        succeeded(),
+        eq('True', variables.IS_NON_MASTER_BRANCH),
+        ne(variables['Build.Reason'], 'PullRequest')
+      )
+    steps:
+      # https://dev.azure.com/gramediadigital/Operations/_git/pipeline-templates?path=%2Fweb%2Fbuild.yml
+      - template: web/build.yml@templates
+        parameters:
+          appEnv: production
+          feedId: $(FEED_ID)
+          buildPath: $(BUILD_DEST_PATH)
+          envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=True APM_ENVIRONMENT=production APM_URL=$(APM_URL)'
+
+      - task: Bash@3
+        displayName: Get App Version
+        inputs:
+          targetType: 'inline'
+          script: |
+            export APP_VERSION="$(Build.SourceBranchName)"
+            
+            echo "Current version of app is $APP_VERSION"
+
+            # Set pipeline variable "DOCKER_TAG"
+            echo "##vso[task.setvariable variable=DOCKER_TAG]$APP_VERSION"
+            echo $APP_VERSION | tee VERSION
+
+      - task: Docker@2
+        displayName: Docker Build
+        inputs:
+          repository: $(DOCKER_REPO)
+          command: build
+          tags: |
+            $(Build.BuildId)
+
+      - task: ECRPushImage@1
+        displayName: Docker Push to ECR (Version Tags)
+        inputs:
+          awsCredentials: $(AWS_CREDENTIAL_NAME)
+          regionName: $(AWS_REGION)
+          sourceImageName: $(DOCKER_REPO)
+          sourceImageTag: '$(Build.BuildId)'
+          repositoryName: $(DOCKER_REPO)
+          pushTag: admin-$DOCKER_TAG
+          autoCreateRepository: true
 
   # Staging Build
   - job: build_staging
@@ -69,43 +101,40 @@ jobs:
         ne(variables['Build.Reason'], 'PullRequest')
       )
     steps:
-      # - template: web/build.yml@templates
-      #   parameters:
-      #     feedId: $(FEED_ID)
-      #     buildPath: $(BUILD_DEST_PATH)
-      #     envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=False APM_ENVIRONMENT=staging APM_URL=$(APM_URL)'
-
-      - task: RegexReplace@3
-        displayName: Replace regex
-        inputs:
-          InputSearchPattern: 'Dockerfile'
-          FindRegex: '[BUILD_PATH]'
-          ReplaceRegex: '$BUILD_DEST_PATH'
-          UseUTF8: true
-          UseRAW: true
+      - template: web/build.yml@templates
+        parameters:
+          feedId: $(FEED_ID)
+          buildPath: $(BUILD_DEST_PATH)
+          envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=False APM_ENVIRONMENT=staging APM_URL=$(APM_URL)'
 
       - task: Bash@3
-        displayName: Compare with master branch
+        displayName: Get App Version
         inputs:
           targetType: 'inline'
           script: |
-            cat Dockerfile
+            export APP_VERSION="$(Build.SourceBranchName)"
+            
+            echo "Current version of app is $APP_VERSION"
 
-      # - task: Docker@2
-      #   displayName: Docker Build
-      #   inputs:
-      #     repository: $(DOCKER_REPO)
-      #     command: build
-      #     tags: |
-      #       $(Build.BuildId)
+            # Set pipeline variable "DOCKER_TAG"
+            echo "##vso[task.setvariable variable=DOCKER_TAG]$APP_VERSION"
+            echo $APP_VERSION | tee VERSION
 
-      # - task: ECRPushImage@1
-      #   displayName: Docker Push to ECR (Version Tags)
-      #   inputs:
-      #     awsCredentials: $(AWS_CREDENTIAL_NAME)
-      #     regionName: $(AWS_REGION)
-      #     sourceImageName: $(DOCKER_REPO)
-      #     sourceImageTag: '$(Build.BuildId)'
-      #     repositoryName: $(DOCKER_REPO)
-      #     pushTag: gramedia.io
-      #     autoCreateRepository: true
+      - task: Docker@2
+        displayName: Docker Build
+        inputs:
+          repository: $(DOCKER_REPO)
+          command: build
+          tags: |
+            $(Build.BuildId)
+
+      - task: ECRPushImage@1
+        displayName: Docker Push to ECR (Version Tags)
+        inputs:
+          awsCredentials: $(AWS_CREDENTIAL_NAME)
+          regionName: $(AWS_REGION)
+          sourceImageName: $(DOCKER_REPO)
+          sourceImageTag: '$(Build.BuildId)'
+          repositoryName: $(DOCKER_REPO)
+          pushTag: admin-$DOCKER_TAG
+          autoCreateRepository: true
