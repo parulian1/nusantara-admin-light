@@ -60,19 +60,6 @@ jobs:
           buildPath: $(BUILD_DEST_PATH)
           envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=True APM_ENVIRONMENT=production APM_URL=$(APM_URL)'
 
-      - task: Bash@3
-        displayName: Get App Version
-        inputs:
-          targetType: 'inline'
-          script: |
-            export APP_VERSION="admin-$(Build.SourceBranchName)"
-            
-            echo "Current version of app is $APP_VERSION"
-
-            # Set pipeline variable "DOCKER_TAG"
-            echo "##vso[task.setvariable variable=DOCKER_TAG]$APP_VERSION"
-            echo $APP_VERSION | tee VERSION
-
       - task: ECRPullImage@1
         displayName: Pull base image
         inputs:
@@ -119,20 +106,6 @@ jobs:
           feedId: $(FEED_ID)
           buildPath: $(BUILD_DEST_PATH)
           envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=False APM_ENVIRONMENT=staging APM_URL=$(APM_URL)'
-
-      - task: Bash@3
-        displayName: Get App Version
-        inputs:
-          targetType: 'inline'
-          script: |
-            export APP_VERSION="admin-$(Build.SourceBranchName)"
-            
-            echo "Current version of app is $APP_VERSION"
-
-            # Set pipeline variable "DOCKER_TAG"
-            echo "##vso[task.setvariable variable=DOCKER_TAG]$APP_VERSION"
-            echo $APP_VERSION | tee VERSION
-            echo admin-$(Build.SourceBranchName)
 
       - task: ECRPullImage@1
         displayName: Pull base image
