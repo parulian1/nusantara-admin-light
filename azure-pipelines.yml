@@ -74,13 +74,21 @@ jobs:
       #     feedId: $(FEED_ID)
       #     buildPath: $(BUILD_DEST_PATH)
       #     envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=False APM_ENVIRONMENT=staging APM_URL=$(APM_URL)'
-        
+
+      - task: RegexReplace@3
+        displayName: Replace regex
+        inputs:
+          InputSearchPattern: 'Dockerfile'
+          FindRegex: '[BUILD_PATH]'
+          ReplaceRegex: '$BUILD_DEST_PATH'
+          UseUTF8: true
+          UseRAW: true
+
       - task: Bash@3
         displayName: Compare with master branch
         inputs:
           targetType: 'inline'
           script: |
-            awk '{sub(/BUILD_PATH/,$BUILD_DEST_PATH); print . "Dockerfile" }' Dockerfile
             cat Dockerfile
 
       # - task: Docker@2
