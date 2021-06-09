@@ -1,5 +1,5 @@
 import {INamedHrefEntity} from '@nusantara/models';
-import {IProduct} from '@nusantara/models/products';
+import {IPriceList} from '@nusantara/models/products';
 
 export interface IPoints extends INamedHrefEntity {
   transactionAmount: number;
@@ -15,6 +15,10 @@ export interface IPoints extends INamedHrefEntity {
 }
 
 export interface IProductPoints {
-  product: INamedHrefEntity;
+  product: IProductPointsDetail;
   amount: number;
+}
+
+export interface IProductPointsDetail extends INamedHrefEntity{
+  priceLists: Array<IPriceList>;
 }

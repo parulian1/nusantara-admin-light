@@ -6,7 +6,8 @@ import {FormControl, FormGroup} from '@angular/forms';
   template: `
     <tr [formGroup]="form">
       <td>{{ form.get('product').get('name').value }}</td>
-      <td>
+      <td>{{ form.get('product').get('price').value | currency:'Rp' }}</td>
+      <td class="numeric">
         <input type="number" [formControl]="amount" placeholder="Points"/></td>
       <td>
         <button (click)="remove.emit()" type="button" class="remove-button">

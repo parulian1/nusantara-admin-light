@@ -12,16 +12,10 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
   selector: 'nus-points',
   template: `
     <h1 class="title-1">Points</h1>
-    <form [formGroup]="form" (ngSubmit)="save()">
+    <form [formGroup]="form" (ngSubmit)="save()" class="fluid">
       <nus-tabs>
         <nus-tab [title]="'Configuration'">
           <div class="points-config">
-
-            <label>
-              <span>Points Name</span>
-              <input type="text" [formControl]="name" maxlength="50" placeholder="Points Name">
-              <nus-field-errors [control]="name"></nus-field-errors>
-            </label>
 
             <span class="subheading-2">Transaction Value</span>
 
@@ -129,6 +123,7 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
               <thead>
               <tr>
                 <th>Product</th>
+                <th>Product Price</th>
                 <th>Points</th>
                 <th></th>
               </tr>
@@ -140,7 +135,7 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
                 (remove)="removeProduct(i)"
               ></nus-product-points>
               <tr>
-                <td colspan="3">
+                <td colspan="4">
                   <button type="button" (click)="selectProduct()" class="new-add-button wide">
                     <i class="material-icons">add</i> Add Product
                   </button>
@@ -303,10 +298,6 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
     super(route, router, toast, service);
   }
 
-  get name(): FormControl {
-    return this.form.get('name') as FormControl;
-  }
-
   get transactionAmount(): FormControl {
     return this.form.get('transactionAmount') as FormControl;
   }
@@ -363,7 +354,6 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
 
   initializeForm(entity?: IPoints, productPoints?: IProductPoints) {
     this.form = this.fb.group({
-      name: [entity?.name, [Validators.required, Validators.maxLength(50)]],
       href: [entity?.href, []],
       transactionAmount: [entity?.transactionAmount, [Validators.required]],
       point: [entity?.point, [Validators.required]],
@@ -397,10 +387,26 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
   }
 
   addProduct(product?: IProductPoints): void {
+    const priceLists = product?.product.priceLists;
+    const priceData = priceLists.find(obj => {
+      return obj.type === 'default';
+    });
+    let basePrice = 0;
+    if (priceData !== undefined) {
+      const priceRange = priceData.ranges.find(range => {
+        return range.minQuantity === 1;
+      });
+
+      if (priceRange !== undefined) {
+        basePrice = priceRange.price;
+      }
+    }
+
     const f = this.fb.group({
       product: this.fb.group({
         href: [product?.product.href, []],
         name: [product?.product.name, []],
+        price: [basePrice, []],
       }),
       amount: [product?.amount, []]
     });
