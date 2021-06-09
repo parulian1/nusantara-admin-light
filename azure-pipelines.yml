@@ -40,6 +40,7 @@ jobs:
           feedId: $(FEED_ID)
           testArgs: ''
 
+  # prod build
   - job: build_prod
     dependsOn: unit_test
     pool:
@@ -88,6 +89,17 @@ jobs:
           pushTag: admin-$(Build.SourceBranchName)
           autoCreateRepository: true
 
+      - task: ECRPushImage@1
+        displayName: Docker Push to ECR (Version Tags)
+        inputs:
+          awsCredentials: $(AWS_CREDENTIAL_NAME)
+          regionName: $(AWS_REGION)
+          sourceImageName: $(DOCKER_REPO)
+          sourceImageTag: '$(Build.BuildId)'
+          repositoryName: $(DOCKER_REPO)
+          pushTag: admin-latest
+          autoCreateRepository: true
+
   # Staging Build
   - job: build_staging
     # dependsOn: build_prod
@@ -133,4 +145,15 @@ jobs:
           sourceImageTag: '$(Build.BuildId)'
           repositoryName: $(DOCKER_REPO)
           pushTag: admin-$(Build.SourceBranchName)
+          autoCreateRepository: true
+
+      - task: ECRPushImage@1
+        displayName: Docker Push to ECR (Version Tags)
+        inputs:
+          awsCredentials: $(AWS_CREDENTIAL_NAME)
+          regionName: $(AWS_REGION)
+          sourceImageName: $(DOCKER_REPO)
+          sourceImageTag: '$(Build.BuildId)'
+          repositoryName: $(DOCKER_REPO)
+          pushTag: admin-dev
           autoCreateRepository: true
