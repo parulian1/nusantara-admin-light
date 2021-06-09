@@ -98,7 +98,7 @@ jobs:
           sourceImageName: $(DOCKER_REPO)
           sourceImageTag: '$(Build.BuildId)'
           repositoryName: $(DOCKER_REPO)
-          pushTag: '$(APP_VERSION)'
+          pushTag: ${{ APP_VERSION }}
           autoCreateRepository: true
 
   # Staging Build
@@ -158,5 +158,5 @@ jobs:
           sourceImageName: $(DOCKER_REPO)
           sourceImageTag: '$(Build.BuildId)'
           repositoryName: $(DOCKER_REPO)
-          pushTag: '$(APP_VERSION)'
+          pushTag: ${{ APP_VERSION }}
           autoCreateRepository: true
