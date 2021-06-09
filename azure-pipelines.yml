@@ -80,7 +80,7 @@ jobs:
         inputs:
           targetType: 'inline'
           script: |
-            sed -i 's/BUILD_PATH/$BUILD_DEST_PATH/g' Dockerfile
+            awk '{sub(/BUILD_PATH/,BUILD_DEST_PATH); print}' Dockerfile
             cat Dockerfile
 
       # - task: Docker@2
