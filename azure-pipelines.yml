@@ -78,7 +78,7 @@ jobs:
         inputs:
           awsCredentials: 'Aws-Ecs (New Account)'
           regionName: 'ap-southeast-1'
-          repository: '377981621342.dkr.ecr.ap-southeast-1.amazonaws.com/gramedia/nginx'
+          repository: 'gramedia/nginx'
           imageSource: 'imagetag'
           imageTag: 'gramedia.io'
           
@@ -138,7 +138,7 @@ jobs:
         inputs:
           awsCredentials: 'Aws-Ecs (New Account)'
           regionName: 'ap-southeast-1'
-          repository: '377981621342.dkr.ecr.ap-southeast-1.amazonaws.com/gramedia/nginx'
+          repository: 'gramedia/nginx'
           imageSource: 'imagetag'
           imageTag: 'gramedia.io'
           
