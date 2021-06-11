@@ -8,8 +8,9 @@ import {FormControl, FormGroup} from '@angular/forms';
       <td>{{ form.get('product').get('name').value }}</td>
       <td>{{ form.get('product').get('price').value | currency:'IDR':'symbol-narrow':'1.0' }}</td>
       <td class="numeric">
-        <input type="number" [formControl]="amount" placeholder="Points" min="1" /></td>
+        <input type="number" [formControl]="amount" placeholder="Points" min="1" />
         <nus-field-errors [control]="amount"></nus-field-errors>
+      </td>
       <td>
         <button (click)="remove.emit()" type="button" class="remove-button">
           <i class="material-icons">remove_circle_outline</i>
