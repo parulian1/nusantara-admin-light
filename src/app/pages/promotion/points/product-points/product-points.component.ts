@@ -6,9 +6,10 @@ import {FormControl, FormGroup} from '@angular/forms';
   template: `
     <tr [formGroup]="form">
       <td>{{ form.get('product').get('name').value }}</td>
-      <td>{{ form.get('product').get('price').value | currency:'Rp' }}</td>
+      <td>{{ form.get('product').get('price').value | currency:'IDR':'symbol-narrow':'1.0' }}</td>
       <td class="numeric">
-        <input type="number" [formControl]="amount" placeholder="Points"/></td>
+        <input type="number" [formControl]="amount" placeholder="Points" min="1" /></td>
+        <nus-field-errors [control]="amount"></nus-field-errors>
       <td>
         <button (click)="remove.emit()" type="button" class="remove-button">
           <i class="material-icons">remove_circle_outline</i>

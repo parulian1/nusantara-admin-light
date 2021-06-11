@@ -387,28 +387,14 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
   }
 
   addProduct(product?: IProductPoints): void {
-    const priceLists = product?.product.priceLists;
-    const priceData = priceLists.find(obj => {
-      return obj.type === 'default';
-    });
-    let basePrice = 0;
-    if (priceData !== undefined) {
-      const priceRange = priceData.ranges.find(range => {
-        return range.minQuantity === 1;
-      });
-
-      if (priceRange !== undefined) {
-        basePrice = priceRange.price;
-      }
-    }
-
+    const basePrice = this.getProductBasePrice(product?.product.priceLists);
     const f = this.fb.group({
       product: this.fb.group({
         href: [product?.product.href, []],
         name: [product?.product.name, []],
         price: [basePrice, []],
       }),
-      amount: [product?.amount, []]
+      amount: [product?.amount, [Validators.required, Validators.min(1)]]
     });
 
     this.products.push(f);
@@ -418,13 +404,15 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
     if (this.productSelectionModal.result === DialogResult.OK) {
 
       const selectedProduct = this.productSelectionModal.product.value as IProduct;
+      const basePrice = this.getProductBasePrice(selectedProduct.priceLists);
 
       const f = this.fb.group({
         product: this.fb.group({
           name: [selectedProduct.name, []],
-          href: [selectedProduct.href, []]
+          href: [selectedProduct.href, []],
+          price: [basePrice, []],
         }),
-        amount: [0, []]
+        amount: [0, [Validators.required, Validators.min(1)]]
       });
 
       this.products.push(f);
@@ -451,5 +439,23 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
 
   removeProduct(i: number): void {
     this.products.removeAt(i);
+  }
+
+  getProductBasePrice(priceLists: Array<any>) {
+    const priceData = priceLists.find(obj => {
+      return obj.type === 'default';
+    });
+    let basePrice = 0;
+    if (priceData !== undefined) {
+      const priceRange = priceData.ranges.find(range => {
+        return range.minQuantity === 1;
+      });
+
+      if (priceRange !== undefined) {
+        basePrice = priceRange.price;
+      }
+    }
+
+    return basePrice;
   }
 }
