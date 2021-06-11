@@ -30,14 +30,14 @@ import { IProductClass } from '../../../models/products';
         <input type="text" [formControl]="batchNumber" data-qa="batch-number">
       </td>
       <td>
-        <div *ngFor="let child_control of locator.controls; index as ctr">
+        <div *ngFor="let child_control of locator.controls; index as ctr" style="display:flex; margin-bottom: 15px;">
           <input [formControl]="child_control" name="locator" data-qa="locator">
           <nus-field-errors [control]="child_control"></nus-field-errors>
           <button (click)="locator.removeAt(ctr)" type="button" class="remove-button" data-qa="remove-locator-button">
             <i class="material-icons">remove_circle_outline</i>
           </button>
         </div>
-        <button (click)="addLocator()" type="button" data-qa="add-locator-button">Add</button>
+        <button (click)="addLocator()" type="button" class="new-add-button wide" data-qa="add-locator-button">Add</button>
       </td>
       <td class="immediate-error-display">
         <input *ngIf="isPerishable" type="date" [formControl]="expiryDate" data-qa="expiry-date">
