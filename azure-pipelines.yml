@@ -8,6 +8,7 @@ pool:
 
 variables:
   - group: nusantara-web-pipeline-build
+  - group: Aws-Programatic
 
   # Don't forget add trailing slash ('/').
   - name: BUILD_DEST_PATH
@@ -15,6 +16,9 @@ variables:
 
   - name: APM_NAME
     value: web-admin
+
+  - name: DOCKER_REPO
+    value: gramedia/nginx
 
   # runtime variables, automatically defined by agent when pipeline running
   - name: IS_NON_MASTER_BRANCH
@@ -36,10 +40,11 @@ jobs:
           feedId: $(FEED_ID)
           testArgs: ''
 
+  # prod build
   - job: build_prod
     dependsOn: unit_test
     pool:
-      name: docker-agent
+      name: Experimental
     displayName: Build & Packaging PROD
     condition: |
       and(
@@ -56,11 +61,50 @@ jobs:
           buildPath: $(BUILD_DEST_PATH)
           envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=True APM_ENVIRONMENT=production APM_URL=$(APM_URL)'
 
+      - task: ECRPullImage@1
+        displayName: Pull base image
+        inputs:
+          awsCredentials: 'Aws-Ecs (New Account)'
+          regionName: 'ap-southeast-1'
+          repository: 'gramedia/nginx'
+          imageSource: 'imagetag'
+          imageTag: 'gramedia.io'
+          
+      - task: Docker@2
+        displayName: Docker Build
+        inputs:
+          repository: $(DOCKER_REPO)
+          command: build
+          tags: |
+            $(Build.BuildId)
+
+      - task: ECRPushImage@1
+        displayName: Docker Push to ECR (Version Tags)
+        inputs:
+          awsCredentials: $(AWS_CREDENTIAL_NAME)
+          regionName: $(AWS_REGION)
+          sourceImageName: $(DOCKER_REPO)
+          sourceImageTag: '$(Build.BuildId)'
+          repositoryName: $(DOCKER_REPO)
+          pushTag: admin-$(Build.SourceBranchName)
+          autoCreateRepository: true
+
+      - task: ECRPushImage@1
+        displayName: Docker Push to ECR (Version Tags)
+        inputs:
+          awsCredentials: $(AWS_CREDENTIAL_NAME)
+          regionName: $(AWS_REGION)
+          sourceImageName: $(DOCKER_REPO)
+          sourceImageTag: '$(Build.BuildId)'
+          repositoryName: $(DOCKER_REPO)
+          pushTag: admin-latest
+          autoCreateRepository: true
+
   # Staging Build
   - job: build_staging
-    dependsOn: build_prod
+    # dependsOn: build_prod
     pool:
-      name: docker-agent
+      name: Experimental
     displayName: Build & Packaging STAGING
     condition: |
       and(
@@ -74,3 +118,42 @@ jobs:
           feedId: $(FEED_ID)
           buildPath: $(BUILD_DEST_PATH)
           envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=False APM_ENVIRONMENT=staging APM_URL=$(APM_URL)'
+
+      - task: ECRPullImage@1
+        displayName: Pull base image
+        inputs:
+          awsCredentials: 'Aws-Ecs (New Account)'
+          regionName: 'ap-southeast-1'
+          repository: 'gramedia/nginx'
+          imageSource: 'imagetag'
+          imageTag: 'gramedia.io'
+          
+      - task: Docker@2
+        displayName: Docker Build
+        inputs:
+          repository: $(DOCKER_REPO)
+          command: build
+          tags: |
+            $(Build.BuildId)
+
+      - task: ECRPushImage@1
+        displayName: Docker Push to ECR (Version Tags)
+        inputs:
+          awsCredentials: $(AWS_CREDENTIAL_NAME)
+          regionName: $(AWS_REGION)
+          sourceImageName: $(DOCKER_REPO)
+          sourceImageTag: '$(Build.BuildId)'
+          repositoryName: $(DOCKER_REPO)
+          pushTag: admin-$(Build.SourceBranchName)
+          autoCreateRepository: true
+
+      - task: ECRPushImage@1
+        displayName: Docker Push to ECR (Version Tags)
+        inputs:
+          awsCredentials: $(AWS_CREDENTIAL_NAME)
+          regionName: $(AWS_REGION)
+          sourceImageName: $(DOCKER_REPO)
+          sourceImageTag: '$(Build.BuildId)'
+          repositoryName: $(DOCKER_REPO)
+          pushTag: admin-dev
+          autoCreateRepository: true
