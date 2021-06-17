@@ -70,6 +70,7 @@ export class EmployeeWarehouseHostComponent implements OnInit {
         .fetchAllByUser(this.entity?.username)
         .subscribe((warehouses) => {
           warehouses.forEach((warehouse) => {
+            this.form.clear();
             this.addToForm(warehouse);
           });
         });
