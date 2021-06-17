@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {
   AbstractDetailComponent,
   DialogResult,
@@ -8,12 +8,20 @@ import {
   ToastLevelEnum,
   ToastService,
 } from '@nusantara/core';
-import { drf, inventory, ISubLocation, IWarehouse } from '@nusantara/models';
-import { IAdjustment, IStockRecord, ReceivingOrderStatusChoices } from '@nusantara/models/inventory';
-import { AuthService } from '@nusantara/auth';
-import { InventoryAdjustmentOrderService, MarketplaceClientService } from '@nusantara/services';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ConfirmModalReceivingOrderComponent, StockRecordSelectionModalComponent } from '@nusantara/shared';
+import {drf, inventory, ISubLocation, IWarehouse, marketplace} from '@nusantara/models';
+import {IAdjustment, IStockRecord, ReceivingOrderStatusChoices} from '@nusantara/models/inventory';
+import {AuthService} from '@nusantara/auth';
+import {
+  InventoryAdjustmentOrderService,
+  InventoryStockRecordService,
+  MarketplaceClientService,
+  WarehouseService
+} from '@nusantara/services';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ConfirmModalReceivingOrderComponent, StockRecordSelectionModalComponent} from '@nusantara/shared';
+import {CsvDialogComponent} from '@nusantara/shared/csv-dialog/csv-dialog.component';
+import * as Papa from 'papaparse';
+import {HttpParams} from '@angular/common/http';
 
 @Component({
   selector: 'nus-adjustment',
@@ -43,44 +51,53 @@ import { ConfirmModalReceivingOrderComponent, StockRecordSelectionModalComponent
           <div [formGroup]="warehouse">
             <label>Warehouse</label>
             <div class="confirm-warehouse">
-              <select formControlName="href">
+              <select formControlName="href" (change)="warehouseSelected($event)">
                 <option [ngValue]="null">Select Warehouse</option>
                 <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
                   {{ wh.name }}
                 </option>
               </select>
+              <select (change)="subLocationSelected($event)">
+                <option [ngValue]="null">Select Warehouse</option>
+                <option *ngFor="let subLocation of availableSubLocations" [ngValue]="subLocation.href">
+                  {{ subLocation.name }}
+                </option>
+              </select>
               <button (click)="confirmWarehouse()" type="button"
                       [disabled]="warehouse.disabled || !warehouse.valid"
-                      class="control confirm">
-                Confirm
+                      class="control confirm">Confirm
+              </button>
+              <button (click)="manualUpload()" type="button"
+                      [disabled]="warehouse.disabled || !warehouse.valid"
+                      class="control confirm">Manual Upload
               </button>
             </div>
           </div>
         </div>
         <!-- <div class="mp-info">-->
-          <!--  <h3>Marketplace Information</h3>-->
-          <!--  <div>-->
-          <!--    <div>Product</div>-->
-          <!--    <div class="count">-->
-          <!--      0-->
-          <!--    </div>-->
-          <!--  </div>-->
-          <!--  <div>-->
-          <!--    <div>Marketplace</div>-->
-          <!--    <div class="count">-->
-          <!--      0-->
-          <!--    </div>-->
-          <!--  </div>-->
-          <!--  <div>-->
-          <!--    <div>Store</div>-->
-          <!--    <div class="count">-->
-          <!--      0-->
-          <!--    </div>-->
-          <!--  </div>-->
-          <!--  <a >More Detail</a>-->
+        <!--  <h3>Marketplace Information</h3>-->
+        <!--  <div>-->
+        <!--    <div>Product</div>-->
+        <!--    <div class="count">-->
+        <!--      0-->
+        <!--    </div>-->
+        <!--  </div>-->
+        <!--  <div>-->
+        <!--    <div>Marketplace</div>-->
+        <!--    <div class="count">-->
+        <!--      0-->
+        <!--    </div>-->
+        <!--  </div>-->
+        <!--  <div>-->
+        <!--    <div>Store</div>-->
+        <!--    <div class="count">-->
+        <!--      0-->
+        <!--    </div>-->
+        <!--  </div>-->
+        <!--  <a >More Detail</a>-->
         <!-- </div>-->
       </div>
-      <div class="product-list" *ngIf="warehouse.disabled">
+      <div class="product-list" *ngIf="warehouse.disabled && adjustmentMode === 'manual'">
         <table>
           <thead>
           <tr id="mp-add-product-head">
@@ -127,6 +144,7 @@ import { ConfirmModalReceivingOrderComponent, StockRecordSelectionModalComponent
     <!-- Modals -->
     <nus-stock-record-selection-modal></nus-stock-record-selection-modal>
     <nus-confirm-receiving-modal></nus-confirm-receiving-modal>
+    <nus-csv-dialog></nus-csv-dialog>
   `,
   styles: [
     'h1 { margin-bottom: 0.75rem; }',
@@ -153,25 +171,31 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
 
   @ViewChild(StockRecordSelectionModalComponent) stockRecordSelectionModal: StockRecordSelectionModalComponent;
   @ViewChild(ConfirmModalReceivingOrderComponent) confirmModalReceiving: ConfirmModalReceivingOrderComponent;
+  @ViewChild(CsvDialogComponent) csvDialog: CsvDialogComponent;
 
   warehouses: IWarehouse[];
   availableSubLocations: ISubLocation[] = [];
   reasonChoices: drf.IChoice[] = [
-    { value: 'opname', displayName: 'OpName' },
-    { value: 'damaged', displayName: 'Damaged' },
-    { value: 'missed', displayName: 'Missing' },
-    { value: 'misplace', displayName: 'Found/Misplace' },
+    {value: 'opname', displayName: 'OpName'},
+    {value: 'damaged', displayName: 'Damaged'},
+    {value: 'missed', displayName: 'Missing'},
+    {value: 'misplace', displayName: 'Found/Misplace'},
   ];
 
   currentDate: Date;
   productValue = 0;
   storeValue = 0;
+  csvData = [];
+  parsedCsv : any;
+  adjustmentMode = 'manual';
 
   constructor(private fb: FormBuilder,
               public toast: ToastService,
               public authService: AuthService,
               public service: InventoryAdjustmentOrderService,
               public clientService: MarketplaceClientService,
+              public warehouseService: WarehouseService,
+              protected inventoryService: InventoryStockRecordService,
               public route: ActivatedRoute,
               public router: Router) {
     super(route, router, toast, service);
@@ -186,13 +210,18 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   }
 
   ngAfterViewInit() {
+    super.ngAfterViewInit();
     this.stockRecordSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
     this.confirmModalReceiving.onClose.subscribe(() => this.onConfirmModalClosed());
+    this.csvDialog.onClose.subscribe(() => this.manualUploadClose());
   }
 
   initializeForm(entity?: IAdjustment): void {
     this.form = this.fb.group({
       warehouse: this.fb.group({
+        href: [null, Validators.required],
+      }),
+      subLocation: this.fb.group({
         href: [null, Validators.required],
       }),
       stockRecords: this.fb.array(
@@ -209,12 +238,16 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     return this.form.get('warehouse') as FormGroup;
   }
 
+  get subLocation(): FormGroup {
+    return this.form.get('subLocation') as FormGroup;
+  }
+
   get userDisplayName(): string {
     const email = this.authService.tokenPayload?.email ?? '';
     const fullName = `${this.authService.tokenPayload?.last_name} ${this.authService.tokenPayload?.first_name}`.trim();
 
     if (fullName && email) {
-      return [fullName, `(${email})`, ].join(', ').trim();
+      return [fullName, `(${email})`,].join(', ').trim();
     } else {
       return email;
     }
@@ -240,6 +273,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     if (wh) {
       this.availableSubLocations = wh.subLocations || [];
       this.warehouse.disable();
+      this.adjustmentMode = 'manual';
     }
   }
 
@@ -248,7 +282,9 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
       const selectedStock = this.stockRecordSelectionModal.stockRecord.value as IStockRecord;
 
       // available stock
-      if (selectedStock.originalQuantity <= 0) { alert('selected receiving order doesnt have stock'); }
+      if (selectedStock.originalQuantity <= 0) {
+        alert('selected receiving order doesnt have stock');
+      }
 
       const newReceiving = this.fb.group({
         href: [null, []],
@@ -306,5 +342,87 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     this.storeValue = this.productValue = 0;
     this.toast?.addMessage(`"${this.form.get('name')?.value ?? 'data'}" was saved successfully.`, 'Saved', ToastLevelEnum.success);
     this.navigateToParent(false);
+  }
+
+  warehouseSelected($event: Event) {
+    if (($event.target as HTMLSelectElement).value !== '') {
+      const wh = this.warehouses.filter(e => e.href === this.warehouse.get('href').value)[0];
+      if (wh) {
+        this.availableSubLocations = wh.subLocations || [];
+        // this.warehouse.disable();
+      }
+    } else {
+
+    }
+  }
+
+  subLocationSelected($event: Event) {
+
+  }
+
+  manualUpload() {
+
+    // this.csvDialog.filters = {
+    //   warehouse: getSlugFromHref(this.warehouse.value?.href),
+    //   receiving_order_status: ReceivingOrderStatusChoices.APPROVED,
+    // };
+
+    this.adjustmentMode = 'csv';
+    this.csvDialog.fileTarget = null;
+    this.csvDialog.columnChoices = null;
+    this.csvDialog.currentStep = 'start';
+    this.csvDialog.open();
+  }
+
+  manualUploadClose() {
+    if (this.csvDialog.result === DialogResult.OK) {
+      console.log(this.csvDialog.columnChoices);
+      console.log(this.csvDialog.fileTarget);
+
+      const target: DataTransfer = this.csvDialog.fileTarget as DataTransfer;
+      // Direct
+      Papa.parse(target.files[0],
+        {
+          header: this.csvDialog.hasCsvHeader,
+          skipEmptyLines: true,
+          complete: (results) => {
+            this.csvData = [];
+            this.parsedCsv = results;
+            results.data.map((value, key) => {
+              console.log(value);
+              const filters = {
+                warehouse: getSlugFromHref(this.warehouse.value?.href),
+                subLocation: getSlugFromHref(this.subLocation.value?.href),
+                receiving_order_status: ReceivingOrderStatusChoices.APPROVED,
+              };
+              const upc = this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['upc']] : value[+(this.csvDialog.columnChoices['upc']) - 1];
+              this.inventoryService.fetchListWithFilter(
+                upc, 1, 10, filters
+              ).subscribe(res => {
+                console.log(res);
+                const dataResult = {
+                  page: res,
+                  data: value,
+                  key
+                };
+                this.csvData.push(dataResult);
+              });
+            });
+          }
+        });
+
+      //
+      // const reader: FileReader = new FileReader();
+      // reader.readAsText(target.files[0]);
+      //
+      // reader.onload = (event: any) => {
+      //   const csvData = event.target.result;
+      //   const data = Papa.parse(csvData, {header: this.csvDialog.hasCsvHeader});
+      //   console.log('Processing', data);
+      // };
+      // reader.onerror = (err: any) => {
+      //   alert('Unable to read ' + target.files[0].name);
+      // };
+    }
   }
 }

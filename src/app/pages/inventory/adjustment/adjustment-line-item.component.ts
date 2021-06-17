@@ -89,6 +89,7 @@ export class AdjustmentLineItemComponent implements OnInit, AfterViewInit {
   @Input() productClasses: IProductClass[];
   @Input() form: FormGroup;
   @Input() reasons: drf.IChoice[] = [];
+  @Input() subLocation: ISubLocation;
 
   @Output() remove = new EventEmitter<void>();
 
