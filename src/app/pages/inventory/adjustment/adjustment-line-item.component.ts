@@ -71,6 +71,9 @@ import { getSlugFromHref } from '@nusantara/core';
         <button (click)="remove.emit()" type="button" class="remove-button" data-qa="remove-button">
           <i class="material-icons">remove_circle_outline</i>
         </button>
+        <button (click)="resolveConflict(index, csvData)" type="button" class="resolve-button" data-qa="resolve-button">
+          Resolve Conflict
+        </button>
       </td>
     </tr>
   `,
@@ -90,8 +93,15 @@ export class AdjustmentLineItemComponent implements OnInit, AfterViewInit {
   @Input() form: FormGroup;
   @Input() reasons: drf.IChoice[] = [];
   @Input() subLocation: ISubLocation;
+  @Input() csvData: any;
+  @Input() index: number;
 
   @Output() remove = new EventEmitter<void>();
+
+  @Output() conflict = new EventEmitter<{
+    'index': number,
+    'data': any
+    }>();
 
   constructor(
     public route: ActivatedRoute,
@@ -134,5 +144,12 @@ export class AdjustmentLineItemComponent implements OnInit, AfterViewInit {
       differentQty = +this.differenceQty.value - +this.originalQuantity.value;
     }
     this.adjustmentQuantity.setValue(differentQty);
+  }
+
+  resolveConflict(idx, data) {
+      this.conflict.emit({
+        index: idx,
+        data
+      });
   }
 }

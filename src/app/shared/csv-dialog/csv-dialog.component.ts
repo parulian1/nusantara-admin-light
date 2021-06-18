@@ -6,11 +6,11 @@ import {drf} from '@nusantara/models';
 
 const CSV_FIELD = ['upc', 'qty', 'reason', 'sku', 'notes'];
 const CSV_FIELD_DESC = {
-  'upc': 'UPC',
-  'qty': 'Adjusted Qty',
-  'reason': 'Reason',
-  'sku': 'SKU',
-  'notes': 'Notes'
+  upc: 'UPC',
+  qty: 'Adjusted Qty',
+  reason: 'Reason',
+  sku: 'SKU',
+  notes: 'Notes'
 };
 
 
@@ -25,7 +25,7 @@ const CSV_FIELD_DESC = {
                accept="text/csv"
                (change)="fileChange($event)">
         <label><input type="checkbox" [(ngModel)]="hasCsvHeader" value="1">Has header</label>
-        <button class="control" (click)="currentStep = 'csvmap'">Next</button>
+        <button class="control" (click)="parseCsv()">Next</button>
         <button class="control secondary ghost">Cancel</button>
       </div>
       <div *ngIf="currentStep == 'csvmap'">
@@ -109,10 +109,15 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
   currentStep = 'start';
   hasCsvHeader: any;
   availableOptions: drf.IChoice[] = [];
+  // tslint:disable-next-line:variable-name
   column_upc: string;
+  // tslint:disable-next-line:variable-name
   column_qty: string;
+  // tslint:disable-next-line:variable-name
   column_reason: string;
+  // tslint:disable-next-line:variable-name
   column_sku: string;
+  // tslint:disable-next-line:variable-name
   column_notes: string;
 
   columnChoices = {
@@ -138,7 +143,7 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.modal.onOpen.subscribe(() => {
-
+      this.result = DialogResult.Cancelled;
     });
     this.modal.onClose.subscribe(() => {
 
@@ -165,8 +170,16 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
   fileChange($event: any) {
     const target: DataTransfer = $event.target as DataTransfer;
     this.fileTarget = target;
+
+  }
+
+  nextStepMap() {
+    this.close();
+  }
+
+  parseCsv() {
     const reader: FileReader = new FileReader();
-    reader.readAsText(target.files[0]);
+    reader.readAsText(this.fileTarget.files[0]);
 
     reader.onload = (event: any) => {
       const csvData = event.target.result;
@@ -192,13 +205,11 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
         }
       }
     };
-    reader.onerror = (err: any) => {
-      alert('Unable to read ' + target.files[0].name);
+    reader.onloadend = (event: any) => {
+      this.currentStep = 'csvmap';
     };
-
-  }
-
-  nextStepMap() {
-    this.close();
+    reader.onerror = (err: any) => {
+      alert('Unable to read ' + this.fileTarget.files[0].name);
+    };
   }
 }

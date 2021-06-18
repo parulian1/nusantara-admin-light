@@ -22,6 +22,8 @@ import {ConfirmModalReceivingOrderComponent, StockRecordSelectionModalComponent}
 import {CsvDialogComponent} from '@nusantara/shared/csv-dialog/csv-dialog.component';
 import * as Papa from 'papaparse';
 import {HttpParams} from '@angular/common/http';
+import {StockRecordDialogComponent} from '@nusantara/pages/inventory/adjustment/stock-record-dialog.component';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'nus-adjustment',
@@ -48,29 +50,35 @@ import {HttpParams} from '@angular/common/http';
             <label>Status</label>
             <span>Pending</span>
           </div>
-          <div [formGroup]="warehouse">
+          <div>
             <label>Warehouse</label>
             <div class="confirm-warehouse">
-              <select formControlName="href" (change)="warehouseSelected($event)">
-                <option [ngValue]="null">Select Warehouse</option>
-                <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
-                  {{ wh.name }}
-                </option>
-              </select>
-              <select (change)="subLocationSelected($event)">
-                <option [ngValue]="null">Select Warehouse</option>
-                <option *ngFor="let subLocation of availableSubLocations" [ngValue]="subLocation.href">
-                  {{ subLocation.name }}
-                </option>
-              </select>
-              <button (click)="confirmWarehouse()" type="button"
-                      [disabled]="warehouse.disabled || !warehouse.valid"
-                      class="control confirm">Confirm
-              </button>
-              <button (click)="manualUpload()" type="button"
-                      [disabled]="warehouse.disabled || !warehouse.valid"
-                      class="control confirm">Manual Upload
-              </button>
+              <div [formGroup]="warehouse">
+                <select formControlName="href" (change)="warehouseSelected($event)">
+                  <option [ngValue]="null">Select Warehouse</option>
+                  <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
+                    {{ wh.name }}
+                  </option>
+                </select>
+              </div>
+              <div [formGroup]="subLocation">
+                <select formControlName="href" (change)="subLocationSelected($event)">
+                  <option [ngValue]="null">Select Warehouse</option>
+                  <option *ngFor="let subLocation of availableSubLocations" [ngValue]="subLocation.href">
+                    {{ subLocation.name }}
+                  </option>
+                </select>
+              </div>
+              <div>
+                <button (click)="confirmWarehouse()" type="button"
+                        [disabled]="warehouse.disabled || !warehouse.valid"
+                        class="control confirm">Confirm
+                </button>
+                <button (click)="manualUpload()" type="button"
+                        [disabled]="warehouse.disabled || !warehouse.valid"
+                        class="control confirm">Manual Upload
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -96,6 +104,43 @@ import {HttpParams} from '@angular/common/http';
         <!--  </div>-->
         <!--  <a >More Detail</a>-->
         <!-- </div>-->
+      </div>
+      <div class="product-list" *ngIf="warehouse.disabled && adjustmentMode === 'csv'">
+        <table>
+          <thead>
+          <tr id="mp-add-product-head">
+            <th>Receiving ID / Product Name / Location</th>
+            <th>SKU</th>
+            <th>Receiving Date</th>
+            <th>Available Stock In Product Record</th>
+            <th>Adjusted Qty</th>
+            <th>Different Qty</th>
+            <th>Reason</th>
+            <th>Notes</th>
+            <th>Remove</th>
+          </tr>
+          </thead>
+          <tbody>
+          <nus-adjustment-line
+            *ngFor="let rec of stockRecords.controls; let i=index"
+            [form]="rec"
+            [warehouse]="warehouse.value"
+            [availableSubLocations]="availableSubLocations"
+            [reasons]="reasonChoices"
+            [csvData]="csvData[i]"
+            [index]="i"
+            (remove)="stockRecords.removeAt(i)"
+            (conflict)="resolveConflict($event)"
+          >
+          </nus-adjustment-line>
+          </tbody>
+
+        </table>
+        <nus-detail-actions
+          [component]="this"
+          (cancel)="confirmModal()"
+          (delete)="delete()">
+        </nus-detail-actions>
       </div>
       <div class="product-list" *ngIf="warehouse.disabled && adjustmentMode === 'manual'">
         <table>
@@ -145,6 +190,7 @@ import {HttpParams} from '@angular/common/http';
     <nus-stock-record-selection-modal></nus-stock-record-selection-modal>
     <nus-confirm-receiving-modal></nus-confirm-receiving-modal>
     <nus-csv-dialog></nus-csv-dialog>
+    <nus-stock-record-dialog></nus-stock-record-dialog>
   `,
   styles: [
     'h1 { margin-bottom: 0.75rem; }',
@@ -172,6 +218,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   @ViewChild(StockRecordSelectionModalComponent) stockRecordSelectionModal: StockRecordSelectionModalComponent;
   @ViewChild(ConfirmModalReceivingOrderComponent) confirmModalReceiving: ConfirmModalReceivingOrderComponent;
   @ViewChild(CsvDialogComponent) csvDialog: CsvDialogComponent;
+  @ViewChild(StockRecordDialogComponent) stockRecordDialog: StockRecordDialogComponent;
 
   warehouses: IWarehouse[];
   availableSubLocations: ISubLocation[] = [];
@@ -186,7 +233,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   productValue = 0;
   storeValue = 0;
   csvData = [];
-  parsedCsv : any;
+  parsedCsv: any;
   adjustmentMode = 'manual';
 
   constructor(private fb: FormBuilder,
@@ -197,7 +244,8 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
               public warehouseService: WarehouseService,
               protected inventoryService: InventoryStockRecordService,
               public route: ActivatedRoute,
-              public router: Router) {
+              public router: Router,
+              private ref: ChangeDetectorRef) {
     super(route, router, toast, service);
   }
 
@@ -214,6 +262,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     this.stockRecordSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
     this.confirmModalReceiving.onClose.subscribe(() => this.onConfirmModalClosed());
     this.csvDialog.onClose.subscribe(() => this.manualUploadClose());
+    this.stockRecordDialog.onClose.subscribe(() => this.onStockRecordDialogClosed())
   }
 
   initializeForm(entity?: IAdjustment): void {
@@ -357,7 +406,9 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   }
 
   subLocationSelected($event: Event) {
-
+    if (($event.target as HTMLSelectElement).value !== '') {
+      // this.subLocation.disable();
+    }
   }
 
   manualUpload() {
@@ -369,7 +420,14 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
 
     this.adjustmentMode = 'csv';
     this.csvDialog.fileTarget = null;
-    this.csvDialog.columnChoices = null;
+    this.csvDialog.columnChoices = {
+      upc: '',
+      qty: '',
+      reason: '',
+      sku: '',
+      notes: ''
+    };
+
     this.csvDialog.currentStep = 'start';
     this.csvDialog.open();
   }
@@ -378,6 +436,9 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     if (this.csvDialog.result === DialogResult.OK) {
       console.log(this.csvDialog.columnChoices);
       console.log(this.csvDialog.fileTarget);
+      this.warehouse.disable();
+      this.subLocation.disable();
+      this.adjustmentMode = 'csv';
 
       const target: DataTransfer = this.csvDialog.fileTarget as DataTransfer;
       // Direct
@@ -389,40 +450,83 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
             this.csvData = [];
             this.parsedCsv = results;
             results.data.map((value, key) => {
-              console.log(value);
               const filters = {
                 warehouse: getSlugFromHref(this.warehouse.value?.href),
-                subLocation: getSlugFromHref(this.subLocation.value?.href),
+                sub_location: getSlugFromHref(this.subLocation.value?.href),
                 receiving_order_status: ReceivingOrderStatusChoices.APPROVED,
               };
               const upc = this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['upc']] : value[+(this.csvDialog.columnChoices['upc']) - 1];
               this.inventoryService.fetchListWithFilter(
                 upc, 1, 10, filters
               ).subscribe(res => {
-                console.log(res);
+                // TODO: Validation
+                const mappedValue = {
+                  upc: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['upc']] : value[+(this.csvDialog.columnChoices['upc']) - 1],
+                  qty: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['qty']] : value[+(this.csvDialog.columnChoices['qty']) - 1],
+                  reason: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['reason']] : value[+(this.csvDialog.columnChoices['reason']) - 1],
+                  sku: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['sku']] : value[+(this.csvDialog.columnChoices['sku']) - 1],
+                  notes: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['notes']] : value[+(this.csvDialog.columnChoices['notes']) - 1]
+                };
                 const dataResult = {
                   page: res,
                   data: value,
-                  key
+                  key,
+                  mappedValue
                 };
-                this.csvData.push(dataResult);
+                if (res.totalResults > 0) {
+                  this.csvData.push(dataResult);
+                  const selectedStock = res.entities[0];
+                  const newReceiving = this.fb.group({
+                    href: [null, []],
+                    receivingOrder: [selectedStock.receivingOrder, [Validators.required]],
+                    location: [selectedStock.location, []],
+                    product: [selectedStock.product, [Validators.required]],
+                    sku: [{value: selectedStock.sku, disabled: true}],
+                    originalQuantity: [{value: selectedStock.originalQuantity, disabled: true}],
+                    differenceQty: [mappedValue.qty, [Validators.min(0)]],
+                    adjustmentQuantity: [null, [Validators.required, Validators.min(-32767), Validators.max(32767)]],
+                    created: [{value: selectedStock.created, disabled: true}],
+                    reason: [this.reasonChoices[0].value, []],
+                    notes: [null, []],
+                  });
+                  this.stockRecords.push(newReceiving);
+
+                }
               });
             });
           }
         });
+    }
+  }
 
-      //
-      // const reader: FileReader = new FileReader();
-      // reader.readAsText(target.files[0]);
-      //
-      // reader.onload = (event: any) => {
-      //   const csvData = event.target.result;
-      //   const data = Papa.parse(csvData, {header: this.csvDialog.hasCsvHeader});
-      //   console.log('Processing', data);
-      // };
-      // reader.onerror = (err: any) => {
-      //   alert('Unable to read ' + target.files[0].name);
-      // };
+  resolveConflict($event: { index: number; data: any }) {
+    console.log('Need resolve ', this.stockRecords[$event.index]);
+    console.log('Data ', $event.data);
+    // this.stockRecordDialog.stockRecord = this.stockRecords[$event.index];
+    this.stockRecordDialog.displayedResults = $event.data.page;
+    this.stockRecordDialog.stockRecordIndex = $event.index;
+    this.stockRecordDialog.stockRecordData = $event.data;
+    this.stockRecordDialog.open();
+  }
+
+  private onStockRecordDialogClosed() {
+    if (this.stockRecordDialog.result === DialogResult.OK) {
+      const selectedStock = this.stockRecordDialog.stockRecord.value as IStockRecord;
+      const newReceiving = this.fb.group({
+        href: [null, []],
+        receivingOrder: [selectedStock.receivingOrder, [Validators.required]],
+        location: [selectedStock.location, []],
+        product: [selectedStock.product, [Validators.required]],
+        sku: [{value: selectedStock.sku, disabled: true}],
+        originalQuantity: [{value: selectedStock.originalQuantity, disabled: true}],
+        differenceQty: [this.stockRecordDialog.stockRecordData.mappedValue.qty, [Validators.min(0)]],
+        adjustmentQuantity: [null, [Validators.required, Validators.min(-32767), Validators.max(32767)]],
+        created: [{value: selectedStock.created, disabled: true}],
+        reason: [this.reasonChoices[0].value, []],
+        notes: [null, []],
+      });
+      this.stockRecords.controls[this.stockRecordDialog.stockRecordIndex] = newReceiving;
+      this.ref.detectChanges();
     }
   }
 }

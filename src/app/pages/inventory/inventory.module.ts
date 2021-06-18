@@ -17,6 +17,7 @@ import {
   AdjustmentDetailComponent,
   AdjustmentLineItemComponent,
 } from './adjustment';
+import { StockRecordDialogComponent } from './adjustment/stock-record-dialog.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import {
     AdjustmentComponent,
     AdjustmentLineItemComponent,
     AdjustmentDetailComponent,
+    StockRecordDialogComponent,
   ],
   imports: [
     CommonModule,
