@@ -3,6 +3,7 @@ import {NgxSmartModalComponent} from 'ngx-smart-modal';
 import {DialogResult} from '@nusantara/core';
 import * as Papa from 'papaparse';
 import {drf} from '@nusantara/models';
+import {FormBuilder} from '@angular/forms';
 
 const CSV_FIELD = ['upc', 'qty', 'reason', 'sku', 'notes'];
 const CSV_FIELD_DESC = {
@@ -19,77 +20,77 @@ const CSV_FIELD_DESC = {
   template: `
     <ngx-smart-modal [identifier]="'csvDialog'" #modal [customClass]="'wide-modal'">
       <div *ngIf="currentStep == 'start'">
+
         <h2 class="heading-2">Choose CSV File</h2>
-        <input type="file"
-               name="filecsv"
-               accept="text/csv"
-               (change)="fileChange($event)">
-        <label><input type="checkbox" [(ngModel)]="hasCsvHeader" value="1">Has header</label>
-        <button class="control" (click)="parseCsv()">Next</button>
-        <button class="control secondary ghost">Cancel</button>
-      </div>
-      <div *ngIf="currentStep == 'csvmap'">
-        <h2 class="heading-2">Choose CSV File (2/2)</h2>
         <div>
-        <table>
-          <tr>
-            <td>UPC</td>
-            <td>
-              <select [(ngModel)]="columnChoices['upc']">
-                <option [ngValue]="null">Select</option>
-                <option *ngFor="let option of availableOptions" [ngValue]="option.value">
-                  {{ option.displayName }}
-                </option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>Adjusted Qty</td>
-            <td>
-              <select [(ngModel)]="columnChoices['qty']">
+          <input type="file"
+                 name="filecsv"
+                 accept="text/csv"
+                 (change)="fileChange($event)">
+          <label><input type="checkbox"
+                        [(ngModel)]="hasCsvHeader"
+                        value="1" (change)="parseCsv()">Has header</label>
+
+        </div>
+        <div *ngIf="!!fileTarget">
+          <table>
+            <tr>
+              <td>UPC</td>
+              <td>
+                <select [(ngModel)]="columnChoices['upc']">
+                  <option [ngValue]="null">Select</option>
+                  <option *ngFor="let option of availableOptions" [ngValue]="option.value">
+                    {{ option.displayName }}
+                  </option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>Adjusted Qty</td>
+              <td>
+                <select [(ngModel)]="columnChoices['qty']">
+                  <option [ngValue]="null">Select</option>
+                  <option *ngFor="let option of availableOptions" [ngValue]="option.value">
+                    {{ option.displayName }}
+                  </option>
+                </select></td>
+            </tr>
+            <tr>
+              <td>Reason</td>
+              <td>
+                <select [(ngModel)]="columnChoices['reason']">
+                  <option [ngValue]="null">Select</option>
+                  <option *ngFor="let option of availableOptions" [ngValue]="option.value">
+                    {{ option.displayName }}
+                  </option>
+                </select></td>
+            </tr>
+            <tr>
+              <td>SKU</td>
+              <td><select [(ngModel)]="columnChoices['sku']">
                 <option [ngValue]="null">Select</option>
                 <option *ngFor="let option of availableOptions" [ngValue]="option.value">
                   {{ option.displayName }}
                 </option>
               </select></td>
-          </tr>
-          <tr>
-            <td>Reason</td>
-            <td>
-              <select [(ngModel)]="columnChoices['reason']">
-                <option [ngValue]="null">Select</option>
-                <option *ngFor="let option of availableOptions" [ngValue]="option.value">
-                  {{ option.displayName }}
-                </option>
-              </select></td>
-          </tr>
-          <tr>
-            <td>SKU</td>
-            <td><select [(ngModel)]="columnChoices['sku']">
-              <option [ngValue]="null">Select</option>
-              <option *ngFor="let option of availableOptions" [ngValue]="option.value">
-                {{ option.displayName }}
-              </option>
-            </select></td>
-          </tr>
-          <tr>
-            <td>Notes</td>
-            <td>
-              <select [(ngModel)]="columnChoices['notes']">
-                <option [ngValue]="null">Select</option>
-                <option *ngFor="let option of availableOptions" [ngValue]="option.value">
-                  {{ option.displayName }}
-                </option>
-              </select></td>
-          </tr>
-        </table>
+            </tr>
+            <tr>
+              <td>Notes</td>
+              <td>
+                <select [(ngModel)]="columnChoices['notes']">
+                  <option [ngValue]="null">Select</option>
+                  <option *ngFor="let option of availableOptions" [ngValue]="option.value">
+                    {{ option.displayName }}
+                  </option>
+                </select></td>
+            </tr>
+          </table>
         </div>
         <div>
-
-          <button class="control " (click)="nextStepMap()" >Next</button>
-          <button class="control secondary" (click)="currentStep = 'start'">Back</button>
+          <button class="control" (click)="nextStepMap()">Next</button>
           <button class="control secondary ghost">Cancel</button>
         </div>
+
       </div>
     </ngx-smart-modal>
   `,
@@ -129,7 +130,7 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
   };
   fileTarget: any;
 
-  constructor() {
+  constructor(protected fb: FormBuilder,) {
   }
 
   ngOnInit(): void {
@@ -139,6 +140,8 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
         displayName: CSV_FIELD_DESC[field]
       });
     }
+    // need to mark as touched to make custom styling works
+    // this.form.controls.isActive.markAsTouched();
   }
 
   ngAfterViewInit() {
@@ -170,7 +173,7 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
   fileChange($event: any) {
     const target: DataTransfer = $event.target as DataTransfer;
     this.fileTarget = target;
-
+    this.parseCsv();
   }
 
   nextStepMap() {
@@ -178,6 +181,13 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
   }
 
   parseCsv() {
+    this.columnChoices = {
+      upc: null,
+      qty: null,
+      reason: null,
+      sku: null,
+      notes: null
+    };
     const reader: FileReader = new FileReader();
     reader.readAsText(this.fileTarget.files[0]);
 
@@ -206,7 +216,7 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
       }
     };
     reader.onloadend = (event: any) => {
-      this.currentStep = 'csvmap';
+      // this.currentStep = 'csvmap';
     };
     reader.onerror = (err: any) => {
       alert('Unable to read ' + this.fileTarget.files[0].name);

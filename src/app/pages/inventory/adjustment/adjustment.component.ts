@@ -62,22 +62,31 @@ import { ChangeDetectorRef } from '@angular/core';
                 </select>
               </div>
               <div [formGroup]="subLocation">
-                <select formControlName="href" (change)="subLocationSelected($event)">
-                  <option [ngValue]="null">Select Warehouse</option>
+                <select formControlName="href" (change)="subLocationSelected($event)"  [disabled]="!warehouse.valid">
+                  <option [ngValue]="null">Select Location</option>
                   <option *ngFor="let subLocation of availableSubLocations" [ngValue]="subLocation.href">
                     {{ subLocation.name }}
                   </option>
                 </select>
               </div>
-              <div>
+              <div class="confirm-warehouse-action">
                 <button (click)="confirmWarehouse()" type="button"
-                        [disabled]="warehouse.disabled || !warehouse.valid"
-                        class="control confirm">Confirm
+                        [disabled]="subLocation.disabled || !warehouse.valid || !subLocation.valid"
+                        class="control confirm">Manual Update
                 </button>
-                <button (click)="manualUpload()" type="button"
-                        [disabled]="warehouse.disabled || !warehouse.valid"
-                        class="control confirm">Manual Upload
-                </button>
+                <div class="dropdown" [class.disabled]="subLocation.disabled || !warehouse.valid || !subLocation.valid">
+                  <button type="button"
+                          [disabled]="subLocation.disabled || !warehouse.valid"
+                          class="dropbtn"><span class="material-icons">keyboard_arrow_down</span>
+                  </button>
+                  <div class="dropdown-content">
+                    <button (click)="manualUpload()" type="button"
+                            [disabled]="subLocation.disabled || !warehouse.valid"
+                            class="control confirm secondary">
+                      Manual Upload
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -208,8 +217,18 @@ import { ChangeDetectorRef } from '@angular/core';
     '.mp-info > div { text-align: center; border: 1px solid var(--grey); border-radius: 4px; padding: 12px 16px; margin-bottom: 12px; }',
     '.mp-info > a { display: block; margin-top: 16px; }',
     '.mp-info .count { font-size: 28px; font-weight: 700; }',
-    '.confirm-warehouse { display: grid; grid-template-columns: 5fr 1fr; grid-gap: 24px; }',
+    '.confirm-warehouse { display: grid; grid-template-columns: 2fr 2fr 1fr; grid-gap: 24px; }',
     '.product-list { margin-top: 24px; }',
+    '.dropdown.disabled:hover .dropdown-content { display: none; }',
+    '.dropdown.disabled:hover .dropbtn { background-color: var(--grey); }',
+    '.dropdown.disabled .dropbtn { background-color: var(--grey); }',
+    '.confirm-warehouse-action .dropbtn { height: 40px; background: var(--secondary); padding: inherit; }',
+    '.confirm-warehouse-action .control { border-radius: 4px 0 0 4px; }',
+    '.confirm-warehouse-action  { display: flex; border-radius: 4px;  }',
+    '.dropdown button.dropbtn { display: flex; align-items: center;  border-radius: 0 4px 4px 0; }',
+    '.confirm-warehouse-action  > button { flex: 1; }',
+    '.confirm-warehouse-action .dropdown-content { right: 0; }',
+    '.dropdown-content button.confirm { width: 100%; }'
   ]
 })
 export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdjustment> implements OnInit, AfterViewInit {
