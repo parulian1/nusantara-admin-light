@@ -495,18 +495,19 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
                 if (res.totalResults > 0) {
                   this.csvData.push(dataResult);
                   const selectedStock = res.entities[0];
+                  const sku = mappedValue.sku || selectedStock.sku;
                   const newReceiving = this.fb.group({
                     href: [null, []],
                     receivingOrder: [selectedStock.receivingOrder, [Validators.required]],
                     location: [selectedStock.location, []],
                     product: [selectedStock.product, [Validators.required]],
-                    sku: [{value: selectedStock.sku, disabled: true}],
+                    sku: [{value: sku, disabled: true}],
                     originalQuantity: [{value: selectedStock.originalQuantity, disabled: true}],
                     differenceQty: [mappedValue.qty, [Validators.min(0)]],
                     adjustmentQuantity: [null, [Validators.required, Validators.min(-32767), Validators.max(32767)]],
                     created: [{value: selectedStock.created, disabled: true}],
-                    reason: [this.reasonChoices[0].value, []],
-                    notes: [null, []],
+                    reason: [mappedValue['reason'], []],
+                    notes: [mappedValue.notes || null, []],
                   });
                   this.stockRecords.push(newReceiving);
 

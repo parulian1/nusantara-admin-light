@@ -108,7 +108,7 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
   result: DialogResult = DialogResult.Cancelled;
 
   currentStep = 'start';
-  hasCsvHeader: any;
+  hasCsvHeader: any = true;
   availableOptions: drf.IChoice[] = [];
   // tslint:disable-next-line:variable-name
   column_upc: string;
@@ -130,7 +130,7 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
   };
   fileTarget: any;
 
-  constructor(protected fb: FormBuilder,) {
+  constructor(protected fb: FormBuilder, ) {
   }
 
   ngOnInit(): void {
