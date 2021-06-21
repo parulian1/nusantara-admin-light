@@ -196,7 +196,6 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
   ngOnInit() {
     super.ngOnInit();
     this.route.data.subscribe((data: { warehouses: IWarehouse[] }) => {
-      console.log(data.warehouses);
       this.warehouses = data.warehouses;
     });
     this.currentDate = new Date();
