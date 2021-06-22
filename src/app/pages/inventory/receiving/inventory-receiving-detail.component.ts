@@ -85,6 +85,7 @@ import { IProduct } from '@nusantara/models/products';
           <th>Stock Requested</th>
           <th>Batch Number</th>
           <th>Expiry Date</th>
+          <th>Cost</th>
         </tr>
         </thead>
         <tbody>
@@ -116,6 +117,10 @@ import { IProduct } from '@nusantara/models/products';
             <td>
               <ng-container *ngIf="!stock_record.expiryDate"> - </ng-container>
               <ng-container *ngIf="stock_record.expiryDate">{{ stock_record.expiryDate|date: 'dd MMM yyyy HH:mm' }}</ng-container>
+            </td>
+            <td>
+              <ng-container *ngIf="!stock_record.cost"> - </ng-container>
+              <ng-container *ngIf="stock_record.cost">{{ stock_record.cost | currency:'IDR':'symbol-narrow':'1.0' }}</ng-container>
             </td>
           </tr>
         </tbody>
@@ -245,7 +250,6 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
 
   approve() {
     this.form.value.status = 'approved';
-    console.log(this.form.value);
     this.save();
   }
 
@@ -313,7 +317,8 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
       originalQuantity: [item.originalQuantity, [Validators.required, Validators.min(1)]],
       batchNumber: [item.batchNumber, []],
       locator: this.fb.array([]),
-      expiryDate: [item.expiryDate, []]
+      expiryDate: [item.expiryDate, []],
+      cost: [item.cost, []]
     });
     this.stockRecords.push(stockRecord);
   }

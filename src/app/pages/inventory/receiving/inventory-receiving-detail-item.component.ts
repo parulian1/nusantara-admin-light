@@ -11,11 +11,9 @@ import {IProductClass} from '@nusantara/models/products';
     <tr [formGroup]="form">
       <td>{{ displayedProductName }}</td>
       <td class="immediate-error-display">
-<!--        <input type="text" [formControl]="sku" data-qa="sku">-->
         {{sku.value}}
       </td>
       <td>
-<!--        <input type="number" min="1" [formControl]="originalQuantity" data-qa="original-quantity">-->
         {{originalQuantity.value}}
       </td>
       <td [formGroup]="location">
