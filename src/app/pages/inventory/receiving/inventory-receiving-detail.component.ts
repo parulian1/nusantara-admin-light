@@ -41,7 +41,6 @@ import { IProduct } from '@nusantara/models/products';
         <th>Created By</th>
         <th>Reviewed By</th>
         <th>Date</th>
-        <th>Cost</th>
       </thead>
       <tbody>
         <td>
@@ -299,11 +298,11 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
     const item = entity;
     const product = item.product as IProduct;
 
-    let defaultSubLocations;
-    if (this.availableSubLocations?.length === 1) {
-      defaultSubLocations = this.availableSubLocations[0].href;
+    let selectedSubLocations;
+    if (item.location !== null) {
+      selectedSubLocations = item.location.href;
     } else {
-      defaultSubLocations = null;
+      selectedSubLocations = null;
     }
 
     const stockRecord = this.fb.group({
@@ -311,7 +310,7 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
       product: [product, [Validators.required]],
       href: [item.href, []],
       location: this.fb.group({
-        href: [defaultSubLocations, [Validators.required]],
+        href: [selectedSubLocations, [Validators.required]],
       }),
       sku: [item.sku, []],
       originalQuantity: [item.originalQuantity, [Validators.required, Validators.min(1)]],
@@ -319,6 +318,10 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
       locator: this.fb.array([]),
       expiryDate: [item.expiryDate, []],
       cost: [item.cost, []]
+    });
+    item.locator.forEach( (data) => {
+      const locator = stockRecord.get('locator') as FormArray;
+      locator.push(new FormControl(data, []));
     });
     this.stockRecords.push(stockRecord);
   }

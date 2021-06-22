@@ -30,12 +30,14 @@ import { IProductClass } from '../../../models/products';
         <input type="text" [formControl]="batchNumber" data-qa="batch-number">
       </td>
       <td>
-        <div *ngFor="let child_control of locator.controls; index as ctr" style="display:flex; margin-bottom: 15px;">
-          <input [formControl]="child_control" name="locator" data-qa="locator">
+        <div *ngFor="let child_control of locator.controls; index as ctr" style="margin-bottom: 15px;">
+          <div style="display: flex">
+            <input [formControl]="child_control" name="locator" data-qa="locator" maxlength="5">
+            <button (click)="locator.removeAt(ctr)" type="button" class="remove-button" data-qa="remove-locator-button">
+              <i class="material-icons">remove_circle_outline</i>
+            </button>
+          </div>
           <nus-field-errors [control]="child_control"></nus-field-errors>
-          <button (click)="locator.removeAt(ctr)" type="button" class="remove-button" data-qa="remove-locator-button">
-            <i class="material-icons">remove_circle_outline</i>
-          </button>
         </div>
         <button (click)="addLocator()" type="button" class="new-add-button wide" data-qa="add-locator-button">Add</button>
       </td>
@@ -44,7 +46,7 @@ import { IProductClass } from '../../../models/products';
         <nus-field-errors [control]="expiryDate"></nus-field-errors>
       </td>
       <td>
-        <input type="number" [formControl]="cost" data-qa="cost">
+        <input type="number" [formControl]="cost" data-qa="cost" maxlength="20">
         <nus-field-errors [control]="cost"></nus-field-errors>
       </td>
       <td>
@@ -104,7 +106,7 @@ export class LineItemComponent implements OnInit, AfterViewInit {
   get cost(): FormControl { return this.form.get('cost') as FormControl; }
 
   ngOnInit() {
-    this.form = <FormGroup>this.controlContainer.control;
+    this.form = (this.controlContainer.control as FormGroup);
   }
 
   ngAfterViewInit() {

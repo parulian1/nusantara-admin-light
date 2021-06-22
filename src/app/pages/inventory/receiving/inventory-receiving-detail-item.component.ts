@@ -25,11 +25,14 @@ import {IProductClass} from '@nusantara/models/products';
         </select>
       </td>
       <td>
-        <div *ngFor="let control of locator.controls; index as ctr" style="display:flex; margin-bottom: 15px;">
-          <input [formControl]="control" name="locator" data-qa="locator" maxlength="5">
-          <button (click)="locator.removeAt(ctr)" type="button" class="remove-button" data-qa="remove-locator-button">
-            <i class="material-icons">remove_circle_outline</i>
-          </button>
+        <div *ngFor="let control of locator.controls; index as ctr" style="margin-bottom: 15px;">
+          <div style="display: flex">
+            <input [formControl]="control" name="locator" data-qa="locator" maxlength="5">
+            <button (click)="locator.removeAt(ctr)" type="button" class="remove-button" data-qa="remove-locator-button">
+              <i class="material-icons">remove_circle_outline</i>
+            </button>
+          </div>
+          <nus-field-errors [control]="control"></nus-field-errors>
         </div>
         <button (click)="addLocator()" type="button" class="new-add-button wide" data-qa="add-locator-button">Add</button>
       </td>
