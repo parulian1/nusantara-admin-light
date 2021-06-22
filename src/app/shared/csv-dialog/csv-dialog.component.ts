@@ -20,22 +20,32 @@ const CSV_FIELD_DESC = {
   template: `
     <ngx-smart-modal [identifier]="'csvDialog'" #modal [customClass]="'wide-modal'">
       <div *ngIf="currentStep == 'start'">
+        <h2 class="heading-2">Choose CSV File (Step 1/2) </h2>
 
-        <h2 class="heading-2">Choose CSV File</h2>
+        <p>Upload a CSV file to bulk upload your products. Don't have a file? <a>Download Template</a></p>
+
         <div>
           <input type="file"
                  name="filecsv"
                  accept="text/csv"
                  (change)="fileChange($event)">
-          <label><input type="checkbox"
-                        [(ngModel)]="hasCsvHeader"
-                        value="1" (change)="parseCsv()">Has header</label>
+          <label>
+            <input type="checkbox"
+                   [(ngModel)]="hasCsvHeader"
+                   value="1" (change)="parseCsv()">My CSV has no header</label>
 
         </div>
+
+      </div>
+
+      <div *ngIf="currentStep === 'mapping'">
+        <h2 class="heading-2">Mapping Attribute (Step 2/2) </h2>
+
         <div *ngIf="!!fileTarget">
-          <table>
+          <table class="mapping-table">
             <tr>
               <td>UPC</td>
+              <td style="border: none;"></td>
               <td>
                 <select [(ngModel)]="columnChoices['upc']">
                   <option [ngValue]="null">Select</option>
@@ -47,6 +57,7 @@ const CSV_FIELD_DESC = {
             </tr>
             <tr>
               <td>Adjusted Qty</td>
+              <td style="border: none;"></td>
               <td>
                 <select [(ngModel)]="columnChoices['qty']">
                   <option [ngValue]="null">Select</option>
@@ -57,6 +68,7 @@ const CSV_FIELD_DESC = {
             </tr>
             <tr>
               <td>Reason</td>
+              <td style="border: none;"></td>
               <td>
                 <select [(ngModel)]="columnChoices['reason']">
                   <option [ngValue]="null">Select</option>
@@ -67,6 +79,7 @@ const CSV_FIELD_DESC = {
             </tr>
             <tr>
               <td>SKU</td>
+              <td style="border: none;"></td>
               <td><select [(ngModel)]="columnChoices['sku']">
                 <option [ngValue]="null">Select</option>
                 <option *ngFor="let option of availableOptions" [ngValue]="option.value">
@@ -76,6 +89,7 @@ const CSV_FIELD_DESC = {
             </tr>
             <tr>
               <td>Notes</td>
+              <td style="border: none;"></td>
               <td>
                 <select [(ngModel)]="columnChoices['notes']">
                   <option [ngValue]="null">Select</option>
@@ -86,20 +100,41 @@ const CSV_FIELD_DESC = {
             </tr>
           </table>
         </div>
-        <div>
-          <button class="control" (click)="nextStepMap()">Next</button>
-          <button class="control secondary ghost">Cancel</button>
-        </div>
 
       </div>
+
+      <div class="csv-dialog-actions">
+        <button class="control" (click)="nextStepMap()">Next</button>
+        <button class="control secondary ghost" (click)="prevStepMap()">Cancel</button>
+      </div>
+
     </ngx-smart-modal>
   `,
-  styles: [
-    `
-      .wide-modal {
-        min-height: 50vh;
-      }`
-  ]
+  styles: [`
+    .wide-modal {
+      min-height: 50vh;
+    }
+
+    .csv-dialog-actions button {
+      margin-right: 8px;
+    }
+
+    .mapping-table {
+      border: none;
+      margin: 16px 0;
+      table-layout: fixed;
+      border-spacing: 8px;
+    }
+
+    .mapping-table td {
+      border: 1px solid #B4B4B4;
+      border-radius: 4px;
+    }
+
+    .mapping-table td > select {
+      border: none;
+    }
+  `]
 })
 export class CsvDialogComponent implements OnInit, AfterViewInit {
 
@@ -130,7 +165,7 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
   };
   fileTarget: any;
 
-  constructor(protected fb: FormBuilder, ) {
+  constructor(protected fb: FormBuilder,) {
   }
 
   ngOnInit(): void {
@@ -176,8 +211,32 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
     this.parseCsv();
   }
 
+  disabledCheck() {
+    if (this.currentStep === 'start') {
+      if (!!this.fileTarget) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   nextStepMap() {
-    this.close();
+    if (this.currentStep === 'start') {
+      this.currentStep = 'mapping';
+    } else {
+      this.close();
+    }
+  }
+
+  prevStepMap() {
+    if (this.currentStep === 'start') {
+      this.fileTarget = null;
+      this.cancel();
+    } else {
+      this.currentStep = 'start';
+      this.fileTarget = null;
+    }
   }
 
   parseCsv() {
@@ -222,4 +281,5 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
       alert('Unable to read ' + this.fileTarget.files[0].name);
     };
   }
+
 }

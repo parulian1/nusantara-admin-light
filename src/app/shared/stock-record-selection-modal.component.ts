@@ -36,7 +36,7 @@ import { map } from 'rxjs/operators';
           </colgroup>
           <thead>
           <tr style="background-color: #F4F4F4;">
-            <th class="product-name">Receiving ID / Product Name / Location</th>
+<!--            <th class="product-name">Receiving ID / Product Name / Location</th>-->
             <th class="product-sku">SKU</th>
             <th class="stock-date">Receiving Date</th>
             <th class="product-original-qty">Original Qty</th>
@@ -45,9 +45,9 @@ import { map } from 'rxjs/operators';
           </thead>
           <tbody *ngIf="displayedResults; else loading">
           <tr *ngFor="let p of displayedResults?.entities">
-            <td class="product-name">
-              {{ displayReceivingID(p.receivingOrder.href) }} / {{ p.product.name }} / {{ p.location.name }}
-            </td>
+<!--            <td class="product-name">-->
+<!--              {{ displayReceivingID(p.receivingOrder.href) }} / {{ p.product.name }} / {{ p.location.name }}-->
+<!--            </td>-->
             <td class="product-sku">{{ p.sku }}</td>
             <td class="stock-date">{{ p.expiryDate | date }}</td>
             <td class="product-original-qty">{{ p.originalQuantity }}</td>

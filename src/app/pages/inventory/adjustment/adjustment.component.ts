@@ -23,7 +23,7 @@ import {CsvDialogComponent} from '@nusantara/shared/csv-dialog/csv-dialog.compon
 import * as Papa from 'papaparse';
 import {HttpParams} from '@angular/common/http';
 import {StockRecordDialogComponent} from '@nusantara/pages/inventory/adjustment/stock-record-dialog.component';
-import { ChangeDetectorRef } from '@angular/core';
+import {ChangeDetectorRef} from '@angular/core';
 
 @Component({
   selector: 'nus-adjustment',
@@ -53,6 +53,7 @@ import { ChangeDetectorRef } from '@angular/core';
           <div>
             <label>Warehouse</label>
             <div class="confirm-warehouse">
+
               <div [formGroup]="warehouse">
                 <select formControlName="href" (change)="warehouseSelected($event)">
                   <option [ngValue]="null">Select Warehouse</option>
@@ -61,14 +62,16 @@ import { ChangeDetectorRef } from '@angular/core';
                   </option>
                 </select>
               </div>
+
               <div [formGroup]="subLocation">
-                <select formControlName="href" (change)="subLocationSelected($event)"  [disabled]="!warehouse.valid">
+                <select formControlName="href" (change)="subLocationSelected($event)" [disabled]="!warehouse.valid">
                   <option [ngValue]="null">Select Location</option>
                   <option *ngFor="let subLocation of availableSubLocations" [ngValue]="subLocation.href">
                     {{ subLocation.name }}
                   </option>
                 </select>
               </div>
+
               <div class="confirm-warehouse-action">
                 <button (click)="confirmWarehouse()" type="button"
                         [disabled]="subLocation.disabled || !warehouse.valid || !subLocation.valid"
@@ -88,6 +91,7 @@ import { ChangeDetectorRef } from '@angular/core';
                   </div>
                 </div>
               </div>
+
             </div>
           </div>
         </div>
@@ -281,7 +285,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     this.stockRecordSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
     this.confirmModalReceiving.onClose.subscribe(() => this.onConfirmModalClosed());
     this.csvDialog.onClose.subscribe(() => this.manualUploadClose());
-    this.stockRecordDialog.onClose.subscribe(() => this.onStockRecordDialogClosed())
+    this.stockRecordDialog.onClose.subscribe(() => this.onStockRecordDialogClosed());
   }
 
   initializeForm(entity?: IAdjustment): void {
