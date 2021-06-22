@@ -8,43 +8,53 @@ import { IOnboardingContent } from '@nusantara/models';
   selector: 'nus-onboarding-content',
   template: `
     <form [formGroup]="form" #f>
-      <div class="onboarding-content-title">
-        <div class="title">
-          <input type="text" [formControl]="name">
-          <nus-field-errors [control]="name"></nus-field-errors>
-          <div class="collapse" (click)="toggle()">
-            <img src="/assets/arrow-down.svg">
+      <div class="onboarding-content-page">
+        <div class="onboarding-content-title">
+          <div class="title">
+            <div>
+              <img src="/assets/drag.svg" style="width: 18px; float: left; padding-right: 10px; padding-top: 9px;">
+              <input type="text" [formControl]="name" style="background-color: transparent;">
+              <div class="collapse" (click)="toggle()">
+                <img src="/assets/arrow-down.svg">
+              </div>
+            </div>
+            <nus-field-errors [control]="name"></nus-field-errors>
           </div>
         </div>
-      </div>
-      <div  class="onboarding-content" *ngIf="show">
-        <label>
-          <span>Image</span>
-          <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Banner Image" class="preview">
-          <input type="file" [formControl]="image" (change)="setImagePreview($event)"
-               name="icon" accept="image/*">
-          <nus-onboarding-content-image></nus-onboarding-content-image>
-        </label>
+        <div  class="onboarding-content" *ngIf="show">
+          <label>
+            <span>Image</span>
+            <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Banner Image" class="preview">
+            <input type="file" [formControl]="image" (change)="setImagePreview($event)"
+                 name="icon" accept="image/*">
+            <nus-onboarding-content-image></nus-onboarding-content-image>
+          </label>
 
-        <label>
-          <span>Description</span>
-          <textarea [formControl]="description"></textarea>
-          <nus-field-errors [control]="description"></nus-field-errors>
-        </label>
+          <label>
+            <span>Description</span>
+            <textarea [formControl]="description"></textarea>
+            <nus-field-errors [control]="description"></nus-field-errors>
+          </label>
 
-        <input type="hidden" [formControl]="buttonStatus">
-        <input type="hidden" [formControl]="buttonText">
-        <input type="hidden" [formControl]="buttonUrl">
+          <input type="hidden" [formControl]="buttonStatus">
+          <input type="hidden" [formControl]="buttonText">
+          <input type="hidden" [formControl]="buttonUrl">
 
-        <input type="number" hidden [formControl]="sortPriority" min="0">
-        <button (click)="remove.emit()" type="button" class="remove-button" data-qa="remove-button">
-          Delete
-        </button>
+          <input type="number" hidden [formControl]="sortPriority" min="0">
+          <button (click)="remove.emit()" type="button" class="remove-button" data-qa="remove-button"
+            style="min-height: 32px;border: 2px solid #B4B4B4;box-sizing: border-box;border-radius: 4px;min-width: 120px;float: right;">
+            Delete
+          </button>
+        </div>
       </div>
     </form>
   `,
   styles: [
     `
+      .onboarding-content-page {
+        border: 1px solid #E0E0E0;
+        border-radius: 8px 8px 0px 0px;
+      }
       .onboarding-content-title {
         background: #E4E4E4;
         border: 1px solid #E0E0E0;
@@ -57,13 +67,14 @@ import { IOnboardingContent } from '@nusantara/models';
       }
       .onboarding-content-title .title input[type=text] {
         float: left;
-        width: 98%;
+        width: 92%;
       }
       .onboarding-content {
         background: #FFFFFF;
         border-bottom: 1px solid #E0E0E0;
         box-sizing: border-box;
         padding: 10px 24px;
+        overflow: hidden;
       }
       div.collapse > img {
         max-height: 10px;

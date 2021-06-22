@@ -31,14 +31,12 @@
   border: none;
 }
 
-.example-list {
-  border: 1px solid #E0E0E0;
-  border-radius: 8px;
+.content-host {
   overflow: hidden;
   margin-bottom: 24px;
 }
 
-.example-list.cdk-drop-list-dragging .onboarding-content-div:not(.cdk-drag-placeholder) {
+.content-host.cdk-drop-list-dragging .onboarding-content-div:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
@@ -63,4 +61,9 @@ nus-onboarding-content {
   align-items: center;
   justify-content: center;
   margin: 12px auto;
+}
+
+.action-button-section {
+  color: #E7E7E7;
+  min-height: 24px;
 }

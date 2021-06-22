@@ -9,7 +9,7 @@ import { OnboardingContentComponent } from './onboarding-content.component';
 @Component({
   selector: 'nus-onboarding-content-host',
   template: `
-    <div cdkDropList [cdkDropListData]="form" class="example-list"
+    <div cdkDropList [cdkDropListData]="form" class="content-host"
          (cdkDropListDropped)="drop($event)">
       <div class="onboarding-content-div" *ngFor="let content_control of form.controls; let i=index" cdkDrag>
         <nus-onboarding-content [form]="content_control"
@@ -18,24 +18,26 @@ import { OnboardingContentComponent } from './onboarding-content.component';
         </nus-onboarding-content>
       </div>
       <button type="button" (click)="addContent()" class="add-button">
-        <i class="material-icons">add</i> Add New Popup
+        <i class="material-icons">add</i> Add new content
       </button>
     </div>
     <form [formGroup]="formButton" *ngIf="form.controls.length" >
       <div class="action-button-box">
+        <label class="action-button-section">
+          Action Button
+        </label>
         <label>
-          <span>Button Status</span>
-          <input type="checkbox" [formControl]="buttonStatus" (change)="setAvailabilityAndClearValueButtonProp()">
+          <input type="checkbox" [formControl]="buttonStatus" (change)="setAvailabilityAndClearValueButtonProp()">Is Active
         </label>
 
         <label>
-          <span>Button Text</span>
+          <span>Button Name</span>
           <input type="url" [formControl]="buttonText">
           <nus-field-errors [control]="buttonText"></nus-field-errors>
         </label>
 
         <label>
-          <span>Button Url</span>
+          <span>URL Path</span>
           <input type="url" [formControl]="buttonUrl">
           <nus-field-errors [control]="buttonUrl"></nus-field-errors>
         </label>
