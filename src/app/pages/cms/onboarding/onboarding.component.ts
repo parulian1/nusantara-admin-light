@@ -1,7 +1,7 @@
 import { AfterViewChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractDetailComponent, ToastService } from '@nusantara/core';
 import { drf, IOnBoarding, IOnboardingContent, OnBoardingTypeEnum } from '@nusantara/models';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OnboardingService } from '@nusantara/services';
 import { OnboardingContentHostComponent } from './onboarding-content-host.component';
@@ -41,7 +41,8 @@ import { OnboardingPreviewHostDialogComponent } from './preview';
       </label>
 
       <nus-onboarding-content-host [form]="contents" [entity]="entity"></nus-onboarding-content-host>
-      <nus-onboarding-preview-host-dialog [form]="contents"></nus-onboarding-preview-host-dialog>
+      <nus-onboarding-preview-host-dialog [form]="contents" (closeEvent)="closePreview()">
+      </nus-onboarding-preview-host-dialog>
       <div class="action-button">
         <button (click)="preview()" type="button" class="preview-btn" [disabled]="!contents.length">
           <i class="material-icons">visibility</i>Preview
@@ -165,6 +166,10 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> im
     this.contentHost.getValue();
     this.onboardingPreviewHostDialogComponent.form = this.contents;
     this.onboardingPreviewHostDialogComponent.open();
+  }
+
+  closePreview() {
+    this.onboardingPreviewHostDialogComponent.close();
   }
 
 }

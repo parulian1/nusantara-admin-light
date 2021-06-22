@@ -61,6 +61,7 @@ import { IOnboardingContent } from '@nusantara/models';
         box-sizing: border-box;
         overflow: hidden;
         padding: 10px;
+        border-radius: 8px 8px 0px 0px;
       }
       .title {
         position: relative;
