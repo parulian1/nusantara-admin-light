@@ -3,7 +3,7 @@ import {NgxSmartModalComponent} from 'ngx-smart-modal';
 import {DialogResult} from '@nusantara/core';
 import * as Papa from 'papaparse';
 import {drf} from '@nusantara/models';
-import {FormBuilder} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 
 const CSV_FIELD = ['upc', 'qty', 'reason', 'sku', 'notes'];
 const CSV_FIELD_DESC = {
@@ -25,14 +25,18 @@ const CSV_FIELD_DESC = {
         <p>Upload a CSV file to bulk upload your products. Don't have a file? <a>Download Template</a></p>
 
         <div>
-          <input type="file"
-                 name="filecsv"
-                 accept="text/csv"
-                 (change)="fileChange($event)">
-          <label>
-            <input type="checkbox"
-                   [(ngModel)]="hasCsvHeader"
-                   value="1" (change)="parseCsv()">My CSV has no header</label>
+          <form [formGroup]="form">
+            <input type="file"
+                   name="filecsv"
+                   accept="text/csv"
+                   (change)="fileChange($event)">
+            <label>
+              <input type="checkbox"
+                     name="csvNoHeader"
+                     [formControl]="csvNoHeader"
+                     [(ngModel)]="hasCsvHeader"
+                     value="1" (change)="parseCsv()">My CSV has no header</label>
+          </form>
 
         </div>
 
@@ -133,6 +137,7 @@ const CSV_FIELD_DESC = {
 
     .mapping-table td > select {
       border: none;
+      outline: none;
     }
   `]
 })
@@ -141,9 +146,10 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
   @ViewChild('modal') modal: NgxSmartModalComponent;
 
   result: DialogResult = DialogResult.Cancelled;
+  form: FormGroup;
 
   currentStep = 'start';
-  hasCsvHeader: any = true;
+  hasCsvHeader: any = false;
   availableOptions: drf.IChoice[] = [];
   // tslint:disable-next-line:variable-name
   column_upc: string;
@@ -165,8 +171,10 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
   };
   fileTarget: any;
 
-  constructor(protected fb: FormBuilder,) {
+  constructor(protected fb: FormBuilder) {
   }
+
+  get csvNoHeader(): FormControl { return this.form.get('csvNoHeader') as FormControl; }
 
   ngOnInit(): void {
     for (const field of CSV_FIELD) {
@@ -175,8 +183,18 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
         displayName: CSV_FIELD_DESC[field]
       });
     }
+
+    this.initializeForm();
     // need to mark as touched to make custom styling works
     // this.form.controls.isActive.markAsTouched();
+  }
+
+  initializeForm() {
+    this.form = this.fb.group({
+      csvNoHeader: [false]
+    });
+
+    this.form.controls.csvNoHeader.markAsTouched();
   }
 
   ngAfterViewInit() {
@@ -224,6 +242,8 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
   nextStepMap() {
     if (this.currentStep === 'start') {
       this.currentStep = 'mapping';
+      this.hasCsvHeader = this.csvNoHeader.value === false;
+      this.parseCsv();
     } else {
       this.close();
     }
