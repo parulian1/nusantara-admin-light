@@ -21,7 +21,7 @@ import {
 } from '@nusantara/shared';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { IProduct } from '@nusantara/models/products';
+import {IProduct, IProductClass} from '@nusantara/models/products';
 
 
 @Component({
@@ -195,6 +195,7 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
   warehouseDetail: marketplace.IWarehouseDetail[];
   marketplaceValue = 0;
   availableSubLocations: ISubLocation[] = [];
+  productClasses: IProductClass[] = [];
 
   @ViewChild(MarketplaceChannelInfoModalComponent) marketplaceChannelInfo: MarketplaceChannelInfoModalComponent;
   @ViewChild(ConfirmModalPendingOrderComponent) marketplaceProgressModal: ConfirmModalPendingOrderComponent;
@@ -217,8 +218,9 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
           this.marketplaceValue = data.totalMarketplace;
         }
       );
-    this.route.data.subscribe((data: { warehouses: IWarehouse[] }) => {
+    this.route.data.subscribe((data: { warehouses: IWarehouse[], productClasses: IProductClass[] }) => {
       this.warehouses = data.warehouses;
+      this.productClasses = data.productClasses;
       const wh = this.warehouses.filter(e => e.href === this.entity.warehouse.href)[0];
       if (wh) {
         this.availableSubLocations = wh.subLocations;

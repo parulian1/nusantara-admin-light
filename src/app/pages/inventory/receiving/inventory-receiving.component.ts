@@ -11,7 +11,7 @@ import {
   marketplace
 } from '@nusantara/models';
 import { InventoryReceivingService, MarketplaceClientService } from '../../../services';
-import { IProduct } from '../../../models/products';
+import {IProduct, IProductClass} from '../../../models/products';
 import {
   ConfirmModalReceivingOrderComponent,
   MarketplaceChannelInfoModalComponent,
@@ -164,6 +164,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
   warehouses: IWarehouse[];
   availableSubLocations: ISubLocation[] = [];
   warehouseDetail: marketplace.IWarehouseDetail[];
+  productClasses: IProductClass[] = [];
 
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
   @ViewChild(MarketplaceChannelInfoModalComponent) marketplaceChannelInfo: MarketplaceChannelInfoModalComponent;
@@ -195,8 +196,9 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
 
   ngOnInit() {
     super.ngOnInit();
-    this.route.data.subscribe((data: { warehouses: IWarehouse[] }) => {
+    this.route.data.subscribe((data: { warehouses: IWarehouse[], productClasses: IProductClass[] }) => {
       this.warehouses = data.warehouses;
+      this.productClasses = data.productClasses;
     });
     this.currentDate = new Date();
   }
