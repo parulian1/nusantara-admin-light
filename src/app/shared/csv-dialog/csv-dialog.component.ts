@@ -22,7 +22,7 @@ const CSV_FIELD_DESC = {
       <div *ngIf="currentStep == 'start'">
         <h2 class="heading-2">Choose CSV File (Step 1/2) </h2>
 
-        <p>Upload a CSV file to bulk upload your products. Don't have a file? <a>Download Template</a></p>
+        <p>Upload a CSV file to bulk upload your products. Don't have a file? <a href="../../../assets/sample-files/example-csv-stock-adjustment.csv" download>Download Template</a></p>
 
         <div>
           <form [formGroup]="form">
