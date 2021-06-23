@@ -30,8 +30,8 @@ import { IProductClass } from '../../../models/products';
         <input type="text" [formControl]="batchNumber" data-qa="batch-number">
       </td>
       <td>
-        <div *ngFor="let child_control of locator.controls; index as ctr" style="margin-bottom: 15px;">
-          <div style="display: flex">
+        <div class="locator-item-container" *ngFor="let child_control of locator.controls; index as ctr">
+          <div class="locator-item-container__input">
             <input [formControl]="child_control" name="locator" data-qa="locator" maxlength="5">
             <button (click)="locator.removeAt(ctr)" type="button" class="remove-button" data-qa="remove-locator-button">
               <i class="material-icons">remove_circle_outline</i>
@@ -62,7 +62,11 @@ import { IProductClass } from '../../../models/products';
     'td:nth-child(3) input { width: 70px; }', // quantity
     'td:nth-child(8) input { width: 105px; }', // cost
     'td>div>input {float: left; width: 80%;}',
-    'td>div>button {float: left; width: 20%;}'
+    'td>div>button {float: left; width: 20%;}',
+    `
+      .locator-item-container { margin-bottom: 15px; }
+      .locator-item-container__input { display: flex; }
+    `,
   ]
 })
 export class LineItemComponent implements OnInit, AfterViewInit {

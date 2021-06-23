@@ -25,8 +25,8 @@ import {IProductClass} from '@nusantara/models/products';
         </select>
       </td>
       <td>
-        <div *ngFor="let control of locator.controls; index as ctr" style="margin-bottom: 15px;">
-          <div style="display: flex">
+        <div class="locator-item-container" *ngFor="let control of locator.controls; index as ctr">
+          <div class="locator-item-container__input">
             <input [formControl]="control" name="locator" data-qa="locator" maxlength="5">
             <button (click)="locator.removeAt(ctr)" type="button" class="remove-button" data-qa="remove-locator-button">
               <i class="material-icons">remove_circle_outline</i>
@@ -49,6 +49,10 @@ import {IProductClass} from '@nusantara/models/products';
   `,
   styles: [
     ':host { display: contents; }',
+    `
+      .locator-item-container { margin-bottom: 15px; }
+      .locator-item-container__input { display: flex; }
+    `,
   ]
 })
 export class InventoryReceivingDetailItemComponent implements OnInit, AfterViewInit {
