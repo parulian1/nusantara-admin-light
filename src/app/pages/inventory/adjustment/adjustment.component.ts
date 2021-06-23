@@ -178,6 +178,7 @@ import {ChangeDetectorRef} from '@angular/core';
             [warehouse]="warehouse.value"
             [availableSubLocations]="availableSubLocations"
             [reasons]="reasonChoices"
+            [adjustmentMode]="adjustmentMode"
             (remove)="stockRecords.removeAt(i)"
           >
           </nus-adjustment-line>
