@@ -44,9 +44,16 @@ const CSV_FIELD_DESC = {
 
       <div *ngIf="currentStep === 'mapping'">
         <h2 class="heading-2">Mapping Attribute (Step 2/2) </h2>
+        <span class="file-name" *ngIf="!!fileTarget">file name : {{fileName}}</span>
 
         <div *ngIf="!!fileTarget">
           <table class="mapping-table">
+            <thead>
+            <th class="mapping-th">Bhisma Attributes</th>
+            <th></th>
+            <th class="mapping-th">CSV Column</th>
+            </thead>
+            <tbody>
             <tr>
               <td>UPC</td>
               <td style="border: none;"></td>
@@ -102,13 +109,14 @@ const CSV_FIELD_DESC = {
                   </option>
                 </select></td>
             </tr>
+            </tbody>
           </table>
         </div>
 
       </div>
 
       <div class="csv-dialog-actions">
-        <button class="control" (click)="nextStepMap()">Next</button>
+        <button class="control" (click)="nextStepMap()" [disabled]="disabledCheck()">Next</button>
         <button class="control secondary ghost" (click)="prevStepMap()">Cancel</button>
       </div>
 
@@ -138,6 +146,26 @@ const CSV_FIELD_DESC = {
     .mapping-table td > select {
       border: none;
       outline: none;
+    }
+
+    .file-name {
+      display: flex;
+      color: #5A5A5A;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 20px;
+      margin: 8px 0;
+    }
+
+    .mapping-table th {
+      background: white;
+      font-weight: 400;
+      font-size: 14px;
+      padding: 0;
+      margin: 0;
+      line-height: 20px;
+      color: #5a5a5a;
+      vertical-align: bottom;
     }
   `]
 })
@@ -170,11 +198,14 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
     notes: ''
   };
   fileTarget: any;
+  fileName = '';
 
   constructor(protected fb: FormBuilder) {
   }
 
-  get csvNoHeader(): FormControl { return this.form.get('csvNoHeader') as FormControl; }
+  get csvNoHeader(): FormControl {
+    return this.form.get('csvNoHeader') as FormControl;
+  }
 
   ngOnInit(): void {
     for (const field of CSV_FIELD) {
@@ -226,6 +257,8 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
   fileChange($event: any) {
     const target: DataTransfer = $event.target as DataTransfer;
     this.fileTarget = target;
+    this.fileName = $event.target.value;
+    this.fileName = this.fileName.replace(/.*[\/\\]/, '');
     this.parseCsv();
   }
 
