@@ -116,7 +116,7 @@ const CSV_FIELD_DESC = {
       </div>
 
       <div class="csv-dialog-actions">
-        <button class="control" (click)="nextStepMap()" [disabled]="disabledCheck()">Next</button>
+        <button class="control" (click)="nextStepMap()">Next</button>
         <button class="control secondary ghost" (click)="prevStepMap()">Cancel</button>
       </div>
 

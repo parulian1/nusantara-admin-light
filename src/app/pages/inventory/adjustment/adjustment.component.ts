@@ -483,6 +483,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
                 upc, 1, 10, filters
               ).subscribe(res => {
                 // TODO: Validation
+
                 const mappedValue = {
                   upc: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['upc']] : value[+(this.csvDialog.columnChoices['upc']) - 1],
                   qty: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['qty']] : value[+(this.csvDialog.columnChoices['qty']) - 1],
@@ -490,6 +491,13 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
                   sku: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['sku']] : value[+(this.csvDialog.columnChoices['sku']) - 1],
                   notes: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['notes']] : value[+(this.csvDialog.columnChoices['notes']) - 1]
                 };
+
+                const isRandomReason = this.reasonChoices.find(v => mappedValue.reason === v.value);
+
+                if (mappedValue.reason === '' || isRandomReason === undefined) {
+                  mappedValue.reason = 'opname';
+                }
+
                 const dataResult = {
                   page: res,
                   data: value,
