@@ -378,7 +378,9 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
   ngAfterViewInit() {
     this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
     this.filteredProducts$ = this.queryText.valueChanges.pipe(
+      startWith(''),
       debounceTime(200),
+      // Only emit when the current value is different than the last.
       distinctUntilChanged(),
       switchMap(val => {
         return of(this.products.controls).pipe(
@@ -387,13 +389,14 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
               const product = group.get('product');
               return product.get('name').value
                 .toLowerCase()
+                .includes(val.toLowerCase()) || product.get('upc').value
+                .toLowerCase()
                 .includes(val.toLowerCase());
             })
           )
         );
       })
     );
-    console.log(this.filteredProducts$);
   }
 
   initializeForm(entity?: IPoints, productPoints?: IProductPoints) {
@@ -437,6 +440,7 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
         href: [product?.product.href, []],
         name: [product?.product.name, []],
         price: [basePrice, []],
+        upc: [product?.product.upc, []]
       }),
       amount: [product?.amount, [Validators.required, Validators.min(1)]]
     });

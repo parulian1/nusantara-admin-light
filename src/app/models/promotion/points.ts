@@ -20,5 +20,6 @@ export interface IProductPoints {
 }
 
 export interface IProductPointsDetail extends INamedHrefEntity{
+  upc: string;
   priceLists: Array<IPriceList>;
 }
