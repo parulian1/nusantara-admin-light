@@ -61,7 +61,7 @@ const CSV_FIELD_DESC = {
                 <td style="border: none;"></td>
                 <td>
                   <div [formGroup]="upcForm">
-                    <select formControlName="upc" (change)="mappingChange($event)">
+                    <select formControlName="upc" (change)="mappingChange('upc', 'UPC')">
                       <option [ngValue]="null">Select</option>
                       <option *ngFor="let option of availableOptions" [ngValue]="option.value">
                         {{ option.displayName }}
@@ -75,7 +75,7 @@ const CSV_FIELD_DESC = {
                 <td style="border: none;"></td>
                 <td>
                   <div [formGroup]="qtyForm">
-                    <select formControlName="qty" (change)="mappingChange($event)">
+                    <select formControlName="qty" (change)="mappingChange('qty', 'Adjusted Qty')">
                       <option [ngValue]="null">Select</option>
                       <option *ngFor="let option of availableOptions" [ngValue]="option.value">
                         {{ option.displayName }}
@@ -89,7 +89,7 @@ const CSV_FIELD_DESC = {
                 <td style="border: none;"></td>
                 <td>
                   <div [formGroup]="reasonForm">
-                    <select formControlName="reason" (change)="mappingChange($event)">
+                    <select formControlName="reason" (change)="mappingChange('reason', 'Reason')">
                       <option [ngValue]="null">Select</option>
                       <option *ngFor="let option of availableOptions" [ngValue]="option.value">
                         {{ option.displayName }}
@@ -103,7 +103,7 @@ const CSV_FIELD_DESC = {
                 <td style="border: none;"></td>
                 <td>
                   <div [formGroup]="skuForm">
-                    <select formControlName="sku" (change)="mappingChange($event)">
+                    <select formControlName="sku" (change)="mappingChange('sku', 'SKU')">
                       <option [ngValue]="null">Select</option>
                       <option *ngFor="let option of availableOptions" [ngValue]="option.value">
                         {{ option.displayName }}
@@ -117,7 +117,7 @@ const CSV_FIELD_DESC = {
                 <td style="border: none;"></td>
                 <td>
                   <div [formGroup]="notesForm">
-                    <select formControlName="notes" (change)="mappingChange($event)">
+                    <select formControlName="notes" (change)="mappingChange('notes', 'Notes')">
                       <option [ngValue]="null">Select</option>
                       <option *ngFor="let option of availableOptions" [ngValue]="option.value">
                         {{ option.displayName }}
@@ -245,7 +245,6 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
     return this.form.get('notesForm') as FormGroup;
   }
 
-
   ngOnInit(): void {
     for (const field of CSV_FIELD) {
       this.availableOptions.push({
@@ -322,7 +321,9 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
         return false;
       }
     } else if (this.currentStep === 'mapping') {
-      this.validateMapping();
+      if (this.form.valid) {
+        return false;
+      }
     }
 
     return true;
@@ -334,7 +335,7 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
       this.hasCsvHeader = this.csvNoHeader.value === false;
       this.parseCsv();
     } else {
-      this.cancel();
+      this.close();
     }
   }
 
@@ -391,12 +392,8 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
     };
   }
 
-
-  validateMapping() {
-    return false;
-  }
-
-  mappingChange($event: any) {
-
+  mappingChange(index: string, param: string) {
+    this.columnChoices[index] = param;
+    console.log(this.columnChoices);
   }
 }
