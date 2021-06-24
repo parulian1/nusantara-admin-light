@@ -3,7 +3,7 @@ import {NgxSmartModalComponent} from 'ngx-smart-modal';
 import {DialogResult} from '@nusantara/core';
 import * as Papa from 'papaparse';
 import {drf} from '@nusantara/models';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 const CSV_FIELD = ['upc', 'qty', 'reason', 'sku', 'notes'];
 const CSV_FIELD_DESC = {
@@ -19,13 +19,15 @@ const CSV_FIELD_DESC = {
   selector: 'nus-csv-dialog',
   template: `
     <ngx-smart-modal [identifier]="'csvDialog'" #modal [customClass]="'wide-modal'">
-      <div *ngIf="currentStep == 'start'">
-        <h2 class="heading-2">Choose CSV File (Step 1/2) </h2>
+      <form [formGroup]="form">
+        <div *ngIf="currentStep == 'start'">
+          <h2 class="heading-2">Choose CSV File (Step 1/2) </h2>
 
-        <p>Upload a CSV file to bulk upload your products. Don't have a file? <a href="../../../assets/sample-files/example-csv-stock-adjustment.csv" download>Download Template</a></p>
+          <p>Upload a CSV file to bulk upload your products. Don't have a file? <a
+            href="../../../assets/sample-files/example-csv-stock-adjustment.csv" download>Download Template</a></p>
 
-        <div>
-          <form [formGroup]="form">
+          <div>
+            <!--          <form [formGroup]="form">-->
             <input type="file"
                    name="filecsv"
                    accept="text/csv"
@@ -36,87 +38,103 @@ const CSV_FIELD_DESC = {
                      [formControl]="csvNoHeader"
                      [(ngModel)]="hasCsvHeader"
                      value="1" (change)="parseCsv()">My CSV has no header</label>
-          </form>
+            <!--          </form>-->
+
+          </div>
 
         </div>
 
-      </div>
+        <div *ngIf="currentStep === 'mapping'">
+          <h2 class="heading-2">Mapping Attribute (Step 2/2) </h2>
+          <span class="file-name" *ngIf="!!fileTarget">file name : {{fileName}}</span>
 
-      <div *ngIf="currentStep === 'mapping'">
-        <h2 class="heading-2">Mapping Attribute (Step 2/2) </h2>
-        <span class="file-name" *ngIf="!!fileTarget">file name : {{fileName}}</span>
+          <div *ngIf="!!fileTarget">
+            <table class="mapping-table">
+              <thead>
+              <th class="mapping-th">Bhisma Attributes</th>
+              <th></th>
+              <th class="mapping-th">CSV Column</th>
+              </thead>
+              <tbody>
+              <tr>
+                <td>UPC</td>
+                <td style="border: none;"></td>
+                <td>
+                  <div [formGroup]="upcForm">
+                    <select formControlName="upc" (change)="mappingChange($event)">
+                      <option [ngValue]="null">Select</option>
+                      <option *ngFor="let option of availableOptions" [ngValue]="option.value">
+                        {{ option.displayName }}
+                      </option>
+                    </select>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Adjusted Qty</td>
+                <td style="border: none;"></td>
+                <td>
+                  <div [formGroup]="qtyForm">
+                    <select formControlName="qty" (change)="mappingChange($event)">
+                      <option [ngValue]="null">Select</option>
+                      <option *ngFor="let option of availableOptions" [ngValue]="option.value">
+                        {{ option.displayName }}
+                      </option>
+                    </select>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Reason</td>
+                <td style="border: none;"></td>
+                <td>
+                  <div [formGroup]="reasonForm">
+                    <select formControlName="reason" (change)="mappingChange($event)">
+                      <option [ngValue]="null">Select</option>
+                      <option *ngFor="let option of availableOptions" [ngValue]="option.value">
+                        {{ option.displayName }}
+                      </option>
+                    </select>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>SKU</td>
+                <td style="border: none;"></td>
+                <td>
+                  <div [formGroup]="skuForm">
+                    <select formControlName="sku" (change)="mappingChange($event)">
+                      <option [ngValue]="null">Select</option>
+                      <option *ngFor="let option of availableOptions" [ngValue]="option.value">
+                        {{ option.displayName }}
+                      </option>
+                    </select>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Notes</td>
+                <td style="border: none;"></td>
+                <td>
+                  <div [formGroup]="notesForm">
+                    <select formControlName="notes" (change)="mappingChange($event)">
+                      <option [ngValue]="null">Select</option>
+                      <option *ngFor="let option of availableOptions" [ngValue]="option.value">
+                        {{ option.displayName }}
+                      </option>
+                    </select>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
 
-        <div *ngIf="!!fileTarget">
-          <table class="mapping-table">
-            <thead>
-            <th class="mapping-th">Bhisma Attributes</th>
-            <th></th>
-            <th class="mapping-th">CSV Column</th>
-            </thead>
-            <tbody>
-            <tr>
-              <td>UPC</td>
-              <td style="border: none;"></td>
-              <td>
-                <select [(ngModel)]="columnChoices['upc']">
-                  <option [ngValue]="null">Select</option>
-                  <option *ngFor="let option of availableOptions" [ngValue]="option.value">
-                    {{ option.displayName }}
-                  </option>
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td>Adjusted Qty</td>
-              <td style="border: none;"></td>
-              <td>
-                <select [(ngModel)]="columnChoices['qty']">
-                  <option [ngValue]="null">Select</option>
-                  <option *ngFor="let option of availableOptions" [ngValue]="option.value">
-                    {{ option.displayName }}
-                  </option>
-                </select></td>
-            </tr>
-            <tr>
-              <td>Reason</td>
-              <td style="border: none;"></td>
-              <td>
-                <select [(ngModel)]="columnChoices['reason']">
-                  <option [ngValue]="null">Select</option>
-                  <option *ngFor="let option of availableOptions" [ngValue]="option.value">
-                    {{ option.displayName }}
-                  </option>
-                </select></td>
-            </tr>
-            <tr>
-              <td>SKU</td>
-              <td style="border: none;"></td>
-              <td><select [(ngModel)]="columnChoices['sku']">
-                <option [ngValue]="null">Select</option>
-                <option *ngFor="let option of availableOptions" [ngValue]="option.value">
-                  {{ option.displayName }}
-                </option>
-              </select></td>
-            </tr>
-            <tr>
-              <td>Notes</td>
-              <td style="border: none;"></td>
-              <td>
-                <select [(ngModel)]="columnChoices['notes']">
-                  <option [ngValue]="null">Select</option>
-                  <option *ngFor="let option of availableOptions" [ngValue]="option.value">
-                    {{ option.displayName }}
-                  </option>
-                </select></td>
-            </tr>
-            </tbody>
-          </table>
         </div>
-
-      </div>
+      </form>
 
       <div class="csv-dialog-actions">
-        <button class="control" (click)="nextStepMap()">Next</button>
+        <button class="control" (click)="nextStepMap()" [disabled]="disabledCheck()">Next</button>
         <button class="control secondary ghost" (click)="prevStepMap()">Cancel</button>
       </div>
 
@@ -143,7 +161,7 @@ const CSV_FIELD_DESC = {
       border-radius: 4px;
     }
 
-    .mapping-table td > select {
+    .mapping-table td > div > select {
       border: none;
       outline: none;
     }
@@ -207,6 +225,27 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
     return this.form.get('csvNoHeader') as FormControl;
   }
 
+  get upcForm(): FormGroup {
+    return this.form.get('upcForm') as FormGroup;
+  }
+
+  get qtyForm(): FormGroup {
+    return this.form.get('qtyForm') as FormGroup;
+  }
+
+  get reasonForm(): FormGroup {
+    return this.form.get('reasonForm') as FormGroup;
+  }
+
+  get skuForm(): FormGroup {
+    return this.form.get('skuForm') as FormGroup;
+  }
+
+  get notesForm(): FormGroup {
+    return this.form.get('notesForm') as FormGroup;
+  }
+
+
   ngOnInit(): void {
     for (const field of CSV_FIELD) {
       this.availableOptions.push({
@@ -222,7 +261,22 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
 
   initializeForm() {
     this.form = this.fb.group({
-      csvNoHeader: [false]
+      csvNoHeader: [false],
+      upcForm: this.fb.group({
+        upc: [null, Validators.required]
+      }),
+      qtyForm: this.fb.group({
+        qty: [null, Validators.required]
+      }),
+      reasonForm: this.fb.group({
+        reason: [null, Validators.required]
+      }),
+      skuForm: this.fb.group({
+        sku: [null, Validators.required]
+      }),
+      notesForm: this.fb.group({
+        notes: [null, Validators.required]
+      })
     });
 
     this.form.controls.csvNoHeader.markAsTouched();
@@ -267,18 +321,20 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
       if (!!this.fileTarget) {
         return false;
       }
+    } else if (this.currentStep === 'mapping') {
+      this.validateMapping();
     }
 
     return true;
   }
 
   nextStepMap() {
-    if (this.currentStep === 'start') {
+    if (this.currentStep === 'start' && !!this.fileTarget) {
       this.currentStep = 'mapping';
       this.hasCsvHeader = this.csvNoHeader.value === false;
       this.parseCsv();
     } else {
-      this.close();
+      this.cancel();
     }
   }
 
@@ -335,4 +391,12 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
     };
   }
 
+
+  validateMapping() {
+    return false;
+  }
+
+  mappingChange($event: any) {
+
+  }
 }
