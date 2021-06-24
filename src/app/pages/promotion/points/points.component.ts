@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {AbstractDetailComponent, DialogResult, ToastService} from '@nusantara/core';
@@ -7,6 +7,8 @@ import {IProduct} from '@nusantara/models/products';
 import {IPoints, IProductPoints} from '@nusantara/models';
 import {PointsService} from '@nusantara/services';
 import {ProductSelectionModalComponent} from '@nusantara/shared';
+import {Observable, of} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map, startWith, switchMap} from 'rxjs/operators';
 
 @Component({
   selector: 'nus-points',
@@ -119,28 +121,32 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
         <nus-tab [title]="'Products'">
           <div class="product-table">
             <p class="subheading-2">Products that can be exchanged for points</p>
+            <div class="product-table__search control">
+              <i class="material-icons">search</i>
+              <input type="search" placeholder="Search Product Name or SKU" [formControl]="queryText">
+            </div>
             <table>
               <thead>
-              <tr>
-                <th>Product</th>
-                <th>Product Price</th>
-                <th>Points</th>
-                <th></th>
-              </tr>
+                <tr>
+                  <th>Product</th>
+                  <th>Product Price</th>
+                  <th>Points</th>
+                  <th></th>
+                </tr>
               </thead>
               <tbody>
-              <nus-product-points
-                *ngFor="let control of products.controls; let i=index"
-                [form]="control"
-                (remove)="removeProduct(i)"
-              ></nus-product-points>
-              <tr>
-                <td colspan="4">
-                  <button type="button" (click)="selectProduct()" class="new-add-button wide">
-                    <i class="material-icons">add</i> Add Product
-                  </button>
-                </td>
-              </tr>
+                <nus-product-points
+                  *ngFor="let control of (filteredProducts$ | async); let i=index"
+                  [form]="control"
+                  (remove)="removeProduct(i)"
+                ></nus-product-points>
+                <tr>
+                  <td colspan="4">
+                    <button type="button" (click)="selectProduct()" class="new-add-button wide">
+                      <i class="material-icons">add</i> Add Product
+                    </button>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -276,6 +282,24 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
       width: 30px;
     }
 
+    .product-table__search {
+      display: flex;
+      border: solid 1px var(--grey);
+      background-color: transparent;
+      align-items: center;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    .product-table__search > i {
+      background-color: white;
+      color: var(--nav-background);
+      line-height: 31px;
+      padding-left: 13px;
+    }
+    .product-table__search > input[type=search] {
+      border: none !important;
+    }
+
   `]
 })
 export class PointsComponent extends AbstractDetailComponent<IPoints> implements OnInit, AfterViewInit {
@@ -285,6 +309,9 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
   entity: IPoints;
   productPoints: Array<IProductPoints>;
   control: FormGroup;
+
+  queryText = new FormControl('');
+  filteredProducts$: Observable<any>;
 
   expireAtAfterEarning: string;
   expireAtCustomerNotActive: string;
@@ -350,6 +377,23 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
 
   ngAfterViewInit() {
     this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
+    this.filteredProducts$ = this.queryText.valueChanges.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      switchMap(val => {
+        return of(this.products.controls).pipe(
+          map((products: AbstractControl[]) =>
+            products.filter((group: AbstractControl) => {
+              const product = group.get('product');
+              return product.get('name').value
+                .toLowerCase()
+                .includes(val.toLowerCase());
+            })
+          )
+        );
+      })
+    );
+    console.log(this.filteredProducts$);
   }
 
   initializeForm(entity?: IPoints, productPoints?: IProductPoints) {
