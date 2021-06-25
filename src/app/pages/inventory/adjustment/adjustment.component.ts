@@ -202,7 +202,7 @@ import {ChangeDetectorRef} from '@angular/core';
 
     <!-- Modals -->
     <nus-stock-record-selection-modal></nus-stock-record-selection-modal>
-    <nus-confirm-receiving-modal></nus-confirm-receiving-modal>
+    <nus-confirm-receiving-modal [cancelWithoutReload]="true"></nus-confirm-receiving-modal>
     <nus-csv-dialog></nus-csv-dialog>
     <nus-stock-record-dialog></nus-stock-record-dialog>
   `,
