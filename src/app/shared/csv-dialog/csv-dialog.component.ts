@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, EventEmitter, OnInit, ViewChild} from '@angular/core';
 import {NgxSmartModalComponent} from 'ngx-smart-modal';
-import {DialogResult} from '@nusantara/core';
+import {DialogResult, Logger} from '@nusantara/core';
 import * as Papa from 'papaparse';
 import {drf} from '@nusantara/models';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
@@ -14,6 +14,7 @@ const CSV_FIELD_DESC = {
   notes: 'Notes'
 };
 
+const logger = new Logger('CSVDialogComponent');
 
 @Component({
   selector: 'nus-csv-dialog',
@@ -30,13 +31,12 @@ const CSV_FIELD_DESC = {
             <!--          <form [formGroup]="form">-->
             <input type="file"
                    name="filecsv"
-                   accept="text/csv"
+                   accept="text/csv,.csv"
                    (change)="fileChange($event)">
             <label>
               <input type="checkbox"
                      name="csvNoHeader"
                      [formControl]="csvNoHeader"
-                     [(ngModel)]="hasCsvHeader"
                      value="1" (change)="parseCsv()">My CSV has no header</label>
             <!--          </form>-->
 
@@ -60,13 +60,14 @@ const CSV_FIELD_DESC = {
                 <td>UPC</td>
                 <td style="border: none;"></td>
                 <td>
-                  <div [formGroup]="upcForm">
-                    <select formControlName="upc" (change)="mappingChange('upc', 'UPC')">
+                  <div >
+                    <select [formControl]="upc" (change)="selectColumn('upc', $event)">
                       <option [ngValue]="null">Select</option>
                       <option *ngFor="let option of availableOptions" [ngValue]="option.value">
                         {{ option.displayName }}
                       </option>
                     </select>
+                    <span *ngIf="upc.hasError('duplicate')">duplicated mapping</span>
                   </div>
                 </td>
               </tr>
@@ -74,13 +75,14 @@ const CSV_FIELD_DESC = {
                 <td>Adjusted Qty</td>
                 <td style="border: none;"></td>
                 <td>
-                  <div [formGroup]="qtyForm">
-                    <select formControlName="qty" (change)="mappingChange('qty', 'Adjusted Qty')">
+                  <div>
+                    <select [formControl]="qty" (change)="selectColumn('qty', $event)">
                       <option [ngValue]="null">Select</option>
                       <option *ngFor="let option of availableOptions" [ngValue]="option.value">
                         {{ option.displayName }}
                       </option>
                     </select>
+                    <span *ngIf="qty.hasError('duplicate')">duplicated mapping</span>
                   </div>
                 </td>
               </tr>
@@ -88,13 +90,14 @@ const CSV_FIELD_DESC = {
                 <td>Reason</td>
                 <td style="border: none;"></td>
                 <td>
-                  <div [formGroup]="reasonForm">
-                    <select formControlName="reason" (change)="mappingChange('reason', 'Reason')">
+                  <div>
+                    <select [formControl]="reason" (change)="selectColumn('reason', $event)">
                       <option [ngValue]="null">Select</option>
                       <option *ngFor="let option of availableOptions" [ngValue]="option.value">
                         {{ option.displayName }}
                       </option>
                     </select>
+                    <span *ngIf="reason.hasError('duplicate')">duplicated mapping</span>
                   </div>
                 </td>
               </tr>
@@ -102,13 +105,14 @@ const CSV_FIELD_DESC = {
                 <td>SKU</td>
                 <td style="border: none;"></td>
                 <td>
-                  <div [formGroup]="skuForm">
-                    <select formControlName="sku" (change)="mappingChange('sku', 'SKU')">
+                  <div>
+                    <select [formControl]="sku" (change)="selectColumn('sku', $event)">
                       <option [ngValue]="null">Select</option>
                       <option *ngFor="let option of availableOptions" [ngValue]="option.value">
                         {{ option.displayName }}
                       </option>
                     </select>
+                    <span *ngIf="sku.hasError('duplicate')">duplicated mapping</span>
                   </div>
                 </td>
               </tr>
@@ -116,13 +120,14 @@ const CSV_FIELD_DESC = {
                 <td>Notes</td>
                 <td style="border: none;"></td>
                 <td>
-                  <div [formGroup]="notesForm">
-                    <select formControlName="notes" (change)="mappingChange('notes', 'Notes')">
+                  <div >
+                    <select [formControl]="notes" (change)="selectColumn('notes', $event)">
                       <option [ngValue]="null">Select</option>
                       <option *ngFor="let option of availableOptions" [ngValue]="option.value">
                         {{ option.displayName }}
                       </option>
                     </select>
+                    <span *ngIf="notes.hasError('duplicate')">duplicated mapping</span>
                   </div>
                 </td>
               </tr>
@@ -215,6 +220,7 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
     sku: '',
     notes: ''
   };
+  columnSelected = {};
   fileTarget: any;
   fileName = '';
 
@@ -225,24 +231,24 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
     return this.form.get('csvNoHeader') as FormControl;
   }
 
-  get upcForm(): FormGroup {
-    return this.form.get('upcForm') as FormGroup;
+  get upc(): FormControl {
+    return this.form.get('upc') as FormControl;
   }
 
-  get qtyForm(): FormGroup {
-    return this.form.get('qtyForm') as FormGroup;
+  get qty(): FormControl {
+    return this.form.get('qty') as FormControl;
   }
 
-  get reasonForm(): FormGroup {
-    return this.form.get('reasonForm') as FormGroup;
+  get reason(): FormControl {
+    return this.form.get('reason') as FormControl;
   }
 
-  get skuForm(): FormGroup {
-    return this.form.get('skuForm') as FormGroup;
+  get sku(): FormControl {
+    return this.form.get('sku') as FormControl;
   }
 
-  get notesForm(): FormGroup {
-    return this.form.get('notesForm') as FormGroup;
+  get notes(): FormControl {
+    return this.form.get('notes') as FormControl;
   }
 
   ngOnInit(): void {
@@ -260,22 +266,12 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
 
   initializeForm() {
     this.form = this.fb.group({
-      csvNoHeader: [false],
-      upcForm: this.fb.group({
-        upc: [null, Validators.required]
-      }),
-      qtyForm: this.fb.group({
-        qty: [null, Validators.required]
-      }),
-      reasonForm: this.fb.group({
-        reason: [null]
-      }),
-      skuForm: this.fb.group({
-        sku: [null]
-      }),
-      notesForm: this.fb.group({
-        notes: [null]
-      })
+      csvNoHeader: this.fb.control({value: false, disabled: true}),
+      upc: this.fb.control({value: null}, [Validators.required, ]),
+      qty: this.fb.control({value: null}, [Validators.required, ]),
+      reason: this.fb.control({value: null}, [Validators.required, ]),
+      sku: this.fb.control({value: null}, ),
+      notes: this.fb.control({value: null}, ),
     });
 
     this.form.controls.csvNoHeader.markAsTouched();
@@ -308,10 +304,19 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
   }
 
   fileChange($event: any) {
+    const file: File = $event.target.files[0];
+    console.log('size', file.size);
+    console.log('type', file.type);
+    if (file.type !== 'text/csv') {
+      alert('File type invalid');
+      return;
+    }
     const target: DataTransfer = $event.target as DataTransfer;
     this.fileTarget = target;
     this.fileName = $event.target.value;
     this.fileName = this.fileName.replace(/.*[\/\\]/, '');
+    this.csvNoHeader.enable();
+    this.hasCsvHeader = this.csvNoHeader.value === false;
     this.parseCsv();
   }
 
@@ -342,10 +347,14 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
   prevStepMap() {
     if (this.currentStep === 'start') {
       this.fileTarget = null;
+      this.csvNoHeader.setValue(false);
+      this.csvNoHeader.disable();
       this.cancel();
     } else {
       this.currentStep = 'start';
       this.fileTarget = null;
+      this.csvNoHeader.setValue(false);
+      this.csvNoHeader.disable();
     }
   }
 
@@ -357,6 +366,7 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
       sku: null,
       notes: null
     };
+    this.hasCsvHeader = this.csvNoHeader.value === false;
     const reader: FileReader = new FileReader();
     reader.readAsText(this.fileTarget.files[0]);
 
@@ -392,8 +402,23 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
     };
   }
 
-  mappingChange(index: string, param: string) {
-    this.columnChoices[index] = param;
-    console.log(this.columnChoices);
+  selectColumn(index, $event) {
+    const formValidate = ['upc', 'qty', 'reason', 'sku', 'notes'];
+    let notValid = false;
+    formValidate.filter(v => v !== index).map(v => {
+      if (this.form.controls[index].value !== null) {
+        if (this.form.controls[index].value === this.form.controls[v].value) {
+          notValid = true;
+        }
+      }
+    });
+    if (notValid) {
+      logger.debug('Value not valid has duplicate');
+      this.form.controls[index].setErrors({duplicate: true});
+      return;
+    }
+    this.columnChoices[index] = this.form.controls[index].value;
+    logger.debug(this.columnChoices);
+
   }
 }

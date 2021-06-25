@@ -24,6 +24,7 @@ import * as Papa from 'papaparse';
 import {HttpParams} from '@angular/common/http';
 import {StockRecordDialogComponent} from '@nusantara/pages/inventory/adjustment/stock-record-dialog.component';
 import {ChangeDetectorRef} from '@angular/core';
+import { isNumeric } from 'rxjs/internal/util/isNumeric';
 
 @Component({
   selector: 'nus-adjustment',
@@ -64,7 +65,7 @@ import {ChangeDetectorRef} from '@angular/core';
               </div>
 
               <div [formGroup]="subLocation">
-                <select formControlName="href" (change)="subLocationSelected($event)" [disabled]="!warehouse.valid">
+                <select formControlName="href" (change)="subLocationSelected($event)">
                   <option [ngValue]="null">Select Location</option>
                   <option *ngFor="let subLocation of availableSubLocations" [ngValue]="subLocation.href">
                     {{ subLocation.name }}
@@ -142,7 +143,6 @@ import {ChangeDetectorRef} from '@angular/core';
             [reasons]="reasonChoices"
             [csvData]="csvData[i]"
             [index]="i"
-            [length]="stockRecords.length"
             (remove)="stockRecords.removeAt(i)"
             (conflict)="resolveConflict($event)"
           >
@@ -260,6 +260,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   csvData = [];
   parsedCsv: any;
   adjustmentMode = 'manual';
+  invalidCsv = [];
 
   constructor(private fb: FormBuilder,
               public toast: ToastService,
@@ -296,7 +297,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
         href: [null, Validators.required],
       }),
       subLocation: this.fb.group({
-        href: [null, Validators.required],
+        href: this.fb.control({value: null, disabled: true}, Validators.required),
       }),
       stockRecords: this.fb.array(
         [], [Validators.required, Validators.minLength(1)]
@@ -423,6 +424,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
       const wh = this.warehouses.filter(e => e.href === this.warehouse.get('href').value)[0];
       if (wh) {
         this.availableSubLocations = wh.subLocations || [];
+        this.subLocation.enable();
         // this.warehouse.disable();
       }
     } else {
@@ -475,6 +477,23 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
             this.csvData = [];
             this.parsedCsv = results;
             results.data.map((value, key) => {
+              const mappedValue = {
+                upc: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['upc']] : value[+(this.csvDialog.columnChoices['upc']) - 1],
+                qty: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['qty']] : value[+(this.csvDialog.columnChoices['qty']) - 1],
+                reason: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['reason']] : value[+(this.csvDialog.columnChoices['reason']) - 1],
+                sku: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['sku']] : value[+(this.csvDialog.columnChoices['sku']) - 1],
+                notes: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['notes']] : value[+(this.csvDialog.columnChoices['notes']) - 1]
+              };
+              const isRandomReason = this.reasonChoices.find(v => mappedValue.reason === v.value);
+
+              if (mappedValue.reason === '' || isRandomReason === undefined) {
+                mappedValue.reason = 'opname';
+              }
+              if (!isNumeric(mappedValue.qty)) {
+                this.invalidCsv.push(mappedValue);
+                return;
+              }
+
               const filters = {
                 warehouse: getSlugFromHref(this.warehouse.value?.href),
                 sub_location: getSlugFromHref(this.subLocation.value?.href),
@@ -482,23 +501,9 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
               };
               const upc = this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['upc']] : value[+(this.csvDialog.columnChoices['upc']) - 1];
               this.inventoryService.fetchListWithFilter(
-                upc, 1, 10, filters
+                upc, 1, 20, filters
               ).subscribe(res => {
                 // TODO: Validation
-
-                const mappedValue = {
-                  upc: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['upc']] : value[+(this.csvDialog.columnChoices['upc']) - 1],
-                  qty: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['qty']] : value[+(this.csvDialog.columnChoices['qty']) - 1],
-                  reason: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['reason']] : value[+(this.csvDialog.columnChoices['reason']) - 1],
-                  sku: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['sku']] : value[+(this.csvDialog.columnChoices['sku']) - 1],
-                  notes: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['notes']] : value[+(this.csvDialog.columnChoices['notes']) - 1]
-                };
-
-                const isRandomReason = this.reasonChoices.find(v => mappedValue.reason === v.value);
-
-                if (mappedValue.reason === '' || isRandomReason === undefined) {
-                  mappedValue.reason = 'opname';
-                }
 
                 const dataResult = {
                   page: res,
@@ -524,6 +529,8 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
                     notes: [mappedValue.notes || null, []],
                   });
                   this.stockRecords.push(newReceiving);
+                } else {
+                  this.invalidCsv.push(mappedValue);
                 }
               });
             });

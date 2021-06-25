@@ -5,7 +5,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {products, ISubLocation, drf} from '@nusantara/models';
 import {IProductClass} from '@nusantara/models/products';
 import {InventoryAdjustmentOrderService} from '@nusantara/services';
-import {getSlugFromHref} from '@nusantara/core';
+import {getSlugFromHref, PagedResponse} from '@nusantara/core';
+import {IStockRecord} from '@nusantara/models/inventory';
 
 @Component({
   selector: 'nus-adjustment-line',
@@ -73,7 +74,7 @@ import {getSlugFromHref} from '@nusantara/core';
           <i class="material-icons">remove_circle_outline</i>
         </button>
         <button
-          *ngIf="adjustmentMode !== 'manual' && length > 1"
+          *ngIf="adjustmentMode !== 'manual' && csvData.page.totalResults > 1"
           (click)="resolveConflict(index, csvData)" type="button" class="resolve-button" data-qa="resolve-button">
           Resolve Conflict
         </button>
@@ -96,11 +97,9 @@ export class AdjustmentLineItemComponent implements OnInit, AfterViewInit {
   @Input() form: FormGroup;
   @Input() reasons: drf.IChoice[] = [];
   @Input() subLocation: ISubLocation;
-  @Input() csvData: any;
+  @Input() csvData: { page: PagedResponse<IStockRecord>, data: any, key: string, mappedValue: any };
   @Input() index: number;
   @Input() adjustmentMode: string;
-  @Input() length: number;
-
   @Output() remove = new EventEmitter<void>();
 
   @Output() conflict = new EventEmitter<{
