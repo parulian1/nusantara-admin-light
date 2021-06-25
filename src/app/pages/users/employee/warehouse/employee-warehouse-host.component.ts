@@ -66,11 +66,11 @@ export class EmployeeWarehouseHostComponent implements OnInit {
 
   initialFormArray(): void {
     if (this.entity) {
+      this.form.clear();
       this.warehouseService
         .fetchAllByUser(this.entity?.username)
         .subscribe((warehouses) => {
           warehouses.forEach((warehouse) => {
-            this.form.clear();
             this.addToForm(warehouse);
           });
         });
