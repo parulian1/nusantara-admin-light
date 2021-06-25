@@ -268,13 +268,13 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
         qty: [null, Validators.required]
       }),
       reasonForm: this.fb.group({
-        reason: [null, Validators.required]
+        reason: [null]
       }),
       skuForm: this.fb.group({
-        sku: [null, Validators.required]
+        sku: [null]
       }),
       notesForm: this.fb.group({
-        notes: [null, Validators.required]
+        notes: [null]
       })
     });
 
