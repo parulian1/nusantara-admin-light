@@ -272,10 +272,12 @@ export class OnboardingPreviewHostDialogComponent extends AbstractEditingCompone
 
   getButtonActionNextText(position: number): string {
     const formControlLength = this.form.controls.length;
-    if (position < formControlLength -1) {
-      return 'MULAI'
+    if (position == 0 && position < formControlLength -1) {
+      return 'MULAI';
+    } else if (position > 0 && position < formControlLength - 1) {
+      return 'LANJUT';
     }
-    return 'MULAI BERJUALAN'
+    return 'MULAI BERJUALAN';
   }
 
 }
