@@ -7,8 +7,8 @@ import {IProduct} from '@nusantara/models/products';
 import {IPoints, IProductPoints} from '@nusantara/models';
 import {PointsService} from '@nusantara/services';
 import {ProductSelectionModalComponent} from '@nusantara/shared';
-import {Observable, of} from 'rxjs';
-import {debounceTime, distinctUntilChanged, map, startWith, switchMap} from 'rxjs/operators';
+import {of} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'nus-points',
@@ -136,7 +136,7 @@ import {debounceTime, distinctUntilChanged, map, startWith, switchMap} from 'rxj
               </thead>
               <tbody>
                 <nus-product-points
-                  *ngFor="let control of (filteredProducts$ | async); let i=index"
+                  *ngFor="let control of filteredProducts$; let i=index"
                   [form]="control"
                   (remove)="removeProduct(i)"
                 ></nus-product-points>
@@ -310,8 +310,10 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
   productPoints: Array<IProductPoints>;
   control: FormGroup;
 
+  timeoutId: any;
+  reloadTimeout = 650;
   queryText = new FormControl('');
-  filteredProducts$: Observable<any>;
+  filteredProducts$: AbstractControl[];
 
   expireAtAfterEarning: string;
   expireAtCustomerNotActive: string;
@@ -359,7 +361,7 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
 
   clearExpiredInput() {
     // Clear expire-at input when expire type change
-    this.form.get('expireType').valueChanges.subscribe(canUsePos => {
+    this.form.get('expireType').valueChanges.subscribe(() => {
       this.expireAtAfterEarning = '';
       this.expireAtCustomerNotActive = '';
       this.expireAtEveryYear = '';
@@ -373,30 +375,13 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
       this.productPoints = data.entity.products;
     });
     this.clearExpiredInput();
+    this.queryText.valueChanges.subscribe(
+      (newValue) => { this.onQueryTextChanged(newValue); }
+    );
   }
 
   ngAfterViewInit() {
     this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
-    this.filteredProducts$ = this.queryText.valueChanges.pipe(
-      startWith(''),
-      debounceTime(200),
-      // Only emit when the current value is different than the last.
-      distinctUntilChanged(),
-      switchMap(val => {
-        return of(this.products.controls).pipe(
-          map((products: AbstractControl[]) =>
-            products.filter((group: AbstractControl) => {
-              const product = group.get('product');
-              return product.get('name').value
-                .toLowerCase()
-                .includes(val.toLowerCase()) || product.get('upc').value
-                .toLowerCase()
-                .includes(val.toLowerCase());
-            })
-          )
-        );
-      })
-    );
   }
 
   initializeForm(entity?: IPoints, productPoints?: IProductPoints) {
@@ -427,6 +412,8 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
     this.expireAtAfterEarning = entity?.expireAt;
     this.expireAtCustomerNotActive = entity?.expireAt;
     this.expireAtEveryYear = entity?.expireAt;
+
+    this.filteredProducts$ = this.products.controls;
   }
 
   selectProduct() {
@@ -459,11 +446,13 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
           name: [selectedProduct.name, []],
           href: [selectedProduct.href, []],
           price: [basePrice, []],
+          upc: [selectedProduct.upc, []]
         }),
         amount: [0, [Validators.required, Validators.min(1)]]
       });
 
       this.products.push(f);
+      this.onQueryTextChanged(this.queryText.value);
     }
   }
 
@@ -486,7 +475,10 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
   }
 
   removeProduct(i: number): void {
-    this.products.removeAt(i);
+    const selectedProduct = this.filteredProducts$[i].value;
+    const index = this.products.value.findIndex( p => p.product.name === selectedProduct.product.name);
+    this.products.removeAt(index);
+    this.onQueryTextChanged(this.queryText.value);
   }
 
   getProductBasePrice(priceLists: Array<any>) {
@@ -505,5 +497,32 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
     }
 
     return basePrice;
+  }
+
+  onQueryTextChanged(newValue: string) {
+
+    if (!!this.timeoutId) {
+      clearTimeout(this.timeoutId);
+    }
+    // don't run if the value hasn't actually changed from the original.
+    if (newValue === '') {
+      this.filteredProducts$ = this.products.controls;
+    } else {
+      this.timeoutId = setTimeout(() => {
+        // wait to see if the user is still typing more before searching
+        of(this.products.controls).pipe(
+          map((products: AbstractControl[]) =>
+            products.filter((group: AbstractControl) => {
+              const product = group.get('product');
+              return product.get('name').value
+                .toLowerCase()
+                .includes(this.queryText.value.toLowerCase()) || product.get('upc').value
+                .toLowerCase()
+                .includes(this.queryText.value.toLowerCase());
+            })
+          )
+        ).subscribe(val => this.filteredProducts$ = val);
+      }, this.reloadTimeout);
+    }
   }
 }
