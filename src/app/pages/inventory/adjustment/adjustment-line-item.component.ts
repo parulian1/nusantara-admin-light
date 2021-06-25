@@ -73,7 +73,7 @@ import {getSlugFromHref} from '@nusantara/core';
           <i class="material-icons">remove_circle_outline</i>
         </button>
         <button
-          *ngIf="adjustmentMode !== 'manual'"
+          *ngIf="adjustmentMode !== 'manual' && length > 1"
           (click)="resolveConflict(index, csvData)" type="button" class="resolve-button" data-qa="resolve-button">
           Resolve Conflict
         </button>
@@ -99,6 +99,7 @@ export class AdjustmentLineItemComponent implements OnInit, AfterViewInit {
   @Input() csvData: any;
   @Input() index: number;
   @Input() adjustmentMode: string;
+  @Input() length: number;
 
   @Output() remove = new EventEmitter<void>();
 

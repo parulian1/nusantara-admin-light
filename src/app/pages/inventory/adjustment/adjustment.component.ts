@@ -142,6 +142,7 @@ import {ChangeDetectorRef} from '@angular/core';
             [reasons]="reasonChoices"
             [csvData]="csvData[i]"
             [index]="i"
+            [length]="stockRecords.length"
             (remove)="stockRecords.removeAt(i)"
             (conflict)="resolveConflict($event)"
           >
@@ -523,7 +524,6 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
                     notes: [mappedValue.notes || null, []],
                   });
                   this.stockRecords.push(newReceiving);
-
                 }
               });
             });
