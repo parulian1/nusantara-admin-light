@@ -44,7 +44,7 @@ jobs:
   - job: build_prod
     dependsOn: unit_test
     pool:
-      name: Experimental
+      name: docker-agent
     displayName: Build & Packaging PROD
     condition: |
       and(
@@ -69,7 +69,7 @@ jobs:
           repository: 'gramedia/nginx'
           imageSource: 'imagetag'
           imageTag: 'gramedia.io'
-          
+
       - task: Docker@2
         displayName: Docker Build
         inputs:
@@ -104,7 +104,7 @@ jobs:
   - job: build_staging
     # dependsOn: build_prod
     pool:
-      name: Experimental
+      name: docker-agent
     displayName: Build & Packaging STAGING
     condition: |
       and(
@@ -127,7 +127,7 @@ jobs:
           repository: 'gramedia/nginx'
           imageSource: 'imagetag'
           imageTag: 'gramedia.io'
-          
+
       - task: Docker@2
         displayName: Docker Build
         inputs:
