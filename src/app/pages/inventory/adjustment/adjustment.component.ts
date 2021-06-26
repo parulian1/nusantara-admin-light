@@ -25,6 +25,7 @@ import {HttpParams} from '@angular/common/http';
 import {StockRecordDialogComponent} from '@nusantara/pages/inventory/adjustment/stock-record-dialog.component';
 import {ChangeDetectorRef} from '@angular/core';
 import { isNumeric } from 'rxjs/internal/util/isNumeric';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'nus-adjustment',
@@ -120,6 +121,14 @@ import { isNumeric } from 'rxjs/internal/util/isNumeric';
         <!-- </div>-->
       </div>
       <div class="product-list" *ngIf="warehouse.disabled && adjustmentMode === 'csv'">
+        <div *ngIf="invalidCsv.length > 0">
+          <div>
+            <a [href]="getInvalidCsv()" target="_blank">Get invalid csv ({{invalidCsv.length}} records)</a>
+          </div>
+          <div *ngFor="let iCsv of invalidCsv">
+              {{iCsv.reason}} - {{iCsv.data['upc']}}
+          </div>
+        </div>
         <table>
           <thead>
           <tr id="mp-add-product-head">
@@ -202,7 +211,7 @@ import { isNumeric } from 'rxjs/internal/util/isNumeric';
     </form>
 
     <!-- Modals -->
-    <nus-stock-record-selection-modal></nus-stock-record-selection-modal>
+    <nus-stock-record-selection-modal [isInStock]="false"></nus-stock-record-selection-modal>
     <nus-confirm-receiving-modal [cancelWithoutReload]="true"></nus-confirm-receiving-modal>
     <nus-csv-dialog></nus-csv-dialog>
     <nus-stock-record-dialog></nus-stock-record-dialog>
@@ -271,7 +280,8 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
               protected inventoryService: InventoryStockRecordService,
               public route: ActivatedRoute,
               public router: Router,
-              private ref: ChangeDetectorRef) {
+              private ref: ChangeDetectorRef,
+              private sanitizer: DomSanitizer) {
     super(route, router, toast, service);
   }
 
@@ -389,6 +399,8 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     this.form.reset();
     this.warehouse.enable();
     this.stockRecords.clear();
+    this.csvDialog.form.reset();
+    this.resetStockRecordDialog();
   }
 
   confirmModal() {
@@ -490,7 +502,10 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
                 mappedValue.reason = 'opname';
               }
               if (!isNumeric(mappedValue.qty)) {
-                this.invalidCsv.push(mappedValue);
+                this.invalidCsv.push({
+                  reason: 'Wrong Qty',
+                  data: mappedValue
+                });
                 return;
               }
 
@@ -530,7 +545,10 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
                   });
                   this.stockRecords.push(newReceiving);
                 } else {
-                  this.invalidCsv.push(mappedValue);
+                  this.invalidCsv.push({
+                    reason: 'No Delivery Order/Stock Record found',
+                    data: mappedValue
+                  });
                 }
               });
             });
@@ -568,5 +586,39 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
       this.stockRecords.controls[this.stockRecordDialog.stockRecordIndex] = newReceiving;
       this.ref.detectChanges();
     }
+  }
+
+  resetStockRecordDialog(): void {
+    this.stockRecordDialog.displayedResults = null;
+    this.stockRecordDialog.stockRecordIndex = null;
+    this.stockRecordDialog.stockRecordData = null;
+  }
+
+  getInvalidCsv() {
+    const forExport = [];
+    let fields = [];
+    if (this.invalidCsv.length > 0) {
+      if (this.csvDialog.hasCsvHeader) {
+        fields = [
+          this.csvDialog.columnChoices['upc'],
+          this.csvDialog.columnChoices['qty'],
+          this.csvDialog.columnChoices['reason'],
+          this.csvDialog.columnChoices['sku'],
+          this.csvDialog.columnChoices['notes'],
+          'import_status'];
+      }
+      for (const csvData of this.invalidCsv) {
+        const data = csvData['data'];
+        data['import_status'] = csvData['reason'];
+        forExport.push(data);
+      }
+
+      let csv = Papa.unparse(forExport, fields );
+      const blob = new Blob([csv], { type: 'text/plain' });
+      return this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(blob));
+    }
+
+    return '';
+
   }
 }
