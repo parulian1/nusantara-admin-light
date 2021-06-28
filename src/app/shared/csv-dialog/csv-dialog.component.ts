@@ -20,7 +20,7 @@ const logger = new Logger('CSVDialogComponent');
   selector: 'nus-csv-dialog',
   template: `
     <ngx-smart-modal [identifier]="'csvDialog'" #modal [customClass]="'wide-modal'">
-      <form [formGroup]="form">
+      <form [formGroup]="form" class="csv-dialog-form">
         <div *ngIf="currentStep == 'start'">
           <h2 class="heading-2">Choose CSV File (Step 1/2) </h2>
 
@@ -57,7 +57,7 @@ const logger = new Logger('CSVDialogComponent');
               </thead>
               <tbody>
               <tr>
-                <td>UPC</td>
+                <td class="label-td">UPC</td>
                 <td style="border: none;"></td>
                 <td>
                   <div >
@@ -73,7 +73,7 @@ const logger = new Logger('CSVDialogComponent');
                 </td>
               </tr>
               <tr>
-                <td>Adjusted Qty</td>
+                <td class="label-td">Adjusted Qty</td>
                 <td style="border: none;"></td>
                 <td>
                   <div>
@@ -88,7 +88,7 @@ const logger = new Logger('CSVDialogComponent');
                 </td>
               </tr>
               <tr>
-                <td>Reason</td>
+                <td class="label-td">Reason</td>
                 <td style="border: none;"></td>
                 <td>
                   <div>
@@ -104,7 +104,7 @@ const logger = new Logger('CSVDialogComponent');
                 </td>
               </tr>
               <tr>
-                <td>SKU</td>
+                <td class="label-td">SKU</td>
                 <td style="border: none;"></td>
                 <td>
                   <div>
@@ -120,7 +120,7 @@ const logger = new Logger('CSVDialogComponent');
                 </td>
               </tr>
               <tr>
-                <td>Notes</td>
+                <td class="label-td">Notes</td>
                 <td style="border: none;"></td>
                 <td>
                   <div >
@@ -154,6 +154,11 @@ const logger = new Logger('CSVDialogComponent');
       min-height: 50vh;
     }
 
+    .csv-dialog-form {
+      width: 100%;
+      max-width: none;
+    }
+
     .csv-dialog-actions button {
       margin-right: 8px;
     }
@@ -165,13 +170,28 @@ const logger = new Logger('CSVDialogComponent');
       border-spacing: 8px;
     }
 
-    .mapping-table td > div {
-      border: 1px solid #B4B4B4;
-      border-radius: 4px;
+    .mapping-table tbody td {
+      border-bottom: none;
+      outline: none;
+      padding: 0;
     }
 
-    .mapping-table td > div > select {
+    .mapping-table tbody td.label-td {
+      border: 1px solid #B4B4B4;
+      border-radius: 4px;
+      outline: none;
+      padding-left: 4px;
+    }
+
+    .mapping-table tbody td div {
       border: none;
+      outline: none;
+    }
+
+    .mapping-table tbody td div select {
+      cursor: pointer;
+      border: 1px solid #B4B4B4;
+      border-radius: 4px;
       outline: none;
     }
 
