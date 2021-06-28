@@ -123,9 +123,9 @@ import {DomSanitizer} from '@angular/platform-browser';
       <div class="product-list" *ngIf="warehouse.disabled && adjustmentMode === 'csv'">
         <div *ngIf="invalidCsv.length > 0">
           <div>
-            <a [href]="getInvalidCsv()" target="_blank">Get invalid csv ({{invalidCsv.length}} records)</a>
+            <a [href]="getInvalidCsv()" target="_blank" class="error-detail">Get invalid csv ({{invalidCsv.length}} records)</a>
           </div>
-          <div *ngFor="let iCsv of invalidCsv">
+          <div *ngFor="let iCsv of invalidCsv" hidden="true">
               {{iCsv.reason}} - {{iCsv.data['upc']}}
           </div>
         </div>
