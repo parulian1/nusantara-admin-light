@@ -2,13 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, Validators} from '@angular/forms';
 import {
   IWarehouse,
   marketplace,
-  IError
+  IError, ISubLocation
 } from '@nusantara/models';
-import { IReceivingOrder } from '@nusantara/models/inventory';
+import {IReceivingOrder, IStockRecord} from '@nusantara/models/inventory';
 import { AbstractDetailComponent } from '@nusantara/core/components';
 import {
   InventoryReceivingOrderService,
@@ -21,6 +21,7 @@ import {
 } from '@nusantara/shared';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import {IProduct, IProductClass} from '@nusantara/models/products';
 
 
 @Component({
@@ -32,27 +33,37 @@ import { catchError } from 'rxjs/operators';
     <p style="margin-bottom: 24px;">Edit shipping method for each product. Skip this step if you don't want to change anything.</p>
     <table id="general-table-info">
       <thead>
-            <th>Type</th>
-            <th>Status</th>
-            <th>Warehouse</th>
-            <th>Created By</th>
-            <th>Reviewed By</th>
-            <th>Date</th>
+        <th>DO Number</th>
+        <th>PIC Sender</th>
+        <th>Type</th>
+        <th>Status</th>
+        <th>Warehouse</th>
+        <th>Created By</th>
+        <th>Reviewed By</th>
+        <th>Date</th>
       </thead>
       <tbody>
-            <td>{{entity.type}}</td>
-            <td>{{entity.status}}</td>
-            <td>
-              <a (click)="showWarehouseDetail()">{{entity.warehouse.name}}</a>
-            </td>
+        <td>
+          <span *ngIf="!entity.doNumber">-</span>
+          <span>{{entity.doNumber}}</span>
+        </td>
+        <td>
+          <span *ngIf="!entity.dcPic">-</span>
+          <span>{{entity.dcPic}}</span>
+        </td>
+        <td>{{entity.type}}</td>
+        <td>{{entity.status}}</td>
+        <td>
+          <a (click)="showWarehouseDetail()">{{entity.warehouse.name}}</a>
+        </td>
 
-            <td *ngIf="!entity.createdBy?.name">-</td>
-            <td *ngIf="entity.createdBy?.name">{{entity.createdBy?.name}}</td>
+        <td *ngIf="!entity.createdBy?.name">-</td>
+        <td *ngIf="entity.createdBy?.name">{{entity.createdBy?.name}}</td>
 
-            <td *ngIf="!entity.reviewedBy?.name">-</td>
-            <td *ngIf="entity.reviewedBy?.name">{{entity.reviewedBy?.name}}</td>
+        <td *ngIf="!entity.reviewedBy?.name">-</td>
+        <td *ngIf="entity.reviewedBy?.name">{{entity.reviewedBy?.name}}</td>
 
-            <td>{{entity.created | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+        <td>{{entity.created | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
       </tbody>
     </table>
     <ul class="non-field-errors" *ngIf="!!nonFieldErrors.length">
@@ -60,50 +71,93 @@ import { catchError } from 'rxjs/operators';
     </ul>
 
     <form [formGroup]="form" (ngSubmit)="save()">
-      <table id="general-table-product">
+      <table *ngIf="entity.status !== 'pending'" class="general-table-product">
         <thead>
         <tr>
           <th>
               Product
           </th>
-          <th>Location</th>
-          <th>sku</th>
-          <th>Locator</th>
+          <th>SKU</th>
           <th>Original Quantity</th>
+          <th>Location</th>
+          <th>Locator</th>
           <th>Stock Requested</th>
           <th>Batch Number</th>
           <th>Expiry Date</th>
+          <th>Cost</th>
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let stock_record of entity.stockRecords">
-          <td data-qa="product">
-            <div>{{ stock_record.product.name }}</div>
-          </td>
-          <td>
-            <div>{{ stock_record.location.name }}</div>
-          </td>
-          <td>
-            <div>{{ stock_record.sku }}</div>
-          </td>
-          <td>
-            {{ stock_record.locator }}
-          </td>
-          <td data-qa="original-quantity">
-            {{ stock_record.originalQuantity }}
-          </td>
-          <td data-qa="stock-requested">
-            {{ stock_record.requestingStock }}
-          </td>
-          <td>
-            {{ stock_record.batchNumber }}
-          </td>
-          <td>
-            {{ stock_record.expiryDate|date: 'dd MMM yyyy HH:mm' }}
-          </td>
-        </tr>
+          <tr *ngFor="let stock_record of entity.stockRecords">
+            <td data-qa="product">
+              <div>{{ stock_record.product.name }}</div>
+            </td>
+            <td>
+              <div>{{ stock_record.sku }}</div>
+            </td>
+            <td data-qa="original-quantity">
+              {{ stock_record.originalQuantity }}
+            </td>
+            <td>
+              <ng-container *ngIf="!stock_record.location"> - </ng-container>
+              <ng-container *ngIf="stock_record.location">{{ stock_record.location?.name }}</ng-container>
+            </td>
+            <td>
+              <ng-container *ngIf="!stock_record.locator"> - </ng-container>
+              <ng-container *ngIf="stock_record.locator">{{ stock_record.locator }}</ng-container>
+            </td>
+            <td data-qa="stock-requested">
+              {{ stock_record.requestingStock }}
+            </td>
+            <td>
+              <ng-container *ngIf="!stock_record.batchNumber"> - </ng-container>
+              <ng-container *ngIf="stock_record.batchNumber">{{ stock_record.batchNumber }}</ng-container>
+            </td>
+            <td>
+              <ng-container *ngIf="!stock_record.expiryDate"> - </ng-container>
+              <ng-container *ngIf="stock_record.expiryDate">{{ stock_record.expiryDate|date: 'dd MMM yyyy HH:mm' }}</ng-container>
+            </td>
+            <td>
+              <ng-container *ngIf="!stock_record.cost"> - </ng-container>
+              <ng-container *ngIf="stock_record.cost">{{ stock_record.cost | currency:'IDR':'symbol-narrow':'1.0' }}</ng-container>
+            </td>
+          </tr>
         </tbody>
       </table>
+      <table *ngIf="entity.status === 'pending'" class="general-table-product">
+        <thead>
+          <tr>
+            <th>Product (UPC)</th>
+            <th>SKU</th>
+            <th>Quantity</th>
+            <th>Location</th>
+            <th>Locator</th>
+            <th>Batch</th>
+            <th>Expiry Date</th>
+            <th>Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <nus-inventory-receiving-detail-item
+            *ngFor="let rec of stockRecords.controls; let i=index"
+            [form]="rec"
+            [availableSubLocations]="availableSubLocations">
+          </nus-inventory-receiving-detail-item>
+        </tbody>
+      </table>
+      <div>
+        <label>
+          <span>Notes (Optional)</span>
+          <ng-container *ngIf="entity.status === 'pending'">
+            <input type="text" [formControl]="notes" placeholder="Input Notes">
+            <nus-field-errors [control]="notes"></nus-field-errors>
+          </ng-container>
+          <ng-container *ngIf="entity.status !== 'pending'">
+            <p *ngIf="entity.notes">{{entity.notes}}</p>
+            <p *ngIf="!entity.notes"> - </p>
+          </ng-container>
+        </label>
+      </div>
       <div class="detail-actions">
         <button type="button" (click)="approve()" [disabled]="entity.status !== 'pending'" class="control" id="confirm-button">
           Approve
@@ -122,15 +176,15 @@ import { catchError } from 'rxjs/operators';
   styles: [
     'button:not(:first-child) { margin-left: 5px; }',
     'form{max-width: none;}',
-    '#general-table-info, #general-table-product{margin-bottom: 30px;height: 80px;border-radius: 8px}',
+    '#general-table-info, .general-table-product{margin-bottom: 30px;height: 80px;border-radius: 8px}',
     'a{background:none;border:none;cursor: pointer;font-weight: 700;}',
     '#general-table-info th{text-align: left;font-weight: 400;}',
     '#general-table-info td{text-align: left;font-weight: 700;color: #5A5A5A;}',
-    '#general-table-product th{font-weight: 700;color: #5A5A5A;}',
-    '#general-table-product td{height: 56px}',
-    '#general-table-product td div{white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}',
-    '#general-table-product thead{background-color: #F4F4F4;}',
-    'table#general-table-product{table-layout: fixed;}',
+    '.general-table-product th{font-weight: 700;color: #5A5A5A;}',
+    '.general-table-product td{height: 56px}',
+    '.general-table-product td div{white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}',
+    '.general-table-product thead{background-color: #F4F4F4;}',
+    'table.general-table-product{table-layout: fixed;}',
     'div.detail-actions { display: flex }',
     'button.danger { margin-left: auto }'
   ]
@@ -140,6 +194,8 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
   warehouses: IWarehouse[];
   warehouseDetail: marketplace.IWarehouseDetail[];
   marketplaceValue = 0;
+  availableSubLocations: ISubLocation[] = [];
+  productClasses: IProductClass[] = [];
 
   @ViewChild(MarketplaceChannelInfoModalComponent) marketplaceChannelInfo: MarketplaceChannelInfoModalComponent;
   @ViewChild(ConfirmModalPendingOrderComponent) marketplaceProgressModal: ConfirmModalPendingOrderComponent;
@@ -162,13 +218,34 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
           this.marketplaceValue = data.totalMarketplace;
         }
       );
+    this.route.data.subscribe((data: { warehouses: IWarehouse[], productClasses: IProductClass[] }) => {
+      this.warehouses = data.warehouses;
+      this.productClasses = data.productClasses;
+      const wh = this.warehouses.filter(e => e.href === this.entity.warehouse.href)[0];
+      if (wh) {
+        this.availableSubLocations = wh.subLocations;
+      }
+    });
+    this.entity.stockRecords.forEach( (lineItem: IStockRecord) => {
+      this.receivingItem(lineItem);
+    });
+  }
+
+  get stockRecords(): FormArray {
+    return this.form.get('stockRecords') as FormArray;
+  }
+
+  get notes(): FormControl {
+    return this.form.get('notes') as FormControl;
   }
 
   initializeForm(entity: IReceivingOrder) {
     this.entity = entity;
     this.form = this.fb.group({
       href: [entity.href, []],
+      stockRecords: this.fb.array([], []),
       status: [entity?.status, []],
+      notes: [entity?.notes, []]
     });
   }
 
@@ -217,5 +294,37 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
   }
   cancel() {
     this.location.back();
+  }
+
+  receivingItem(entity: IStockRecord) {
+    const item = entity;
+    const product = item.product as IProduct;
+
+    let selectedSubLocations;
+    if (item.location !== null) {
+      selectedSubLocations = item.location.href;
+    } else {
+      selectedSubLocations = null;
+    }
+
+    const stockRecord = this.fb.group({
+      inventoryReceiving: [null, []],
+      product: [product, [Validators.required]],
+      href: [item.href, []],
+      location: this.fb.group({
+        href: [selectedSubLocations, [Validators.required]],
+      }),
+      sku: [item.sku, []],
+      originalQuantity: [item.originalQuantity, [Validators.required, Validators.min(1)]],
+      batchNumber: [item.batchNumber, []],
+      locator: this.fb.array([]),
+      expiryDate: [item.expiryDate, []],
+      cost: [item.cost, []]
+    });
+    item.locator.forEach( (data) => {
+      const locator = stockRecord.get('locator') as FormArray;
+      locator.push(new FormControl(data, []));
+    });
+    this.stockRecords.push(stockRecord);
   }
 }
