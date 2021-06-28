@@ -9,7 +9,7 @@ import { IProductClass } from '../../../models/products';
   selector: 'nus-inventory-receiving-line',
   template: `
     <tr [formGroup]="form">
-      <td><a>{{ displayedProductName }} {{form.hasError('apiError') ? form.getError('apiError')[0]: 'false'}}</a></td>
+      <td><a>{{ displayedProductName }}</a></td>
       <td class="immediate-error-display" [formGroup]="location">
         <select formControlName="href" data-qa="location">
           <option [ngValue]="null">---</option>
