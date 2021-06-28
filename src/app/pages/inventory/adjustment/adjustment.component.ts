@@ -270,6 +270,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   parsedCsv: any;
   adjustmentMode = 'manual';
   invalidCsv = [];
+  upcList = [];
 
   constructor(private fb: FormBuilder,
               public toast: ToastService,
@@ -515,6 +516,21 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
                 receiving_order_status: ReceivingOrderStatusChoices.APPROVED,
               };
               const upc = this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['upc']] : value[+(this.csvDialog.columnChoices['upc']) - 1];
+              if (upc.length < 2) {
+                this.invalidCsv.push({
+                  reason: 'UPC data too short',
+                  data: mappedValue
+                });
+                return;
+              }
+              if (this.upcList.indexOf(upc) >= 0) {
+                this.invalidCsv.push({
+                  reason: 'Duplicate UPC',
+                  data: mappedValue
+                });
+                return;
+              }
+              this.upcList.push(upc);
               this.inventoryService.fetchListWithFilter(
                 upc, 1, 20, filters
               ).subscribe(res => {
@@ -613,7 +629,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
         forExport.push(data);
       }
 
-      let csv = Papa.unparse(forExport, fields );
+      let csv = Papa.unparse(forExport );
       const blob = new Blob([csv], { type: 'text/plain' });
       return this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(blob));
     }

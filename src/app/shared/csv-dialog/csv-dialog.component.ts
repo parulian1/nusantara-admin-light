@@ -67,8 +67,9 @@ const logger = new Logger('CSVDialogComponent');
                         {{ option.displayName }}
                       </option>
                     </select>
-                    <span *ngIf="upc.hasError('duplicate')">duplicated mapping</span>
                   </div>
+                  <span *ngIf="upc.hasError('duplicate')">Can be mapped to one attribute only</span>
+
                 </td>
               </tr>
               <tr>
@@ -82,8 +83,8 @@ const logger = new Logger('CSVDialogComponent');
                         {{ option.displayName }}
                       </option>
                     </select>
-                    <span *ngIf="qty.hasError('duplicate')">duplicated mapping</span>
                   </div>
+                  <span *ngIf="qty.hasError('duplicate')" class="error-detail">Can be mapped to one attribute only</span>
                 </td>
               </tr>
               <tr>
@@ -97,8 +98,9 @@ const logger = new Logger('CSVDialogComponent');
                         {{ option.displayName }}
                       </option>
                     </select>
-                    <span *ngIf="reason.hasError('duplicate')">duplicated mapping</span>
+
                   </div>
+                  <span *ngIf="reason.hasError('duplicate')" class="error-detail">Can be mapped to one attribute only</span>
                 </td>
               </tr>
               <tr>
@@ -112,8 +114,9 @@ const logger = new Logger('CSVDialogComponent');
                         {{ option.displayName }}
                       </option>
                     </select>
-                    <span *ngIf="sku.hasError('duplicate')">duplicated mapping</span>
+
                   </div>
+                  <span *ngIf="sku.hasError('duplicate')" class="error-detail">Can be mapped to one attribute only</span>
                 </td>
               </tr>
               <tr>
@@ -127,8 +130,9 @@ const logger = new Logger('CSVDialogComponent');
                         {{ option.displayName }}
                       </option>
                     </select>
-                    <span *ngIf="notes.hasError('duplicate')">duplicated mapping</span>
+
                   </div>
+                  <span *ngIf="notes.hasError('duplicate')" class="error-detail">Can be mapped to one attribute only</span>
                 </td>
               </tr>
               </tbody>
@@ -161,7 +165,7 @@ const logger = new Logger('CSVDialogComponent');
       border-spacing: 8px;
     }
 
-    .mapping-table td {
+    .mapping-table td > div {
       border: 1px solid #B4B4B4;
       border-radius: 4px;
     }

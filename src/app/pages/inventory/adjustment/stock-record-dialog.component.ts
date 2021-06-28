@@ -6,7 +6,6 @@ import {Subscription} from 'rxjs';
 import {IStockRecord} from '@nusantara/models/inventory';
 import {InventoryStockRecordService} from '@nusantara/services';
 import {getSlugFromHref} from '@nusantara/shared/helpers';
-import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'nus-stock-record-dialog',

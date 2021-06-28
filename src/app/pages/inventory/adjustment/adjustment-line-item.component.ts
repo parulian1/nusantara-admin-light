@@ -76,7 +76,7 @@ import {IStockRecord} from '@nusantara/models/inventory';
         <button
           *ngIf="adjustmentMode !== 'manual' && csvData.page.totalResults > 1"
           (click)="resolveConflict(index, csvData)" type="button" class="resolve-button" data-qa="resolve-button">
-          Resolve Conflict
+          <span class="material-icons">warning</span>Update
         </button>
       </td>
     </tr>
@@ -87,7 +87,8 @@ import {IStockRecord} from '@nusantara/models/inventory';
     'td:nth-child(3) input { width: 70px; }', // quantity
     'td:nth-child(8) input { width: 105px; }', // cost
     'td>div>input {float: left; width: 80%;}',
-    'td>div>button {float: left; width: 20%;}'
+    'td>div>button {float: left; width: 20%;}',
+    'resolve-button { border: none;}'
   ]
 })
 export class AdjustmentLineItemComponent implements OnInit, AfterViewInit {
