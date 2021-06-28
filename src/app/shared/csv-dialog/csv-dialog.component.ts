@@ -311,10 +311,10 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
     const file: File = $event.target.files[0];
     console.log('size', file.size);
     console.log('type', file.type);
-    if (file.type !== 'text/csv') {
-      alert('File type invalid');
-      return;
-    }
+    // if (file.type !== 'text/csv') {
+    //   alert('File type invalid');
+    //   return;
+    // }
     const target: DataTransfer = $event.target as DataTransfer;
     this.fileTarget = target;
     this.fileName = $event.target.value;
