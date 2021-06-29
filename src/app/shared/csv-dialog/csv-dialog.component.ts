@@ -293,7 +293,7 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
       csvNoHeader: this.fb.control({value: false, disabled: true}),
       upc: this.fb.control({value: null}, [Validators.required, ]),
       qty: this.fb.control({value: null}, [Validators.required, ]),
-      reason: this.fb.control({value: null}, [Validators.required, ]),
+      reason: this.fb.control({value: null}, []),
       sku: this.fb.control({value: null}, ),
       notes: this.fb.control({value: null}, ),
     });
