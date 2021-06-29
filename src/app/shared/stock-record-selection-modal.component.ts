@@ -46,7 +46,7 @@ import { map } from 'rxjs/operators';
           <tbody *ngIf="displayedResults; else loading">
           <tr *ngFor="let p of displayedResults?.entities">
             <td class="product-name">
-              {{ displayReceivingID(p.receivingOrder.href) }} / {{ p.product.name }} / {{ p.location.name }}
+              {{ displayReceivingID(p?.receivingOrder?.href) }} / {{ p?.product?.name }} / {{ p?.location?.name }}
             </td>
             <td class="product-sku">{{ p.sku }}</td>
             <td class="stock-date">{{ p.expiryDate | date }}</td>

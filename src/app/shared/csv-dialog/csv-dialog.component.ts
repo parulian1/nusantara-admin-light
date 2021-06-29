@@ -104,7 +104,7 @@ const logger = new Logger('CSVDialogComponent');
                 </td>
               </tr>
               <tr>
-                <td class="label-td">SKU</td>
+                <td class="label-td">SKU (Optional)</td>
                 <td style="border: none;"></td>
                 <td>
                   <div>
