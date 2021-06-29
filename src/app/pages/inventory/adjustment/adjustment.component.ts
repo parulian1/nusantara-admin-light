@@ -24,7 +24,7 @@ import * as Papa from 'papaparse';
 import {HttpParams} from '@angular/common/http';
 import {StockRecordDialogComponent} from '@nusantara/pages/inventory/adjustment/stock-record-dialog.component';
 import {ChangeDetectorRef} from '@angular/core';
-import { isNumeric } from 'rxjs/internal/util/isNumeric';
+import {isNumeric} from 'rxjs/internal/util/isNumeric';
 import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
@@ -123,10 +123,11 @@ import {DomSanitizer} from '@angular/platform-browser';
       <div class="product-list" *ngIf="warehouse.disabled && adjustmentMode === 'csv'">
         <div *ngIf="invalidCsv.length > 0">
           <div>
-            <a [href]="getInvalidCsv()" target="_blank" class="error-detail">Get invalid csv ({{invalidCsv.length}} records)</a>
+            <a [href]="getInvalidCsv()" target="_blank" class="error-detail">Get invalid csv ({{invalidCsv.length}}
+              records)</a>
           </div>
           <div *ngFor="let iCsv of invalidCsv" hidden="true">
-              {{iCsv.reason}} - {{iCsv.data['upc']}}
+            {{iCsv.reason}} - {{iCsv.data['upc']}}
           </div>
         </div>
         <table>
@@ -491,19 +492,44 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
           complete: (results) => {
             this.csvData = [];
             this.parsedCsv = results;
+
             results.data.map((value, key) => {
+
+              let mappedHeaderReason = 'opname';
+              if (value) {
+
+                let reason = 'opname';
+                if (this.csvDialog.hasCsvHeader) {
+                  reason = value.Reason;
+                } else {
+                  reason = value[3];
+                }
+
+                if (reason === '' || reason === null || reason === undefined) {
+                  mappedHeaderReason = 'opname';
+                }
+
+                const isReasonDisplayName = this.reasonChoices.find(v => v.displayName === reason);
+                const isReasonValue = this.reasonChoices.find(v => v.value === reason);
+
+                if (isReasonDisplayName !== undefined) {
+                  mappedHeaderReason = isReasonDisplayName.value;
+                }
+
+                if (isReasonValue !== undefined) {
+                  mappedHeaderReason = isReasonValue.value;
+                }
+
+              }
+
               const mappedValue = {
                 upc: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['upc']] : value[+(this.csvDialog.columnChoices['upc']) - 1],
                 qty: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['qty']] : value[+(this.csvDialog.columnChoices['qty']) - 1],
-                reason: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['reason']] : value[+(this.csvDialog.columnChoices['reason']) - 1],
+                reason: mappedHeaderReason,
                 sku: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['sku']] : value[+(this.csvDialog.columnChoices['sku']) - 1],
                 notes: this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['notes']] : value[+(this.csvDialog.columnChoices['notes']) - 1]
               };
-              const isRandomReason = this.reasonChoices.find(v => mappedValue.reason === v.value);
 
-              if (mappedValue.reason === '' || isRandomReason === undefined) {
-                mappedValue.reason = 'opname';
-              }
               if (!isNumeric(mappedValue.qty)) {
                 this.invalidCsv.push({
                   reason: 'Wrong Qty',
@@ -631,8 +657,8 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
         forExport.push(data);
       }
 
-      let csv = Papa.unparse(forExport );
-      const blob = new Blob([csv], { type: 'text/plain' });
+      let csv = Papa.unparse(forExport);
+      const blob = new Blob([csv], {type: 'text/plain'});
       return this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(blob));
     }
 

@@ -60,7 +60,7 @@ const logger = new Logger('CSVDialogComponent');
                 <td class="label-td">UPC</td>
                 <td style="border: none;"></td>
                 <td>
-                  <div >
+                  <div>
                     <select [formControl]="upc" (change)="selectColumn('upc', $event)">
                       <option [ngValue]="null">Select</option>
                       <option *ngFor="let option of availableOptions" [ngValue]="option.value">
@@ -84,7 +84,8 @@ const logger = new Logger('CSVDialogComponent');
                       </option>
                     </select>
                   </div>
-                  <span *ngIf="qty.hasError('duplicate')" class="error-detail">Can be mapped to one attribute only</span>
+                  <span *ngIf="qty.hasError('duplicate')"
+                        class="error-detail">Can be mapped to one attribute only</span>
                 </td>
               </tr>
               <tr>
@@ -100,7 +101,8 @@ const logger = new Logger('CSVDialogComponent');
                     </select>
 
                   </div>
-                  <span *ngIf="reason.hasError('duplicate')" class="error-detail">Can be mapped to one attribute only</span>
+                  <span *ngIf="reason.hasError('duplicate')"
+                        class="error-detail">Can be mapped to one attribute only</span>
                 </td>
               </tr>
               <tr>
@@ -116,14 +118,15 @@ const logger = new Logger('CSVDialogComponent');
                     </select>
 
                   </div>
-                  <span *ngIf="sku.hasError('duplicate')" class="error-detail">Can be mapped to one attribute only</span>
+                  <span *ngIf="sku.hasError('duplicate')"
+                        class="error-detail">Can be mapped to one attribute only</span>
                 </td>
               </tr>
               <tr>
                 <td class="label-td">Notes (Optional)</td>
                 <td style="border: none;"></td>
                 <td>
-                  <div >
+                  <div>
                     <select [formControl]="notes" (change)="selectColumn('notes', $event)">
                       <option [ngValue]="null">Select</option>
                       <option *ngFor="let option of availableOptions" [ngValue]="option.value">
@@ -132,7 +135,8 @@ const logger = new Logger('CSVDialogComponent');
                     </select>
 
                   </div>
-                  <span *ngIf="notes.hasError('duplicate')" class="error-detail">Can be mapped to one attribute only</span>
+                  <span *ngIf="notes.hasError('duplicate')"
+                        class="error-detail">Can be mapped to one attribute only</span>
                 </td>
               </tr>
               </tbody>
@@ -291,11 +295,11 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
   initializeForm() {
     this.form = this.fb.group({
       csvNoHeader: this.fb.control({value: false, disabled: true}),
-      upc: this.fb.control({value: null}, [Validators.required, ]),
-      qty: this.fb.control({value: null}, [Validators.required, ]),
+      upc: this.fb.control({value: null}, [Validators.required,]),
+      qty: this.fb.control({value: null}, [Validators.required,]),
       reason: this.fb.control({value: null}, []),
-      sku: this.fb.control({value: null}, ),
-      notes: this.fb.control({value: null}, ),
+      sku: this.fb.control({value: null},),
+      notes: this.fb.control({value: null},),
     });
 
     this.form.controls.csvNoHeader.markAsTouched();
@@ -349,7 +353,9 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
       if (!!this.fileTarget) {
         return false;
       }
-    } else if (this.currentStep === 'mapping') {
+    }
+
+    if (this.currentStep === 'mapping') {
       if (this.form.valid) {
         return false;
       }
@@ -364,6 +370,7 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
       this.hasCsvHeader = this.csvNoHeader.value === false;
       this.parseCsv();
     } else {
+      this.disabledCheck();
       this.close();
     }
   }
