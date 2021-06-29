@@ -88,7 +88,7 @@ const logger = new Logger('CSVDialogComponent');
                 </td>
               </tr>
               <tr>
-                <td class="label-td">Reason</td>
+                <td class="label-td">Reason (Optional)</td>
                 <td style="border: none;"></td>
                 <td>
                   <div>
@@ -120,7 +120,7 @@ const logger = new Logger('CSVDialogComponent');
                 </td>
               </tr>
               <tr>
-                <td class="label-td">Notes</td>
+                <td class="label-td">Notes (Optional)</td>
                 <td style="border: none;"></td>
                 <td>
                   <div >

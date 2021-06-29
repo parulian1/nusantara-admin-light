@@ -402,6 +402,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     this.stockRecords.clear();
     this.csvDialog.form.reset();
     this.invalidCsv = [];
+    this.upcList = [];
     this.resetStockRecordDialog();
   }
 
