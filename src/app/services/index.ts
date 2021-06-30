@@ -90,3 +90,4 @@ export * from './shopify';
 export * from './svg-icon.service';
 
 export  * from './default-pin-config.service';
+export * from './product-related.service';

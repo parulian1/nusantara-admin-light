@@ -18,3 +18,4 @@ export * from './product-option';
 export * from './product-option-type.enum';
 
 export * from './product-subscription';
+export * from './product-relation';

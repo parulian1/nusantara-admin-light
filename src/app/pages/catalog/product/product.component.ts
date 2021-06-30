@@ -7,23 +7,28 @@ import * as ClassicEditor from '@gdnnusantara/ckeditor5-build/build/ckeditor';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-
-import {
-  ToastService,
-  AbstractDetailComponent,
-  getSlugFromHref,
+import { SvgIconService } from '@nusantara/services';
+import { 
+  ToastService, 
+  AbstractDetailComponent, 
+  getSlugFromHref, 
   NusantaraValidators,
   ErrorResult,
-  Logger
+  Logger,
+  DialogResult,
+  ToastLevelEnum
 } from '@nusantara/core';
 import { ICategory, IVendor, drf, products } from '@nusantara/models';
 import { IError } from '@nusantara/models/base/error';
-import { ProductService, SiteConfigService } from '@nusantara/services';
+import { ProductService, SiteConfigService, ProductRelatedService } from '@nusantara/services';
 import { PriceListHostComponent } from './price';
 import { ProductMediaHostComponent } from './media';
 import { ProductAttributeHostComponent } from './attribute';
 import { ProductSubscriptonHostComponent } from './subscription';
 import { MarketplaceInfoHostComponent } from './marketplace';
+
+import { ProductSelectionModalComponent } from '@nusantara/shared';
+import { IProductRelation } from '@nusantara/models/products';
 
 const log = new Logger('ProductComponent');
 
@@ -296,6 +301,39 @@ const log = new Logger('ProductComponent');
             </ng-container>
           </div>
 
+          <div id="product-recommendation" class="wrapper">
+            <h1 class="heading-1">Product Recommendation</h1>
+            <table>
+              <thead>
+              <tr>
+                <th>Product</th>
+                <th>Remove</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let control of productRelated.controls; let i=index">
+                <td>
+                  <a [routerLink]="['/catalog','products', control.get('href').value|entityToSlug]" target="_blank">
+                  {{ control.get('name').value }}
+                  </a>
+                </td>
+                <td>
+                  <button (click)="removeRelated(i)" type="button" class="remove-button">
+                      <mat-icon class="icon" svgIcon="trash"></mat-icon>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <button type="button" (click)="selectProduct()" class="new-add-button wide">
+                    Add Product
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
           <nus-detail-actions
             [component]="this"
             (cancel)="navigateToParent(true)"
@@ -338,6 +376,9 @@ const log = new Logger('ProductComponent');
         </ul>
       </div>
     </div>
+
+    <!-- Modals -->
+    <nus-product-selection-modal></nus-product-selection-modal>
   `,
   styles: [
     '.container { display: grid; grid-template-columns: 3fr 1fr; grid-column-gap: 24px; }',
@@ -423,6 +464,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     licenseKey: ''
   };
   selectedProductClass: products.IProductClass;
+  productRelatedSlug: string;
+  productSlug: string;
 
   @ViewChild(ProductMediaHostComponent) mediaHost!: ProductMediaHostComponent;
   @ViewChild(PriceListHostComponent) priceListHost!: PriceListHostComponent;
@@ -431,14 +474,23 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   @ViewChild(StockInputComponent) stockInput!: StockInputComponent;
   @ViewChild(MarketplaceInfoHostComponent) marketplaceHost!: MarketplaceInfoHostComponent;
 
+  @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
+
   constructor(service: ProductService,
               private fb: FormBuilder,
               route: ActivatedRoute,
               toast: ToastService,
+              private RelatedService: ProductRelatedService,
               private configSercvice: SiteConfigService,
               router: Router,
+              svgIconService: SvgIconService, 
               public modal: NgxSmartModalService) {
     super(route, router, toast, service);
+    svgIconService.registerIcons();
+  }
+
+  ngAfterViewInit() {
+    this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
   }
 
   get name(): FormControl {
@@ -525,6 +577,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     return this.form?.get('marketplace') as FormGroup;
   }
 
+  get productRelated(): FormArray {
+    return this.form.get('productRelated') as FormArray;
+  }
+
 
   get isProductOptionDomain(): boolean {
     let pc;
@@ -538,6 +594,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   ngOnInit(): void {
+    this.productSlug = this.route.snapshot.paramMap.get('slug');
     this.route.data.subscribe((
       data: {
         entity: products.IProduct, categories: ICategory[], parent: products.IProduct, vendors: IVendor[],
@@ -552,6 +609,14 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     });
 
     super.ngOnInit();
+  }
+
+  getSlugFromHref(href: string): string {
+    const r = /^.+\/(.+?)\/$/.exec(href);
+    if (r) {
+      return r[1];
+    }
+    return null;
   }
 
   /**
@@ -589,7 +654,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       seoMeta: [entity?.seoMeta, []],
       seoDescription: [entity?.seoDescription, []],
       tags: this.fb.array([], [NusantaraValidators.preventArrayDuplicates()]),
-      subscription: this.fb.group({})
+      subscription: this.fb.group({}),
+      productRelated: this.fb.array([]),
     });
 
     // new product variant
@@ -609,16 +675,14 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     this.variants = entity?.variants ?? [];
     this.originalAttributeValues = entity?.attributes ?? {};
 
-    for (const relatedProduct of entity?.related ?? []) {
-      this.related.push(
-        this.fb.control({
-          name: [relatedProduct.name],
-          href: [relatedProduct.href],
-          image: [relatedProduct.image],
-          vendor: [relatedProduct.vendor]
-        })
-      );
-    }
+    this.RelatedService.fetch(this.productSlug)
+      .subscribe((data: products.IProductRelation[]) => {
+        if(data){
+          for (const prod of data) {
+            this.addProductRelation(prod);
+          }
+        }
+      });
 
     for (const t of entity?.tags ?? []) {
       this.addTag(t);
@@ -665,7 +729,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
    */
   getFormValue(): any {
     const formValue = {};
+    this.form.value.productRelated.forEach(function(v){ delete v.name, delete v.href });
     Object.assign(formValue, this.form.value);
+
     if (!formValue.hasOwnProperty('attributes')) {
       formValue['attributes'] = {};
     } else {
@@ -847,5 +913,82 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   isValidForm(): boolean {
     return this.form.valid && this.priceListHost.validatePriceListHost();
+  }
+
+  selectProduct() {
+    this.productSelectionModal.open();
+  }
+
+  showErrorToast(err) {
+    this.toast?.addMessage(err.error.relation, 'error', ToastLevelEnum.error);
+  }
+
+  showInfoWindow(resp, action) {
+    if(action == "remove"){
+      this.toast?.addMessage(resp,'Successfully Removed', ToastLevelEnum.info);
+    } else {
+      this.toast?.addMessage(resp,'Successfully Add', ToastLevelEnum.success);
+    }
+  }
+
+  apiPostRelatedProduct(productValue, action, product,index=0){
+    delete productValue["name"];
+    delete productValue["href"];
+    let actionStatus = "add"
+
+    if (action == "remove"){
+      productValue["action"] = "remove";
+      actionStatus = "remove";
+    }
+    
+    this.RelatedService.post(productValue).subscribe(
+      (resp) => {
+        if (action == "add"){
+          // if "add" then it will be push to array
+          this.productRelated.push(product);
+        } else {
+          // this will remove from the table if remove sucess
+          this.productRelated.removeAt(index);
+        }
+        this.showInfoWindow(resp.status, actionStatus);
+      },
+      (err) => {
+        this.showErrorToast(err);
+      }
+    );
+  }
+
+  removeRelated(index: number) {
+    const prevRelated = this.productRelated.at(index).value;
+    const postRemove = this.apiPostRelatedProduct(prevRelated, "remove", this.productRelated, index);
+  }
+
+  addProductRelation(product: products.IProductRelation) {
+    this.productRelated.push(
+      this.fb.group({
+        primary: [getSlugFromHref(this.entity?.href)],
+        relation: [product.slug, []],
+        name: [product.name, []],
+        href: [product.href, []],
+        action: "add"
+      }));
+  }
+
+  onProductSelectionModalClosed() {
+    if (this.productSelectionModal.result === DialogResult.OK) {
+      const selectedProduct = this.productSelectionModal.product.value as products.IProductRelation;
+      const productRelatedSlug = getSlugFromHref(this.productSelectionModal.product.value.href);
+      const primarySlug = getSlugFromHref(this.entity?.href);
+
+      const f = this.fb.group({
+        primary: [primarySlug, []],
+        relation: [productRelatedSlug, []],
+        name: [selectedProduct.name, []],
+        href: [selectedProduct.href, []],
+        action: "add"
+      });
+
+      this.apiPostRelatedProduct(f.value, "add", f);      
+    }
   }
 }

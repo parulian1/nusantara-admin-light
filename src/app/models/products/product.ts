@@ -5,6 +5,7 @@ import { StructureType } from './structure.type';
 import { IVariantSummary } from './variant-summary';
 import { IRelatedProductSummary } from './related-product-summary';
 import { IProductSubscription } from './product-subscription';
+import { IProductRelation } from './product-relation';
 
 /**
  * Anything that is available for sale.
@@ -38,4 +39,5 @@ export interface IProduct extends INamedHrefEntity {
   isActive?: boolean;
   dimensions: IDimensions;
   inStock?: boolean;
+  productRelated: Array<IProductRelation>;
 }
