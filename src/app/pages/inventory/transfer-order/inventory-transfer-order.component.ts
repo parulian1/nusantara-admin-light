@@ -84,10 +84,11 @@ import { IProductClass } from '@nusantara/models/products';
 
           <nus-inventory-receiving-line
             *ngFor="let rec of stockRecords.controls; let i=index"
-            [form]="rec"
             [productClasses]="productClasses"
             [availableSubLocations]="availableSubLocations"
-            (remove)="stockRecords.removeAt(i)">
+            (remove)="stockRecords.removeAt(i)"
+            [formGroup]="rec"
+          >
           </nus-inventory-receiving-line>
 
           <tr>

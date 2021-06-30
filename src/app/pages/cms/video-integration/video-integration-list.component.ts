@@ -3,7 +3,7 @@ import { IVideoIntegrationItem } from '@nusantara/models/video-integration';
 import { ActivatedRoute } from '@angular/router';
 
 import { AbstractListComponent } from '@nusantara/core';
-import { youtubeUrl } from './utils';
+import {getYoutubeIdFromUrl, youtubeUrl} from './utils';
 
 @Component({
   selector: 'nus-video-integration-list',
@@ -35,6 +35,7 @@ import { youtubeUrl } from './utils';
         <td>
           <a target="_blank" [href]="entity.embededUrl">
             {{ entity.embededUrl }}
+            <img class="video-preview" [src]="getVideoThumbnail(entity.embededUrl)">
           </a>
         </td>
       </tr>
@@ -43,12 +44,16 @@ import { youtubeUrl } from './utils';
 
     <nus-pagination [page]="page"></nus-pagination>
   `,
-  styles: [``]
+  styles: [`
+    .video-preview {
+      max-width: 120px;
+    }
+  `]
 })
 export class VideoIntegrationListComponent extends AbstractListComponent<IVideoIntegrationItem> {
   constructor(route: ActivatedRoute) { super(route); }
 
-  youtube(youtubeId): string {
-    return youtubeUrl(youtubeId, true);
+  getVideoThumbnail(embededUrl: string) : string {
+    return `https://img.youtube.com/vi/${getYoutubeIdFromUrl(embededUrl)}/mqdefault.jpg`
   }
 }

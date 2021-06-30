@@ -7,6 +7,7 @@ import { SharedModule } from '@nusantara/shared';
 import {
   InventoryReceivingComponent,
   InventoryReceivingDetailComponent,
+  InventoryReceivingDetailItemComponent,
   LineItemComponent,
 } from './receiving';
 import { InventoryRoutingModule } from './inventory-routing.module';
@@ -23,6 +24,7 @@ import { StockRecordDialogComponent } from './adjustment/stock-record-dialog.com
   declarations: [
     InventoryReceivingComponent,
     InventoryReceivingDetailComponent,
+    InventoryReceivingDetailItemComponent,
     LineItemComponent,
 
     InventoryOrderListComponent,

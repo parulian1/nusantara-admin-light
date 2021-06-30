@@ -23,7 +23,7 @@ import {getLastUrlString} from '@nusantara/core/helpers';
 
       <label>
         <span>Title</span>
-        <input type="text" [formControl]="title">
+        <input type="text" [formControl]="title" data-qa="title">
         <nus-field-errors [control]="title"></nus-field-errors>
       </label>
 

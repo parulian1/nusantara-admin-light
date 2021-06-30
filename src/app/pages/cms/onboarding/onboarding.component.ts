@@ -1,7 +1,7 @@
 import { AfterViewChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractDetailComponent, ToastService } from '@nusantara/core';
 import { drf, IOnBoarding, IOnboardingContent, OnBoardingTypeEnum } from '@nusantara/models';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OnboardingService } from '@nusantara/services';
 import { OnboardingContentHostComponent } from './onboarding-content-host.component';
@@ -41,7 +41,8 @@ import { OnboardingPreviewHostDialogComponent } from './preview';
       </label>
 
       <nus-onboarding-content-host [form]="contents" [entity]="entity"></nus-onboarding-content-host>
-      <nus-onboarding-preview-host-dialog [form]="contents"></nus-onboarding-preview-host-dialog>
+      <nus-onboarding-preview-host-dialog [form]="contents" (closeEvent)="closePreview()">
+      </nus-onboarding-preview-host-dialog>
       <div class="action-button">
         <button (click)="preview()" type="button" class="preview-btn" [disabled]="!contents.length">
           <i class="material-icons">visibility</i>Preview
@@ -85,7 +86,6 @@ import { OnboardingPreviewHostDialogComponent } from './preview';
 export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> implements OnInit, AfterViewChecked {
   entity: IOnBoarding;
   typeChoices: drf.IChoice[] = [];
-  contentsValue: IOnboardingContent[];
 
   @ViewChild(OnboardingContentHostComponent) contentHost!: OnboardingContentHostComponent;
   @ViewChild(OnboardingPreviewHostDialogComponent) onboardingPreviewHostDialogComponent: OnboardingPreviewHostDialogComponent;
@@ -119,6 +119,7 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> im
 
   initializeForm(entity?: IOnBoarding) {
     this.entity = entity;
+
     this.form = this.fb.group({
       name: [entity?.name, [Validators.required, Validators.maxLength(100)]],
       href: [entity?.href, []],
@@ -148,20 +149,16 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> im
   }
 
   save() {
-    this.contentHost.getValue();
-    this.cleanData();
-    super.save();
-  }
-
-  cleanData() {
-    this.contents.controls.map((contentControl, index) => {
-      const formContentControl = (contentControl as FormGroup);
-      if (!contentControl.value.image.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
-        formContentControl.removeControl('image');
-      }
-      contentControl = formContentControl;
-    });
-
+    if (!this.form.invalid) {
+      const contentValues = this.contentHost.getValue();
+      contentValues.map((value) => {
+        if (!value['image'].match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
+          delete value['image'];
+        }
+      });
+      this.form.value.contents = contentValues;
+      super.save();
+    }
   }
 
   preview() {
@@ -169,6 +166,10 @@ export class OnboardingComponent extends AbstractDetailComponent<IOnBoarding> im
     this.contentHost.getValue();
     this.onboardingPreviewHostDialogComponent.form = this.contents;
     this.onboardingPreviewHostDialogComponent.open();
+  }
+
+  closePreview() {
+    this.onboardingPreviewHostDialogComponent.close();
   }
 
 }

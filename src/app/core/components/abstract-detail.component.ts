@@ -10,6 +10,7 @@ import { IHttpFailure } from '@nusantara/models';
 import { AbstractEditingComponent } from './abstract-editing.component';
 import { convertStringToObject, keysToCamel } from '@nusantara/shared/helpers';
 import { isObject } from 'rxjs/internal-compatibility';
+import { FormArray, FormGroup } from '@angular/forms';
 
 
 /**
@@ -107,7 +108,6 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
         }
       }
     );
-    this.form.disable();
   }
 
   /**
@@ -147,18 +147,17 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
    * Called when a save fails.
    */
   protected onSaveError(error: any) {
-    this.form.enable();
+    // if (this.form.disabled) this.form.enable();
     let errorMessage = '';
     const errorMessages: string[] = [];
 
-    if (error.errorDetails.errors) {
+    if (error.errorDetails?.errors) {
       this.setFormErrors(error.errorDetails.errors);
-    } else if (error.errorDetails.detail) {
-      errorMessage = error.errorDetails.detail;
-    } else if (error.errorDetails.message) {
+    } else if (error.errorDetails?.detail) {
+      errorMessage = error.errorDetails?.detail;
+    } else if (error.errorDetails?.message) {
       errorMessage = error.errorDetails.message;
-    }
-      else if (isObject(error.errorDetails)) {
+    } else if (isObject(error.errorDetails)) {
       this.getErrors(error.errorDetails, errorMessages);
       errorMessage = errorMessages.length > 0 ? errorMessages[0] : 'Please check your input again.';
       this.setFormErrors(error.errorDetails);
@@ -217,6 +216,37 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
       for (const prop in errorMessage) {
         if (errorMessage.hasOwnProperty(prop) && this.form.controls.hasOwnProperty(prop)) {
             this.form.controls[prop].setErrors({apiError: errorMessage[prop]});
+            errorMessage[prop].forEach((_error, index) => {
+              Object.keys(errorMessage[prop][index]).forEach((key) => {
+                let formArray = this.form.controls[prop] as FormArray;
+                Object.keys(errorMessage[prop][index][key]).forEach((bottomError) => {
+                  formArray?.controls?.map((control, arrayIndex) => {
+                    if (arrayIndex === index) {
+                      let childError = errorMessage[prop][index][key][bottomError];
+                      const childFormControl = (control as FormGroup).controls;
+                      let _control;
+                      if (childFormControl[key] instanceof FormArray) {
+                        _control = (childFormControl[key] as FormArray).controls[bottomError];
+                      } else if (childFormControl[key] instanceof FormGroup) {
+                         _control = ((control as FormGroup).controls[key] as FormGroup);
+                      } else {
+                        _control = childFormControl[key];
+                      }
+                      if (!!_control) {
+                        let apiError = childError;
+                        if (childError instanceof Array) {
+                          apiError = childError[0];
+                        }
+                        _control.setErrors({
+                          apiError: apiError
+                        });
+                      }
+                      control = _control;
+                    }
+                  });
+                });
+              });
+            });
         }
       }
     }
