@@ -402,6 +402,9 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     this.warehouse.enable();
     this.stockRecords.clear();
     this.csvDialog.form.reset();
+    this.csvDialog.csvNoHeader.disable();
+    this.csvDialog.csvNoHeader.setValue(false);
+    this.csvDialog.hasCsvHeader = false;
     this.invalidCsv = [];
     this.upcList = [];
     this.resetStockRecordDialog();
@@ -533,7 +536,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
               if (!isNumeric(mappedValue.qty)) {
                 this.invalidCsv.push({
                   reason: 'Wrong Qty',
-                  data: mappedValue
+                  data: value
                 });
                 return;
               }
@@ -542,6 +545,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
                 warehouse: getSlugFromHref(this.warehouse.value?.href),
                 sub_location: getSlugFromHref(this.subLocation.value?.href),
                 receiving_order_status: ReceivingOrderStatusChoices.APPROVED,
+                search_fields: 'product__upc'
               };
               const upc = this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['upc']] : value[+(this.csvDialog.columnChoices['upc']) - 1];
               if (upc.length < 2) {
@@ -554,12 +558,12 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
               if (this.upcList.indexOf(upc) >= 0) {
                 this.invalidCsv.push({
                   reason: 'Duplicate UPC',
-                  data: mappedValue
+                  data: value
                 });
                 return;
               }
               this.upcList.push(upc);
-              this.inventoryService.fetchListWithFilter(
+              this.inventoryService.fetchListWithFilterBackend(
                 upc, 1, 20, filters
               ).subscribe(res => {
                 // TODO: Validation
@@ -591,7 +595,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
                 } else {
                   this.invalidCsv.push({
                     reason: 'No Delivery Order/Stock Record found',
-                    data: mappedValue
+                    data: value
                   });
                 }
               });

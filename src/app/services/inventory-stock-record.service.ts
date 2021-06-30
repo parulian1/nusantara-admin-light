@@ -37,4 +37,23 @@ export class InventoryStockRecordService extends AbstractCrudService<IStockRecor
       .get<IStockRecord[]>(`${this.baseUrl}/`, {observe: 'response', responseType: 'json', params})
       .pipe(map(resp => new PagedResponse(resp)));
   }
+
+  fetchListWithFilterBackend(query?: string, page: number = 1, perPage?: number, filter = {}): Observable<PagedResponse<IStockRecord>> {
+    // create query params --> ?q=maybe&page=1
+    let params = new HttpParams({ fromObject: filter });
+
+    params = params.set('page', page.toFixed(0).toString());
+
+    if (perPage) {
+      params = params.set('per_page', perPage.toFixed(0).toString());
+    }
+
+    if (query) {
+      params = params.set('q', query);
+    }
+
+    return this.httpClient
+      .get<IStockRecord[]>(`/api/fulfillment/stock-record-search/`, {observe: 'response', responseType: 'json', params})
+      .pipe(map(resp => new PagedResponse(resp)));
+  }
 }

@@ -333,8 +333,7 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
 
   fileChange($event: any) {
     const file: File = $event.target.files[0];
-    console.log('size', file.size);
-    console.log('type', file.type);
+
     // if (file.type !== 'text/csv') {
     //   alert('File type invalid');
     //   return;
