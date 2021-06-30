@@ -846,6 +846,6 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   isValidForm(): boolean {
-    return this.form.valid && this.priceListHost.validatePriceListHost();
+    return this.form.valid && this.priceListHost?.validatePriceListHost();
   }
 }

@@ -43,6 +43,7 @@ import { FieldDatetimeComponent } from '@nusantara/shared/field-datetime.compone
 import { GetUserDisplayNamePipe } from './get-user-display-name.pipe';
 import { StockRecordSelectionModalComponent } from '@nusantara/shared/stock-record-selection-modal.component';
 import { ConfirmModalResetPinComponent } from '@nusantara/shared/confirm-modal-reset-pin.component';
+import { CsvDialogComponent } from './csv-dialog/csv-dialog.component';
 
 /**
  * The purpose of this module is to make common code (like pipes)
@@ -87,6 +88,7 @@ import { ConfirmModalResetPinComponent } from '@nusantara/shared/confirm-modal-r
     OrderType,
     OnlyNumberDirective,
     ConfirmModalResetPinComponent,
+    CsvDialogComponent,
   ],
   exports: [
     EntityToSlugPipe,
@@ -126,6 +128,7 @@ import { ConfirmModalResetPinComponent } from '@nusantara/shared/confirm-modal-r
     OnlyNumberDirective,
     OrderType,
     ConfirmModalResetPinComponent,
+    CsvDialogComponent,
   ],
   imports: [
     CommonModule,

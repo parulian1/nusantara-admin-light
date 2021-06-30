@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { NgxSmartModalComponent } from 'ngx-smart-modal';
 import { Subscription } from 'rxjs';
@@ -46,7 +46,7 @@ import { map } from 'rxjs/operators';
           <tbody *ngIf="displayedResults; else loading">
           <tr *ngFor="let p of displayedResults?.entities">
             <td class="product-name">
-              {{ displayReceivingID(p.receivingOrder.href) }} / {{ p.product.name }} / {{ p.location.name }}
+              {{ displayReceivingID(p?.receivingOrder?.href) }} / {{ p?.product?.name }} / {{ p?.location?.name }}
             </td>
             <td class="product-sku">{{ p.sku }}</td>
             <td class="stock-date">{{ p.expiryDate | date }}</td>
@@ -121,7 +121,7 @@ export class StockRecordSelectionModalComponent implements OnInit, AfterViewInit
   originalValue: string = null;
   filters = {};
 
-  isInStock = true;
+  @Input() isInStock = true;
 
   //
   constructor(

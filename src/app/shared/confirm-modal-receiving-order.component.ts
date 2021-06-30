@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, ViewChild } from '@angular/core';
-import { DialogResult } from '@nusantara/core';
-import { NgxSmartModalComponent } from 'ngx-smart-modal';
+import {Component, EventEmitter, Input, ViewChild} from '@angular/core';
+import {DialogResult} from '@nusantara/core';
+import {NgxSmartModalComponent} from 'ngx-smart-modal';
 
 /**
  * Simple confirmation modal dialog
@@ -23,7 +23,7 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
         </div>
       </div>
     </ngx-smart-modal>
-    `,
+  `,
   styles: [
     'h2 { margin-bottom: 11px; }',
     'p { color: var(--darken-grey); }',
@@ -39,6 +39,7 @@ export class ConfirmModalReceivingOrderComponent {
   result: DialogResult = DialogResult.Cancelled;
   @Input() title = 'Are You Sure?';
   @Input() content = 'The product you added will not be saved if you cancel.';
+  @Input() cancelWithoutReload: boolean;
 
   open() {
     this.modal.open();
@@ -55,7 +56,12 @@ export class ConfirmModalReceivingOrderComponent {
   }
 
   close() {
-    window.location.reload();
+    if (!!this.cancelWithoutReload && this.cancelWithoutReload === true) {
+      this.result = DialogResult.OK;
+      this.modal.close();
+    } else {
+      window.location.reload();
+    }
   }
 
   cancel() {

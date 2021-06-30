@@ -303,9 +303,6 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     });
     super.ngOnInit();
     this.smeLicensePaymentType();
-    this.type.valueChanges.subscribe(change => {
-      this.setCurrentTypeAndValidatorFields(change);
-    });
   }
 
   initializeForm(entity?: IPaymentGateway) {
@@ -350,6 +347,10 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     this.setLogoPreview(entity?.logo);
     this.setCurrentTypeAndValidatorFields(entity?.type);
     this.onInStoreChange(entity?.meta?.type);
+
+    this.type?.valueChanges.subscribe(change => {
+      this.setCurrentTypeAndValidatorFields(change);
+    });
   }
 
   addLineBank(value?: string) {
