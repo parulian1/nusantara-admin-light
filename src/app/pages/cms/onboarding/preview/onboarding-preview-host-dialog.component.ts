@@ -1,6 +1,6 @@
 import { AbstractEditingComponent, DialogResult } from '@nusantara/core';
-import { AbstractControl, FormArray, FormBuilder, Validators } from '@angular/forms';
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { NgxSmartModalComponent } from 'ngx-smart-modal';
 import { IOnboardingContent } from '@nusantara/models';
 
@@ -33,12 +33,11 @@ import { IOnboardingContent } from '@nusantara/models';
                     (click)="executeButtonAction(form.controls[position])">
               {{ getContentButtonText(form.controls[position]) }}
             </button>
-            <button *ngIf="!getContentButtonStatus(form.controls[position])" (click)="next()" type="button" class="button-next">Selanjutnya</button>
+            <button (click)="nextOrClose()" type="button" class="button-next" style="margin-left: 20px;">
+              {{ getButtonActionNextText(position) }}
+            </button>
           </div>
         </div>
-      </div>
-      <div class="content-content">
-
       </div>
 
     </ngx-smart-modal>
@@ -87,6 +86,7 @@ import { IOnboardingContent } from '@nusantara/models';
       padding: 0 20px;
       height: 140px;
       width: auto;
+      word-break: break-word;
     }
 
     h1 {
@@ -133,6 +133,10 @@ import { IOnboardingContent } from '@nusantara/models';
       box-shadow: none;
     }
 
+    ::ng-deep .content-container .nsm-content .nsm-body {
+      padding: 0px;
+    }
+
     input[type="radio"]:after {
       transform: none;
     }
@@ -160,6 +164,7 @@ export class OnboardingPreviewHostDialogComponent extends AbstractEditingCompone
   AfterViewInit {
   @Input() form: FormArray;
   @ViewChild('modal') modal: NgxSmartModalComponent;
+  @Output() closeEvent = new EventEmitter<any>();
 
   imagePreviewUrl: string;
 
@@ -229,27 +234,29 @@ export class OnboardingPreviewHostDialogComponent extends AbstractEditingCompone
   }
 
   getContentButtonStatus(formControl?: AbstractControl): boolean {
-    if (!!formControl && !!formControl.value.buttonStatus) {
+    if (!!formControl && formControl.value.buttonStatus) {
       return true;
     }
     return false;
   }
 
   getContentButtonText(formControl?: AbstractControl): string {
-    if (!!formControl && !!formControl.get('buttonText')) {
+    if (!!formControl && formControl.value.buttonText) {
       return formControl.value.buttonText;
     }
   }
 
   executeButtonAction(formControl?: AbstractControl) {
-    if (!!formControl && !!formControl.get('buttonStatus')) {
+    if (!!formControl && formControl.value.buttonStatus) {
       window.open(formControl.value.buttonUrl, '_blank');
     }
   }
 
-  next() {
+  nextOrClose() {
     if (this.position < (this.form.controls.length - 1)) {
       this.position += 1;
+    } else {
+      this.closeEvent.emit();
     }
   }
 
@@ -261,6 +268,16 @@ export class OnboardingPreviewHostDialogComponent extends AbstractEditingCompone
     super.setImagePreview(data, (dataAsUrl) => {
       this.imagePreviewUrl = dataAsUrl;
     });
+  }
+
+  getButtonActionNextText(position: number): string {
+    const formControlLength = this.form.controls.length;
+    if (position == 0 && position < formControlLength -1) {
+      return 'MULAI';
+    } else if (position > 0 && position < formControlLength - 1) {
+      return 'LANJUT';
+    }
+    return 'MULAI BERJUALAN';
   }
 
 }

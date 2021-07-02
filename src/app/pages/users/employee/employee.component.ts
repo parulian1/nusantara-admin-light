@@ -25,6 +25,7 @@ import { EmployeeWarehouseHostComponent } from './warehouse';
 import { EmployeeAccessGroupHostComponent } from './access-group';
 import { IJwtClaims } from '@nusantara/auth/models';
 import { ConfirmModalResetPinComponent } from '@nusantara/shared/confirm-modal-reset-pin.component';
+import { getSlugFromHref } from '@nusantara/shared/helpers';
 
 
 @Component({
@@ -366,6 +367,8 @@ export class EmployeeComponent
   protected onSaveSuccess(result: IResultResponse<IEmployee>) {
     if (this.isUsePos) {
       this.EmployeeWarehouseHostComponent.saveAll(result.entity.href).subscribe(() => {});
+    } else {
+      this.warehouseService.deleteAllEmployeeWarehouse(getSlugFromHref(result.entity.href)).subscribe(() => {});
     }
     if (this.enterpriseGuard.canActivate(null, null)) {
       this.EmployeeAccessGroupHostComponent.saveAll(result.entity.href).subscribe(() => {});

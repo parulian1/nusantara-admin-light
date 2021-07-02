@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthService } from '../../../auth';
@@ -11,7 +11,7 @@ import {
   marketplace
 } from '@nusantara/models';
 import { InventoryReceivingService, MarketplaceClientService } from '../../../services';
-import { IProduct } from '../../../models/products';
+import {IProduct, IProductClass} from '../../../models/products';
 import {
   ConfirmModalReceivingOrderComponent,
   MarketplaceChannelInfoModalComponent,
@@ -51,6 +51,14 @@ import { convertStringToObject, keysToCamel } from '@nusantara/shared/helpers';
           <div>
             <label>Status</label>
             <span>Pending</span>
+          </div>
+          <div>
+            <label>DO Number</label>
+            <input type="text" [formControl]="doNumber">
+          </div>
+          <div>
+            <label for="">DC PIC</label>
+            <input type="text" [formControl]="dcPic">
           </div>
           <div [formGroup]="warehouse">
             <label>Warehouse</label>
@@ -110,13 +118,14 @@ import { convertStringToObject, keysToCamel } from '@nusantara/shared/helpers';
             (remove)="stockRecords.removeAt(i)">
           </nus-inventory-receiving-line>
 
-          <tr>
-            <td colspan="9">
-              <button type="button" (click)="addLine()" class="new-add-button wide">
-                <i class="material-icons">add</i> Add Record
-              </button>
-            </td>
-          </tr>
+            <tr>
+              <td colspan="9">
+                <button type="button" (click)="addLine()" class="new-add-button wide">
+                  <i class="material-icons">add</i> Add Record
+                </button>
+              </td>
+            </tr>
+          </tbody>
         </table>
 
         <nus-detail-actions
@@ -155,6 +164,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
   warehouses: IWarehouse[];
   availableSubLocations: ISubLocation[] = [];
   warehouseDetail: marketplace.IWarehouseDetail[];
+  productClasses: IProductClass[] = [];
 
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
   @ViewChild(MarketplaceChannelInfoModalComponent) marketplaceChannelInfo: MarketplaceChannelInfoModalComponent;
@@ -186,8 +196,9 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
 
   ngOnInit() {
     super.ngOnInit();
-    this.route.data.subscribe((data: { warehouses: IWarehouse[] }) => {
+    this.route.data.subscribe((data: { warehouses: IWarehouse[], productClasses: IProductClass[] }) => {
       this.warehouses = data.warehouses;
+      this.productClasses = data.productClasses;
     });
     this.currentDate = new Date();
   }
@@ -197,6 +208,14 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
     this.marketplaceChannelInfo.onClose.subscribe(() => this.onMarketplaceModalClosed());
     this.confirmModalReceiving.onClose.subscribe(() => this.onConfirmModalClosed());
+  }
+
+  get doNumber(): FormControl {
+    return this.form.get('doNumber') as FormControl;
+  }
+
+  get dcPic(): FormControl {
+    return this.form.get('dcPic') as FormControl;
   }
 
   initializeForm(entity?: inventory.IReceivingOrder) {
@@ -213,6 +232,8 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
       }),
       reviewedBy: [null, ],
       stockRecords: this.fb.array([], [Validators.required, Validators.minLength(1)]),
+      doNumber: ['', []],
+      dcPic: ['', []],
     });
   }
 
@@ -274,7 +295,6 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     }
     const wh = this.warehouses.filter(e => e.href === this.warehouse.get('href').value)[0];
     if (wh) {
-
       this.clientService.getWarehouseInformation(wh.code).subscribe(
         (data: marketplace.IWarehouseInfo) => {
           this.storeValue = data?.totalStore ?? 0;
@@ -314,7 +334,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
         product: [selectedProduct, [Validators.required]],
         href: [null, []],
         location: this.fb.group({
-          href: [defaultSubLocations, Validators.required],
+          href: [defaultSubLocations, []],
           // name: ['', ],
         }),
         sku: [defaultSku, []],

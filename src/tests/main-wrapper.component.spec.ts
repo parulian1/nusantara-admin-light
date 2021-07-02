@@ -7,12 +7,15 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {GetUserDisplayNamePipe} from '@nusantara/shared/get-user-display-name.pipe';
 import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {AuthService} from '@nusantara/auth';
 
 describe('MainWrapperComponent', () => {
   let component: MainWrapperComponent;
   let fixture: ComponentFixture<MainWrapperComponent>;
+  let authServiceSpy: jasmine.SpyObj<AuthService>;
 
   beforeEach(waitForAsync(() => {
+    authServiceSpy = jasmine.createSpyObj('AuthService', ['logout', 'shouldRefresh']);
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,

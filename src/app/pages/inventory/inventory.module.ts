@@ -7,6 +7,7 @@ import { SharedModule } from '@nusantara/shared';
 import {
   InventoryReceivingComponent,
   InventoryReceivingDetailComponent,
+  InventoryReceivingDetailItemComponent,
   LineItemComponent,
 } from './receiving';
 import { InventoryRoutingModule } from './inventory-routing.module';
@@ -17,11 +18,13 @@ import {
   AdjustmentDetailComponent,
   AdjustmentLineItemComponent,
 } from './adjustment';
+import { StockRecordDialogComponent } from './adjustment/stock-record-dialog.component';
 
 @NgModule({
   declarations: [
     InventoryReceivingComponent,
     InventoryReceivingDetailComponent,
+    InventoryReceivingDetailItemComponent,
     LineItemComponent,
 
     InventoryOrderListComponent,
@@ -30,6 +33,7 @@ import {
     AdjustmentComponent,
     AdjustmentLineItemComponent,
     AdjustmentDetailComponent,
+    StockRecordDialogComponent,
   ],
   imports: [
     CommonModule,

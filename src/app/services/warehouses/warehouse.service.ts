@@ -52,4 +52,9 @@ export class WarehouseService extends AbstractCrudService<IWarehouse> {
       `/api/fulfillment/warehouse/${warehouseSlug}/user/${username}/`,
     );
   }
+  deleteAllEmployeeWarehouse(username: string): Observable<void> {
+    return this.httpClient.delete<any>(
+      `/api/fulfillment/warehouse/user/${username}/delete-all/`,
+    );
+  }
 }
