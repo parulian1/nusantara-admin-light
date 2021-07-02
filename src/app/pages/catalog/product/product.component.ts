@@ -183,7 +183,7 @@ const log = new Logger('ProductComponent');
               <nus-field-errors [control]="price"></nus-field-errors>
             </label>
 
-            <div>
+            <div [ngClass]="{'hidden' : !enterpriseLicense()}">
               <nus-price-list-host [form]="priceLists"></nus-price-list-host>
             </div>
           </div>
@@ -493,6 +493,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   ngAfterViewInit() {
+    super.ngAfterViewInit();
     this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
   }
 
