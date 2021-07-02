@@ -8,10 +8,10 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { SvgIconService } from '@nusantara/services';
-import { 
-  ToastService, 
-  AbstractDetailComponent, 
-  getSlugFromHref, 
+import {
+  ToastService,
+  AbstractDetailComponent,
+  getSlugFromHref,
   NusantaraValidators,
   ErrorResult,
   Logger,
@@ -183,7 +183,7 @@ const log = new Logger('ProductComponent');
               <nus-field-errors [control]="price"></nus-field-errors>
             </label>
 
-            <div [ngClass]="{'hidden' : !enterpriseLicense()}">
+            <div>
               <nus-price-list-host [form]="priceLists"></nus-price-list-host>
             </div>
           </div>
@@ -486,7 +486,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
               private RelatedService: ProductRelatedService,
               private configSercvice: SiteConfigService,
               router: Router,
-              svgIconService: SvgIconService, 
+              svgIconService: SvgIconService,
               public modal: NgxSmartModalService) {
     super(route, router, toast, service);
     svgIconService.registerIcons();
@@ -592,7 +592,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     }
     if (pc && (pc.type === 'subscription' && pc.option)) {
       return true;
-    } 
+    }
     return false;
   }
 
@@ -622,7 +622,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     super.ngOnInit();
   }
 
- 
+
 
   /**
    * Configures the form that is edited in this component.
@@ -787,26 +787,23 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
               });
             });
 
-            if(!this.enterpriseLicense()){
-              if (this.priceListHost.validatePriceListHost()) {
-                this.priceListHost.saveAll(resp.entity).pipe(catchError(childErr => {
-                  if (childErr instanceof HttpErrorResponse) {
-                    return of(new ErrorResult<IError>(childErr.error, childErr.status));
+            if (this.priceListHost.validatePriceListHost()) {
+              this.priceListHost.saveAll(resp.entity).pipe(catchError(childErr => {
+                if (childErr instanceof HttpErrorResponse) {
+                  return of(new ErrorResult<IError>(childErr.error, childErr.status));
+                } else {
+                  return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, childErr.status));
+                }
+              })).subscribe((childResp) => {
+                  if (childResp instanceof ErrorResult) {
+                    this.onSaveError(childResp);
                   } else {
-                    return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, childErr.status));
+                    this.onSaveSuccess(resp);
                   }
-                })).subscribe((childResp) => {
-                    if (childResp instanceof ErrorResult) {
-                      this.onSaveError(childResp);
-                    } else {
-                      this.onSaveSuccess(resp);
-                    }
-                  }
-                );
-              }
-            } else {
-              this.onSaveSuccess(resp);
+                }
+              );
             }
+
           }
         }
       );
@@ -949,7 +946,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       productValue["action"] = "remove";
       actionStatus = "remove";
     }
-    
+
     this.RelatedService.post(productValue).subscribe(
       (resp) => {
         if (action == "add"){
@@ -997,7 +994,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         action: "add"
       });
 
-      this.apiPostRelatedProduct(f.value, "add", f);      
+      this.apiPostRelatedProduct(f.value, "add", f);
     }
   }
 }
