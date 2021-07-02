@@ -796,7 +796,6 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
                     return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, childErr.status));
                   }
                 })).subscribe((childResp) => {
-                    log.debug("respon price", childResp);
                     if (childResp instanceof ErrorResult) {
                       this.onSaveError(childResp);
                     } else {
