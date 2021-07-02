@@ -301,38 +301,38 @@ const log = new Logger('ProductComponent');
             </ng-container>
           </div>
 
-          <div id="product-recommendation" class="wrapper">
-            <h1 class="heading-1">Product Recommendation</h1>
-            <table>
-              <thead>
-              <tr>
-                <th>Product</th>
-                <th>Remove</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr *ngFor="let control of productRelated.controls; let i=index">
-                <td>
-                  <a [routerLink]="['/catalog','products', control.get('href').value|entityToSlug]" target="_blank">
-                  {{ control.get('name').value }}
-                  </a>
-                </td>
-                <td>
-                  <button (click)="removeRelated(i)" type="button" class="remove-button">
-                      <mat-icon class="icon" svgIcon="trash"></mat-icon>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td colspan="2">
-                  <button type="button" (click)="selectProduct()" class="new-add-button wide">
-                    Add Product
-                  </button>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
+            <div id="product-recommendation" class="wrapper">
+              <h1 class="heading-1">Product Recommendation</h1>
+              <table>
+                <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Remove</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let control of productRelated.controls; let i=index">
+                  <td>
+                    <a [routerLink]="['/catalog','products', control.get('href').value|entityToSlug]" target="_blank">
+                    {{ control.get('name').value }}
+                    </a>
+                  </td>
+                  <td>
+                    <button (click)="removeRelated(i)" type="button" class="remove-button">
+                        <mat-icon class="icon" svgIcon="trash"></mat-icon>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <button type="button" (click)="selectProduct()" class="new-add-button wide">
+                      Add Product
+                    </button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
 
           <nus-detail-actions
             [component]="this"
@@ -372,6 +372,9 @@ const log = new Logger('ProductComponent');
           </li>
           <li *ngIf="!isNew" [ngClass]="{ active: currentActive === 'product-inventory' }">
             <a (click)="scrollTo('product-inventory')">Product Inventory</a>
+          </li>
+          <li *ngIf="!isNew" [ngClass]="{ active: currentActive === 'product-recommendation' }">
+            <a (click)="scrollTo('product-recommendation')">Product Recommendation</a>
           </li>
         </ul>
       </div>
@@ -589,8 +592,16 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     }
     if (pc && (pc.type === 'subscription' && pc.option)) {
       return true;
-    }
+    } 
     return false;
+  }
+
+  getSlugFromHref(href: string): string {
+    const r = /^.+\/(.+?)\/$/.exec(href);
+    if (r) {
+      return r[1];
+    }
+    return null;
   }
 
   ngOnInit(): void {
@@ -611,13 +622,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     super.ngOnInit();
   }
 
-  getSlugFromHref(href: string): string {
-    const r = /^.+\/(.+?)\/$/.exec(href);
-    if (r) {
-      return r[1];
-    }
-    return null;
-  }
+ 
 
   /**
    * Configures the form that is edited in this component.
@@ -650,7 +655,6 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       attributes: this.fb.group({}),
       marketplace: this.fb.group({}),
       priceLists: this.fb.array([]),
-      related: this.fb.array([]),
       seoMeta: [entity?.seoMeta, []],
       seoDescription: [entity?.seoDescription, []],
       tags: this.fb.array([], [NusantaraValidators.preventArrayDuplicates()]),
@@ -782,21 +786,27 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
                 log.debug('validate', component.validatePriceRange(), component.maxQuantity.value);
               });
             });
-            if (this.priceListHost.validatePriceListHost()) {
-              this.priceListHost.saveAll(resp.entity).pipe(catchError(childErr => {
-                if (childErr instanceof HttpErrorResponse) {
-                  return of(new ErrorResult<IError>(childErr.error, childErr.status));
-                } else {
-                  return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, childErr.status));
-                }
-              })).subscribe((childResp) => {
-                  if (childResp instanceof ErrorResult) {
-                    this.onSaveError(childResp);
+
+            if(!this.enterpriseLicense()){
+              if (this.priceListHost.validatePriceListHost()) {
+                this.priceListHost.saveAll(resp.entity).pipe(catchError(childErr => {
+                  if (childErr instanceof HttpErrorResponse) {
+                    return of(new ErrorResult<IError>(childErr.error, childErr.status));
                   } else {
-                    this.onSaveSuccess(resp);
+                    return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, childErr.status));
                   }
-                }
-              );
+                })).subscribe((childResp) => {
+                    log.debug("respon price", childResp);
+                    if (childResp instanceof ErrorResult) {
+                      this.onSaveError(childResp);
+                    } else {
+                      this.onSaveSuccess(resp);
+                    }
+                  }
+                );
+              }
+            } else {
+              this.onSaveSuccess(resp);
             }
           }
         }
@@ -912,7 +922,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   isValidForm(): boolean {
-    return this.form.valid && this.priceListHost?.validatePriceListHost();
+    return this.form.valid && this.priceListHost.validatePriceListHost();
   }
 
   selectProduct() {
