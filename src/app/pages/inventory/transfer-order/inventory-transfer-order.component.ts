@@ -228,7 +228,7 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
         sku: ['', [Validators.required, ]],
         originalQuantity: [1, [Validators.required, Validators.min(1), ]],
         batchNumber: ['', []],
-        locator: this.fb.array([], [Validators.required, Validators.minLength(1)]),
+        locator: this.fb.array([], [Validators.minLength(1)]),
         expiryDate: [null, []]
       });
       this.stockRecords.push(f);
