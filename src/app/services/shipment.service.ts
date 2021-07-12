@@ -21,6 +21,7 @@ export class ShipmentService extends AbstractCrudService<shipment.IShipment> {
 
   baseUrl = '/api/fulfillment/shipment';
   createConnoteUrl = '/api/fulfillment/create-awb';
+  manualConnoteUrl = '/api/fulfillment/manual-awb';
   httpClient: HttpClient;
 
   constructor(httpClient: HttpClient) {
@@ -43,6 +44,25 @@ export class ShipmentService extends AbstractCrudService<shipment.IShipment> {
           return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, err.status));
         }
       }));
+
+  }
+
+  manualAWB(requestData: object): Observable<IResultResponse> {
+    return this.httpClient.post(`${this.createConnoteUrl}/`, requestData, {observe: 'response', responseType: 'json'})
+      .pipe(map((response) => {
+          if (response.status === HttpStatusCode.CREATED) {
+            return new SuccessResult([], response.body);
+          } else {
+            return new ErrorResult<IError>(response.body as IError, response.status);
+          }
+        }),
+        catchError(err => {
+          if (err instanceof HttpErrorResponse) {
+            return of(new ErrorResult<IError>(err.error, err.status));
+          } else {
+            return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, err.status));
+          }
+        }));
 
   }
 
