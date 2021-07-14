@@ -17,10 +17,11 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
           <label>
             <span>AWB</span>
             <input type="text" placeholder="Input AWB" [formControl]="awbNumber">
+            <nus-field-errors [control]="awbNumber"></nus-field-errors>
           </label>
         </div>
         <input type="hidden" [formControl]="orderNumber"/>
-        <button type="submit" class="control" (click)="close()" [disabled]="form.invalid">Submit</button>
+        <button type="submit" class="control" (click)="close()" [disabled]="!form.valid">Submit</button>
       </div>
     </ngx-smart-modal>
   `,
@@ -62,7 +63,7 @@ export class InputAwbModalComponent implements AfterViewInit, OnInit {
           Validators.required,
           Validators.maxLength(30),
           Validators.minLength(5),
-          Validators.pattern('^[a-z0-9_-]{5,30}$')
+          Validators.pattern('^[A-Za-z0-9_-]{5,30}$')
         ]
       ],
     });
