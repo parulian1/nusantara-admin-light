@@ -424,15 +424,22 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
             ToastLevelEnum.error
           );
         } else {
-          // if (!childrenData.shipmentHistory) {
-          //   childrenData.shipmentHistory = new Object({
-          //     awbNumber: null,
-          //     href: null,
-          //     shippingLabelUrl: '',
-          //   });
-          // }
-          // this.fetchAwbUrl(childrenData);
-          // this.updateOrder(childrenData, 'shipped');
+          this.orderDetailData.children.forEach((children) => {
+            children.data.forEach((childrenData) => {
+              if (getSlugFromHref(childrenData.href) === this.inputAwb.orderNumber.value) {
+                if (!childrenData.shipmentHistory) {
+                  childrenData.shipmentHistory = {
+                    awbNumber: null,
+                    href: null,
+                    shippingLabelUrl: '',
+                  };
+                }
+                this.fetchAwbUrl(childrenData);
+                this.updateOrder(childrenData, 'shipped');
+              }
+            });
+          });
+
         }
         this.isRequestShipment = false;
       });
