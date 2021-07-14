@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, EventEmitter, OnInit, ViewChild} from '@angular/core';
-import { NgxSmartModalComponent } from 'ngx-smart-modal';
+import {NgxSmartModalComponent} from 'ngx-smart-modal';
 import {DialogResult} from '@nusantara/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
@@ -20,7 +20,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
           </label>
         </div>
         <input type="hidden" [formControl]="orderNumber"/>
-        <button type="submit" class="control" (click)="close()">Submit</button>
+        <button type="submit" class="control" (click)="close()" [disabled]="form.invalid">Submit</button>
       </div>
     </ngx-smart-modal>
   `,
@@ -39,25 +39,38 @@ export class InputAwbModalComponent implements AfterViewInit, OnInit {
   form: FormGroup;
   result: DialogResult = DialogResult.Cancelled;
 
-  constructor(protected fb: FormBuilder, ) {
+  constructor(protected fb: FormBuilder,) {
   }
 
   ngOnInit(): void {
     this.initializeForm();
   }
 
-  get awbNumber(): FormControl { return this.form.get('awbNumber') as FormControl; }
-  get orderNumber(): FormControl { return this.form.get('orderNumber') as FormControl; }
+  get awbNumber(): FormControl {
+    return this.form.get('awbNumber') as FormControl;
+  }
+
+  get orderNumber(): FormControl {
+    return this.form.get('orderNumber') as FormControl;
+  }
 
   private initializeForm(): void {
     this.form = this.fb.group({
-      orderNumber: ['', [Validators.required]],
-      awbNumber: ['', [Validators.required ]],
+      orderNumber: ['', [Validators.required, ]],
+      awbNumber: ['',
+        [
+          Validators.required,
+          Validators.maxLength(30),
+          Validators.minLength(5),
+          Validators.pattern('^[a-z0-9_-]{5,30}$')
+        ]
+      ],
     });
   }
 
   ngAfterViewInit(): void {
-    this.modal.onOpen.subscribe(() => {});
+    this.modal.onOpen.subscribe(() => {
+    });
   }
 
   open() {
