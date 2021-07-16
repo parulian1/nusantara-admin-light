@@ -12,11 +12,11 @@ import {ProductRelatedService, SiteConfigService} from '@nusantara/services';
 import {PriceListHostComponent} from '@nusantara/pages/catalog/product/price';
 import {IPriceList} from '@nusantara/models/products';
 import {StockInputComponent} from '@nusantara/pages/catalog/product/stock-input/stock-input.component';
-import {MockComponent} from 'ng-mocks';
+import {MockComponent, MockComponents} from 'ng-mocks';
 // import {StockInputComponent} from '@nusantara/pages/catalog/product/stock-input/stock-input.component';
 // import {MarketplaceInfoHostComponent} from '@nusantara/pages/catalog/product/marketplace';
-// import {ProductMediaHostComponent} from '@nusantara/pages/catalog/product/media';
-// import {ProductAttributeHostComponent} from '@nusantara/pages/catalog/product/attribute';
+import {ProductMediaHostComponent} from '@nusantara/pages/catalog/product/media';
+import {ProductAttributeHostComponent} from '@nusantara/pages/catalog/product/attribute';
 
 describe('ProductComponent', () => {
   let component: ProductComponent;
@@ -26,6 +26,7 @@ describe('ProductComponent', () => {
   const productRelatedService = jasmine.createSpyObj('ProductRelatedService', ['fetch']);
 
   const router = jasmine.createSpyObj('Router', ['navigate']);
+  const siteService = jasmine.createSpyObj('SiteConfigService', ['isEnterpriseLicense']);
 
   const addProductResp = {
     href: 'https://superbearzz.dev.bisma.systems/api/catalog/product/pedang/',
@@ -78,8 +79,8 @@ describe('ProductComponent', () => {
     productPoint: 0
   };
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         ReactiveFormsModule,
@@ -92,7 +93,8 @@ describe('ProductComponent', () => {
         // ProductMediaHostComponent,
         // ProductAttributeHostComponent,
         PriceListHostComponent,
-        MockComponent(StockInputComponent),
+        ...MockComponents(StockInputComponent, ProductMediaHostComponent,
+          ProductAttributeHostComponent),
         // MarketplaceInfoHostComponent
       ],
       providers: [
@@ -119,16 +121,17 @@ describe('ProductComponent', () => {
           provide: ProductRelatedService,
           use: productRelatedService
         },
-        // {provide: Router, useValue: router}
+        {provide: SiteConfigService, useValue: siteService}
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
-
+  });
+  beforeEach( () => {
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(ProductComponent);
     component = fixture.componentInstance;
-    siteConfigService = TestBed.inject(SiteConfigService) as jasmine.SpyObj<SiteConfigService>;
+    // siteConfigService = TestBed.inject(SiteConfigService) as jasmine.SpyObj<SiteConfigService>;
     // productRelatedService = TestBed.inject(ProductRelatedService) as jasmine.SpyObj<ProductRelatedService>;
     fixture.detectChanges();
   });
@@ -170,6 +173,7 @@ describe('ProductComponent', () => {
   });
 
   it('can create a new product', () => {
+    siteService.isEnterpriseLicense.and.returnValue( of(true));
     const price = {
       href: null,
       product: null,
@@ -243,6 +247,9 @@ describe('ProductComponent', () => {
   });
 
   it('can edit a product', () => {
+    // TODO : Need separate test for non enterprise
+    siteService.isEnterpriseLicense.and.returnValue(true);
+
     const editProductResp = {
       href: 'https://superbearzz.dev.bisma.systems/api/catalog/product/pedang-edit/',
       upc: 'pedang',
@@ -353,6 +360,9 @@ describe('ProductComponent', () => {
   });
 
   it('can delete product', () => {
+    // TODO : Need separate test for non enterprise
+    siteService.isEnterpriseLicense.and.returnValue(true);
+
     component.href.setValue(addProductResp.href);
     component.delete();
     const mock = httpTestingController.expectOne(addProductResp.href);

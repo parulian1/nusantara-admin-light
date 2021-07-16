@@ -20,6 +20,9 @@ describe('LoginComponent', () => {
   let authServiceSpy: jasmine.SpyObj<AuthService>;
   let httpTestingController: HttpTestingController;
 
+  // const router = jasmine.createSpyObj('Router', ['navigate', 'navigateByUrl', 'redirect']);
+
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
@@ -36,6 +39,7 @@ describe('LoginComponent', () => {
       providers: [
         { provide: ActivatedRoute, useClass: MockActivatedRoute },
         { provide: JwtHelperService, useClass: MockJwtHelperService },
+        // { provide: Router, use: router }
       ]
     })
     .compileComponents();

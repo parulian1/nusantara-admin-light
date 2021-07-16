@@ -484,12 +484,12 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   productRelatedSlug: string;
   productSlug: string;
 
-  @ViewChild(ProductMediaHostComponent) mediaHost!: ProductMediaHostComponent;
-  @ViewChild(PriceListHostComponent) priceListHost!: PriceListHostComponent;
-  @ViewChild(ProductAttributeHostComponent) attributeHost!: ProductAttributeHostComponent;
-  @ViewChild(ProductSubscriptonHostComponent) subscriptionHost!: ProductSubscriptonHostComponent;
-  @ViewChild(StockInputComponent) stockInput!: StockInputComponent;
-  @ViewChild(MarketplaceInfoHostComponent) marketplaceHost!: MarketplaceInfoHostComponent;
+  @ViewChild(ProductMediaHostComponent) mediaHost: ProductMediaHostComponent;
+  @ViewChild(PriceListHostComponent) priceListHost: PriceListHostComponent;
+  @ViewChild(ProductAttributeHostComponent) attributeHost: ProductAttributeHostComponent;
+  @ViewChild(ProductSubscriptonHostComponent) subscriptionHost: ProductSubscriptonHostComponent;
+  @ViewChild(StockInputComponent) stockInput: StockInputComponent;
+  @ViewChild(MarketplaceInfoHostComponent) marketplaceHost: MarketplaceInfoHostComponent;
 
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
 
@@ -809,7 +809,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
               });
             }
 
-            this.mediaHost.saveAll(resp.entity).subscribe(() => {
+            this.mediaHost?.saveAll(resp.entity)?.subscribe(() => {
             });
             this.priceListHost.priceLists.forEach((priceList) => {
               log.debug('pricelist', priceList.validatePriceList());
