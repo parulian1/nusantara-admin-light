@@ -20,11 +20,8 @@ describe('LoginComponent', () => {
   let authServiceSpy: jasmine.SpyObj<AuthService>;
   let httpTestingController: HttpTestingController;
 
-  beforeEach(waitForAsync(() => {
-
-    authServiceSpy = jasmine.createSpyObj('AuthService', ['login']);
-
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         ReactiveFormsModule,
@@ -42,12 +39,13 @@ describe('LoginComponent', () => {
       ]
     })
     .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
+    authServiceSpy = jasmine.createSpyObj('AuthService', ['login']);
     fixture.detectChanges();
   });
 

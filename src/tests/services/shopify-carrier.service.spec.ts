@@ -6,8 +6,8 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 describe('ShopifyCarrierService', () => {
   let service: ShopifyCarrierService;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
       ],

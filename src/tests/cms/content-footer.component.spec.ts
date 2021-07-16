@@ -20,8 +20,8 @@ describe('ContentFooterComponent', () => {
     href: 'https://staging.bhisma.cloud/api/cms/navigation/content_footer/item/'
   };
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach( async () => {
+    await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         ReactiveFormsModule,
@@ -34,7 +34,7 @@ describe('ContentFooterComponent', () => {
       providers: []
     })
       .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     httpTestingController = TestBed.inject(HttpTestingController);

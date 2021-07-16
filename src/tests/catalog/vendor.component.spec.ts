@@ -32,8 +32,8 @@ describe('VendorComponent', () => {
     internalNotes: 'tes internal note vendor dua'
   };
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         ReactiveFormsModule,
@@ -46,7 +46,7 @@ describe('VendorComponent', () => {
       providers: []
     })
       .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     httpTestingController = TestBed.inject(HttpTestingController);

@@ -14,8 +14,8 @@ describe('ForgotPasswordComponent', () => {
 
   let httpTestingController: HttpTestingController;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         ReactiveFormsModule,
@@ -30,7 +30,7 @@ describe('ForgotPasswordComponent', () => {
       ]
     })
     .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     httpTestingController = TestBed.inject(HttpTestingController);

@@ -12,9 +12,14 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 describe('LogoutComponent', () => {
   let component: LogoutComponent;
   let fixture: ComponentFixture<LogoutComponent>;
+  const routerMock = jasmine.createSpyObj('Router', ['navigate']);
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  const mockRouter = {
+    navigate: jasmine.createSpy('navigate')
+  };
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
@@ -24,9 +29,10 @@ describe('LogoutComponent', () => {
       ],
       providers: [
         { provide: JwtHelperService, useClass: MockJwtHelperService },
+        // {provide: Router, useValue: routerMock}
       ]
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LogoutComponent);

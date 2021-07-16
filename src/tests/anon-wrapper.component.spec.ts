@@ -9,14 +9,14 @@ describe('AnonWrapperComponent', () => {
   let component: AnonWrapperComponent;
   let fixture: ComponentFixture<AnonWrapperComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [AuthModule, RouterTestingModule, ],
       declarations: [ AnonWrapperComponent ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AnonWrapperComponent);

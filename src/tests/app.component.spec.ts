@@ -17,11 +17,8 @@ describe('AppComponent', () => {
   let authServiceSpy: jasmine.SpyObj<AuthService>;
   let httpTestingController: HttpTestingController;
 
-  beforeEach(waitForAsync(() => {
-
-    authServiceSpy = jasmine.createSpyObj('AuthService', ['logout', 'shouldRefresh']);
-
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
@@ -36,12 +33,13 @@ describe('AppComponent', () => {
         { provide: JwtHelperService, useClass: MockJwtHelperService },
       ]
     }).compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
+    authServiceSpy = jasmine.createSpyObj('AuthService', ['logout', 'shouldRefresh']);
     fixture.detectChanges();
   });
 
