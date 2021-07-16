@@ -8,6 +8,7 @@ import { AppComponent } from '@nusantara/app.component';
 import { SharedModule } from '@nusantara/shared';
 import { CoreModule } from '@nusantara/core';
 import { MockJwtHelperService } from './helpers/mocks';
+import {Router} from '@angular/router';
 
 describe('AppComponent', () => {
 
@@ -16,6 +17,7 @@ describe('AppComponent', () => {
 
   let authServiceSpy: jasmine.SpyObj<AuthService>;
   let httpTestingController: HttpTestingController;
+  let routerSpy: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -31,6 +33,7 @@ describe('AppComponent', () => {
       ],
       providers: [
         { provide: JwtHelperService, useClass: MockJwtHelperService },
+        // { provide: Router, use: router}
       ]
     }).compileComponents();
   });
@@ -39,7 +42,8 @@ describe('AppComponent', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
-    authServiceSpy = jasmine.createSpyObj('AuthService', ['logout', 'shouldRefresh']);
+    authServiceSpy = jasmine.createSpyObj('AuthService', ['logout', 'shouldRefresh', 'refresh']);
+    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     fixture.detectChanges();
   });
 
