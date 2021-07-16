@@ -321,7 +321,7 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
       allowPos: [entity?.allowPos ?? false, []],
       meta: this.fb.group(
         {
-          type: [entity?.meta.type, []],
+          type: [entity?.meta?.type, []],
           banks: this.fb.array([], [NusantaraValidators.preventArrayDuplicates(), ]),
           eWallets: this.fb.array([], [NusantaraValidators.preventArrayDuplicates(), ]),
         }
@@ -381,12 +381,12 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     if (!!this.logo && this.logoPreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
       this.form.value.logo = this.logoPreviewUrl;
     }
-    if (!!this.entity?.meta.type && this.entity?.meta.type === 'edc') {
+    if (!!this.entity?.meta?.type && this.entity?.meta?.type === 'edc') {
       (this.form.get('meta') as FormGroup).removeControl('meta.eWallets');
       delete (this.form.value.meta.eWallet);
     }
 
-    if (!!this.entity?.meta.type && this.entity?.meta.type === 'e_wallet') {
+    if (!!this.entity?.meta?.type && this.entity?.meta?.type === 'e_wallet') {
       (this.form.get('meta') as FormGroup).removeControl('meta.eWallets');
       delete (this.form.value.meta.banks);
     }

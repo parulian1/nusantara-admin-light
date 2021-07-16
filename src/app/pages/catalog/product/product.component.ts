@@ -628,7 +628,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   ngOnInit(): void {
-    this.productSlug = this.route.snapshot.paramMap.get('slug');
+    this.productSlug = this.route.snapshot.paramMap?.get('slug');
     this.route.data.subscribe((
       data: {
         entity: products.IProduct, parent: products.IProduct,
@@ -667,9 +667,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       weight: [entity?.weight, [Validators.required,]],
       price: [0, [Validators.minLength(0)]],
       dimensions: this.fb.group({
-        currentLength: [entity?.dimensions.currentLength,],
-        currentWidth: [entity?.dimensions.currentWidth,],
-        currentHeight: [entity?.dimensions.currentHeight,]
+        currentLength: [entity?.dimensions?.currentLength,],
+        currentWidth: [entity?.dimensions?.currentWidth,],
+        currentHeight: [entity?.dimensions?.currentHeight,]
       }),
       productClass: this.fb.group({href: [entity?.productClass.href, [Validators.required]]}),
       category: this.fb.group({href: [entity?.category.href, [Validators.required]]}),
@@ -709,16 +709,16 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
     this.variants = entity?.variants ?? [];
     this.originalAttributeValues = entity?.attributes ?? {};
-
-    this.RelatedService.fetch(this.productSlug)
-      .subscribe((data: products.IProductRelation[]) => {
-        if (data){
-          for (const prod of data) {
-            this.addProductRelation(prod);
+    if (!!this.productSlug) {
+      this.RelatedService.fetch(this.productSlug)
+        .subscribe((data: products.IProductRelation[]) => {
+          if (data) {
+            for (const prod of data) {
+              this.addProductRelation(prod);
+            }
           }
-        }
-      });
-
+        });
+    }
     for (const t of entity?.tags ?? []) {
       this.addTag(t);
     }
@@ -839,11 +839,11 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         }
       );
       if (!this.isNew && this.isPhysical() && this.enterpriseLicense()) {
-        this.marketplaceHost.saveAll();
+        this.marketplaceHost?.saveAll();
       }
     } else {
       window.alert('Please check your input.');
-      this.priceListHost.priceLists.forEach((priceList) => {
+      this.priceListHost?.priceLists.forEach((priceList) => {
         log.debug('pricelist', priceList.validatePriceList());
         priceList.rangeComponents.forEach((component) => {
           log.debug('validate', component.validatePriceRange(), component.maxQuantity.value);
