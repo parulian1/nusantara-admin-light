@@ -45,6 +45,8 @@ import { StockRecordSelectionModalComponent } from '@nusantara/shared/stock-reco
 import { ConfirmModalResetPinComponent } from '@nusantara/shared/confirm-modal-reset-pin.component';
 import { CsvDialogComponent } from './csv-dialog/csv-dialog.component';
 import {VendorSelectionModalComponent} from '@nusantara/shared/vendor-selection-modal/vendor-selection-modal.component';
+import { CategorySelectionModalComponent } from './modals/category-selection-modal.component';
+import { ProductClassSelectionModalComponent } from './modals/product-class-selection-modal.component';
 
 /**
  * The purpose of this module is to make common code (like pipes)
@@ -91,7 +93,9 @@ import {VendorSelectionModalComponent} from '@nusantara/shared/vendor-selection-
     ConfirmModalResetPinComponent,
     CsvDialogComponent,
     OnlyNumberDirective,
-    VendorSelectionModalComponent
+    VendorSelectionModalComponent,
+    CategorySelectionModalComponent,
+    ProductClassSelectionModalComponent
   ],
   exports: [
     EntityToSlugPipe,
@@ -132,7 +136,9 @@ import {VendorSelectionModalComponent} from '@nusantara/shared/vendor-selection-
     OrderType,
     ConfirmModalResetPinComponent,
     CsvDialogComponent,
-    VendorSelectionModalComponent
+    VendorSelectionModalComponent,
+    CategorySelectionModalComponent,
+    ProductClassSelectionModalComponent
   ],
   imports: [
     CommonModule,

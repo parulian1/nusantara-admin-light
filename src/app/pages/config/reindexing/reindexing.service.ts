@@ -26,6 +26,11 @@ export class ReindexingService {
       '/api/fulfillment/reindex-receiving-order/'
     );
   }
+  public reindexStockApproved() {
+    return this.httpClient.get(
+      '/api/fulfillment/reindex-approved-receiving-order/'
+    );
+  }
 
   public reindexReference() {
     return this.httpClient.get(

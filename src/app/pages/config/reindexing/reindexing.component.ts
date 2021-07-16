@@ -28,6 +28,11 @@ export class ReindexingComponent implements OnInit {
             console.log(res);
           });
           break;
+        case 'approved-stock':
+          this.reindexingService.reindexStock().subscribe(res => {
+            console.log(res);
+          });
+          break;
         case 'reference':
           this.reindexingService.reindexReference().subscribe(res => {
             console.log(res);

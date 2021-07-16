@@ -18,7 +18,7 @@ import {
   DialogResult,
   ToastLevelEnum
 } from '@nusantara/core';
-import { ICategory, IVendor, drf, products } from '@nusantara/models';
+import {ICategory, IVendor, drf, products, INamedHrefEntity} from '@nusantara/models';
 import { IError } from '@nusantara/models/base/error';
 import { ProductService, SiteConfigService, ProductRelatedService } from '@nusantara/services';
 import { PriceListHostComponent } from './price';
@@ -27,8 +27,9 @@ import { ProductAttributeHostComponent } from './attribute';
 import { ProductSubscriptonHostComponent } from './subscription';
 import { MarketplaceInfoHostComponent } from './marketplace';
 
-import { ProductSelectionModalComponent } from '@nusantara/shared';
+import {ProductSelectionModalComponent, VendorSelectionModalComponent} from '@nusantara/shared';
 import { IProductRelation } from '@nusantara/models/products';
+import {CategorySelectionModalComponent} from '@nusantara/shared/modals/category-selection-modal.component';
 
 const log = new Logger('ProductComponent');
 
@@ -71,11 +72,13 @@ const log = new Logger('ProductComponent');
               <span>Product Category</span>
               <div class="manage">
                 <div>
-                  <select [formControl]="category" name="category" data-qa="category">
-                    <option *ngFor="let c of categories" [ngValue]="c.href">
-                      {{ c.pathName }}
-                    </option>
-                  </select>
+                  <input type="hidden" [formControl]="category">
+                  <input type="text" (click)="selectCategory()" readonly [value]="selectedCategory?.name">
+<!--                  <select [formControl]="category" name="category" data-qa="category">-->
+<!--                    <option *ngFor="let c of categories" [ngValue]="c.href">-->
+<!--                      {{ c.pathName }}-->
+<!--                    </option>-->
+<!--                  </select>-->
                   <nus-field-errors [control]="category"></nus-field-errors>
                 </div>
                 <div><a [routerLink]="['/catalog', 'categories']"> Manage Category</a></div>
@@ -125,14 +128,16 @@ const log = new Logger('ProductComponent');
               <span>Vendor</span>
               <div class="manage">
                 <div>
-                  <select [formControl]="vendor" name="vendor" data-qa="vendor">
-                    <option *ngFor="let v of vendors" [ngValue]="v.href">
-                      {{ v.name }}
-                    </option>
-                  </select>
+                  <input type="hidden" [formControl]="vendor">
+                  <input type="text" (click)="selectVendor()" readonly [value]="selectedVendor?.name">
+<!--                  <select [formControl]="vendor" name="vendor" data-qa="vendor">-->
+<!--                    <option *ngFor="let v of vendors" [ngValue]="v.href">-->
+<!--                      {{ v.name }}-->
+<!--                    </option>-->
+<!--                  </select>-->
                   <nus-field-errors [control]="vendor"></nus-field-errors>
                 </div>
-                <div><a [routerLink]="['/catalog', 'vendors']"> Manage Vendor </a></div>
+                <div><a [routerLink]="['/catalog', 'vendors']" target="_blank"> Manage Vendor </a></div>
               </div>
             </label>
           </div>
@@ -382,6 +387,8 @@ const log = new Logger('ProductComponent');
 
     <!-- Modals -->
     <nus-product-selection-modal></nus-product-selection-modal>
+    <nus-vendor-selection-modal #vendorModal></nus-vendor-selection-modal>
+    <nus-category-selection-modal #categoryModal></nus-category-selection-modal>
   `,
   styles: [
     '.container { display: grid; grid-template-columns: 3fr 1fr; grid-column-gap: 24px; }',
@@ -467,6 +474,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     licenseKey: ''
   };
   selectedProductClass: products.IProductClass;
+
+  selectedVendor: INamedHrefEntity = null;
+  selectedCategory: INamedHrefEntity = null;
+
   productRelatedSlug: string;
   productSlug: string;
 
@@ -478,6 +489,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   @ViewChild(MarketplaceInfoHostComponent) marketplaceHost!: MarketplaceInfoHostComponent;
 
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
+
+  @ViewChild('vendorModal') vendorSelectionModal: VendorSelectionModalComponent;
+  @ViewChild('categoryModal') categorySelectionModal: CategorySelectionModalComponent;
 
   constructor(service: ProductService,
               private fb: FormBuilder,
@@ -495,6 +509,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   ngAfterViewInit() {
     super.ngAfterViewInit();
     this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
+    this.vendorSelectionModal.onClose.subscribe(() => this.onVendorSelectionModalClosed());
+    this.categorySelectionModal.onClose.subscribe(() => this.onCategorySelectionModalClosed());
   }
 
   get name(): FormControl {
@@ -609,12 +625,12 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     this.productSlug = this.route.snapshot.paramMap.get('slug');
     this.route.data.subscribe((
       data: {
-        entity: products.IProduct, categories: ICategory[], parent: products.IProduct, vendors: IVendor[],
+        entity: products.IProduct, parent: products.IProduct,
         productClasses: products.IProductClass[], mediaTypes: drf.IChoice[]
       }) => {
       this.parentProduct = data.parent;
-      this.vendors = data.vendors;
-      this.categories = data.categories;
+      // this.vendors = data.vendors;
+      // this.categories = data.categories;
       this.productClasses = data.productClasses;
       this.mediaTypes = data.mediaTypes;
       this.entity = data.entity;
@@ -663,6 +679,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       productRelated: this.fb.array([]),
     });
 
+
+    this.selectedVendor = entity?.vendor;
+    this.selectedCategory = entity?.category;
     // new product variant
     if (!entity && !!this.parentProduct) {
       this.parent.setValue(this.parentProduct.href);
@@ -673,6 +692,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       this.category.setValue(this.parentProduct.category.href);
       this.vendor.setValue(this.parentProduct.vendor.href);
 
+      this.selectedVendor = this.vendor.value;
+      this.selectedCategory = this.category.value;
+
       // optional inheritance from parent
       this.description.setValue(this.parentProduct.description);
     }
@@ -682,7 +704,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
     this.RelatedService.fetch(this.productSlug)
       .subscribe((data: products.IProductRelation[]) => {
-        if(data){
+        if (data){
           for (const prod of data) {
             this.addProductRelation(prod);
           }
@@ -931,7 +953,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   showInfoWindow(resp, action) {
-    if(action == "remove"){
+    if(action === "remove"){
       this.toast?.addMessage(resp,'Successfully Removed', ToastLevelEnum.info);
     } else {
       this.toast?.addMessage(resp,'Successfully Add', ToastLevelEnum.success);
@@ -950,7 +972,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
     this.RelatedService.post(productValue).subscribe(
       (resp) => {
-        if (action == "add"){
+        if (action === "add"){
           // if "add" then it will be push to array
           this.productRelated.push(product);
         } else {
@@ -997,5 +1019,27 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
       this.apiPostRelatedProduct(f.value, "add", f);
     }
+  }
+
+  private onVendorSelectionModalClosed(): void {
+    if (this.vendorSelectionModal.result === DialogResult.OK) {
+      this.selectedVendor = this.vendorSelectionModal.vendor.value as IVendor;
+      this.vendor.setValue(this.selectedVendor.href);
+    }
+  }
+
+  private onCategorySelectionModalClosed(): void {
+    if (this.categorySelectionModal.result === DialogResult.OK) {
+      this.selectedCategory = this.categorySelectionModal.category.value as ICategory;
+      this.category.setValue(this.selectedCategory.href);
+    }
+  }
+
+  selectVendor(): void {
+    this.vendorSelectionModal.open();
+  }
+
+  selectCategory(): void {
+    this.categorySelectionModal.open();
   }
 }

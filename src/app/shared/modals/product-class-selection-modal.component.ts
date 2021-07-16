@@ -3,40 +3,42 @@ import {NgxSmartModalComponent} from 'ngx-smart-modal';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {DialogResult, PagedResponse} from '@nusantara/core';
 import {Subscription} from 'rxjs';
-import {IVendor} from '@nusantara/models';
-import {VendorService} from '@nusantara/services';
+import {ICategory} from '@nusantara/models';
+import {CategoryService, ProductClassService} from '@nusantara/services';
+import {IProductClass} from '@nusantara/models/products';
 
 @Component({
-  selector: 'nus-vendor-selection-modal',
-  template: `<ngx-smart-modal [identifier]="'selectVendor'" #modal [formGroup]="form" [customClass]="'wide-modal'">
-    <h2 class="heading-2">Select Vendor</h2>
-    <form #modalForm class="fluid">
-      <div class="search">
-        <i class="material-icons">search</i>
-        <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Vendor Name">
-      </div>
-      <input type="hidden" [formControl]="vendor">
-      <p>Search vendor name to find more.</p>
-      <table>
-        <colgroup>
-          <col class="product-name">
-          <col class="product-sku">
-        </colgroup>
-        <thead>
-        <tr style="background-color: #F4F4F4;">
-          <th>Vendor Name</th>
-          <th class="centered">Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let p of displayedResults?.entities">
-          <td class="product-name">{{ p.name }}</td>
-          <td class="centered"><a href="#" (click)="selectVendor(p)">Select</a></td>
-        </tr>
-        </tbody>
-      </table>
-    </form>
-  </ngx-smart-modal>`,
+  selector: 'nus-product-class-selection-modal',
+  template: `
+    <ngx-smart-modal [identifier]="'selectProductClass'" #modal [formGroup]="form" [customClass]="'wide-modal'">
+      <h2 class="heading-2">Select Product Class</h2>
+      <form #modalForm class="fluid">
+        <div class="search">
+          <i class="material-icons">search</i>
+          <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Product Class Name">
+        </div>
+        <input type="hidden" [formControl]="productClass">
+        <p>Search product class name to find more product classes.</p>
+        <table>
+          <colgroup>
+            <col class="product-name">
+            <col class="product-sku">
+          </colgroup>
+          <thead>
+          <tr style="background-color: #F4F4F4;">
+            <th>Product Class Name</th>
+            <th class="centered">Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let p of displayedResults?.entities">
+            <td class="product-name">{{ p.name }}</td>
+            <td class="centered"><a href="#" (click)="selectProductClass(p)">Select</a></td>
+          </tr>
+          </tbody>
+        </table>
+      </form>
+    </ngx-smart-modal>`,
   styles: [
     'h2 { padding-bottom: 16px }',
     'p { color : var(--darken-grey); margin-bottom: 16px; }',
@@ -64,9 +66,8 @@ import {VendorService} from '@nusantara/services';
     '.product-sku { width: 30%; }'
   ]
 })
-export class VendorSelectionModalComponent implements OnInit, AfterViewInit {
+export class ProductClassSelectionModalComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('imageInput') imageInput: ElementRef;
   @ViewChild('modalForm') formView: ElementRef<HTMLFormElement>;
   @ViewChild('modal') modal: NgxSmartModalComponent;
 
@@ -74,17 +75,17 @@ export class VendorSelectionModalComponent implements OnInit, AfterViewInit {
   result: DialogResult = DialogResult.Cancelled;
   searchTextChanged$: Subscription;
 
-  displayedResults: PagedResponse<IVendor> = null;
+  displayedResults: PagedResponse<IProductClass> = null;
 
   timeoutId: any;
   reloadTimeout = 650;
   originalValue: string = null;
 
 
-  constructor(protected fb: FormBuilder, protected service: VendorService) { }
+  constructor(protected fb: FormBuilder, protected service: ProductClassService) { }
 
   get searchText(): FormControl { return this.form.get('searchText') as FormControl; }
-  get vendor(): FormControl { return this.form.get('vendor') as FormControl; }
+  get productClass(): FormControl { return this.form.get('productClass') as FormControl; }
 
   ngOnInit() {
     this.initializeForm();
@@ -119,7 +120,7 @@ export class VendorSelectionModalComponent implements OnInit, AfterViewInit {
   private initializeForm(): void {
     this.form = this.fb.group({
       searchText: ['', [ ]],
-      vendor: ['', [Validators.required, ]],
+      productClass: ['', [Validators.required, ]],
     });
   }
 
@@ -161,8 +162,8 @@ export class VendorSelectionModalComponent implements OnInit, AfterViewInit {
     this.modal.open();
   }
 
-  selectVendor(vendor: IVendor) {
-    this.vendor.setValue(vendor);
+  selectProductClass(productClass: IProductClass) {
+    this.productClass.setValue(productClass);
     this.close();
     return false;
   }
@@ -179,4 +180,6 @@ export class VendorSelectionModalComponent implements OnInit, AfterViewInit {
   cancel() {
     this.modal.close();
   }
+
+
 }
