@@ -28,8 +28,9 @@ import { ProductSubscriptonHostComponent } from './subscription';
 import { MarketplaceInfoHostComponent } from './marketplace';
 
 import {ProductSelectionModalComponent, VendorSelectionModalComponent} from '@nusantara/shared';
-import { IProductRelation } from '@nusantara/models/products';
+import {IProductClass, IProductRelation} from '@nusantara/models/products';
 import {CategorySelectionModalComponent} from '@nusantara/shared/modals/category-selection-modal.component';
+import {ProductClassSelectionModalComponent} from '@nusantara/shared/modals/product-class-selection-modal.component';
 
 const log = new Logger('ProductComponent');
 
@@ -72,8 +73,8 @@ const log = new Logger('ProductComponent');
               <span>Product Category</span>
               <div class="manage">
                 <div>
-                  <input type="hidden" [formControl]="category">
-                  <input type="text" (click)="selectCategory()" readonly [value]="selectedCategory?.name">
+                  <input type="hidden" [formControl]="category" data-qa="category">
+                  <input type="text" (click)="selectCategory()" readonly [value]="selectedCategory?.name" data-qa="category-pop">
 <!--                  <select [formControl]="category" name="category" data-qa="category">-->
 <!--                    <option *ngFor="let c of categories" [ngValue]="c.href">-->
 <!--                      {{ c.pathName }}-->
@@ -96,7 +97,7 @@ const log = new Logger('ProductComponent');
                   </select>
                   <nus-field-errors [control]="productClass"></nus-field-errors>
                 </div>
-                <div><a [routerLink]="['/catalog', 'product-classes']">Manage Class</a>
+                <div><a [routerLink]="['/catalog', 'product-classes']" target="_blank">Manage Class</a>
                 </div>
               </div>
             </label>
@@ -128,8 +129,8 @@ const log = new Logger('ProductComponent');
               <span>Vendor</span>
               <div class="manage">
                 <div>
-                  <input type="hidden" [formControl]="vendor">
-                  <input type="text" (click)="selectVendor()" readonly [value]="selectedVendor?.name">
+                  <input type="hidden" [formControl]="vendor" data-qa="vendor">
+                  <input type="text" (click)="selectVendor()" readonly [value]="selectedVendor?.name" data-qa="vendor-pop">
 <!--                  <select [formControl]="vendor" name="vendor" data-qa="vendor">-->
 <!--                    <option *ngFor="let v of vendors" [ngValue]="v.href">-->
 <!--                      {{ v.name }}-->
@@ -389,6 +390,7 @@ const log = new Logger('ProductComponent');
     <nus-product-selection-modal></nus-product-selection-modal>
     <nus-vendor-selection-modal #vendorModal></nus-vendor-selection-modal>
     <nus-category-selection-modal #categoryModal></nus-category-selection-modal>
+    <nus-product-class-selection-modal #productClassModal></nus-product-class-selection-modal>
   `,
   styles: [
     '.container { display: grid; grid-template-columns: 3fr 1fr; grid-column-gap: 24px; }',
@@ -477,6 +479,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   selectedVendor: INamedHrefEntity = null;
   selectedCategory: INamedHrefEntity = null;
+  selectedProductClassValue: INamedHrefEntity = null;
 
   productRelatedSlug: string;
   productSlug: string;
@@ -492,6 +495,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   @ViewChild('vendorModal') vendorSelectionModal: VendorSelectionModalComponent;
   @ViewChild('categoryModal') categorySelectionModal: CategorySelectionModalComponent;
+  @ViewChild('productClassModal') productClassSelectionModal: ProductClassSelectionModalComponent;
+
 
   constructor(service: ProductService,
               private fb: FormBuilder,
@@ -511,6 +516,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
     this.vendorSelectionModal.onClose.subscribe(() => this.onVendorSelectionModalClosed());
     this.categorySelectionModal.onClose.subscribe(() => this.onCategorySelectionModalClosed());
+    this.productClassSelectionModal.onClose.subscribe(() => this.onProductClassSelectionModalClosed());
   }
 
   get name(): FormControl {
@@ -682,6 +688,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
     this.selectedVendor = entity?.vendor;
     this.selectedCategory = entity?.category;
+    this.selectedProductClassValue = entity?.productClass;
     // new product variant
     if (!entity && !!this.parentProduct) {
       this.parent.setValue(this.parentProduct.href);
@@ -694,6 +701,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
       this.selectedVendor = this.vendor.value;
       this.selectedCategory = this.category.value;
+      this.selectedProductClassValue = this.productClass.value;
 
       // optional inheritance from parent
       this.description.setValue(this.parentProduct.description);
@@ -1041,5 +1049,16 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   selectCategory(): void {
     this.categorySelectionModal.open();
+  }
+
+  selectProductClass(): void {
+    this.productClassSelectionModal.open();
+  }
+
+  private onProductClassSelectionModalClosed() {
+    if (this.productClassSelectionModal.result === DialogResult.OK) {
+      this.selectedProductClassValue = this.productClassSelectionModal.productClass.value as IProductClass;
+      this.productClass.setValue(this.selectedProductClassValue.href);
+    }
   }
 }
