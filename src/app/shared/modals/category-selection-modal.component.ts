@@ -3,8 +3,8 @@ import {NgxSmartModalComponent} from 'ngx-smart-modal';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {DialogResult, PagedResponse} from '@nusantara/core';
 import {Subscription} from 'rxjs';
-import {ICategory, IVendor} from '@nusantara/models';
-import {CategoryService, VendorService} from '@nusantara/services';
+import {ICategory} from '@nusantara/models';
+import {CategoryService} from '@nusantara/services';
 
 @Component({
   selector: 'nus-category-selection-modal',

@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CategorySelectionModalComponent } from '@nusantara/shared/modals/category-selection-modal.component';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {ReactiveFormsModule} from '@angular/forms';
+import {NgxSmartModalModule} from 'ngx-smart-modal';
 
 describe('CategorySelectionModalComponent', () => {
   let component: CategorySelectionModalComponent;
@@ -14,6 +15,7 @@ describe('CategorySelectionModalComponent', () => {
       imports: [
         HttpClientTestingModule,
         ReactiveFormsModule,
+        NgxSmartModalModule.forChild()
       ],
       declarations: [ CategorySelectionModalComponent ]
     })

@@ -3,6 +3,7 @@ import {VendorSelectionModalComponent} from '@nusantara/shared/vendor-selection-
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {IVendor} from '@nusantara/models';
 import {ReactiveFormsModule} from '@angular/forms';
+import {NgxSmartModalModule} from 'ngx-smart-modal';
 
 
 describe('VendorSelectionModalComponent', () => {
@@ -37,6 +38,7 @@ describe('VendorSelectionModalComponent', () => {
       imports: [
         HttpClientTestingModule,
         ReactiveFormsModule,
+        NgxSmartModalModule.forChild()
       ],
       declarations: [VendorSelectionModalComponent]
     })

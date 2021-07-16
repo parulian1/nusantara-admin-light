@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ProductClassSelectionModalComponent } from '@nusantara/shared/modals/product-class-selection-modal.component';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {ReactiveFormsModule} from '@angular/forms';
+import {NgxSmartModalModule} from 'ngx-smart-modal';
 
 describe('ProductClassSelectionModalComponent', () => {
   let component: ProductClassSelectionModalComponent;
@@ -14,6 +15,7 @@ describe('ProductClassSelectionModalComponent', () => {
       imports: [
         HttpClientTestingModule,
         ReactiveFormsModule,
+        NgxSmartModalModule.forChild()
       ],
       declarations: [ ProductClassSelectionModalComponent ]
     })
