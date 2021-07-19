@@ -90,11 +90,13 @@ const log = new Logger('ProductComponent');
               <span>Product Class</span>
               <div class="manage">
                 <div>
-                  <select [formControl]="productClass" name="product-class" data-qa="product-class">
-                    <option *ngFor="let pc of productClasses" [ngValue]="pc.href">
-                      {{ pc.name }}
-                    </option>
-                  </select>
+                  <input type="hidden" [formControl]="productClass" data-qa="product-class">
+                  <input type="text" (click)="selectProductClass()" readonly [value]="selectedProductClassValue?.name" data-qa="product-class-pop">
+<!--                  <select [formControl]="productClass" name="product-class" data-qa="product-class">-->
+<!--                    <option *ngFor="let pc of productClasses" [ngValue]="pc.href">-->
+<!--                      {{ pc.name }}-->
+<!--                    </option>-->
+<!--                  </select>-->
                   <nus-field-errors [control]="productClass"></nus-field-errors>
                 </div>
                 <div><a [routerLink]="['/catalog', 'product-classes']" target="_blank">Manage Class</a>
