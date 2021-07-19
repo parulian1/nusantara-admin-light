@@ -86,7 +86,7 @@ import { AuthService } from '@nusantara/auth';
             {{ stock_record.actualQuantity }}
           </td>
           <td data-qa="adjusted-quantity">
-            {{ adjustedQty(stock_record.originalQuantity, stock_record.expectedQuantity) }}
+            {{ adjustedQty(stock_record.actualQuantity, stock_record.expectedQuantity) }}
           </td>
           <td data-qa="difference-quantity">
             {{ stock_record.expectedQuantity }}
@@ -177,8 +177,8 @@ export class AdjustmentDetailComponent  extends AbstractDetailComponent<IAdjustm
     return `${getSlugFromHref(receivingHref)} / ${productName} / ${getSlugFromHref(locationHref)}`;
   }
 
-  adjustedQty(originalQty: number, expectedQty: number): number {
-    return expectedQty - originalQty;
+  adjustedQty(actualQty: number, expectedQty: number): number {
+    return expectedQty - actualQty;
   }
 
   getFormValue(): any {
