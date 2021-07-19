@@ -441,6 +441,12 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
       const selectedProduct = this.productSelectionModal.product.value as IProduct;
       const basePrice = this.getProductBasePrice(selectedProduct.priceLists);
 
+      const checkDuplicate = this.products.controls.filter(data => data.value.product.href === selectedProduct.href);
+      if (checkDuplicate.length > 0) {
+        this.toast?.addError('Product ' + selectedProduct.name + ' is already on the list!', 'Failed to add product');
+        return;
+      }
+
       const f = this.fb.group({
         product: this.fb.group({
           name: [selectedProduct.name, []],
