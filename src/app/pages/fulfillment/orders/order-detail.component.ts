@@ -413,36 +413,45 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   private inputAwbClose() {
     if (this.inputAwb.result === DialogResult.OK) {
       const awbNumber = this.inputAwb.awbNumber.value;
-      this.shipmentService.manualAWB({
-        orderNumber: this.inputAwb.orderNumber.value,
-        awbNumber,
-      }).subscribe((response) => {
-        if (response instanceof ErrorResult) {
-          this.toast?.addMessage(
-            'Please try again or contact the administrator.',
-            'Unable to Proceed',
-            ToastLevelEnum.error
-          );
-        } else {
-          this.orderDetailData.children.forEach((children) => {
-            children.data.forEach((childrenData) => {
-              if (getSlugFromHref(childrenData.href) === this.inputAwb.orderNumber.value) {
-                if (!childrenData.shipmentHistory) {
-                  childrenData.shipmentHistory = {
-                    awbNumber: null,
-                    href: null,
-                    shippingLabelUrl: '',
-                  };
+      if (this.inputAwb.form.valid)
+      {
+        this.shipmentService.manualAWB({
+          orderNumber: this.inputAwb.orderNumber.value,
+          awbNumber,
+        }).subscribe((response) => {
+          if (response instanceof ErrorResult) {
+            this.toast?.addMessage(
+              'Please try again or contact the administrator.',
+              'Unable to Proceed',
+              ToastLevelEnum.error
+            );
+          } else {
+            this.orderDetailData.children.forEach((children) => {
+              children.data.forEach((childrenData) => {
+                if (getSlugFromHref(childrenData.href) === this.inputAwb.orderNumber.value) {
+                  if (!childrenData.shipmentHistory) {
+                    childrenData.shipmentHistory = {
+                      awbNumber: null,
+                      href: null,
+                      shippingLabelUrl: '',
+                    };
+                  }
+                  this.fetchAwbUrl(childrenData);
+                  this.updateOrder(childrenData, 'shipped');
                 }
-                this.fetchAwbUrl(childrenData);
-                this.updateOrder(childrenData, 'shipped');
-              }
+              });
             });
-          });
+          }
+          this.isRequestShipment = false;
+        });
+      } else {
+        this.toast?.addMessage(
+          'Your AWB entry is not valid.',
+          'Unable to Proceed',
+          ToastLevelEnum.error
+        );
+      }
 
-        }
-        this.isRequestShipment = false;
-      });
     }
   }
 }
