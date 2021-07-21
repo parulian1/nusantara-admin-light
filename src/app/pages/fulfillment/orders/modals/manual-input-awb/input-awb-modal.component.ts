@@ -84,7 +84,11 @@ export class InputAwbModalComponent implements AfterViewInit, OnInit {
   }
 
   close() {
-    this.result = DialogResult.OK;
-    this.modal.close();
+    if (this.form.valid) {
+      this.result = DialogResult.OK;
+      this.modal.close();
+    } else {
+      alert('Invalid entry');
+    }
   }
 }
