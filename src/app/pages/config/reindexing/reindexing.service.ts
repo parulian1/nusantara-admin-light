@@ -23,7 +23,13 @@ export class ReindexingService {
 
   public reindexStock() {
     return this.httpClient.get(
-      '/api/fulfillment/reindex-receiving-order/'
+      '/api/fulfillment/reindex-stock-receiving-order/'
+    );
+  }
+
+  public reindexStockApproved() {
+    return this.httpClient.get(
+      '/api/fulfillment/reindex-stock-receiving-order/'
     );
   }
 
