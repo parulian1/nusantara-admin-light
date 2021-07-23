@@ -14,6 +14,7 @@ import {
   TokopediaClientFormComponent,
   TscFormComponent,
   LazadaFormComponent,
+  BukalapakFormComponent
 } from './connect';
 
 import {
@@ -64,7 +65,7 @@ export function getMarketplacesConfig(
 
 @NgModule({
   declarations: [
-    // conmect
+    // connect
     ConnectComponent,
     ConnectionFormComponent,
     VariantFormComponent,
@@ -76,6 +77,7 @@ export function getMarketplacesConfig(
     CategoryGroupControlComponent,
     AttributeSelectionFormComponent,
     AttributeMatchingFormComponent,
+    BukalapakFormComponent,
 
     // setup
     SetupComponent,
