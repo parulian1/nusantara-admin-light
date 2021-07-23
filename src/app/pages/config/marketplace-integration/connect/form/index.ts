@@ -3,3 +3,4 @@ export * from './shopee-form.component';
 export * from './tokopedia-form.component';
 export * from './tsc-form.component';
 export * from './lazada-form.component';
+export * from './bukalapak-form.component';

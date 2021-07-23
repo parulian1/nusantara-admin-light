@@ -104,7 +104,8 @@ export class EditShippingComponent implements OnInit, OnDestroy {
   readOnly = [
     'tsc',
     'lazada',
-    'tokopedia'
+    'tokopedia',
+    'bukalapak'
   ]
 
   constructor(

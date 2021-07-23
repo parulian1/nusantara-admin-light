@@ -49,8 +49,13 @@ import { MarketplaceClientEnum } from './markeplace-client-enum';
           [shopSlug]="shopSlug"
           [isEdit]="editMode"
         ></nus-lazada-client-form>
+        <nus-bukalapak-client-form
+          *ngSwitchCase="marketplaceClient.bukalapak"
+          [shopSlug]="shopSlug"
+          [isEdit]="editMode"
+        ></nus-bukalapak-client-form>
       </div>
-    </div>
+    </div>  
   `,
   styles: [
     `.wrapper { padding: 16px 24px; border: solid 1px var(--grey); border-radius: 4px; width: 60vw; }`,

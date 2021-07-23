@@ -60,7 +60,6 @@ export class MarketplaceShowcaseService {
   }
 
   update(shopSlug: string, showcaseId: number, name: string): Observable<any>{
-    console.log(name, showcaseId);
     return this.httpClient.put(`${this.baseUrl}/${shopSlug}/etalase/${showcaseId}/`, {
       name: name, id: showcaseId
     });

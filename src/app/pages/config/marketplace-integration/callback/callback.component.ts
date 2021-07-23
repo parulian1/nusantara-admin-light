@@ -18,7 +18,7 @@ import { IError } from '@nusantara/models/base/error';
   template: `
     <form [formGroup]="form" (ngSubmit)="callback()">
       <input type="hidden" [formControl]="code">
-      <h3>Please Confirm Lazada and Bhisma Authorization</h3>
+      <h3 style="text-align: center">Please Confirm {{marketplace | titlecase}} and Bhisma Authorization</h3>
       <h3 style="text-align: center">This process will takes times</h3>
       <h3 style="text-align: center">Please wait and refresh your store list page until the status is connected</h3>
       <div class="controls-container">
@@ -54,6 +54,10 @@ export class CallbackComponent implements OnInit {
   codeCallback: any;
   redirectOnFail = '/auth/login';
   siteDomain = this.auth.siteDomain;
+  marketplace: string;
+
+  // add new marketplace that need code
+  marketplaceArray = ['lazada']
 
   constructor(private fb: FormBuilder,
               private service: MarketplaceShopService,
@@ -62,13 +66,21 @@ export class CallbackComponent implements OnInit {
               private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
+
+    // needed to check marketplace, now only bukalapak and lazada
+    if(this.checkString(this.router.url)[0]){
+      this.marketplace = this.checkString(this.router.url)[1]
+    } else {
+      this.marketplace = 'bukalapak'
+    }
+
     this.activatedRoute.queryParams.subscribe(params => {
         this.codeCallback = params['code'];
     });
 
     this.form = this.fb.group({
       code: [this.codeCallback, [Validators.required]],
-      marketplace: ['lazada', []],
+      marketplace: [this.marketplace, []],
     });
 
     this.activatedRoute.queryParamMap.subscribe(paramMap => {
@@ -80,6 +92,17 @@ export class CallbackComponent implements OnInit {
    * Attempts to log the user in.
    * If successful, their auth token will be saved and they will be redirected.
    */
+
+  checkString(str) {    
+    let status = false;
+    let selectedMarketplace;
+    this.marketplaceArray.forEach((currentMarketplace, index)=>{
+      status = str.includes(currentMarketplace)  
+      selectedMarketplace = currentMarketplace
+    });
+    return [status, selectedMarketplace]
+  }
+
   getFormValue(): any {
     const formValue = {
       code: this.form.value.code,
