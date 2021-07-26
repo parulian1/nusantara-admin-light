@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {AbstractDetailComponent, DialogResult, ToastService} from '@nusantara/core';
@@ -7,21 +7,17 @@ import {IProduct} from '@nusantara/models/products';
 import {IPoints, IProductPoints} from '@nusantara/models';
 import {PointsService} from '@nusantara/services';
 import {ProductSelectionModalComponent} from '@nusantara/shared';
+import {of} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'nus-points',
   template: `
     <h1 class="title-1">Points</h1>
-    <form [formGroup]="form" (ngSubmit)="save()">
+    <form [formGroup]="form" (ngSubmit)="save()" class="fluid">
       <nus-tabs>
         <nus-tab [title]="'Configuration'">
           <div class="points-config">
-
-            <label>
-              <span>Points Name</span>
-              <input type="text" [formControl]="name" maxlength="50" placeholder="Points Name">
-              <nus-field-errors [control]="name"></nus-field-errors>
-            </label>
 
             <span class="subheading-2">Transaction Value</span>
 
@@ -125,27 +121,32 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
         <nus-tab [title]="'Products'">
           <div class="product-table">
             <p class="subheading-2">Products that can be exchanged for points</p>
+            <div class="product-table__search control">
+              <i class="material-icons">search</i>
+              <input type="search" placeholder="Search Product Name or SKU" [formControl]="queryText">
+            </div>
             <table>
               <thead>
-              <tr>
-                <th>Product</th>
-                <th>Points</th>
-                <th></th>
-              </tr>
+                <tr>
+                  <th>Product</th>
+                  <th>Product Price</th>
+                  <th>Points</th>
+                  <th></th>
+                </tr>
               </thead>
               <tbody>
-              <nus-product-points
-                *ngFor="let control of products.controls; let i=index"
-                [form]="control"
-                (remove)="removeProduct(i)"
-              ></nus-product-points>
-              <tr>
-                <td colspan="3">
-                  <button type="button" (click)="selectProduct()" class="new-add-button wide">
-                    <i class="material-icons">add</i> Add Product
-                  </button>
-                </td>
-              </tr>
+                <nus-product-points
+                  *ngFor="let control of filteredProducts$; let i=index"
+                  [form]="control"
+                  (remove)="removeProduct(i)"
+                ></nus-product-points>
+                <tr>
+                  <td colspan="4">
+                    <button type="button" (click)="selectProduct()" class="new-add-button wide">
+                      <i class="material-icons">add</i> Add Product
+                    </button>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -281,6 +282,24 @@ import {ProductSelectionModalComponent} from '@nusantara/shared';
       width: 30px;
     }
 
+    .product-table__search {
+      display: flex;
+      border: solid 1px var(--grey);
+      background-color: transparent;
+      align-items: center;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    .product-table__search > i {
+      background-color: white;
+      color: var(--nav-background);
+      line-height: 31px;
+      padding-left: 13px;
+    }
+    .product-table__search > input[type=search] {
+      border: none !important;
+    }
+
   `]
 })
 export class PointsComponent extends AbstractDetailComponent<IPoints> implements OnInit, AfterViewInit {
@@ -290,6 +309,11 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
   entity: IPoints;
   productPoints: Array<IProductPoints>;
   control: FormGroup;
+
+  timeoutId: any;
+  reloadTimeout = 650;
+  queryText = new FormControl('');
+  filteredProducts$: AbstractControl[];
 
   expireAtAfterEarning: string;
   expireAtCustomerNotActive: string;
@@ -301,10 +325,6 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
               toast: ToastService,
               public fb: FormBuilder) {
     super(route, router, toast, service);
-  }
-
-  get name(): FormControl {
-    return this.form.get('name') as FormControl;
   }
 
   get transactionAmount(): FormControl {
@@ -341,7 +361,7 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
 
   clearExpiredInput() {
     // Clear expire-at input when expire type change
-    this.form.get('expireType').valueChanges.subscribe(canUsePos => {
+    this.form.get('expireType').valueChanges.subscribe(() => {
       this.expireAtAfterEarning = '';
       this.expireAtCustomerNotActive = '';
       this.expireAtEveryYear = '';
@@ -355,6 +375,9 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
       this.productPoints = data.entity.products;
     });
     this.clearExpiredInput();
+    this.queryText.valueChanges.subscribe(
+      (newValue) => { this.onQueryTextChanged(newValue); }
+    );
   }
 
   ngAfterViewInit() {
@@ -363,7 +386,6 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
 
   initializeForm(entity?: IPoints, productPoints?: IProductPoints) {
     this.form = this.fb.group({
-      name: [entity?.name, [Validators.required, Validators.maxLength(50)]],
       href: [entity?.href, []],
       transactionAmount: [entity?.transactionAmount, [Validators.required]],
       point: [entity?.point, [Validators.required]],
@@ -390,6 +412,8 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
     this.expireAtAfterEarning = entity?.expireAt;
     this.expireAtCustomerNotActive = entity?.expireAt;
     this.expireAtEveryYear = entity?.expireAt;
+
+    this.filteredProducts$ = this.products.controls;
   }
 
   selectProduct() {
@@ -397,12 +421,15 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
   }
 
   addProduct(product?: IProductPoints): void {
+    const basePrice = this.getProductBasePrice(product?.product.priceLists);
     const f = this.fb.group({
       product: this.fb.group({
         href: [product?.product.href, []],
         name: [product?.product.name, []],
+        price: [basePrice, []],
+        upc: [product?.product.upc, []]
       }),
-      amount: [product?.amount, []]
+      amount: [product?.amount, [Validators.required, Validators.min(1)]]
     });
 
     this.products.push(f);
@@ -412,16 +439,26 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
     if (this.productSelectionModal.result === DialogResult.OK) {
 
       const selectedProduct = this.productSelectionModal.product.value as IProduct;
+      const basePrice = this.getProductBasePrice(selectedProduct.priceLists);
+
+      const checkDuplicate = this.products.controls.filter(data => data.value.product.href === selectedProduct.href);
+      if (checkDuplicate.length > 0) {
+        this.toast?.addError('Product ' + selectedProduct.name + ' is already on the list!', 'Failed to add product');
+        return;
+      }
 
       const f = this.fb.group({
         product: this.fb.group({
           name: [selectedProduct.name, []],
-          href: [selectedProduct.href, []]
+          href: [selectedProduct.href, []],
+          price: [basePrice, []],
+          upc: [selectedProduct.upc, []]
         }),
-        amount: [0, []]
+        amount: [0, [Validators.required, Validators.min(1)]]
       });
 
       this.products.push(f);
+      this.onQueryTextChanged(this.queryText.value);
     }
   }
 
@@ -444,6 +481,54 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
   }
 
   removeProduct(i: number): void {
-    this.products.removeAt(i);
+    const selectedProduct = this.filteredProducts$[i].value;
+    const index = this.products.value.findIndex( p => p.product.name === selectedProduct.product.name);
+    this.products.removeAt(index);
+    this.onQueryTextChanged(this.queryText.value);
+  }
+
+  getProductBasePrice(priceLists: Array<any>) {
+    const priceData = priceLists.find(obj => {
+      return obj.type === 'default';
+    });
+    let basePrice = 0;
+    if (priceData !== undefined) {
+      const priceRange = priceData.ranges.find(range => {
+        return range.minQuantity === 1;
+      });
+
+      if (priceRange !== undefined) {
+        basePrice = priceRange.price;
+      }
+    }
+
+    return basePrice;
+  }
+
+  onQueryTextChanged(newValue: string) {
+
+    if (!!this.timeoutId) {
+      clearTimeout(this.timeoutId);
+    }
+    // don't run if the value hasn't actually changed from the original.
+    if (newValue === '') {
+      this.filteredProducts$ = this.products.controls;
+    } else {
+      this.timeoutId = setTimeout(() => {
+        // wait to see if the user is still typing more before searching
+        of(this.products.controls).pipe(
+          map((products: AbstractControl[]) =>
+            products.filter((group: AbstractControl) => {
+              const product = group.get('product');
+              return product.get('name').value
+                .toLowerCase()
+                .includes(this.queryText.value.toLowerCase()) || product.get('upc').value
+                .toLowerCase()
+                .includes(this.queryText.value.toLowerCase());
+            })
+          )
+        ).subscribe(val => this.filteredProducts$ = val);
+      }, this.reloadTimeout);
+    }
   }
 }
