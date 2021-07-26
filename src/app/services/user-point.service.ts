@@ -16,7 +16,7 @@ export class UserPointService extends AbstractCrudService<IPoint> {
   }
 
   fetchByUser(username: string): Observable<IPoint> {
-    return this.httpClient.get<IPoint>(`/api/order/point/${username}/`,
+    return this.httpClient.get<IPoint>(`/api/order/point/?username=${username}`,
       {observe: 'body', responseType: 'json'});
   }
 }
