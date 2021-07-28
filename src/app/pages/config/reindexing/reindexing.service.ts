@@ -77,4 +77,10 @@ export class ReindexingService {
       '/api/iam/reindex/customer-groups/'
     );
   }
+
+  public reindexHighlight() {
+    return this.httpClient.get(
+      '/api/cms/reindex-highlight/'
+    );
+  }
 }

@@ -31,6 +31,6 @@ export class ShopifyWebhookService {
 
   registerCarrier(): Observable<any> {
     return this.httpClient
-      .post(`/api/fulfillment/shopify/carrier-register`, {}, {observe: 'body', responseType: 'json'});
+      .post(`/api/fulfillment/shopify/carrier-register/`, {}, {observe: 'body', responseType: 'json'});
   }
 }

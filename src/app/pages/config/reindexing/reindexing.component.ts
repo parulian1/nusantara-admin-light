@@ -29,7 +29,7 @@ export class ReindexingComponent implements OnInit {
           });
           break;
         case 'approved-stock':
-          this.reindexingService.reindexStock().subscribe(res => {
+          this.reindexingService.reindexStockApproved().subscribe(res => {
             console.log(res);
           });
           break;
@@ -54,7 +54,11 @@ export class ReindexingComponent implements OnInit {
             console.log(res);
           });
           break;
-
+        case 'highlight':
+          this.reindexingService.reindexHighlight().subscribe(res => {
+            console.log(res);
+          });
+          break;
         case 'product-image':
           this.reindexingService.reindexProductImage().subscribe(res => {
             console.log(res);
