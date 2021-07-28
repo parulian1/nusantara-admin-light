@@ -78,4 +78,10 @@ export class ReindexingService {
       '/api/iam/reindex/customer-groups/'
     );
   }
+
+  public googleDataFeed() {
+    return this.httpClient.get(
+      '/api/catalog/feed-data/google/'
+    );
+  }
 }
