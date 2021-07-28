@@ -53,7 +53,7 @@ export class InventoryStockRecordService extends AbstractCrudService<IStockRecor
     }
 
     return this.httpClient
-      .get<IStockRecord[]>(`/api/fulfillment/stock-record-search/`, {observe: 'response', responseType: 'json', params})
+      .get<IStockRecord[]>(`/api/fulfillment/stock-record/`, {observe: 'response', responseType: 'json', params})
       .pipe(map(resp => new PagedResponse(resp)));
   }
 }

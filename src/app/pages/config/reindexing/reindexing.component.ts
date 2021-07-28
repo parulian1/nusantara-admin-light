@@ -79,6 +79,11 @@ export class ReindexingComponent implements OnInit {
             console.log(res);
           });
           break;
+        case 'google-feed':
+          this.reindexingService.googleDataFeed().subscribe(res => {
+            console.log(res);
+          });
+          break;
       }
     });
   }
