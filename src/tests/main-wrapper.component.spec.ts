@@ -14,9 +14,8 @@ describe('MainWrapperComponent', () => {
   let fixture: ComponentFixture<MainWrapperComponent>;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
 
-  beforeEach(waitForAsync(() => {
-    authServiceSpy = jasmine.createSpyObj('AuthService', ['logout', 'shouldRefresh']);
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         NoopAnimationsModule,
@@ -36,19 +35,22 @@ describe('MainWrapperComponent', () => {
         }),
       ],
       declarations: [MainWrapperComponent, GetUserDisplayNamePipe],
-      providers: [JwtHelperService, {
-        provide: AuthService,
-        useValue: authServiceSpy
-      }],
+      providers: [
+        JwtHelperService,
+        {
+          provide: AuthService,
+          useValue: authServiceSpy
+        }],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
 
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MainWrapperComponent);
     component = fixture.componentInstance;
+    authServiceSpy = jasmine.createSpyObj('AuthService', ['logout', 'shouldRefresh'], ['siteDomain']);
     fixture.detectChanges();
   });
 

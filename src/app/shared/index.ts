@@ -17,3 +17,4 @@ export * from './marketplace-shipping-info-modal.component';
 export * from './marketplace-stock-info-modal.component';
 export * from './animation';
 export * from './confirm-modal-reset-pin.component';
+export * from './vendor-selection-modal/vendor-selection-modal.component';

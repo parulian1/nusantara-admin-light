@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ICategory } from '@nusantara/models';
+import {ICategory, INamedHrefEntity} from '@nusantara/models';
 import { CategoryService } from '@nusantara/services';
-import { AbstractDetailComponent, ToastService } from '@nusantara/core';
+import {AbstractDetailComponent, DialogResult, ToastService} from '@nusantara/core';
+import {CategorySelectionModalComponent} from '@nusantara/shared/modals/category-selection-modal.component';
 
 @Component({
   selector: 'nus-category',
@@ -28,12 +29,17 @@ import { AbstractDetailComponent, ToastService } from '@nusantara/core';
 
       <label>
         <span>Parent</span>
-        <select [formControl]="parent" name="parent">
-          <option *ngFor="let parent of parentOptions"
-                  [value]="parent.href">
-            {{ parent.pathName }}
-          </option>
-        </select>
+        <input type="hidden" [formControl]="parent" data-qa="parent">
+        <div>
+        <input type="text" (click)="selectCategory()" [disabled]="!!entity?.href" readonly [value]="selectedCategory?.name" data-qa="parent-pop">
+<!--        <select [formControl]="parent" name="parent">-->
+<!--          <option *ngFor="let parent of parentOptions"-->
+<!--                  [value]="parent.href">-->
+<!--            {{ parent.pathName }}-->
+<!--          </option>-->
+<!--        </select>-->
+          <button type="button" (click)="clearCategory()" [disabled]="!!entity?.href">Clear Selection</button>
+        </div>
       </label>
 
       <label class="checkbox" style="min-height: 1rem;">
@@ -98,6 +104,7 @@ import { AbstractDetailComponent, ToastService } from '@nusantara/core';
       </nus-detail-actions>
 
     </form>
+    <nus-category-selection-modal #categoryModal></nus-category-selection-modal>
   `,
   styles: [
     'img { height: 65px; width: 65px; }',
@@ -109,6 +116,10 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
   parentOptions: ICategory[] = [];
   imagePreviewUrl: string;
   entity?: ICategory;
+
+  selectedCategory: INamedHrefEntity = null;
+
+  @ViewChild('categoryModal') categorySelectionModal: CategorySelectionModalComponent;
 
   constructor(service: CategoryService,
               route: ActivatedRoute,
@@ -123,6 +134,21 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
     this.route.data.subscribe((data: {parentOptions: ICategory[]}) => {
       this.parentOptions = data.parentOptions;
     });
+  }
+
+  ngAfterViewInit(): void {
+    super.ngAfterViewInit();
+    this.categorySelectionModal.onClose.subscribe(() => this.onCategorySelectionModalClosed());
+
+  }
+  private onCategorySelectionModalClosed(): void {
+    if (this.categorySelectionModal.result === DialogResult.OK) {
+      this.selectedCategory = this.categorySelectionModal.category.value as ICategory;
+      this.parent.setValue(this.selectedCategory.href);
+    }
+  }
+  selectCategory(): void {
+    this.categorySelectionModal.open();
   }
 
   initializeForm(entity?: ICategory) {
@@ -177,5 +203,10 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
       this.form.value.image = this.imagePreviewUrl;
     }
     super.save();
+  }
+
+  clearCategory(): void {
+    this.parent.setValue(null);
+    this.selectedCategory = null;
   }
 }

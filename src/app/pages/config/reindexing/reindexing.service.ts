@@ -29,7 +29,7 @@ export class ReindexingService {
 
   public reindexStockApproved() {
     return this.httpClient.get(
-      '/api/fulfillment/reindex-stock-receiving-order/'
+      '/api/fulfillment/reindex-approved-receiving-order/'
     );
   }
 
@@ -82,6 +82,12 @@ export class ReindexingService {
   public googleDataFeed() {
     return this.httpClient.get(
       '/api/catalog/feed-data/google/'
+    );
+  }
+
+  public reindexHighlight() {
+    return this.httpClient.get(
+      '/api/cms/reindex-highlight/'
     );
   }
 }

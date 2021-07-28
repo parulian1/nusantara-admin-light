@@ -44,6 +44,9 @@ import { GetUserDisplayNamePipe } from './get-user-display-name.pipe';
 import { StockRecordSelectionModalComponent } from '@nusantara/shared/stock-record-selection-modal.component';
 import { ConfirmModalResetPinComponent } from '@nusantara/shared/confirm-modal-reset-pin.component';
 import { CsvDialogComponent } from './csv-dialog/csv-dialog.component';
+import {VendorSelectionModalComponent} from '@nusantara/shared/vendor-selection-modal/vendor-selection-modal.component';
+import { CategorySelectionModalComponent } from './modals/category-selection-modal.component';
+import { ProductClassSelectionModalComponent } from './modals/product-class-selection-modal.component';
 
 /**
  * The purpose of this module is to make common code (like pipes)
@@ -89,6 +92,10 @@ import { CsvDialogComponent } from './csv-dialog/csv-dialog.component';
     OnlyNumberDirective,
     ConfirmModalResetPinComponent,
     CsvDialogComponent,
+    OnlyNumberDirective,
+    VendorSelectionModalComponent,
+    CategorySelectionModalComponent,
+    ProductClassSelectionModalComponent
   ],
   exports: [
     EntityToSlugPipe,
@@ -129,6 +136,9 @@ import { CsvDialogComponent } from './csv-dialog/csv-dialog.component';
     OrderType,
     ConfirmModalResetPinComponent,
     CsvDialogComponent,
+    VendorSelectionModalComponent,
+    CategorySelectionModalComponent,
+    ProductClassSelectionModalComponent
   ],
   imports: [
     CommonModule,

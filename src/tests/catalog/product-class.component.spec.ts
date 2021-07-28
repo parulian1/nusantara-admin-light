@@ -7,7 +7,8 @@ import {SharedModule} from '@nusantara/shared';
 import {ProductClassComponent} from '@nusantara/pages/catalog/product-class';
 import {ProductClassAttributesComponent} from '@nusantara/pages/catalog/product-class/components';
 import {ActivatedRoute, ActivatedRouteSnapshot, convertToParamMap, ParamMap, Params, Router} from '@angular/router';
-import { of, ReplaySubject} from 'rxjs';
+import {of, ReplaySubject} from 'rxjs';
+import {SiteConfigService} from '@nusantara/services';
 
 class ActivatedRouteStub implements Partial<ActivatedRoute> {
   // tslint:disable-next-line:variable-name
@@ -15,6 +16,7 @@ class ActivatedRouteStub implements Partial<ActivatedRoute> {
   private subject = new ReplaySubject<ParamMap>();
 
   paramMap = this.subject.asObservable();
+
   get snapshot(): ActivatedRouteSnapshot {
     const snapshot: Partial<ActivatedRouteSnapshot> = {
       paramMap: this._paramMap,
@@ -37,11 +39,9 @@ class ActivatedRouteStub implements Partial<ActivatedRoute> {
 describe('ProductClassComponent', () => {
   let component: ProductClassComponent;
   let fixture: ComponentFixture<ProductClassComponent>;
-
+  let siteConfigService: jasmine.SpyObj<SiteConfigService>;
   let httpTestingController: HttpTestingController;
-  const mockRouter = {
-    navigate: jasmine.createSpy('navigate')
-  };
+  const mockRouter = jasmine.createSpyObj('Router', ['navigate']);
 
   const productClassResponse = {
     name: 'sasa3',
@@ -54,9 +54,9 @@ describe('ProductClassComponent', () => {
     productCount: 0
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         ReactiveFormsModule,
@@ -68,7 +68,7 @@ describe('ProductClassComponent', () => {
         ProductClassAttributesComponent
       ],
       providers: [
-        { provide: Router, useValue: mockRouter},
+        {provide: Router, useValue: mockRouter},
         {
           provide: ActivatedRoute,
           useValue: {
@@ -84,11 +84,11 @@ describe('ProductClassComponent', () => {
       ]
     })
       .compileComponents();
-  }));
-
+  });
   beforeEach(() => {
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(ProductClassComponent);
+    siteConfigService = TestBed.inject(SiteConfigService) as jasmine.SpyObj<SiteConfigService>;
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -137,7 +137,7 @@ describe('ProductClassComponent', () => {
     expect(mock.request.body.trackStock).toBe(productClassResponse.trackStock);
     expect(mock.request.body.isPerishable).toBe(productClassResponse.isPerishable);
     expect(mock.request.body.attributes).toEqual(productClassResponse.attributes);
-    mock.flush(productClassResponse);
+    mock.flush(productClassResponse, {status: 201, statusText: 'CREATED'});
     httpTestingController.verify();
   });
 
@@ -160,7 +160,7 @@ describe('ProductClassComponent', () => {
     expect(mock.request.body.trackStock).toBe(false);
     expect(mock.request.body.isPerishable).toBe(true);
     expect(mock.request.body.attributes).toEqual(productClassResponse.attributes);
-    mock.flush(productClassResponse);
+    mock.flush(productClassResponse, {status: 200, statusText: 'UPDATED'});
     httpTestingController.verify();
   });
 
@@ -189,7 +189,7 @@ describe('ProductClassComponent', () => {
     expect(mock.request.body.trackStock).toBe(false);
     expect(mock.request.body.isPerishable).toBe(false);
     expect(mock.request.body.attributes).toEqual(productClassResponse.attributes);
-    mock.flush(productClassResponse);
+    mock.flush(productClassResponse, {status: 201, statusText: 'CREATED'});
     httpTestingController.verify();
   });
 

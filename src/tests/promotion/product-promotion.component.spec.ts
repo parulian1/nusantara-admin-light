@@ -61,8 +61,8 @@ describe('ProductPromotionComponent', () => {
     priority: 1
   };
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach( async() => {
+    await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         ReactiveFormsModule,
@@ -75,7 +75,7 @@ describe('ProductPromotionComponent', () => {
       providers: []
     })
       .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     httpTestingController = TestBed.inject(HttpTestingController);

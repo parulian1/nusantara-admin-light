@@ -14,8 +14,8 @@ describe('DashboardComponent', () => {
 
   const fakeResolvedData = { dashboard: { href: 'https://something/?foo=bar&titled=true', } };
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
@@ -31,7 +31,7 @@ describe('DashboardComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DashboardComponent);

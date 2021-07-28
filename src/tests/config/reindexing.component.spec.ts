@@ -13,8 +13,8 @@ describe('ReindexingComponent', () => {
   let reindexingService: jasmine.SpyObj<ReindexingService>;
   let fixture: ComponentFixture<ReindexingComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
@@ -36,7 +36,7 @@ describe('ReindexingComponent', () => {
       ]
     })
       .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ReindexingComponent);

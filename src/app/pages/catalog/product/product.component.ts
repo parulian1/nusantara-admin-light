@@ -18,7 +18,7 @@ import {
   DialogResult,
   ToastLevelEnum
 } from '@nusantara/core';
-import { ICategory, IVendor, drf, products } from '@nusantara/models';
+import {ICategory, IVendor, drf, products, INamedHrefEntity} from '@nusantara/models';
 import { IError } from '@nusantara/models/base/error';
 import { ProductService, SiteConfigService, ProductRelatedService } from '@nusantara/services';
 import { PriceListHostComponent } from './price';
@@ -27,8 +27,10 @@ import { ProductAttributeHostComponent } from './attribute';
 import { ProductSubscriptonHostComponent } from './subscription';
 import { MarketplaceInfoHostComponent } from './marketplace';
 
-import { ProductSelectionModalComponent } from '@nusantara/shared';
-import { IProductRelation } from '@nusantara/models/products';
+import {ProductSelectionModalComponent, VendorSelectionModalComponent} from '@nusantara/shared';
+import {IProductClass, IProductRelation} from '@nusantara/models/products';
+import {CategorySelectionModalComponent} from '@nusantara/shared/modals/category-selection-modal.component';
+import {ProductClassSelectionModalComponent} from '@nusantara/shared/modals/product-class-selection-modal.component';
 
 const log = new Logger('ProductComponent');
 
@@ -71,11 +73,13 @@ const log = new Logger('ProductComponent');
               <span>Product Category</span>
               <div class="manage">
                 <div>
-                  <select [formControl]="category" name="category" data-qa="category">
-                    <option *ngFor="let c of categories" [ngValue]="c.href">
-                      {{ c.pathName }}
-                    </option>
-                  </select>
+                  <input type="hidden" [formControl]="category" data-qa="category">
+                  <input type="text" (click)="selectCategory()" readonly [value]="selectedCategory?.name" data-qa="category-pop">
+<!--                  <select [formControl]="category" name="category" data-qa="category">-->
+<!--                    <option *ngFor="let c of categories" [ngValue]="c.href">-->
+<!--                      {{ c.pathName }}-->
+<!--                    </option>-->
+<!--                  </select>-->
                   <nus-field-errors [control]="category"></nus-field-errors>
                 </div>
                 <div><a [routerLink]="['/catalog', 'categories']"> Manage Category</a></div>
@@ -86,14 +90,16 @@ const log = new Logger('ProductComponent');
               <span>Product Class</span>
               <div class="manage">
                 <div>
-                  <select [formControl]="productClass" name="product-class" data-qa="product-class">
-                    <option *ngFor="let pc of productClasses" [ngValue]="pc.href">
-                      {{ pc.name }}
-                    </option>
-                  </select>
+                  <input type="hidden" [formControl]="productClass" data-qa="product-class">
+                  <input type="text" (click)="selectProductClass()" readonly [value]="selectedProductClassValue?.name" data-qa="product-class-pop">
+<!--                  <select [formControl]="productClass" name="product-class" data-qa="product-class">-->
+<!--                    <option *ngFor="let pc of productClasses" [ngValue]="pc.href">-->
+<!--                      {{ pc.name }}-->
+<!--                    </option>-->
+<!--                  </select>-->
                   <nus-field-errors [control]="productClass"></nus-field-errors>
                 </div>
-                <div><a [routerLink]="['/catalog', 'product-classes']">Manage Class</a>
+                <div><a [routerLink]="['/catalog', 'product-classes']" target="_blank">Manage Class</a>
                 </div>
               </div>
             </label>
@@ -125,14 +131,16 @@ const log = new Logger('ProductComponent');
               <span>Vendor</span>
               <div class="manage">
                 <div>
-                  <select [formControl]="vendor" name="vendor" data-qa="vendor">
-                    <option *ngFor="let v of vendors" [ngValue]="v.href">
-                      {{ v.name }}
-                    </option>
-                  </select>
+                  <input type="hidden" [formControl]="vendor" data-qa="vendor">
+                  <input type="text" (click)="selectVendor()" readonly [value]="selectedVendor?.name" data-qa="vendor-pop">
+<!--                  <select [formControl]="vendor" name="vendor" data-qa="vendor">-->
+<!--                    <option *ngFor="let v of vendors" [ngValue]="v.href">-->
+<!--                      {{ v.name }}-->
+<!--                    </option>-->
+<!--                  </select>-->
                   <nus-field-errors [control]="vendor"></nus-field-errors>
                 </div>
-                <div><a [routerLink]="['/catalog', 'vendors']"> Manage Vendor </a></div>
+                <div><a [routerLink]="['/catalog', 'vendors']" target="_blank"> Manage Vendor </a></div>
               </div>
             </label>
           </div>
@@ -382,6 +390,9 @@ const log = new Logger('ProductComponent');
 
     <!-- Modals -->
     <nus-product-selection-modal></nus-product-selection-modal>
+    <nus-vendor-selection-modal #vendorModal></nus-vendor-selection-modal>
+    <nus-category-selection-modal #categoryModal></nus-category-selection-modal>
+    <nus-product-class-selection-modal #productClassModal></nus-product-class-selection-modal>
   `,
   styles: [
     '.container { display: grid; grid-template-columns: 3fr 1fr; grid-column-gap: 24px; }',
@@ -467,17 +478,27 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     licenseKey: ''
   };
   selectedProductClass: products.IProductClass;
+
+  selectedVendor: INamedHrefEntity = null;
+  selectedCategory: INamedHrefEntity = null;
+  selectedProductClassValue: INamedHrefEntity = null;
+
   productRelatedSlug: string;
   productSlug: string;
 
-  @ViewChild(ProductMediaHostComponent) mediaHost!: ProductMediaHostComponent;
-  @ViewChild(PriceListHostComponent) priceListHost!: PriceListHostComponent;
-  @ViewChild(ProductAttributeHostComponent) attributeHost!: ProductAttributeHostComponent;
-  @ViewChild(ProductSubscriptonHostComponent) subscriptionHost!: ProductSubscriptonHostComponent;
-  @ViewChild(StockInputComponent) stockInput!: StockInputComponent;
-  @ViewChild(MarketplaceInfoHostComponent) marketplaceHost!: MarketplaceInfoHostComponent;
+  @ViewChild(ProductMediaHostComponent) mediaHost: ProductMediaHostComponent;
+  @ViewChild(PriceListHostComponent) priceListHost: PriceListHostComponent;
+  @ViewChild(ProductAttributeHostComponent) attributeHost: ProductAttributeHostComponent;
+  @ViewChild(ProductSubscriptonHostComponent) subscriptionHost: ProductSubscriptonHostComponent;
+  @ViewChild(StockInputComponent) stockInput: StockInputComponent;
+  @ViewChild(MarketplaceInfoHostComponent) marketplaceHost: MarketplaceInfoHostComponent;
 
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
+
+  @ViewChild('vendorModal') vendorSelectionModal: VendorSelectionModalComponent;
+  @ViewChild('categoryModal') categorySelectionModal: CategorySelectionModalComponent;
+  @ViewChild('productClassModal') productClassSelectionModal: ProductClassSelectionModalComponent;
+
 
   constructor(service: ProductService,
               private fb: FormBuilder,
@@ -495,6 +516,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   ngAfterViewInit() {
     super.ngAfterViewInit();
     this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
+    this.vendorSelectionModal.onClose.subscribe(() => this.onVendorSelectionModalClosed());
+    this.categorySelectionModal.onClose.subscribe(() => this.onCategorySelectionModalClosed());
+    this.productClassSelectionModal.onClose.subscribe(() => this.onProductClassSelectionModalClosed());
   }
 
   get name(): FormControl {
@@ -606,15 +630,15 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   ngOnInit(): void {
-    this.productSlug = this.route.snapshot.paramMap.get('slug');
+    this.productSlug = this.route.snapshot.paramMap?.get('slug');
     this.route.data.subscribe((
       data: {
-        entity: products.IProduct, categories: ICategory[], parent: products.IProduct, vendors: IVendor[],
+        entity: products.IProduct, parent: products.IProduct,
         productClasses: products.IProductClass[], mediaTypes: drf.IChoice[]
       }) => {
       this.parentProduct = data.parent;
-      this.vendors = data.vendors;
-      this.categories = data.categories;
+      // this.vendors = data.vendors;
+      // this.categories = data.categories;
       this.productClasses = data.productClasses;
       this.mediaTypes = data.mediaTypes;
       this.entity = data.entity;
@@ -645,9 +669,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       weight: [entity?.weight, [Validators.required,]],
       price: [0, [Validators.minLength(0)]],
       dimensions: this.fb.group({
-        currentLength: [entity?.dimensions.currentLength,],
-        currentWidth: [entity?.dimensions.currentWidth,],
-        currentHeight: [entity?.dimensions.currentHeight,]
+        currentLength: [entity?.dimensions?.currentLength,],
+        currentWidth: [entity?.dimensions?.currentWidth,],
+        currentHeight: [entity?.dimensions?.currentHeight,]
       }),
       productClass: this.fb.group({href: [entity?.productClass.href, [Validators.required]]}),
       category: this.fb.group({href: [entity?.category.href, [Validators.required]]}),
@@ -663,6 +687,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       productRelated: this.fb.array([]),
     });
 
+
+    this.selectedVendor = entity?.vendor;
+    this.selectedCategory = entity?.category;
+    this.selectedProductClassValue = entity?.productClass;
     // new product variant
     if (!entity && !!this.parentProduct) {
       this.parent.setValue(this.parentProduct.href);
@@ -673,22 +701,26 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       this.category.setValue(this.parentProduct.category.href);
       this.vendor.setValue(this.parentProduct.vendor.href);
 
+      this.selectedVendor = this.vendor.value;
+      this.selectedCategory = this.category.value;
+      this.selectedProductClassValue = this.productClass.value;
+
       // optional inheritance from parent
       this.description.setValue(this.parentProduct.description);
     }
 
     this.variants = entity?.variants ?? [];
     this.originalAttributeValues = entity?.attributes ?? {};
-
-    this.RelatedService.fetch(this.productSlug)
-      .subscribe((data: products.IProductRelation[]) => {
-        if(data){
-          for (const prod of data) {
-            this.addProductRelation(prod);
+    if (!!this.productSlug) {
+      this.RelatedService.fetch(this.productSlug)
+        .subscribe((data: products.IProductRelation[]) => {
+          if (data) {
+            for (const prod of data) {
+              this.addProductRelation(prod);
+            }
           }
-        }
-      });
-
+        });
+    }
     for (const t of entity?.tags ?? []) {
       this.addTag(t);
     }
@@ -779,7 +811,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
               });
             }
 
-            this.mediaHost.saveAll(resp.entity).subscribe(() => {
+            this.mediaHost?.saveAll(resp.entity)?.subscribe(() => {
             });
             this.priceListHost.priceLists.forEach((priceList) => {
               log.debug('pricelist', priceList.validatePriceList());
@@ -809,11 +841,11 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         }
       );
       if (!this.isNew && this.isPhysical() && this.enterpriseLicense()) {
-        this.marketplaceHost.saveAll();
+        this.marketplaceHost?.saveAll();
       }
     } else {
       window.alert('Please check your input.');
-      this.priceListHost.priceLists.forEach((priceList) => {
+      this.priceListHost?.priceLists.forEach((priceList) => {
         log.debug('pricelist', priceList.validatePriceList());
         priceList.rangeComponents.forEach((component) => {
           log.debug('validate', component.validatePriceRange(), component.maxQuantity.value);
@@ -931,7 +963,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   showInfoWindow(resp, action) {
-    if(action == "remove"){
+    if(action === "remove"){
       this.toast?.addMessage(resp,'Successfully Removed', ToastLevelEnum.info);
     } else {
       this.toast?.addMessage(resp,'Successfully Add', ToastLevelEnum.success);
@@ -950,7 +982,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
     this.RelatedService.post(productValue).subscribe(
       (resp) => {
-        if (action == "add"){
+        if (action === "add"){
           // if "add" then it will be push to array
           this.productRelated.push(product);
         } else {
@@ -996,6 +1028,39 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       });
 
       this.apiPostRelatedProduct(f.value, "add", f);
+    }
+  }
+
+  private onVendorSelectionModalClosed(): void {
+    if (this.vendorSelectionModal.result === DialogResult.OK) {
+      this.selectedVendor = this.vendorSelectionModal.vendor.value as IVendor;
+      this.vendor.setValue(this.selectedVendor.href);
+    }
+  }
+
+  private onCategorySelectionModalClosed(): void {
+    if (this.categorySelectionModal.result === DialogResult.OK) {
+      this.selectedCategory = this.categorySelectionModal.category.value as ICategory;
+      this.category.setValue(this.selectedCategory.href);
+    }
+  }
+
+  selectVendor(): void {
+    this.vendorSelectionModal.open();
+  }
+
+  selectCategory(): void {
+    this.categorySelectionModal.open();
+  }
+
+  selectProductClass(): void {
+    this.productClassSelectionModal.open();
+  }
+
+  private onProductClassSelectionModalClosed() {
+    if (this.productClassSelectionModal.result === DialogResult.OK) {
+      this.selectedProductClassValue = this.productClassSelectionModal.productClass.value as IProductClass;
+      this.productClass.setValue(this.selectedProductClassValue.href);
     }
   }
 }

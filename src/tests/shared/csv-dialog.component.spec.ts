@@ -10,8 +10,8 @@ describe('CsvDialogComponent', () => {
   let component: CsvDialogComponent;
   let fixture: ComponentFixture<CsvDialogComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         ReactiveFormsModule,
@@ -21,9 +21,7 @@ describe('CsvDialogComponent', () => {
       declarations: [ CsvDialogComponent ]
     })
     .compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(CsvDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
