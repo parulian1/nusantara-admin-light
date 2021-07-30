@@ -38,7 +38,7 @@ jobs:
       - template: web/unit_test.yml@templates
         parameters:
           feedId: $(FEED_ID)
-          testArgs: '--configuration=ci --code-coverage'
+          testArgs: '--code-coverage'
 
   # prod build
   - job: build_prod
