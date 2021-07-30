@@ -29,8 +29,8 @@ module.exports = function (config) {
       reporters: [
         // reporters not supporting the `file` property
         { type: 'html', subdir: 'report-html' },
-        { type: 'cobertura', subdir: '.', file: 'report-cobertura.xml' },
-        { type: 'lcovonly', subdir: '.', file: 'report-lcovonly.txt' },
+        { type: 'cobertura', subdir: '.', file: 'cobertura-coverage.xml' },
+        { type: 'lcovonly', subdir: '.', file: 'lcov.info' },
       ]
     },
     // the default configuration
