@@ -10,7 +10,7 @@ module.exports = function (config) {
       require('karma-spec-reporter'),
       require('karma-chrome-launcher'),
       require('karma-jasmine-html-reporter'),
-      require('karma-coverage-istanbul-reporter'),
+      require('karma-coverage'),
       require('@angular-devkit/build-angular/plugins/karma')
     ],
     client: {
@@ -18,10 +18,21 @@ module.exports = function (config) {
     },
     coverageIstanbulReporter: {
       dir: require('path').join(__dirname, './coverage/nusantara-admin'),
-      reports: ['html', 'lcovonly', 'text-summary'],
+      reports: ['cobertura', 'html', 'lcovonly'],
       fixWebpackSourcePaths: true
     },
-    reporters: ['progress', 'spec', 'kjhtml' ],
+    // optionally, configure the reporter
+    coverageReporter: {
+      type : 'cobertura',
+      dir : require('path').join(__dirname, './coverage/nusantara-admin'),
+      reporters: [
+        // reporters not supporting the `file` property
+        { type: 'html', subdir: 'report-html' },
+        { type: 'cobertura', subdir: '.', file: 'TEST-nusantara-admin.xml' },
+        { type: 'lcovonly', subdir: '.', file: 'report-lcovonly.txt' },
+      ]
+    },
+    reporters: ['progress', 'spec', 'kjhtml' , 'coverage'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
