@@ -124,7 +124,8 @@ describe('PaymentGatewayDetailComponent', () => {
         type: 'eWallets',
         banks: [],
         eWallets: []
-      }
+      },
+      expiryReminder: 0
     });
     component.form.value.logo = image64;
     component.save();
@@ -158,7 +159,8 @@ describe('PaymentGatewayDetailComponent', () => {
         type: 'eWallets',
         banks: [],
         eWallets: []
-      }
+      },
+      expiryReminder: 0
     };
 
     component.form.setValue({
@@ -174,7 +176,8 @@ describe('PaymentGatewayDetailComponent', () => {
       code: UpdatePaymentGateway.code,
       isActive: true,
       allowPos: UpdatePaymentGateway.allowPos,
-      meta: UpdatePaymentGateway.meta
+      meta: UpdatePaymentGateway.meta,
+      expiryReminder: UpdatePaymentGateway.expiryReminder
     });
     component.form.value.logo = image64;
     component.save();

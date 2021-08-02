@@ -314,8 +314,10 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
 
   ngOnInit(): void {
     this.route.data.subscribe((data: { typeAndExpiryChoices: [drf.IChoice[], drf.IChoice[]] }) => {
-      this.typeChoices = data.typeAndExpiryChoices[0];
-      this.expiryReminderChoices = data.typeAndExpiryChoices[1];
+      if (!!data.typeAndExpiryChoices && !!data.typeAndExpiryChoices.length) {
+        this.typeChoices = data.typeAndExpiryChoices[0];
+        this.expiryReminderChoices = data.typeAndExpiryChoices[1];
+      }
     });
     super.ngOnInit();
     this.smeLicensePaymentType();
@@ -346,7 +348,7 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
           eWallets: this.fb.array([], [NusantaraValidators.preventArrayDuplicates(), ]),
         }
       ),
-      expiryReminder: [entity?.expiryReminder, []],
+      expiryReminder: [entity?.expiryReminder ?? 0, []],
     });
 
     this.entity = entity;
@@ -433,7 +435,7 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
 
   smeLicensePaymentType() {
     if (!this.configService.isEnterpriseLicense()) {
-      this.typeChoices = this.typeChoices.filter(opt => enumToArray(PaymentTypeSmeClient).includes(opt.value));
+      this.typeChoices = this.typeChoices?.filter(opt => enumToArray(PaymentTypeSmeClient).includes(opt.value));
     }
   }
 
