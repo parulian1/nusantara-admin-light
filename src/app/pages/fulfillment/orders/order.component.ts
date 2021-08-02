@@ -216,7 +216,7 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
       });
 
       // set initial value for canCancelOrder using this criteria
-      if(['unpaid', 'waiting', 'paid', 'ready'].includes(this.orderDetailData.status)){
+      if(this.isCancelOrderSupported){
         this.canCancelOrder = true;
       }
 
@@ -340,6 +340,18 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
     } else {
       return '-';
     }
+  }
+
+  get isCancelOrderSupported() {
+    return (
+      !(
+        ["web", "pos"].includes(this.orderDetailData.source) ||
+        this.orderDetailData.sourceName == "tsc"
+      ) &&
+      ["unpaid", "waiting", "paid", "ready"].includes(
+        this.orderDetailData.status
+      )
+    );
   }
 }
 
