@@ -40,9 +40,9 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
 
       <label>
         <span>Type</span>
-        <select [formControl]="type">
+        <select formControlName="type" name="type">
           <option *ngFor="let opt of typeChoices" [value]="opt.value">
-            {{opt.displayName}}
+            {{ opt.displayName }}
           </option>
         </select>
         <nus-field-errors [control]="type"></nus-field-errors>
@@ -90,7 +90,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
           <span>In Store Type</span>
           <select [formControl]="metaType" (ngModelChange)="onInStoreChange($event)">
             <option *ngFor="let opt of inStoreTypeChoices" [ngValue]="opt.value">
-              {{opt.displayName}}
+              {{ opt.displayName }}
             </option>
           </select>
           <nus-field-errors [control]="meta"></nus-field-errors>
@@ -168,6 +168,16 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
         <nus-field-errors [control]="allowPos"></nus-field-errors>
       </label>
 
+      <label>
+          <span>Notification for Order Near Expired</span>
+          <select [formControl]="expiryReminder" name="expiryReminder">
+          <option *ngFor="let opt of expiryReminderChoices" [value]="opt.value">
+            {{ opt.displayName }}
+          </option>
+        </select>
+          <nus-field-errors [control]="expiryReminder"></nus-field-errors>
+        </label>
+
       <div>
         <label for="description" class="external"><span>Description</span></label>
         <ckeditor [editor]="Editor" [config]="editorConfig"
@@ -226,13 +236,14 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     {displayName: 'Sales', value: 'sales'},
     {displayName: 'Salary Deduction', value: 'salary_deduction'},
   ];
+  expiryReminderChoices: drf.IChoice[];
 
   constructor(service: PaymentGatewayService,
               public fb: FormBuilder,
               toast: ToastService,
               route: ActivatedRoute,
               public enterpriseGuard: RequireIsEnterpriseGuard,
-              private configSercvice: SiteConfigService,
+              private configService: SiteConfigService,
               router: Router) {
     super(route, router, toast, service);
   }
@@ -246,7 +257,7 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
   }
 
   get type(): FormControl {
-    return this.form.get('type') as FormControl;
+    return this.form?.get('type') as FormControl;
   }
 
   get clientKey(): FormControl {
@@ -297,12 +308,23 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     return this.meta.get('eWallets') as FormArray;
   }
 
+  get expiryReminder(): FormControl {
+    return this.form.get('expiryReminder') as FormControl;
+  }
+
   ngOnInit(): void {
-    this.route.data.subscribe((data: { typeChoices: drf.IChoice[] }) => {
-      this.typeChoices = data.typeChoices;
+    this.route.data.subscribe((data: { typeAndExpiryChoices: [drf.IChoice[], drf.IChoice[]] }) => {
+      if (!!data.typeAndExpiryChoices && !!data.typeAndExpiryChoices.length) {
+        this.typeChoices = data.typeAndExpiryChoices[0];
+        this.expiryReminderChoices = data.typeAndExpiryChoices[1];
+      }
     });
     super.ngOnInit();
     this.smeLicensePaymentType();
+    this.type.valueChanges.subscribe(change => {
+      this.setCurrentTypeAndValidatorFields(change);
+    });
+
   }
 
   initializeForm(entity?: IPaymentGateway) {
@@ -325,7 +347,8 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
           banks: this.fb.array([], [NusantaraValidators.preventArrayDuplicates(), ]),
           eWallets: this.fb.array([], [NusantaraValidators.preventArrayDuplicates(), ]),
         }
-      )
+      ),
+      expiryReminder: [entity?.expiryReminder ?? 0, []],
     });
 
     this.entity = entity;
@@ -411,8 +434,8 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
   }
 
   smeLicensePaymentType() {
-    if (!this.configSercvice.isEnterpriseLicense()) {
-      this.typeChoices = this.typeChoices.filter(opt => enumToArray(PaymentTypeSmeClient).includes(opt.value));
+    if (!this.configService.isEnterpriseLicense()) {
+      this.typeChoices = this.typeChoices?.filter(opt => enumToArray(PaymentTypeSmeClient).includes(opt.value));
     }
   }
 
