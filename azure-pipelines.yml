@@ -38,7 +38,7 @@ jobs:
       - template: web/unit_test.yml@templates
         parameters:
           feedId: $(FEED_ID)
-          testArgs: ''
+          testArgs: '--source-map --code-coverage'
 
   # prod build
   - job: build_prod
