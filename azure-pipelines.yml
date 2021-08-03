@@ -102,7 +102,7 @@ jobs:
 
   # Staging Build
   - job: build_staging
-    # dependsOn: build_prod
+    dependsOn: unit_test
     pool:
       name: docker-agent
     displayName: Build & Packaging STAGING

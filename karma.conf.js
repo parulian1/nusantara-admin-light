@@ -18,14 +18,14 @@ module.exports = function (config) {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
     coverageIstanbulReporter: {
-      dir: require('path').join(__dirname, './coverage/nusantara-admin'),
+      dir: require('path').join(__dirname, './reports/coverage/nusantara-admin'),
       reports: ['cobertura', 'html', 'lcovonly'],
       fixWebpackSourcePaths: true
     },
     // optionally, configure the reporter
     coverageReporter: {
       type : 'cobertura',
-      dir : require('path').join(__dirname, './coverage/nusantara-admin'),
+      dir : require('path').join(__dirname, './reports/coverage/nusantara-admin'),
       reporters: [
         // reporters not supporting the `file` property
         { type: 'html', subdir: 'report-html' },
@@ -35,7 +35,7 @@ module.exports = function (config) {
     },
     // the default configuration
     junitReporter: {
-      outputDir:  require('path').join(__dirname, './coverage/nusantara-admin'), // results will be saved as $outputDir/$browserName.xml
+      outputDir:  require('path').join(__dirname, './reports/coverage/nusantara-admin'), // results will be saved as $outputDir/$browserName.xml
       outputFile: 'TEST-nusantara-admin.xml', // if included, results will be saved as $outputDir/$browserName/$outputFile
     //   suite: '', // suite will become the package name attribute in xml testsuite element
     //   useBrowserName: true, // add browser name to report and classes names
