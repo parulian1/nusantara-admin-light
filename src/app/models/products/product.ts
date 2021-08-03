@@ -40,4 +40,5 @@ export interface IProduct extends INamedHrefEntity {
   dimensions: IDimensions;
   inStock?: boolean;
   productRelated: Array<IProductRelation>;
+  stockAmount?: number;
 }

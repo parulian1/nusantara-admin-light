@@ -1,11 +1,12 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, ViewChild } from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgxSmartModalComponent } from 'ngx-smart-modal';
 import { Subscription } from 'rxjs';
 
 import { DialogResult, PagedResponse } from '../core';
-import { ProductService } from '../services';
+import { ProductService, WarehouseService } from '../services';
 import { products } from '../models';
+import {IStockSearch} from '@nusantara/models/products/stock-search';
 
 /**
  * Shows the user a list of products they can select from.
@@ -37,6 +38,7 @@ import { products } from '../models';
             <tr>
               <th>Product Name</th>
               <th>SKU</th>
+<!--              <th *ngIf="!!showStockAmount">Current Stock</th>-->
               <th class="centered">Action</th>
             </tr>
             </thead>
@@ -44,6 +46,8 @@ import { products } from '../models';
             <tr *ngFor="let p of displayedResults?.entities">
               <td class="product-name">{{ p.name }}</td>
               <td class="product-sku">{{ p.upc }}</td>
+<!--              TODO : NEED TO CREATE API FOR SHOWING WHICH PRODUCTS THAT AVAILABLE FOR THAT WAREHOUSE-->
+<!--              <td class="product-stock" *ngIf="!!showStockAmount">{{ p.stockAmount }}</td>-->
               <td class="centered"><a href="#" (click)="selectProduct(p)">Add</a></td>
             </tr>
             </tbody>
@@ -103,8 +107,11 @@ export class ProductSelectionModalComponent implements OnInit, AfterViewInit {
   timeoutId: any;
   reloadTimeout = 650;
   originalValue: string = null;
+  showStockAmount: boolean = false;
 
-  constructor(protected fb: FormBuilder, protected service: ProductService) { }
+  displayedProductStock: Array<{href: string; quantity: number}> = [];
+
+  constructor(protected fb: FormBuilder, protected service: ProductService, public warehouseService: WarehouseService,) { }
 
   get searchText(): FormControl { return this.form.get('searchText') as FormControl; }
   get product(): FormControl { return this.form.get('product') as FormControl; }
@@ -175,6 +182,7 @@ export class ProductSelectionModalComponent implements OnInit, AfterViewInit {
     this.timeoutId = setTimeout(() => {
       this.service.fetchList(this.searchText.value, 1, 10).subscribe((page) => {
         this.displayedResults = page;
+
       });
     }, this.reloadTimeout);
 
@@ -195,11 +203,19 @@ export class ProductSelectionModalComponent implements OnInit, AfterViewInit {
   }
 
   close() {
+    this.showStockAmount = false;
     this.result = DialogResult.OK;
     this.modal.close();
   }
 
   cancel() {
+    this.showStockAmount = false;
     this.modal.close();
   }
+
+  openWithStockAmount() {
+    this.showStockAmount = true;
+    this.open();
+  }
+
 }

@@ -71,25 +71,23 @@ import { IProductClass } from '@nusantara/models/products';
           <tr>
             <th>Product (UPC)</th>
             <th>Location</th>
-            <th>Quantity</th>
-            <th>SKU</th>
-            <th>Batch</th>
-            <th>Locator</th>
-            <th>Expiry Date</th>
+            <th>Current Stock</th>
+            <th>Requesting Stock</th>
             <th>Cost</th>
             <th></th>
           </tr>
           </thead>
           <tbody>
 
-          <nus-inventory-receiving-line
+          <nus-transfer-order-line
             *ngFor="let rec of stockRecords.controls; let i=index"
             [productClasses]="productClasses"
             [availableSubLocations]="availableSubLocations"
+            [warehouseHref]="getFromWarehouseHref()"
             (remove)="stockRecords.removeAt(i)"
             [formGroup]="rec"
           >
-          </nus-inventory-receiving-line>
+          </nus-transfer-order-line>
 
           <tr>
             <td colspan="9">
@@ -184,7 +182,7 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
   }
 
   addLine() {
-    this.productSelectionModal.open();
+    this.productSelectionModal.openWithStockAmount();
   }
 
   confirmWarehouse(): void {
@@ -225,11 +223,7 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
           href: [null, Validators.required],
           // name: ['', ],
         }),
-        sku: ['', [Validators.required, ]],
         originalQuantity: [1, [Validators.required, Validators.min(1), ]],
-        batchNumber: ['', []],
-        locator: this.fb.array([], [Validators.minLength(1)]),
-        expiryDate: [null, []]
       });
       this.stockRecords.push(f);
     }
@@ -268,5 +262,10 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
     this.form.reset();
     this.warehouse.enable();
     this.stockRecords.clear();
+  }
+
+  getFromWarehouseHref(): string {
+    const warehouse: IWarehouse = this.warehouse.value;
+    return warehouse?.href;
   }
 }
