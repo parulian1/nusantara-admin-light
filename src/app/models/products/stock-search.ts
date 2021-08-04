@@ -4,7 +4,7 @@ import {IAddress} from '../../shared/address';
 
 export interface IStockSearch extends INamedHrefEntity {
   href: string;
-  quantity: string;
+  quantity: number;
   name: string;
   code: string;
   type: string;

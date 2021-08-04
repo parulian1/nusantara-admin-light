@@ -12,13 +12,14 @@ import {
 } from './receiving';
 import { InventoryRoutingModule } from './inventory-routing.module';
 import { InventoryOrderListComponent } from './pending-order';
-import {InventoryTransferOrderComponent} from './transfer-order';
+import {InventoryTransferDetailComponent, InventoryTransferOrderComponent} from './transfer-order';
 import {
   AdjustmentComponent,
   AdjustmentDetailComponent,
   AdjustmentLineItemComponent,
 } from './adjustment';
 import { StockRecordDialogComponent } from './adjustment/stock-record-dialog.component';
+import {TransferOrderLineItemComponent} from '@nusantara/pages/inventory/transfer-order/transfer-order-line-item.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,8 @@ import { StockRecordDialogComponent } from './adjustment/stock-record-dialog.com
     AdjustmentLineItemComponent,
     AdjustmentDetailComponent,
     StockRecordDialogComponent,
+    TransferOrderLineItemComponent,
+    InventoryTransferDetailComponent,
   ],
   imports: [
     CommonModule,
