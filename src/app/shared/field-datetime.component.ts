@@ -8,6 +8,7 @@ import { FormControl } from '@angular/forms';
 import { Input, Component, OnInit } from '@angular/core';
 
 import { FlatpickrOptions } from 'ng2-flatpickr';
+import * as moment from 'moment';
 
 @Component({
   selector: 'nus-field-datetime',
@@ -59,8 +60,9 @@ export class FieldDatetimeComponent implements OnInit {
    */
   onChange(ev: any): void {
     if (this.autoFormat) {
+      // try to use moment, because native new Date() returns invalid in safari
       this.control.setValue(
-        new Date(ev.target.value).toISOString(), { onlySelf: true }
+        moment(ev.target.value).toISOString(), { onlySelf: true }
       );
     }
   }
