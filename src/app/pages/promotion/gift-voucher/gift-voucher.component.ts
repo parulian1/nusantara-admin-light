@@ -119,6 +119,19 @@ export class GiftVoucherComponent extends AbstractDetailComponent<IGiftVoucher> 
 
     // need to mark as touched to make custom styling works
     this.form.controls.isActive.markAsTouched();
+
+    const today = new Date();
+    // passed/historical gift voucher, admin can not edit anything
+    if (today > new Date(entity?.validTo)) {
+      this.form.disable();
+    }
+    // ongoing gift voucher,admin can ONLY edit "valid to" date and / or Inactive a promotion
+    if (today > new Date(entity?.validFrom)) {
+      this.form.controls.name.disable();
+      this.form.controls.code.disable();
+      this.form.controls.amount.disable();
+      this.form.controls.validFrom.disable();
+    }
   }
 
   convertDateTime(timestamp: string) {
