@@ -37,13 +37,15 @@ import {ActivatedRoute, Router} from '@angular/router';
 
       <label>
         <span>Valid From</span>
-        <input type="datetime-local" [formControl]="validFrom">
+        <nus-field-datetime [control]="validFrom" [minDate]="minDateValidFrom"
+                            [maxDate]="maxDateValidFrom"></nus-field-datetime>
         <nus-field-errors [control]="validFrom"></nus-field-errors>
       </label>
 
       <label>
         <span>Valid To</span>
-        <input type="datetime-local" [formControl]="validTo">
+        <nus-field-datetime [control]="validTo" [minDate]="minDateValidTo"
+                            [maxDate]="maxDateValidTo"></nus-field-datetime>
         <nus-field-errors [control]="validTo"></nus-field-errors>
       </label>
 
@@ -72,6 +74,10 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class GiftVoucherComponent extends AbstractDetailComponent<IGiftVoucher> implements OnInit, AfterViewInit {
   public entity: IGiftVoucher;
+  minDateValidTo: string | Date = null;
+  maxDateValidTo: string | Date = null;
+  minDateValidFrom: string | Date = null;
+  maxDateValidFrom: string | Date = null;
 
   constructor(service: GiftVoucherService,
               private  fb: FormBuilder,
@@ -121,16 +127,22 @@ export class GiftVoucherComponent extends AbstractDetailComponent<IGiftVoucher> 
     this.form.controls.isActive.markAsTouched();
 
     const today = new Date();
-    // passed/historical gift voucher, admin can not edit anything
+    this.minDateValidTo = entity?.validTo ? entity.validTo : today;
+    this.minDateValidFrom = entity?.validFrom ? entity.validFrom : today;
+
     if (today > new Date(entity?.validTo)) {
+      // passed/historical gift voucher, admin can not edit anything
       this.form.disable();
-    }
-    // ongoing gift voucher,admin can ONLY edit "valid to" date and / or Inactive a promotion
-    if (today > new Date(entity?.validFrom)) {
-      this.form.controls.name.disable();
-      this.form.controls.code.disable();
-      this.form.controls.amount.disable();
-      this.form.controls.validFrom.disable();
+      this.maxDateValidFrom = entity.validFrom;
+      this.maxDateValidTo = entity.validTo;
+    } else if (today > new Date(entity?.validFrom)) {
+      // ongoing gift voucher, admin can ONLY edit "valid to" date and / or Inactive a gift voucher
+      this.form.disable();
+      this.form.controls.href.enable();
+      this.form.controls.validTo.enable();
+      this.form.controls.isActive.enable();
+      this.minDateValidFrom = entity.validFrom;
+      this.maxDateValidFrom = entity.validFrom;
     }
   }
 
@@ -153,17 +165,5 @@ export class GiftVoucherComponent extends AbstractDetailComponent<IGiftVoucher> 
       return (`${year}-${month}-${day}T${hours}:${minutes}:${seconds}`);
     }
     return '';
-  }
-
-  getTimeZone() {
-    const offset = new Date().getTimezoneOffset();
-    const o = Math.abs(offset);
-    return (offset < 0 ? '+' : '-') + ('00' + Math.floor(o / 60)).slice(-2) + ':' + ('00' + (o % 60)).slice(-2);
-  }
-
-  save() {
-    this.form.value.validFrom = this.form.value.validFrom + this.getTimeZone();
-    this.form.value.validTo = this.form.value.validTo + this.getTimeZone();
-    super.save();
   }
 }
