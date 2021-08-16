@@ -35,49 +35,45 @@ import { convertStringToObject, keysToCamel } from '@nusantara/shared/helpers';
     <form [formGroup]="form" (ngSubmit)="saveForm()">
       <div class="container">
         <div class="general-info">
-          <h3>General Information</h3>
-          <div>
-            <label>Received By</label>
-            <span>{{ userDisplayName }}</span>
+          <div class="general-info--header box-container">
+            <div>
+              <label>Created By</label>
+              <span>{{ userDisplayName }}</span>
+            </div>
+            <div>
+              <label>Created Date</label>
+              <span>{{ currentDate|date }}</span>
+            </div>
           </div>
-          <div>
-            <label>Approved By</label>
-            <span>-</span>
-          </div>
-          <div>
-            <label>Receiving Date</label>
-            <span>{{ currentDate|date }}</span>
-          </div>
-          <div>
-            <label>Status</label>
-            <span>Pending</span>
-          </div>
-          <div>
-            <label>DO Number</label>
-            <input type="text" [formControl]="doNumber">
-          </div>
-          <div>
-            <label for="">DC PIC</label>
-            <input type="text" [formControl]="dcPic">
-          </div>
-          <div [formGroup]="warehouse">
-            <label>Warehouse</label>
-            <div class="confirm-warehouse">
-              <select formControlName="href">
-                <option [ngValue]="null">Select Warehouse</option>
-                <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
-                  {{ wh.name }}
-                </option>
-              </select>
-              <button (click)="confirmWarehouse()" type="button"
-                      [disabled]="warehouse.disabled || !warehouse.valid"
-                      class="control confirm">
-                Confirm
-              </button>
+          <div class="general-info--detail box-container">
+            <h3>General Information</h3>
+            <div>
+              <label>DO Number (Optional)</label>
+              <input type="text" [formControl]="doNumber">
+            </div>
+            <div>
+              <label for="">DC PIC (Optional)</label>
+              <input type="text" [formControl]="dcPic">
+            </div>
+            <div [formGroup]="warehouse">
+              <label>Warehouse</label>
+              <div class="confirm-warehouse">
+                <select formControlName="href">
+                  <option [ngValue]="null">Select Warehouse</option>
+                  <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
+                    {{ wh.name }}
+                  </option>
+                </select>
+                <button (click)="confirmWarehouse()" type="button"
+                        [disabled]="warehouse.disabled || !warehouse.valid"
+                        class="control confirm">
+                  Confirm
+                </button>
+              </div>
             </div>
           </div>
         </div>
-        <div class="mp-info">
+        <div class="mp-info box-container">
           <h3>Marketplace Information</h3>
           <div>
             <div>Product</div>
@@ -142,15 +138,24 @@ import { convertStringToObject, keysToCamel } from '@nusantara/shared/helpers';
 
   `,
   styles: [
+    'h1 { margin-bottom: 24px;}',
     'form{ max-width: none;}',
     'h3 { font-size: 20px; margin: 0; }',
     'button.confirm { width: auto }',
     '.container { display: grid; grid-template-columns: 4fr 1fr; grid-gap: 24px; }',
-    '.container > div { border: 1px solid var(--grey); border-radius: 4px; padding: 16px 24px; }',
-    '.general-info > h3 { margin-bottom: 20px; }',
-    '.general-info > div:not(:last-child) { margin-bottom: 23px; }',
-    '.general-info label { min-height: 0; }',
-    '.general-info span{ font-weight: 700; color: var(--darken-grey); }',
+    '.box-container { border: 1px solid var(--grey); border-radius: 4px; padding: 16px 24px; }',
+    '.general-info h3 { margin-bottom: 20px; }',
+    '.general-info > div:not(:last-child), .general-info--detail > div:not(:last-child) { margin-bottom: 23px; }',
+    '.general-info label { min-height: 0; line-height: 20px; color: var(--darken-grey); padding-bottom: 0;}',
+    '.general-info--detail label { color: var(--lighten-black); font-weight: bold; }',
+    '.general-info span{ font-weight: 700; color: var(--lighten-black); }',
+    '.general-info--header { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); }',
+    `
+      @media (min-width: 768px) {
+        .general-info--header { display: grid; grid-template-columns: 1fr; }
+        .general-info--header > div:not(:last-child) { margin-bottom: 23px; }
+      }
+    `,
     '.mp-info > h3 { margin-bottom: 16px; }',
     '.mp-info > div { text-align: center; border: 1px solid var(--grey); border-radius: 4px; padding: 12px 16px; margin-bottom: 12px; }',
     '.mp-info > a { display: block; margin-top: 16px; }',
