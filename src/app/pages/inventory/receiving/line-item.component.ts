@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {ControlContainer, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {ControlContainer, FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 
 import { products, ISubLocation } from '@nusantara/models';
 import { IProductClass } from '../../../models/products';
@@ -9,37 +8,17 @@ import { IProductClass } from '../../../models/products';
   selector: 'nus-inventory-receiving-line',
   template: `
     <tr [formGroup]="form">
-      <td><a>{{ displayedProductName }}</a></td>
-      <td class="immediate-error-display" [formGroup]="location">
-        <select formControlName="href" data-qa="location">
-          <option [ngValue]="null">---</option>
-          <option *ngFor="let loc of availableSubLocations" [ngValue]="loc.href">
-            {{ loc.name }} ({{ loc.code }})
-          </option>
-        </select>
-      </td>
-      <td>
-        <input type="number" min="1" [formControl]="originalQuantity" data-qa="original-quantity">
-        <nus-field-errors [control]="originalQuantity"></nus-field-errors>
-      </td>
+      <td>{{ displayedProductName }}</td>
       <td class="immediate-error-display">
         <input type="text" [formControl]="sku" data-qa="sku">
         <nus-field-errors [control]="sku"></nus-field-errors>
       </td>
       <td>
-        <input type="text" [formControl]="batchNumber" data-qa="batch-number">
+        <input type="number" min="1" [formControl]="originalQuantity" data-qa="original-quantity">
+        <nus-field-errors [control]="originalQuantity"></nus-field-errors>
       </td>
       <td>
-        <div class="locator-item-container" *ngFor="let child_control of locator.controls; index as ctr">
-          <div class="locator-item-container__input">
-            <input [formControl]="child_control" name="locator" data-qa="locator" maxlength="5">
-            <button (click)="locator.removeAt(ctr)" type="button" class="remove-button" data-qa="remove-locator-button">
-              <i class="material-icons">remove_circle_outline</i>
-            </button>
-          </div>
-          <nus-field-errors [control]="child_control"></nus-field-errors>
-        </div>
-        <button (click)="addLocator()" type="button" class="new-add-button wide" data-qa="add-locator-button">Add</button>
+        <input type="text" [formControl]="batchNumber" data-qa="batch-number">
       </td>
       <td class="immediate-error-display">
         <input *ngIf="isPerishable" type="date" [formControl]="expiryDate" data-qa="expiry-date">
@@ -58,22 +37,14 @@ import { IProductClass } from '../../../models/products';
   `,
   styles: [
     ':host { display: contents; }',
-    'td:nth-child(2) select { min-width: 115px; }', // location
-    'td:nth-child(3) input { width: 70px; }', // quantity
-    'td:nth-child(8) input { width: 105px; }', // cost
-    'td>div>input {float: left; width: 80%;}',
-    'td>div>button {float: left; width: 20%;}',
-    `
-      .locator-item-container { margin-bottom: 15px; }
-      .locator-item-container__input { display: flex; }
-    `,
+    'td:not(:first-child) { width: 12%; }',
+    'td:nth-child(7) { width: 5%; text-align: center; }',
   ]
 })
 export class LineItemComponent implements OnInit, AfterViewInit {
 
   @Input() availableSubLocations: ISubLocation[] = [];
   @Input() productClasses: IProductClass[];
-  // @Input() form: FormGroup;
   @Output() remove = new EventEmitter<void>();
   form: FormGroup;
 
@@ -88,9 +59,12 @@ export class LineItemComponent implements OnInit, AfterViewInit {
 
   get isPerishable(): boolean {
     const p = this.product.value as products.IProduct;
+    console.log(p);
     let currentPc = [];
+    console.log('this.productClasses: ', this.productClasses);
     if (!!this.productClasses) {
       currentPc = this.productClasses.filter(pc => pc.href === p.productClass.href);
+      console.log('currentPc: ', currentPc);
     }
 
     if (currentPc.length > 0) {
@@ -119,9 +93,5 @@ export class LineItemComponent implements OnInit, AfterViewInit {
     } else {
       this.expiryDate.clearValidators();
     }
-  }
-
-  addLocator() {
-    this.locator.push(new FormControl('', []));
   }
 }

@@ -91,15 +91,14 @@ import { convertStringToObject, keysToCamel } from '@nusantara/shared/helpers';
         </div>
       </div>
       <div class="product-list" *ngIf="warehouse.disabled">
+        <p>*) Required fields</p>
         <table>
           <thead>
           <tr id="mp-add-product-head">
-            <th>Product (UPC)</th>
-            <th>Location</th>
-            <th>Quantity</th>
+            <th>Product Name (UPC)*</th>
             <th>SKU</th>
+            <th>Quantity*</th>
             <th>Batch</th>
-            <th>Locator</th>
             <th>Expiry Date</th>
             <th>Cost</th>
             <th>Remove</th>
@@ -111,6 +110,7 @@ import { convertStringToObject, keysToCamel } from '@nusantara/shared/helpers';
             *ngFor="let rec of stockRecords.controls; let i=index"
             [formGroup]="rec"
             [availableSubLocations]="availableSubLocations"
+            [productClasses]="productClasses"
             (remove)="stockRecords.removeAt(i)">
           </nus-inventory-receiving-line>
 
@@ -151,7 +151,7 @@ import { convertStringToObject, keysToCamel } from '@nusantara/shared/helpers';
     '.general-info span{ font-weight: 700; color: var(--lighten-black); }',
     '.general-info--header { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); }',
     `
-      @media (min-width: 768px) {
+      @media (max-width: 768px) {
         .general-info--header { display: grid; grid-template-columns: 1fr; }
         .general-info--header > div:not(:last-child) { margin-bottom: 23px; }
       }
@@ -162,6 +162,7 @@ import { convertStringToObject, keysToCamel } from '@nusantara/shared/helpers';
     '.mp-info .count { font-size: 28px; font-weight: 700; }',
     '.confirm-warehouse { display: grid; grid-template-columns: 5fr 1fr; grid-gap: 24px; }',
     '.product-list { margin-top: 24px; }',
+    '.product-list > p { color: var(--darken-grey); }'
   ]
 })
 export class InventoryReceivingComponent extends AbstractDetailComponent<inventory.IReceivingOrder> implements OnInit, AfterViewInit {
@@ -204,6 +205,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     this.route.data.subscribe((data: { warehouses: IWarehouse[], productClasses: IProductClass[] }) => {
       this.warehouses = data.warehouses;
       this.productClasses = data.productClasses;
+      console.log(this.productClasses);
     });
     this.currentDate = new Date();
   }
