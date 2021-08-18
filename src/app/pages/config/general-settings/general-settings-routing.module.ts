@@ -67,14 +67,17 @@ const routes: Routes = [
       {
         path: 'new',
         component: pg.PaymentGatewayDetailComponent,
-        resolve: { typeChoices: pg.PaymentGatewayTypeResolver },
+        resolve: { typeAndExpiryChoices: pg.PaymentGatewayTypeAndExpiryChoiceResolver },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail' },
       },
       {
         path: ':slug',
         component: pg.PaymentGatewayDetailComponent,
-        resolve: { entity: pg.PaymentGatewayResolver, typeChoices: pg.PaymentGatewayTypeResolver },
+        resolve: {
+          entity: pg.PaymentGatewayResolver,
+          typeAndExpiryChoices: pg.PaymentGatewayTypeAndExpiryChoiceResolver
+        },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail' },
       },

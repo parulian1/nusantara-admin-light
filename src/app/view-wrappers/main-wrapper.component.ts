@@ -10,13 +10,13 @@ import { SubscriptionLike } from 'rxjs';
     <header class="main-header">
       <div id="branding">
         <img src="/assets/bhisma-logo.png" alt="logo" id="brand-icon">
-        <div>{{ authService.siteDomain }}</div>
+        <div>{{ authService?.siteDomain }}</div>
       </div>
 
       <div class="dropdown">
         <button class="dropbtn">
           <img src="/assets/default-profile-img.svg" alt="Profile Image">
-          {{ authService.tokenPayload | getUserDisplayName }}
+          {{ authService?.tokenPayload | getUserDisplayName }}
         </button>
         <div class="dropdown-content">
           <a [routerLink]="['/auth/logout']"><i class="material-icons">exit_to_app</i>Logout</a>

@@ -10,8 +10,8 @@ describe('OnboardingListComponent', () => {
   let component: OnboardingListComponent;
   let fixture: ComponentFixture<OnboardingListComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [ OnboardingListComponent ],
       providers: [ HttpClientTestingModule,
         {
@@ -25,7 +25,7 @@ describe('OnboardingListComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(OnboardingListComponent);

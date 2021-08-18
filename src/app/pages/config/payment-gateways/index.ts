@@ -4,4 +4,4 @@ export * from './payment-gateway-list.resolver';
 export * from './payment-gateway-detail.component';
 export * from './payment-gateway.resolver';
 
-export * from './payment-gateway-type.resolver';
+export * from './payment-gateway-type-and-expiry-choice-resolver.service';

@@ -73,8 +73,8 @@ const routes: Routes = [
         component: ProductComponent,
         resolve: {
           productClasses: AllProductClassResolver,
-          vendors: AllVendorResolver,
-          categories: AllCategoryResolver,
+          // vendors: AllVendorResolver,
+          // categories: AllCategoryResolver,
           mediaTypes: MediaTypeResolver,
           priceListTypes: PriceListTypeResolver,
           subscriptionPacket: PacketListResolver,
@@ -91,8 +91,8 @@ const routes: Routes = [
         resolve: {
           entity: ProductResolver,
           productClasses: AllProductClassResolver,
-          vendors: AllVendorResolver,
-          categories: AllCategoryResolver,
+          // vendors: AllVendorResolver,
+          // categories: AllCategoryResolver,
           mediaTypes: MediaTypeResolver,
           priceListTypes: PriceListTypeResolver,
           subscriptionPacket: PacketListResolver,
@@ -108,8 +108,8 @@ const routes: Routes = [
         component: ProductComponent,
         resolve: {
           productClasses: AllProductClassResolver,
-          vendors: AllVendorResolver,
-          categories: AllCategoryResolver,
+          // vendors: AllVendorResolver,
+          // categories: AllCategoryResolver,
           mediaTypes: MediaTypeResolver,
           priceListTypes: PriceListTypeResolver,
           parent: ParentProductResolver,
@@ -124,8 +124,8 @@ const routes: Routes = [
         resolve: {
           entity: ProductResolver,
           productClasses: AllProductClassResolver,
-          vendors: AllVendorResolver,
-          categories: AllCategoryResolver,
+          // vendors: AllVendorResolver,
+          // categories: AllCategoryResolver,
           mediaTypes: MediaTypeResolver,
           priceListTypes: PriceListTypeResolver,
           parent: ParentProductResolver,

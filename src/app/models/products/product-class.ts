@@ -1,7 +1,8 @@
 import { IProductAttribute } from './product-attribute';
 import { IProductOption } from './product-option';
+import {INamedHrefEntity} from '@nusantara/models';
 
-export interface IProductClass {
+export interface IProductClass extends INamedHrefEntity{
   name: string;
   href: string;
   requiresShipping: boolean;

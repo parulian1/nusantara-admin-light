@@ -38,7 +38,7 @@ jobs:
       - template: web/unit_test.yml@templates
         parameters:
           feedId: $(FEED_ID)
-          testArgs: ''
+          testArgs: '--source-map --code-coverage'
 
   # prod build
   - job: build_prod
@@ -102,7 +102,7 @@ jobs:
 
   # Staging Build
   - job: build_staging
-    # dependsOn: build_prod
+    dependsOn: unit_test
     pool:
       name: docker-agent
     displayName: Build & Packaging STAGING

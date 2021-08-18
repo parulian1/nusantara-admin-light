@@ -20,11 +20,11 @@ describe('LoginComponent', () => {
   let authServiceSpy: jasmine.SpyObj<AuthService>;
   let httpTestingController: HttpTestingController;
 
-  beforeEach(waitForAsync(() => {
+  // const router = jasmine.createSpyObj('Router', ['navigate', 'navigateByUrl', 'redirect']);
 
-    authServiceSpy = jasmine.createSpyObj('AuthService', ['login']);
 
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         ReactiveFormsModule,
@@ -39,15 +39,17 @@ describe('LoginComponent', () => {
       providers: [
         { provide: ActivatedRoute, useClass: MockActivatedRoute },
         { provide: JwtHelperService, useClass: MockJwtHelperService },
+        // { provide: Router, use: router }
       ]
     })
     .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
+    authServiceSpy = jasmine.createSpyObj('AuthService', ['login']);
     fixture.detectChanges();
   });
 
