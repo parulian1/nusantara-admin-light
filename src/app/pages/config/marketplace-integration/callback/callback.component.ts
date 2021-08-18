@@ -67,13 +67,6 @@ export class CallbackComponent implements OnInit {
 
   ngOnInit(): void {
 
-    // needed to check marketplace, now only bukalapak and lazada
-    if(this.checkString(this.router.url)[0]){
-      this.marketplace = this.checkString(this.router.url)[1]
-    } else {
-      this.marketplace = 'bukalapak'
-    }
-
     this.activatedRoute.queryParams.subscribe(params => {
         this.codeCallback = params['code'];
     });
@@ -92,17 +85,7 @@ export class CallbackComponent implements OnInit {
    * Attempts to log the user in.
    * If successful, their auth token will be saved and they will be redirected.
    */
-
-  checkString(str) {    
-    let status = false;
-    let selectedMarketplace;
-    this.marketplaceArray.forEach((currentMarketplace, index)=>{
-      status = str.includes(currentMarketplace)  
-      selectedMarketplace = currentMarketplace
-    });
-    return [status, selectedMarketplace]
-  }
-
+  
   getFormValue(): any {
     const formValue = {
       code: this.form.value.code,
