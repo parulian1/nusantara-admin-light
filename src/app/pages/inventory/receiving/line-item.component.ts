@@ -10,7 +10,7 @@ import { IProductClass } from '../../../models/products';
     <tr [formGroup]="form">
       <td>{{ displayedProductName }}</td>
       <td class="immediate-error-display">
-        <input type="text" [formControl]="sku" data-qa="sku">
+        <input type="text" [formControl]="sku" data-qa="sku" placeholder="Input SKU">
         <nus-field-errors [control]="sku"></nus-field-errors>
       </td>
       <td>
@@ -18,7 +18,8 @@ import { IProductClass } from '../../../models/products';
         <nus-field-errors [control]="originalQuantity"></nus-field-errors>
       </td>
       <td>
-        <input type="text" [formControl]="batchNumber" data-qa="batch-number">
+        <input type="text" [formControl]="batchNumber" data-qa="batch-number" placeholder="Input Batch">
+        <nus-field-errors [control]="batchNumber"></nus-field-errors>
       </td>
       <td class="immediate-error-display">
         <input *ngIf="isPerishable" type="date" [formControl]="expiryDate" data-qa="expiry-date">
@@ -30,7 +31,7 @@ import { IProductClass } from '../../../models/products';
       </td>
       <td>
         <button (click)="remove.emit()" type="button" class="remove-button" data-qa="remove-button">
-          <i class="material-icons">remove_circle_outline</i>
+          <i class="material-icons">delete_outline</i>
         </button>
       </td>
     </tr>

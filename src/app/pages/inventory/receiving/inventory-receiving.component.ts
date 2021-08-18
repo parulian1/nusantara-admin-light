@@ -250,13 +250,13 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
 
   saveForm() {
     // check if sku is empty, set the sku value to be `upc` value
-    for (const [i, val] of this.form.value.stockRecords.entries()) {
-      if (val.sku === '') {
-        this.stockRecords.at(i).patchValue({
-          sku: val.product.upc
-        });
-      }
-    }
+    // for (const [i, val] of this.form.value.stockRecords.entries()) {
+    //   if (val.sku === '') {
+    //     this.stockRecords.at(i).patchValue({
+    //       sku: val.product.upc
+    //     });
+    //   }
+    // }
 
     this.service.save(this.getFormValue()).pipe(catchError(err => {
       if (err instanceof HttpErrorResponse) {
@@ -329,27 +329,19 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
 
       const selectedProduct = this.productSelectionModal.product.value as IProduct;
 
-      let defaultSku;
-      if (selectedProduct.upc) {
-        defaultSku = selectedProduct.upc;
-      } else {
-        defaultSku = '';
-      }
-
       const oneProduct = this.fb.group({
         inventoryReceiving: [null, []],
         product: [selectedProduct, [Validators.required]],
         href: [null, []],
         location: this.fb.group({
           href: [defaultSubLocations, []],
-          // name: ['', ],
         }),
-        sku: [defaultSku, []],
+        sku: ['', []],
         originalQuantity: [1, [Validators.required, Validators.min(1)]],
         batchNumber: ['', []],
         locator: this.fb.array([]),
         expiryDate: [null, []],
-        cost: [0, [Validators.required]]
+        cost: [0, []]
       });
       this.stockRecords.push(oneProduct);
     }
