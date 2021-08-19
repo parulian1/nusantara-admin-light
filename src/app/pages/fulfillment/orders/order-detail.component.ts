@@ -32,6 +32,8 @@ import {
   SetPickUpServiceComponent,
   TransportToCounterSelectionModalComponent,
 } from "./modals";
+import { MarketplaceOrderService } from "@nusantara/services/merketplace-order.service";
+import { IOrderChildren } from "@nusantara/models/order/order-children";
 
 @Component({
   selector: "nus-order-detail",
@@ -65,11 +67,19 @@ import {
               <td>
                 <div class="body-2">AWB</div>
                 <div class="subheading-2">
-                  {{
-                    getAwbNumber(children.data[0])
-                      ? getAwbNumber(children.data[0])
-                      : "-"
-                  }}
+                  <div>
+                    {{
+                      getAwbNumber(children.data[0])
+                        ? getAwbNumber(children.data[0])
+                        : "-"
+                    }}
+                    <a
+                      class="refresh-awb"
+                      *ngIf="isRefreshAwbEnable(children.data[0])"
+                      (click)="refreshAwb()"
+                      >Refresh AWB</a
+                    >
+                  </div>
                 </div>
               </td>
               <td>
@@ -127,15 +137,33 @@ import {
                       type="button"
                       class="control"
                       (click)="updateOrder(children.data[0], 'complete')"
+                      [disabled]="isCompleteButtonDisabled(children.data[0])"
                     >
                       Complete
                     </button>
+
+                    <a
+                      *ngIf="isRedirectMarketplaceShowed(children)"
+                      class="control see-order"
+                      href="{{ children.marketplaceRedirectHref }}"
+                      target="_blank"
+                    >
+                      See Order
+                    </a>
 
                     <!-- <button type="button" class="control secondary"
                       (click)="activityTracking.open()">
                       View Progress
                       </button>
                     -->
+
+                    <div *ngIf="isRedirectMarketplaceShowed(children)">
+                      Orders can only be processed on the {{ orderDetailData.sourceName | titlecase }} Dashboard.
+                    </div>
+                    <div *ngIf="isCompleteButtonDisabled(children.data[0])">
+                      Order will automatically complete when customer receives
+                      the package
+                    </div>
                   </ng-container>
 
                   <button
@@ -273,6 +301,7 @@ import {
     ".product-item-detail > span:first-child { width: 64px; }",
     ".product-item-detail > span:nth-child(2) { min-width: 240px; flex-basis: 390px;}",
     ".product-item-detail > span:nth-child(3) { min-width: 120px; flex-basis: 200px; }",
+    ".product-item-detail .caption-1 { overflow: hidden; text-overflow: ellipsis; }",
     "tr.product-title > td { padding: 16px 24px; border-bottom: none; width: 100%; }",
     ".summary thead { background: transparent; }",
     ".summary th { padding: 20px 24px; }",
@@ -281,6 +310,8 @@ import {
     ".download-button { min-width: 200px; display: block; margin-left: auto; }",
     "img { height: 64px; width: 64px; }",
     ".no-image { background: var(--lighten-black); }",
+    ".see-order { text-align: center; padding-top: 4px; }",
+    ".refresh-awb { margin-left: 5px; font-weight: normal; }",
   ],
 })
 export class OrderDetailComponent implements OnInit, AfterViewInit {
@@ -311,9 +342,13 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   // marketplace source name that not using default AWB handler
   notManagedAwbSources = ["tokopedia", "lazada", "shopee", "bukalapak"];
 
+  // enable refresh AWB for following source name
+  enableRefreshAwb = ["tokopedia", "shopee", "bukalapak"];
+
   constructor(
     public route: ActivatedRoute,
     public service: OrderService,
+    public mpService: MarketplaceOrderService,
     public shipmentService: ShipmentService,
     private toast: ToastService
   ) {}
@@ -528,7 +563,8 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   isCompleteButtonHidden(childrenData: any): boolean {
     if (
       childrenData.status !== "shipped" ||
-      childrenData.status === "complete"
+      childrenData.status === "complete" ||
+      this.isRedirectMarketplaceShowed(childrenData)
     ) {
       return true;
     }
@@ -615,5 +651,37 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
       ["web", "pos"].includes(this.orderDetailData.source) ||
       this.orderDetailData.sourceName == "tsc"
     );
+  }
+
+  // after click ship, redirect to marketplace admin
+  // for status : shipped and source name : bukalapak/tokped/shopee
+  get isfulfillmentException() {
+    return (
+      this.enableRefreshAwb.includes(this.orderDetailData.sourceName) &&
+      this.orderDetailData.status === "shipped"
+    );
+  }
+
+  isRefreshAwbEnable(childrenData: IOrderChildrenData) {
+    return this.isfulfillmentException && !this.getAwbNumber(childrenData);
+  }
+
+  isRedirectMarketplaceShowed(children: IOrderChildren) {
+    return (
+      this.isfulfillmentException && children.marketplaceRedirectHref !== null
+    );
+  }
+
+  isCompleteButtonDisabled(childrenData: IOrderChildrenData) {
+    console.log(this.getAwbNumber(childrenData));
+    return this.isfulfillmentException && !!this.getAwbNumber(childrenData);
+  }
+
+  refreshAwb() {
+    this.mpService
+      .fetchDetail(this.orderDetailData.orderNumber)
+      .subscribe((_) => {
+        window.location.reload();
+      });
   }
 }
