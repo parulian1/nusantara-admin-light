@@ -293,7 +293,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
       alert('You must first select a warehouse');
       return;
     }
-    const wh = this.warehouses.filter(e => e.href === this.warehouse.get('href').value)[0];
+    const wh = this.warehouses?.find(e => e.href === this.warehouse.get('href').value);
     if (wh) {
       this.clientService.getWarehouseInformation(wh.code).subscribe(
         (data: marketplace.IWarehouseInfo) => {

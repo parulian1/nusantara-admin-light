@@ -73,9 +73,9 @@ export abstract class AbstractCrudService<T extends base.IHrefEntity> {
   /**
    * Sends JSON or FormData to this service's list endpoint using HTTP POST.
    */
-  create(entity: T | FormData): Observable<IResultResponse> {
+  create(entity: T | FormData, headers?: any): Observable<IResultResponse> {
     return this.httpClient
-      .post<T>(`${this.baseUrl}/`, entity, {observe: 'response', responseType: 'json'})
+      .post<T>(`${this.baseUrl}/`, entity, {observe: 'response', responseType: 'json', headers})
       .pipe(map(resp => {
         if (resp.status === 201) {
           return new SuccessCreatedResult<T>(resp.headers.get('Location'), [], resp.body);
@@ -90,7 +90,7 @@ export abstract class AbstractCrudService<T extends base.IHrefEntity> {
    * @param entity The form or JSON object to update
    * @param removeEmptyFiles Only used if entity is FormData;  Prevents unchanged file fields from being deleted.
    */
-  update(entity: T | FormData, removeEmptyFiles = true): Observable<IResultResponse> {
+  update(entity: T | FormData, removeEmptyFiles = true, headers?: any): Observable<IResultResponse> {
 
     // prevent unchanged files from being deleted on form data.
     if (entity instanceof FormData && removeEmptyFiles) {
@@ -98,7 +98,7 @@ export abstract class AbstractCrudService<T extends base.IHrefEntity> {
     }
 
     return this.httpClient
-      .patch<T>(this.getEntityUrl(entity), entity, {observe: 'response', responseType: 'json'})
+      .patch<T>(this.getEntityUrl(entity), entity, {observe: 'response', responseType: 'json', headers})
       .pipe(map(resp => {
         if (resp.status === 200) {
           return new SuccessResult([], resp.body);
@@ -135,8 +135,12 @@ export abstract class AbstractCrudService<T extends base.IHrefEntity> {
    * Shortcut method; either creates or updates an object based on whether the .href
    * attribute is already set.  If not set, assumes that the object must be created.
    */
-  save(entity: T | FormData): Observable<IResultResponse> {
-    return (!!this.getEntityUrl(entity)) ? this.update(entity) : this.create(entity);
+  save(entity: T | FormData, headers?: Headers): Observable<IResultResponse> {
+    if (!!this.getEntityUrl(entity)) {
+      return this.update(entity, true, headers);
+    } else {
+      return this.create(entity, headers);
+    }
   }
 
   delete(entity: T | base.IHrefEntity | FormData): Observable<IResultResponse> {

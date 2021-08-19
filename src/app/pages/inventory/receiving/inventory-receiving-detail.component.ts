@@ -88,38 +88,38 @@ import {IProduct, IProductClass} from '@nusantara/models/products';
         </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let stock_record of entity.stockRecords">
+          <tr *ngFor="let stockRecord of entity.stockRecords">
             <td data-qa="product">
-              <div>{{ stock_record.product.name }}</div>
+              <div>{{ stockRecord.product.name }}</div>
             </td>
             <td>
-              <div>{{ stock_record.sku }}</div>
+              <div>{{ stockRecord.sku }}</div>
             </td>
             <td data-qa="original-quantity">
-              {{ stock_record.originalQuantity }}
+              {{ stockRecord.originalQuantity }}
             </td>
             <td>
-              <ng-container *ngIf="!stock_record.location"> - </ng-container>
-              <ng-container *ngIf="stock_record.location">{{ stock_record.location?.name }}</ng-container>
+              <ng-container *ngIf="!stockRecord.location"> - </ng-container>
+              <ng-container *ngIf="!!stockRecord.location">{{ stockRecord.location?.name }}</ng-container>
             </td>
             <td>
-              <ng-container *ngIf="!stock_record.locator"> - </ng-container>
-              <ng-container *ngIf="stock_record.locator">{{ stock_record.locator }}</ng-container>
+              <ng-container *ngIf="!stockRecord.locator"> - </ng-container>
+              <ng-container *ngIf="stockRecord.locator">{{ stockRecord.locator }}</ng-container>
             </td>
             <td data-qa="stock-requested">
-              {{ stock_record.requestingStock }}
+              {{ stockRecord.requestingStock }}
             </td>
             <td>
-              <ng-container *ngIf="!stock_record.batchNumber"> - </ng-container>
-              <ng-container *ngIf="stock_record.batchNumber">{{ stock_record.batchNumber }}</ng-container>
+              <ng-container *ngIf="!stockRecord.batchNumber"> - </ng-container>
+              <ng-container *ngIf="stockRecord.batchNumber">{{ stockRecord.batchNumber }}</ng-container>
             </td>
             <td>
-              <ng-container *ngIf="!stock_record.expiryDate"> - </ng-container>
-              <ng-container *ngIf="stock_record.expiryDate">{{ stock_record.expiryDate|date: 'dd MMM yyyy HH:mm' }}</ng-container>
+              <ng-container *ngIf="!stockRecord.expiryDate"> - </ng-container>
+              <ng-container *ngIf="stockRecord.expiryDate">{{ stockRecord.expiryDate|date: 'dd MMM yyyy HH:mm' }}</ng-container>
             </td>
             <td>
-              <ng-container *ngIf="!stock_record.cost"> - </ng-container>
-              <ng-container *ngIf="stock_record.cost">{{ stock_record.cost | currency:'IDR':'symbol-narrow':'1.0' }}</ng-container>
+              <ng-container *ngIf="!stockRecord.cost"> - </ng-container>
+              <ng-container *ngIf="stockRecord.cost">{{ stockRecord.cost | currency:'IDR':'symbol-narrow':'1.0' }}</ng-container>
             </td>
           </tr>
         </tbody>
@@ -212,16 +212,18 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
 
   ngOnInit() {
     super.ngOnInit();
-    this.clientService.getWarehouseInformation(this.entity.warehouse.code).subscribe(
+    if (!!this.entity.warehouse.code) {
+      this.clientService.getWarehouseInformation(this.entity.warehouse.code).subscribe(
         (data: marketplace.IWarehouseInfo) => {
           this.warehouseDetail = data.details;
           this.marketplaceValue = data.totalMarketplace;
         }
       );
+    }
     this.route.data.subscribe((data: { warehouses: IWarehouse[], productClasses: IProductClass[] }) => {
       this.warehouses = data.warehouses;
       this.productClasses = data.productClasses;
-      const wh = this.warehouses.filter(e => e.href === this.entity.warehouse.href)[0];
+      const wh = this.warehouses?.find(e => e.href === this.entity.warehouse.href);
       if (wh) {
         this.availableSubLocations = wh.subLocations;
       }

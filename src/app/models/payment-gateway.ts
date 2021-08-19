@@ -17,4 +17,5 @@ export interface IPaymentGateway extends INamedHrefEntity{
   isActive: boolean;
   allowPos: boolean;
   meta: IPaymentGatewayMeta;
+  expiryReminder?: number;
 }

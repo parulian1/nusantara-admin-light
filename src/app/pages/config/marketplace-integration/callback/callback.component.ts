@@ -57,7 +57,7 @@ export class CallbackComponent implements OnInit {
   marketplace: string;
 
   // add new marketplace that need code
-  marketplaceArray = ['lazada']
+  marketplaceArray = ['lazada', 'bukalapak']
 
   constructor(private fb: FormBuilder,
               private service: MarketplaceShopService,
@@ -68,11 +68,7 @@ export class CallbackComponent implements OnInit {
   ngOnInit(): void {
 
     // needed to check marketplace, now only bukalapak and lazada
-    if(this.checkString(this.router.url)[0]){
-      this.marketplace = this.checkString(this.router.url)[1]
-    } else {
-      this.marketplace = 'bukalapak'
-    }
+    this.marketplace = this.checkString(this.router.url)[1]
 
     this.activatedRoute.queryParams.subscribe(params => {
         this.codeCallback = params['code'];
