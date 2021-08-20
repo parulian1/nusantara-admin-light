@@ -10,3 +10,4 @@ export * from './marketplace-showcase';
 export * from './lazada';
 export * from './shopee';
 export * from './tokopedia';
+export * from './bukalapak';

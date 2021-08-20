@@ -219,6 +219,7 @@ export class ShowcaseComponent implements OnInit {
             showCaseName: data.name,
           });
           
+          console.log(data)
           this.displayName = data.name;
           this.totalProduct = data.total;
           this.isDisabled = data.disable;
@@ -227,7 +228,6 @@ export class ShowcaseComponent implements OnInit {
   }
 
   updateShowcaseName(){
-    console.log(this.form.value.showCaseName);
     this.service.update(this.shopSlug, this.showcaseId, this.form.value.showCaseName).subscribe(
       (resp) => {
         this.refetch();
