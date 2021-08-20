@@ -79,12 +79,12 @@ import {IProduct, IProductClass} from '@nusantara/models/products';
           </th>
           <th>SKU</th>
           <th>Original Quantity</th>
-          <th>Location</th>
-          <th>Locator</th>
           <th>Stock Requested</th>
           <th>Batch Number</th>
           <th>Expiry Date</th>
           <th>Cost</th>
+          <th>Location</th>
+          <th>Locator</th>
         </tr>
         </thead>
         <tbody>
@@ -97,14 +97,6 @@ import {IProduct, IProductClass} from '@nusantara/models/products';
             </td>
             <td data-qa="original-quantity">
               {{ stockRecord.originalQuantity }}
-            </td>
-            <td>
-              <ng-container *ngIf="!stockRecord.location"> - </ng-container>
-              <ng-container *ngIf="!!stockRecord.location">{{ stockRecord.location?.name }}</ng-container>
-            </td>
-            <td>
-              <ng-container *ngIf="!stockRecord.locator"> - </ng-container>
-              <ng-container *ngIf="stockRecord.locator">{{ stockRecord.locator }}</ng-container>
             </td>
             <td data-qa="stock-requested">
               {{ stockRecord.requestingStock }}
@@ -121,6 +113,14 @@ import {IProduct, IProductClass} from '@nusantara/models/products';
               <ng-container *ngIf="!stockRecord.cost"> - </ng-container>
               <ng-container *ngIf="stockRecord.cost">{{ stockRecord.cost | currency:'IDR':'symbol-narrow':'1.0' }}</ng-container>
             </td>
+            <td>
+              <ng-container *ngIf="!stockRecord.location"> - </ng-container>
+              <ng-container *ngIf="!!stockRecord.location">{{ stockRecord.location?.name }}</ng-container>
+            </td>
+            <td>
+              <ng-container *ngIf="!stockRecord.locator"> - </ng-container>
+              <ng-container *ngIf="stockRecord.locator">{{ stockRecord.locator }}</ng-container>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -130,11 +130,11 @@ import {IProduct, IProductClass} from '@nusantara/models/products';
             <th>Product (UPC)</th>
             <th>SKU</th>
             <th>Quantity</th>
-            <th>Location</th>
-            <th>Locator</th>
             <th>Batch</th>
             <th>Expiry Date</th>
             <th>Cost</th>
+            <th>Location</th>
+            <th>Locator</th>
           </tr>
         </thead>
         <tbody>

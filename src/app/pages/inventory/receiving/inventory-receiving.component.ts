@@ -8,7 +8,8 @@ import {
   inventory,
   ISubLocation,
   IWarehouse,
-  marketplace
+  marketplace,
+  IError
 } from '@nusantara/models';
 import { InventoryReceivingService, MarketplaceClientService } from '../../../services';
 import {IProduct, IProductClass} from '../../../models/products';
@@ -20,9 +21,6 @@ import {
 import { catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { of } from 'rxjs';
-import { IError } from '../../../models/base/error';
-import { isObject } from 'rxjs/internal-compatibility';
-import { convertStringToObject, keysToCamel } from '@nusantara/shared/helpers';
 
 /**
  * Allows a user to receive a new batch of inventory.
@@ -96,7 +94,7 @@ import { convertStringToObject, keysToCamel } from '@nusantara/shared/helpers';
           <thead>
           <tr id="mp-add-product-head">
             <th>Product Name (UPC)*</th>
-            <th>SKU</th>
+            <th>SKU*</th>
             <th>Quantity*</th>
             <th>Batch</th>
             <th>Expiry Date</th>
@@ -205,7 +203,6 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     this.route.data.subscribe((data: { warehouses: IWarehouse[], productClasses: IProductClass[] }) => {
       this.warehouses = data.warehouses;
       this.productClasses = data.productClasses;
-      console.log(this.productClasses);
     });
     this.currentDate = new Date();
   }
@@ -249,15 +246,6 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
   }
 
   saveForm() {
-    // check if sku is empty, set the sku value to be `upc` value
-    // for (const [i, val] of this.form.value.stockRecords.entries()) {
-    //   if (val.sku === '') {
-    //     this.stockRecords.at(i).patchValue({
-    //       sku: val.product.upc
-    //     });
-    //   }
-    // }
-
     this.service.save(this.getFormValue()).pipe(catchError(err => {
       if (err instanceof HttpErrorResponse) {
         return of(new ErrorResult<IError>(err.error, err.status));
@@ -336,12 +324,12 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
         location: this.fb.group({
           href: [defaultSubLocations, []],
         }),
-        sku: ['', []],
+        sku: ['', Validators.required],
         originalQuantity: [1, [Validators.required, Validators.min(1)]],
         batchNumber: ['', []],
         locator: this.fb.array([]),
         expiryDate: [null, []],
-        cost: [0, []]
+        cost: [0, [Validators.max(9999999999999998), Validators.min(0)]]
       });
       this.stockRecords.push(oneProduct);
     }

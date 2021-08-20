@@ -25,9 +25,12 @@ import { IProductClass } from '../../../models/products';
         <input *ngIf="isPerishable" type="date" [formControl]="expiryDate" data-qa="expiry-date">
         <nus-field-errors [control]="expiryDate"></nus-field-errors>
       </td>
-      <td>
-        <input type="number" [formControl]="cost" data-qa="cost" maxlength="20">
+      <td class="immediate-error-display">
+        <input type="number" [formControl]="cost" data-qa="cost">
         <nus-field-errors [control]="cost"></nus-field-errors>
+        <div *ngIf="cost?.touched" class="error-detail">
+          <div *ngIf="cost?.errors?.max">Ensure that there are no more than 16 digits</div>
+        </div>
       </td>
       <td>
         <button (click)="remove.emit()" type="button" class="remove-button" data-qa="remove-button">
@@ -60,12 +63,9 @@ export class LineItemComponent implements OnInit, AfterViewInit {
 
   get isPerishable(): boolean {
     const p = this.product.value as products.IProduct;
-    console.log(p);
     let currentPc = [];
-    console.log('this.productClasses: ', this.productClasses);
     if (!!this.productClasses) {
       currentPc = this.productClasses.filter(pc => pc.href === p.productClass.href);
-      console.log('currentPc: ', currentPc);
     }
 
     if (currentPc.length > 0) {
