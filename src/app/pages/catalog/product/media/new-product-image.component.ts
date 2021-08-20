@@ -20,8 +20,10 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
         <input type="hidden" [formControl]="href" name="href">
         <input type="hidden" [formControl]="type" name="type">
         <input type="hidden" [formControl]="youtubeVideoId" name="youtubeVideoId">
-        <input type="file" [formControl]="image" (change)="setMediaImage($event)" #imageInput name="image">
 
+        <input type="file" [formControl]="image" (change)="setMediaImage($event)" #imageInput name="image">
+        <input type="hidden" [formControl]="sortPriority" name="sortPriority">
+        <input type="hidden" [formControl]="identifier" name="identifier">
         <button [disabled]="form.invalid" (click)="close()" type="button" class="control">Save</button>
         <button (click)="cancel()" type="button" class="control secondary">Cancel</button>
       </form>
@@ -38,6 +40,7 @@ export class NewProductImageComponent extends AbstractEditingComponent implement
   result: DialogResult;
 
   imagePreviewUrl: string;
+  priorityValue = 1;
 
   constructor(protected fb: FormBuilder) {
     super();
@@ -62,6 +65,8 @@ export class NewProductImageComponent extends AbstractEditingComponent implement
     this.form = this.fb.group({
       href: ['', []],
       image: ['', [Validators.required, ]],
+      sortPriority: [this.priorityValue, [Validators.required, ]],
+      identifier: [  this.randomString(10), [Validators.required, ]],
       type: ['image', [Validators.required, ]],
       youtubeVideoId: [null, []]
     });
@@ -70,6 +75,8 @@ export class NewProductImageComponent extends AbstractEditingComponent implement
   get type(): FormControl { return this.form.get('type') as FormControl; }
   get image(): FormControl { return this.form.get('image') as FormControl; }
   get youtubeVideoId(): FormControl { return this.form.get('youtubeVideoId') as FormControl; }
+  get sortPriority(): FormControl { return this.form.get('sortPriority') as FormControl; }
+  get identifier(): FormControl { return this.form.get('identifier') as FormControl; }
 
   setMediaImage(data?: Event|string) {
     this.setImagePreview(data,  (url) => this.imagePreviewUrl = url);
@@ -82,7 +89,8 @@ export class NewProductImageComponent extends AbstractEditingComponent implement
     return new FormData(this.formView.nativeElement);
   }
 
-  open() {
+  open(priority?: number) {
+    this.priorityValue = !!priority ? priority : 1;
     this.modal.open();
   }
 
@@ -97,6 +105,15 @@ export class NewProductImageComponent extends AbstractEditingComponent implement
 
   cancel() {
     this.modal.close();
+  }
+
+  randomString(length) {
+    const randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for ( let i = 0; i < length; i++ ) {
+      result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
+    }
+    return result;
   }
 }
 

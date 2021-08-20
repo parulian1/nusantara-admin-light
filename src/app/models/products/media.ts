@@ -10,4 +10,6 @@ export interface IProductMedia {
   youtubeVideoId?: string;
   product?: string;
   image?: string;
+  sortPriority?: number;
+  identifier?: string;
 }
