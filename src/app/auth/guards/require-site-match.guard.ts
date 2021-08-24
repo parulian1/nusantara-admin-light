@@ -15,11 +15,11 @@ export class RequireSiteMatchGuard implements CanActivate {
   constructor(public auth: AuthService, public router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    if (this.auth.tokenPayload?.site !== this.auth.siteDomain) {
-      this.auth.logout();
-      this.router.navigate([this.redirectOnFail, ], {queryParams: {next: state.url}});
-      return false;
-    }
+    // if (this.auth.tokenPayload?.site !== this.auth.siteDomain) {
+    //   this.auth.logout();
+    //   this.router.navigate([this.redirectOnFail, ], {queryParams: {next: state.url}});
+    //   return false;
+    // }
     return true;
   }
 }
