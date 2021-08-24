@@ -176,7 +176,7 @@ import {IProduct, IProductClass} from '@nusantara/models/products';
   styles: [
     'button:not(:first-child) { margin-left: 5px; }',
     'form{max-width: none;}',
-    '#general-table-info, .general-table-product{margin-bottom: 30px;height: 80px;border-radius: 8px}',
+    '#general-table-info, .general-table-product{margin-bottom: 30px;height: 80px;border-radius: 8px; border-collapse: collapse;}',
     'a{background:none;border:none;cursor: pointer;font-weight: 700;}',
     '#general-table-info th{text-align: left;font-weight: 400;}',
     '#general-table-info td{text-align: left;font-weight: 700;color: #5A5A5A;}',
@@ -186,7 +186,7 @@ import {IProduct, IProductClass} from '@nusantara/models/products';
     '.general-table-product thead{background-color: #F4F4F4;}',
     'table.general-table-product{table-layout: fixed;}',
     'div.detail-actions { display: flex }',
-    'button.danger { margin-left: auto }'
+    'button.danger { margin-left: auto }',
   ]
 })
 export class InventoryReceivingDetailComponent extends AbstractDetailComponent<IReceivingOrder> implements OnInit {

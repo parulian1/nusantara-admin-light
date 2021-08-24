@@ -55,6 +55,8 @@ import {IProductClass} from '@nusantara/models/products';
     `
       .locator-item-container { margin-bottom: 15px; }
       .locator-item-container__input { display: flex; }
+      tr {border: solid 1px #B4B4B4}
+      tr td { vertical-align: top;}
     `,
   ]
 })

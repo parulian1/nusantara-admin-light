@@ -46,17 +46,17 @@ import { of } from 'rxjs';
           <div class="general-info--detail box-container">
             <h3>General Information</h3>
             <div>
-              <label>DO Number (Optional)</label>
-              <input type="text" [formControl]="doNumber">
+              <label for="do-number">DO Number (Optional)</label>
+              <input id="do-number" type="text" [formControl]="doNumber" placeholder="Input DO Number">
             </div>
             <div>
-              <label for="">DC PIC (Optional)</label>
-              <input type="text" [formControl]="dcPic">
+              <label for="pic-sender">PIC Sender (Optional)</label>
+              <input id="pic-sender" type="text" [formControl]="dcPic" placeholder="Input PIC Sender">
             </div>
             <div [formGroup]="warehouse">
-              <label>Warehouse</label>
+              <label for="warehouse">Warehouse</label>
               <div class="confirm-warehouse">
-                <select formControlName="href">
+                <select id="warehouse" formControlName="href">
                   <option [ngValue]="null">Select Warehouse</option>
                   <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
                     {{ wh.name }}
@@ -342,7 +342,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     const fullname = firstName.concat(' ', lastName);
 
     if (lastName && firstName && email) {
-      return [fullname, `(${email})`, ].join(', ').trim();
+      return [fullname, `(${email})`, ].join(' ').trim();
     } else {
       return email;
     }
