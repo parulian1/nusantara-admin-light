@@ -1,22 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { Store } from "@ngrx/store";
 
-import { PagedResponse } from '@nusantara/core';
-import { marketplace } from '@nusantara/models';
-import * as fromMarketplaces from '@nusantara/reducers/marketplace.reducers';
-import * as shopActions from '@nusantara/actions';
-import { MarketplaceClientEnum } from '../connect/markeplace-client-enum';
+import { PagedResponse } from "@nusantara/core";
+import { marketplace } from "@nusantara/models";
+import * as fromMarketplaces from "@nusantara/reducers/marketplace.reducers";
+import * as shopActions from "@nusantara/actions";
+import { MarketplaceClientEnum } from "../connect/markeplace-client-enum";
 
 @Component({
-  selector: 'nus-marketplace-setup',
+  selector: "nus-marketplace-setup",
   template: `<h1 class="title-1">Marketplace Set Up</h1>
     <nus-empty-list
       *ngIf="!page?.entities?.length; else elseBlock"
       title="No Connected Store Yet!"
       description="Add a marketplace store to manage all your products in one place."
       [addUrl]="['/config', 'marketplace-integration', 'connect', 'new']"
-      addText="Add Store">
+      addText="Add Store"
+    >
     </nus-empty-list>
     <ng-template #elseBlock>
       <nus-pagination [page]="page"></nus-pagination>
@@ -43,16 +44,20 @@ import { MarketplaceClientEnum } from '../connect/markeplace-client-enum';
             </td>
 
             <td>
-              <a [routerLink]="['edit-shipping/', entity.slug]"
+              <a
+                [routerLink]="['edit-shipping/', entity.slug]"
                 (click)="setSelectedShop(entity)"
-                [ngClass]="{'disabled': entity.isConnected === false}">
+                [ngClass]="{ disabled: entity.isConnected === false }"
+              >
                 Edit Shipping
               </a>
             </td>
             <td>
-              <a [routerLink]="['showcase/', entity.slug]"
+              <a
+                [routerLink]="['showcase/', entity.slug]"
                 (click)="setSelectedShop(entity)"
-                [ngClass]="{'disabled': entity.marketplace === marketplaceClient.shopee || entity.isConnected === false}">
+                [ngClass]="{ disabled: isDisabledShowcase(entity) }"
+              >
                 Set Up Showcase
               </a>
             </td>
@@ -62,8 +67,8 @@ import { MarketplaceClientEnum } from '../connect/markeplace-client-enum';
       <nus-pagination [page]="page"></nus-pagination>
     </ng-template>`,
   styles: [
-    'thead th, tbody td { text-align: left }',
-    ':host ::ng-deep nus-empty-list div { height: 100vh }'
+    "thead th, tbody td { text-align: left }",
+    ":host ::ng-deep nus-empty-list div { height: 100vh }",
   ],
 })
 export class SetupComponent implements OnInit {
@@ -85,5 +90,13 @@ export class SetupComponent implements OnInit {
 
   setSelectedShop(shop: marketplace.IShop) {
     this.store.dispatch(new shopActions.SetCurrentShop(shop));
+  }
+
+  isDisabledShowcase(entity: marketplace.IShop) {
+    return (
+      entity.marketplace === this.marketplaceClient.shopee ||
+      entity.marketplace === this.marketplaceClient.tsc ||
+      !entity.isConnected
+    );
   }
 }
