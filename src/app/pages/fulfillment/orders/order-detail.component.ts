@@ -145,7 +145,7 @@ import { IOrderChildren } from "@nusantara/models/order/order-children";
                     <a
                       *ngIf="isRedirectMarketplaceShowed(children.data[0])"
                       class="control see-order"
-                      href="{{ children.marketplaceRedirectHref }}"
+                      href="{{ children.data[0].marketplaceRedirectHref }}"
                       target="_blank"
                     >
                       See Order
