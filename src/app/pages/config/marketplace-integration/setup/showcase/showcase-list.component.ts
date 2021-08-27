@@ -126,13 +126,13 @@ export class ShowcaseListComponent implements OnInit, AfterViewInit, OnDestroy {
   shopSlug: string;
   currentShop$: Observable<marketplace.IShop>;
   isBusy: boolean;
+  subscription: Subscription;
+
   data = null;
   marketplaceClient = MarketplaceClientEnum;
-  subscription: Subscription;
 
   @ViewChild(DeleteShowcaseModalComponent)
   deleteShowcaseModal: DeleteShowcaseModalComponent;
-
   @ViewChild(AddNewShowcaseModalComponent)
   addShowcaseModal: AddNewShowcaseModalComponent;
 
@@ -173,22 +173,16 @@ export class ShowcaseListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ondeleteShowcaseModalClosed() {
     if (this.deleteShowcaseModal.result === DialogResult.OK) {
+      const ToastMessage = "Showcase successfully deleted";
       const etalaseId = this.deleteShowcaseModal.etalaseId;
+
       this.service.delete(this.shopSlug, etalaseId).subscribe(
         (resp: HttpResponse<any>) => {
           this.refetch();
-          this.toast?.addMessage(
-            resp.body.data.message,
-            'Success',
-            ToastLevelEnum.success
-          );
+          this.toast?.addMessage(ToastMessage,'Deleted', ToastLevelEnum.info);
         },
         (errorResp: HttpErrorResponse) => {
-          this.toast?.addMessage(
-            errorResp.error.message,
-            'Error',
-            ToastLevelEnum.error
-          );
+          this.toast?.addMessage(errorResp.error.message,'Error',ToastLevelEnum.error);
         }
       );
     }
@@ -201,18 +195,10 @@ export class ShowcaseListComponent implements OnInit, AfterViewInit, OnDestroy {
         (resp) => {
           this.addShowcaseModal.name = null;
           this.refetch();
-          this.toast?.addMessage(
-            `${name} was saved successfully.`,
-            'Saved',
-            ToastLevelEnum.success
-          );
+          this.toast?.addMessage(`${name} was saved successfully.`,'Saved',ToastLevelEnum.success);
         },
         (errorResp) => {
-          this.toast?.addMessage(
-            errorResp.error.details[0].message,
-            'Error',
-            ToastLevelEnum.error
-          );
+          this.toast?.addMessage(errorResp.error.details[0].message,'Error',ToastLevelEnum.error);
         }
       );
     }
