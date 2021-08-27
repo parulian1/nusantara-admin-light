@@ -4,8 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { SharedModule } from '@nusantara/shared';
 import { FulfillmentRoutingModule } from './fulfillment-routing.module';
-import { 
-  OrderListComponent, 
+import {
+  OrderListComponent,
   OrderComponent,
   OrderDetailComponent,
   OrderPaymentConfirmComponent,
@@ -25,11 +25,12 @@ import {
   PaymentConfirmFormModalComponent,
   DeleteConfirmDialogComponent,
   CancelOrderDialogComponent,
+  MarkAsTestingDialogComponent
 } from './orders';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule} from '@angular/material/datepicker';
-import { 
+import {
   MatNativeDateModule,
   MAT_RIPPLE_GLOBAL_OPTIONS,
 } from '@angular/material/core';
@@ -61,7 +62,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     PaymentConfirmModalComponent,
     PaymentConfirmFormModalComponent,
     DeleteConfirmDialogComponent,
-    CancelOrderDialogComponent
+    CancelOrderDialogComponent,
+    MarkAsTestingDialogComponent
   ],
   imports: [
     CommonModule,
