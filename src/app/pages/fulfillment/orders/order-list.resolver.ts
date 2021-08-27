@@ -29,6 +29,7 @@ export class OrderListResolver extends AbstractListResolver<IOrder> {
           "shipping_method",
           "page",
           "per_page",
+          'is_testing',
           "order",
         ].indexOf(keyParam) >= 0
       ) {
@@ -39,8 +40,9 @@ export class OrderListResolver extends AbstractListResolver<IOrder> {
             continue;
           }
         }
-
-        params = params.set(keyParam, theQuery[keyParam]);
+        if (!!theQuery[keyParam]) {
+          params = params.set(keyParam, theQuery[keyParam]);
+        }
         continue;
       }
     }

@@ -7,6 +7,7 @@ export interface IOrderFilter {
   platform: Array<IOption>;
   orderStatus: Array<IOption>;
   logistics: Array<IOption>;
+  isTesting: boolean;
 }
 
 export interface IOrderFilterValue {
@@ -19,4 +20,5 @@ export interface IOrderFilterValue {
   status: string,
   logistic: string,
   q: string,
+  isTesting: string,
 }

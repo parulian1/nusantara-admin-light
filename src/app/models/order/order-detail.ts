@@ -61,7 +61,10 @@ export interface IOrderDetail extends ICoreOrder {
     orderPromo?: any;
     subscription?: string;
     subscriptionId?: number;
+    reason?: string;
   };
+
+  isTesting?: boolean;
 
 }
 
