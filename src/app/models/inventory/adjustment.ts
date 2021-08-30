@@ -18,6 +18,8 @@ export interface IAdjustmentStockRecordReadOnly extends IStockRecord {
   reason: string;
   notes: string;
   adjustmentQuantity: number;
+  actualQuantity: number;
+  expectedQuantity: number;
 }
 
 
