@@ -10,18 +10,19 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
       [identifier]="'markAsTesting'"
       #modal
       [customClass]="'medium-modal no-padding-modal'">
-      <div class="wrapper">
-        <div class="message">
-          <h2 class="title-2">Mark as test</h2>
-          <p>State the reason why this product is for testing</p>
-          <label>
-            <span>AWB</span>
-            <textarea placeholder="State the reason" [formControl]="reason"></textarea>
-            <nus-field-errors [control]="reason"></nus-field-errors>
-          </label>
+      <form>
+        <div class="wrapper">
+          <div class="message">
+            <h2 class="title-2">Mark as test</h2>
+            <p>State the reason why this product is for testing</p>
+            <label>
+              <textarea placeholder="State the reason" [formControl]="reason"></textarea>
+              <nus-field-errors [control]="reason"></nus-field-errors>
+            </label>
+          </div>
+          <button type="submit" class="control" (click)="close()" [disabled]="!form.valid">Submit</button>
         </div>
-        <button type="submit" class="control" (click)="close()" [disabled]="!form.valid">Submit</button>
-      </div>
+      </form>
     </ngx-smart-modal>
   `,
   styles: [
@@ -30,7 +31,8 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
     'h2 { padding-bottom: 24px }',
     'p { margin-bottom: 16px; }',
     'label { padding-bottom: 0; }',
-    'button { width: 50% }'
+    'button { width: 50% }',
+    '.error-detail {}'
   ]
 })
 export class MarkAsTestingDialogComponent {
