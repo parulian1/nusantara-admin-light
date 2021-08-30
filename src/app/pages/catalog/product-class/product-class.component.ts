@@ -121,7 +121,9 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
                                             optionChoices: products.IProductOption[]}) => {
 
       this.entity = data.entity;
-      this.attributeTypeChoices = data.attributeTypeChoices;
+      this.attributeTypeChoices = data.attributeTypeChoices.filter((typeChoice) => {
+        return ['dropdown', 'combo box', 'boolean'].indexOf(typeChoice.value) === -1;
+      });
       this.typeChoices = data.typeChoices;
       this.smeLicenseProductType();
       this.optionChoices = data.optionChoices;
