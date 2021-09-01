@@ -97,13 +97,13 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
 
       <label>
         <span>Valid From</span>
-        <nus-field-datetime [control]="validFrom"></nus-field-datetime>
+        <nus-field-datetime [control]="validFrom" [minDate]="minDateValidFrom" [maxDate]="maxDateValidFrom"></nus-field-datetime>
         <nus-field-errors [control]="validFrom"></nus-field-errors>
       </label>
 
       <label>
         <span>Valid To</span>
-        <nus-field-datetime [control]="validTo"></nus-field-datetime>
+        <nus-field-datetime [control]="validTo" [minDate]="minDateValidTo" [maxDate]="maxDateValidTo"></nus-field-datetime>
         <nus-field-errors [control]="validTo"></nus-field-errors>
       </label>
 
@@ -118,7 +118,7 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
 
       <span class="eligible-product">
         <h2 class="title-2">Voucher Eligible Products</h2>
-        <button type="button" class="control" (click)="uploadProductXLSX()">
+        <button type="button" class="control" (click)="uploadProductXLSX()" [disabled]="checkVoucherDateValid()">
           <i class="material-icons">publish</i>
           <span>Upload from XLSX</span>
         </button>
@@ -137,14 +137,14 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
           <td class="numeric">{{ i + 1 }}</td>
           <td>{{ control.get('name').value }}</td>
           <td>
-            <button (click)="products.removeAt(i)" type="button" class="remove-button">
+            <button (click)="products.removeAt(i)" type="button" [disabled]="checkVoucherDateValid()" class="remove-button">
               <i class="material-icons">remove_circle_outline</i>
             </button>
           </td>
         </tr>
         <tr>
           <td colspan="3">
-            <button type="button" (click)="selectProduct()" class="new-add-button wide">
+            <button type="button" (click)="selectProduct()"  [disabled]="checkVoucherDateValid()" class="new-add-button wide">
               <i class="material-icons">add</i> Add Product
             </button>
           </td>
@@ -188,6 +188,10 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
   ];
 
   hasProductUrl = false;
+  minDateValidTo: string | Date = null;
+  maxDateValidTo: string | Date = null;
+  minDateValidFrom: string | Date = null;
+  maxDateValidFrom: string | Date = null;
 
   public entity: IVoucher;
 
@@ -280,6 +284,25 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
     if ((window.localStorage.getItem('site_domain') === 'marthatilaarshop.com') || (window.localStorage.getItem('site_domain') === 'www.marthatilaarshop.com')) {
       // TODO: Bad thing, should get this from API
       this.hasProductUrl = true;
+    }
+
+    const today = new Date();
+    this.minDateValidTo = entity?.validTo ? entity.validTo : today;
+    this.minDateValidFrom = entity?.validFrom ? entity.validFrom : today;
+
+    if (today > new Date(entity?.validTo)) {
+      // passed/historical voucher, admin can not edit anything
+      this.form.disable();
+      this.maxDateValidFrom = entity.validFrom;
+      this.maxDateValidTo = entity.validTo;
+    } else if (today > new Date(entity?.validFrom)) {
+      // ongoing voucher, admin can ONLY edit "valid to" date and / or Inactive a promotion
+      this.form.disable();
+      this.form.controls.href.enable();
+      this.form.controls.validTo.enable();
+      this.form.controls.isActive.enable();
+      this.minDateValidFrom = entity.validFrom;
+      this.maxDateValidFrom = entity.validFrom;
     }
   }
 
@@ -376,5 +399,11 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
       reader.readAsBinaryString(target.files[0]);
     };
     input.click();
+  }
+
+  checkVoucherDateValid(): boolean {
+    // Disable button if its not new form and voucher is ongoing, passed/historical
+    const today = new Date();
+    return this.entity && today > new Date(this.validFrom.value);
   }
 }
