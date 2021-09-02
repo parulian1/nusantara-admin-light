@@ -29,8 +29,8 @@ export class OrderListResolver extends AbstractListResolver<IOrder> {
           "shipping_method",
           "page",
           "per_page",
-          'is_testing',
           "order",
+          "is_testing",
         ].indexOf(keyParam) >= 0
       ) {
         if ('page' === keyParam || keyParam === 'per_page') {
