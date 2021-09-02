@@ -6,12 +6,7 @@ import { RequireLoggedInGuard } from '@nusantara/auth/guards';
 
 const authRoutes: Routes = [
   {
-    path: 'bukalapak',
-    component: CallbackComponent,
-    canActivate: [RequireLoggedInGuard, ],
-  },
-  {
-    path: 'lazada',
+    path: ':marketplace',
     component: CallbackComponent,
     canActivate: [RequireLoggedInGuard, ],
   },
