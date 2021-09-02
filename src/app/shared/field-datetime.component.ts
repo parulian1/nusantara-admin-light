@@ -24,6 +24,8 @@ export class FieldDatetimeComponent implements OnInit {
   @Input() setDate: string | Date;
   @Input() control?: FormControl;
   @Input() autoFormat = true;
+  @Input() minDate: string | Date;
+  @Input() maxDate: string | Date;
 
   defaultTime: FlatpickrOptions = {
     enableTime: true,
@@ -42,6 +44,14 @@ export class FieldDatetimeComponent implements OnInit {
 
     if (this.control?.value) {
       this.defaultTime.defaultDate = this.control?.value;
+    }
+
+    if (this.minDate) {
+      this.defaultTime.minDate = this.minDate;
+    }
+
+    if (this.maxDate) {
+      this.defaultTime.maxDate = this.maxDate;
     }
   }
 

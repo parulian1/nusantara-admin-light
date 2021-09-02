@@ -10,4 +10,5 @@ export interface IOrderChildrenData extends IHrefEntity {
   };
   shippingMethod: string;
   status: string;
+  marketplaceRedirectHref?: string;
 }

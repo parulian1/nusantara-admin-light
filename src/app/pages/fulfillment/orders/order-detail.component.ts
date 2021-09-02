@@ -143,9 +143,9 @@ import { IOrderChildren } from '@nusantara/models/order/order-children';
                     </button>
 
                     <a
-                      *ngIf="isRedirectMarketplaceShowed(children)"
+                      *ngIf="isRedirectMarketplaceShowed(children.data[0])"
                       class="control see-order"
-                      href="{{ children.marketplaceRedirectHref }}"
+                      href="{{ children.data[0].marketplaceRedirectHref }}"
                       target="_blank"
                     >
                       See Order
@@ -157,8 +157,9 @@ import { IOrderChildren } from '@nusantara/models/order/order-children';
                       </button>
                     -->
 
-                    <div *ngIf="isRedirectMarketplaceShowed(children)">
-                      Orders can only be processed on the {{ orderDetailData.sourceName | titlecase }} Dashboard.
+                    <div *ngIf="isRedirectMarketplaceShowed(children.data[0])">
+                      Orders can only be processed on the
+                      {{ orderDetailData.sourceName | titlecase }} Dashboard.
                     </div>
                     <div *ngIf="isCompleteButtonDisabled(children.data[0])">
                       Order will automatically complete when customer receives
@@ -666,9 +667,11 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
     return this.isfulfillmentException && !this.getAwbNumber(childrenData);
   }
 
-  isRedirectMarketplaceShowed(children: IOrderChildren) {
+  isRedirectMarketplaceShowed(childrenData: IOrderChildrenData) {
     return (
-      this.isfulfillmentException && children.marketplaceRedirectHref !== null
+      this.isfulfillmentException &&
+      childrenData.marketplaceRedirectHref !== null &&
+      !this.getAwbNumber(childrenData)
     );
   }
 
