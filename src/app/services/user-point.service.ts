@@ -19,11 +19,11 @@ export class UserPointService extends AbstractCrudService<IPoint> {
 
   fetchHistory(username: string, per_page?: number): Observable<PagedResponse<IPointHistory>> {
     let params = new HttpParams();
-    params.set('username', username);
+    params = params.set('username', username);
     if (!per_page) {
-      params.set('per_page', '250');
+      params = params.set('per_page', '250');
     } else {
-      params.set('per_page', per_page.toString());
+      params = params.set('per_page', per_page.toString());
     }
     return this.httpClient.get<IPointHistory[]>(`/api/order/point-history/`,
       {observe: 'response', responseType: 'json', params}
