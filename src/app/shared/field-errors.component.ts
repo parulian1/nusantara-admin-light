@@ -24,6 +24,7 @@ import { FormControl } from '@angular/forms';
     <div *ngIf="control?.touched" class="error-detail">
       <div *ngIf="control?.errors?.required">Required</div>
       <div *ngIf="control?.errors?.maxlength">Maximum length {{ control.getError('maxlength')?.requiredLength }} characters</div>
+      <div *ngIf="control?.errors?.minlength">Minimum length {{ control.getError('minlength')?.requiredLength }} characters</div>
     </div>
     <div *ngIf="control?.hasError('apiError')" class="error-detail">
       <div *ngIf="control.errors.apiError">{{ control.getError('apiError') }}</div>

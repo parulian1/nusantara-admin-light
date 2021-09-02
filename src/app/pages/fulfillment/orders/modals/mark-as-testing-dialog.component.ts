@@ -53,8 +53,7 @@ export class MarkAsTestingDialogComponent {
       reason: ['',
         [
           Validators.required,
-          Validators.maxLength(30),
-          Validators.minLength(3),
+          Validators.minLength(10),
         ]
       ],
     });
