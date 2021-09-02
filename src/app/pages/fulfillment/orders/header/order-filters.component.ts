@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IOption, IOrderFilter, IOrderFilterValue } from '@nusantara/models/order/filter';
-import * as moment from "moment";
+import * as moment from 'moment';
 import { Utils } from './utils';
 
 @Component({
@@ -52,7 +52,6 @@ import { Utils } from './utils';
               </mat-option>
             </mat-select>
           </mat-form-field>
-
         </div>
       </label>
       <label>
@@ -159,7 +158,7 @@ export class OrderFiltersComponent implements OnInit {
       ? value.get(this.TESTING_PARAM)
       : null;
 
-      console.log('isTesting', isTesting);
+
       if(platform){
         this.updatePlatform(platform)
       }
@@ -194,7 +193,6 @@ export class OrderFiltersComponent implements OnInit {
         this.updatePlatform(newValue.platform);
         this.updateStatus(newValue.status);
         this.updateLogistic(newValue.logistic);
-        this.updateTesting(newValue.isTesting);
       });
     });
   }
