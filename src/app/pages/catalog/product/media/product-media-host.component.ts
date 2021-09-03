@@ -1,14 +1,16 @@
-import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { Observable, zip } from 'rxjs';
+import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {FormArray, FormBuilder, Validators} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
+import {Observable, zip} from 'rxjs';
 
-import { AbstractEditingComponent, DialogResult, IResultResponse } from '@nusantara/core';
-import { drf, products } from '@nusantara/models';
-import { ProductMediaService } from '@nusantara/services';
+import {AbstractEditingComponent, DialogResult, IResultResponse} from '@nusantara/core';
+import {drf, products} from '@nusantara/models';
+import {ProductMediaService} from '@nusantara/services';
 
-import { NewProductImageComponent } from './new-product-image.component';
-import { NewProductYoutubeComponent } from './new-product-youtube.component';
+import {NewProductImageComponent} from './new-product-image.component';
+import {NewProductYoutubeComponent} from './new-product-youtube.component';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import {IProductMedia} from '@nusantara/models/products';
 
 /**
  * Container for all the media objects assigned to a single product.
@@ -21,19 +23,19 @@ import { NewProductYoutubeComponent } from './new-product-youtube.component';
   selector: 'nus-product-media-host',
   template: `
     <h2>Media
-      <button (click)="newImageModal.open()" type="button" title="Add new Image">
+      <button (click)="openImageModal()" type="button" title="Add new Image">
         <i class="material-icons">image</i>
       </button>
-      <button (click)="newYoutubeModal.open()" type="button" title="Add new YouTube video">
+      <button (click)="openVideoModal()" type="button" title="Add new YouTube video">
         <i class="material-icons">ondemand_video</i>
       </button>
     </h2>
 
-    <div class="product-media-wrapper">
+    <div class="product-media-wrapper" cdkDropList (cdkDropListDropped)="dropEvent($event)">
       <nus-product-media
         *ngFor="let media of entities; let i=index"
         [entity]="media"
-        (remove)="remove(i)">
+        (remove)="remove(i)" cdkDrag>
       </nus-product-media>
     </div>
 
@@ -72,17 +74,25 @@ export class ProductMediaHostComponent extends AbstractEditingComponent<FormArra
   newImages: Array<FormData> = [];
   newVideos: Array<products.IProductMedia> = [];
   deletedMedia: Array<products.IProductMedia> = [];
+  imageList: Array<FormData> = [];
 
   constructor(protected service: ProductMediaService,
               protected route: ActivatedRoute,
-              protected fb: FormBuilder) { super(); }
+              protected fb: FormBuilder) {
+    super();
+  }
 
 
-  get imageCount(): number { return this.entities.filter(e => e.type === 'image').length; }
-  get youtubeCount(): number { return this.entities.filter(e => e.type === 'you_tube').length; }
+  get imageCount(): number {
+    return this.entities.filter(e => e.type === 'image').length;
+  }
+
+  get youtubeCount(): number {
+    return this.entities.filter(e => e.type === 'you_tube').length;
+  }
 
   ngOnInit() {
-    this.route.data.subscribe((data: {mediaTypes: drf.IChoice[]}) => {
+    this.route.data.subscribe((data: { mediaTypes: drf.IChoice[] }) => {
       this.mediaTypes = data.mediaTypes;
     });
   }
@@ -92,12 +102,22 @@ export class ProductMediaHostComponent extends AbstractEditingComponent<FormArra
     this.newYoutubeModal.onClose.subscribe(() => this.onYoutubeModalClosed());
   }
 
+  openImageModal() {
+    console.log('entities length', this.entities.length);
+    this.newImageModal.open(this.entities.length + 1);
+  }
+
+  openVideoModal() {
+    this.newYoutubeModal.open(this.entities.length + 1);
+  }
+
   add(media?: products.IProductMedia) {
 
     if (!media) {
       // this.isAddingNewMedia = true;
     } else {
       this.entities.push(media);
+      this.recreateImageList();
       // const f = this.fb.group({
       //   type: [media?.type || this.mediaTypes[0].value, []],
       //   href: [media?.href, []],
@@ -108,6 +128,7 @@ export class ProductMediaHostComponent extends AbstractEditingComponent<FormArra
       // this.form.push(f);
     }
   }
+
   remove(index: number) {
     const mediaToRemove = this.entities[index];
     // media was already saved to API:  record it in deleted media
@@ -117,6 +138,48 @@ export class ProductMediaHostComponent extends AbstractEditingComponent<FormArra
     }
     // remove from displayed objects
     this.entities.splice(index, 1);
+    this.recreateImageList();
+  }
+
+  recreateImageList(): void {
+    this.imageList = [];
+    this.entities.forEach((media, idx, entities) => {
+      if (!!media.href) {
+        const formData: any = new FormData();
+        formData.append('href', media?.href);
+        formData.append('sortPriority', idx);
+        formData.append('type', media?.type);
+        if (media?.type === 'image') {
+
+        } else if (media?.type === 'you_tube') {
+          formData.append('youtubeVideoId', media?.youtubeVideoId);
+        }
+
+        this.imageList.push(formData as FormData);
+      } else {
+        // new image or video
+        if (media?.type === 'image') {
+          const xMedia = this.newImages.find((val) => {
+            if (val.get('identifier') === media?.identifier) {
+              val.set('sortPriority', '' + idx);
+              this.imageList.push(val);
+            }
+          });
+        } else if (media?.type === 'you_tube') {
+          const xMedia = this.newVideos.find((val) => {
+            if (val.identifier === media?.identifier) {
+              const formData: any = new FormData();
+              formData.append('href', media?.href);
+              formData.append('sortPriority', idx);
+              formData.append('type', media?.type);
+              formData.append('youtubeVideoId', media?.youtubeVideoId);
+
+              this.imageList.push(formData as FormData);
+            }
+          });
+        }
+      }
+    });
   }
 
   /**
@@ -154,15 +217,56 @@ export class ProductMediaHostComponent extends AbstractEditingComponent<FormArra
   saveAll(product: products.IProduct): Observable<IResultResponse[]> {
 
     // make sure all new images and videos have the product href set
-    this.newImages.forEach((value) => { value.set('product', product.href); });
-    this.newVideos.forEach((value) => { value.product = product.href; });
+    this.newImages.forEach((value) => {
+      value.set('product', product.href);
+    });
+    this.newVideos.forEach((value) => {
+      value.product = product.href;
+    });
+
+    this.imageList.forEach((value) => {
+      value.set('product', product.href);
+      if (!!value.get('href')) {
+        value.delete('image');
+      }
+    });
 
     // submit all changes to the API and an observable of all responses
     return zip(
-      ...this.newImages.map(img => this.service.save(img)),
-      ...this.newVideos.map(vid => this.service.save(vid)),
+      // ...this.newImages.map((img) => {
+      //   console.log('save image', img.get('sortPriority'));
+      //   return this.service.save(img);
+      // }),
+      ...this.imageList.map(vid => {
+        if (vid.get('type') === 'you_tube') {
+          let href = null;
+          if (vid.get('href') !== 'null') {
+            href = vid.get('href').toString();
+          }
+          const dataVideo: IProductMedia = {
+            href,
+            youtubeVideoId: vid.get('youtubeVideoId').toString(),
+            image: null,
+            sortPriority: parseInt(vid.get('sortPriority').toString(), 10),
+            type: 'you_tube',
+            product: product.href
+          };
+          return this.service.save(dataVideo);
+        }
+        return this.service.save(vid);
+      }),
+      // ...this.newVideos.map(vid => {
+      //
+      //   return this.service.save(vid);
+      // }),
       ...this.deletedMedia.map(m => this.service.delete(m))
     );
+  }
+
+  dropEvent(event: CdkDragDrop<IProductMedia[]>) {
+    moveItemInArray(this.entities, event.previousIndex, event.currentIndex);
+    this.recreateImageList();
+
   }
 
 }
