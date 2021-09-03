@@ -175,7 +175,6 @@ export class ProductMediaHostComponent extends AbstractEditingComponent<FormArra
               formData.append('youtubeVideoId', media?.youtubeVideoId);
 
               this.imageList.push(formData as FormData);
-              this.imageList.push(formData);
             }
           });
         }
@@ -228,7 +227,7 @@ export class ProductMediaHostComponent extends AbstractEditingComponent<FormArra
     this.imageList.forEach((value) => {
       value.set('product', product.href);
       if (!!value.get('href')) {
-          value.delete('image');
+        value.delete('image');
       }
     });
 
@@ -238,8 +237,28 @@ export class ProductMediaHostComponent extends AbstractEditingComponent<FormArra
       //   console.log('save image', img.get('sortPriority'));
       //   return this.service.save(img);
       // }),
-      // ...this.newVideos.map(vid => this.service.save(vid)),
-      ...this.imageList.map(vid => this.service.save(vid)),
+      ...this.imageList.map(vid => {
+        if (vid.get('type') === 'you_tube') {
+          let href = null;
+          if (vid.get('href') !== 'null') {
+            href = vid.get('href').toString();
+          }
+          const dataVideo: IProductMedia = {
+            href,
+            youtubeVideoId: vid.get('youtubeVideoId').toString(),
+            image: null,
+            sortPriority: parseInt(vid.get('sortPriority').toString(), 10),
+            type: 'you_tube',
+            product: product.href
+          };
+          return this.service.save(dataVideo);
+        }
+        return this.service.save(vid);
+      }),
+      // ...this.newVideos.map(vid => {
+      //
+      //   return this.service.save(vid);
+      // }),
       ...this.deletedMedia.map(m => this.service.delete(m))
     );
   }
