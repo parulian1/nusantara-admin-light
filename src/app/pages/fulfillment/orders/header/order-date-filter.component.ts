@@ -20,11 +20,11 @@ const apiDateFormat = "YYYY-MM-DDTHH:mm:ss";
   <div>
     <mat-form-field>
       <mat-select #select="matSelect"
-        [disableOptionCentering]="true" 
+        [disableOptionCentering]="true"
         panelClass="mat-select-panel" [formControl]="date"
         (selectionChange)="onDateOptionsSelected($event)">
         <mat-select-trigger>
-          <ng-template [ngIf]="date.value === 'allDate'">
+          <ng-template [ngIf]="date.value === 'allDate'" i18n>
             All Date
           </ng-template>
           <ng-template [ngIf]="date.value === 'today'">
@@ -50,15 +50,15 @@ const apiDateFormat = "YYYY-MM-DDTHH:mm:ss";
             {{ customRange.get('start').value ? showDisplayDate(customRange.get('start').value) : '' }}
             -
             {{ customRange.get('end').value ? showDisplayDate(customRange.get('end').value) : '' }}
-          </ng-template>           
+          </ng-template>
         </mat-select-trigger>
-        <mat-option value="allDate">All Date</mat-option>
-        <mat-option value="today">Today</mat-option>
-        <mat-option value="yesterday">Yesterday</mat-option>
-        <mat-option value="last3Days">Last 3 days</mat-option>
-        <mat-option value="last7Days">Last 7 days</mat-option>
-        <mat-option value="customDate" (click)="datePicker.open()">Custom Date</mat-option>
-        <mat-option value="customRange" (click)="dateRangePicker.open()">Custom Range</mat-option>
+        <mat-option value="allDate" i18n>All Date</mat-option>
+        <mat-option value="today" i18n>Today</mat-option>
+        <mat-option value="yesterday" i18n>Yesterday</mat-option>
+        <mat-option value="last3Days" i18n>Last 3 days</mat-option>
+        <mat-option value="last7Days" i18n>Last 7 days</mat-option>
+        <mat-option value="customDate" (click)="datePicker.open()" i18n>Custom Date</mat-option>
+        <mat-option value="customRange" (click)="dateRangePicker.open()" i18n>Custom Range</mat-option>
         <mat-option class="custom-date-filter">
           <mat-form-field>
             <input matInput (dateChange)="onCustomDateFilterChange()"
@@ -76,7 +76,7 @@ const apiDateFormat = "YYYY-MM-DDTHH:mm:ss";
               [formGroup]="customRange"
               [rangePicker]="dateRangePicker">
               <input matStartDate formControlName="start"/>
-              <input 
+              <input
                 (dateChange)="onCustomDateRangeEndChange()"
                 matEndDate formControlName="end"/>
             </mat-date-range-input>
@@ -85,13 +85,13 @@ const apiDateFormat = "YYYY-MM-DDTHH:mm:ss";
               [for]="dateRangePicker">
             </mat-datepicker-toggle>
             <mat-date-range-picker touchUi #dateRangePicker (opened)="displayMaxRangeInfo()">
-              <span><sup>*</sup>Select up to 14 days</span>
+              <span i18n><sup>*</sup>Select up to 14 days</span>
             </mat-date-range-picker>
           </mat-form-field>
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-error *ngIf="date.value === 'customRange' && customRange.errors?.empty">Please select start date and end date.</mat-error>
+    <mat-error *ngIf="date.value === 'customRange' && customRange.errors?.empty" i18n>Please select start date and end date.</mat-error>
   </div>
   `,
   styles: [
@@ -102,7 +102,7 @@ const apiDateFormat = "YYYY-MM-DDTHH:mm:ss";
         height: 10px;
         width: 10%;
         background-image: url("assets/arrow-down.svg");
-        background-size: 12px; 
+        background-size: 12px;
       }`,
     '.custom-date-filter { display: none; }',
     '::ng-deep .mat-calendar .mat-button-wrapper { color: var(--lighten-black); font-weight: bold; }'
@@ -114,7 +114,7 @@ const apiDateFormat = "YYYY-MM-DDTHH:mm:ss";
 })
 export class OrderDateFilterComponent implements OnInit {
   @Output() selectedDate = new EventEmitter<{type: string, startDate: string; endDate: string}>();
-  @ViewChild('select') select: MatSelect;  
+  @ViewChild('select') select: MatSelect;
 
   date = new FormControl("allDate");
   customDate = new FormControl();
@@ -168,16 +168,16 @@ export class OrderDateFilterComponent implements OnInit {
             this.customDate.setValue(selectedStartTime);
             this.date.setValue("customDate");
             break;
-          case "customRange": 
+          case "customRange":
             this.updateDateRangeForm(selectedStartTime, selectedEndTime);
-            break; 
+            break;
           default:
             break;
         }
       }
     });
   }
-  
+
   onDateOptionsSelected(event) {
     this.resetDatePicker();
     this.resetDateRangePicker();

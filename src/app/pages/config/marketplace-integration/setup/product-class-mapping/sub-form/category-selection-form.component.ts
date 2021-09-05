@@ -25,12 +25,12 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
   template: `
     <form [formGroup]="form" class="fluid">
       <div class="wrapper">
-        <h1 class="heading-1">Choose Category (1/3)</h1>
-        <p>Choose a category that matches your Product Class</p>
+        <h1 class="heading-1" i18n>Choose Category (1/3)</h1>
+        <p i18n>Choose a category that matches your Product Class</p>
 
         <div class="form">
           <label>
-            <span>Product Class Name</span>
+            <span i18n>Product Class Name</span>
             <span>{{ productClassName }}</span>
           </label>
 
@@ -45,10 +45,10 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
         </div>
       </div>
 
-      <button type="button" [disabled]="form.invalid" class="control" (click)="onNext()">
+      <button type="button" [disabled]="form.invalid" class="control" (click)="onNext()" i18n>
         Next
       </button>
-      <button type="button" class="control secondary ghost" (click)="onCancel()">
+      <button type="button" class="control secondary ghost" (click)="onCancel()" i18n>
         Cancel
       </button>
 

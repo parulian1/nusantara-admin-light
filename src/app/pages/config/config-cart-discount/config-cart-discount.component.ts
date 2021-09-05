@@ -20,7 +20,7 @@ import {ActivatedRoute, Router} from '@angular/router';
     <form [formGroup]="form" (ngSubmit)="save()">
       <input type="checkbox" class="toggle" [formControl]="openDiscount"/>
 
-      <p>Activating cart discount will allow offline customers to get additional discount </p>
+      <p i18n>Activating cart discount will allow offline customers to get additional discount </p>
 
       <nus-detail-actions
         [component]="this"

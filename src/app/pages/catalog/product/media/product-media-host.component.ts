@@ -20,7 +20,7 @@ import { NewProductYoutubeComponent } from './new-product-youtube.component';
 @Component({
   selector: 'nus-product-media-host',
   template: `
-    <h2>Media
+    <h2 i18n>Media
       <button (click)="newImageModal.open()" type="button" title="Add new Image">
         <i class="material-icons">image</i>
       </button>

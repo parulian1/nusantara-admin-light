@@ -15,7 +15,7 @@ import { SiteConfigService } from '@nusantara/services';
 @Component({
   selector: 'nus-login',
   template: `
-    <h1>Login</h1> <!-- Hidden: Kept for Screen Readers Only -->
+    <h1 i18n>Login</h1> <!-- Hidden: Kept for Screen Readers Only -->
 
     <ul class="non-field-errors">
       <li *ngFor="let err of nonFieldErrors">{{ err }}</li>
@@ -24,33 +24,33 @@ import { SiteConfigService } from '@nusantara/services';
     <form [formGroup]="form" (ngSubmit)="login()">
 
       <label>
-        <span>Site Domain</span>
+        <span i18n>Site Domain</span>
         <input type="text" formControlName="siteDomain" placeholder="Ex, www.mysite.com">
         <nus-field-errors [control]="siteDomain"></nus-field-errors>
       </label>
 
       <label>
-        <span>Email Address</span>
+        <span i18n>Email Address</span>
         <input type="email" [formControl]="email" placeholder="email@domain.com">
         <nus-field-errors [control]="email"></nus-field-errors>
       </label>
 
       <label>
-        <span>Password</span>
+        <span i18n>Password</span>
         <input type="password" [formControl]="password">
         <nus-field-errors [control]="password"></nus-field-errors>
       </label>
 
       <div class="controls-container">
         <button type="submit" [disabled]="!form.valid || isBusy" class="control">
-          <span>Login</span>
+          <span i18n>Login</span>
         </button>
       </div>
 
     </form>
 
     <nav>
-      <a [routerLink]="['/auth/forgot-password']">Forgot Your Password?</a>
+      <a [routerLink]="['/auth/forgot-password']" i18n>Forgot Your Password?</a>
     </nav>
   `,
   styles: [`

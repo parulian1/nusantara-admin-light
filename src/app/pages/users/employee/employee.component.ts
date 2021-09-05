@@ -36,28 +36,28 @@ import { getSlugFromHref } from '@nusantara/shared/helpers';
 
     <form [formGroup]="form" (ngSubmit)="save()" class="fluid">
       <div id="personal-info" class="wrapper">
-        <h1 class="heading-1">Personal Information</h1>
+        <h1 class="heading-1" i18n>Personal Information</h1>
         <label class="hidden">
-          <span>Name</span>
+          <span i18n>Name</span>
           <input type="text" [formControl]="name"/>
         </label>
         <label>
-          <span>Employee ID</span>
+          <span i18n>Employee ID</span>
           <input type="text" [formControl]="identityNumber"/>
         </label>
 
         <label>
-          <span>First Name</span>
+          <span i18n>First Name</span>
           <input type="text" [formControl]="firstName"/>
         </label>
 
         <label>
-          <span>Last Name</span>
+          <span i18n>Last Name</span>
           <input type="text" [formControl]="lastName"/>
         </label>
 
         <label>
-          <span>Email Address</span>
+          <span i18n>Email Address</span>
           <div *ngIf="!entity; else emailReadOnly">
             <input type="email" [formControl]="email"/>
           </div>
@@ -67,7 +67,7 @@ import { getSlugFromHref } from '@nusantara/shared/helpers';
         </label>
 
         <label>
-          <span>Phone Number</span>
+          <span i18n>Phone Number</span>
           <input type="tel" [formControl]="phoneNumber"/>
         </label>
 
@@ -76,32 +76,32 @@ import { getSlugFromHref } from '@nusantara/shared/helpers';
                  class="toggle"
                  [formControl]="isActive"
                  name="is-active"/>
-          <span>Is Active</span>
+          <span i18n>Is Active</span>
           <nus-field-errors [control]="isActive"></nus-field-errors>
         </label>
       </div>
 
       <div id="pos-info" class="wrapper"  *ngIf="enterpriseLicense()">
-        <h1 class="heading-1">Point Of Sales (Optional)</h1>
+        <h1 class="heading-1" i18n>Point Of Sales (Optional)</h1>
         <label class="toggle">
           <input type="checkbox"
                  class="toggle"
                  [formControl]="canUsePos"
                  name="is-active"
                  (ngModelChange)="onCanUsePosChange($event)"/>
-          <span>Use Pos</span>
+          <span i18n>Use Pos</span>
           <nus-field-errors [control]="canUsePos"></nus-field-errors>
         </label>
 
-        <p *ngIf="isCreateForm && hasDefaultPinConfig">Login to BHISMA POS using Default PIN</p>
-        <p *ngIf="isCreateForm && !hasDefaultPinConfig">Default PIN has not been filled, please fill in <a
-          routerLink="/config/pos-integration/default-pin-config" style="color:#EA730B;">here</a></p>
+        <p *ngIf="isCreateForm && hasDefaultPinConfig" i18n>Login to BHISMA POS using Default PIN</p>
+        <p *ngIf="isCreateForm && !hasDefaultPinConfig" i18n>Default PIN has not been filled, please fill in <a
+          routerLink="/config/pos-integration/default-pin-config" style="color:#EA730B;" i18n>here</a></p>
 
         <button *ngIf="!isCreateForm && isUsePos"
                 (click)="confirmModalResetPinComponent.open()"
                 type="button" class="new-add-button wide control secondary"
                 [class.button-email--disabled]="isLoadingResetPIN"
-                [disabled]="isLoadingResetPIN"
+                [disabled]="isLoadingResetPIN" i18n
         >
           Reset to Default PIN
         </button>
@@ -125,14 +125,14 @@ import { getSlugFromHref } from '@nusantara/shared/helpers';
       </div>
 
       <div class="mt-3" *ngIf="entity">
-        <h4 class="is-marginless">Send Reset Password Email?</h4>
+        <h4 class="is-marginless" i18n>Send Reset Password Email?</h4>
         <div class="mt-1">
           <button
             type="button"
             (click)="sendResetPassword()"
             class="button-email"
             [class.button-reset-pin--disabled]="isLoadingResetPassword"
-            [disabled]="isLoadingResetPassword"
+            [disabled]="isLoadingResetPassword" i18n
           >
             Send Reset Password
           </button>

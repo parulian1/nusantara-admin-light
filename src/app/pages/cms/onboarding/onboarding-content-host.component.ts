@@ -17,27 +17,27 @@ import { OnboardingContentComponent } from './onboarding-content.component';
                                 (remove)="form.removeAt(i)">
         </nus-onboarding-content>
       </div>
-      <button type="button" (click)="addContent()" class="add-button">
+      <button type="button" (click)="addContent()" class="add-button" i18n>
         <i class="material-icons">add</i> Add new content
       </button>
     </div>
     <form [formGroup]="formButton" *ngIf="form.controls.length" >
       <div class="action-button-box">
-        <label class="action-button-section">
+        <label class="action-button-section" i18n>
           Action Button
         </label>
         <label>
-          <input type="checkbox" [formControl]="buttonStatus" (change)="setAvailabilityAndClearValueButtonProp()">Is Active
+          <input type="checkbox" [formControl]="buttonStatus" (change)="setAvailabilityAndClearValueButtonProp()" i18n>Is Active
         </label>
 
         <label>
-          <span>Button Name</span>
+          <span i18n>Button Name</span>
           <input type="url" [formControl]="buttonText">
           <nus-field-errors [control]="buttonText"></nus-field-errors>
         </label>
 
         <label>
-          <span>URL Path</span>
+          <span i18n>URL Path</span>
           <input type="url" [formControl]="buttonUrl">
           <nus-field-errors [control]="buttonUrl"></nus-field-errors>
         </label>

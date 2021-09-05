@@ -4,13 +4,13 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
 @Component({
   selector: 'nus-activity-tracking-modal',
   template: `
-    <ngx-smart-modal 
+    <ngx-smart-modal
       [identifier]="'activityTracking'"
       #modal
       [customClass]="'medium-modal no-padding-modal'">
       <div class="wrapper">
         <div class="message">
-          <h2 class="title-2">Activity Tracking</h2>
+          <h2 class="title-2" i18n>Activity Tracking</h2>
           <nus-activity-tracking></nus-activity-tracking>
         </div>
       </div>

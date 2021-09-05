@@ -75,7 +75,7 @@ import {IStockRecord} from '@nusantara/models/inventory';
         </button>
         <button
           *ngIf="adjustmentMode !== 'manual' && csvData.page.totalResults > 1"
-          (click)="resolveConflict(index, csvData)" type="button" class="resolve-button" data-qa="resolve-button">
+          (click)="resolveConflict(index, csvData)" type="button" class="resolve-button" data-qa="resolve-button" i18n>
           <span class="material-icons">warning</span>Update
         </button>
       </td>

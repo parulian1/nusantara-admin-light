@@ -41,7 +41,7 @@ interface IPaymentConfirmDialog {
       <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
       <form [formGroup]="form" (ngSubmit)="save()">
         <label>
-          <span>Sender Name</span>
+          <span i18n>Sender Name</span>
           <input type="text" [formControl]="shippingName" name="name"  placeholder="Input Sender Name"/>
 
           <div *ngIf="shippingName.invalid && (shippingName.touched || shippingName.dirty)" class="error-detail">
@@ -51,7 +51,7 @@ interface IPaymentConfirmDialog {
         </label>
 
         <label>
-          <span>Transfer Amount</span>
+          <span i18n>Transfer Amount</span>
           <input type="number" [formControl]="transferAmount" name="name" placeholder="Input Transfer Amount"/>
 
           <div *ngIf="transferAmount.invalid && (transferAmount.touched || transferAmount.dirty)" class="error-detail">
@@ -61,7 +61,7 @@ interface IPaymentConfirmDialog {
         </label>
 
         <label>
-          <span>Transfer To</span>
+          <span i18n>Transfer To</span>
           <select
             class="select-wrapper"
             [class.is-error]="transferTo.invalid && (transferTo.touched || transferTo.dirty)"
@@ -75,13 +75,13 @@ interface IPaymentConfirmDialog {
           </select>
 
           <div *ngIf="transferTo.invalid && (transferTo.touched || transferTo.dirty)" class="error-detail">
-            <div *ngIf="transferTo.hasError('required')">Required</div>
+            <div *ngIf="transferTo.hasError('required')" i18n>Required</div>
             <div *ngIf="transferTo.hasError('apiError')">{{ transferTo.errors.apiError }}</div>
           </div>
         </label>
 
         <label>
-          <span>Receipt File</span>
+          <span i18n>Receipt File</span>
           <img
             *ngIf="proofImageHelpers?.url || proofImageHelpers?.base64"
             [src]="proofImageHelpers?.url || proofImageHelpers?.base64"

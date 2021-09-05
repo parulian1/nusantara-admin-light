@@ -23,7 +23,7 @@ import { IOnboardingContent } from '@nusantara/models';
         </div>
         <div  class="onboarding-content" *ngIf="show">
           <label>
-            <span>Image</span>
+            <span i18n>Image</span>
             <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Banner Image" class="preview">
             <input type="file" [formControl]="image" (change)="setImagePreview($event)"
                  name="icon" accept="image/*">
@@ -31,7 +31,7 @@ import { IOnboardingContent } from '@nusantara/models';
           </label>
 
           <label>
-            <span>Description</span>
+            <span i18n>Description</span>
             <textarea [formControl]="description"></textarea>
             <nus-field-errors [control]="description"></nus-field-errors>
           </label>
@@ -42,7 +42,7 @@ import { IOnboardingContent } from '@nusantara/models';
 
           <input type="number" hidden [formControl]="sortPriority" min="0">
           <button (click)="remove.emit()" type="button" class="remove-button" data-qa="remove-button"
-            style="min-height: 32px;border: 2px solid #B4B4B4;box-sizing: border-box;border-radius: 4px;min-width: 120px;float: right;">
+            style="min-height: 32px;border: 2px solid #B4B4B4;box-sizing: border-box;border-radius: 4px;min-width: 120px;float: right;" i18n>
             Delete
           </button>
         </div>

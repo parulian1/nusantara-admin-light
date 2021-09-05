@@ -8,7 +8,7 @@ import { banner } from '@nusantara/models';
   selector: 'nus-banner-list',
   template: `
     <nus-list-header
-      title="Banners">
+      title="Banners" i18n-title>
     </nus-list-header>
     <div class="filtering">
       <nus-include-deleted></nus-include-deleted>
@@ -18,11 +18,11 @@ import { banner } from '@nusantara/models';
     <table>
       <thead>
       <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th class="numeric">Valid From</th>
-        <th class="numeric">Valid To</th>
-        <th class="centered">Is Active</th>
+        <th i18n>Name</th>
+        <th i18n>Type</th>
+        <th class="numeric" i18n>Valid From</th>
+        <th class="numeric" i18n>Valid To</th>
+        <th class="centered" i18n>Is Active</th>
       </tr>
       </thead>
       <tbody>

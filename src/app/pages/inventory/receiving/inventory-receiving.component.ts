@@ -30,83 +30,83 @@ import { convertStringToObject, keysToCamel } from '@nusantara/shared/helpers';
 @Component({
   selector: 'nus-inventory-receiving',
   template: `
-    <h1>Delivery Order</h1>
+    <h1 i18n>Delivery Order</h1>
 
     <form [formGroup]="form" (ngSubmit)="saveForm()">
       <div class="container">
         <div class="general-info">
-          <h3>General Information</h3>
+          <h3 i18n>General Information</h3>
           <div>
-            <label>Received By</label>
+            <label i18n>Received By</label>
             <span>{{ userDisplayName }}</span>
           </div>
           <div>
-            <label>Approved By</label>
+            <label i18n>Approved By</label>
             <span>-</span>
           </div>
           <div>
-            <label>Receiving Date</label>
+            <label i18n>Receiving Date</label>
             <span>{{ currentDate|date }}</span>
           </div>
           <div>
-            <label>Status</label>
-            <span>Pending</span>
+            <label i18n>Status</label>
+            <span i18n>Pending</span>
           </div>
           <div>
-            <label>DO Number</label>
+            <label i18n>DO Number</label>
             <input type="text" [formControl]="doNumber">
           </div>
           <div>
-            <label for="">DC PIC</label>
+            <label for="" i18n>DC PIC</label>
             <input type="text" [formControl]="dcPic">
           </div>
           <div [formGroup]="warehouse">
-            <label>Warehouse</label>
+            <label i18n>Warehouse</label>
             <div class="confirm-warehouse">
               <select formControlName="href">
-                <option [ngValue]="null">Select Warehouse</option>
+                <option [ngValue]="null" i18n>Select Warehouse</option>
                 <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
                   {{ wh.name }}
                 </option>
               </select>
               <button (click)="confirmWarehouse()" type="button"
                       [disabled]="warehouse.disabled || !warehouse.valid"
-                      class="control confirm">
+                      class="control confirm" i18n>
                 Confirm
               </button>
             </div>
           </div>
         </div>
         <div class="mp-info">
-          <h3>Marketplace Information</h3>
+          <h3 i18n>Marketplace Information</h3>
           <div>
-            <div>Product</div>
+            <div i18n>Product</div>
             <div class="count">{{ productValue }}</div>
           </div>
           <div>
-            <div>Marketplace</div>
+            <div i18n>Marketplace</div>
             <div class="count">{{ marketplaceValue }}</div>
           </div>
           <div>
-            <div>Store</div>
+            <div i18n>Store</div>
             <div class="count">{{ storeValue }}</div>
           </div>
-          <a (click)="showMarketplaceDetail()">More Detail</a>
+          <a (click)="showMarketplaceDetail()" i18n>More Detail</a>
         </div>
       </div>
       <div class="product-list" *ngIf="warehouse.disabled">
         <table>
           <thead>
           <tr id="mp-add-product-head">
-            <th>Product (UPC)</th>
-            <th>Location</th>
-            <th>Quantity</th>
-            <th>SKU</th>
-            <th>Batch</th>
-            <th>Locator</th>
-            <th>Expiry Date</th>
-            <th>Cost</th>
-            <th>Remove</th>
+            <th i18n>Product (UPC)</th>
+            <th i18n>Location</th>
+            <th i18n>Quantity</th>
+            <th i18n>SKU</th>
+            <th i18n>Batch</th>
+            <th i18n>Locator</th>
+            <th i18n>Expiry Date</th>
+            <th i18n>Cost</th>
+            <th i18n>Remove</th>
           </tr>
           </thead>
           <tbody>
@@ -120,7 +120,7 @@ import { convertStringToObject, keysToCamel } from '@nusantara/shared/helpers';
 
             <tr>
               <td colspan="9">
-                <button type="button" (click)="addLine()" class="new-add-button wide">
+                <button type="button" (click)="addLine()" class="new-add-button wide" i18n>
                   <i class="material-icons">add</i> Add Record
                 </button>
               </td>

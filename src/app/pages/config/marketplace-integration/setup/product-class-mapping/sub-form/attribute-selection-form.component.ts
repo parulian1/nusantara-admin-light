@@ -24,19 +24,19 @@ import { SubFormComponent } from './sub-form.component';
 
     <form [formGroup]="form">
       <div class="wrapper">
-        <h1 class="heading-1">Choose Attribute (2/3)</h1>
-        <p>Choose {{ currentShop }} attributes for your product.</p>
+        <h1 class="heading-1" i18n>Choose Attribute (2/3)</h1>
+        <p i18n>Choose {{ currentShop }} attributes for your product.</p>
 
         <div class="form">
           <label>
-            <span>{{ currentShop }} Category</span>
+            <span i18n>{{ currentShop }} Category</span>
             <p>{{ categoryNames }}</p>
           </label>
 
           <label class="attributes">
-            <span>{{ currentShop }} Attributes</span>
+            <span i18n>{{ currentShop }} Attributes</span>
             <div *ngIf="mandatoryAttributes">
-              <p>Mandatory</p>
+              <p i18n>Mandatory</p>
               <div class="checkboxes">
                 <div *ngFor="let attr of mandatories.controls; let i = index">
                   <input type="checkbox" [formControl]="attr" formArrayName="mandatories"/>
@@ -46,7 +46,7 @@ import { SubFormComponent } from './sub-form.component';
             </div>
 
             <div *ngIf="optionalAttributes">
-              <p>Optionals</p>
+              <p i18n>Optionals</p>
               <div class="checkboxes">
                 <div *ngFor="let attr of optionals.controls; let i = index">
                   <label [for]="i">
@@ -61,10 +61,10 @@ import { SubFormComponent } from './sub-form.component';
         </div>
       </div>
 
-      <button type="button" class="control" (click)="marketplaceAttributes? onNext() : onSubmitNoAttributes()" [disabled]="isBusy">
+      <button type="button" class="control" (click)="marketplaceAttributes? onNext() : onSubmitNoAttributes()" [disabled]="isBusy" i18n>
         Next
       </button>
-      <button type="button" class="control secondary ghost" (click)="confirmModal.open()">
+      <button type="button" class="control secondary ghost" (click)="confirmModal.open()" i18n>
         Previous
       </button>
     </form>

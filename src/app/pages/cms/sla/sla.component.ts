@@ -19,15 +19,15 @@ import { SlaService } from '@nusantara/services';
     <form [formGroup]="form" (ngSubmit)="save()">
 
       <label>
-        <span>Title</span>
+        <span i18n>Title</span>
         <input type="text" formControlName="title" name="title">
         <nus-field-errors [control]="form.get('title')"></nus-field-errors>
       </label>
 
       <label>
-        <span>Image</span>
+        <span i18n>Image</span>
         <img [src]="imagePreviewUrl" alt="Sla Picture" class="preview">
-        <small>Recommended: A size</small>
+        <small i18n>Recommended: A size</small>
         <input type="file"
                formControlName="image"
                (change)="setPhotoPreview($event)"
@@ -36,19 +36,19 @@ import { SlaService } from '@nusantara/services';
       </label>
 
       <label>
-        <span>Description</span>
+        <span i18n>Description</span>
         <input type="text" formControlName="description" name="description">
         <nus-field-errors [control]="form.get('description')"></nus-field-errors>
       </label>
 
       <label>
-        <span>Sort Priority</span>
+        <span i18n>Sort Priority</span>
         <input type="number" formControlName="sortPriority" name="sortPriority">
         <nus-field-errors [control]="form.get('sortPriority')"></nus-field-errors>
       </label>
 
       <label class="checkbox">
-        <input type="checkbox" formControlName="isActive" name="isActive"> Is Active
+        <input type="checkbox" formControlName="isActive" name="isActive" i18n> Is Active
         <nus-field-errors [control]="form.get('isActive')"></nus-field-errors>
       </label>
 

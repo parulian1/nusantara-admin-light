@@ -7,7 +7,7 @@ import { AbstractListComponent } from '@nusantara/core';
 @Component({
   selector: 'nus-customer-list',
   template: `
-    <nus-list-header
+    <nus-list-header i18n-title
       title="Customers"
       description="Users that can make purchases.  This includes employees."
       [canAddNew]="false">
@@ -18,12 +18,12 @@ import { AbstractListComponent } from '@nusantara/core';
     <table>
       <thead>
       <tr>
-        <th>Email</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th class="numeric">Date Registered</th>
-        <th>LTV</th>
-        <th class="numeric">Last Login</th>
+        <th i18n>Email</th>
+        <th i18n>First Name</th>
+        <th i18n>Last Name</th>
+        <th class="numeric" i18n>Date Registered</th>
+        <th i18n>LTV</th>
+        <th class="numeric" i18n>Last Login</th>
       </tr>
       </thead>
       <tbody>

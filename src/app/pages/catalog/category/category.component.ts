@@ -22,13 +22,13 @@ import {CategorySelectionModalComponent} from '@nusantara/shared/modals/category
 <!--      <input type="hidden" [formControl]="href" name="href"> &lt;!&ndash; required for non-JSON form posting &ndash;&gt;-->
 
       <label>
-        <span>Name</span>
+        <span i18n>Name</span>
         <input type="text" [formControl]="name" name="name">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
-        <span>Parent</span>
+        <span i18n>Parent</span>
         <input type="hidden" [formControl]="parent" data-qa="parent">
         <div>
         <input type="text" (click)="selectCategory()" [disabled]="!!entity?.href" readonly [value]="selectedCategory?.name" data-qa="parent-pop">
@@ -38,24 +38,24 @@ import {CategorySelectionModalComponent} from '@nusantara/shared/modals/category
 <!--            {{ parent.pathName }}-->
 <!--          </option>-->
 <!--        </select>-->
-          <button type="button" (click)="clearCategory()" [disabled]="!!entity?.href">Clear Selection</button>
+          <button type="button" (click)="clearCategory()" [disabled]="!!entity?.href" i18n>Clear Selection</button>
         </div>
       </label>
 
       <label class="checkbox" style="min-height: 1rem;">
-        <input type="checkbox" [formControl]="isActive" name="isActive"> Is Active
+        <input type="checkbox" [formControl]="isActive" name="isActive" i18n> Is Active
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
       <label class="checkbox" style="min-height: 1rem;">
-        <input type="checkbox" [formControl]="isInterestedCategory" name="isInterestedCategory"> Interest Categories ?
+        <input type="checkbox" [formControl]="isInterestedCategory" name="isInterestedCategory" i18n> Interest Categories ?
         <nus-field-errors [control]="isInterestedCategory"></nus-field-errors>
       </label>
 
       <label>
-        <span>Icon</span>
+        <span i18n>Icon</span>
         <img [src]="imagePreviewUrl" alt="Category Icon" class="preview">
-        <small>Recommended: 65x65</small>
+        <small i18n>Recommended: 65x65</small>
         <input type="file"
                [formControl]="image"
                (change)="setIconImagePreview($event)"
@@ -63,8 +63,8 @@ import {CategorySelectionModalComponent} from '@nusantara/shared/modals/category
                accept="image/*">
       </label>
 
-      <h2>Source Mappings (optional)</h2>
-      <p>
+      <h2 i18n>Source Mappings (optional)</h2>
+      <p i18n>
         Maps a category in your source data (such as an ERP system) to
         to this category.  These mappings are only applied once, when
         importing new data.
@@ -72,7 +72,7 @@ import {CategorySelectionModalComponent} from '@nusantara/shared/modals/category
       <table>
         <thead>
         <tr>
-          <th>Mapping</th>
+          <th i18n>Mapping</th>
           <th></th>
         </tr>
         </thead>
@@ -89,7 +89,7 @@ import {CategorySelectionModalComponent} from '@nusantara/shared/modals/category
         </tr>
         <tr>
           <td colspan="2">
-            <button type="button" (click)="addMapping()" class="add-button">
+            <button type="button" (click)="addMapping()" class="add-button" i18n>
               Add Mapping
             </button>
           </td>

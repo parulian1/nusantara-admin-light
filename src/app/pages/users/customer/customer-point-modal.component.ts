@@ -7,20 +7,20 @@ import {ICustomer} from '@nusantara/models';
   selector: 'nus-customer-point-modal',
   template: `
     <ngx-smart-modal [identifier]="'pointHistory'" #modal [customClass]="'wide-modal'">
-      <h2 class="heading-2">Point History</h2>
+      <h2 class="heading-2" i18n>Point History</h2>
       <section class="customer-point-modal__summary">
         <div id="customer-total-point">
           <img src="/assets/point-icon.svg" alt="Profile Image">
-          <span>{{ pointTotal | number }} Point</span>
+          <span i18n>{{ pointTotal | number }} Point</span>
         </div>
       </section>
       <section class="customer-point-modal__history">
         <table>
           <thead>
             <tr style="background-color: #F4F4F4;">
-              <th class="point-information">Information</th>
-              <th class="point-date">Date</th>
-              <th class="point-amount">Points</th>
+              <th class="point-information" i18n>Information</th>
+              <th class="point-date" i18n>Date</th>
+              <th class="point-amount" i18n>Points</th>
             </tr>
           </thead>
           <tbody>
@@ -30,7 +30,7 @@ import {ICustomer} from '@nusantara/models';
               <td class="point-amount">{{ p.pointValue|number }}</td>
             </tr>
             <tr *ngIf="pointHistory?.length == 0">
-              <td colspan="3" style="text-align: center;">No point history</td>
+              <td colspan="3" style="text-align: center;" i18n>No point history</td>
             </tr>
           </tbody>
         </table>

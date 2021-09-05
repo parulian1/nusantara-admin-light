@@ -12,7 +12,7 @@ import {HttpErrorResponse} from '@angular/common/http';
   template: `
     <form [formGroup]="form" class="fluid">
       <label>
-        <span>Partner ID
+        <span i18n>Partner ID
           <nus-tooltip [text]="partnerIdInfo"></nus-tooltip>
         </span>
         <input type="text" formControlName="partnerId" placeholder="Input Partner ID"/>
@@ -23,7 +23,7 @@ import {HttpErrorResponse} from '@angular/common/http';
       </label>
 
       <label>
-        <span>Partner Key
+        <span i18n>Partner Key
           <nus-tooltip [text]="partnerKeyInfo"></nus-tooltip>
         </span>
         <input type="email" formControlName="partnerKey" placeholder="Input Partner Key"/>
@@ -34,7 +34,7 @@ import {HttpErrorResponse} from '@angular/common/http';
       </label>
 
       <label *ngIf="!isEdit">
-        <span>FS ID
+        <span i18n>FS ID
           <nus-tooltip [text]="fsIdInfo"></nus-tooltip>
         </span>
         <input type="email" formControlName="fsId" placeholder="Input FS ID"/>
@@ -42,15 +42,15 @@ import {HttpErrorResponse} from '@angular/common/http';
           [control]="fsId"
           variable="FS ID"
         ></nus-field-errors-marketplace>
-        <div *ngIf="form.get('fsId').errors?.notNumeric" class="error-detail">
+        <div *ngIf="form.get('fsId').errors?.notNumeric" class="error-detail" i18n>
           FS ID must be integer
         </div>
       </label>
 
       <label>
-        <span>Warehouse</span>
+        <span i18n>Warehouse</span>
         <select formControlName="warehouseId">
-          <option [value]="null">Select Warehouse</option>
+          <option [value]="null" i18n>Select Warehouse</option>
           <option *ngFor="let opt of warehouses" [ngValue]="opt.warehouseId">
             {{ opt.name }}
           </option>
@@ -66,17 +66,17 @@ import {HttpErrorResponse} from '@angular/common/http';
           type="submit"
           [disabled]="!form.valid"
           class="control"
-          (click)="onUpdate()">
+          (click)="onUpdate()" i18n>
           Connect
         </button>
         <button *ngIf="!isEdit"
           type="submit"
           [disabled]="!form.valid"
           class="control"
-          (click)="onConnect()">
+          (click)="onConnect()" i18n>
           Connect
         </button>
-        <button type="button" (click)="onCancel()" class="control secondary ghost">
+        <button type="button" (click)="onCancel()" class="control secondary ghost" i18n>
           Cancel
         </button>
       </div>

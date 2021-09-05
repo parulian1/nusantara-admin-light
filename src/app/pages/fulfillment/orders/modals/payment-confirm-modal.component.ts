@@ -8,12 +8,12 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
     <ngx-smart-modal [identifier]="'orderPaymentConfirm'" #modal [customClass]="'no-close-icon-modal no-padding-modal'">
       <div class="wrapper">
         <div class="message">
-          <h2 class="heading-2">Confirm Payment?</h2>
-          <p class="body-2">Make sure payment information matches the amount received on the designated bank account. If there's a mismatch, please contact the customer.</p>
+          <h2 class="heading-2" i18n>Confirm Payment?</h2>
+          <p class="body-2" i18n>Make sure payment information matches the amount received on the designated bank account. If there's a mismatch, please contact the customer.</p>
         </div>
         <div class="action">
-          <button class="control" (click)="close()" type="button">Confirm</button>
-          <button class="control secondary ghost" (click)="cancel()" type="button">
+          <button class="control" (click)="close()" type="button" i18n>Confirm</button>
+          <button class="control secondary ghost" (click)="cancel()" type="button" i18n>
             Cancel
           </button>
         </div>

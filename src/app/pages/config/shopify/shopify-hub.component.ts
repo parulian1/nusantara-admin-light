@@ -3,23 +3,23 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'nus-shopify-hub',
   template: `
-    <h1 class="title-1">Shopify</h1>
+    <h1 class="title-1" i18n>Shopify</h1>
     <div class="wrapper">
       <div>
-        <h1 class="heading-1">Shopify</h1>
-        <p>Shopify Order Message</p>
+        <h1 class="heading-1" i18n>Shopify</h1>
+        <p i18n>Shopify Order Message</p>
       </div>
       <div>
-        <button routerLink="message" class="control">Open</button>
+        <button routerLink="message" class="control" i18n>Open</button>
       </div>
     </div>
     <div class="wrapper">
       <div>
-        <h1 class="heading-1">Shopify</h1>
-        <p>Webhook Config</p>
+        <h1 class="heading-1" i18n>Shopify</h1>
+        <p i18n>Webhook Config</p>
       </div>
       <div>
-        <button routerLink="webhook" class="control">Open</button>
+        <button routerLink="webhook" class="control" i18n>Open</button>
       </div>
     </div>
   `,

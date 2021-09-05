@@ -3,42 +3,42 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'nus-marketplace-integration',
   template: `
-    <h1 class="title-1">Marketplace Configuration</h1>
+    <h1 class="title-1" i18n>Marketplace Configuration</h1>
     <div class="wrapper">
       <div>
-        <h1 class="heading-1">Connect to Marketplace</h1>
-        <p>Add store, Map Attribute
+        <h1 class="heading-1" i18n>Connect to Marketplace</h1>
+        <p i18n>Add store, Map Attribute
         </p>
       </div>
       <div>
-        <button routerLink="connect" class="control">Open</button>
+        <button routerLink="connect" class="control" i18n>Open</button>
       </div>
     </div>
     <div class="wrapper">
       <div>
-        <h1 class="heading-1">Marketplace Setup</h1>
-        <p>Set Up Shipping, Set Up Showcase</p>
+        <h1 class="heading-1" i18n>Marketplace Setup</h1>
+        <p i18n>Set Up Shipping, Set Up Showcase</p>
       </div>
       <div>
-        <button routerLink="setup" class="control">Open</button>
-      </div>
-    </div>
-    <div class="wrapper">
-      <div>
-        <h1 class="heading-1">Publish to Marketplace</h1>
-        <p>See Publish Progress, See Publish History</p>
-      </div>
-      <div>
-        <button routerLink="publish" class="control">Open</button>
+        <button routerLink="setup" class="control" i18n>Open</button>
       </div>
     </div>
     <div class="wrapper">
       <div>
-        <h1 class="heading-1">Shopify</h1>
-        <p>Shopify Integration</p>
+        <h1 class="heading-1" i18n>Publish to Marketplace</h1>
+        <p i18n>See Publish Progress, See Publish History</p>
       </div>
       <div>
-        <button routerLink="shopify" class="control">Open</button>
+        <button routerLink="publish" class="control" i18n>Open</button>
+      </div>
+    </div>
+    <div class="wrapper">
+      <div>
+        <h1 class="heading-1" i18n>Shopify</h1>
+        <p i18n>Shopify Integration</p>
+      </div>
+      <div>
+        <button routerLink="shopify" class="control" i18n>Open</button>
       </div>
     </div>
   `,

@@ -18,10 +18,10 @@ import { Component } from '@angular/core';
     <table>
       <thead>
       <tr>
-        <th translate>Name</th>
-        <th>Type</th>
-        <th class="numeric">Minimum Length</th>
-        <th class="numeric">Maximum length</th>
+        <th translate i18n>Name</th>
+        <th i18n>Type</th>
+        <th class="numeric" i18n>Minimum Length</th>
+        <th class="numeric" i18n>Maximum length</th>
       </tr>
       </thead>
       <tbody>

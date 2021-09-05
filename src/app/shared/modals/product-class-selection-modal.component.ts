@@ -11,14 +11,14 @@ import {IProductClass} from '@nusantara/models/products';
   selector: 'nus-product-class-selection-modal',
   template: `
     <ngx-smart-modal [identifier]="'selectProductClass'" #modal [formGroup]="form" [customClass]="'wide-modal'">
-      <h2 class="heading-2">Select Product Class</h2>
+      <h2 class="heading-2" i18n>Select Product Class</h2>
       <form #modalForm class="fluid">
         <div class="search">
           <i class="material-icons">search</i>
           <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Product Class Name">
         </div>
         <input type="hidden" [formControl]="productClass">
-        <p>Search product class name to find more product classes.</p>
+        <p i18n>Search product class name to find more product classes.</p>
         <table>
           <colgroup>
             <col class="product-name">
@@ -26,14 +26,14 @@ import {IProductClass} from '@nusantara/models/products';
           </colgroup>
           <thead>
           <tr style="background-color: #F4F4F4;">
-            <th>Product Class Name</th>
-            <th class="centered">Action</th>
+            <th i18n>Product Class Name</th>
+            <th class="centered" i18n>Action</th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let p of displayedResults?.entities">
             <td class="product-name">{{ p.name }}</td>
-            <td class="centered"><a href="#" (click)="selectProductClass(p)">Select</a></td>
+            <td class="centered"><a href="#" (click)="selectProductClass(p)" i18n>Select</a></td>
           </tr>
           </tbody>
         </table>

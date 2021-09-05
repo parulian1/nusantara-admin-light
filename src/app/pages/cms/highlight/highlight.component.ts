@@ -23,31 +23,31 @@ import { IProduct } from '@nusantara/models/products';
     <form [formGroup]="form" (ngSubmit)="save()">
 
       <label>
-        <span>Name</span>
+        <span i18n>Name</span>
         <input type="text" [formControl]="name" name="name">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
-        <span>Description</span>
+        <span i18n>Description</span>
         <textarea [formControl]="description" id="description" name="description"></textarea>
         <nus-field-errors [control]="description"></nus-field-errors>
       </label>
 
       <label>
-        <span>Vendor</span>
+        <span i18n>Vendor</span>
         <select [formControl]="forVendor" name="forVendor">
           <option [value]=''> </option>
           <option *ngFor="let v of vendorChoices" [ngValue]="v.href">{{ v.name }}</option>
         </select>
-        <small> if choosen it will show in brand detail page </small>
+        <small i18n> if choosen it will show in brand detail page </small>
         <nus-field-errors [control]="forVendor"></nus-field-errors>
       </label>
 
       <table>
         <thead>
         <tr>
-          <th>Product</th>
+          <th i18n>Product</th>
           <th></th>
         </tr>
         </thead>
@@ -62,7 +62,7 @@ import { IProduct } from '@nusantara/models/products';
         </tr>
         <tr>
           <td colspan="2">
-            <button type="button" (click)="selectProduct()" class="add-button">
+            <button type="button" (click)="selectProduct()" class="add-button" i18n>
               Add Product
             </button>
           </td>

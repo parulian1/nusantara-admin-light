@@ -34,27 +34,27 @@ import { SubFormComponent } from './sub-form.component';
   template: `
     <form [formGroup]="form">
       <div class="wrapper">
-        <h1 class="heading-1">Match Attribute (3/3)</h1>
-        <p>Choose {{ currentShop }} attributes for your product.</p>
+        <h1 class="heading-1" i18n>Match Attribute (3/3)</h1>
+        <p i18n>Choose {{ currentShop }} attributes for your product.</p>
 
         <div class="form">
           <label>
-            <span>{{ currentShop }} Category </span>
+            <span i18n>{{ currentShop }} Category </span>
             <p>{{ categoryNames }}</p>
           </label>
 
           <label>
-            <span>{{ currentShop }} Attributes </span>
+            <span i18n>{{ currentShop }} Attributes </span>
             <p>{{ attributeNames }}</p>
           </label>
 
-          <h4 class="subheading-2">Match {{ currentShop }} Attribute</h4>
+          <h4 class="subheading-2" i18n>Match {{ currentShop }} Attribute</h4>
           <div>
             <div class="attribute-group">
-              <p>{{ currentShop }} Attributes</p>
-              <p>Type {{ currentShop }}</p>
-              <p>Bhisma Attributes</p>
-              <p>Type Bhisma</p>
+              <p i18n>{{ currentShop }} Attributes</p>
+              <p i18n>Type {{ currentShop }}</p>
+              <p i18n>Bhisma Attributes</p>
+              <p i18n>Type Bhisma</p>
             </div>
             <div formArrayName="attributes" class="attributes">
               <div *ngFor="let attr of attributes.controls; let i = index" [formGroupName]="i">
@@ -67,15 +67,15 @@ import { SubFormComponent } from './sub-form.component';
                     (change)="attrChange(selectedAttr.value, i)"
                     [ngClass]="{ 'mismatch warning': attributes.controls[i].get('bhismaObj').invalid}">
 
-                    <option [ngValue]="null">Select an option</option>
+                    <option [ngValue]="null" i18n>Select an option</option>
                     <option *ngFor="let opt of bhismaAttributes" [ngValue]="opt">
                       {{ opt.name }}
                     </option>
-                    <option value="addNewAttr">
+                    <option value="addNewAttr" i18n>
                       + Add New Attribute
                     </option>
                   </select>
-                  <div *ngIf="attributes.controls[i].get('bhismaObj').invalid"class="error-detail">
+                  <div *ngIf="attributes.controls[i].get('bhismaObj').invalid"class="error-detail" i18n>
                     Please select an option
                   </div>
                   <div *ngIf="selectedAttr.value === 'addNewAttr'" class="new-attr-input">
@@ -83,7 +83,7 @@ import { SubFormComponent } from './sub-form.component';
                     <div *ngIf="
                         attributes.controls[i].get('newAttrName').invalid &&
                         attributes.controls[i].get('newAttrName').touched
-                      " class="error-detail">
+                      " class="error-detail" i18n>
                       This field is required
                     </div>
                   </div>
@@ -92,10 +92,10 @@ import { SubFormComponent } from './sub-form.component';
                   <select formControlName="bhismaType"
                     [ngClass]="attributes.controls[i].get('bhismaType').valid? 'match': 'mismatch warning'">
 
-                    <option [ngValue]="null">Select an option</option>
+                    <option [ngValue]="null" i18n>Select an option</option>
                     <option *ngFor="let type of bhismaAttributeTypes">{{ type }}</option>
                   </select>
-                  <div *ngIf="attributes.controls[i].get('bhismaType').invalid" class="error-detail">
+                  <div *ngIf="attributes.controls[i].get('bhismaType').invalid" class="error-detail" i18n>
                     Match with {{ currentShop }} Type
                   </div>
                 </div>
@@ -105,10 +105,10 @@ import { SubFormComponent } from './sub-form.component';
         </div>
       </div>
 
-      <button type="button" class="control" (click)="onSubmit()" [disabled]="form.invalid">
+      <button type="button" class="control" (click)="onSubmit()" [disabled]="form.invalid" i18n>
         Submit
       </button>
-      <button type="button" class="control secondary ghost" (click)="confirmModal.open()">
+      <button type="button" class="control secondary ghost" (click)="confirmModal.open()" i18n>
         Previous
       </button>
     </form>

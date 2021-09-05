@@ -18,10 +18,10 @@ import { CustomerService } from '@nusantara/services';
   selector: 'nus-user-selection-modal',
   template: `
     <ngx-smart-modal [identifier]="'selectUser'" #modal [formGroup]="form">
-      <h2 class="heading-2">Select User</h2>
+      <h2 class="heading-2" i18n>Select User</h2>
       <form #modalForm>
         <label>
-          <span>Search</span>
+          <span i18n>Search</span>
           <input type="text" [formControl]="searchText" placeholder="ex, cari or 'cari@gmail.com'">
         </label>
         <input type="hidden" [formControl]="user">
@@ -30,8 +30,8 @@ import { CustomerService } from '@nusantara/services';
           <table>
             <thead>
             <tr>
-              <th>Email</th>
-              <th>Username</th>
+              <th i18n>Email</th>
+              <th i18n>Username</th>
             </tr>
             </thead>
             <tbody>

@@ -5,12 +5,12 @@ import { IStockSearch } from '@nusantara/models/products/stock-search';
 @Component({
   selector: 'nus-stock-search',
   template: `
-    <h3>Product Inventory</h3>
+    <h3 i18n>Product Inventory</h3>
     <table *ngIf="!!entity">
       <thead>
         <tr>
-          <th>Warehouse</th>
-          <th>Quantity</th>
+          <th i18n>Warehouse</th>
+          <th i18n>Quantity</th>
         </tr>
       </thead>
       <tbody>

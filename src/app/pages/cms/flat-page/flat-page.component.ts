@@ -22,19 +22,19 @@ import {getLastUrlString} from '@nusantara/core/helpers';
     <form [formGroup]="form" (ngSubmit)="save()">
 
       <label>
-        <span>Title</span>
-        <input type="text" [formControl]="title" data-qa="title">
+        <span i18n>Title</span>
+        <input type="text" [formControl]="title">
         <nus-field-errors [control]="title"></nus-field-errors>
       </label>
 
       <label>
-        <span>URL Path</span>
+        <span i18n>URL Path</span>
         <input type="text" [formControl]="url">
         <nus-field-errors [control]="url"></nus-field-errors>
       </label>
 
       <div>
-        <label for="content" class="external"><span>Content</span></label>
+        <label for="content" class="external"><span i18n>Content</span></label>
         <ckeditor [editor]="Editor" [config]="editorConfig"
                   [formControl]="content" id="content"></ckeditor>
         <nus-field-errors [control]="content"></nus-field-errors>

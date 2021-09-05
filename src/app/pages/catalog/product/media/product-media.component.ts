@@ -16,10 +16,10 @@ import { GoogleService } from '@nusantara/services';
   selector: 'nus-product-media',
   template: `
     <div>
-      <button type="button" (click)="remove.emit()" title="Remove"><i class="material-icons">remove_circle_outline</i></button>
+      <button type="button" (click)="remove.emit()" title="Remove" i18n-title><i class="material-icons">remove_circle_outline</i></button>
 
       <div *ngIf="entity?.type === 'image'">
-        <span class="video-title">Image</span>
+        <span class="video-title" i18n>Image</span>
       </div>
       <div *ngIf="entity?.type === 'you_tube'">
         <a class="video-title" [href]="clickUrl" target="_blank">

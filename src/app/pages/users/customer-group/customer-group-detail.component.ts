@@ -26,13 +26,13 @@ import { UserSelectionModalComponent } from '@nusantara/shared';
 
     <form [formGroup]="form" (ngSubmit)="save()">
       <label>
-        <span>Name</span>
+        <span i18n>Name</span>
         <input type="text" [formControl]="name">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
-        <span>Type</span>
+        <span i18n>Type</span>
         <select [formControl]="type">
           <option *ngFor="let opt of typeChoices" [ngValue]="opt.value">
             {{ opt.displayName }}
@@ -54,7 +54,7 @@ import { UserSelectionModalComponent } from '@nusantara/shared';
       <table *ngIf="type.value === manual">
         <thead>
         <tr>
-          <th>User</th>
+          <th i18n>User</th>
           <th></th>
         </tr>
         </thead>
@@ -69,7 +69,7 @@ import { UserSelectionModalComponent } from '@nusantara/shared';
         </tr>
         <tr>
           <td colspan="2">
-            <button type="button" (click)="selectUser()" class="add-button">
+            <button type="button" (click)="selectUser()" class="add-button" i18n>
               Add User
             </button>
           </td>

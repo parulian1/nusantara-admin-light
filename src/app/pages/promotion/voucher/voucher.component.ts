@@ -42,52 +42,52 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
     <form [formGroup]="form" (ngSubmit)="save()">
 
       <label>
-        <span>Name</span>
+        <span i18n>Name</span>
         <input type="text" [formControl]="name" maxlength="50">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
-        <span>Code</span>
+        <span i18n>Code</span>
         <input type="text" [formControl]="code" maxlength="10">
         <nus-field-errors [control]="code"></nus-field-errors>
       </label>
 
       <label>
-        <span>Type</span>
+        <span i18n>Type</span>
         <select [formControl]="type">
           <option *ngFor="let t of typeChoices" [ngValue]="t.value">{{ t.displayName }}</option>
         </select>
       </label>
 
       <label>
-        <span>Discount Amount</span>
+        <span i18n>Discount Amount</span>
         <input type="number" [formControl]="amount" placeholder="Ex, 10000000">
         <nus-field-errors [control]="amount"></nus-field-errors>
       </label>
 
       <label>
-        <span>Max Discount Amount</span>
+        <span i18n>Max Discount Amount</span>
         <input type="text" [formControl]="maxAmount" placeholder="Ex, 10000000">
         <nus-field-errors [control]="maxAmount"></nus-field-errors>
       </label>
 
       <label>
-        <span>Discount Based On</span>
+        <span i18n>Discount Based On</span>
         <select [formControl]="discountBase">
           <option *ngFor="let t of discountBaseChoices" [ngValue]="t.value">{{ t.displayName }}</option>
         </select>
       </label>
 
       <label>
-        <span>Minimum Order Amount</span>
+        <span i18n>Minimum Order Amount</span>
         <input type="number" [formControl]="minimumOrderAmount" placeholder="Ex, 10000000">
         <nus-field-errors [control]="minimumOrderAmount"></nus-field-errors>
       </label>
 
 
       <label>
-        <span>Maximum Usage</span>
+        <span i18n>Maximum Usage</span>
         <select [formControl]="maxUsed">
           <option *ngFor="let t of maxUsedChoices" [ngValue]="t.value">{{ t.displayName }}</option>
         </select>
@@ -96,13 +96,13 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
       </label>
 
       <label>
-        <span>Valid From</span>
+        <span i18n>Valid From</span>
         <nus-field-datetime [control]="validFrom" [minDate]="minDateValidFrom" [maxDate]="maxDateValidFrom"></nus-field-datetime>
         <nus-field-errors [control]="validFrom"></nus-field-errors>
       </label>
 
       <label>
-        <span>Valid To</span>
+        <span i18n>Valid To</span>
         <nus-field-datetime [control]="validTo" [minDate]="minDateValidTo" [maxDate]="maxDateValidTo"></nus-field-datetime>
         <nus-field-errors [control]="validTo"></nus-field-errors>
       </label>
@@ -112,15 +112,15 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
                class="toggle"
                [formControl]="isActive"
                name="is-active"/>
-        <span>Is Active</span>
+        <span i18n>Is Active</span>
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
       <span class="eligible-product">
-        <h2 class="title-2">Voucher Eligible Products</h2>
+        <h2 class="title-2" i18n>Voucher Eligible Products</h2>
         <button type="button" class="control" (click)="uploadProductXLSX()" [disabled]="checkVoucherDateValid()">
           <i class="material-icons">publish</i>
-          <span>Upload from XLSX</span>
+          <span i18n>Upload from XLSX</span>
         </button>
       </span>
 
@@ -128,8 +128,8 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
         <thead>
         <tr>
           <th class="numeric">#</th>
-          <th>Product</th>
-          <th>Action</th>
+          <th i18n>Product</th>
+          <th i18n>Action</th>
         </tr>
         </thead>
         <tbody>
@@ -144,7 +144,7 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
         </tr>
         <tr>
           <td colspan="3">
-            <button type="button" (click)="selectProduct()"  [disabled]="checkVoucherDateValid()" class="new-add-button wide">
+            <button type="button" (click)="selectProduct()"  [disabled]="checkVoucherDateValid()" class="new-add-button wide" i18n>
               <i class="material-icons">add</i> Add Product
             </button>
           </td>
@@ -152,7 +152,7 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
         </tbody>
       </table>
 
-      <a href="{{ service.productListDownloadUrl }}" target="_blank" *ngIf="hasProductUrl">Download Product List</a>
+      <a href="{{ service.productListDownloadUrl }}" target="_blank" *ngIf="hasProductUrl" i18n>Download Product List</a>
 
       <nus-detail-actions
         [component]="this"

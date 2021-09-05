@@ -23,19 +23,19 @@ import { UserSelectionModalComponent } from '@nusantara/shared';
     <form [formGroup]="form" (ngSubmit)="save()">
 
       <label>
-        <span>Name</span>
+        <span i18n>Name</span>
         <input type="text" [value]="entity.name" readonly>
       </label>
 
       <label>
-        <span>Permissions</span>
+        <span i18n>Permissions</span>
 
       </label>
 
       <table>
         <thead>
         <tr>
-          <th>User</th>
+          <th i18n>User</th>
           <th></th>
         </tr>
         </thead>
@@ -50,7 +50,7 @@ import { UserSelectionModalComponent } from '@nusantara/shared';
         </tr>
         <tr>
           <td colspan="2">
-            <button type="button" (click)="selectUser()" class="add-button">
+            <button type="button" (click)="selectUser()" class="add-button" i18n>
               Add User
             </button>
           </td>

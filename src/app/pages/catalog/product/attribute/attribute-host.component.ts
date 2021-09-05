@@ -8,14 +8,14 @@ import { products } from '@nusantara/models';
 @Component({
   selector: 'nus-product-attribute-host',
   template: `
-    <h4 class="subheading-2">Attributes</h4>
+    <h4 class="subheading-2" i18n>Attributes</h4>
 
     <table>
       <thead>
       <tr>
-        <th>Name</th>
-        <th class="centered">Enabled</th>
-        <th>Value</th>
+        <th i18n>Name</th>
+        <th class="centered" i18n>Enabled</th>
+        <th i18n>Value</th>
       </tr>
       </thead>
       <tbody *ngIf="!!originalAttributeValues">
@@ -26,7 +26,7 @@ import { products } from '@nusantara/models';
         </nus-product-attribute-value>
         <tr>
           <td colspan="3">
-            <a (click)="goToClass()" class="manage-attr">Manage Attribute</a>
+            <a (click)="goToClass()" class="manage-attr" i18n>Manage Attribute</a>
           </td>
         </tr>
       </tbody>

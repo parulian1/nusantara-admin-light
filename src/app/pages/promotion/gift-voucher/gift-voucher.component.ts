@@ -18,32 +18,32 @@ import {ActivatedRoute, Router} from '@angular/router';
     <form [formGroup]="form" (ngSubmit)="save()">
 
       <label>
-        <span>Name</span>
+        <span i18n>Name</span>
         <input type="text" [formControl]="name" maxlength="50">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
-        <span>Code</span>
+        <span i18n>Code</span>
         <input type="text" [formControl]="code" maxlength="10">
         <nus-field-errors [control]="code"></nus-field-errors>
       </label>
 
       <label>
-        <span>Amount</span>
+        <span i18n>Amount</span>
         <input type="number" [formControl]="amount" placeholder="Ex, 10000000">
         <nus-field-errors [control]="amount"></nus-field-errors>
       </label>
 
       <label>
-        <span>Valid From</span>
+        <span i18n>Valid From</span>
         <nus-field-datetime [control]="validFrom" [minDate]="minDateValidFrom"
                             [maxDate]="maxDateValidFrom"></nus-field-datetime>
         <nus-field-errors [control]="validFrom"></nus-field-errors>
       </label>
 
       <label>
-        <span>Valid To</span>
+        <span i18n>Valid To</span>
         <nus-field-datetime [control]="validTo" [minDate]="minDateValidTo"
                             [maxDate]="maxDateValidTo"></nus-field-datetime>
         <nus-field-errors [control]="validTo"></nus-field-errors>
@@ -54,7 +54,7 @@ import {ActivatedRoute, Router} from '@angular/router';
                class="toggle"
                [formControl]="isActive"
                name="is-active"/>
-        <span>Is Active</span>
+        <span i18n>Is Active</span>
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 

@@ -22,15 +22,15 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
 
     <form [formGroup]="form" (ngSubmit)="save()" #f>
       <label>
-        <span>Name</span>
+        <span i18n>Name</span>
         <input type="text" [formControl]="name" name="name" maxlength="50">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
-        <span>Logo</span>
+        <span i18n>Logo</span>
         <img [src]="logoPreviewUrl" alt="Payment Gateway Logo" class="preview">
-        <small>Recommended: 120x120</small>
+        <small i18n>Recommended: 120x120</small>
         <input type="file"
                [formControl]="logo"
                (change)="setLogoPreview($event)"
@@ -39,7 +39,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
       </label>
 
       <label>
-        <span>Type</span>
+        <span i18n>Type</span>
         <select formControlName="type" name="type">
           <option *ngFor="let opt of typeChoices" [value]="opt.value">
             {{ opt.displayName }}
@@ -51,19 +51,19 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
       <!-- Show when type of payment other than manual transfer -->
       <ng-template [ngIf]="currentType && (currentType !== 'manual_transfer') && (currentType !== 'in_store') ">
         <label>
-          <span>Client Key</span>
+          <span i18n>Client Key</span>
           <input type="text" [formControl]="clientKey" name="clientKey" maxlength="255">
           <nus-field-errors [control]="clientKey"></nus-field-errors>
         </label>
 
         <label>
-          <span>Server Key</span>
+          <span i18n>Server Key</span>
           <input type="text" [formControl]="serverKey" name="serverKey" maxlength="255">
           <nus-field-errors [control]="serverKey"></nus-field-errors>
         </label>
 
         <label>
-          <span>Code</span>
+          <span i18n>Code</span>
           <input type="text" [formControl]="code" name="code" maxlength="25">
           <nus-field-errors [control]="code"></nus-field-errors>
         </label>
@@ -72,13 +72,13 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
       <!-- Show when type of payment is manual_transfer -->
       <ng-template [ngIf]="currentType && (currentType === 'manual_transfer')">
         <label>
-          <span>Account Number</span>
+          <span i18n>Account Number</span>
           <input type="text" [formControl]="accountNumber" name="accountNumber" maxlength="255">
           <nus-field-errors [control]="clientKey"></nus-field-errors>
         </label>
 
         <label>
-          <span>Account Hold Number</span>
+          <span i18n>Account Hold Number</span>
           <input type="text" [formControl]="accountHoldNumber" name="accountHoldNumber" maxlength="255">
           <nus-field-errors [control]="serverKey"></nus-field-errors>
         </label>
@@ -87,7 +87,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
       <!-- Show when type of payment is in_store -->
       <ng-template [ngIf]="currentType && (currentType === 'in_store')">
         <label>
-          <span>In Store Type</span>
+          <span i18n>In Store Type</span>
           <select [formControl]="metaType" (ngModelChange)="onInStoreChange($event)">
             <option *ngFor="let opt of inStoreTypeChoices" [ngValue]="opt.value">
               {{ opt.displayName }}
@@ -121,7 +121,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
               </tr>
               <tr>
                 <td colspan="2">
-                  <button (click)="addLineBank()" type="button" class="add-button">Add Bank</button>
+                  <button (click)="addLineBank()" type="button" class="add-button" i18n>Add Bank</button>
                 </td>
               </tr>
             </ng-template>
@@ -140,7 +140,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
               </tr>
               <tr>
                 <td colspan="2">
-                  <button (click)="addLineWallet()" type="button" class="add-button">Add eWallet</button>
+                  <button (click)="addLineWallet()" type="button" class="add-button" i18n>Add eWallet</button>
                 </td>
               </tr>
             </ng-template>
@@ -155,7 +155,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
                class="toggle"
                [formControl]="isActive"
                name="is-active"/>
-        <span>Is Active</span>
+        <span i18n>Is Active</span>
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
@@ -164,12 +164,12 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
                class="toggle"
                [formControl]="allowPos"
                name="allow-pos"/>
-        <span>Allow POS</span>
+        <span i18n>Allow POS</span>
         <nus-field-errors [control]="allowPos"></nus-field-errors>
       </label>
 
       <label>
-          <span>Notification for Order Near Expired</span>
+          <span i18n>Notification for Order Near Expired</span>
           <select [formControl]="expiryReminder" name="expiryReminder">
           <option *ngFor="let opt of expiryReminderChoices" [value]="opt.value">
             {{ opt.displayName }}
@@ -179,7 +179,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
         </label>
 
       <div>
-        <label for="description" class="external"><span>Description</span></label>
+        <label for="description" class="external"><span i18n>Description</span></label>
         <ckeditor [editor]="Editor" [config]="editorConfig"
                   [formControl]="description" id="description" maxlength="255"></ckeditor>
         <nus-field-errors [control]="description"></nus-field-errors>

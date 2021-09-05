@@ -7,7 +7,7 @@ import { widgets } from '@nusantara/models';
 @Component({
   selector: 'nus-flat-page-list',
   template: `
-    <nus-list-header
+    <nus-list-header i18n-title
       title="Testimonials"
       description="Customer reviews of Products/Vendors">
     </nus-list-header>
@@ -19,10 +19,10 @@ import { widgets } from '@nusantara/models';
     <table>
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Vendor/Product</th>
-          <th>Reviewer Name</th>
-          <th class="centered">Is Active</th>
+          <th i18n>Name</th>
+          <th i18n>Vendor/Product</th>
+          <th i18n>Reviewer Name</th>
+          <th class="centered" i18n>Is Active</th>
         </tr>
       </thead>
       <tbody>

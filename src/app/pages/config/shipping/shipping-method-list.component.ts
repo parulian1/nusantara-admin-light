@@ -6,7 +6,7 @@ import { AbstractListComponent } from '@nusantara/core';
 @Component({
   selector: 'nus-shipping-method-list',
   template: `
-    <nus-list-header
+    <nus-list-header i18n-title
       title="Shipping Methods"
       description="A way which orders can be fulfilled to the customer.">
     </nus-list-header>
@@ -21,7 +21,7 @@ import { AbstractListComponent } from '@nusantara/core';
     <table>
       <thead>
         <tr>
-          <th>Name</th>
+          <th i18n>Name</th>
         </tr>
       </thead>
       <tbody>

@@ -21,21 +21,21 @@ import { forkJoin } from 'rxjs';
 
     <form [formGroup]="form" (ngSubmit)="save()" #f>
       <label>
-        <span>Shop Name</span>
+        <span i18n>Shop Name</span>
         <input type="text" [formControl]="name" name="name">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
-        <span>Company Name</span>
+        <span i18n>Company Name</span>
         <input type="text" [formControl]="companyName" name="companyName">
         <nus-field-errors [control]="companyName"></nus-field-errors>
       </label>
 
       <label>
-        <span>Logo</span>
+        <span i18n>Logo</span>
         <img [src]="logoPreviewUrl" alt="Shop Logo" class="preview" id="logo">
-        <small>Recommended: 120x120</small>
+        <small i18n>Recommended: 120x120</small>
         <input type="file"
                [formControl]="logo"
                (change)="setLogoPreview($event)"
@@ -45,19 +45,19 @@ import { forkJoin } from 'rxjs';
       </label>
 
       <label>
-        <span>GA Account ID</span>
+        <span i18n>GA Account ID</span>
         <nus-config-analytic-tool-service [form]="form"></nus-config-analytic-tool-service>
       </label>
 
       <label>
-        <span>Jixie Account ID</span>
+        <span i18n>Jixie Account ID</span>
         <input type="text" [formControl]="jixieAccountId">
       </label>
 
       <label>
-        <span>Favicon</span>
+        <span i18n>Favicon</span>
         <img [src]="faviconPreviewUrl" alt="Favicon Logo" class="preview" id="favicon">
-        <small>Recommended: 48x48</small>
+        <small i18n>Recommended: 48x48</small>
         <input type="file"
                [formControl]="favicon"
                (change)="setFaviconPreview($event)"
@@ -67,32 +67,32 @@ import { forkJoin } from 'rxjs';
       </label>
 
       <label>
-        <span>Email Customer Service</span>
+        <span i18n>Email Customer Service</span>
         <input type="text" [formControl]="customerServiceEmail">
-        <small>This email is used for CS Email. If it is empty then your customer will not get an email.</small>
+        <small i18n>This email is used for CS Email. If it is empty then your customer will not get an email.</small>
         <nus-field-errors [control]="customerServiceEmail"></nus-field-errors>
       </label>
 
       <label>
-        <span>Tagline</span>
+        <span i18n>Tagline</span>
         <input type="text" [formControl]="tagLine">
         <nus-field-errors [control]="tagLine"></nus-field-errors>
       </label>
 
       <label>
-        <span>Description</span>
+        <span i18n>Description</span>
         <textarea [formControl]="description"></textarea>
         <nus-field-errors [control]="description"></nus-field-errors>
       </label>
 
       <label>
-        <span>Keywords</span>
+        <span i18n>Keywords</span>
         <input type="text" [formControl]="keywords">
         <nus-field-errors [control]="keywords"></nus-field-errors>
       </label>
 
       <label>
-        <span>Phone Number / Telephone (Optional)</span>
+        <span i18n>Phone Number / Telephone (Optional)</span>
         <input type="text" [formControl]="phoneNumber" name="phoneNumber">
         <nus-field-errors [control]="phoneNumber"></nus-field-errors>
       </label>
@@ -101,7 +101,7 @@ import { forkJoin } from 'rxjs';
       </nus-company-address>
 
       <div class="sosmed-title">
-        <h3>
+        <h3 i18n>
           Social Media Settings
         </h3>
       </div>
@@ -109,8 +109,8 @@ import { forkJoin } from 'rxjs';
       <table class="line-items">
         <thead>
         <tr>
-          <th>Type</th>
-          <th>URL</th>
+          <th i18n>Type</th>
+          <th i18n>URL</th>
           <th></th>
         </tr>
         </thead>
@@ -125,7 +125,7 @@ import { forkJoin } from 'rxjs';
 
         <tr>
           <td colspan="9">
-            <button type="button" (click)="addLine()" class="add-button">
+            <button type="button" (click)="addLine()" class="add-button" i18n>
               Add Record
             </button>
           </td>

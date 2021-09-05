@@ -15,19 +15,19 @@ import { AuthService } from '@nusantara/auth';
 @Component({
   selector: 'nus-adjustment-detail',
   template: `
-    <h1 class="title-1">
+    <h1 class="title-1" i18n>
       Stock Adjustment {{entity.href|entityToSlug}}
     </h1>
-    <p style="margin-bottom: 24px;">Edit shipping method for each product. Skip this step if you don't want to change anything.</p>
+    <p style="margin-bottom: 24px;" i18n>Edit shipping method for each product. Skip this step if you don't want to change anything.</p>
 
     <table id="general-table-info">
       <thead>
-      <th>Type</th>
-      <th>Status</th>
-      <th>Warehouse</th>
-      <th>Created By</th>
-      <th>Reviewed By</th>
-      <th>Date</th>
+      <th i18n>Type</th>
+      <th i18n>Status</th>
+      <th i18n>Warehouse</th>
+      <th i18n>Created By</th>
+      <th i18n>Reviewed By</th>
+      <th i18n>Date</th>
       </thead>
       <tbody>
       <td>{{entity.type}}</td>
@@ -53,16 +53,16 @@ import { AuthService } from '@nusantara/auth';
       <table id="general-table-product">
         <thead>
         <tr>
-          <th>
+          <th i18n>
             Receiving ID / Product Name / Location
           </th>
-          <th>sku</th>
-          <th>Receiving Date</th>
-          <th>Available Stock in Product Record</th>
-          <th>Adjusted Qty</th>
-          <th>Difference Qty</th>
-          <th>Reason</th>
-          <th>Notes</th>
+          <th i18n>sku</th>
+          <th i18n>Receiving Date</th>
+          <th i18n>Available Stock in Product Record</th>
+          <th i18n>Adjusted Qty</th>
+          <th i18n>Difference Qty</th>
+          <th i18n>Reason</th>
+          <th i18n>Notes</th>
         </tr>
         </thead>
         <tbody>
@@ -97,13 +97,13 @@ import { AuthService } from '@nusantara/auth';
         </tbody>
       </table>
       <div class="detail-actions">
-        <button type="button" (click)="approve()" [disabled]="entity.status !== 'pending'" class="control" id="confirm-button">
+        <button type="button" (click)="approve()" [disabled]="entity.status !== 'pending'" class="control" id="confirm-button" i18n>
           Approve
         </button>
-        <button type="button" (click)="cancel()" class="control secondary">
+        <button type="button" (click)="cancel()" class="control secondary" i18n>
           Back
         </button>
-        <button type="button" (click)="reject()" [disabled]="entity.status !== 'pending'" class="control danger ghost">
+        <button type="button" (click)="reject()" [disabled]="entity.status !== 'pending'" class="control danger ghost" i18n>
           Reject
         </button>
       </div>

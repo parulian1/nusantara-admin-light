@@ -5,23 +5,23 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
 @Component({
   selector: 'nus-transport-to-counter-selection-modal',
   template: `
-    <ngx-smart-modal 
-      [identifier]="'transportToCounterSelection'" 
-      #modal 
+    <ngx-smart-modal
+      [identifier]="'transportToCounterSelection'"
+      #modal
       [customClass]="'medium-modal no-padding-modal'">
       <div class="wrapper">
         <div class="message">
-          <h2 class="title-2">Ship Order</h2>
-          <p><strong>MARKETPLACE (Store Name) | Logistic Name</strong></p>
+          <h2 class="title-2" i18n>Ship Order</h2>
+          <p i18n><strong>MARKETPLACE (Store Name) | Logistic Name</strong></p>
           <div class="shipping-method">
             <div class="method-option">
               <span><input type="radio" name="methodOption"/></span>
               <img src="/assets/deliver-to-counter.svg">
               <span>
-                <div class="subheading-2">
+                <div class="subheading-2" i18n>
                   Deliver to Counter
                 </div>
-                <div class="body-2">
+                <div class="body-2" i18n>
                   Deliver your packages to the closest <strong>Logistic Name</strong> counter.
                 </div>
               </span>
@@ -30,17 +30,17 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
               <span><input type="radio" name="methodOption"/></span>
               <img src="/assets/use-pickup-service.svg">
               <span>
-                <div class="subheading-2">
+                <div class="subheading-2" i18n>
                   Use Pick Up Service
                 </div>
-                <div class="body-2">
+                <div class="body-2" i18n>
                   <strong>Logistic Name</strong> will pick up the packages from your address.
                 </div>
               </span>
             </div>
           </div>
         </div>
-        <button type="submit" class="control">Submit</button>
+        <button type="submit" class="control" i18n>Submit</button>
       </div>
     </ngx-smart-modal>
   `,
@@ -50,14 +50,14 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
     'h2 { padding-bottom: 24px }',
     'p { color : var(--darken-grey-color); margin: 0; }',
     '.shipping-method { margin-top: 28px; }',
-    `.method-option { 
+    `.method-option {
       border: solid 1px var(--grey);
       border-radius: 4px;
       display: flex;
       align-items: center;
       padding: 12px 16px;
       gap: 12px; }`,
-    '.method-option:not(:last-child) { margin-bottom: 16px; }', 
+    '.method-option:not(:last-child) { margin-bottom: 16px; }',
     'button { width: 50% }'
   ]
 })

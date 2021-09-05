@@ -5,27 +5,27 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
 @Component({
   selector: 'nus-deliver-to-counter-auto-awb-modal',
   template: `
-    <ngx-smart-modal 
-      [identifier]="'autoDeliverToCounterAutoAwb'" 
-      #modal 
+    <ngx-smart-modal
+      [identifier]="'autoDeliverToCounterAutoAwb'"
+      #modal
       [customClass]="'medium-modal no-padding-modal'">
       <div class="wrapper">
         <div class="message">
-          <h2 class="title-2">Deliver to Counter</h2>
-          <p><strong>Order count</strong> will be delivered to <strong>Logistic</strong> counter.</p>
+          <h2 class="title-2" i18n>Deliver to Counter</h2>
+          <p i18n><strong>Order count</strong> will be delivered to <strong>Logistic</strong> counter.</p>
           <div class="awb-number">
-            <div class="body-2">AWB Number</div>
-            <div class="heading-2">AWB Number</div>
+            <div class="body-2" i18n>AWB Number</div>
+            <div class="heading-2" i18n>AWB Number</div>
           </div>
           <div class="to-do">
-            <p>What to do next:</p>
+            <p i18n>What to do next:</p>
             <ol>
-              <li>Print shipping label & put it on the package.</li>
-              <li>Deliver your package to the nearest <strong>Logistic Name</strong> counter.</li>
+              <li i18n>Print shipping label & put it on the package.</li>
+              <li i18n>Deliver your package to the nearest <strong>Logistic Name</strong> counter.</li>
             </ol>
           </div>
         </div>
-        <button type="submit" class="control">Download Shipping Label</button>
+        <button type="submit" class="control" i18n>Download Shipping Label</button>
       </div>
 
     </ngx-smart-modal>
@@ -39,7 +39,7 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
     '.to-do p { margin-bottom: 8px; }',
     'ol { padding-left: 16px; margin: 0; }',
     'li { margin-bottom: 10px; }',
-    `.awb-number { 
+    `.awb-number {
       display: block;
       margin: 32px auto 24px auto;
       width: fit-content;

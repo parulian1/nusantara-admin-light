@@ -44,7 +44,7 @@ import { IOrderChildren } from "@nusantara/models/order/order-children";
           <tbody>
             <tr>
               <td>
-                <div class="body-2">Status</div>
+                <div class="body-2" i18n>Status</div>
                 <div class="subheading-2">
                   {{
                     (children.data[0]?.status ? children.data[0]?.status : "-")
@@ -53,7 +53,7 @@ import { IOrderChildren } from "@nusantara/models/order/order-children";
                 </div>
               </td>
               <td>
-                <div class="body-2">Logistic</div>
+                <div class="body-2" i18n>Logistic</div>
                 <div class="subheading-2">
                   <ng-container *ngIf="children.data[0]?.shippingMethod">
                     {{
@@ -65,7 +65,7 @@ import { IOrderChildren } from "@nusantara/models/order/order-children";
                 </div>
               </td>
               <td>
-                <div class="body-2">AWB</div>
+                <div class="body-2" i18n>AWB</div>
                 <div class="subheading-2">
                   <div>
                     {{
@@ -77,6 +77,7 @@ import { IOrderChildren } from "@nusantara/models/order/order-children";
                       class="refresh-awb"
                       *ngIf="isRefreshAwbEnable(children.data[0])"
                       (click)="refreshAwb()"
+                       i18n
                       >Refresh AWB</a
                     >
                   </div>
@@ -84,7 +85,7 @@ import { IOrderChildren } from "@nusantara/models/order/order-children";
               </td>
               <td>
                 <ng-container *ngIf="isManualTransfer(orderDetailData)">
-                  <div class="body-2">Warehouse</div>
+                  <div class="body-2" i18n>Warehouse</div>
                   <div class="subheading-2">
                     {{ children.warehouse.name }}
                   </div>
@@ -112,6 +113,7 @@ import { IOrderChildren } from "@nusantara/models/order/order-children";
                       class="control"
                       (click)="updateOrder(children.data[0], 'ready')"
                       [disabled]="isReadyButtonDisabled(children.data[0])"
+                       i18n
                     >
                       Ready
                     </button>
@@ -120,6 +122,7 @@ import { IOrderChildren } from "@nusantara/models/order/order-children";
                       type="button"
                       class="control"
                       (click)="requestShipmentAndUpdateOrder(children.data[0])"
+                       i18n
                     >
                       Ship
                     </button>
@@ -129,6 +132,7 @@ import { IOrderChildren } from "@nusantara/models/order/order-children";
                       class="control"
                       [disabled]="!isManagedAwb"
                       (click)="manualShipment(children.data[0])"
+                       i18n
                     >
                       Manual Shipment
                     </button>
@@ -138,6 +142,7 @@ import { IOrderChildren } from "@nusantara/models/order/order-children";
                       class="control"
                       (click)="updateOrder(children.data[0], 'complete')"
                       [disabled]="isCompleteButtonDisabled(children.data[0])"
+                      i18n
                     >
                       Complete
                     </button>
@@ -146,7 +151,7 @@ import { IOrderChildren } from "@nusantara/models/order/order-children";
                       *ngIf="isRedirectMarketplaceShowed(children.data[0])"
                       class="control see-order"
                       href="{{ children.data[0].marketplaceRedirectHref }}"
-                      target="_blank"
+                      target="_blank" i18n
                     >
                       See Order
                     </a>
@@ -157,11 +162,11 @@ import { IOrderChildren } from "@nusantara/models/order/order-children";
                       </button>
                     -->
 
-                    <div *ngIf="isRedirectMarketplaceShowed(children.data[0])">
+                    <div *ngIf="isRedirectMarketplaceShowed(children.data[0])" i18n>
                       Orders can only be processed on the
                       {{ orderDetailData.sourceName | titlecase }} Dashboard.
                     </div>
-                    <div *ngIf="isCompleteButtonDisabled(children.data[0])">
+                    <div *ngIf="isCompleteButtonDisabled(children.data[0])" i18n>
                       Order will automatically complete when customer receives
                       the package
                     </div>
@@ -175,6 +180,7 @@ import { IOrderChildren } from "@nusantara/models/order/order-children";
                         children.data[0].shipmentHistory.shippingLabelUrl
                       )
                     "
+                     i18n
                   >
                     Download Shipping Label
                   </button>
@@ -183,7 +189,7 @@ import { IOrderChildren } from "@nusantara/models/order/order-children";
             </tr>
             <tr class="product-title">
               <td colspan="5" class="product-title">
-                <h3 class="heading-1">Product</h3>
+                <h3 class="heading-1" i18n>Product</h3>
               </td>
             </tr>
             <ng-container *ngFor="let data of children.data">
@@ -214,13 +220,13 @@ import { IOrderChildren } from "@nusantara/models/order/order-children";
                       </div>
                     </span>
                     <span>
-                      <div class="body-2">Item Price</div>
+                      <div class="body-2" i18n>Item Price</div>
                       <div class="subheading-2">
                         {{ lineItems.price | currency: "IDR" }}
                       </div>
                     </span>
                     <span>
-                      <div class="body-2">Total Item</div>
+                      <div class="body-2" i18n>Total Item</div>
                       <div class="subheading-2">{{ lineItems.quantity }}</div>
                     </span>
                   </div>
@@ -236,25 +242,25 @@ import { IOrderChildren } from "@nusantara/models/order/order-children";
         <thead>
           <tr>
             <th colspan="2">
-              <h3 class="heading-1">Order Summary</h3>
+              <h3 class="heading-1" i18n>Order Summary</h3>
             </th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Total amount cart (before Disc)</td>
+            <td i18n>Total amount cart (before Disc)</td>
             <td class="summary-order-value">
               {{ orderDetailData.subtotalCost | currency: "IDR" }}
             </td>
           </tr>
           <tr>
-            <td>Discount Total</td>
+            <td i18n>Discount Total</td>
             <td class="summary-order-value">
               -{{ orderDetailData.discount | currency: "IDR" }}
             </td>
           </tr>
           <tr>
-            <td>Total amount cart (after Disc)</td>
+            <td i18n>Total amount cart (after Disc)</td>
             <td class="summary-order-value">
               {{
                 orderDetailData.subtotalCost - orderDetailData.discount
@@ -263,13 +269,13 @@ import { IOrderChildren } from "@nusantara/models/order/order-children";
             </td>
           </tr>
           <tr>
-            <td>Shipping total</td>
+            <td i18n>Shipping total</td>
             <td class="summary-order-value">
               {{ orderDetailData.shippingCost | currency: "IDR" }}
             </td>
           </tr>
           <tr>
-            <td>Order total</td>
+            <td i18n>Order total</td>
             <td class="summary-order-value">
               {{ orderDetailData.orderPayment.amount | currency: "IDR" }}
             </td>

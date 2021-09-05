@@ -9,12 +9,12 @@ import { SvgIconService } from '@nusantara/services';
 @Component({
   selector: 'nus-order-list',
   template: `
-    <nus-order-list-header title="Order"></nus-order-list-header>
-    <nus-order-filters 
+    <nus-order-list-header title="Order" i18n-title></nus-order-list-header>
+    <nus-order-filters
       (filterApplied)="onFilterApplied($event)">
     </nus-order-filters>
-    <nus-order-custom-pagination 
-      [page]="page" 
+    <nus-order-custom-pagination
+      [page]="page"
       [checklist]="checklist"
       [checkedlist]="checkedlist"
       [appliedFilters]="appliedFilter"
@@ -31,16 +31,16 @@ import { SvgIconService } from '@nusantara/services';
       </colgroup>
       <thead>
         <tr>
-          <th>Order Number</th>
-          <th>Platform</th>
+          <th i18n>Order Number</th>
+          <th i18n>Platform</th>
           <th>
-            <span class="nowrap">
+            <span class="nowrap" i18n>
               Paid Date
               <nus-sort-toggle field="paid_time"></nus-sort-toggle>
             </span>
           </th>
-          <th>Logistic</th>
-          <th>Status</th>
+          <th i18n>Logistic</th>
+          <th i18n>Status</th>
         </tr>
       </thead>
       <tbody>
@@ -96,7 +96,7 @@ export class OrderListComponent extends AbstractListComponent<IOrder> implements
     this.route.data.subscribe((
       data: { page: PagedResponse<IOrder>, orderType: drf.IChoice[]}) => {
       this.page = data.page;
-      this.checklist = this.page.entities.map(  
+      this.checklist = this.page.entities.map(
         (entity, index) => ({ index: index, order: entity, isSelected: false })
       )
     });

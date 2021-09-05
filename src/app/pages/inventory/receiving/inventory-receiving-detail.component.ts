@@ -27,20 +27,20 @@ import {IProduct, IProductClass} from '@nusantara/models/products';
 @Component({
   selector: 'nus-receiving-order-detail',
   template: `
-    <h1 class="title-1">
+    <h1 class="title-1" i18n>
       Pending Order {{entity.href|entityToSlug}}
     </h1>
-    <p style="margin-bottom: 24px;">Edit shipping method for each product. Skip this step if you don't want to change anything.</p>
+    <p style="margin-bottom: 24px;" i18n>Edit shipping method for each product. Skip this step if you don't want to change anything.</p>
     <table id="general-table-info">
       <thead>
-        <th>DO Number</th>
-        <th>PIC Sender</th>
-        <th>Type</th>
-        <th>Status</th>
-        <th>Warehouse</th>
-        <th>Created By</th>
-        <th>Reviewed By</th>
-        <th>Date</th>
+        <th i18n>DO Number</th>
+        <th i18n>PIC Sender</th>
+        <th i18n>Type</th>
+        <th i18n>Status</th>
+        <th i18n>Warehouse</th>
+        <th i18n>Created By</th>
+        <th i18n>Reviewed By</th>
+        <th i18n>Date</th>
       </thead>
       <tbody>
         <td>
@@ -74,17 +74,17 @@ import {IProduct, IProductClass} from '@nusantara/models/products';
       <table *ngIf="entity.status !== 'pending'" class="general-table-product">
         <thead>
         <tr>
-          <th>
+          <th i18n>
               Product
           </th>
-          <th>SKU</th>
-          <th>Original Quantity</th>
-          <th>Location</th>
-          <th>Locator</th>
-          <th>Stock Requested</th>
-          <th>Batch Number</th>
-          <th>Expiry Date</th>
-          <th>Cost</th>
+          <th i18n>SKU</th>
+          <th i18n>Original Quantity</th>
+          <th i18n>Location</th>
+          <th i18n>Locator</th>
+          <th i18n>Stock Requested</th>
+          <th i18n>Batch Number</th>
+          <th i18n>Expiry Date</th>
+          <th i18n>Cost</th>
         </tr>
         </thead>
         <tbody>
@@ -127,14 +127,14 @@ import {IProduct, IProductClass} from '@nusantara/models/products';
       <table *ngIf="entity.status === 'pending'" class="general-table-product">
         <thead>
           <tr>
-            <th>Product (UPC)</th>
-            <th>SKU</th>
-            <th>Quantity</th>
-            <th>Location</th>
-            <th>Locator</th>
-            <th>Batch</th>
-            <th>Expiry Date</th>
-            <th>Cost</th>
+            <th i18n>Product (UPC)</th>
+            <th i18n>SKU</th>
+            <th i18n>Quantity</th>
+            <th i18n>Location</th>
+            <th i18n>Locator</th>
+            <th i18n>Batch</th>
+            <th i18n>Expiry Date</th>
+            <th i18n>Cost</th>
           </tr>
         </thead>
         <tbody>
@@ -147,7 +147,7 @@ import {IProduct, IProductClass} from '@nusantara/models/products';
       </table>
       <div>
         <label>
-          <span>Notes (Optional)</span>
+          <span i18n>Notes (Optional)</span>
           <ng-container *ngIf="entity.status === 'pending'">
             <input type="text" [formControl]="notes" placeholder="Input Notes">
             <nus-field-errors [control]="notes"></nus-field-errors>
@@ -159,13 +159,13 @@ import {IProduct, IProductClass} from '@nusantara/models/products';
         </label>
       </div>
       <div class="detail-actions">
-        <button type="button" (click)="approve()" [disabled]="entity.status !== 'pending'" class="control" id="confirm-button">
+        <button type="button" (click)="approve()" [disabled]="entity.status !== 'pending'" class="control" id="confirm-button" i18n>
           Approve
         </button>
-        <button type="button" (click)="cancel()" class="control secondary">
+        <button type="button" (click)="cancel()" class="control secondary" i18n>
           Back
         </button>
-        <button type="button" (click)="reject()" [disabled]="entity.status !== 'pending'" class="control danger ghost">
+        <button type="button" (click)="reject()" [disabled]="entity.status !== 'pending'" class="control danger ghost" i18n>
           Reject
         </button>
       </div>

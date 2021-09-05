@@ -18,10 +18,10 @@ import { CustomerGroupService } from '@nusantara/services';
   selector: 'nus-customer-group-selection-modal',
   template: `
     <ngx-smart-modal [identifier]="'selectGroup'" #modal [formGroup]="form">
-      <h2 class="heading-2">Select Group</h2>
+      <h2 class="heading-2" i18n>Select Group</h2>
       <form #modalForm>
         <label>
-          <span>Search</span>
+          <span i18n>Search</span>
           <input type="text" [formControl]="searchText" placeholder="ex, cari or 'new user'">
         </label>
         <input type="hidden" [formControl]="group">
@@ -30,7 +30,7 @@ import { CustomerGroupService } from '@nusantara/services';
           <table>
             <thead>
             <tr>
-              <th>Name</th>
+              <th i18n>Name</th>
             </tr>
             </thead>
             <tbody>

@@ -8,7 +8,7 @@ import {IShopifyCarrier} from '@nusantara/models/shopify/shopify-carrier';
 @Component({
   selector: 'nus-shopify-webhook',
   template: `
-    <nus-list-header
+    <nus-list-header i18n-title
       title="Shopify Webhook registration list"
       description="A list of receive shopify webhook message." [canAddNew]="false" [canSearch]="false">
     </nus-list-header>
@@ -16,10 +16,10 @@ import {IShopifyCarrier} from '@nusantara/models/shopify/shopify-carrier';
     <table>
       <thead>
       <tr>
-        <th>ID</th>
-        <th>Topic</th>
-        <th>Webhook URL</th>
-        <th class="centered">Format</th>
+        <th i18n>ID</th>
+        <th i18n>Topic</th>
+        <th i18n>Webhook URL</th>
+        <th class="centered" i18n>Format</th>
       </tr>
       </thead>
       <tbody>
@@ -37,11 +37,11 @@ import {IShopifyCarrier} from '@nusantara/models/shopify/shopify-carrier';
     <table>
       <thead>
       <tr>
-        <th>ID</th>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Callback URL</th>
-        <th class="centered">Format</th>
+        <th i18n>ID</th>
+        <th i18n>Type</th>
+        <th i18n>Name</th>
+        <th i18n>Callback URL</th>
+        <th class="centered" i18n>Format</th>
       </tr>
       </thead>
       <tbody>

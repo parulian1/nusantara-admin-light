@@ -9,7 +9,7 @@ import {
 @Component({
   selector: 'nus-marketplace-publish',
   template: `
-    <h1 class="title-1">Publish List</h1>
+    <h1 class="title-1" i18n>Publish List</h1>
     <div class="empty-list">
       <nus-empty-list
         *ngIf="!shops?.entities?.length && !processing?.entities?.length && !completed?.entities?.length"
@@ -42,12 +42,12 @@ import {
           <table>
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Status</th>
-                <th>Received By</th>
-                <th>Approved By</th>
-                <th class="numeric">Total</th>
-                <th class="numeric">Date</th>
+                <th i18n>ID</th>
+                <th i18n>Status</th>
+                <th i18n>Received By</th>
+                <th i18n>Approved By</th>
+                <th class="numeric" i18n>Total</th>
+                <th class="numeric" i18n>Date</th>
               </tr>
             </thead>
             <tbody>
@@ -87,12 +87,12 @@ import {
           <table>
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Status</th>
-                <th>Received By</th>
-                <th>Approved By</th>
-                <th class="numeric">Total</th>
-                <th class="numeric">Date</th>
+                <th i18n>ID</th>
+                <th i18n>Status</th>
+                <th i18n>Received By</th>
+                <th i18n>Approved By</th>
+                <th class="numeric" i18n>Total</th>
+                <th class="numeric" i18n>Date</th>
               </tr>
             </thead>
             <tbody>

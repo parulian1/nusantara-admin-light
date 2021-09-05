@@ -15,15 +15,15 @@ import {CompanyStoryService} from '@nusantara/services';
       title="Company Story List (Ordering)"
       [canSearch]="false"
       [canAddNew]="false"
-      description="Static content for pages such as 'About-Us'">
+      description="Static content for pages such as 'About-Us'" i18n-title>
     </nus-list-header>
 
     <table>
       <thead>
       <tr>
-        <th>Stories Title</th>
-        <th>Images</th>
-        <th>Status</th>
+        <th i18n>Stories Title</th>
+        <th i18n>Images</th>
+        <th i18n>Status</th>
       </tr>
       </thead>
       <tbody cdkDropList (cdkDropListDropped)="drop($event)">
@@ -46,11 +46,11 @@ import {CompanyStoryService} from '@nusantara/services';
     </table>
 
     <div style="margin-top: 1.5rem;">
-      <button type="submit" class="control" (click)="onSave()">
+      <button type="submit" class="control" (click)="onSave()" i18n>
         Save
       </button>
       &nbsp;
-      <button type="button" class="control secondary" (click)="onCancel()">
+      <button type="button" class="control secondary" (click)="onCancel()" i18n>
         Cancel
       </button>
     </div>

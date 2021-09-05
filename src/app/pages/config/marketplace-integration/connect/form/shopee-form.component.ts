@@ -18,7 +18,7 @@ import { MarketplaceClientEnum } from '../markeplace-client-enum';
   template: `
     <form [formGroup]="form" class="fluid">
       <label *ngIf="!isEdit">
-        <span>Shop ID
+        <span i18n>Shop ID
           <nus-tooltip [text]="shopIdInfo"></nus-tooltip>
         </span>
         <input formControlName="shopId" placeholder="Input Shop ID"/>
@@ -26,13 +26,13 @@ import { MarketplaceClientEnum } from '../markeplace-client-enum';
           [control]="shopId"
           variable="Shop ID"
         ></nus-field-errors-marketplace>
-        <div *ngIf="form.get('shopId').errors?.notNumeric" class="error-detail">
+        <div *ngIf="form.get('shopId').errors?.notNumeric" class="error-detail" i18n>
           Shop ID must be integer and Max length is 10
         </div>
       </label>
 
       <label>
-        <span>Partner ID
+        <span i18n>Partner ID
           <nus-tooltip [text]="partnerIdInfo"></nus-tooltip>
         </span>
         <input type="text" formControlName="partnerId" placeholder="Input Partner ID"/>
@@ -43,7 +43,7 @@ import { MarketplaceClientEnum } from '../markeplace-client-enum';
       </label>
 
       <label>
-        <span>Partner Key
+        <span i18n>Partner Key
           <nus-tooltip [text]="partnerKeyInfo"></nus-tooltip>
         </span>
         <input type="text" formControlName="partnerKey" placeholder="Input Partner Key"/>
@@ -54,7 +54,7 @@ import { MarketplaceClientEnum } from '../markeplace-client-enum';
       </label>
 
       <label>
-        <span>Shop URL</span>
+        <span i18n>Shop URL</span>
         <input type="text" formControlName="redirectUrl" placeholder="Input Shop URL"/>
         <nus-field-errors-marketplace
           [control]="redirectUrl"
@@ -63,9 +63,9 @@ import { MarketplaceClientEnum } from '../markeplace-client-enum';
       </label>
 
       <label>
-        <span>Warehouse</span>
+        <span i18n>Warehouse</span>
         <select formControlName="warehouseId">
-          <option [value]="null">Select Warehouse</option>
+          <option [value]="null" i18n>Select Warehouse</option>
           <option *ngFor="let opt of warehouses" [ngValue]="opt.warehouseId">
             {{ opt.name }}
           </option>
@@ -81,17 +81,17 @@ import { MarketplaceClientEnum } from '../markeplace-client-enum';
           type="submit"
           [disabled]="!form.valid"
           class="control"
-          (click)="onUpdate()">
+          (click)="onUpdate()" i18n>
           Connect
         </button>
         <button *ngIf="!isEdit"
           type="submit"
           [disabled]="!form.valid"
           class="control"
-          (click)="onConnect()">
+          (click)="onConnect()" i18n>
           Connect
         </button>
-        <button type="button" (click)="onCancel()" class="control secondary ghost">
+        <button type="button" (click)="onCancel()" class="control secondary ghost" i18n>
           Cancel
         </button>
       </div>

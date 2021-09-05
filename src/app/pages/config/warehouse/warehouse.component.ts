@@ -22,18 +22,18 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
     <form [formGroup]="form" (ngSubmit)="save()">
 
       <label>
-        <span>Name</span>
+        <span i18n>Name</span>
         <input type="text" formControlName="name" name="name">
         <nus-field-errors [control]="form.get('name')"></nus-field-errors>
       </label>
 
       <label>
-        <span>Code</span>
+        <span i18n>Code</span>
         <input type="text" formControlName="code" name="code">
         <nus-field-errors [control]="form.get('code')"></nus-field-errors>
       </label>
 
-      <label *ngIf="enterpriseGuard.canActivate(null, null)">Type
+      <label *ngIf="enterpriseGuard.canActivate(null, null)" i18n>Type
         <select formControlName="type" name="type">
           <option *ngFor="let opt of types" [ngValue]="opt.value">
             {{opt.displayName}}
@@ -43,7 +43,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
       </label>
 
       <label *ngIf="enterpriseGuard.canActivate(null, null)">
-        <span>Financial Reporting As</span>
+        <span i18n>Financial Reporting As</span>
         <select formControlName="financialReportingAs" name="financialReportingAs">
           <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
             {{ wh.name }}
@@ -53,13 +53,13 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
       </label>
 
       <label>
-        <span>Internal Notes</span>
+        <span i18n>Internal Notes</span>
         <textarea formControlName="internalNotes" name="internalNotes"></textarea>
         <nus-field-errors [control]="form.get('internalNotes')"></nus-field-errors>
       </label>
 
       <label>
-        <span>Phone Number</span>
+        <span i18n>Phone Number</span>
         <input type="text" formControlName="phoneNumber" name="phoneNumber">
         <nus-field-errors [control]="form.get('phoneNumber')"></nus-field-errors>
       </label>
@@ -69,13 +69,13 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
       </nus-address>
 
       <label class="checkbox">
-        <input type="checkbox" [attr.disabled]="disableIsActive ? '' : null" formControlName="isActive" name="isActive"> Is Active
+        <input type="checkbox" [attr.disabled]="disableIsActive ? '' : null" formControlName="isActive" name="isActive" i18n> Is Active
         <nus-field-errors [control]="form.get('isActive')"></nus-field-errors>
       </label>
 
       <div *ngIf="enterpriseGuard.canActivate(null, null)">
         <h2>
-          <span>Inventory Locations</span>
+          <span i18n>Inventory Locations</span>
           <button type="button" (click)="addSubLocation()" class="add-button">
             <i class="material-icons">add_circle</i>
           </button>
@@ -84,9 +84,9 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
         <table>
           <thead>
           <tr>
-            <th>Name</th>
-            <th>Code</th>
-            <th>Type</th>
+            <th i18n>Name</th>
+            <th i18n>Code</th>
+            <th i18n>Type</th>
             <th></th>
           </tr>
           </thead>
@@ -102,7 +102,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
               </select>
             </td>
             <td>
-              <button (click)="removeSubLocation(i)">Remove</button>
+              <button (click)="removeSubLocation(i)" i18n>Remove</button>
             </td>
           </tr>
           </tbody>

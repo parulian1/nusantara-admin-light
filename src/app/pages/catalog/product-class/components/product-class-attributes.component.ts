@@ -10,10 +10,10 @@ import { FormArray, FormBuilder, Validators } from '@angular/forms';
       <table>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Searchable</th>
-            <th>Filterable</th>
+            <th i18n>Name</th>
+            <th i18n>Type</th>
+            <th i18n>Searchable</th>
+            <th i18n>Filterable</th>
             <th></th>
           </tr>
         </thead>
@@ -52,7 +52,7 @@ import { FormArray, FormBuilder, Validators } from '@angular/forms';
           </ng-container>
           <tr>
             <td colspan="5">
-              <button type="button" (click)="addAttribute()" class="add-button">
+              <button type="button" (click)="addAttribute()" class="add-button" i18n>
                 Add Attribute
               </button>
             </td>

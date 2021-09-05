@@ -39,7 +39,7 @@ import { IProductClass } from '../../../models/products';
           </div>
           <nus-field-errors [control]="child_control"></nus-field-errors>
         </div>
-        <button (click)="addLocator()" type="button" class="new-add-button wide" data-qa="add-locator-button">Add</button>
+        <button (click)="addLocator()" type="button" class="new-add-button wide" data-qa="add-locator-button" i18n>Add</button>
       </td>
       <td class="immediate-error-display">
         <input *ngIf="isPerishable" type="date" [formControl]="expiryDate" data-qa="expiry-date">

@@ -21,13 +21,13 @@ import { VendorService } from '@nusantara/services';
       <input type="hidden" [formControl]="href" name="href"> <!-- required for non-JSON form posting -->
 
       <label>
-        <span>Name</span>
+        <span i18n>Name</span>
         <input type="text" [formControl]="name" name="name">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
-        <span>Description</span>
+        <span i18n>Description</span>
         <textarea [formControl]="description" name="description"></textarea>
         <nus-field-errors [control]="description"></nus-field-errors>
       </label>
@@ -39,48 +39,48 @@ import { VendorService } from '@nusantara/services';
                [formControl]="isActive"
                name="is-active"
                data-qa="is-active"/>
-        <span>Is Active</span>
+        <span i18n>Is Active</span>
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
       <label>
-        <span>Icon Image</span>
+        <span i18n>Icon Image</span>
         <img [src]="iconImagePreviewUrl" id="icon-image-preview" alt="Icon Image" class="preview">
         <input type="file"
                [formControl]="iconImage"
                (change)="setIconImagePreview($event)"
                name="iconImage"
                accept="image/*">
-        <small>Recommended 120px x 120px (1:1)</small>
+        <small i18n>Recommended 120px x 120px (1:1)</small>
         <nus-field-errors [control]="iconImage"></nus-field-errors>
       </label>
 
       <label>
-        <span>Banner Image</span>
+        <span i18n>Banner Image</span>
         <img [src]="bannerImagePreviewUrl" id="banner-image-preview" alt="Banner Image" class="preview">
         <input type="file"
                [formControl]="bannerImage"
                (change)="setBannerImagePreview($event)"
                name="bannerImage"
                 accept="image/*">
-        <small>Recommended: 1152px x 350px (16:5)</small>
+        <small i18n>Recommended: 1152px x 350px (16:5)</small>
         <nus-field-errors [control]="bannerImage"></nus-field-errors>
       </label>
 
       <label>
-        <span>Internal Notes</span>
+        <span i18n>Internal Notes</span>
         <textarea [formControl]="internalNotes" name="internalNotes"></textarea>
         <nus-field-errors [control]="internalNotes"></nus-field-errors>
       </label>
 
       <label>
-        <span>Seo Description</span>
+        <span i18n>Seo Description</span>
         <textarea [formControl]="seoDescription" name="seoDescription"></textarea>
         <nus-field-errors [control]="seoDescription"></nus-field-errors>
       </label>
 
       <label>
-        <span>Seo Keywords</span>
+        <span i18n>Seo Keywords</span>
         <input type="text" [formControl]="seoKeywords" name="seoKeywords">
         <nus-field-errors [control]="seoKeywords"></nus-field-errors>
       </label>

@@ -19,7 +19,7 @@ import { SubscriptionLike } from 'rxjs';
           {{ authService?.tokenPayload | getUserDisplayName }}
         </button>
         <div class="dropdown-content">
-          <a [routerLink]="['/auth/logout']"><i class="material-icons">exit_to_app</i>Logout</a>
+          <a [routerLink]="['/auth/logout']" i18n><i class="material-icons">exit_to_app</i>Logout</a>
         </div>
       </div>
     </header>

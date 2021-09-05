@@ -8,7 +8,7 @@ import { AbstractListComponent } from '@nusantara/core';
 @Component({
   selector: 'nus-theme-list',
   template: `
-    <nus-list-header
+    <nus-list-header i18n-title
       title="Themes"
       description="Users that can manage themes."
       [canAddNew]="false">
@@ -20,9 +20,9 @@ import { AbstractListComponent } from '@nusantara/core';
       <thead>
       <tr>
         <!-- <th>ID</th> -->
-        <th>Name</th>
-        <th>Subsrciption Type</th>
-        <th>Status</th>
+        <th i18n>Name</th>
+        <th i18n>Subsrciption Type</th>
+        <th i18n>Status</th>
       </tr>
       </thead>
       <tbody>

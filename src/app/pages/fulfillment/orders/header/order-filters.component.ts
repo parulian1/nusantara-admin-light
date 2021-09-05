@@ -10,43 +10,43 @@ import { Utils } from './utils';
   template: `
     <form [formGroup]="filtersForm">
       <label>
-        <span>Filter</span>
+        <span i18n>Filter</span>
         <div class="filters">
-          <nus-order-date-filter 
+          <nus-order-date-filter
             (selectedDate)="onSelectedDateChanged($event)">
           </nus-order-date-filter>
           <mat-form-field>
-            <mat-select [disableOptionCentering]="true" 
-              panelClass="mat-select-panel" 
+            <mat-select [disableOptionCentering]="true"
+              panelClass="mat-select-panel"
               formControlName="platform">
-              <mat-option value="">All Platform</mat-option>
-              <mat-option 
-                *ngFor="let platform of orderFilter.platform" 
+              <mat-option value="" i18n>All Platform</mat-option>
+              <mat-option
+                *ngFor="let platform of orderFilter.platform"
                 [value]="platform.option">
               {{ platform.title }}
               </mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field>
-            <mat-select 
-              [disableOptionCentering]="true" 
-              panelClass="mat-select-panel" 
+            <mat-select
+              [disableOptionCentering]="true"
+              panelClass="mat-select-panel"
               formControlName="status">
-              <mat-option value="">All Status</mat-option>
-              <mat-option 
-                *ngFor="let status of orderFilter.orderStatus" 
+              <mat-option value="" i18n>All Status</mat-option>
+              <mat-option
+                *ngFor="let status of orderFilter.orderStatus"
                 [value]="status.option">
                 {{ status.title }}
               </mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field>
-            <mat-select [disableOptionCentering]="true" 
-              panelClass="mat-select-panel" 
+            <mat-select [disableOptionCentering]="true"
+              panelClass="mat-select-panel"
               formControlName="logistic">
-              <mat-option value="">All Logistics</mat-option>
-              <mat-option 
-                *ngFor="let logistic of orderFilter.logistics" 
+              <mat-option value="" i18n>All Logistics</mat-option>
+              <mat-option
+                *ngFor="let logistic of orderFilter.logistics"
                 [value]="logistic.option">
                 {{ logistic.title }}
               </mat-option>
@@ -59,7 +59,7 @@ import { Utils } from './utils';
     'form { max-width: none }',
     '.filters { display: grid; grid-template-columns: repeat(4, 1fr); grid-gap: 16px; }',
     '.button-action { display: flex; justify-content: space-between; align-items: center; }',
-    '.button-action button:not(:first-child) { margin-left: 16px; }', 
+    '.button-action button:not(:first-child) { margin-left: 16px; }',
     '.select-date { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 20px; }',
     `.svg {
         content: "";
@@ -67,7 +67,7 @@ import { Utils } from './utils';
         height: 10px;
         width: 10%;
         // background-image: url("assets/arrow-down.svg");
-        background-size: 12px; 
+        background-size: 12px;
       }`,
   ]
 })
@@ -115,7 +115,7 @@ export class OrderFiltersComponent implements OnInit {
       const startTime = moment(value.get(this.START_TIME_PARAM)).isValid
       ? value.get(this.START_TIME_PARAM)
       : null;
-      
+
       const endTime = moment(value.get(this.END_TIME_PARAM)).isValid
       ? value.get(this.END_TIME_PARAM)
       : null;
@@ -146,7 +146,7 @@ export class OrderFiltersComponent implements OnInit {
         )
       : null;
       const q = value.get('q')? value.get('q') : null;
-  
+
       if(platform){
         this.updatePlatform(platform)
       }
@@ -159,7 +159,7 @@ export class OrderFiltersComponent implements OnInit {
       if(q){
         this.updateQuery(q);
       }
-       
+
       this.filtersForm.patchValue({
         platform: platform? platform : '',
         status: status? status : '',
@@ -225,7 +225,7 @@ export class OrderFiltersComponent implements OnInit {
     this.filtersValue.date.type = type;
     this.filtersValue.date.start = startDate;
     this.filtersValue.date.end = endDate;
-    this.filterApplied.next(this.filtersValue)    
+    this.filterApplied.next(this.filtersValue)
   }
   updatePlatform(platform: number) {
     this.filtersValue.platform = platform;
