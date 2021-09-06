@@ -138,7 +138,7 @@ const log = new Logger('ProductPromotionComponent');
       <div class="promo-products" *ngIf="!isPromoBundling">
         <span class="upload-product">
           <h2 class="title-2" i18n>Promotion Products</h2>
-          <button type="button" class="control" (click)="uploadProductXLSX()" [disabled]="checkPromoDateValid()" i18n>
+          <button type="button" class="control" (click)="uploadProductXLSX()" [disabled]="checkPromoDateValid()">
             <i class="material-icons">publish</i>
             <span i18n>Upload from XLSX</span>
           </button>

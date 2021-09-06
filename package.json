@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "npm run env && ng serve --port=4201",
-    "start:local-proxy": "npm run env && ng serve --port=4201 --proxy-config proxy.conf.js",
+    "start:local-proxy": "npm run env && ng serve --port=4201 --proxy-config proxy.conf.js --configuration=en",
+    "start:local-proxy:id": "npm run env && ng serve --port=4201 --proxy-config proxy.conf.js --configuration=id",
     "start:prod": "npm run env && ng serve --port=4201 --prod",
     "build": "npm run env && ng build",
     "build:prod": "npm run env && ng build --prod",
@@ -12,7 +13,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "env": "ngx-scripts env APM_URL APM_ACTIVE APM_NAME APM_ENVIRONMENT YOUTUBE_KEY",
-    "postinstall": "ngcc"
+    "extract:i18n": "ng extract-i18n --output-path src/locale"
   },
   "private": true,
   "dependencies": {

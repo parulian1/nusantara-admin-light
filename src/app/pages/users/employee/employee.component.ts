@@ -95,7 +95,7 @@ import { getSlugFromHref } from '@nusantara/shared/helpers';
 
         <p *ngIf="isCreateForm && hasDefaultPinConfig" i18n>Login to BHISMA POS using Default PIN</p>
         <p *ngIf="isCreateForm && !hasDefaultPinConfig" i18n>Default PIN has not been filled, please fill in <a
-          routerLink="/config/pos-integration/default-pin-config" style="color:#EA730B;" i18n>here</a></p>
+          routerLink="/config/pos-integration/default-pin-config" style="color:#EA730B;" >here</a></p>
 
         <button *ngIf="!isCreateForm && isUsePos"
                 (click)="confirmModalResetPinComponent.open()"

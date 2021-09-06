@@ -12,7 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'nus-stock-input',
   template: `
-    <h3 i18n>Product Inventory</h3>
+    <h3 i18n="dialog header|Stock input title@@stockInputTitle">Product Inventory</h3>
     <table [formGroup]="fm">
       <thead>
         <tr>
@@ -30,7 +30,7 @@ import { ActivatedRoute, Router } from '@angular/router';
         </tr>
         <tr *ngIf="warehouses.length < 1">
           <td>
-            <small i18n>To input quantity, add warehouse first - ( <a (click)="goToWarehouse()" i18n>Manage Warehouse</a> )</small>
+            <small i18n>To input quantity, add warehouse first - ( <a (click)="goToWarehouse()">Manage Warehouse</a> )</small>
           </td>
         </tr>
       </tbody>
