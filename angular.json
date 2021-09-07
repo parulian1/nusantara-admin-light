@@ -139,8 +139,8 @@
       },
       "i18n": {
         "locales": {
-          "en": "src/locale/messages.en.xlf",
-          "id": "src/locale/messages.id.xlf"
+          "en": "src/locale/en/messages.xlf",
+          "id": "src/locale/id/messages.xlf"
         }
       }
     }
