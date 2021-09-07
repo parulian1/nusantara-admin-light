@@ -11,7 +11,7 @@ import { ToastLevelEnum, ToastService } from '@nusantara/core';
     <div class="wrapper">
         <div class="message">
           <h2 class="title-2">Ship Order</h2>
-          <p><strong>{{orderData.sourceName}} | {{orderData.storeName}} | {{shippingMethod ? shippingMethod : "-" }} </strong></p>
+          <p><strong>{{orderData.sourceName | titlecase }} | {{orderData.storeName}} | {{shippingMethod ? shippingMethod : "-" }} </strong></p>
           <div class="shipping-method">
             <div class="method-option" *ngIf="this.type.indexOf('dropoff') > -1">
               <span><input type="radio" name="logistic" value="dropoff" (click)="showPickupForm($event)"></span>
