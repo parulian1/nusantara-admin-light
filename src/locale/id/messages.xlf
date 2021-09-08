@@ -113,7 +113,7 @@
       </trans-unit>
       <trans-unit id="fcb10a344ff12cf46323639e9d74b4450b626692" datatype="html">
         <source>Forgot Your Password?</source>
-        <target>Lupa Kata Sandi?</target>
+        <target>Lupa Kata Sandi Anda?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/auth/pages/login.component.ts</context>
           <context context-type="linenumber">53</context>
@@ -121,6 +121,7 @@
       </trans-unit>
       <trans-unit id="bb694b49d408265c91c62799c2b3a7e3151c824d" datatype="html">
         <source>Logout</source>
+        <target>Keluar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/auth/pages/logout.component.ts</context>
           <context context-type="linenumber">13</context>
@@ -128,13 +129,15 @@
       </trans-unit>
       <trans-unit id="34557152cff7bc7db72a2a8706794d7fba4bac86" datatype="html">
         <source>Reset Password</source>
+        <target>Setel Ulang Kata Sandi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/auth/pages/reset-password.component.ts</context>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8c5d12330d2c43c98ea5ff3f178c8357f5be3336" datatype="html">
-        <source> Please enter your new password. </source>
+        <source>Please enter your new password.</source>
+        <target>Silakan masukkan kata sandi baru Anda.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/auth/pages/reset-password.component.ts</context>
           <context context-type="linenumber">8,9</context>
