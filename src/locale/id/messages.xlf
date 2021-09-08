@@ -79,6 +79,7 @@
       </trans-unit>
       <trans-unit id="0ab8ff55921cad31d1048250021d7b82fa0c9e81" datatype="html">
         <source>Reset Your Password</source>
+        <target>Atur Ulang Kata Sandi Anda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/auth/pages/forgot-password.component.ts</context>
           <context context-type="linenumber">40</context>
@@ -129,7 +130,7 @@
       </trans-unit>
       <trans-unit id="34557152cff7bc7db72a2a8706794d7fba4bac86" datatype="html">
         <source>Reset Password</source>
-        <target>Setel Ulang Kata Sandi</target>
+        <target>Atur Ulang Kata Sandi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/auth/pages/reset-password.component.ts</context>
           <context context-type="linenumber">6</context>
