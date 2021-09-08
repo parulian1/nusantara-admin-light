@@ -32,7 +32,7 @@ import {
   SetPickUpServiceComponent,
   TransportToCounterSelectionModalComponent,
 } from "./modals";
-import { MarketplaceOrderService } from "@nusantara/services/merketplace-order.service";
+import { MarketplaceOrderService } from "@nusantara/services/marketplace-order.service";
 import { IOrderChildren } from "@nusantara/models/order/order-children";
 import {MatDialog} from '@angular/material/dialog';
 @Component({
