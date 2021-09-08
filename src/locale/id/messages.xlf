@@ -26,6 +26,7 @@
       </trans-unit>
       <trans-unit id="4d528d81243448524f3e1de53c8b67e41aa7639f" datatype="html">
         <source>Forgot Password</source>
+        <target>Lupa Kata Sandi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/auth/pages/forgot-password.component.ts</context>
           <context context-type="linenumber">15</context>
@@ -51,6 +52,7 @@
       </trans-unit>
       <trans-unit id="ec984ab36f1da5f75ba43f9bd4b866ca9c7e6493" datatype="html">
         <source>Email Address</source>
+        <target>Alamat Surel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/auth/pages/forgot-password.component.ts</context>
           <context context-type="linenumber">31</context>
@@ -91,6 +93,7 @@
       </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9" datatype="html">
         <source>Login</source>
+        <target>Masuk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/auth/pages/login.component.ts</context>
           <context context-type="linenumber">18</context>
@@ -102,6 +105,7 @@
       </trans-unit>
       <trans-unit id="c32ef07f8803a223a83ed17024b38e8d82292407" datatype="html">
         <source>Password</source>
+        <target>Kata Sandi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/auth/pages/login.component.ts</context>
           <context context-type="linenumber">39</context>
@@ -109,6 +113,7 @@
       </trans-unit>
       <trans-unit id="fcb10a344ff12cf46323639e9d74b4450b626692" datatype="html">
         <source>Forgot Your Password?</source>
+        <target>Lupa Kata Sandi?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/auth/pages/login.component.ts</context>
           <context context-type="linenumber">53</context>
@@ -137,6 +142,7 @@
       </trans-unit>
       <trans-unit id="cff1428d10d59d14e45edec3c735a27b5482db59" datatype="html">
         <source>Name</source>
+        <target>Nama</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/category/category-list.component.ts</context>
           <context context-type="linenumber">21</context>
