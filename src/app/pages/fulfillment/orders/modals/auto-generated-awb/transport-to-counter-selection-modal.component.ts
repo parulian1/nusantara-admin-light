@@ -166,7 +166,7 @@ export class TransportToCounterSelectionModalComponent implements OnInit {
     } else {
       const formValue = {
         href: this.href,
-        pickup_id : "zzzz",
+        pickup_id : "none",
         address_id : 0,
         status: "shipped",
         logistic_type: this.selectedType
@@ -180,11 +180,6 @@ export class TransportToCounterSelectionModalComponent implements OnInit {
   }
 
   logisticInit(){
-    // this.isBusy = true;
-    // setTimeout(function(){
-    //     window.location.reload()
-    // }, 3000);
-
     this.service.updateByOrderNumber(this.orderData.orderNumber, this.getFormValue()).subscribe(() => {
         this.isBusy = true;
         setTimeout(function(){
