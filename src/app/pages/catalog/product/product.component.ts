@@ -886,8 +886,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     if (!newValue || !this.productClasses) {
       return;
     }
-    const productClass = this.productClasses.filter(e => e.href === newValue)[0];
-    this.selectedProductClass = productClass;
+    const productClass = this.selectedProductClass;
 
     if (productClass?.type === 'physical') {
       this.weight.enable();
@@ -1060,6 +1059,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   private onProductClassSelectionModalClosed() {
     if (this.productClassSelectionModal.result === DialogResult.OK) {
       this.selectedProductClassValue = this.productClassSelectionModal.productClass.value as IProductClass;
+      this.selectedProductClass = this.productClassSelectionModal.productClass.value as IProductClass;
       this.productClass.setValue(this.selectedProductClassValue.href);
     }
   }
