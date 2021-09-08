@@ -1,12 +1,12 @@
-import {StockInputComponent} from './stock-input/stock-input.component';
-import {HttpErrorResponse} from '@angular/common/http';
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { StockInputComponent } from './stock-input/stock-input.component';
+import { HttpErrorResponse } from '@angular/common/http';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as ClassicEditor from '@gdnnusantara/ckeditor5-build/build/ckeditor';
-import {NgxSmartModalService} from 'ngx-smart-modal';
-import {of} from 'rxjs';
-import {catchError} from 'rxjs/operators';
+import { NgxSmartModalService } from 'ngx-smart-modal';
+import { of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import {
   ProductRelatedService,
   ProductService,
@@ -24,21 +24,21 @@ import {
   ToastLevelEnum,
   ToastService
 } from '@nusantara/core';
-import {drf, ICategory, INamedHrefEntity, IVendor, products} from '@nusantara/models';
-import {IError} from '@nusantara/models/base/error';
-import {PriceListHostComponent} from './price';
-import {ProductMediaHostComponent} from './media';
-import {ProductAttributeHostComponent} from './attribute';
-import {ProductSubscriptonHostComponent} from './subscription';
-import {MarketplaceInfoHostComponent} from './marketplace';
+import { drf, ICategory, INamedHrefEntity, IVendor, products } from '@nusantara/models';
+import { IError } from '@nusantara/models/base/error';
+import { PriceListHostComponent } from './price';
+import { ProductMediaHostComponent } from './media';
+import { ProductAttributeHostComponent } from './attribute';
+import { ProductSubscriptonHostComponent } from './subscription';
+import { MarketplaceInfoHostComponent } from './marketplace';
 
-import {ProductSelectionModalComponent, VendorSelectionModalComponent} from '@nusantara/shared';
-import {IProduct, IProductClass} from '@nusantara/models/products';
-import {CategorySelectionModalComponent} from '@nusantara/shared/modals/category-selection-modal.component';
-import {ProductClassSelectionModalComponent} from '@nusantara/shared/modals/product-class-selection-modal.component';
-import {ProductOnlineSelectionModalComponent} from '@nusantara/shared/product-online-selection-modal.component';
-import {IBundleStockSearch} from "@nusantara/models/products/stock-search";
-import {IProductBundle} from "@nusantara/models/products/product-bundle";
+import { ProductSelectionModalComponent, VendorSelectionModalComponent } from '@nusantara/shared';
+import { IProduct, IProductClass } from '@nusantara/models/products';
+import { CategorySelectionModalComponent } from '@nusantara/shared/modals/category-selection-modal.component';
+import { ProductClassSelectionModalComponent } from '@nusantara/shared/modals/product-class-selection-modal.component';
+import { ProductOnlineSelectionModalComponent } from '@nusantara/shared/product-online-selection-modal.component';
+import { IBundleStockSearch } from '@nusantara/models/products/stock-search';
+import { IProductBundle } from '@nusantara/models/products/product-bundle';
 
 const log = new Logger('ProductComponent');
 
@@ -1056,7 +1056,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
     this.relatedService.post(productValue).subscribe(
       (resp) => {
-        if (action === 'add'){
+        if (action === "add") {
           // if "add" then it will be push to array
           this.productRelated.push(product);
         } else {
@@ -1150,6 +1150,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         this.productBundling.push(f);
         log.debug(this.productBundling);
         this.setDescription();
+        this.setProductBundlingMedia(selectedProduct);
       }
       this.updateVirtualAmountAndPriceListAndWeight();
     }
