@@ -86,6 +86,23 @@ const routes: Routes = [
         data: { animation: 'Detail', },
       },
       {
+        path: 'new/:type',
+        component: ProductComponent,
+        resolve: {
+          productClasses: AllProductClassResolver,
+          // vendors: AllVendorResolver,
+          // categories: AllCategoryResolver,
+          mediaTypes: MediaTypeResolver,
+          priceListTypes: PriceListTypeResolver,
+          subscriptionPacket: PacketListResolver,
+          subscriptionDuration: DurationListResolver,
+          subscriptionLength: LengthListResolver,
+          warehouses: config.warehouse.AllWarehouseResolver,
+        },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+      {
         path: ':slug',
         component: ProductComponent,
         resolve: {

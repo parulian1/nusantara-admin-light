@@ -15,3 +15,12 @@ export interface IStockSearch extends INamedHrefEntity {
 export interface ISubLocationWithQuantity extends ISubLocation {
   quantity?: number;
 }
+
+export interface IBundleStockSearch {
+  product: string;
+  name: string;
+  upc: string;
+  weight?: number;
+  quantity?: number;
+  price?: number;
+}
