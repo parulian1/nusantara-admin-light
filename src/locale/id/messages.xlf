@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en-US" datatype="plaintext" original="ng2.template">
+<?xml version='1.0' encoding='UTF-8'?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en-US" datatype="plaintext" original="ng2.template" target-language="id">
     <body>
       <trans-unit id="5c112eccf2cd10cf48736fb8fd2c18c1788b6bb9" datatype="html">
         <source>Email Sent</source>
+        <target>Surel Terkirim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/auth/pages/forgot-password-sent.component.ts</context>
           <context context-type="linenumber">6</context>
@@ -1061,7 +1062,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="76a02a9c9793cce3d3a001aa3b12ac0e91ebef31" datatype="html">
-        <source>This information will be used as specific per marketplace. Skip this if you don&apos;t want to publish to marketplace.</source>
+        <source>This information will be used as specific per marketplace. Skip this if you don't want to publish to marketplace.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/marketplace/marketplace-information.component.ts</context>
           <context context-type="linenumber">55</context>
@@ -1079,7 +1080,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ab7d78daabbdcd9b0f7c4e5e5eb5dc3371c6fecd" datatype="html">
-        <source>Product class doesn&apos;t have attribute.</source>
+        <source>Product class doesn't have attribute.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/marketplace/marketplace-information.component.ts</context>
           <context context-type="linenumber">131</context>
@@ -1339,10 +1340,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="99caaf20d674b866890453d347bdaf69e4f1af56" datatype="html">
-        <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;checkbox&quot;
-            [formControl]=&quot;isProgressive&quot;
-              name=&quot;is-progressive&quot;
-              data-qa=&quot;is-progressive&quot;&gt;"/> Is Progressive </source>
+        <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;checkbox&quot;             [formControl]=&quot;isProgressive&quot;               name=&quot;is-progressive&quot;               data-qa=&quot;is-progressive&quot;&gt;"/> Is Progressive </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/price/price-list.component.ts</context>
           <context context-type="linenumber">74,79</context>
@@ -3446,7 +3444,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="3d7559f4d3542f6c4f36689e764c25d2872b3e9b" datatype="html">
-        <source>Once you choose, you can&apos;t change back.</source>
+        <source>Once you choose, you can't change back.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/connect/form/variant-form.component.ts</context>
           <context context-type="linenumber">18</context>
@@ -3699,21 +3697,21 @@
         </context-group>
       </trans-unit>
       <trans-unit id="66bb1c96e9e74837f4bd19370a1960c18b32495c" datatype="html">
-        <source>Go to &quot;Product Data Error&quot; tab and click &quot;Fix&quot; on each product&quot;</source>
+        <source>Go to "Product Data Error" tab and click "Fix" on each product"</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/publish/publish-detail.component.ts</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="22344b8763c9605e884a2487874ba002249fe541" datatype="html">
-        <source>Go to &quot;Credentials Error&quot; tab, reconnect the stores, then click &quot;Refresh&quot;</source>
+        <source>Go to "Credentials Error" tab, reconnect the stores, then click "Refresh"</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/publish/publish-detail.component.ts</context>
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ad7de8ebd9aeef8ce583a97b375a74f458cfb088" datatype="html">
-        <source> Go to &quot;Time Out Error&quot; tab and click &quot;Refresh&quot; on each product or &quot;Refresh All&quot; to reupload all products. </source>
+        <source> Go to "Time Out Error" tab and click "Refresh" on each product or "Refresh All" to reupload all products. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/publish/publish-detail.component.ts</context>
           <context context-type="linenumber">53,54</context>
@@ -3876,7 +3874,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="48db7326a34de2503bdb8c54553a2c3365492522" datatype="html">
-        <source>Click &quot;Reconnect&quot; on each stores to fix this.</source>
+        <source>Click "Reconnect" on each stores to fix this.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/publish/publish-detail.component.ts</context>
           <context context-type="linenumber">120</context>
@@ -3894,14 +3892,14 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ea61c365bc8ca6ba5253727e70a01cee296f965b" datatype="html">
-        <source> <x id="INTERPOLATION" equiv-text="{{ order?.totalRecord.errorMetadata }}"/> Products Can&apos;t be Published</source>
+        <source> <x id="INTERPOLATION" equiv-text="{{ order?.totalRecord.errorMetadata }}"/> Products Can't be Published</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/publish/publish-detail.component.ts</context>
           <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit>
       <trans-unit id="69dacd127475aee33ce4649db9e78992e722fc32" datatype="html">
-        <source>Click &quot;Fix&quot; on each product below.</source>
+        <source>Click "Fix" on each product below.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/publish/publish-detail.component.ts</context>
           <context context-type="linenumber">168</context>
@@ -3922,7 +3920,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="45f6d61c49f789f232bd5972296b0706a65bda37" datatype="html">
-        <source>Click &quot;Refresh&quot; on each product or click &quot;Refresh All&quot; to reupload all products.</source>
+        <source>Click "Refresh" on each product or click "Refresh All" to reupload all products.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/publish/publish-detail.component.ts</context>
           <context context-type="linenumber">222</context>
@@ -4385,7 +4383,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="8ad0ba43934f7750f57d7a4bd52c272e5ac4edab" datatype="html">
-        <source>Deleting this showcase will not delete the product. Deleted showcase can&apos;t be recovered.</source>
+        <source>Deleting this showcase will not delete the product. Deleted showcase can't be recovered.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/setup/showcase/modals/delete-showcase-modal.component.ts</context>
           <context context-type="linenumber">12</context>
@@ -5019,7 +5017,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="8b830624ddbb1418bbeedd86ee0107f36467d0e4" datatype="html">
-        <source>Type <x id="START_TAG_SELECT" ctype="x-select" equiv-text="&lt;select formControlName=&quot;type&quot; name=&quot;type&quot;&gt;"/><x id="START_TAG_OPTION" ctype="x-option" equiv-text="&lt;option *ngFor=&quot;let opt of types&quot; [ngValue]=&quot;opt.value&quot;&gt;"/> <x id="INTERPOLATION" equiv-text="{{opt.displayName}}"/> <x id="CLOSE_TAG_OPTION" ctype="x-option" equiv-text="&lt;/option&gt;"/><x id="CLOSE_TAG_SELECT" ctype="x-select" equiv-text="&lt;/select&gt;"/><x id="START_TAG_NUS_FIELD_ERRORS" ctype="x-nus_field_errors" equiv-text="&lt;nus-field-errors [control]=&quot;form.get(&apos;type&apos;)&quot;&gt;"/><x id="CLOSE_TAG_NUS_FIELD_ERRORS" ctype="x-nus_field_errors" equiv-text="&lt;/nus-field-errors&gt;"/></source>
+        <source>Type <x id="START_TAG_SELECT" ctype="x-select" equiv-text="&lt;select formControlName=&quot;type&quot; name=&quot;type&quot;&gt;"/><x id="START_TAG_OPTION" ctype="x-option" equiv-text="&lt;option *ngFor=&quot;let opt of types&quot; [ngValue]=&quot;opt.value&quot;&gt;"/> <x id="INTERPOLATION" equiv-text="{{opt.displayName}}"/> <x id="CLOSE_TAG_OPTION" ctype="x-option" equiv-text="&lt;/option&gt;"/><x id="CLOSE_TAG_SELECT" ctype="x-select" equiv-text="&lt;/select&gt;"/><x id="START_TAG_NUS_FIELD_ERRORS" ctype="x-nus_field_errors" equiv-text="&lt;nus-field-errors [control]=&quot;form.get('type')&quot;&gt;"/><x id="CLOSE_TAG_NUS_FIELD_ERRORS" ctype="x-nus_field_errors" equiv-text="&lt;/nus-field-errors&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/warehouse/warehouse.component.ts</context>
           <context context-type="linenumber">36,42</context>
@@ -5494,7 +5492,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="45d567149d168d398d5ce5cc75cae7a2f8ed5548" datatype="html">
-        <source>You won&apos;t be able to recover this information.</source>
+        <source>You won't be able to recover this information.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/modals/delete-confirm-dialog.component.ts</context>
           <context context-type="linenumber">13</context>
@@ -5508,7 +5506,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="0445eaa676e80ace8a7f384f2b835f44696f15d8" datatype="html">
-        <source>Track shipment process from &quot;Shipped&quot; tab.</source>
+        <source>Track shipment process from "Shipped" tab.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/modals/manual-input-awb/deliver-to-counter-manual-awb-modal.component.ts</context>
           <context context-type="linenumber">22</context>
@@ -5587,7 +5585,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="87e73265f1d1a06647e636d238a5226b12c09a19" datatype="html">
-        <source>Make sure payment information matches the amount received on the designated bank account. If there&apos;s a mismatch, please contact the customer.</source>
+        <source>Make sure payment information matches the amount received on the designated bank account. If there's a mismatch, please contact the customer.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/modals/payment-confirm-modal.component.ts</context>
           <context context-type="linenumber">12</context>
@@ -5899,7 +5897,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="85fe7a69864348bf71b51f0976d3f489e4f7e514" datatype="html">
-        <source>Edit shipping method for each product. Skip this step if you don&apos;t want to change anything.</source>
+        <source>Edit shipping method for each product. Skip this step if you don't want to change anything.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/adjustment/adjustment-detail.component.ts</context>
           <context context-type="linenumber">21</context>
@@ -7119,8 +7117,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="d1881dc4539bfdd04673d27e6a36462fbd9997a5" datatype="html">
-        <source>Default PIN has not been filled, please fill in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a
-          routerLink=&quot;/config/pos-integration/default-pin-config&quot; style=&quot;color:#EA730B;&quot; &gt;"/>here<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+        <source>Default PIN has not been filled, please fill in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a           routerLink=&quot;/config/pos-integration/default-pin-config&quot; style=&quot;color:#EA730B;&quot; &gt;"/>here<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/users/employee/employee.component.ts</context>
           <context context-type="linenumber">97,98</context>
@@ -7183,8 +7180,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="90bf43b9a31e43272c3065c96e46e4c208987760" datatype="html">
-        <source>Upload a CSV file to bulk upload your products. Don&apos;t have a file? <x id="START_LINK" ctype="x-a" equiv-text="&lt;a
-            href=&quot;../../../assets/sample-files/example-csv-stock-adjustment.csv&quot; download&gt;"/>Download Template<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+        <source>Upload a CSV file to bulk upload your products. Don't have a file? <x id="START_LINK" ctype="x-a" equiv-text="&lt;a             href=&quot;../../../assets/sample-files/example-csv-stock-adjustment.csv&quot; download&gt;"/>Download Template<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/csv-dialog/csv-dialog.component.ts</context>
           <context context-type="linenumber">27,28</context>
@@ -7333,7 +7329,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="0cb6e4d6ae327e356ba6eb893437aba86102956d" datatype="html">
-        <source>Maximum length <x id="INTERPOLATION" equiv-text="{{ control.getError(&apos;maxlength&apos;)?.requiredLength }}"/> characters</source>
+        <source>Maximum length <x id="INTERPOLATION" equiv-text="{{ control.getError('maxlength')?.requiredLength }}"/> characters</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/field-errors.component.ts</context>
           <context context-type="linenumber">26</context>
