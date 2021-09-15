@@ -663,15 +663,15 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       isActive: [entity?.isActive, []],
       parent: [entity?.parent],
       href: [entity?.href],
-      upc: [entity?.upc, [Validators.required,]],
-      structure: [entity?.structure ?? 'parent', [Validators.required,]],
-      description: [entity?.description, [Validators.required,]],
-      weight: [entity?.weight, [Validators.required,]],
+      upc: [entity?.upc, [Validators.required, ]],
+      structure: [entity?.structure ?? 'parent', [Validators.required, ]],
+      description: [entity?.description, [Validators.required, ]],
+      weight: [entity?.weight, [Validators.required, ]],
       price: [0, [Validators.minLength(0)]],
       dimensions: this.fb.group({
-        currentLength: [entity?.dimensions?.currentLength,],
-        currentWidth: [entity?.dimensions?.currentWidth,],
-        currentHeight: [entity?.dimensions?.currentHeight,]
+        currentLength: [entity?.dimensions?.currentLength, ],
+        currentWidth: [entity?.dimensions?.currentWidth, ],
+        currentHeight: [entity?.dimensions?.currentHeight, ]
       }),
       productClass: this.fb.group({href: [entity?.productClass.href, [Validators.required]]}),
       category: this.fb.group({href: [entity?.category.href, [Validators.required]]}),
@@ -766,7 +766,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
    */
   getFormValue(): any {
     const formValue = {};
-    this.form.value.productRelated.forEach(function(v){ delete v.name, delete v.href });
+    this.form.value.productRelated.forEach( (v) => { delete v.name; delete v.href; });
     Object.assign(formValue, this.form.value);
 
     if (!formValue.hasOwnProperty('attributes')) {
@@ -886,7 +886,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     if (!newValue || !this.productClasses) {
       return;
     }
-    const productClass = this.selectedProductClass;
+    const productClass = this.productClasses.filter(e => e.href === newValue)[0];
+    this.selectedProductClass = productClass;
+    // const productClass = this.selectedProductClass;
 
     if (productClass?.type === 'physical') {
       this.weight.enable();
@@ -962,26 +964,26 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   showInfoWindow(resp, action) {
-    if(action === "remove"){
-      this.toast?.addMessage(resp,'Successfully Removed', ToastLevelEnum.info);
+    if (action === 'remove'){
+      this.toast?.addMessage(resp, 'Successfully Removed', ToastLevelEnum.info);
     } else {
-      this.toast?.addMessage(resp,'Successfully Add', ToastLevelEnum.success);
+      this.toast?.addMessage(resp, 'Successfully Add', ToastLevelEnum.success);
     }
   }
 
-  apiPostRelatedProduct(productValue, action, product,index=0){
-    delete productValue["name"];
-    delete productValue["href"];
-    let actionStatus = "add"
+  apiPostRelatedProduct(productValue, action, product, index= 0){
+    delete productValue['name'];
+    delete productValue['href'];
+    let actionStatus = 'add';
 
-    if (action == "remove"){
-      productValue["action"] = "remove";
-      actionStatus = "remove";
+    if (action === 'remove'){
+      productValue['action'] = 'remove';
+      actionStatus = 'remove';
     }
 
     this.RelatedService.post(productValue).subscribe(
       (resp) => {
-        if (action === "add"){
+        if (action === 'add'){
           // if "add" then it will be push to array
           this.productRelated.push(product);
         } else {
@@ -998,7 +1000,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   removeRelated(index: number) {
     const prevRelated = this.productRelated.at(index).value;
-    const postRemove = this.apiPostRelatedProduct(prevRelated, "remove", this.productRelated, index);
+    const postRemove = this.apiPostRelatedProduct(prevRelated, 'remove', this.productRelated, index);
   }
 
   addProductRelation(product: products.IProductRelation) {
@@ -1008,7 +1010,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         relation: [product.slug, []],
         name: [product.name, []],
         href: [product.href, []],
-        action: "add"
+        action: 'add'
       }));
   }
 
@@ -1023,10 +1025,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         relation: [productRelatedSlug, []],
         name: [selectedProduct.name, []],
         href: [selectedProduct.href, []],
-        action: "add"
+        action: 'add'
       });
 
-      this.apiPostRelatedProduct(f.value, "add", f);
+      this.apiPostRelatedProduct(f.value, 'add', f);
     }
   }
 
