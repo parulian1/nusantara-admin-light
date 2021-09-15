@@ -3,5 +3,8 @@ import {IPointHistory} from '@nusantara/models/point-history';
 
 export interface IPoint extends INamedHrefEntity {
   total: number;
-  pointHistory: IPointHistory[];
+}
+
+export interface IPointSummary extends IPoint {
+  pointHistory?: Array<IPointHistory>;
 }
