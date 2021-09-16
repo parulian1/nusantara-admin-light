@@ -72,7 +72,7 @@ const routes: Routes = [
         path: 'new',
         component: ProductComponent,
         resolve: {
-          productClasses: AllProductClassResolver,
+          // productClasses: AllProductClassResolver,
           // vendors: AllVendorResolver,
           // categories: AllCategoryResolver,
           mediaTypes: MediaTypeResolver,
