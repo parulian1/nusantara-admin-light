@@ -27,6 +27,7 @@ describe('ProductComponent', () => {
 
   const router = jasmine.createSpyObj('Router', ['navigate']);
   const siteService = jasmine.createSpyObj('SiteConfigService', ['isEnterpriseLicense']);
+  const productClassService = jasmine.createSpyObj('ProductClassService', ['fetch']);
 
   const addProductResp = {
     href: 'https://superbearzz.dev.bisma.systems/api/catalog/product/pedang/',
@@ -229,7 +230,9 @@ describe('ProductComponent', () => {
     expect(mock.request.body.upc).toBe(addProductResp.upc);
     expect(mock.request.body.structure).toBe(addProductResp.structure);
     expect(mock.request.body.description).toBe(addProductResp.description);
-    expect(mock.request.body.weight).toBe(addProductResp.weight);
+
+    // expect(mock.request.body.weight).toBe(addProductResp.weight);
+
     expect(mock.request.body.productClass.href).toBe(addProductResp.productClass.href);
     expect(mock.request.body.category.href).toBe(addProductResp.category.href);
     expect(mock.request.body.attributes).toEqual(addProductResp.attributes);
@@ -339,7 +342,7 @@ describe('ProductComponent', () => {
     expect(mock.request.body.upc).toBe(editProductResp.upc);
     expect(mock.request.body.structure).toBe(editProductResp.structure);
     expect(mock.request.body.description).toBe(editProductResp.description);
-    expect(mock.request.body.weight).toBe(editProductResp.weight);
+
     expect(mock.request.body.productClass.href).toBe(editProductResp.productClass.href);
     expect(mock.request.body.category.href).toBe(editProductResp.category.href);
 
@@ -348,7 +351,10 @@ describe('ProductComponent', () => {
     expect(mock.request.body.seoMeta).toBe(editProductResp.seoMeta);
     expect(mock.request.body.seoDescription).toBe(editProductResp.seoDescription);
     expect(mock.request.body.tags).toEqual(editProductResp.tags);
-    expect(mock.request.body.dimensions).toEqual(editProductResp.dimensions);
+
+    // expect(mock.request.body.dimensions).toEqual(editProductResp.dimensions);
+    // expect(mock.request.body.weight).toBe(editProductResp.weight);
+
     expect(mock.request.body.subscription).toEqual(editProductResp.subscription);
     expect(mock.request.body.isActive).toEqual(true);
 
