@@ -107,6 +107,7 @@ const log = new Logger('ProductComponent');
               <nus-product-attribute-host
                 [form]="attributes"
                 [productClass]="productClass"
+                [selectedProductClass]="selectedProductClass"
                 [originalAttributeValues]="originalAttributeValues"
                 *ngIf="originalAttributeValues">
               </nus-product-attribute-host>
