@@ -155,9 +155,16 @@ import { MatDialog } from '@angular/material/dialog';
                     <a
                       *ngIf="isRedirectMarketplaceShowed(children.data[0])"
                       class="control see-order"
+                      [ngClass]="{'bukalapak': this.orderDetailData.sourceName === 'bukalapak'}"
                       href="{{ children.data[0].marketplaceRedirectHref }}"
                       target="_blank"
                     >
+                      <div *ngIf="this.orderDetailData.sourceName === 'bukapalak'" class="logo">
+                        <img
+                          src="/assets/marketplace-logo/bukalapak.jpg"
+                          alt="marketplace-logo"
+                        />
+                      </div>
                       See Order
                     </a>
 
@@ -321,7 +328,11 @@ import { MatDialog } from '@angular/material/dialog';
     ".download-button { min-width: 200px; display: block; margin-left: auto; }",
     "img { height: 64px; width: 64px; }",
     ".no-image { background: var(--lighten-black); }",
-    ".see-order { text-align: center; padding-top: 4px; }",
+    ".see-order { text-align: center; }",
+    ".see-order { display: flex; justify-content: center; align-items: center;}",
+    ".see-order.bukalapak { background: #E2004D }",
+    ".see-order.bukalapak div.logo { margin-top: 8px; margin-right: 5px; }",
+    ".see-order.bukalapak div.logo img { width: 20px; height: 20px; border-radius: 4px; }",
     ".refresh-awb { margin-left: 5px; font-weight: normal; }",
   ],
 })
