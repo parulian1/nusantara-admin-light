@@ -26,7 +26,6 @@ import { ProductOptionListComponent, AllProductOptionResolver, ProductOptionComp
 import { DurationListResolver, LengthListResolver, PacketListResolver } from './product/subscription';
 import { RequireIsEnterpriseGuard } from '@nusantara/auth/guards';
 import { EditShippingComponent } from '../config/marketplace-integration';
-import { AllVendorResolver } from './product/all-vendor.resolver';
 
 const routes: Routes = [
   {

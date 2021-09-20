@@ -5,7 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
   selector: 'nus-include-deleted',
   template: `
     <label>
-      <mat-checkbox [ngModel]="showDeleted" (ngModelChange)="applyFilter($event)"> 
+      <mat-checkbox [ngModel]="showDeleted" (ngModelChange)="applyFilter($event)">
         {{ text }}
       </mat-checkbox>
     </label>
@@ -32,7 +32,7 @@ export class IncludeDeletedComponent implements OnInit {
   }
 
   applyFilter(event: boolean) {
-    const params = {include_deleted: event};
+    const params = {include_deleted: event, page: 1};
     this.router.navigate(
       ['./'],
       {

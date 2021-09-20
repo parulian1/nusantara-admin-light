@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { products } from '@nusantara/models';
+import { drf, products } from '@nusantara/models';
 import { AbstractListComponent } from '@nusantara/core';
 import { FormControl } from '@angular/forms';
+import { WarehouseService } from '@nusantara/services';
 
 /**
  * A searchable list of all products.
@@ -26,21 +27,29 @@ import { FormControl } from '@angular/forms';
             <input type="search" placeholder="Search" [formControl]="queryText">
           </div>
 
-          <div class="filter-control">
-            <select>
-              <option i18n-text>All</option>
-              <option i18n-text>Single Product</option>
-              <option i18n-text>Bundling Product</option>
+          <div class="filter-control" *ngIf="!!showBundling">
+            <select [formControl]="productType">
+              <option *ngFor="let opt of productTypeChoices" [ngValue]="opt.value">
+                {{opt.displayName}}
+              </option>
             </select>
           </div>
         </div>
-        <div class="add-product control" (nusClickOutside)="close()">
-          <a [routerLink]="['new']" i18n> Add</a>
-          <span class="material-icons" (click)="addBundleProduct()">expand_more</span>
-          <div class="add-bundle-product"
-               *ngIf="isBundling"><a [routerLink]="['new','bundling']"i18n>Bundling Product</a>
+        <ng-container *ngIf="!showBundling; else bundlingAddComponent;">
+          <div  class="add-product control">
+            <a [routerLink]="['new']" class="control" i18n><i class="material-icons">add</i> Add</a>
           </div>
-        </div>
+        </ng-container>
+        <ng-template #bundlingAddComponent>
+          <div *ngIf="!!showBundling" class="add-product control" (nusClickOutside)="close()">
+            <a [routerLink]="['new']" i18n> Add</a>
+            <span class="material-icons" (click)="addBundleProduct()">expand_more</span>
+            <div class="add-bundle-product"
+                 *ngIf="isBundling"><a [routerLink]="['new','bundling']" i18n>Bundling Product</a>
+            </div>
+          </div>
+        </ng-template>
+
       </div>
     </header>
 
@@ -99,7 +108,7 @@ import { FormControl } from '@angular/forms';
   styles: ['header { margin-bottom: 23px; }',
     'header > div { display: flex; }',
     'input[type=search] { font-size: 15px; padding-right: 5px; width: 325px; }',
-    'a { display: flex; justify-content: center; align-items: center; margin-left: auto; }',
+    'a { justify-content: center; align-items: center; margin-left: auto; }',
     'p { margin-bottom: 5px; }',
 
     `
@@ -185,6 +194,13 @@ import { FormControl } from '@angular/forms';
         text-decoration: none;
         color: #000;
       }
+
+      table {
+        text-align: left;
+      }
+      td {
+        text-align: left;
+      }
     `]
 })
 export class ProductListComponent extends AbstractListComponent<products.IProduct> {
@@ -194,8 +210,15 @@ export class ProductListComponent extends AbstractListComponent<products.IProduc
   reloadTimeout = 650;
   originalValue: string = null;
   queryText = new FormControl('');
+  productType = new FormControl('');
+  showBundling = false;
+  productTypeChoices: drf.IChoice[] = [
+    {displayName: 'All', value: 'all'},
+    {displayName: 'Single Product', value: 'single'},
+    {displayName: 'Bundle Product', value: 'bundling'}
+  ];
 
-  constructor(route: ActivatedRoute, public router: Router) {
+  constructor(route: ActivatedRoute, public router: Router, private warehouseService: WarehouseService) {
     super(route);
   }
 
@@ -208,8 +231,19 @@ export class ProductListComponent extends AbstractListComponent<products.IProduc
         this.queryText.valueChanges.subscribe(
           (newValue) => { this.onQueryTextChanged(newValue); }
         );
+        let _productType = value.get('product_type');
+        if (!_productType) {
+          _productType = 'all';
+        }
+        this.productType.setValue(_productType);
+        this.productType.valueChanges.subscribe((newValue) => this.applyProductTypeFilter(newValue));
       }
     );
+    this.warehouseService.fetchHeadWarehouse().subscribe((resp) => {
+      if (resp.totalResults === 1) {
+        this.showBundling = true;
+      }
+    })
   }
 
   onQueryTextChanged(newValue: string) {
@@ -222,24 +256,19 @@ export class ProductListComponent extends AbstractListComponent<products.IProduc
       return;
     }
 
-    // always go back to page 1 when a new filter is applied
-    if (!newValue) {
-      // if the search input was cleared -> navigate immediately
-      this.router.navigate(['.'], {relativeTo: this.route});
-    } else {
-      this.timeoutId = setTimeout(() => {
-        // wait to see if the user is still typing more before navigating
-        const params = {q: this.queryText.value};
-        this.router.navigate(
-          ['.'],
-          {
-            queryParams: params,
-            queryParamsHandling: 'merge',
-            relativeTo: this.route
-          }
-        );
-      }, this.reloadTimeout);
-    }
+  // always go back to page 1 when a new filter is applied
+    this.timeoutId = setTimeout(() => {
+      // wait to see if the user is still typing more before navigating
+      const params = {q: this.queryText.value, page: 1};
+      this.router.navigate(
+        ['.'],
+        {
+          queryParams: params,
+          queryParamsHandling: 'merge',
+          relativeTo: this.route
+        }
+      );
+    }, this.reloadTimeout);
   }
 
   addBundleProduct(): void {
@@ -250,5 +279,26 @@ export class ProductListComponent extends AbstractListComponent<products.IProduc
     if (this.isBundling === true) {
       this.isBundling = false;
     }
+  }
+
+  applyProductTypeFilter(event: string) {
+    const params = {product_type: event};
+    this.router.navigate(
+      ['./'],
+      {
+        queryParams: params,
+        queryParamsHandling: 'merge',
+        relativeTo: this.route
+      }).catch((error) => {
+        if (error.status === 404) {
+          this.router.navigate(
+          ['./'],
+          {
+            queryParams: {product_type: event, page: 1},
+            queryParamsHandling: 'merge',
+            relativeTo: this.route
+          });
+        }
+    });
   }
 }

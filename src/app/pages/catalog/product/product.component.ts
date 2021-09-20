@@ -19,7 +19,7 @@ import {
   AbstractDetailComponent,
   DialogResult,
   ErrorResult,
-  getSlugFromHref,
+  getSlugFromHref, IResultResponse,
   Logger,
   NusantaraValidators,
   ToastLevelEnum,
@@ -871,6 +871,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   save() {
     if (this.isValidForm()) {
       this.service.save(this.getFormValue()).pipe(catchError(err => {
+        log.debug('err', err);
         if (err instanceof HttpErrorResponse) {
           return of(new ErrorResult<IError>(err.error, err.status));
         } else {
@@ -898,7 +899,6 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
                 log.debug('validate', component.validatePriceRange(), component.maxQuantity.value);
               });
             });
-
             if (this.priceListHost.validatePriceListHost()) {
               this.priceListHost.saveAll(resp.entity).pipe(catchError(childErr => {
                 if (childErr instanceof HttpErrorResponse) {
@@ -950,7 +950,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   navigateToParent(warnOnDirty: boolean = false) {
-    if (this.structure.value === 'parent') {
+    if (this.structure.value === 'parent' && this.productFormType !== 'bundling') {
       super.navigateToParent(warnOnDirty);
     } else {
       this.router.navigateByUrl('/catalog/products',);
@@ -1166,11 +1166,11 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
           upc: [selectedProduct.upc, []],
           weight: [selectedProduct.weight, []],
           quantity: [defaultQty, Validators.required],
-          price: [selectedProductPrice, []]
+          price: [selectedProductPrice, []],
+          media: [selectedProduct.media, []]
         });
         this.productBundling.push(f);
         log.debug(this.productBundling);
-        this.setDescription();
         this.setProductBundlingMedia(selectedProduct);
       }
       this.updateVirtualAmountAndPriceListAndWeight();
@@ -1200,12 +1200,12 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   private getProductFormType(): void {
-    this.route.params.subscribe((param) => {
+    this.route.params?.subscribe((param) => {
       if (param) {
         this.productFormType = param.type;
       }
     });
-    if (!!this.entity?.bundle) {
+    if (!!this.entity?.bundle && this.entity.bundle.length > 0) {
       this.productFormType = 'bundling';
     }
   }
@@ -1258,27 +1258,35 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   addProductBundling(entity: IProduct): void {
-    entity?.bundle.forEach((productInfo) => {
-      const f = this.fb.group({
-        product: [{
-          href: productInfo.product.href,
-          name: productInfo.product.name
-        }, []],
-        name: [productInfo.product.name, []],
-        upc: [productInfo.product.upc, []],
-        weight: [productInfo.product.weight, []],
-        quantity: [productInfo.quantity, Validators.required],
-        price: [productInfo.product.defaultPrice, []]
+    if (!!entity?.bundle) {
+      entity?.bundle?.forEach((productInfo) => {
+        const f = this.fb.group({
+          product: [{
+            href: productInfo.product.href,
+            name: productInfo.product.name
+          }, []],
+          name: [productInfo.product.name, []],
+          upc: [productInfo.product.upc, []],
+          weight: [productInfo.product.weight, []],
+          quantity: [productInfo.quantity, Validators.required],
+          media: [productInfo.product.media, []],
+          price: [productInfo.product.defaultPrice, []]
+        });
+        this.productBundling.push(f);
       });
-      this.productBundling.push(f);
-    });
 
-    log.debug(this.productBundling);
-    this.getVirtualPackageAmount();
+      log.debug(this.productBundling);
+      this.getVirtualPackageAmount();
+    }
   }
 
   showNonBundlingComponent(): boolean {
-    return !!this.entity && !this.entity.bundle;
+    if (!this.entity) {
+      return false;
+    } else if (!!this.entity && !!this.entity.bundle && this.entity.bundle.length > 0) {
+      return false;
+    }
+    return true;
   }
 
   private setDescription(): void {
@@ -1291,7 +1299,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       productBundlingDescription += '<ul>';
 
       for (const product of this.productBundling.value) {
-        productBundlingDescription += '<li>' + product.qty + ' ' + product.name + '</li><br>';
+        productBundlingDescription += '<li>' + product.quantity + ' ' + product.name + '</li><br>';
       }
       productBundlingDescription += '</ul>';
 
@@ -1328,35 +1336,63 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   private setPriceProductBundling(): void {
-    this.priceListHost?.updatePriceList({
-      href: null,
-      product: null,
-      type: 'default',
-      platforms: [],
-      locations: [],
-      isProgressive: false,
-      ranges: [
-        {href: null, priceList: null, price: this.totalPrice, minQuantity: 1, maxQuantity: null}
-      ]
-    }, 0);
+    if (!this.priceListHost) {
+      this.priceListHost?.updatePriceList({
+        href: null,
+        product: null,
+        type: 'default',
+        platforms: [],
+        locations: [],
+        isProgressive: false,
+        ranges: [
+          {href: null, priceList: null, price: this.totalPrice, minQuantity: 1, maxQuantity: null}
+        ]
+      }, 0);
+    } else {
+      for (const priceList of this.entity?.priceLists ?? []) {
+        priceList.ranges[0].price = this.totalPrice;
+        this.priceListHost.updatePriceList(priceList, 0);
+      }
+    }
+
   }
 
   updateVirtualAmountAndPriceListAndWeight(): void {
     this.getVirtualPackageAmount();
     this.setPriceProductBundling();
     this.setWeight();
+    if (!this.description.dirty && !this.entity) {
+      this.setDescription();
+    }
   }
 
   private removeProductBundlingMedia(product: any): void {
     if (!!this.mediaHost.entities) {
-      const removeImage = this.mediaHost.entities.findIndex((x) => x.product === product.href && x.type === 'image');
+      const removeImage = this.mediaHost.entities.findIndex((x) => {
+        return (x.product === product.href || x.product === product.product.href) && x.type === 'image';
+      });
       if (removeImage !== -1) {
         this.mediaHost.remove(removeImage);
-        const removeVideo = this.mediaHost.entities.findIndex((x) => x.product === product.href && x.type === 'you_tube');
-        if (removeVideo !== -1) {
-          this.mediaHost.remove(removeVideo);
-        }
+      }
+      const removeVideo = this.mediaHost.entities.findIndex((x) => {
+        return (x.product === product.href || x.product === product.product.href) && x.type === 'you_tube';
+      });
+      if (removeVideo !== -1) {
+        this.mediaHost.remove(removeVideo);
       }
     }
+  }
+
+  protected onSaveSuccess(result: IResultResponse<any>) {
+    this.form.enable();
+    this.toast?.addMessage(`"${this.form.get('name')?.value ?? 'data'}" was saved successfully.`, 'Saved', ToastLevelEnum.success);
+    this.navigateToParent();
+  }
+
+  protected onDeleteSuccess() {
+    this.form.enable();
+    const message = this.form.get('name')?.value ?? this.form.get('title')?.value;
+    this.toast?.addMessage(`"${message}" was deleted successfully.`, 'Deleted', ToastLevelEnum.success);
+    this.navigateToParent(false);
   }
 }
