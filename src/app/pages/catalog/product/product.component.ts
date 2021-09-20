@@ -1179,7 +1179,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   private getProductFormType(): void {
-    this.route.params.subscribe((param) => {
+    this.route.params?.subscribe((param) => {
       if (param) {
         this.productFormType = param.type;
       }
