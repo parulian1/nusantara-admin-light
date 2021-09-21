@@ -1,9 +1,10 @@
-import {Component} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import {products} from '@nusantara/models';
-import {AbstractListComponent} from '@nusantara/core';
-import {FormControl} from "@angular/forms";
+import { products } from '@nusantara/models';
+import { AbstractListComponent } from '@nusantara/core';
+import { FormControl } from '@angular/forms';
+import { WarehouseService } from '@nusantara/services';
 
 /**
  * A searchable list of all products.
@@ -26,7 +27,7 @@ import {FormControl} from "@angular/forms";
             <input type="search" placeholder="Search" [formControl]="queryText">
           </div>
 
-          <div class="filter-control">
+          <div class="filter-control" *ngIf="!!showBundling">
             <select>
               <option>All</option>
               <option>Single Product</option>
@@ -34,13 +35,21 @@ import {FormControl} from "@angular/forms";
             </select>
           </div>
         </div>
-        <div class="add-product control" (nusClickOutside)="close()">
-          <a [routerLink]="['new']"> Add</a>
-          <span class="material-icons" (click)="addBundleProduct()">expand_more</span>
-          <div class="add-bundle-product"
-               *ngIf="isBundling"><a [routerLink]="['new','bundling']">Bundling Product</a>
+        <ng-container *ngIf="!showBundling; else bundlingAddComponent;">
+          <div  class="add-product control">
+            <a [routerLink]="['new']" class="control"><i class="material-icons">add</i> Add</a>
           </div>
-        </div>
+        </ng-container>
+        <ng-template #bundlingAddComponent>
+          <div *ngIf="!!showBundling" class="add-product control" (nusClickOutside)="close()">
+            <a [routerLink]="['new']"> Add</a>
+            <span class="material-icons" (click)="addBundleProduct()">expand_more</span>
+            <div class="add-bundle-product"
+                 *ngIf="isBundling"><a [routerLink]="['new','bundling']">Bundling Product</a>
+            </div>
+          </div>
+        </ng-template>
+
       </div>
     </header>
 
@@ -194,8 +203,9 @@ export class ProductListComponent extends AbstractListComponent<products.IProduc
   reloadTimeout = 650;
   originalValue: string = null;
   queryText = new FormControl('');
+  showBundling = false;
 
-  constructor(route: ActivatedRoute, public router: Router) {
+  constructor(route: ActivatedRoute, public router: Router, private warehouseService: WarehouseService) {
     super(route);
   }
 
@@ -210,6 +220,11 @@ export class ProductListComponent extends AbstractListComponent<products.IProduc
         );
       }
     );
+    this.warehouseService.fetchHeadWarehouse().subscribe((resp) => {
+      if (resp.totalResults === 1) {
+        this.showBundling = true;
+      }
+    })
   }
 
   onQueryTextChanged(newValue: string) {

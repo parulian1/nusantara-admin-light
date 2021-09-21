@@ -1,5 +1,5 @@
-import {AfterViewInit, Component, OnInit, EventEmitter, Output} from "@angular/core";
-import {ControlContainer, FormControl, FormGroup} from "@angular/forms";
+import { AfterViewInit, Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { ControlContainer, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'nus-bundle-line',
@@ -13,7 +13,10 @@ import {ControlContainer, FormControl, FormGroup} from "@angular/forms";
     </td>
     <td style="word-break: break-word">{{ upc.value }}</td>
     <td>{{ weight.value }}</td>
-    <td><input type="number" [formControl]="quantity" (ngModelChange)="update.emit()"></td>
+    <td>
+      <input type="number" [formControl]="quantity" (ngModelChange)="update.emit()"
+             [min]="1" (keypress)="onlyNumberNonDecimal($event)">
+    </td>
     <td>{{ price.value | currency: 'Rp ': 'symbol' : '1.0'}}</td>
     <td>
       <button (click)="remove.emit()" type="button" class="remove-button">
@@ -47,5 +50,7 @@ export class BundleLineComponent implements OnInit {
     this.productForm = this.form.get('product') as FormGroup;
   }
 
-
+  onlyNumberNonDecimal($event: any) {
+    return $event.charCode >= 48 && $event.charCode <= 57;
+  }
 }
