@@ -1184,7 +1184,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         this.productFormType = param.type;
       }
     });
-    if (!!this.entity?.bundle) {
+    if (!!this.entity?.bundle && this.entity.bundle.length > 0) {
       this.productFormType = 'bundling';
     }
   }
@@ -1259,7 +1259,12 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   showNonBundlingComponent(): boolean {
-    return !!this.entity && !this.entity.bundle;
+    if (!this.entity) {
+      return false;
+    } else if (!!this.entity && !!this.entity.bundle && this.entity.bundle.length > 0) {
+      return false;
+    }
+    return true;
   }
 
   private setDescription(): void {
@@ -1272,7 +1277,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       productBundlingDescription += '<ul>';
 
       for (const product of this.productBundling.value) {
-        productBundlingDescription += '<li>' + product.qty + ' ' + product.name + '</li><br>';
+        productBundlingDescription += '<li>' + product.quantity + ' ' + product.name + '</li><br>';
       }
       productBundlingDescription += '</ul>';
 
