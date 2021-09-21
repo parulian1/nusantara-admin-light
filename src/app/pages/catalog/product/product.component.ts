@@ -1237,23 +1237,25 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   addProductBundling(entity: IProduct): void {
-    entity?.bundle.forEach((productInfo) => {
-      const f = this.fb.group({
-        product: [{
-          href: productInfo.product.href,
-          name: productInfo.product.name
-        }, []],
-        name: [productInfo.product.name, []],
-        upc: [productInfo.product.upc, []],
-        weight: [productInfo.product.weight, []],
-        quantity: [productInfo.quantity, Validators.required],
-        price: [productInfo.product.defaultPrice, []]
+    if (!!entity?.bundle) {
+      entity?.bundle?.forEach((productInfo) => {
+        const f = this.fb.group({
+          product: [{
+            href: productInfo.product.href,
+            name: productInfo.product.name
+          }, []],
+          name: [productInfo.product.name, []],
+          upc: [productInfo.product.upc, []],
+          weight: [productInfo.product.weight, []],
+          quantity: [productInfo.quantity, Validators.required],
+          price: [productInfo.product.defaultPrice, []]
+        });
+        this.productBundling.push(f);
       });
-      this.productBundling.push(f);
-    });
 
-    log.debug(this.productBundling);
-    this.getVirtualPackageAmount();
+      log.debug(this.productBundling);
+      this.getVirtualPackageAmount();
+    }
   }
 
   showNonBundlingComponent(): boolean {
