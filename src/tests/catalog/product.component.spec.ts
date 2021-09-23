@@ -1,6 +1,6 @@
 import {ProductComponent} from '@nusantara/pages/catalog/product';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {ComponentFixture, flushMicrotasks, TestBed, waitForAsync} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {RouterTestingModule} from '@angular/router/testing';
 import {SharedModule} from '@nusantara/shared';
@@ -10,7 +10,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {of} from 'rxjs';
 import {ProductRelatedService, SiteConfigService} from '@nusantara/services';
 import {PriceListHostComponent} from '@nusantara/pages/catalog/product/price';
-import {IPriceList} from '@nusantara/models/products';
+import {IPriceList, IProductClass} from '@nusantara/models/products';
 import {StockInputComponent} from '@nusantara/pages/catalog/product/stock-input/stock-input.component';
 import {MockComponent, MockComponents} from 'ng-mocks';
 // import {StockInputComponent} from '@nusantara/pages/catalog/product/stock-input/stock-input.component';
@@ -220,6 +220,16 @@ describe('ProductComponent', () => {
       productRelated: addProductResp.productRelated,
     });
     component.priceListHost.addPriceList(price as IPriceList);
+    httpTestingController.match('/api/catalog/product-class/default-product-class-2/').map(req => req.flush({
+      name: 'default product class',
+      href: 'https://superbearzz.dev.bisma.systems/api/catalog/product-class/default-product-class-2/',
+      requiresShipping: true,
+      trackStock: true,
+      isPerishable: false,
+      type: 'physical',
+    }, {status: 200, statusText: 'OK'}));
+    fixture.detectChanges();
+
     component.save();
 
     const mock = httpTestingController.expectOne('/api/catalog/product/');
@@ -246,6 +256,17 @@ describe('ProductComponent', () => {
     // expect(mock.request.body.media).toEqual(addProductResp.media);
     // expect(mock.request.body.priceLists).toEqual(addProductResp.priceLists);
     mock.flush(addProductResp, {status: 201, statusText: 'CREATED'});
+
+
+    httpTestingController.match('/api/catalog/product-class/default-product-class-2/').map(req => req.flush({
+      name: 'default product class',
+      href: 'https://superbearzz.dev.bisma.systems/api/catalog/product-class/default-product-class-2/',
+      requiresShipping: true,
+      trackStock: true,
+      isPerishable: false,
+      type: 'physical',
+    }, {status: 200, statusText: 'OK'}));
+    fixture.detectChanges();
     httpTestingController.verify();
   });
 
@@ -332,8 +353,18 @@ describe('ProductComponent', () => {
       marketplace: editProductResp.marketplace,
       href: editProductResp.href
     });
-
+    httpTestingController.match('/api/catalog/product-class/default-product-class-2/').map(req => req.flush({
+      name: 'default product class',
+      href: 'https://superbearzz.dev.bisma.systems/api/catalog/product-class/default-product-class-2/',
+      requiresShipping: true,
+      trackStock: true,
+      isPerishable: false,
+      type: 'physical',
+    }, {status: 200, statusText: 'OK'}));
+    fixture.detectChanges();
+    httpTestingController.verify();
     component.save();
+
     const mock = httpTestingController.expectOne(editProductResp.href);
     expect(mock.request.method).toEqual('PATCH');
     expect(mock.request.body.name).toBe(editProductResp.name);
@@ -362,6 +393,16 @@ describe('ProductComponent', () => {
     // expect(mock.request.body.priceLists).toBe(editProductResp.priceLists);
 
     mock.flush(addProductResp, {status: 200, statusText: 'UPDATED'});
+
+    httpTestingController.match('/api/catalog/product-class/default-product-class-2/').map(req => req.flush({
+      name: 'default product class',
+      href: 'https://superbearzz.dev.bisma.systems/api/catalog/product-class/default-product-class-2/',
+      requiresShipping: true,
+      trackStock: true,
+      isPerishable: false,
+      type: 'physical',
+    }, {status: 200, statusText: 'OK'}));
+    fixture.detectChanges();
     httpTestingController.verify();
   });
 

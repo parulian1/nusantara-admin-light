@@ -5,9 +5,9 @@ import { Validators, FormBuilder, FormArray, FormControl, FormGroup } from '@ang
 import { ActivatedRoute, Router } from '@angular/router';
 import * as ClassicEditor from '@gdnnusantara/ckeditor5-build/build/ckeditor';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { of } from 'rxjs';
+import {EMPTY, of} from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { SvgIconService } from '@nusantara/services';
+import {ProductClassService, SvgIconService} from '@nusantara/services';
 import {
   ToastService,
   AbstractDetailComponent,
@@ -107,6 +107,7 @@ const log = new Logger('ProductComponent');
               <nus-product-attribute-host
                 [form]="attributes"
                 [productClass]="productClass"
+                [selectedProductClass]="selectedProductClass"
                 [originalAttributeValues]="originalAttributeValues"
                 *ngIf="originalAttributeValues">
               </nus-product-attribute-host>
@@ -508,7 +509,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
               private configSercvice: SiteConfigService,
               router: Router,
               svgIconService: SvgIconService,
-              public modal: NgxSmartModalService) {
+              public modal: NgxSmartModalService,
+              public productClassService: ProductClassService) {
     super(route, router, toast, service);
     svgIconService.registerIcons();
   }
@@ -612,10 +614,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   get isProductOptionDomain(): boolean {
     let pc;
-    if (this.productClasses) {
-      pc = this.productClasses.filter(e => e.href === (this.form.get('productClass').get('href') as FormControl)?.value)[0];
+    if (!!this.selectedProductClass) {
+      pc = this.selectedProductClass;
     }
-    if (pc && (pc.type === 'subscription' && pc.option)) {
+    if (!!pc && (pc.type === 'subscription' && pc.option)) {
       return true;
     }
     return false;
@@ -634,12 +636,13 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     this.route.data.subscribe((
       data: {
         entity: products.IProduct, parent: products.IProduct,
-        productClasses: products.IProductClass[], mediaTypes: drf.IChoice[]
+        // productClasses: products.IProductClass[],
+        mediaTypes: drf.IChoice[]
       }) => {
       this.parentProduct = data.parent;
       // this.vendors = data.vendors;
       // this.categories = data.categories;
-      this.productClasses = data.productClasses;
+      // this.productClasses = data.productClasses;
       this.mediaTypes = data.mediaTypes;
       this.entity = data.entity;
     });
@@ -691,6 +694,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     this.selectedVendor = entity?.vendor;
     this.selectedCategory = entity?.category;
     this.selectedProductClassValue = entity?.productClass;
+
     // new product variant
     if (!entity && !!this.parentProduct) {
       this.parent.setValue(this.parentProduct.href);
@@ -726,8 +730,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     }
 
     // listen for any changes to this so we can disable weight when appropriate
-    this.productClass.valueChanges.subscribe(val => this.onProductClassChanged(val));
     this.onProductClassChanged(this.productClass.value?.href ?? this.productClass.value);
+    this.productClass.valueChanges.subscribe(val => this.onProductClassChanged(val));
+
   }
 
   initializeSubViewForms(entity?: products.IProduct) {
@@ -883,24 +888,39 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
    */
   onProductClassChanged(newValue: any) {
     // protect against triggering during initialization
-    if (!newValue || !this.productClasses) {
+    if (!newValue) {
       return;
     }
-    const productClass = this.productClasses.filter(e => e.href === newValue)[0];
-    this.selectedProductClass = productClass;
-    // const productClass = this.selectedProductClass;
+    this.productClassService.fetch(getSlugFromHref(newValue)).pipe(catchError((err) => {
+      log.error('Cannot get correct product class');
+      return of(EMPTY);
+    })).subscribe((res) => {
+      if (!!res) {
+        const productClass = res as IProductClass;
+        // const productClass = this.productClasses.filter(e => e.href === newValue)[0];
 
-    if (productClass?.type === 'physical') {
-      this.weight.enable();
-      Object.keys(this.dimensions.controls).forEach(key => {
-        this.dimensions.controls[key].enable();
-      });
-    } else {
-      this.weight.disable();
-      Object.keys(this.dimensions.controls).forEach(key => {
-        this.dimensions.controls[key].disable();
-      });
-    }
+        this.selectedProductClass = productClass;
+        // const productClass = this.selectedProductClass;
+
+        if (productClass?.type === 'physical') {
+          this.weight.enable();
+          Object.keys(this.dimensions.controls).forEach(key => {
+            this.dimensions.controls[key].enable();
+          });
+        } else {
+          this.weight.disable();
+          Object.keys(this.dimensions.controls).forEach(key => {
+            this.dimensions.controls[key].disable();
+          });
+        }
+      } else {
+        this.selectedProductClass = null;
+        this.weight.disable();
+        Object.keys(this.dimensions.controls).forEach(key => {
+          this.dimensions.controls[key].disable();
+        });
+      }
+    });
   }
 
   isPhysical() {
