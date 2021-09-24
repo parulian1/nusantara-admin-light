@@ -19,7 +19,7 @@ import {
   AbstractDetailComponent,
   DialogResult,
   ErrorResult,
-  getSlugFromHref,
+  getSlugFromHref, IResultResponse,
   Logger,
   NusantaraValidators,
   ToastLevelEnum,
@@ -871,6 +871,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   save() {
     if (this.isValidForm()) {
       this.service.save(this.getFormValue()).pipe(catchError(err => {
+        log.debug('err', err);
         if (err instanceof HttpErrorResponse) {
           return of(new ErrorResult<IError>(err.error, err.status));
         } else {
@@ -898,7 +899,6 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
                 log.debug('validate', component.validatePriceRange(), component.maxQuantity.value);
               });
             });
-
             if (this.priceListHost.validatePriceListHost()) {
               this.priceListHost.saveAll(resp.entity).pipe(catchError(childErr => {
                 if (childErr instanceof HttpErrorResponse) {
@@ -950,7 +950,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   navigateToParent(warnOnDirty: boolean = false) {
-    if (this.structure.value === 'parent') {
+    if (this.structure.value === 'parent' && this.productFormType !== 'bundling') {
       super.navigateToParent(warnOnDirty);
     } else {
       this.router.navigateByUrl('/catalog/products',);
@@ -1374,4 +1374,16 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     }
   }
 
+  protected onSaveSuccess(result: IResultResponse<any>) {
+    this.form.enable();
+    this.toast?.addMessage(`"${this.form.get('name')?.value ?? 'data'}" was saved successfully.`, 'Saved', ToastLevelEnum.success);
+    this.navigateToParent();
+  }
+
+  protected onDeleteSuccess() {
+    this.form.enable();
+    const message = this.form.get('name')?.value ?? this.form.get('title')?.value;
+    this.toast?.addMessage(`"${message}" was deleted successfully.`, 'Deleted', ToastLevelEnum.success);
+    this.navigateToParent(false);
+  }
 }
