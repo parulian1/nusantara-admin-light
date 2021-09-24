@@ -1166,11 +1166,11 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
           upc: [selectedProduct.upc, []],
           weight: [selectedProduct.weight, []],
           quantity: [defaultQty, Validators.required],
-          price: [selectedProductPrice, []]
+          price: [selectedProductPrice, []],
+          media: [selectedProduct.media, []]
         });
         this.productBundling.push(f);
         log.debug(this.productBundling);
-        this.setDescription();
         this.setProductBundlingMedia(selectedProduct);
       }
       this.updateVirtualAmountAndPriceListAndWeight();
@@ -1269,7 +1269,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
           upc: [productInfo.product.upc, []],
           weight: [productInfo.product.weight, []],
           quantity: [productInfo.quantity, Validators.required],
-          price: [productInfo.product.defaultPrice, []]
+          media: [productInfo.product.media, []],
         });
         this.productBundling.push(f);
       });
@@ -1352,18 +1352,26 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     this.getVirtualPackageAmount();
     this.setPriceProductBundling();
     this.setWeight();
+    if (!this.description.dirty) {
+      this.setDescription();
+    }
   }
 
   private removeProductBundlingMedia(product: any): void {
     if (!!this.mediaHost.entities) {
-      const removeImage = this.mediaHost.entities.findIndex((x) => x.product === product.href && x.type === 'image');
+      const removeImage = this.mediaHost.entities.findIndex((x) => {
+        return (x.product === product.href || x.product === product.product.href) && x.type === 'image';
+      });
       if (removeImage !== -1) {
         this.mediaHost.remove(removeImage);
-        const removeVideo = this.mediaHost.entities.findIndex((x) => x.product === product.href && x.type === 'you_tube');
-        if (removeVideo !== -1) {
-          this.mediaHost.remove(removeVideo);
-        }
+      }
+      const removeVideo = this.mediaHost.entities.findIndex((x) => {
+        return (x.product === product.href || x.product === product.product.href) && x.type === 'you_tube';
+      });
+      if (removeVideo !== -1) {
+        this.mediaHost.remove(removeVideo);
       }
     }
   }
+
 }

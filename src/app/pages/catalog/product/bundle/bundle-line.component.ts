@@ -12,7 +12,7 @@ import { ControlContainer, FormControl, FormGroup } from '@angular/forms';
       </a>
     </td>
     <td style="word-break: break-word">{{ upc.value }}</td>
-    <td>{{ weight.value }}</td>
+    <td>{{ weight.value }} kilogram</td>
     <td>
       <input type="number" [formControl]="quantity" (ngModelChange)="update.emit()"
              [min]="1" (keypress)="onlyNumberNonDecimal($event)">

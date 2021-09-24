@@ -1,4 +1,5 @@
-import {INamedHrefEntity} from "@nusantara/models";
+import { INamedHrefEntity } from '@nusantara/models';
+import { IProductMedia } from '@nusantara/models/products/media';
 
 export interface IProductBundle {
   product: IProductBundleInfo;
@@ -8,12 +9,10 @@ export interface IProductBundle {
 
 export interface IProductBundleInfo extends INamedHrefEntity {
   isActive: boolean;
-  defaultImage?: string;
-  defaultVideo?: string;
   productClass: string;
   vendor?: string;
   category?: string;
-  defaultPrice?: number;
   upc?: string;
   weight?: number;
+  media?: IProductMedia[];
 }
