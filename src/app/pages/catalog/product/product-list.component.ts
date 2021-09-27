@@ -256,24 +256,19 @@ export class ProductListComponent extends AbstractListComponent<products.IProduc
       return;
     }
 
-    // always go back to page 1 when a new filter is applied
-    if (!newValue) {
-      // if the search input was cleared -> navigate immediately
-      this.router.navigate(['.'], {relativeTo: this.route});
-    } else {
-      this.timeoutId = setTimeout(() => {
-        // wait to see if the user is still typing more before navigating
-        const params = {q: this.queryText.value, page: 1};
-        this.router.navigate(
-          ['.'],
-          {
-            queryParams: params,
-            queryParamsHandling: 'merge',
-            relativeTo: this.route
-          }
-        );
-      }, this.reloadTimeout);
-    }
+  // always go back to page 1 when a new filter is applied
+    this.timeoutId = setTimeout(() => {
+      // wait to see if the user is still typing more before navigating
+      const params = {q: this.queryText.value, page: 1};
+      this.router.navigate(
+        ['.'],
+        {
+          queryParams: params,
+          queryParamsHandling: 'merge',
+          relativeTo: this.route
+        }
+      );
+    }, this.reloadTimeout);
   }
 
   addBundleProduct(): void {

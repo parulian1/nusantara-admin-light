@@ -1270,6 +1270,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
           weight: [productInfo.product.weight, []],
           quantity: [productInfo.quantity, Validators.required],
           media: [productInfo.product.media, []],
+          price: [productInfo.product.defaultPrice, []]
         });
         this.productBundling.push(f);
       });
@@ -1352,7 +1353,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     this.getVirtualPackageAmount();
     this.setPriceProductBundling();
     this.setWeight();
-    if (!this.description.dirty) {
+    if (!this.description.dirty && !this.entity) {
       this.setDescription();
     }
   }

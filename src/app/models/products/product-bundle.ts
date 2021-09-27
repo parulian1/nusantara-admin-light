@@ -15,4 +15,5 @@ export interface IProductBundleInfo extends INamedHrefEntity {
   upc?: string;
   weight?: number;
   media?: IProductMedia[];
+  defaultPrice?: number;
 }
