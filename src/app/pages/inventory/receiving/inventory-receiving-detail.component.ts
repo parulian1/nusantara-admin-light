@@ -258,6 +258,13 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
 
   reject() {
     this.form.value.status = 'rejected';
+    const stockRecordsForm = this.form.get('stockRecords') as FormArray;
+    // Stock record location is not required if receiving order rejected
+    stockRecordsForm.controls.forEach((item) => {
+      const location = item.get('location');
+      location.get('href').setValidators([]);
+      location.value.href = null;
+    });
     this.save();
   }
 
