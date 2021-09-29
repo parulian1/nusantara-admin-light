@@ -85,7 +85,7 @@ import {
           </td>
         </tr>
         <tr class="more-toggle">
-          <td colspan="4">
+          <td colspan="5">
             <a (click)="isDetailShowed = !isDetailShowed;">{{ isDetailShowed? 'Hide' : 'More' }}</a>
           </td>
         </tr>
