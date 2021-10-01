@@ -3,11 +3,14 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthService } from '../../../auth';
-import { DialogResult, ToastService, AbstractDetailComponent } from '@nusantara/core';
-import { inventory, ISubLocation, IWarehouse, products } from '@nusantara/models';
+import { DialogResult, ToastService, AbstractDetailComponent, ErrorResult } from '@nusantara/core';
+import { IHttpFailure, inventory, ISubLocation, IWarehouse, products } from '@nusantara/models';
 import { InventoryTransferService } from '@nusantara/services';
 import { ProductSelectionModalComponent } from '@nusantara/shared/product-selection-modal.component';
 import { IProductClass } from '@nusantara/models/products';
+import { catchError } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
+import { of } from 'rxjs';
 
 /**
  * Allows a user to receive a new batch of inventory.
@@ -224,6 +227,7 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
           // name: ['', ],
         }),
         originalQuantity: [1, [Validators.required, Validators.min(1), ]],
+        cost: [0, [Validators.required, Validators.min(0)]]
       });
       this.stockRecords.push(f);
     }
@@ -247,9 +251,23 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
     return this.form.getRawValue();
   }
 
-  save(): void {
-    super.save();
-    this.stockRecords.clear();
+  save(headers?: any): void {
+    this.service.save(this.getFormValue(), headers).pipe(catchError(err => {
+      if (err instanceof HttpErrorResponse) {
+        return of(new ErrorResult<IHttpFailure>(err.error, err.status));
+      } else {
+        return of(new ErrorResult<IHttpFailure>({detail: 'Network error.. probably?'}, err.status));
+      }
+    })).subscribe(
+      resp => {
+        if (resp.success) {
+          this.onSaveSuccess(resp);
+          this.stockRecords.clear();
+        } else {
+          this.onSaveError(resp);
+        }
+      }
+    );
   }
 
   resetForm(warnOnDirty = false) {
