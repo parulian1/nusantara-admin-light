@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IOption, IOrderFilter, IOrderFilterValue } from '@nusantara/models/order/filter';
-import * as moment from "moment";
+import * as moment from 'moment';
 import { Utils } from './utils';
 
 @Component({
@@ -54,6 +54,11 @@ import { Utils } from './utils';
           </mat-form-field>
         </div>
       </label>
+      <label>
+        <mat-checkbox formControlName="isTesting">
+          Show Testing Order
+        </mat-checkbox>
+      </label>
     </form>`,
   styles: [
     'form { max-width: none }',
@@ -86,7 +91,8 @@ export class OrderFiltersComponent implements OnInit {
     platform: null,
     status: null,
     logistic: null,
-    q: null
+    q: null,
+    isTesting: null
   };
 
   readonly START_TIME_PARAM = 'start_time';
@@ -94,6 +100,7 @@ export class OrderFiltersComponent implements OnInit {
   readonly PLATFORM_PARAM = 'store_id';
   readonly STATUS_PARAM = 'order_status_admin';
   readonly LOGISTIC_PARAM = 'shipping_method';
+  readonly TESTING_PARAM = 'is_testing';
 
   constructor(public router: Router,
               public route: ActivatedRoute,
@@ -147,6 +154,11 @@ export class OrderFiltersComponent implements OnInit {
       : null;
       const q = value.get('q')? value.get('q') : null;
 
+      const isTesting = moment(value.get(this.TESTING_PARAM)).isValid
+      ? value.get(this.TESTING_PARAM)
+      : null;
+
+
       if(platform){
         this.updatePlatform(platform)
       }
@@ -159,11 +171,15 @@ export class OrderFiltersComponent implements OnInit {
       if(q){
         this.updateQuery(q);
       }
+      if(!!isTesting && isTesting.toLowerCase() === 'true') {
+        this.updateTesting(isTesting);
+      }
 
       this.filtersForm.patchValue({
         platform: platform? platform : '',
         status: status? status : '',
         logistic: logistic? logistic: '',
+        isTesting: isTesting? isTesting.toLowerCase() === 'true': false,
       });
 
       this.filtersForm.valueChanges.subscribe((newValue) => {
@@ -171,6 +187,7 @@ export class OrderFiltersComponent implements OnInit {
           [this.PLATFORM_PARAM]: newValue.platform ? newValue.platform : null,
           [this.STATUS_PARAM]: newValue.status ? newValue.status : null,
           [this.LOGISTIC_PARAM]: newValue.logistic ? newValue.logistic : null,
+          [this.TESTING_PARAM]: newValue.isTesting ? newValue.isTesting : null
         });
 
         this.updatePlatform(newValue.platform);
@@ -184,17 +201,20 @@ export class OrderFiltersComponent implements OnInit {
     this.filtersForm = this.fb.group({
       platform: new FormControl(''),
       status: new FormControl('paid'),
-      logistic: new FormControl('')
+      logistic: new FormControl(''),
+      isTesting: new FormControl(),
     })
   }
 
   onSelectedDateChanged(selectedDate: { type: string, startDate: string; endDate: string }) {
-    if(selectedDate){
-      this.filtersValue.date.type = selectedDate.type;
-      if(selectedDate.startDate){
+    if(!!selectedDate){
+      if (!!this.filtersValue.date) {
+        this.filtersValue.date.type = selectedDate.type;
+      }
+      if(selectedDate?.startDate){
         this.filtersValue.date.start = selectedDate.startDate;
       }
-      if(selectedDate.endDate){
+      if(selectedDate?.endDate){
         this.filtersValue.date.end = selectedDate.startDate;
       }
     } else {
@@ -222,25 +242,44 @@ export class OrderFiltersComponent implements OnInit {
   }
 
   updateDate(type: string, startDate: string, endDate: string) {
-    this.filtersValue.date.type = type;
-    this.filtersValue.date.start = startDate;
-    this.filtersValue.date.end = endDate;
-    this.filterApplied.next(this.filtersValue)
+    if (!!this.filtersValue.date) {
+      this.filtersValue.date.type = type;
+      this.filtersValue.date.start = startDate;
+      this.filtersValue.date.end = endDate;
+      this.filterApplied.next(this.filtersValue)
+    }
   }
+
   updatePlatform(platform: number) {
     this.filtersValue.platform = platform;
     this.filterApplied.next(this.filtersValue);
   }
+
   updateStatus(status: string) {
     this.filtersValue.status = status;
     this.filterApplied.next(this.filtersValue);
   }
+
   updateLogistic(logistic: string) {
     this.filtersValue.logistic = logistic;
     this.filterApplied.next(this.filtersValue);
   }
+
   updateQuery(q: string) {
     this.filtersValue.q = q;
     this.filterApplied.next(this.filtersValue);
+  }
+
+  updateTesting(isTesting: string) {
+    if(isTesting){
+      this.filtersValue.isTesting = isTesting;
+    } else {
+      this.filtersValue.date = null;
+    }
+
+    this.filterApplied.next(this.filtersValue);
+    this.updateRoute({
+      is_testing: `${isTesting}`,
+    });
   }
 }

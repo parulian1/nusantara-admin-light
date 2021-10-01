@@ -5,6 +5,7 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
 import { AbstractEditingComponent, DialogResult } from '@nusantara/core';
 import { GoogleService } from '@nusantara/services';
 
+
 /**
  * Allows the user to enter the ID of a youtube video.
  */
@@ -19,7 +20,8 @@ import { GoogleService } from '@nusantara/services';
         <input type="hidden" [formControl]="href" name="href">
         <input type="hidden" [formControl]="type" name="type">
         <input type="hidden" [formControl]="image" name="image">
-
+        <input type="hidden" [formControl]="sortPriority" name="sortPriority">
+        <input type="hidden" [formControl]="identifier" name="identifier">
         <label>
           <span i18n>Video ID</span>
           <input type="text" [formControl]="youtubeVideoId" name="youtubeVideoId" placeholder="Enter Video ID" i18n-placeholder>
@@ -43,6 +45,7 @@ export class NewProductYoutubeComponent extends AbstractEditingComponent impleme
 
   timeoutId: any;
   reloadTimeout = 650;
+  priorityValue = 1;
 
   constructor(protected fb: FormBuilder,
               protected google: GoogleService) { super(); }
@@ -64,6 +67,8 @@ export class NewProductYoutubeComponent extends AbstractEditingComponent impleme
     this.form = this.fb.group({
       href: [null, []],
       image: [null, []],
+      sortPriority: [this.priorityValue, [Validators.required, ]],
+      identifier: [ this.randomString(10), [Validators.required, ]],
       type: ['you_tube', [Validators.required, ]],
       youtubeVideoId: ['', [Validators.required, ]]
     });
@@ -72,6 +77,8 @@ export class NewProductYoutubeComponent extends AbstractEditingComponent impleme
   get type(): FormControl { return this.form.get('type') as FormControl; }
   get youtubeVideoId(): FormControl { return this.form.get('youtubeVideoId') as FormControl; }
   get image(): FormControl { return this.form.get('image') as FormControl; }
+  get sortPriority(): FormControl { return this.form.get('sortPriority') as FormControl; }
+  get identifier(): FormControl { return this.form.get('identifier') as FormControl; }
 
   setYoutubeThumbnail(data?: string) {
     this.setImagePreview(data,  (dataAsUrl) => this.imagePreviewUrl = dataAsUrl);
@@ -112,7 +119,8 @@ export class NewProductYoutubeComponent extends AbstractEditingComponent impleme
     // return new FormData(this.formView.nativeElement);
   }
 
-  open() {
+  open(priority: number = 1) {
+    this.priorityValue = !!priority ? priority : 1;
     this.modal.open();
   }
 
@@ -127,6 +135,15 @@ export class NewProductYoutubeComponent extends AbstractEditingComponent impleme
 
   cancel() {
     this.modal.close();
+  }
+
+  randomString(length) {
+    const randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for ( let i = 0; i < length; i++ ) {
+      result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
+    }
+    return result;
   }
 
 }

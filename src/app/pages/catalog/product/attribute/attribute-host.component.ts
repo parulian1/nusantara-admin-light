@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractEditingComponent } from '@nusantara/core';
 import { products } from '@nusantara/models';
+import {IProductClass} from '@nusantara/models/products';
 
 @Component({
   selector: 'nus-product-attribute-host',
@@ -37,21 +38,36 @@ import { products } from '@nusantara/models';
     'h4 { margin-bottom: 4px; }',
   ]
 })
-export class ProductAttributeHostComponent extends AbstractEditingComponent implements OnInit {
+export class ProductAttributeHostComponent extends AbstractEditingComponent implements OnInit, OnChanges {
 
   productClasses: Array<products.IProductClass> = [];
   productAttributeTypesHide: string[] = ['image', 'markdown'];
 
   @Input() productClass: FormControl; // href
   @Input() originalAttributeValues: {[key: string]: string|number|boolean};
+  @Input() selectedProductClass: IProductClass;
 
   constructor(protected route: ActivatedRoute, protected fb: FormBuilder, private router: Router) { super(); }
 
   ngOnInit() {
-    this.route.data.subscribe((data: {productClasses: products.IProductClass[]}) => {
-      this.productClasses = data.productClasses;
-    });
+    // this.route.data.subscribe((data: {productClasses: products.IProductClass[]}) => {
+    //   this.productClasses = data.productClasses;
+    // });
   }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        switch (propName) {
+          case 'selectedProductClass': {
+             break;
+          }
+        }
+      }
+    }
+  }
+
+
 
   getFormControlForAttribute(attrDefinition: products.IProductAttribute): FormControl {
     // if the control hasn't yet been created, create it with the values from the original object
@@ -70,7 +86,7 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
       return [];
     }
     const productClassHref = this.productClass.value?.href ?? this.productClass.value;
-    const productClass = this.productClasses.filter(e => e.href === productClassHref)[0];
+    const productClass = this.selectedProductClass;
 
     // #69558, image and richText (markdown) be hide
     return productClass?.attributes?.filter(

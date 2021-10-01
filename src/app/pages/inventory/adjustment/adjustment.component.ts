@@ -137,7 +137,7 @@ import {DomSanitizer} from '@angular/platform-browser';
             <th i18n>SKU</th>
             <th i18n>Receiving Date</th>
             <th i18n>Available Stock In Product Record</th>
-            <th i18n>Adjusted Qty</th>
+            <th i18n>Expected Qty</th>
             <th i18n>Different Qty</th>
             <th i18n>Reason</th>
             <th i18n>Notes</th>
@@ -174,7 +174,7 @@ import {DomSanitizer} from '@angular/platform-browser';
             <th i18n>SKU</th>
             <th i18n>Receiving Date</th>
             <th i18n>Available Stock In Product Record</th>
-            <th i18n>Adjusted Qty</th>
+            <th i18n>Expected Qty</th>
             <th i18n>Different Qty</th>
             <th i18n>Reason</th>
             <th i18n>Notes</th>

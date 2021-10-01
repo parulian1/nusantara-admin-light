@@ -11,7 +11,11 @@ import {
 } from '@nusantara/services';
 import { drf, order } from '@nusantara/models';
 import { FormBuilder } from '@angular/forms';
-import { CancelOrderDialogComponent, PaymentConfirmModalComponent } from './modals';
+import {
+  CancelOrderDialogComponent,
+  PaymentConfirmModalComponent,
+  MarkAsTestingDialogComponent
+} from './modals';
 @Component({
   selector: 'nus-order',
   template: `
@@ -92,6 +96,12 @@ import { CancelOrderDialogComponent, PaymentConfirmModalComponent } from './moda
               <div class="subheading-2">{{ orderStatusDisplayName }}</div>
             </div>
           </td>
+          <td>
+            <div>
+              <div class="body-2">Reason</div>
+              <div class="subheading-2">{{ markAsTestReason }}</div>
+            </div>
+          </td>
           <ng-container *ngIf="canUpdateOrder">
             <td>
               <button *ngIf="this.orderDetailData.status === 'unpaid'"
@@ -107,8 +117,14 @@ import { CancelOrderDialogComponent, PaymentConfirmModalComponent } from './moda
               </button>
             </td>
           </ng-container>
-          <td colspan="3">
-            <button class="download-button control secondary" (click)="downloadProductList()" i18n>Download Product List</button>
+          <td colspan="3" class="other-action">
+              <button class="download-button control secondary"
+                  (click)="markAsTestingModal.open()"
+                  [disabled]="orderDetailData.isTesting"
+                  style="margin-right: 10px;" i18n>
+                  Mark As Test
+              </button>
+              <button class="download-button control secondary" (click)="downloadProductList()" i18n>Download Product List</button>
           </td>
         </tr>
       </tbody>
@@ -149,6 +165,7 @@ import { CancelOrderDialogComponent, PaymentConfirmModalComponent } from './moda
     <!-- Modal -->
     <nus-payment-confirm-modal></nus-payment-confirm-modal>
     <nus-cancel-order-dialog></nus-cancel-order-dialog>
+    <nus-mark-as-testing-modal></nus-mark-as-testing-modal>
     `,
   styles: [
     'table { margin-bottom: 24px; width: 100%; table-layout: fixed; }',
@@ -165,14 +182,16 @@ import { CancelOrderDialogComponent, PaymentConfirmModalComponent } from './moda
     'h3 { color: var(--lighten-black); margin-bottom: 0; }',
     '.confirm-payment { min-width: 160px }',
     '.subheading-2 { color: var(--lighten-black); margin-bottom: 2px; }',
-    '.download-button { min-width: 200px; display: block; margin-left: auto; }',
+    '.download-button { min-width: 200px; margin-left: auto; }',
     '.action-button { display: flex; justify-content: space-between; }',
-    'address { font-style: normal; }'
+    'address { font-style: normal; }',
+    '.other-action { text-align: right; }'
   ]
 })
 export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> implements OnInit {
   @ViewChild(PaymentConfirmModalComponent) paymentConfirmModal: PaymentConfirmModalComponent;
   @ViewChild(CancelOrderDialogComponent) cancelOrderModal: CancelOrderDialogComponent;
+  @ViewChild(MarkAsTestingDialogComponent) markAsTestingModal: MarkAsTestingDialogComponent;
 
   orderDetailData: order.IOrderDetail;
   shipmentMessageInfo: Array<order.IOrderShipmentInfo> = [];
@@ -227,6 +246,7 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
   ngAfterViewInit() {
     this.paymentConfirmModal.onClose.subscribe(() => this.onPaymentConfirmModalClosed());
     this.cancelOrderModal.onClose.subscribe(() => this.oncancelOrderModalClosed());
+    this.markAsTestingModal.onClose.subscribe(() => this.onMarkAsTestingModalClosed());
   }
 
   onPaymentConfirmModalClosed() {
@@ -262,6 +282,29 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
         this.toast?.addMessage(
           'Unable to cancel order. Please try again.',
           'Failed to Cancel Order',
+          ToastLevelEnum.error
+        );
+        console.log(error)
+      });
+    }
+  }
+
+  onMarkAsTestingModalClosed(){
+    if (this.markAsTestingModal.result === DialogResult.OK) {
+      this.service.updateByOrderNumber(this.orderDetailData.orderNumber, {
+        reason: this.markAsTestingModal.reason.value,
+        isTesting: true
+      }).subscribe(() => {
+        this.toast?.addMessage(
+          `Order ${this.orderDetailData.orderNumber} has just been marked as test.`,
+          'Order marked as test!',
+          ToastLevelEnum.success
+        );
+        this.router.navigate([]);
+      }, error => {
+        this.toast?.addMessage(
+          'Unable to mark order as test. Please try again.',
+          'Failed to mark order as test',
           ToastLevelEnum.error
         );
         console.log(error)
@@ -352,6 +395,10 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
         this.orderDetailData.status
       )
     );
+  }
+
+  get markAsTestReason(): string {
+    return this.orderDetailData.meta?.reason || '-';
   }
 }
 

@@ -90,13 +90,14 @@ export class CustomerPointModalComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.modal.onOpen.subscribe(() => {
       this.service.fetchByUser(this.entity?.username).subscribe((result) => {
-        if (result) {
+        if (result && result?.total) {
           this.pointTotal = result?.total;
-          this.pointHistory = result?.pointHistory;
         } else {
           this.pointTotal = 0;
-          this.pointHistory = [];
         }
+      });
+      this.service.fetchHistory(this.entity?.username).subscribe((result) => {
+        this.pointHistory = result.entities;
       });
     });
   }

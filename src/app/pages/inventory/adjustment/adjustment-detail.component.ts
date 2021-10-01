@@ -58,9 +58,10 @@ import { AuthService } from '@nusantara/auth';
           </th>
           <th i18n>sku</th>
           <th i18n>Receiving Date</th>
-          <th i18n>Available Stock in Product Record</th>
+          <th i18n>Available Stock When Transaction Request occured</th>
+          <th i18n>Actual Stock from receiving order</th>
           <th i18n>Adjusted Qty</th>
-          <th i18n>Difference Qty</th>
+          <th i18n>Expected Qty</th>
           <th i18n>Reason</th>
           <th i18n>Notes</th>
         </tr>
@@ -79,13 +80,16 @@ import { AuthService } from '@nusantara/auth';
             {{ stock_record.created|date: 'dd MMM yyyy HH:mm' }}
           </td>
           <td data-qa="available-quantity">
-            {{ stock_record.originalQuantity }} <!-- is it current quantity ?? -->
+            {{ stock_record.originalQuantity }}
+          </td>
+          <td data-qa="actual-quantity">
+            {{ stock_record.actualQuantity }}
           </td>
           <td data-qa="adjusted-quantity">
-            {{ adjustedQty(stock_record.originalQuantity, stock_record.adjustmentQuantity) }}
+            {{ adjustedQty(stock_record.actualQuantity, stock_record.expectedQuantity) }}
           </td>
           <td data-qa="difference-quantity">
-            {{ stock_record.adjustmentQuantity }} <!-- manual calculation ?? -->
+            {{ stock_record.expectedQuantity }}
           </td>
           <td data-qa="stock-reason">
             {{ stock_record.reason }}
@@ -173,8 +177,8 @@ export class AdjustmentDetailComponent  extends AbstractDetailComponent<IAdjustm
     return `${getSlugFromHref(receivingHref)} / ${productName} / ${getSlugFromHref(locationHref)}`;
   }
 
-  adjustedQty(originalQty: number, differenceQty: number): number {
-    return differenceQty + originalQty;
+  adjustedQty(actualQty: number, expectedQty: number): number {
+    return expectedQty - actualQty;
   }
 
   getFormValue(): any {

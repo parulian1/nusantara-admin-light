@@ -19,6 +19,7 @@ import { StockInputComponent } from './product/stock-input/stock-input.component
 
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 @NgModule({
   declarations: [
     CategoryListComponent,
@@ -63,7 +64,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     ReactiveFormsModule,
     CKEditorModule,
     CatalogRoutingModule,
-
+    DragDropModule,
     // Angular Material
     MatIconModule,
     MatSlideToggleModule,

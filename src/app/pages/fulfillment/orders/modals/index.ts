@@ -13,3 +13,4 @@ export * from './payment-confirm-modal.component';
 export * from './payment-confirm-form-modal.component';
 export * from './delete-confirm-dialog.component';
 export * from './cancel-order-dialog.component';
+export * from './mark-as-testing-dialog.component';

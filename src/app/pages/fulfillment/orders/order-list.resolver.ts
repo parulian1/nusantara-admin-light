@@ -30,6 +30,7 @@ export class OrderListResolver extends AbstractListResolver<IOrder> {
           "page",
           "per_page",
           "order",
+          "is_testing",
         ].indexOf(keyParam) >= 0
       ) {
         if ('page' === keyParam || keyParam === 'per_page') {
@@ -39,8 +40,9 @@ export class OrderListResolver extends AbstractListResolver<IOrder> {
             continue;
           }
         }
-
-        params = params.set(keyParam, theQuery[keyParam]);
+        if (!!theQuery[keyParam]) {
+          params = params.set(keyParam, theQuery[keyParam]);
+        }
         continue;
       }
     }
