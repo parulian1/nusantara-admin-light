@@ -81,10 +81,12 @@
               "browserTarget": "nusantara-admin:build:production"
             },
             "en": {
-              "browserTarget": "nusantara-admin:build:en"
+              "browserTarget": "nusantara-admin:build:en",
+              "baseHref": "/",
             },
             "id": {
-              "browserTarget": "nusantara-admin:build:id"
+              "browserTarget": "nusantara-admin:build:id",
+              "baseHref": "/"
             }
           }
         },
