@@ -227,7 +227,7 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
           // name: ['', ],
         }),
         originalQuantity: [1, [Validators.required, Validators.min(1), ]],
-        cost: [0, [Validators.required, Validators.min(0)]]
+        cost: [{value: 0, disabled: true}, [Validators.required, Validators.min(0)]]
       });
       this.stockRecords.push(f);
     }
