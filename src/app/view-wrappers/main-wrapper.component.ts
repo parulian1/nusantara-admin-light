@@ -9,7 +9,7 @@ import { SubscriptionLike } from 'rxjs';
   template: `
     <header class="main-header">
       <div id="branding">
-        <img src="/assets/bhisma-logo.png" alt="logo" id="brand-icon">
+        <img src="assets/bhisma-logo.png" alt="logo" id="brand-icon">
         <div>{{ authService?.siteDomain }}</div>
       </div>
 

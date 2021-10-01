@@ -401,7 +401,7 @@ const log = new Logger('ProductComponent');
     '.manage { display: grid; grid-template-columns: 7fr 1fr; grid-gap: 20px; align-items: center; }',
     '.product-dimension { display: grid; grid-template-columns: repeat(3, 1fr); grid-column-gap: 16px; }',
     '.heading-1 { margin-bottom: 16px; }',
-    'label.toggle { padding-bottom: 20px 0; width: fit-content; min-height: 0; }',
+    'label.toggle { padding-bottom: 20px 0px; width: fit-content; min-height: 0; }',
     'label.toggle > input { margin-right: 16px }',
     '.rich-text-container { padding-bottom: 16px; margin: 0 !important; }',
     'ul { list-style: none; margin: 0; padding: 0; }',
