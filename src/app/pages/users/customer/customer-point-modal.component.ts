@@ -10,7 +10,7 @@ import {ICustomer} from '@nusantara/models';
       <h2 class="heading-2" i18n>Point History</h2>
       <section class="customer-point-modal__summary">
         <div id="customer-total-point">
-          <img src="/assets/point-icon.svg" alt="Profile Image">
+          <img src="assets/point-icon.svg" alt="Profile Image">
           <span i18n>{{ pointTotal | number }} Point</span>
         </div>
       </section>

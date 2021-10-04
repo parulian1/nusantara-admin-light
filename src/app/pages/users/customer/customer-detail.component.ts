@@ -109,7 +109,7 @@ import { CustomerPointModalComponent } from '@nusantara/pages/users/customer/cus
       <div *ngIf="currentTab === 'profile'" id="profile">
         <section id="customer-point-summary">
           <div id="customer-total-point">
-            <img src="/assets/point-icon.svg" alt="Profile Image">
+            <img src="assets/point-icon.svg" alt="Profile Image">
             <span i18n>{{ userPoint | number }} Point</span>
           </div>
           <div>

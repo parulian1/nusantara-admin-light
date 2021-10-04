@@ -12,10 +12,10 @@ import { IOnboardingContent } from '@nusantara/models';
         <div class="onboarding-content-title">
           <div class="title">
             <div>
-              <img src="/assets/drag.svg" style="width: 18px; float: left; padding-right: 10px; padding-top: 9px;">
+              <img src="assets/drag.svg" style="width: 18px; float: left; padding-right: 10px; padding-top: 9px;">
               <input type="text" [formControl]="name" style="background-color: transparent;">
               <div class="collapse" (click)="toggle()">
-                <img src="/assets/arrow-down.svg">
+                <img src="assets/arrow-down.svg">
               </div>
             </div>
             <nus-field-errors [control]="name"></nus-field-errors>

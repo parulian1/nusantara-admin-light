@@ -8,7 +8,7 @@ export const setAndClearValidators = (value, form: FormGroup, logo = null) => {
     form.get('accountHoldNumber').setValidators([Validators.required]);
     form.get('accountNumber').setValidators([Validators.required]);
 
-    if (logo && logo === '/assets/no-image_id.png') {
+    if (logo && logo === 'assets/no-image_id.png') {
       if (_logo) {
         form.get('logo').setValidators([Validators.required]);
       }

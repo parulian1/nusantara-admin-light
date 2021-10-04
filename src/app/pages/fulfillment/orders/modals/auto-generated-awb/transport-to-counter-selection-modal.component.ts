@@ -15,7 +15,7 @@ import { ToastLevelEnum, ToastService } from '@nusantara/core';
           <div class="shipping-method">
             <div class="method-option" *ngIf="this.type.indexOf('dropoff') > -1">
               <span><input type="radio" name="logistic" value="dropoff" (click)="showPickupForm($event)"></span>
-              <img src="/assets/deliver-to-counter.svg">
+              <img src="assets/deliver-to-counter.svg">
               <span>
                 <div class="subheading-2" i18n>
                   Deliver to Counter
@@ -27,7 +27,7 @@ import { ToastLevelEnum, ToastService } from '@nusantara/core';
             </div>
             <div class="method-option" *ngIf="this.type.indexOf('pickup') > -1">
               <span><input type="radio" name="logistic" value="pickup" (click)="showPickupForm($event)"/></span>
-              <img src="/assets/use-pickup-service.svg">
+              <img src="assets/use-pickup-service.svg">
               <span>
                 <div class="subheading-2" i18n>
                   Use Pick Up Service

@@ -216,7 +216,7 @@ import { MatDialog } from '@angular/material/dialog';
                       <ng-template #noImage>
                         <img
                           class="no-image"
-                          src="/assets/no-image_en.png"
+                          src="assets/no-image_en.png"
                           alt="Product Image"
                         />
                       </ng-template>

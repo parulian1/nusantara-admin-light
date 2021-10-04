@@ -15,7 +15,7 @@ import { SubscriptionLike } from 'rxjs';
 
       <div class="dropdown">
         <button class="dropbtn">
-          <img src="/assets/default-profile-img.svg" alt="Profile Image">
+          <img src="assets/default-profile-img.svg" alt="Profile Image">
           {{ authService?.tokenPayload | getUserDisplayName }}
         </button>
         <div class="dropdown-content">
@@ -336,7 +336,7 @@ export class MainWrapperComponent implements OnInit, OnDestroy {
     }
   }
 
-  get profileImage(): string { return '/assets/default-profile-img.svg'; }
+  get profileImage(): string { return 'assets/default-profile-img.svg'; }
   get currentSiteName(): string { return 'marthatilaarshop.com'; }
 
   onNavigationStarted() {

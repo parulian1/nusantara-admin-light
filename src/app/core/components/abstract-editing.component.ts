@@ -21,7 +21,7 @@ export abstract class AbstractEditingComponent<TForm extends AbstractControl = F
    * URL to be used for an image preview, when there is no image available.
    */
   get emptyImagePreviewURL(): string {
-    return '/assets/no-image_id.png';
+    return 'assets/no-image_id.png';
   }
 
   /**
