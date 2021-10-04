@@ -1292,43 +1292,48 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   private setDescription(): void {
     let productBundlingDescription = '';
 
-    if (this.productBundling.length === 0) {
-      productBundlingDescription = '';
-    } else {
-      productBundlingDescription = 'Paket berisi : ';
-      productBundlingDescription += '<ul>';
+    if (!this.description.dirty && !this.entity) {
+      if (this.productBundling.length === 0) {
+        productBundlingDescription = '';
+      } else {
+        productBundlingDescription = 'Paket berisi : ';
+        productBundlingDescription += '<ul>';
 
-      for (const product of this.productBundling.value) {
-        productBundlingDescription += '<li>' + product.quantity + ' ' + product.name + '</li><br>';
+        for (const product of this.productBundling.value) {
+          productBundlingDescription += '<li>' + product.quantity + ' ' + product.name + '</li><br>';
+        }
+        productBundlingDescription += '</ul>';
+
       }
-      productBundlingDescription += '</ul>';
-
+      this.description.setValue(productBundlingDescription);
     }
-    this.description.setValue(productBundlingDescription);
   }
 
   private setWeight(): void {
     let totalWeight = 0;
+    if (!this.entity) {
+      for (const product of this.productBundling.value) {
+        totalWeight += (product.weight * product.quantity);
+      }
 
-    for (const product of this.productBundling.value) {
-      totalWeight += (product.weight * product.quantity);
+      this.weight.patchValue(totalWeight);
     }
-
-    this.weight.patchValue(totalWeight);
   }
 
   private setProductBundlingMedia(selectedProduct: IProduct): void {
     const productMedia = selectedProduct.media;
     const firstImage = productMedia.find((img) => img.type === 'image');
     const firstVideo = productMedia.find((video) => video.type === 'you_tube');
+    if (!this.entity) {
+      if (!!firstImage) {
+        this.mediaHost.add(firstImage);
+      }
 
-    if (!!firstImage) {
-      this.mediaHost.add(firstImage);
+      if (!!firstVideo) {
+        this.mediaHost.add(firstVideo);
+      }
     }
 
-    if (!!firstVideo) {
-      this.mediaHost.add(firstVideo);
-    }
   }
 
   private getSameProductBundlingIndex(name: string): number {
@@ -1336,49 +1341,50 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   private setPriceProductBundling(): void {
-    if (!this.priceListHost) {
-      this.priceListHost?.updatePriceList({
-        href: null,
-        product: null,
-        type: 'default',
-        platforms: [],
-        locations: [],
-        isProgressive: false,
-        ranges: [
-          {href: null, priceList: null, price: this.totalPrice, minQuantity: 1, maxQuantity: null}
-        ]
-      }, 0);
-    } else {
-      for (const priceList of this.entity?.priceLists ?? []) {
-        priceList.ranges[0].price = this.totalPrice;
-        this.priceListHost.updatePriceList(priceList, 0);
+    if (!this.entity) {
+      if (!this.entity?.priceLists) {
+        this.priceListHost?.updatePriceList({
+          href: null,
+          product: null,
+          type: 'default',
+          platforms: [],
+          locations: [],
+          isProgressive: false,
+          ranges: [
+            {href: null, priceList: null, price: this.totalPrice, minQuantity: 1, maxQuantity: null}
+          ]
+        }, 0);
+      } else {
+        for (const priceList of this.entity?.priceLists ?? []) {
+          priceList.ranges[0].price = this.totalPrice;
+          this.priceListHost.updatePriceList(priceList, 0);
+        }
       }
     }
-
   }
 
   updateVirtualAmountAndPriceListAndWeight(): void {
     this.getVirtualPackageAmount();
     this.setPriceProductBundling();
     this.setWeight();
-    if (!this.description.dirty && !this.entity) {
-      this.setDescription();
-    }
+    this.setDescription();
   }
 
   private removeProductBundlingMedia(product: any): void {
-    if (!!this.mediaHost.entities) {
-      const removeImage = this.mediaHost.entities.findIndex((x) => {
-        return (x.product === product.href || x.product === product.product.href) && x.type === 'image';
-      });
-      if (removeImage !== -1) {
-        this.mediaHost.remove(removeImage);
-      }
-      const removeVideo = this.mediaHost.entities.findIndex((x) => {
-        return (x.product === product.href || x.product === product.product.href) && x.type === 'you_tube';
-      });
-      if (removeVideo !== -1) {
-        this.mediaHost.remove(removeVideo);
+    if (!this.entity) {
+      if (!!this.mediaHost.entities) {
+        const removeImage = this.mediaHost.entities.findIndex((x) => {
+          return (x.product === product.href || x.product === product.product.href) && x.type === 'image';
+        });
+        if (removeImage !== -1) {
+          this.mediaHost.remove(removeImage);
+        }
+        const removeVideo = this.mediaHost.entities.findIndex((x) => {
+          return (x.product === product.href || x.product === product.product.href) && x.type === 'you_tube';
+        });
+        if (removeVideo !== -1) {
+          this.mediaHost.remove(removeVideo);
+        }
       }
     }
   }
