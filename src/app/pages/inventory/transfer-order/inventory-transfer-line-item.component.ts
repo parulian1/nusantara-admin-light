@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {ControlContainer, FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
+import { ControlContainer, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { products, ISubLocation } from '@nusantara/models';
 import { IProductClass } from '../../../models/products';

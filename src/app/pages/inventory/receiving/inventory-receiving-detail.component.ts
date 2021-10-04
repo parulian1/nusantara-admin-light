@@ -2,13 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import {FormArray, FormBuilder, FormControl, Validators} from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import {
   IWarehouse,
   marketplace,
   IError, ISubLocation
 } from '@nusantara/models';
-import {IReceivingOrder, IStockRecord} from '@nusantara/models/inventory';
+import { IReceivingOrder, IStockRecord } from '@nusantara/models/inventory';
 import { AbstractDetailComponent } from '@nusantara/core/components';
 import {
   InventoryReceivingOrderService,
@@ -21,7 +21,7 @@ import {
 } from '@nusantara/shared';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import {IProduct, IProductClass} from '@nusantara/models/products';
+import { IProduct, IProductClass } from '@nusantara/models/products';
 
 
 @Component({

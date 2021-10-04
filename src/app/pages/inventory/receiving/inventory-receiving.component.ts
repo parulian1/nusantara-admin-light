@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthService } from '../../../auth';
@@ -12,7 +12,7 @@ import {
   IError
 } from '@nusantara/models';
 import { InventoryReceivingService, MarketplaceClientService } from '../../../services';
-import {IProduct, IProductClass} from '../../../models/products';
+import { IProduct, IProductClass } from '../../../models/products';
 import {
   ConfirmModalReceivingOrderComponent,
   MarketplaceChannelInfoModalComponent,

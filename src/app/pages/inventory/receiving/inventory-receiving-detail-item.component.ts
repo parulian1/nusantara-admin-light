@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
-import {FormArray, FormControl, FormGroup} from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { products, ISubLocation } from '@nusantara/models';
-import {IProductClass} from '@nusantara/models/products';
+import { IProductClass } from '@nusantara/models/products';
 
 @Component({
   selector: 'nus-inventory-receiving-detail-item',
