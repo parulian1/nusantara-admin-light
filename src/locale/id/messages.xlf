@@ -13,7 +13,6 @@
       <trans-unit id="92f51a4f89ccc52456bdbe94c1df1eef12eba548" datatype="html">
         <source> An email has been sent to your address with a link that will allow you to reset your password. Please check your email. </source>
         <target state="needs-adaptation">Email berisi link untuk atur ulang password telah dikirim. Silakan cek email Anda.</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/auth/pages/forgot-password-sent.component.ts</context>
           <context context-type="linenumber">8,11</context>
@@ -146,7 +145,6 @@
       <trans-unit id="8c5d12330d2c43c98ea5ff3f178c8357f5be3336" datatype="html">
         <source> Please enter your new password. </source>
         <target state="needs-adaptation">Masukkan password baru</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/auth/pages/reset-password.component.ts</context>
           <context context-type="linenumber">8,9</context>
@@ -419,7 +417,6 @@
       <trans-unit id="d62c82214c07766ccc7d4dd05b3f625d86c98808" datatype="html">
         <source> Maps a category in your source data (such as an ERP system) to to this category. These mappings are only applied once, when importing new data. </source>
         <target state="needs-adaptation">Cocokkan kategori dari sumber data (seperti sistem ERP) dengan kategori ini. Hanya dilakukan satu kali ketika memasukkan data baru.</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/category/category.component.ts</context>
           <context context-type="linenumber">68,71</context>
@@ -436,7 +433,6 @@
       <trans-unit id="7002dce63c9094d49a4ef06f93774a01009cb6aa" datatype="html">
         <source> Add Mapping </source>
         <target state="needs-adaptation">Tambah Mapping</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/category/category.component.ts</context>
           <context context-type="linenumber">93,94</context>
@@ -597,7 +593,6 @@
       <trans-unit id="0d7bed14e0ed62581d4b61fe7af437acdb2f2c96" datatype="html">
         <source> Add Attribute </source>
         <target state="needs-adaptation">Tambah Atribut</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product-class/components/product-class-attributes.component.ts</context>
           <context context-type="linenumber">56,57</context>
@@ -814,7 +809,6 @@
       <trans-unit id="9346c0eab45a35bf480b439cfe07c9556e844c5f" datatype="html">
         <source> Minimum Length </source>
         <target state="needs-adaptation">Minimum Karakter</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product-options/product-option.component.ts</context>
           <context context-type="linenumber">50,51</context>
@@ -823,7 +817,6 @@
       <trans-unit id="5939890c138b15c8d39b5101d393e05f9b33ed9d" datatype="html">
         <source> Maximum Length </source>
         <target state="needs-adaptation">Maksimal Karakter</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product-options/product-option.component.ts</context>
           <context context-type="linenumber">58,59</context>
@@ -832,7 +825,6 @@
       <trans-unit id="51eae6d4b8bb1ca25516bee51da1c614c72b8bb8" datatype="html">
         <source> Webhook Check Domain </source>
         <target state="needs-adaptation">Webhook untuk Cek Domain</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product-options/product-option.component.ts</context>
           <context context-type="linenumber">66,67</context>
@@ -841,7 +833,6 @@
       <trans-unit id="a2306ddb65d3aedae88a58f6923fcff67254f99e" datatype="html">
         <source> Webhook Post Checkout </source>
         <target state="needs-adaptation">Webhook untuk Post Checkout</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product-options/product-option.component.ts</context>
           <context context-type="linenumber">74,75</context>
@@ -891,10 +882,6 @@
           <context context-type="linenumber">380</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">81</context>
-        </context-group>
-        <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/marketplace-channel-info-modal.component.ts</context>
           <context context-type="linenumber">15</context>
         </context-group>
@@ -924,7 +911,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">94</context>
+          <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
       <trans-unit id="16a804bc19d2cbab25a1b01097bb1af21a54096d" datatype="html">
@@ -1000,7 +987,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">57</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/users/employee/warehouse/employee-warehouse-host.component.ts</context>
@@ -1040,7 +1027,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">87</context>
+          <context context-type="linenumber">81</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/marketplace-shipping-info-modal.component.ts</context>
@@ -1080,7 +1067,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">91</context>
+          <context context-type="linenumber">85</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/marketplace-channel-info-modal.component.ts</context>
@@ -1182,7 +1169,6 @@
       <trans-unit id="e1d9a6313422a8bb543c5551bc51bddaae74c1cb" datatype="html">
         <source>Start Mapping </source>
         <target state="needs-adaptation">Mulai Mapping</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/marketplace/marketplace-information.component.ts</context>
           <context context-type="linenumber">146,147</context>
@@ -1215,7 +1201,6 @@
       <trans-unit id="36ca18a46238b9bc6ec0e0023b1326775da3217a" datatype="html">
         <source>Start Mapping </source>
         <target state="needs-adaptation">Mulai Mapping</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/marketplace/marketplace-information.component.ts</context>
           <context context-type="linenumber">170,171</context>
@@ -1328,7 +1313,6 @@
       <trans-unit id="940bf18ff36445be2bd91d769b1a63b917afdefd" datatype="html">
         <source>Media <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button (click)=&quot;openImageModal()&quot; type=&quot;button&quot; title=&quot;Add new Image&quot;&gt;"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>image<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/><x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/><x id="START_TAG_BUTTON_1" ctype="x-button_1" equiv-text="&lt;button (click)=&quot;openVideoModal()&quot; type=&quot;button&quot; title=&quot;Add new YouTube video&quot;&gt;"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>ondemand_video<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/><x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/></source>
         <target state="needs-adaptation">Media<x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button (click)=&quot;newImageModal.open()&quot; type=&quot;button&quot; title=&quot;Add new Image&quot;&gt;"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>gambar<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/><x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/><x id="START_TAG_BUTTON_1" ctype="x-button_1" equiv-text="&lt;button (click)=&quot;newYoutubeModal.open()&quot; type=&quot;button&quot; title=&quot;Add new YouTube video&quot;&gt;"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>video_ondemand<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/><x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/></target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/media/product-media-host.component.ts</context>
           <context context-type="linenumber">25,31</context>
@@ -1371,7 +1355,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">109</context>
+          <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a5f9ba9bb9faa8284bcadb1cdbc6aaf969e9c4bb" datatype="html">
@@ -1433,7 +1417,6 @@
       <trans-unit id="99caaf20d674b866890453d347bdaf69e4f1af56" datatype="html">
         <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;checkbox&quot;&#xA;            [formControl]=&quot;isProgressive&quot;&#xA;              name=&quot;is-progressive&quot;&#xA;              data-qa=&quot;is-progressive&quot;&gt;"/> Is Progressive </source>
         <target state="needs-adaptation"><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;checkbox&quot;             [formControl]=&quot;isProgressive&quot;               name=&quot;is-progressive&quot;               data-qa=&quot;is-progressive&quot;&gt;"/>Harga Progresif </target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/price/price-list.component.ts</context>
           <context context-type="linenumber">74,79</context>
@@ -1596,7 +1579,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a9e18fe53a6fdf81267883dc7b3cdcc031727dbc" datatype="html">
@@ -1610,7 +1593,6 @@
       <trans-unit id="8dee6f2791ae72c896f081039e74e0b9c10ef9ea" datatype="html">
         <source> Manage Category</source>
         <target state="needs-adaptation">Atur Kategori</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">85</context>
@@ -1691,7 +1673,6 @@
       <trans-unit id="55084decfa5b044c2d97cbbc12eb397cd47d7764" datatype="html">
         <source> Manage Vendor </source>
         <target state="needs-adaptation">Atur Vendor</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">144</context>
@@ -1878,7 +1859,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">77</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
@@ -1904,7 +1885,6 @@
       <trans-unit id="5819064c68959116ea8f129b1de324e7af1b0fae" datatype="html">
         <source> Add Product </source>
         <target state="needs-adaptation">Tambah Produk</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">338,339</context>
@@ -1958,10 +1938,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving-detail.component.ts</context>
           <context context-type="linenumber">132</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">103</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/transfer-order/inventory-transfer-order.component.ts</context>
@@ -2432,10 +2408,6 @@
           <context context-type="linenumber">39</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">52</context>
-        </context-group>
-        <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/transfer-order/inventory-transfer-order.component.ts</context>
           <context context-type="linenumber">34</context>
         </context-group>
@@ -2451,7 +2423,6 @@
       <trans-unit id="f8b53b407af242e77dc3391947f23988f3451e64" datatype="html">
         <source> Save </source>
         <target state="needs-adaptation">Simpan</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/cms/company-story/company-story-list-ordering.component.ts</context>
           <context context-type="linenumber">50,51</context>
@@ -2460,7 +2431,6 @@
       <trans-unit id="a5433ae2324496bea9537caa5e8a2719d8e958d8" datatype="html">
         <source> Cancel </source>
         <target state="needs-adaptation">Batal</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/cms/company-story/company-story-list-ordering.component.ts</context>
           <context context-type="linenumber">54,55</context>
@@ -2481,7 +2451,6 @@
       <trans-unit id="1ce2779f65ad30ca6b349bab4c156506cfb325ba" datatype="html">
         <source> Reordering </source>
         <target state="needs-adaptation">Urutkan</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/cms/company-story/company-story-list.component.ts</context>
           <context context-type="linenumber">17,18</context>
@@ -2670,7 +2639,6 @@
       <trans-unit id="c849332a2b6af5ca77de6c2358f4a4a54e8fab54" datatype="html">
         <source> if choosen it will show in brand detail page </source>
         <target state="needs-adaptation">Akan muncul di halaman brand detail jika dipilih</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/cms/highlight/highlight.component.ts</context>
           <context context-type="linenumber">43</context>
@@ -2679,7 +2647,6 @@
       <trans-unit id="3885d4873ce436aa53d649bba245e7a4f4d38ebc" datatype="html">
         <source> Add Product </source>
         <target state="needs-adaptation">Tambah Produk</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/cms/highlight/highlight.component.ts</context>
           <context context-type="linenumber">66,67</context>
@@ -2704,7 +2671,6 @@
       <trans-unit id="f34c61b3938ae75d0dbd1878f0bbcf819f9fff26" datatype="html">
         <source> Action Button </source>
         <target state="needs-adaptation">Action Button</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/cms/onboarding/onboarding-content-host.component.ts</context>
           <context context-type="linenumber">27,28</context>
@@ -2721,7 +2687,6 @@
       <trans-unit id="7aafd81526e4dbfbfe16413c3e1350f66939ec96" datatype="html">
         <source> Delete </source>
         <target state="needs-adaptation">Hapus</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/cms/onboarding/onboarding-content.component.ts</context>
           <context context-type="linenumber">46,47</context>
@@ -2778,7 +2743,6 @@
       <trans-unit id="fb8aad312b72bbb7e5a1e2cc0b55fae8962bf0fb" datatype="html">
         <source> Cancel </source>
         <target state="needs-adaptation">Batal</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/cms/onboarding/onboarding.component.ts</context>
           <context context-type="linenumber">51,52</context>
@@ -2807,7 +2771,6 @@
       <trans-unit id="bb1b2fab23cc121dc5106c9c6625199075531616" datatype="html">
         <source> Save </source>
         <target state="needs-adaptation">Simpan</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/cms/onboarding/onboarding.component.ts</context>
           <context context-type="linenumber">54,55</context>
@@ -2916,7 +2879,6 @@
       <trans-unit id="99fdf982dbb0f71d1129571e01d979376eb1d90b" datatype="html">
         <source> Your url is invalid, please follow example properly </source>
         <target state="needs-adaptation">URL tidak valid. Silakan lihat contoh sebagai panduan.</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/cms/video-integration/video-integration.component.ts</context>
           <context context-type="linenumber">67,68</context>
@@ -3033,7 +2995,6 @@
       <trans-unit id="c0df7b0b6f92e5815e0fdec0a0e153e4f7fe80d7" datatype="html">
         <source> Cache result for how many hour(s) </source>
         <target state="needs-adaptation">Simpan informasi di cache selama (jam)</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/blog-feed/blog-feed.component.ts</context>
           <context context-type="linenumber">33,34</context>
@@ -3042,7 +3003,6 @@
       <trans-unit id="743c82402d33311eac1999c216254bffb49d1326" datatype="html">
         <source>Activating cart discount will allow offline customers to get additional discount </source>
         <target state="needs-adaptation">Mengaktifkan diskon keranjang memungkinkan customer offline mendapatkan diskon tambahan.</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/config-cart-discount/config-cart-discount.component.ts</context>
           <context context-type="linenumber">23</context>
@@ -3107,7 +3067,6 @@
       <trans-unit id="c2da56b2d17b662427dfbab779917c016dc6d33b" datatype="html">
         <source> Device Id </source>
         <target state="needs-adaptation">ID Perangkat</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/device/device.component.ts</context>
           <context context-type="linenumber">40,41</context>
@@ -3304,7 +3263,6 @@
       <trans-unit id="00133c3452d63da06c2d755aa36076ec93f1814e" datatype="html">
         <source> Add User </source>
         <target state="needs-adaptation">Tambah Pengguna</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/group/group.component.ts</context>
           <context context-type="linenumber">54,55</context>
@@ -3517,7 +3475,6 @@
       <trans-unit id="41b0fc84f110ac70791b691ca9ff8b5e0cdc133c" datatype="html">
         <source> Map Class &amp; Attribute </source>
         <target state="needs-adaptation">Map Class &amp; Attribute</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/connect/connect.component.ts</context>
           <context context-type="linenumber">55,56</context>
@@ -3562,7 +3519,6 @@
       <trans-unit id="bd958d1265fed3d8b9b72e441159e166f344e230" datatype="html">
         <source> Connect </source>
         <target state="needs-adaptation">Hubungkan</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/connect/form/bukalapak-form.component.ts</context>
           <context context-type="linenumber">51,52</context>
@@ -3637,7 +3593,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1cda7e896753c2605bb6175dca7b7c62456d5274" datatype="html">
@@ -3655,7 +3611,6 @@
       <trans-unit id="5ef329f3004c8f92bd977eb25898a71ba53fb9fa" datatype="html">
         <source> Shop ID must be integer and Max length is 10 </source>
         <target state="needs-adaptation">Shop ID harus berupa angka. Jumlah karakter max. 10</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/connect/form/shopee-form.component.ts</context>
           <context context-type="linenumber">30,31</context>
@@ -3716,7 +3671,6 @@
       <trans-unit id="3092b35949324885de4603b8cafb717ca0632dec" datatype="html">
         <source> FS ID must be integer </source>
         <target state="needs-adaptation">FS ID harus berupa angka</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/connect/form/tokopedia-form.component.ts</context>
           <context context-type="linenumber">46,47</context>
@@ -3805,7 +3759,6 @@
       <trans-unit id="cea6ff7bdc890680515e016c95b7483399aef930" datatype="html">
         <source>Add store, Map Attribute </source>
         <target state="needs-adaptation">Tambah Toko, Mapping Atribut</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/marketplace-integration.component.ts</context>
           <context context-type="linenumber">10,11</context>
@@ -3906,6 +3859,10 @@
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving-detail.component.ts</context>
           <context context-type="linenumber">41</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="089c05a47daee64f6867a2ed9d0adf1f6423c746" datatype="html">
         <source>Reviewed By</source>
@@ -3982,7 +3939,6 @@
       <trans-unit id="7ec9bba3016ed7a844e08d9bc895b61ce1ad079c" datatype="html">
         <source> Publishing Your Product (<x id="INTERPOLATION" equiv-text="{{ order?.totalRecord?.published }}"/>/<x id="INTERPOLATION_1" equiv-text="{{order?.totalProduct}}"/>) </source>
         <target state="needs-adaptation">Mengupload Produk Anda (<x id="INTERPOLATION" equiv-text="{{ order?.totalRecord?.published }}"/>/<x id="INTERPOLATION_1" equiv-text="{{order?.totalProduct}}"/>) </target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/publish/publish-detail.component.ts</context>
           <context context-type="linenumber">38,40</context>
@@ -4027,7 +3983,6 @@
       <trans-unit id="ad7de8ebd9aeef8ce583a97b375a74f458cfb088" datatype="html">
         <source> Go to "Time Out Error" tab and click "Refresh" on each product or "Refresh All" to reupload all products. </source>
         <target state="needs-adaptation">Buka tab "Eror Time Out" dan klik "Refresh" pada setiap produk atau "Refresh Semua" untuk mengupload ulang semua produk</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/publish/publish-detail.component.ts</context>
           <context context-type="linenumber">53,54</context>
@@ -4051,10 +4006,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving-detail.component.ts</context>
           <context context-type="linenumber">130</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">101</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/transfer-order/inventory-transfer-order.component.ts</context>
@@ -4105,10 +4056,6 @@
           <context context-type="linenumber">131</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">104</context>
-        </context-group>
-        <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/transfer-order/inventory-transfer-order.component.ts</context>
           <context context-type="linenumber">75</context>
         </context-group>
@@ -4138,15 +4085,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving-detail.component.ts</context>
-          <context context-type="linenumber">82</context>
+          <context context-type="linenumber">86</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving-detail.component.ts</context>
-          <context context-type="linenumber">133</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">102</context>
+          <context context-type="linenumber">136</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/transfer-order/inventory-transfer-order.component.ts</context>
@@ -4168,7 +4111,6 @@
       <trans-unit id="1215b34304900e739906a728726a1df5ed03b9b6" datatype="html">
         <source> Credentials Error </source>
         <target state="needs-adaptation">Eror Kredensial</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/publish/publish-detail.component.ts</context>
           <context context-type="linenumber">97,98</context>
@@ -4177,7 +4119,6 @@
       <trans-unit id="cce56df551657cc00488cd958ba108a9193e2833" datatype="html">
         <source> Product Data Error </source>
         <target state="needs-adaptation">Eror Data Produk</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/publish/publish-detail.component.ts</context>
           <context context-type="linenumber">100,101</context>
@@ -4186,7 +4127,6 @@
       <trans-unit id="4d3c1b421aa4d641b00a67dfa3934f3c3e0da72b" datatype="html">
         <source> Time Out Error </source>
         <target state="needs-adaptation">Eror Time Out</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/publish/publish-detail.component.ts</context>
           <context context-type="linenumber">103,104</context>
@@ -4223,7 +4163,6 @@
       <trans-unit id="ea61c365bc8ca6ba5253727e70a01cee296f965b" datatype="html">
         <source> <x id="INTERPOLATION" equiv-text="{{ order?.totalRecord.errorMetadata }}"/> Products Can't be Published</source>
         <target state="needs-adaptation"><x id="INTERPOLATION" equiv-text="{{ order?.totalRecord.errorMetadata }}"/>Produk Tidak Dapat Diupload</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/publish/publish-detail.component.ts</context>
           <context context-type="linenumber">167</context>
@@ -4309,10 +4248,6 @@
           <context context-type="linenumber">92</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">40</context>
-        </context-group>
-        <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/transfer-order/inventory-transfer-order.component.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
@@ -4330,10 +4265,6 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/adjustment/adjustment.component.ts</context>
-          <context context-type="linenumber">44</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
           <context context-type="linenumber">44</context>
         </context-group>
         <context-group purpose="location">
@@ -4380,7 +4311,6 @@
       <trans-unit id="59804d9b69f39f46506a9bb69e8eed79c3eef8fd" datatype="html">
         <source> Save </source>
         <target state="needs-adaptation">Simpan</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/setup/edit-shipping.component.ts</context>
           <context context-type="linenumber">72,73</context>
@@ -4389,7 +4319,6 @@
       <trans-unit id="17a9d3860d9ad593dd09a9f934e03999d9e76a7a" datatype="html">
         <source> Cancel </source>
         <target state="needs-adaptation">Batal</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/setup/edit-shipping.component.ts</context>
           <context context-type="linenumber">76,77</context>
@@ -4434,7 +4363,6 @@
       <trans-unit id="1436b4a7969ee41afe88bb6fb8f7cddff264d83f" datatype="html">
         <source> Map your Product Classes to <x id="INTERPOLATION" equiv-text="{{ (currentShop$ | async)?.marketplace | titlecase }}"/> Categories &amp; Attributes. </source>
         <target state="needs-adaptation">Map Product Classes untuk<x id="INTERPOLATION" equiv-text="{{ (currentShop$ | async)?.marketplace | titlecase }}"/>Kategori &amp; Atribut </target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/setup/product-class-mapping/product-class-mapping-list.component.ts</context>
           <context context-type="linenumber">16,20</context>
@@ -4443,7 +4371,6 @@
       <trans-unit id="188255c6d09e9d31943fe2fa7410c530046245ed" datatype="html">
         <source> <x id="INTERPOLATION" equiv-text="{{ (currentShop$ | async)?.marketplace | titlecase }}"/> Category &amp; Attribute</source>
         <target state="needs-adaptation"><x id="INTERPOLATION" equiv-text="{{ (currentShop$ | async)?.marketplace | titlecase }}"/>Kategori &amp; Atribut</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/setup/product-class-mapping/product-class-mapping-list.component.ts</context>
           <context context-type="linenumber">27</context>
@@ -4468,7 +4395,6 @@
       <trans-unit id="3255d61d21aac0032617cbc5d139c29d2d1c2af2" datatype="html">
         <source> Edit Mapping </source>
         <target state="needs-adaptation">Edit Mapping</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/setup/product-class-mapping/product-class-mapping-list.component.ts</context>
           <context context-type="linenumber">52,53</context>
@@ -4477,7 +4403,6 @@
       <trans-unit id="a5d9d4e1c5a088869d5b187cf00115bf8d301b66" datatype="html">
         <source> Start Mapping </source>
         <target state="needs-adaptation">Mulai Mapping</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/setup/product-class-mapping/product-class-mapping-list.component.ts</context>
           <context context-type="linenumber">55,56</context>
@@ -4582,7 +4507,6 @@
       <trans-unit id="c739acdf0e194cfff4d0882d22bab32ca4831c99" datatype="html">
         <source> + Add New Attribute </source>
         <target state="needs-adaptation">+ Tambah atribut baru</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/setup/product-class-mapping/sub-form/attribute-matching-form.component.ts</context>
           <context context-type="linenumber">75,76</context>
@@ -4591,7 +4515,6 @@
       <trans-unit id="04c9c50ec81e27e46a95ab5d3dc5e5a7f0a1bcf8" datatype="html">
         <source> Please select an option </source>
         <target state="needs-adaptation">Pilih 1 atribut</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/setup/product-class-mapping/sub-form/attribute-matching-form.component.ts</context>
           <context context-type="linenumber">79,80</context>
@@ -4600,7 +4523,6 @@
       <trans-unit id="f167ac953aaa0e82633d8b14751ebc0aee1a4ac2" datatype="html">
         <source> This field is required </source>
         <target state="needs-adaptation">Wajib diisi</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/setup/product-class-mapping/sub-form/attribute-matching-form.component.ts</context>
           <context context-type="linenumber">87,88</context>
@@ -4609,7 +4531,6 @@
       <trans-unit id="c22560790cdb6084db4504b57c46813ead2824ae" datatype="html">
         <source> Match with <x id="INTERPOLATION" equiv-text="{{ currentShop }}"/> Type </source>
         <target state="needs-adaptation">Harus sama dengan<x id="INTERPOLATION" equiv-text="{{ currentShop }}"/>Tipe </target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/setup/product-class-mapping/sub-form/attribute-matching-form.component.ts</context>
           <context context-type="linenumber">98,100</context>
@@ -4618,7 +4539,6 @@
       <trans-unit id="b570c9b6f5d96fb6f6969cb9397019829c34e82c" datatype="html">
         <source> Submit </source>
         <target state="needs-adaptation">Selesai</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/setup/product-class-mapping/sub-form/attribute-matching-form.component.ts</context>
           <context context-type="linenumber">109,110</context>
@@ -4627,7 +4547,6 @@
       <trans-unit id="2d84b028dc9dabbdebe773e79a9223fd1fa54bdd" datatype="html">
         <source> Previous </source>
         <target state="needs-adaptation">Sebelumnya</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/setup/product-class-mapping/sub-form/attribute-matching-form.component.ts</context>
           <context context-type="linenumber">112,113</context>
@@ -4676,7 +4595,6 @@
       <trans-unit id="fc1713f296c296918839de73ebecb3e7ef008d0e" datatype="html">
         <source> Next </source>
         <target state="needs-adaptation">Selanjutnya</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/setup/product-class-mapping/sub-form/attribute-selection-form.component.ts</context>
           <context context-type="linenumber">65,66</context>
@@ -4733,7 +4651,6 @@
       <trans-unit id="e6f75b2030ab35ba3bbbc2238afc85c159fb2d0e" datatype="html">
         <source> Edit Shipping </source>
         <target state="needs-adaptation">Atur Pengiriman</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/setup/setup.component.ts</context>
           <context context-type="linenumber">49,50</context>
@@ -4742,7 +4659,6 @@
       <trans-unit id="2c8581ad83959cf7b50f411dbc599b2bd88dc4d3" datatype="html">
         <source> Set Up Showcase </source>
         <target state="needs-adaptation">Atur Etalase</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/setup/setup.component.ts</context>
           <context context-type="linenumber">56,57</context>
@@ -4815,10 +4731,6 @@
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/setup/showcase/modals/marketplace-showcase-product-selection-modal.component.ts</context>
           <context context-type="linenumber">30</context>
         </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/product-selection-modal.component.ts</context>
-          <context context-type="linenumber">29</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="5787fcac03eda5b96436527a54e60cfbb7c30d95" datatype="html">
         <source>Product Name</source>
@@ -4849,11 +4761,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving-detail-item.component.ts</context>
-          <context context-type="linenumber">37</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/inventory/receiving/line-item.component.ts</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">49</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/product-selection-modal.component.ts</context>
@@ -4867,7 +4775,6 @@
       <trans-unit id="18b9710f7669f13110691758aa26af36bf67c7c1" datatype="html">
         <source> Product Not Found </source>
         <target state="needs-adaptation">Produk Tidak Ditemukan</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/setup/showcase/modals/marketplace-showcase-product-selection-modal.component.ts</context>
           <context context-type="linenumber">56,57</context>
@@ -4908,7 +4815,6 @@
       <trans-unit id="2162243278f4b90faf34fca1d528ea7389fe58de" datatype="html">
         <source> Update </source>
         <target state="needs-adaptation">Update</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/setup/showcase/showcase.component.ts</context>
           <context context-type="linenumber">29,30</context>
@@ -4933,7 +4839,6 @@
       <trans-unit id="edf0a82ceee56e600cee13bedc0ddc717c198cd9" datatype="html">
         <source> Back </source>
         <target state="needs-adaptation">Kembali</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/setup/showcase/showcase.component.ts</context>
           <context context-type="linenumber">81,82</context>
@@ -5130,7 +5035,6 @@
       <trans-unit id="295f312536e5971472b932fabc8318705c55072c" datatype="html">
         <source> Add Customer Group </source>
         <target state="needs-adaptation">Tambah Customer Group</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/reseller/reseller.component.ts</context>
           <context context-type="linenumber">48,49</context>
@@ -5187,7 +5091,6 @@
       <trans-unit id="6830e5da528c8406001fcac284e8f5870036ebac" datatype="html">
         <source> Shipping Service Settings </source>
         <target state="needs-adaptation">Pengaturan Jasa Pengiriman</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/shipping/shipping-provider-detail.component.ts</context>
           <context context-type="linenumber">87,88</context>
@@ -5196,7 +5099,6 @@
       <trans-unit id="c9cadaf9010a2183165f79fdf8977d0fd7d57ec7" datatype="html">
         <source> Add Record </source>
         <target state="needs-adaptation">Tambah Media Sosial</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/shipping/shipping-provider-detail.component.ts</context>
           <context context-type="linenumber">113,114</context>
@@ -5457,7 +5359,6 @@
       <trans-unit id="a2914cb8c8816ebe035184681687bccc9c030599" datatype="html">
         <source> Social Media Settings </source>
         <target state="needs-adaptation">Pengaturan Media Sosial</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/site-config/site-config.component.ts</context>
           <context context-type="linenumber">105,106</context>
@@ -5474,7 +5375,6 @@
       <trans-unit id="db8ce73c5b1cfcdcf70b45bb1d2e2f25c5075c45" datatype="html">
         <source> Add Record </source>
         <target state="needs-adaptation">Tambah Produk</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/site-config/site-config.component.ts</context>
           <context context-type="linenumber">129,130</context>
@@ -5579,7 +5479,6 @@
       <trans-unit id="647438b83bedfbb19125ea9dced8d3442a2f2ec3" datatype="html">
         <source> All Date </source>
         <target state="needs-adaptation">Semua Tanggal</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/header/order-date-filter.component.ts</context>
           <context context-type="linenumber">28,29</context>
@@ -5692,7 +5591,6 @@
       <trans-unit id="5553f3e883e25acab5f4a1b127603efc90ac10a8" datatype="html">
         <source> Selected <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{checkedlist? checkedlist.length: 0 }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ page.entities.length }}"/> <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
         <target state="needs-adaptation">Terpilih<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{checkedlist? checkedlist.length: 0 }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ page.entities.length }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/header/order-pagination.component.ts</context>
           <context context-type="linenumber">17</context>
@@ -5701,7 +5599,6 @@
       <trans-unit id="298555f36efe3740e607ffc6384edf367d1f1a0b" datatype="html">
         <source> Download <x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon class=&quot;icon-secondary&quot; svgIcon=&quot;arrow-down&quot;&gt;"/><x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/></source>
         <target state="needs-adaptation">Download<x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon class=&quot;icon-secondary&quot; svgIcon=&quot;arrow-down&quot;&gt;"/><x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/></target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/header/order-pagination.component.ts</context>
           <context context-type="linenumber">29,30</context>
@@ -5950,7 +5847,6 @@
       <trans-unit id="8260261db3a1d79ed58781bd50fb2a36867a1691" datatype="html">
         <source> Deliver to Counter </source>
         <target state="needs-adaptation">Antar ke Konter</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/modals/auto-generated-awb/transport-to-counter-selection-modal.component.ts</context>
           <context context-type="linenumber">21,22</context>
@@ -5967,7 +5863,6 @@
       <trans-unit id="089a3eb4a5e8d49c98e46a6ac6ba6c1a647e9dc8" datatype="html">
         <source> Use Pick Up Service </source>
         <target state="needs-adaptation">Gunakan Jasa Pick Up</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/modals/auto-generated-awb/transport-to-counter-selection-modal.component.ts</context>
           <context context-type="linenumber">33,34</context>
@@ -6016,7 +5911,6 @@
       <trans-unit id="28ec1d49db0a6c99523d20802523e6ee2b052375" datatype="html">
         <source> No </source>
         <target state="needs-adaptation">Tidak</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/modals/cancel-order-dialog.component.ts</context>
           <context context-type="linenumber">17,18</context>
@@ -6153,7 +6047,6 @@
       <trans-unit id="54037bf0e8031210d942820247af293182d4db3c" datatype="html">
         <source> Ready </source>
         <target state="needs-adaptation">Barang Tersedia</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/order-detail.component.ts</context>
           <context context-type="linenumber">120,121</context>
@@ -6162,7 +6055,6 @@
       <trans-unit id="3d04e915f442e3f8d3d8a22f2434a1fe7c547ba4" datatype="html">
         <source> Ship </source>
         <target state="needs-adaptation">Kirim</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/order-detail.component.ts</context>
           <context context-type="linenumber">129,130</context>
@@ -6171,7 +6063,6 @@
       <trans-unit id="99f0fb91f400e79cbefd2162a57e0ebda31a46a1" datatype="html">
         <source> Manual Shipment </source>
         <target state="needs-adaptation">Pengiriman Manual</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/order-detail.component.ts</context>
           <context context-type="linenumber">147,148</context>
@@ -6180,7 +6071,6 @@
       <trans-unit id="f6476aec9536ecfe32ab5bab17c036792d45f69a" datatype="html">
         <source> Complete </source>
         <target state="needs-adaptation">Selesai</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/order-detail.component.ts</context>
           <context context-type="linenumber">157,158</context>
@@ -6189,7 +6079,6 @@
       <trans-unit id="5a052fd9c3c496ebb27bba8b9edb10abccae2f41" datatype="html">
         <source> See Order </source>
         <target state="needs-adaptation">Lihat Pesanan</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/order-detail.component.ts</context>
           <context context-type="linenumber">166,167</context>
@@ -6198,7 +6087,6 @@
       <trans-unit id="5359074048017caec03b05c924c22bc06206998e" datatype="html">
         <source> Orders can only be processed on the <x id="INTERPOLATION" equiv-text="{{ orderDetailData.sourceName | titlecase }}"/> Dashboard. </source>
         <target state="needs-adaptation">Pesanan hanya bisa diproses di<x id="INTERPOLATION" equiv-text="{{ orderDetailData.sourceName | titlecase }}"/>Dashboard. </target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/order-detail.component.ts</context>
           <context context-type="linenumber">175,178</context>
@@ -6207,7 +6095,6 @@
       <trans-unit id="b617271b57e0a3d63c66abe1dd3e594bce219508" datatype="html">
         <source> Order will automatically complete when customer receives the package </source>
         <target state="needs-adaptation">Pesanan akan otomatis selesai setelah customer menerima paket.</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/order-detail.component.ts</context>
           <context context-type="linenumber">180,182</context>
@@ -6216,7 +6103,6 @@
       <trans-unit id="72529ff2fbedd58e73480eff83e5800092fa1b78" datatype="html">
         <source> Download Shipping Label </source>
         <target state="needs-adaptation">Download Label Pengiriman</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/order-detail.component.ts</context>
           <context context-type="linenumber">195,196</context>
@@ -6325,7 +6211,6 @@
       <trans-unit id="3f74c544b6961f7c74191914e1e50de647e9d395" datatype="html">
         <source> Paid Date <x id="START_TAG_NUS_SORT_TOGGLE" ctype="x-nus_sort_toggle" equiv-text="&lt;nus-sort-toggle field=&quot;paid_time&quot;&gt;"/><x id="CLOSE_TAG_NUS_SORT_TOGGLE" ctype="x-nus_sort_toggle" equiv-text="&lt;/nus-sort-toggle&gt;"/></source>
         <target state="needs-adaptation">Tanggal Dibayar<x id="START_TAG_NUS_SORT_TOGGLE" ctype="x-nus_sort_toggle" equiv-text="&lt;nus-sort-toggle field=&quot;paid_time&quot;&gt;"/><x id="CLOSE_TAG_NUS_SORT_TOGGLE" ctype="x-nus_sort_toggle" equiv-text="&lt;/nus-sort-toggle&gt;"/></target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/order-list.component.ts</context>
           <context context-type="linenumber">38,39</context>
@@ -6366,7 +6251,6 @@
       <trans-unit id="0e2402df2d8b982958b023872fdb943f4c0d8538" datatype="html">
         <source> Click Here </source>
         <target state="needs-adaptation">Klik di Sini</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/order-payment-confirm.component.ts</context>
           <context context-type="linenumber">50,51</context>
@@ -6375,7 +6259,6 @@
       <trans-unit id="b9e806e7d3b649b80eca4cd6a03f98b3ba632d8d" datatype="html">
         <source> Edit </source>
         <target state="needs-adaptation">Edit</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/order-payment-confirm.component.ts</context>
           <context context-type="linenumber">57,58</context>
@@ -6452,7 +6335,6 @@
       <trans-unit id="29fb5173e814c9ff55f329f75232f9a8be6e0b5b" datatype="html">
         <source> Confirm Payment </source>
         <target state="needs-adaptation">Konfirmasi Pembayaran</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/order.component.ts</context>
           <context context-type="linenumber">110,111</context>
@@ -6493,7 +6375,6 @@
       <trans-unit id="999342270345007a918df09fcf99feef3df31114" datatype="html">
         <source> Cancel Order </source>
         <target state="needs-adaptation">Batalkan Pesanan</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/order.component.ts</context>
           <context context-type="linenumber">161,162</context>
@@ -6502,7 +6383,6 @@
       <trans-unit id="8f9ae37db70d84dce7057b5ddea62afced6d7fff" datatype="html">
         <source> Stock Adjustment <x id="INTERPOLATION" equiv-text="{{entity.href|entityToSlug}}"/> </source>
         <target state="needs-adaptation">Penyesuaian Stok<x id="INTERPOLATION" equiv-text="{{entity.href|entityToSlug}}"/> </target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/adjustment/adjustment-detail.component.ts</context>
           <context context-type="linenumber">18,20</context>
@@ -6523,7 +6403,6 @@
       <trans-unit id="37fd0c18fa2dd33addb9356f870267d3df846eda" datatype="html">
         <source> Receiving ID / Product Name / Location </source>
         <target state="needs-adaptation">Receiving ID / Nama Produk / Lokasi</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/adjustment/adjustment-detail.component.ts</context>
           <context context-type="linenumber">57,58</context>
@@ -6555,10 +6434,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/adjustment/stock-record-dialog.component.ts</context>
           <context context-type="linenumber">28</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">48</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/transfer-order/inventory-transfer-order.component.ts</context>
@@ -6632,7 +6507,6 @@
       <trans-unit id="250c16ef37a26a29c9614682f75da3134d0b5f3e" datatype="html">
         <source> Approve </source>
         <target state="needs-adaptation">Setujui</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/adjustment/adjustment-detail.component.ts</context>
           <context context-type="linenumber">105,106</context>
@@ -6645,7 +6519,6 @@
       <trans-unit id="45493a221c09f4d2550f928e73f2e8ea49ceef55" datatype="html">
         <source> Back </source>
         <target state="needs-adaptation">Kembali</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/adjustment/adjustment-detail.component.ts</context>
           <context context-type="linenumber">108,109</context>
@@ -6658,7 +6531,6 @@
       <trans-unit id="73a046d2739c3d6bc08596c5f16c5dfbc648c07f" datatype="html">
         <source> Reject </source>
         <target state="needs-adaptation">Tolak</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/adjustment/adjustment-detail.component.ts</context>
           <context context-type="linenumber">111,112</context>
@@ -6708,10 +6580,6 @@
           <context context-type="linenumber">53</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">53</context>
-        </context-group>
-        <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/transfer-order/inventory-transfer-order.component.ts</context>
           <context context-type="linenumber">34</context>
         </context-group>
@@ -6727,7 +6595,6 @@
       <trans-unit id="71c203b5b21237649c46ce706c976eed05734ae0" datatype="html">
         <source>Manual Update </source>
         <target state="needs-adaptation">Update Manual</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/adjustment/adjustment.component.ts</context>
           <context context-type="linenumber">80,81</context>
@@ -6736,7 +6603,6 @@
       <trans-unit id="ee2ac6a858cf68dabc4b73794bcd90dc63bf35f1" datatype="html">
         <source> Manual Upload </source>
         <target state="needs-adaptation">Upload Manual</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/adjustment/adjustment.component.ts</context>
           <context context-type="linenumber">91,92</context>
@@ -6841,7 +6707,6 @@
       <trans-unit id="ecba0a20c1c3f5c5e63239e9c8899de9cdb5a6ee" datatype="html">
         <source> Loading... </source>
         <target state="needs-adaptation">Memuat...</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/adjustment/stock-record-dialog.component.ts</context>
           <context context-type="linenumber">49,50</context>
@@ -6862,7 +6727,6 @@
       <trans-unit id="48a4a89f80b425bd270e6943e1cd7b4a9b2ac3ba" datatype="html">
         <source> Pending Order <x id="INTERPOLATION" equiv-text="{{entity.href|entityToSlug}}"/> </source>
         <target state="needs-adaptation">Pending Order<x id="INTERPOLATION" equiv-text="{{entity.href|entityToSlug}}"/> </target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving-detail.component.ts</context>
           <context context-type="linenumber">30,32</context>
@@ -6874,10 +6738,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving-detail.component.ts</context>
           <context context-type="linenumber">36</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="efd0a5f5cc4c1024c7d218e74b0e1c4f4b02d28a" datatype="html">
@@ -6891,7 +6751,6 @@
       <trans-unit id="d0dccaa468f5efbde01a8c6cd97ad2dd65dd772f" datatype="html">
         <source> Product </source>
         <target state="needs-adaptation">Produk</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving-detail.component.ts</context>
           <context context-type="linenumber">78,79</context>
@@ -6905,32 +6764,12 @@
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="0da737231dd0f1705dd9671ad87922d082f01899" datatype="html">
-        <source>Locator</source>
-        <target state="needs-translation">Lokator</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving-detail.component.ts</context>
-          <context context-type="linenumber">83</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving-detail.component.ts</context>
-          <context context-type="linenumber">134</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">106</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/inventory/transfer-order/inventory-transfer-order.component.ts</context>
-          <context context-type="linenumber">77</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="0be330baadd578e534a56b684eb72940f2214ecd" datatype="html">
         <source>Stock Requested</source>
         <target state="needs-translation">Jumlah Stok Direquest</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving-detail.component.ts</context>
-          <context context-type="linenumber">84</context>
+          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
       <trans-unit id="007833ea5b3c29e911ed2c4ed6782a4f8056310a" datatype="html">
@@ -6938,7 +6777,7 @@
         <target state="needs-translation">Nomor Batch</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving-detail.component.ts</context>
-          <context context-type="linenumber">85</context>
+          <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
       <trans-unit id="195153c5164e21b71a3a232b4cfb49044ff892a4" datatype="html">
@@ -6946,15 +6785,15 @@
         <target state="needs-translation">Tanggal Kedaluwarsa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving-detail.component.ts</context>
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">84</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving-detail.component.ts</context>
-          <context context-type="linenumber">136</context>
+          <context context-type="linenumber">134</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">107</context>
+          <context context-type="linenumber">100</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/transfer-order/inventory-transfer-order.component.ts</context>
@@ -6966,6 +6805,26 @@
         <target state="needs-translation">Biaya</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving-detail.component.ts</context>
+          <context context-type="linenumber">85</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving-detail.component.ts</context>
+          <context context-type="linenumber">135</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
+          <context context-type="linenumber">101</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/inventory/transfer-order/inventory-transfer-order.component.ts</context>
+          <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0da737231dd0f1705dd9671ad87922d082f01899" datatype="html">
+        <source>Locator</source>
+        <target state="needs-translation">Lokator</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving-detail.component.ts</context>
           <context context-type="linenumber">87</context>
         </context-group>
         <context-group purpose="location">
@@ -6973,12 +6832,8 @@
           <context context-type="linenumber">137</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">108</context>
-        </context-group>
-        <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/transfer-order/inventory-transfer-order.component.ts</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ed718c498d6c85e7d51e5c38787e26c06d1933e2" datatype="html">
@@ -6986,11 +6841,11 @@
         <target state="needs-translation">Batch</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving-detail.component.ts</context>
-          <context context-type="linenumber">135</context>
+          <context context-type="linenumber">133</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">105</context>
+          <context context-type="linenumber">99</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/transfer-order/inventory-transfer-order.component.ts</context>
@@ -7014,24 +6869,55 @@
         <target state="needs-translation">Delivery Order</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="e7bea8a986c36963603803f6338298a8ae9c7905" datatype="html">
-        <source>DC PIC</source>
-        <target state="needs-translation">PIC DC</target>
+      <trans-unit id="472f2890e75d2f37dbe1da8bb859594b5e22a933" datatype="html">
+        <source>Created Date</source>
+        <target state="needs-translation"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ea193948cef464a5f9bb17a3bb15ef2332c9234f" datatype="html">
-        <source> Confirm </source>
-        <target state="needs-adaptation">Konfirmasi</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
+      <trans-unit id="6fb68b8ca05d72766e3c70f85572ba2e4976bc83" datatype="html">
+        <source>DO Number (Optional)</source>
+        <target state="needs-translation"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">75,76</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8e06cffadfb5222970681a11379cee253b7ef150" datatype="html">
+        <source>*) Required fields</source>
+        <target state="needs-translation"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5c892fecd999003ead13bf825101ee8f6fc319cf" datatype="html">
+        <source>Product Name (UPC)*</source>
+        <target state="needs-translation"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
+          <context context-type="linenumber">96</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2cd5e2f09b70013eb42df61473287786b8120177" datatype="html">
+        <source>SKU*</source>
+        <target state="needs-translation"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
+          <context context-type="linenumber">97</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a46aef2b264c46f6c2589b8645d2d4e5b893a85f" datatype="html">
+        <source>Quantity*</source>
+        <target state="needs-translation"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
+          <context context-type="linenumber">98</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9ce75d386d35e322e7794c6f98cc54b0720275f0" datatype="html">
@@ -7039,7 +6925,31 @@
         <target state="needs-translation"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>tambah<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Tambah Record </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">124,125</context>
+          <context context-type="linenumber">118,119</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c81b254007317d38080e67ba00f3b83298778d8c" datatype="html">
+        <source>Input SKU</source>
+        <target state="needs-translation"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/inventory/receiving/line-item.component.ts</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="86f1643081809c28a4e81f9ab9f7313b3acf7c33" datatype="html">
+        <source>Input Batch</source>
+        <target state="needs-translation"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/inventory/receiving/line-item.component.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0ea0d0def5221f18ace218f255739c3259561eab" datatype="html">
+        <source>Ensure that there are no more than 16 digits</source>
+        <target state="needs-translation"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/inventory/receiving/line-item.component.ts</context>
+          <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f435ca5e98ff1e512f0163a951acc1c692ef865a" datatype="html">
@@ -7885,7 +7795,6 @@
       <trans-unit id="d1881dc4539bfdd04673d27e6a36462fbd9997a5" datatype="html">
         <source>Default PIN has not been filled, please fill in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&#xA;          routerLink=&quot;/config/pos-integration/default-pin-config&quot; style=&quot;color:#EA730B;&quot; &gt;"/>here<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
         <target state="needs-adaptation">PIN bawaan belum diisi. Mohon isi<x id="START_LINK" ctype="x-a" equiv-text="&lt;a           routerLink=&quot;/config/pos-integration/default-pin-config&quot; style=&quot;color:#EA730B;&quot; &gt;"/>di sini<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/users/employee/employee.component.ts</context>
           <context context-type="linenumber">97,98</context>
@@ -7894,7 +7803,6 @@
       <trans-unit id="7ae55ebe12c47ebcab7d0b80ad7d5ff846e8110a" datatype="html">
         <source> Reset to Default PIN </source>
         <target state="needs-adaptation">Reset ke PIN Bawaan</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/users/employee/employee.component.ts</context>
           <context context-type="linenumber">106,107</context>
@@ -7911,7 +7819,6 @@
       <trans-unit id="3b305f57622102f71cb565c234f9367540b1e940" datatype="html">
         <source> Send Reset Password </source>
         <target state="needs-adaptation">Kirim Reset Password</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/users/employee/employee.component.ts</context>
           <context context-type="linenumber">137,138</context>
@@ -7944,7 +7851,6 @@
       <trans-unit id="63c5f397b4174d879154d0d3e3fd4f3903ce27c5" datatype="html">
         <source> Go to Approved Order </source>
         <target state="needs-adaptation">Pergi ke Approved Order</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/confirm-modal-pending-order.component.ts</context>
           <context context-type="linenumber">23,24</context>
@@ -7953,7 +7859,6 @@
       <trans-unit id="6ce352b75374ce086cfebe7ef042585827ea499e" datatype="html">
         <source>Choose CSV File (Step 1/2) </source>
         <target state="needs-adaptation">Pilih File CSV (Tahap 1/2)</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/csv-dialog/csv-dialog.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -7962,7 +7867,6 @@
       <trans-unit id="90bf43b9a31e43272c3065c96e46e4c208987760" datatype="html">
         <source>Upload a CSV file to bulk upload your products. Don't have a file? <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&#xA;            href=&quot;../../../assets/sample-files/example-csv-stock-adjustment.csv&quot; download&gt;"/>Download Template<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
         <target state="needs-adaptation">Upload CSV untuk menambahkan banyak produk sekaligus. Tidak memiliki file CSV?<x id="START_LINK" ctype="x-a" equiv-text="&lt;a             href=&quot;../../../assets/sample-files/example-csv-stock-adjustment.csv&quot; download&gt;"/>Download Template<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/csv-dialog/csv-dialog.component.ts</context>
           <context context-type="linenumber">27,28</context>
@@ -7971,7 +7875,6 @@
       <trans-unit id="bc4a2514712aa83082282c29f795f3d9c0f040f8" datatype="html">
         <source>Mapping Attribute (Step 2/2) </source>
         <target state="needs-adaptation">Mapping Atribut (Tahap 2/2)</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/csv-dialog/csv-dialog.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -8088,7 +7991,6 @@
       <trans-unit id="2a62a59d9424e9e869061ebf3e8f8b8f95411571" datatype="html">
         <source> Save </source>
         <target state="needs-adaptation">Simpan</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/detail-actions.component.ts</context>
           <context context-type="linenumber">12,13</context>
@@ -8097,7 +7999,6 @@
       <trans-unit id="da44efc7b658c318651866454d258bbbe57ff21c" datatype="html">
         <source> Cancel </source>
         <target state="needs-adaptation">Cancel</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/detail-actions.component.ts</context>
           <context context-type="linenumber">15,16</context>
@@ -8106,7 +8007,6 @@
       <trans-unit id="d9797b7f7d130802253f3bdd06f7da9f474816af" datatype="html">
         <source> Delete </source>
         <target state="needs-adaptation">Hapus</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/detail-actions.component.ts</context>
           <context context-type="linenumber">18,19</context>
@@ -8159,7 +8059,6 @@
       <trans-unit id="361f2d674ddb86aac36c425da3de974b6a8797fd" datatype="html">
         <source> Manage Shipping </source>
         <target state="needs-adaptation">Atur Pengiriman</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/marketplace-shipping-info-modal.component.ts</context>
           <context context-type="linenumber">36,37</context>
@@ -8216,7 +8115,6 @@
       <trans-unit id="415040806e2c1299946309ba8102dfb852993b17" datatype="html">
         <source> Showing <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ startingIndex }}"/>-<x id="INTERPOLATION_1" equiv-text="{{ endingIndex }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_2" equiv-text="{{ page?.totalResults }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
         <target state="needs-adaptation">Menampilkan<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ startingIndex }}"/>-<x id="INTERPOLATION_1" equiv-text="{{ endingIndex }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>dari<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_2" equiv-text="{{ page?.totalResults }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pagination-child.component.ts</context>
           <context context-type="linenumber">12,14</context>
@@ -8224,6 +8122,14 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pagination.component.ts</context>
           <context context-type="linenumber">12,14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5ff77df30fde5c1c38206d8d6b66604c140186ec" datatype="html">
+        <source>Showing 10 recently added products. Search product name or UPC to find more products.</source>
+        <target state="needs-translation"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/product-selection-modal.component.ts</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2ea9a4bd22a64d8743f0c60c55aaef392169cf0a" datatype="html">
