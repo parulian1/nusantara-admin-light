@@ -56,6 +56,7 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
       <label>
         <span>Type</span>
         <select [formControl]="type">
+          <option selected value> -- select an option -- </option>
           <option *ngFor="let t of typeChoices" [ngValue]="t.value">{{ t.displayName }}</option>
         </select>
       </label>
@@ -75,6 +76,7 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
       <label>
         <span>Discount Based On</span>
         <select [formControl]="discountBase">
+          <option selected value> -- select an option -- </option>
           <option *ngFor="let t of discountBaseChoices" [ngValue]="t.value">{{ t.displayName }}</option>
         </select>
       </label>
@@ -89,6 +91,7 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
       <label>
         <span>Maximum Usage</span>
         <select [formControl]="maxUsed">
+          <option selected value> -- select an option -- </option>
           <option *ngFor="let t of maxUsedChoices" [ngValue]="t.value">{{ t.displayName }}</option>
         </select>
         <!--        <input type="number" [formControl]="maxUsed" placeholder="Ex, 10000000">-->
