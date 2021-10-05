@@ -4,45 +4,45 @@ import {RequireIsEnterpriseGuard} from '@nusantara/auth';
 @Component({
   selector: 'nus-general-settings',
   template: `
-    <h1 class="title-1">General</h1>
+    <h1 class="title-1" i18n>General</h1>
     <div class="wrapper">
       <div>
-        <h1 class="heading-1">Corporate Information</h1>
+        <h1 class="heading-1" i18n>Corporate Information</h1>
       </div>
       <div>
-        <button routerLink="settings" class="control">Open</button>
+        <button routerLink="settings" class="control" i18n>Open</button>
       </div>
     </div>
     <div *ngIf="enterpriseGuard.canActivate(null, null)" class="wrapper">
       <div>
-        <h1 class="heading-1">Groups</h1>
+        <h1 class="heading-1" i18n>Groups</h1>
       </div>
       <div>
-        <button routerLink="groups" class="control">Open</button>
-      </div>
-    </div>
-    <div class="wrapper">
-      <div>
-        <h1 class="heading-1">Payment Gateways</h1>
-      </div>
-      <div>
-        <button routerLink="payment-gateways" class="control">Open</button>
+        <button routerLink="groups" class="control" i18n>Open</button>
       </div>
     </div>
     <div class="wrapper">
       <div>
-        <h1 class="heading-1">Warehouses</h1>
+        <h1 class="heading-1" i18n>Payment Gateways</h1>
       </div>
       <div>
-        <button routerLink="warehouses" class="control">Open</button>
+        <button routerLink="payment-gateways" class="control" i18n>Open</button>
       </div>
     </div>
     <div class="wrapper">
       <div>
-        <h1 class="heading-1">Shipping Methods</h1>
+        <h1 class="heading-1" i18n>Warehouses</h1>
       </div>
       <div>
-        <button routerLink="shipping-methods" class="control">Open</button>
+        <button routerLink="warehouses" class="control" i18n>Open</button>
+      </div>
+    </div>
+    <div class="wrapper">
+      <div>
+        <h1 class="heading-1" i18n>Shipping Methods</h1>
+      </div>
+      <div>
+        <button routerLink="shipping-methods" class="control" i18n>Open</button>
       </div>
     </div>
   `,

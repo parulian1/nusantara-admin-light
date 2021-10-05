@@ -18,7 +18,7 @@ import { MarketplaceClientEnum } from '../markeplace-client-enum';
   template: `
     <form [formGroup]="form" class="fluid">
       <label>
-        <span>Username
+        <span i18n>Username
           <nus-tooltip [text]="usernameInfo"></nus-tooltip>
         </span>
         <input type="email" formControlName="username" placeholder="Input your Bukalapak Username"/>
@@ -29,7 +29,7 @@ import { MarketplaceClientEnum } from '../markeplace-client-enum';
       </label>
 
       <label>
-        <span>Warehouse</span>
+        <span i18n>Warehouse</span>
         <select formControlName="warehouseId">
           <option [value]="null">Select Warehouse</option>
           <option *ngFor="let opt of warehouses" [ngValue]="opt.warehouseId">
@@ -47,17 +47,17 @@ import { MarketplaceClientEnum } from '../markeplace-client-enum';
           type="submit"
           [disabled]="!form.valid"
           class="control"
-          (click)="onUpdate()">
+          (click)="onUpdate()" i18n>
           Connect
         </button>
         <button *ngIf="!isEdit"
           type="submit"
           [disabled]="!form.valid"
           class="control"
-          (click)="onConnect()">
+          (click)="onConnect()" i18n>
           Connect
         </button>
-        <button type="button" (click)="onCancel()" class="control secondary ghost">
+        <button type="button" (click)="onCancel()" class="control secondary ghost" i18n>
           Cancel
         </button>
       </div>
@@ -86,7 +86,7 @@ export class BukalapakFormComponent implements OnInit {
   form: FormGroup;
   warehouses: marketplace.IMarketplaceWarehouse[] = [];
   shopIdValue: any;
-  usernameInfo = "Username from your Bukalapak account";   
+  usernameInfo = "Username from your Bukalapak account";
 
   constructor(
     private service: MarketplaceClientService,

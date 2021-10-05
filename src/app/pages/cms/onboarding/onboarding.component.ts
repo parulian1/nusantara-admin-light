@@ -18,13 +18,13 @@ import { OnboardingPreviewHostDialogComponent } from './preview';
 
     <form [formGroup]="form" (ngSubmit)="save()">
       <label>
-        <span>Title</span>
+        <span i18n>Title</span>
         <input type="text" [formControl]="name">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
-        <span>Display At</span>
+        <span i18n>Display At</span>
         <select formControlName="type">
           <option [ngValue]="null">---</option>
           <option *ngFor="let typeChoice of typeChoices" [ngValue]="typeChoice.value">
@@ -35,7 +35,7 @@ import { OnboardingPreviewHostDialogComponent } from './preview';
       </label>
 
       <label class="checkbox">
-        <span>Display On/Off</span>
+        <span i18n>Display On/Off</span>
         <input type="checkbox" [formControl]="isActive">
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
@@ -44,13 +44,13 @@ import { OnboardingPreviewHostDialogComponent } from './preview';
       <nus-onboarding-preview-host-dialog [form]="contents" (closeEvent)="closePreview()">
       </nus-onboarding-preview-host-dialog>
       <div class="action-button">
-        <button (click)="preview()" type="button" class="preview-btn" [disabled]="!contents.length">
+        <button (click)="preview()" type="button" class="preview-btn" [disabled]="!contents.length" i18n>
           <i class="material-icons">visibility</i>Preview
         </button>
-        <button type="button" (click)="navigateToParent(true)" class="control secondary">
+        <button type="button" (click)="navigateToParent(true)" class="control secondary" i18n>
           Cancel
         </button>
-        <button type="submit" [disabled]="!form.valid" class="control">
+        <button type="submit" [disabled]="!form.valid" class="control" i18n>
             Save
         </button>
       </div>

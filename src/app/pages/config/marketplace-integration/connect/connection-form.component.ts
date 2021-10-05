@@ -8,14 +8,14 @@ import { MarketplaceClientEnum } from './markeplace-client-enum';
 @Component({
   selector: 'nus-marketplace-integration',
   template: `
-    <h1 class="title-1">Add Store</h1>
+    <h1 class="title-1" i18n>Add Store</h1>
     <div class="wrapper">
-      <h1 class="heading-1">Connect to Marketplace</h1>
-      <p>Connect to manage products in marketplace.</p>
+      <h1 class="heading-1" i18n>Connect to Marketplace</h1>
+      <p i18n>Connect to manage products in marketplace.</p>
 
       <form class="fluid">
         <label>
-          <span>Marketplace</span>
+          <span i18n>Marketplace</span>
           <select
             [disabled]="editMode"
             [(ngModel)]="selectedClient"
@@ -55,7 +55,7 @@ import { MarketplaceClientEnum } from './markeplace-client-enum';
           [isEdit]="editMode"
         ></nus-bukalapak-client-form>
       </div>
-    </div>  
+    </div>
   `,
   styles: [
     `.wrapper { padding: 16px 24px; border: solid 1px var(--grey); border-radius: 4px; width: 60vw; }`,

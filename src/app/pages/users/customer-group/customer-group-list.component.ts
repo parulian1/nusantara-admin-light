@@ -7,7 +7,7 @@ import { AbstractListComponent } from '@nusantara/core';
 @Component({
   selector: 'nus-customer-group-list',
   template: `
-    <nus-list-header
+    <nus-list-header i18n-title
       title="Customer Groups"
       description="Groups of customers, typically used for promotional targeting">
     </nus-list-header>
@@ -17,9 +17,9 @@ import { AbstractListComponent } from '@nusantara/core';
     <table>
       <thead>
         <tr>
-          <th translate>Name</th>
-          <th>Type</th>
-          <th translate class="numeric">Customers</th>
+          <th translate i18n>Name</th>
+          <th i18n>Type</th>
+          <th translate class="numeric" i18n>Customers</th>
         </tr>
       </thead>
       <tbody>

@@ -5,25 +5,25 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
 @Component({
   selector: 'nus-deliver-to-counter-manual-input-awb-modal',
   template: `
-    <ngx-smart-modal 
-      [identifier]="'deliverToCounterManualInputAwb'" 
-      #modal 
+    <ngx-smart-modal
+      [identifier]="'deliverToCounterManualInputAwb'"
+      #modal
       [customClass]="'medium-modal no-padding-modal'">
       <div class="wrapper">
         <div class="message">
-          <h2 class="title-2">Deliver to Counter</h2>
-          <p><strong>Order count</strong> will be delivered to <strong>Logistic</strong> counter.</p>
+          <h2 class="title-2" i18n>Deliver to Counter</h2>
+          <p i18n><strong>Order count</strong> will be delivered to <strong>Logistic</strong> counter.</p>
           <div class="to-do">
-            <p>What to do next:</p>
+            <p i18n>What to do next:</p>
             <ol>
-              <li>Print shipping label & put it on the package.</li>
-              <li>Deliver your package to the nearest <strong>Logistic Name</strong> counter.</li>
-              <li>Input AWB number obtained from the counter.</li>
-              <li>Track shipment process from "Shipped" tab.</li>
+              <li i18n>Print shipping label & put it on the package.</li>
+              <li i18n>Deliver your package to the nearest <strong>Logistic Name</strong> counter.</li>
+              <li i18n>Input AWB number obtained from the counter.</li>
+              <li i18n>Track shipment process from "Shipped" tab.</li>
             </ol>
           </div>
         </div>
-        <button type="submit" class="control">Download Shipping Label</button>
+        <button type="submit" class="control" i18n>Download Shipping Label</button>
       </div>
 
     </ngx-smart-modal>

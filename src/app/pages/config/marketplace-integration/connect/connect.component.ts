@@ -9,7 +9,7 @@ import * as shopActions from '@nusantara/actions';
 
 @Component({
   selector: 'nus-marketplace-setup',
-  template: `<h1 class="title-1">Connect to Marketplace</h1>
+  template: `<h1 class="title-1" i18n>Connect to Marketplace</h1>
     <nus-empty-list
       *ngIf="!page?.entities?.length; else elseBlock"
       title="No Connected Store Yet!"
@@ -20,21 +20,21 @@ import * as shopActions from '@nusantara/actions';
     <ng-template #elseBlock>
       <div class="header">
         <div>
-          <h1 class="heading-1">Store List</h1>
-          <p>All marketplace stores you connected are listed here.</p>
+          <h1 class="heading-1" i18n>Store List</h1>
+          <p i18n>All marketplace stores you connected are listed here.</p>
         </div>
-        <button [routerLink]="['new']" class="control"><i class="material-icons">add</i> Add</button>
+        <button [routerLink]="['new']" class="control" i18n><i class="material-icons">add</i> Add</button>
       </div>
 
       <nus-pagination [page]="page"></nus-pagination>
       <table>
         <thead>
           <tr>
-            <th>Store Name</th>
-            <th>Marketplace</th>
-            <th>Warehouse</th>
-            <th>Status</th>
-            <th>Action</th>
+            <th i18n>Store Name</th>
+            <th i18n>Marketplace</th>
+            <th i18n>Warehouse</th>
+            <th i18n>Status</th>
+            <th i18n>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -44,19 +44,19 @@ import * as shopActions from '@nusantara/actions';
             <td>{{ entity.warehouse.name }}</td>
 
             <td *ngIf="entity.isConnected == false">
-              <span class="badge alert">Not Connected</span>
+              <span class="badge alert" i18n>Not Connected</span>
             </td>
             <td *ngIf="entity.isConnected == true">
-              <span class="badge success">Connected</span>
+              <span class="badge success" i18n>Connected</span>
             </td>
 
             <td *ngIf="entity.isConnected == true">
-              <a [routerLink]="['product-class/', entity.slug]" (click)="setSelectedShop(entity)">
+              <a [routerLink]="['product-class/', entity.slug]" (click)="setSelectedShop(entity)" i18n>
                 Map Class & Attribute
               </a>
             </td>
             <td *ngIf="entity.isConnected == false">
-              <a [routerLink]="[entity.slug]">Reconnect</a>
+              <a [routerLink]="[entity.slug]" i18n>Reconnect</a>
             </td>
           </tr>
         </tbody>

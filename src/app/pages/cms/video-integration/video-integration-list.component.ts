@@ -8,7 +8,7 @@ import {getYoutubeIdFromUrl, youtubeUrl} from './utils';
 @Component({
   selector: 'nus-video-integration-list',
   template: `
-    <nus-list-header
+    <nus-list-header i18n-title
       title="Video Integration"
       description="Customer reviews of Video Integration">
     </nus-list-header>
@@ -21,10 +21,10 @@ import {getYoutubeIdFromUrl, youtubeUrl} from './utils';
     <table>
       <thead>
       <tr>
-        <th>Title</th>
-        <th>Type</th>
-        <th>Sort Priority</th>
-        <th>Emmbed Url</th>
+        <th i18n>Title</th>
+        <th i18n>Type</th>
+        <th i18n>Sort Priority</th>
+        <th i18n>Emmbed Url</th>
       </tr>
       </thead>
       <tbody>

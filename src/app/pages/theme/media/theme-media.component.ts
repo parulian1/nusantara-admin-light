@@ -18,7 +18,7 @@ import { GoogleService } from '@nusantara/services';
     <button type="button" (click)="remove.emit()" title="Remove"><i class="material-icons">remove_circle_outline</i></button>
 
     <div *ngIf="entity?.type === 'image'">
-      <span class="video-title">Image</span>
+      <span class="video-title" i18n>Image</span>
     </div>
     <img [src]="previewImageUrl" alt="Media Preview">
   `,

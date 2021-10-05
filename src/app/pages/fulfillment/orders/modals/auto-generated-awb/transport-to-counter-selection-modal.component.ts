@@ -10,29 +10,29 @@ import { ToastLevelEnum, ToastService } from '@nusantara/core';
     <nus-spinner [appBusy]="isBusy"></nus-spinner>
     <div class="wrapper">
         <div class="message">
-          <h2 class="title-2">Ship Order</h2>
-          <p><strong>{{orderData.sourceName | titlecase }} | {{orderData.storeName}} | {{shippingMethod ? shippingMethod : "-" }} </strong></p>
+          <h2 class="title-2" i18n>Ship Order</h2>
+          <p i18n><strong>{{orderData.sourceName | titlecase }} | {{orderData.storeName}} | {{shippingMethod ? shippingMethod : "-" }} </strong></p>
           <div class="shipping-method">
             <div class="method-option" *ngIf="this.type.indexOf('dropoff') > -1">
               <span><input type="radio" name="logistic" value="dropoff" (click)="showPickupForm($event)"></span>
-              <img src="/assets/deliver-to-counter.svg">
+              <img src="assets/deliver-to-counter.svg">
               <span>
-                <div class="subheading-2">
+                <div class="subheading-2" i18n>
                   Deliver to Counter
                 </div>
-                <div class="body-2">
+                <div class="body-2" i18n>
                   Deliver your packages to the closest <strong>{{shippingMethod}}</strong> counter.
                 </div>
               </span>
             </div>
             <div class="method-option" *ngIf="this.type.indexOf('pickup') > -1">
               <span><input type="radio" name="logistic" value="pickup" (click)="showPickupForm($event)"/></span>
-              <img src="/assets/use-pickup-service.svg">
+              <img src="assets/use-pickup-service.svg">
               <span>
-                <div class="subheading-2">
+                <div class="subheading-2" i18n>
                   Use Pick Up Service
                 </div>
-                <div class="body-2">
+                <div class="body-2" i18n>
                   <strong>{{shippingMethod ? shippingMethod : "-" }}</strong> will pick up the packages from your address.
                 </div>
               </span>
@@ -45,7 +45,7 @@ import { ToastLevelEnum, ToastService } from '@nusantara/core';
 
                 <div class="method-option" *ngFor="let addr_ of this.addresses;">
                   <span>
-                    <input  type="radio" (click)="showDateTimeForm(addr_.id)" 
+                    <input  type="radio" (click)="showDateTimeForm(addr_.id)"
                             formControlName="addressId" name="addressId" [value]="addr_.id"/>
                   </span>
                   <span>
@@ -69,7 +69,7 @@ import { ToastLevelEnum, ToastService } from '@nusantara/core';
             </form>
           </div>
         </div>
-        <button [disabled]="!form.valid" type="submit" class="control" (click)="logisticInit()">Submit</button>
+        <button [disabled]="!form.valid" type="submit" class="control" (click)="logisticInit()" i18n>Submit</button>
       </div>
   `,
   styles: [
@@ -78,14 +78,14 @@ import { ToastLevelEnum, ToastService } from '@nusantara/core';
     'h2 { padding-bottom: 24px }',
     'p { color : var(--darken-grey-color); margin: 0; }',
     '.shipping-method { margin-top: 28px; }',
-    `.method-option { 
+    `.method-option {
       border: solid 1px var(--grey);
       border-radius: 4px;
       display: flex;
       align-items: center;
       padding: 12px 16px;
       gap: 12px; }`,
-    '.method-option:not(:last-child) { margin-bottom: 16px; }', 
+    '.method-option:not(:last-child) { margin-bottom: 16px; }',
     'button { width: 50% }'
   ]
 })
@@ -152,7 +152,7 @@ export class TransportToCounterSelectionModalComponent implements OnInit {
   }
 
   getFormValue(): any {
-    
+
     if(this.selectedType == 'pickup'){
       const formValue = {
         pickup_id : this.form.value.pickupId,
@@ -194,5 +194,5 @@ export class TransportToCounterSelectionModalComponent implements OnInit {
         console.log(error)
     });
   }
-  
+
 }

@@ -8,12 +8,12 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
     <ngx-smart-modal [identifier]="'confirm'" #modal [customClass]="'no-close-icon-modal no-padding-modal'">
       <div class="wrapper">
         <div class="message">
-          <h2 class="heading-2">Delete Showcase?</h2>
-          <p class="body-2">Deleting this showcase will not delete the product. Deleted showcase can't be recovered.</p>
+          <h2 class="heading-2" i18n>Delete Showcase?</h2>
+          <p class="body-2" i18n>Deleting this showcase will not delete the product. Deleted showcase can't be recovered.</p>
         </div>
         <div class="action">
-          <button class="control" (click)="close()" type="button">Yes, Delete</button>
-          <button class="control secondary ghost" (click)="cancel()" type="button">
+          <button class="control" (click)="close()" type="button" i18n>Yes, Delete</button>
+          <button class="control secondary ghost" (click)="cancel()" type="button" i18n>
             Cancel
           </button>
         </div>

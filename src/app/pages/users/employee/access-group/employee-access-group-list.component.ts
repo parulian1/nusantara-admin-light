@@ -12,7 +12,7 @@ import { IAccessGroup } from '@nusantara/models';
           [formControl]="href"
           style="white-space: pre-wrap; max-width: 250px; text-overflow: ellipsis;"
         >
-          <option [ngValue]="''">Choose Access Group</option>
+          <option [ngValue]="''" i18n>Choose Access Group</option>
           <option *ngFor="let accessGroup of choices" [ngValue]="accessGroup.href">
             {{ accessGroup.name }}
           </option>

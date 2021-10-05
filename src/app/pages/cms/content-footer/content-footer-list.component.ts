@@ -6,7 +6,7 @@ import {ActivatedRoute} from '@angular/router';
 @Component({
   selector: 'nus-content-footer',
   template: `
-    <nus-list-header
+    <nus-list-header i18n-title
       title="Content Footer"
       description="The Content Footer">
     </nus-list-header>
@@ -16,9 +16,9 @@ import {ActivatedRoute} from '@angular/router';
     <table>
       <thead>
       <tr>
-        <th>Title</th>
-        <th class="numeric">Number of Child</th>
-        <th class="centered">Is Active</th>
+        <th i18n>Title</th>
+        <th class="numeric" i18n>Number of Child</th>
+        <th class="centered" i18n>Is Active</th>
       </tr>
       </thead>
       <tbody>

@@ -11,10 +11,10 @@ import {getSlugFromHref} from '@nusantara/shared/helpers';
   selector: 'nus-stock-record-dialog',
   template: `
     <ngx-smart-modal [identifier]="'selectStockRecord'" #modal [formGroup]="form" [customClass]="'wide-modal'">
-      <h2 class="heading-2">Select Record</h2>
+      <h2 class="heading-2" i18n>Select Record</h2>
       <form #modalForm class="fluid">
         <input type="hidden" [formControl]="stockRecord">
-        <p>Showing 10 recently added product records. Search product name or SKU to find more products.</p>
+        <p i18n>Showing 10 recently added product records. Search product name or SKU to find more products.</p>
         <table>
           <colgroup>
             <col class="product-name">
@@ -23,11 +23,11 @@ import {getSlugFromHref} from '@nusantara/shared/helpers';
           </colgroup>
           <thead>
           <tr style="background-color: #F4F4F4;">
-            <th class="product-name">Receiving ID / Product Name / Location</th>
-            <th class="product-sku">SKU</th>
-            <th class="stock-date">Receiving Date</th>
-            <th class="product-original-qty">Original Qty</th>
-            <th class="centered">Action</th>
+            <th class="product-name" i18n>Receiving ID / Product Name / Location</th>
+            <th class="product-sku" i18n>SKU</th>
+            <th class="stock-date" i18n>Receiving Date</th>
+            <th class="product-original-qty" i18n>Original Qty</th>
+            <th class="centered" i18n>Action</th>
           </tr>
           </thead>
           <tbody *ngIf="displayedResults; else loading">
@@ -38,14 +38,14 @@ import {getSlugFromHref} from '@nusantara/shared/helpers';
             <td class="product-sku">{{ p.sku }}</td>
             <td class="stock-date">{{ p.expiryDate | date }}</td>
             <td class="product-original-qty">{{ p.originalQuantity }}</td>
-            <td class="centered"><a href="#" (click)="selectStockRecord(p)">Add</a></td>
+            <td class="centered"><a href="#" (click)="selectStockRecord(p)" i18n>Add</a></td>
           </tr>
           </tbody>
 
           <ng-template #loading>
             <tbody>
             <tr>
-              <td colspan="4">
+              <td colspan="4" i18n>
                 Loading...
               </td>
             </tr>

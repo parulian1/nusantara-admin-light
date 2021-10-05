@@ -21,14 +21,14 @@ import { getYoutubeIdFromUrl, youtubeUrl, youtubeUrlValidator } from './utils';
     <form [formGroup]="form" (ngSubmit)="save()" #f>
 
       <label>
-        <span>Title</span>
+        <span i18n>Title</span>
         <input type="text" [formControl]="name" name="name">
 
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
-        <span>Description</span>
+        <span i18n>Description</span>
         <textarea name="description" cols="30" rows="10" [formControl]="description">
         </textarea>
 
@@ -37,10 +37,10 @@ import { getYoutubeIdFromUrl, youtubeUrl, youtubeUrlValidator } from './utils';
 
 
       <label>
-        <span>Type</span>
+        <span i18n>Type</span>
 
         <select [formControl]="type">
-          <option value="" disabled>-- Choose Type --</option>
+          <option value="" disabled i18n>-- Choose Type --</option>
           <option *ngFor="let choice of typeChoices" [ngValue]="choice.value">
             {{ choice.displayName }}
           </option>
@@ -50,7 +50,7 @@ import { getYoutubeIdFromUrl, youtubeUrl, youtubeUrlValidator } from './utils';
       </label>
 
       <label>
-        <span>Embeded Url</span>
+        <span i18n>Embeded Url</span>
         <input type="text" [formControl]="embededUrl" name="youtube-video-id">
 
         <div style="margin: 0.1rem 0 0.5rem; font-size: 0.7rem;">
@@ -63,7 +63,7 @@ import { getYoutubeIdFromUrl, youtubeUrl, youtubeUrlValidator } from './utils';
 
         <!-- extra error messages -->
         <div *ngIf="embededUrl.errors && (embededUrl.touched || embededUrl.dirty)" class="error-detail">
-          <div *ngIf="embededUrl.hasError('invalidYoutubeUrl')">
+          <div *ngIf="embededUrl.hasError('invalidYoutubeUrl')" i18n>
             Your url is invalid, please follow example properly
           </div>
         </div>
@@ -71,7 +71,7 @@ import { getYoutubeIdFromUrl, youtubeUrl, youtubeUrlValidator } from './utils';
 
 
       <label>
-        <span>Sort Priority</span>
+        <span i18n>Sort Priority</span>
         <input type="number" [formControl]="sortPriority" name="sortPriority">
 
         <nus-field-errors [control]="isActive"></nus-field-errors>
@@ -82,7 +82,7 @@ import { getYoutubeIdFromUrl, youtubeUrl, youtubeUrlValidator } from './utils';
                class="toggle"
                [formControl]="isActive"
                name="is-active"/>
-        <span>Is Active</span>
+        <span i18n>Is Active</span>
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 

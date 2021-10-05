@@ -10,10 +10,10 @@ import * as fromReducer from '@nusantara/reducers';
 @Component({
   selector: 'nus-product-class-mapping-list',
   template: `
-    <h1 class="title-1">Marketplace Configuration</h1>
+    <h1 class="title-1" i18n>Marketplace Configuration</h1>
     <div class="header">
-      <h2 class="heading-1">Product Class List</h2>
-      <p>
+      <h2 class="heading-1" i18n>Product Class List</h2>
+      <p i18n>
         Map your Product Classes to
         {{ (currentShop$ | async)?.marketplace | titlecase }} Categories &
         Attributes.
@@ -23,10 +23,10 @@ import * as fromReducer from '@nusantara/reducers';
     <table>
       <thead>
         <tr>
-          <th>Product Class</th>
-          <th> {{ (currentShop$ | async)?.marketplace | titlecase }} Category & Attribute</th>
-          <th>Status</th>
-          <th>Action</th>
+          <th i18n>Product Class</th>
+          <th i18n> {{ (currentShop$ | async)?.marketplace | titlecase }} Category & Attribute</th>
+          <th i18n>Status</th>
+          <th i18n>Action</th>
         </tr>
       </thead>
       <tbody>
@@ -41,17 +41,17 @@ import * as fromReducer from '@nusantara/reducers';
           </td>
           <td *ngIf="!entity.category">-</td>
           <td *ngIf="entity.isMapped == false">
-            <span class="badge alert">Not Matched</span>
+            <span class="badge alert" i18n>Not Matched</span>
           </td>
           <td *ngIf="entity.isMapped == true">
-            <span class="badge success">Done</span>
+            <span class="badge success" i18n>Done</span>
           </td>
           <!--Action to Match-->
           <td>
-            <a *ngIf="entity.isMapped" class="disabled">
+            <a *ngIf="entity.isMapped" class="disabled" i18n>
               Edit Mapping
             </a>
-            <a *ngIf="!entity.isMapped" [routerLink]="[entity.slug]" [state]="{ productClass: entity }">
+            <a *ngIf="!entity.isMapped" [routerLink]="[entity.slug]" [state]="{ productClass: entity }" i18n>
               Start Mapping
             </a>
           </td>

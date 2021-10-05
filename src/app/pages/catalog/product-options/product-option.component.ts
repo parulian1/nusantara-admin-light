@@ -21,13 +21,13 @@ import { ProductOptionService } from '@nusantara/services';
     <form [formGroup]="form" (ngSubmit)="save()">
 
       <label>
-        <span>Name</span>
+        <span i18n>Name</span>
         <input type="text" [formControl]="name" name="name" maxlength="50">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
-        <span>Type</span>
+        <span i18n>Type</span>
         <select [formControl]="type" name="type">
           <option *ngFor="let opt of typeChoices" [ngValue]="opt.value">
             {{ opt.displayName }}
@@ -41,12 +41,12 @@ import { ProductOptionService } from '@nusantara/services';
                class="toggle"
                [formControl]="isActive"
                name="is-active"/>
-        <span>Is Active</span>
+        <span i18n>Is Active</span>
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
       <label>
-        <span>
+        <span i18n>
           Minimum Length
         </span>
         <input type="number" formControlName="minimumLength">
@@ -54,7 +54,7 @@ import { ProductOptionService } from '@nusantara/services';
       </label>
 
       <label>
-        <span>
+        <span i18n>
           Maximum Length
         </span>
         <input type="number" formControlName="maximumLength">
@@ -62,7 +62,7 @@ import { ProductOptionService } from '@nusantara/services';
       </label>
 
       <label>
-        <span>
+        <span i18n>
           Webhook Check Domain
         </span>
         <input type="text" formControlName="webhookCheckDomain">
@@ -70,7 +70,7 @@ import { ProductOptionService } from '@nusantara/services';
       </label>
 
       <label>
-        <span>
+        <span i18n>
           Webhook Post Checkout
         </span>
         <input type="text" formControlName="webhookPostCheckout">

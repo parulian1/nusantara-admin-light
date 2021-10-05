@@ -4,29 +4,29 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth/guards';
 @Component({
   selector: 'nus-website-settings',
   template: `
-    <h1 class="title-1">Website Settings</h1>
+    <h1 class="title-1" i18n>Website Settings</h1>
     <div class="wrapper">
       <div>
-        <h1 class="heading-1">Blog Feed</h1>
+        <h1 class="heading-1" i18n>Blog Feed</h1>
       </div>
       <div>
-        <button routerLink="blog-feed" class="control">Open</button>
+        <button routerLink="blog-feed" class="control" i18n>Open</button>
       </div>
     </div>
     <div class="wrapper">
       <div>
-        <h1 class="heading-1">Social Auth</h1>
+        <h1 class="heading-1" i18n>Social Auth</h1>
       </div>
       <div>
-        <button routerLink="auth-social" class="control">Open</button>
+        <button routerLink="auth-social" class="control" i18n>Open</button>
       </div>
     </div>
     <div *ngIf="enterpriseGuard.canActivate(null, null)" class="wrapper">
       <div>
-        <h1 class="heading-1">Reseller</h1>
+        <h1 class="heading-1" i18n>Reseller</h1>
       </div>
       <div>
-        <button routerLink="reseller" class="control">Open</button>
+        <button routerLink="reseller" class="control" i18n>Open</button>
       </div>
     </div>
   `,

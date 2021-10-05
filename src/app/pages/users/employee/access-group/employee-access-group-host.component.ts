@@ -11,8 +11,8 @@ import { getSlugFromHref } from '@nusantara/shared/helpers';
     <table>
       <thead>
       <tr>
-        <th>Access Group</th>
-        <th>Delete</th>
+        <th i18n>Access Group</th>
+        <th i18n>Delete</th>
       </tr>
       </thead>
       <tbody>
@@ -26,7 +26,7 @@ import { getSlugFromHref } from '@nusantara/shared/helpers';
 
       <tr>
         <td colspan="2">
-          <a (click)="addToForm()" style="cursor: pointer;">Add new Access</a>
+          <a (click)="addToForm()" style="cursor: pointer;" i18n>Add new Access</a>
         </td>
       </tr>
       </tbody>

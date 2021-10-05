@@ -28,25 +28,25 @@ import { of } from 'rxjs';
 @Component({
   selector: 'nus-inventory-receiving',
   template: `
-    <h1>Delivery Order</h1>
+    <h1 i18n>Delivery Order</h1>
 
     <form [formGroup]="form" (ngSubmit)="saveForm()">
       <div class="container">
         <div class="general-info">
           <div class="general-info--header box-container">
             <div>
-              <label>Created By</label>
+              <label i18n>Created By</label>
               <span>{{ userDisplayName }}</span>
             </div>
             <div>
-              <label>Created Date</label>
+              <label i18n>Created Date</label>
               <span>{{ currentDate|date }}</span>
             </div>
           </div>
           <div class="general-info--detail box-container">
-            <h3>General Information</h3>
+            <h3 i18n>General Information</h3>
             <div>
-              <label for="do-number">DO Number (Optional)</label>
+              <label for="do-number" i18n>DO Number (Optional)</label>
               <input id="do-number" type="text" [formControl]="doNumber" placeholder="Input DO Number">
             </div>
             <div>
@@ -54,10 +54,10 @@ import { of } from 'rxjs';
               <input id="pic-sender" type="text" [formControl]="dcPic" placeholder="Input PIC Sender">
             </div>
             <div [formGroup]="warehouse">
-              <label for="warehouse">Warehouse</label>
+              <label for="warehouse" i18n>Warehouse</label>
               <div class="confirm-warehouse">
                 <select id="warehouse" formControlName="href">
-                  <option [ngValue]="null">Select Warehouse</option>
+                  <option [ngValue]="null" i18n>Select Warehouse</option>
                   <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
                     {{ wh.name }}
                   </option>
@@ -74,32 +74,32 @@ import { of } from 'rxjs';
         <div class="mp-info box-container">
           <h3>Marketplace Information</h3>
           <div>
-            <div>Product</div>
+            <div i18n>Product</div>
             <div class="count">{{ productValue }}</div>
           </div>
           <div>
-            <div>Marketplace</div>
+            <div i18n>Marketplace</div>
             <div class="count">{{ marketplaceValue }}</div>
           </div>
           <div>
-            <div>Store</div>
+            <div i18n>Store</div>
             <div class="count">{{ storeValue }}</div>
           </div>
-          <a (click)="showMarketplaceDetail()">More Detail</a>
+          <a (click)="showMarketplaceDetail()" i18n>More Detail</a>
         </div>
       </div>
       <div class="product-list" *ngIf="warehouse.disabled">
-        <p>*) Required fields</p>
+        <p i18n>*) Required fields</p>
         <table>
           <thead>
           <tr id="mp-add-product-head">
-            <th>Product Name (UPC)*</th>
-            <th>SKU*</th>
-            <th>Quantity*</th>
-            <th>Batch</th>
-            <th>Expiry Date</th>
-            <th>Cost</th>
-            <th>Remove</th>
+            <th i18n>Product Name (UPC)*</th>
+            <th i18n>SKU*</th>
+            <th i18n>Quantity*</th>
+            <th i18n>Batch</th>
+            <th i18n>Expiry Date</th>
+            <th i18n>Cost</th>
+            <th i18n>Remove</th>
           </tr>
           </thead>
           <tbody>
@@ -114,7 +114,7 @@ import { of } from 'rxjs';
 
             <tr>
               <td colspan="9">
-                <button type="button" (click)="addLine()" class="new-add-button wide">
+                <button type="button" (click)="addLine()" class="new-add-button wide" i18n>
                   <i class="material-icons">add</i> Add Record
                 </button>
               </td>

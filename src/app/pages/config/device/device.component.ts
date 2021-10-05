@@ -21,40 +21,40 @@ import { DeviceService } from '@nusantara/services';
     <form [formGroup]="form" (ngSubmit)="save()">
 
       <label>
-        <span>Warehouse</span>
+        <span i18n>Warehouse</span>
         <input type="text" [value]="entity.warehouse.name" readonly>
       </label>
 
       <label>
-        <span>Device Name</span>
+        <span i18n>Device Name</span>
         <input type="text" [value]="entity.data.name" readonly>
       </label>
 
       <label>
-        <span>Device Model</span>
+        <span i18n>Device Model</span>
         <input type="text" [value]="entity.data.model? entity.data.model: ''" readonly>
       </label>
 
       <label>
-        <span>
+        <span i18n>
           Device Id
         </span>
         <input type="text" [value]="entity.data.firebaseId" readonly>
       </label>
 
       <label>
-        <span>Register Date</span>
+        <span i18n>Register Date</span>
         <input type="datetime-local" [value]="convertDateTime(entity.created)" readonly>
       </label>
 
       <label>
-        <span>Notes</span>
+        <span i18n>Notes</span>
         <textarea [formControl]="notes" name="notes"></textarea>
         <nus-field-errors [control]="notes"></nus-field-errors>
       </label>
 
       <label class="checkbox">
-        <span>Is Approved</span>
+        <span i18n>Is Approved</span>
         <input type="checkbox" [formControl]="isApproved">
       </label>
 

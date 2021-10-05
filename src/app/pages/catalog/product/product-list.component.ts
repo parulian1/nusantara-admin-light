@@ -13,25 +13,25 @@ import { AbstractListComponent } from '@nusantara/core';
   selector: 'nus-product-list',
   template: `
     <nus-list-header
-      title="Products">
+      title="Products" i18n-title>
     </nus-list-header>
     <div class="filtering">
       <!-- Soft deleted product but change the wording into InActive -->
-      <nus-include-deleted text="Show Inactive Product"></nus-include-deleted>
+      <nus-include-deleted text="Show Inactive Product" i18n-text></nus-include-deleted>
     </div>
     <nus-pagination [page]="page"></nus-pagination>
 
     <table>
       <thead>
         <tr>
-          <th translate>Name</th>
-          <th>UPC</th>
-          <th class="numeric">Variants</th>
-          <th class="centered">Has Image</th>
-          <th>Category</th>
-          <th>Product Class</th>
-          <th>Vendor</th>
-          <th class="centered">Is Active</th>
+          <th translate i18n>Name</th>
+          <th i18n>UPC</th>
+          <th class="numeric" i18n>Variants</th>
+          <th class="centered" i18n>Has Image</th>
+          <th i18n>Category</th>
+          <th i18n>Product Class</th>
+          <th i18n>Vendor</th>
+          <th class="centered" i18n>Is Active</th>
         </tr>
       </thead>
       <tbody>

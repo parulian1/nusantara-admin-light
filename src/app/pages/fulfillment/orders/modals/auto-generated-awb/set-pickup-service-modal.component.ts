@@ -5,35 +5,35 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
 @Component({
   selector: 'nus-set-pickup-service-modal',
   template: `
-    <ngx-smart-modal 
-      [identifier]="'setPickUpService'" 
-      #modal 
-      [formGroup]="form" 
+    <ngx-smart-modal
+      [identifier]="'setPickUpService'"
+      #modal
+      [formGroup]="form"
       [customClass]="'medium-modal no-padding-modal'">
       <div class="wrapper">
         <form #modalForm class="fluid" [formGroup]="">
           <div class="message">
-            <h2 class="title-2">Set Pick Up Service</h2>
-            <p><strong>Order count</strong> will be picked up from your store address by <strong>Shipping service</strong>.</p>
+            <h2 class="title-2" i18n>Set Pick Up Service</h2>
+            <p i18n><strong>Order count</strong> will be picked up from your store address by <strong>Shipping service</strong>.</p>
             <label>
-              <span>Date</span>
+              <span i18n>Date</span>
               <input type="date" [formControl]="date" placeholder="Select Date">
             </label>
             <label>
-              <span>Time</span>
+              <span i18n>Time</span>
               <input type="time" [formControl]="time" placeholder="Select Time">
             </label>
             <label>
-              <span>Note</span>
+              <span i18n>Note</span>
               <input type="text" [formControl]="note" placeholder="Write Additional Note">
             </label>
             <label>
-              <span>Store Address</span>
-              <p class="caption-1">Your package will be picked up from this address. If this address is incorrect, go to <strong>Makertplace</strong> admin and change the address.</p>
+              <span i18n>Store Address</span>
+              <p class="caption-1" i18n>Your package will be picked up from this address. If this address is incorrect, go to <strong>Makertplace</strong> admin and change the address.</p>
               <textarea [formControl]="storeAddress"></textarea>
             </label>
           </div>
-          <button type="submit" class="control">Submit</button>
+          <button type="submit" class="control" i18n>Submit</button>
         </form>
       </div>
     </ngx-smart-modal>

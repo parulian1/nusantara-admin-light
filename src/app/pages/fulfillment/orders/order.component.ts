@@ -19,26 +19,26 @@ import {
 @Component({
   selector: 'nus-order',
   template: `
-    <h1 class="title-1">Order Detail</h1>
+    <h1 class="title-1" i18n>Order Detail</h1>
     <table class="detail">
       <tbody>
         <tr class="no-border-bottom">
           <td>
-            <div class="body-2">Order Number</div>
+            <div class="body-2" i18n>Order Number</div>
             <div class="subheading-2">{{ orderDetailData.orderNumber }}</div>
           </td>
           <td>
-            <div class="body-2">Time of Order</div>
+            <div class="body-2" i18n>Time of Order</div>
             <div class="subheading-2">
               {{ orderDetailData.created | date: 'dd/MM/yyyy HH:mm:ss' }}
             </div>
           </td>
           <td>
-            <div class="body-2">Platform</div>
+            <div class="body-2" i18n>Platform</div>
             <div class="subheading-2">{{ platform }}</div>
           </td>
           <td class="wide-column" *ngIf="orderDetailData?.meta?.shopifyInfo">
-            <div class="body-2">Order Notes (Shopify)</div>
+            <div class="body-2" i18n>Order Notes (Shopify)</div>
             <div class="subheading-2">
                 <div>{{ orderDetailData.meta.shopifyInfo.note? orderDetailData.meta.shopifyInfo.note: '-' }}</div>
             </div>
@@ -46,25 +46,25 @@ import {
         </tr>
         <tr *ngIf="isDetailShowed" class="no-border-bottom more-detail">
           <td>
-            <div class="body-2">Customer Name</div>
+            <div class="body-2" i18n>Customer Name</div>
             <div class="subheading-2">
               {{ orderDetailData.customer.name? orderDetailData.customer.name : '-' }}
             </div>
           </td>
           <td>
-            <div class="body-2">Phone Number</div>
+            <div class="body-2" i18n>Phone Number</div>
             <div class="subheading-2">
               {{ orderDetailData.orderAddress.phoneNumber? orderDetailData.orderAddress.phoneNumber : '-' }}
             </div>
           </td>
           <td>
-            <div class="body-2">Email</div>
+            <div class="body-2" i18n>Email</div>
             <div class="subheading-2">
               {{ orderDetailData.customer.email? orderDetailData.customer.email : '-' }}
             </div>
           </td>
           <td class="wide-column">
-            <div class="body-2">Address</div>
+            <div class="body-2" i18n>Address</div>
             <div class="subheading-2">
               <ng-container *ngIf="this.orderDetailData && this.orderDetailData.orderAddress; else noAddress">
                 <div>{{ orderDetailData.orderAddress.shipToName }}</div>
@@ -77,7 +77,7 @@ import {
         </tr>
         <tr *ngIf="isDetailShowed && orderDetailData?.meta?.billingAddress" class="no-border-bottom more-detail">
           <td>
-              <div class="body-2">Billing Address</div>
+              <div class="body-2" i18n>Billing Address</div>
               <div class="subheading-2">
                   <div><address [innerHTML]="billingAddress"></address></div>
               </div>
@@ -92,7 +92,7 @@ import {
         <tr>
           <td>
             <div>
-              <div class="body-2">Status</div>
+              <div class="body-2" i18n>Status</div>
               <div class="subheading-2">{{ orderStatusDisplayName }}</div>
             </div>
           </td>
@@ -106,13 +106,13 @@ import {
             <td>
               <button *ngIf="this.orderDetailData.status === 'unpaid'"
                 type="button"
-                class="control confirm-payment" disabled>
+                class="control confirm-payment" disabled i18n>
                   Confirm Payment
               </button>
               <button *ngIf="this.orderDetailData.status === 'waiting'"
                 type="button"
                 class="control confirm-payment"
-                (click)="paymentConfirmModal.open()">
+                (click)="paymentConfirmModal.open()" i18n>
                   Confirm Payment
               </button>
             </td>
@@ -121,10 +121,10 @@ import {
               <button class="download-button control secondary"
                   (click)="markAsTestingModal.open()"
                   [disabled]="orderDetailData.isTesting"
-                  style="margin-right: 10px;">
+                  style="margin-right: 10px;" i18n>
                   Mark As Test
               </button>
-              <button class="download-button control secondary" (click)="downloadProductList()">Download Product List</button>
+              <button class="download-button control secondary" (click)="downloadProductList()" i18n>Download Product List</button>
           </td>
         </tr>
       </tbody>
@@ -152,12 +152,12 @@ import {
     </ng-template>
 
     <div class="action-button">
-      <button type="button" (click)="navigateToParent(true)" class="control secondary">Back</button>
+      <button type="button" (click)="navigateToParent(true)" class="control secondary" i18n>Back</button>
       <button
         *ngIf="canCancelOrder"
         type="button"
         class="control danger ghost"
-        (click)="cancelOrderModal.open()">
+        (click)="cancelOrderModal.open()" i18n>
           Cancel Order
         </button>
     </div>

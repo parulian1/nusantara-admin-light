@@ -9,14 +9,14 @@ import {VendorService} from '@nusantara/services';
 @Component({
   selector: 'nus-vendor-selection-modal',
   template: `<ngx-smart-modal [identifier]="'selectVendor'" #modal [formGroup]="form" [customClass]="'wide-modal'">
-    <h2 class="heading-2">Select Vendor</h2>
+    <h2 class="heading-2" i18n>Select Vendor</h2>
     <form #modalForm class="fluid">
       <div class="search">
         <i class="material-icons">search</i>
         <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Vendor Name">
       </div>
       <input type="hidden" [formControl]="vendor">
-      <p>Search vendor name to find more.</p>
+      <p i18n>Search vendor name to find more.</p>
       <table>
         <colgroup>
           <col class="product-name">
@@ -24,14 +24,14 @@ import {VendorService} from '@nusantara/services';
         </colgroup>
         <thead>
         <tr style="background-color: #F4F4F4;">
-          <th>Vendor Name</th>
-          <th class="centered">Action</th>
+          <th i18n>Vendor Name</th>
+          <th class="centered" i18n>Action</th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let p of displayedResults?.entities">
           <td class="product-name">{{ p.name }}</td>
-          <td class="centered"><a href="#" (click)="selectVendor(p)">Select</a></td>
+          <td class="centered"><a href="#" (click)="selectVendor(p)" i18n>Select</a></td>
         </tr>
         </tbody>
       </table>

@@ -8,14 +8,14 @@ import { NgxSmartModalComponent } from "ngx-smart-modal";
     <ngx-smart-modal [identifier]="'confirm'" #modal [customClass]="'no-padding-modal'">
     <div class="wrapper">
       <div class="content">
-        <h2>Add Showcase</h2>
+        <h2 i18n>Add Showcase</h2>
         <label>
-          <span>Showcase Display Name</span>
+          <span i18n>Showcase Display Name</span>
           <input [(ngModel)]="name" #ctrl="ngModel" type="text" name="add-showcase" placeholder="Input Name" required/>
         </label>
       </div>
       <div class="action">
-        <button class="control" type="button" [disabled]="ctrl.invalid" (click)="save()">Save</button>
+        <button class="control" type="button" [disabled]="ctrl.invalid" (click)="save()" i18n>Save</button>
       </div>
     </div>
   </ngx-smart-modal>

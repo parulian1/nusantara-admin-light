@@ -19,7 +19,7 @@ import {FormBuilder, FormControl, Validators} from '@angular/forms';
 
     <form [formGroup]="form" (ngSubmit)="save()">
       <label class="has-icons-right">
-        <span>{{ this.formLabel }} Default PIN (4 digits numeric)</span>
+        <span i18n>{{ this.formLabel }} Default PIN (4 digits numeric)</span>
         <input class="input" type="password" maxlength="4" [formControl]="pin" placeholder="Input PIN"/>
         <span class="icon icon-password is-right">
           <i class="material-icons">

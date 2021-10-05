@@ -11,7 +11,7 @@ import { FormGroup, FormControl } from '@angular/forms';
       <td><input type="number" [formControl]="handlingFee"></td>
       <td><input type="number" [formControl]="graceAmount"></td>
       <td><input type="text" [formControl]="description"></td>
-      <td><button type="button" (click)="remove.emit()" *ngIf="!href.value">Remove</button></td>
+      <td><button type="button" (click)="remove.emit()" *ngIf="!href.value" i18n>Remove</button></td>
     </tr>
   `,
   styles: [':host { display: contents; }' ]

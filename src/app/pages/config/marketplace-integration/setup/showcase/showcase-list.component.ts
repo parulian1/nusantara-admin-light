@@ -14,23 +14,23 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 @Component({
   selector: "nus-showcase",
   template: `
-    <h1 class="title-1">Showcase Configuration</h1>
+    <h1 class="title-1" i18n>Showcase Configuration</h1>
     <div class="wrapper">
       <div>
-        <p class="body-2">Store</p>
+        <p class="body-2" i18n>Store</p>
         <p class="subheading-2">
           <strong>{{ (currentShop$ | async)?.name }}</strong>
         </p>
       </div>
       <div>
-        <p class="body-2">Marketplace</p>
+        <p class="body-2" i18n>Marketplace</p>
         <p class="subheading-2">
           <strong>{{ (currentShop$ | async)?.marketplace | titlecase }}</strong>
         </p>
       </div>
       <div>
-        <p class="body-2">Status</p>
-        <p class="subheading-2" [ngClass]="{ connected: (currentShop$ | async)?.isConnected === true }">          
+        <p class="body-2" i18n>Status</p>
+        <p class="subheading-2" [ngClass]="{ connected: (currentShop$ | async)?.isConnected === true }">
           {{
             (currentShop$ | async)?.isConnected === true
               ? "Connected"
@@ -46,10 +46,10 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
     <table>
       <thead>
         <tr>
-          <th>Showcase Display Name</th>
-          <th>Author</th>
-          <th class="centered" *ngIf="(currentShop$ | async)?.marketplace !== marketplaceClient.tokopedia">Display On/Off</th>
-          <th class="centered">Remove</th>
+          <th i18n>Showcase Display Name</th>
+          <th i18n>Author</th>
+          <th class="centered" *ngIf="(currentShop$ | async)?.marketplace !== marketplaceClient.tokopedia" i18n>Display On/Off</th>
+          <th class="centered" i18n>Remove</th>
         </tr>
       </thead>
       <tbody>
@@ -71,7 +71,7 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
             <td *ngIf='!entity.isDefault'>Admin</td>
             <td *ngIf='entity.isDefault'>System</td>
             <td class="centered" *ngIf='entity.marketplace !== marketplaceClient.tokopedia;'>
-              <div> 
+              <div>
                 <mat-slide-toggle
                   [checked]="entity.isConnected">
                 </mat-slide-toggle>
@@ -141,7 +141,7 @@ export class ShowcaseListComponent implements OnInit, AfterViewInit, OnDestroy {
     private store: Store<fromReducer.State>,
     private service: MarketplaceShowcaseService,
     private toast: ToastService,
-    svgIconService: SvgIconService, 
+    svgIconService: SvgIconService,
     ) {
       this.currentShop$ = this.store.select(fromReducer.getCurrentShop);
       svgIconService.registerIcons();

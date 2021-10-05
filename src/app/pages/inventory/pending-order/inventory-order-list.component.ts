@@ -13,7 +13,7 @@ import { IInventoryOrderSummary } from '@nusantara/models/inventory';
 @Component({
   selector: 'nus-pending-order-list',
   template: `
-    <nus-list-header
+    <nus-list-header i18n-title
       title="Inventory Orders"
       [canAddNew]="false">
     </nus-list-header>
@@ -23,13 +23,13 @@ import { IInventoryOrderSummary } from '@nusantara/models/inventory';
     <table>
       <thead>
       <tr>
-        <th>ID</th>
-        <th>Type</th>
-        <th>Status</th>
-        <th>Created By</th>
-        <th>Reviewed By</th>
-        <th>Warehouse</th>
-        <th class="numeric">Date</th>
+        <th i18n>ID</th>
+        <th i18n>Type</th>
+        <th i18n>Status</th>
+        <th i18n>Created By</th>
+        <th i18n>Reviewed By</th>
+        <th i18n>Warehouse</th>
+        <th class="numeric" i18n>Date</th>
       </tr>
       </thead>
       <tbody>

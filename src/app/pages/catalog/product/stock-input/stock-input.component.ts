@@ -12,11 +12,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'nus-stock-input',
   template: `
-    <h3>Product Inventory</h3>
+    <h3 i18n="dialog header|Stock input title@@stockInputTitle">Product Inventory</h3>
     <table [formGroup]="fm">
       <thead>
         <tr>
-          <th>Quantity</th>
+          <th i18n>Quantity</th>
         </tr>
       </thead>
       <tbody>
@@ -24,13 +24,13 @@ import { ActivatedRoute, Router } from '@angular/router';
           <td data-qa="quantity">
             <input type="number" min="1" [ngClass]="{'disabled': warehouses.length < 1}" [attr.disabled]="warehouses.length < 1 ? '' : null" [formControl]="originalQuantity" data-qa="original-quantity">
             <div class="min-quantity" *ngIf="(fm.get('originalQuantity').errors && fm.get('originalQuantity').errors.min) || (currentQuantity && !originalQuantity.value)">
-              <small>Quantity cannot be less than current stock ( {{ currentQuantity }} )</small>
+              <small i18n>Quantity cannot be less than current stock ( {{ currentQuantity }} )</small>
             </div>
           </td>
         </tr>
         <tr *ngIf="warehouses.length < 1">
           <td>
-            <small>To input quantity, add warehouse first - ( <a (click)="goToWarehouse()">Manage Warehouse</a> )</small>
+            <small i18n>To input quantity, add warehouse first - ( <a (click)="goToWarehouse()">Manage Warehouse</a> )</small>
           </td>
         </tr>
       </tbody>

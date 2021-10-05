@@ -11,13 +11,13 @@ import {InternalAddressValue} from '@nusantara/shared/address/internal-address-v
   template: `
     <div [formGroup]="innerForm">
       <label>
-        <span>Street</span>
+        <span i18n>Street</span>
         <input [formControl]="street" name="street">
         <nus-field-errors [control]="form.get('street')"></nus-field-errors>
       </label>
 
       <label>
-        <span>Province</span>
+        <span i18n>Province</span>
         <select [formControl]="province" name="province">
           <option *ngFor="let prov of availableProvinces" [ngValue]="prov">
             {{ prov.name }}
@@ -27,7 +27,7 @@ import {InternalAddressValue} from '@nusantara/shared/address/internal-address-v
       </label>
 
       <label>
-        <span>City</span>
+        <span i18n>City</span>
         <select [formControl]="city" name="city">
           <option *ngFor="let city of availableCities" [ngValue]="city">
             {{ city.name }}
@@ -37,7 +37,7 @@ import {InternalAddressValue} from '@nusantara/shared/address/internal-address-v
       </label>
 
       <label>
-        <span>Postal Code</span>
+        <span i18n>Postal Code</span>
         <select [formControl]="postal" name="postal">
           <option *ngFor="let postalInfo of availablePostals" [ngValue]="postalInfo">
             {{ postalInfo.district }} / {{ postalInfo.subDistrict }} ({{ postalInfo.postalCode }})

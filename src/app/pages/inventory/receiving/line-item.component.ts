@@ -10,7 +10,7 @@ import { IProductClass } from '../../../models/products';
     <tr [formGroup]="form">
       <td>{{ displayedProductName }}</td>
       <td class="immediate-error-display">
-        <input type="text" [formControl]="sku" data-qa="sku" placeholder="Input SKU">
+        <input type="text" [formControl]="sku" data-qa="sku" placeholder="Input SKU" i18n-placeholder>
         <nus-field-errors [control]="sku"></nus-field-errors>
       </td>
       <td>
@@ -18,7 +18,7 @@ import { IProductClass } from '../../../models/products';
         <nus-field-errors [control]="originalQuantity"></nus-field-errors>
       </td>
       <td>
-        <input type="text" [formControl]="batchNumber" data-qa="batch-number" placeholder="Input Batch">
+        <input type="text" [formControl]="batchNumber" data-qa="batch-number" placeholder="Input Batch" i18n-placeholder>
         <nus-field-errors [control]="batchNumber"></nus-field-errors>
       </td>
       <td class="immediate-error-display">
@@ -29,7 +29,7 @@ import { IProductClass } from '../../../models/products';
         <input type="number" [formControl]="cost" data-qa="cost">
         <nus-field-errors [control]="cost"></nus-field-errors>
         <div *ngIf="cost?.touched" class="error-detail">
-          <div *ngIf="cost?.errors?.max">Ensure that there are no more than 16 digits</div>
+          <div *ngIf="cost?.errors?.max" i18n>Ensure that there are no more than 16 digits</div>
         </div>
       </td>
       <td>

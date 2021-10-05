@@ -12,7 +12,7 @@ import { Observable, zip } from 'rxjs';
   template: `
     <div [formGroup]="form" class="product-dimension">
       <label>
-        <span>Packet*</span>
+        <span i18n>Packet*</span>
         <select [formControl]="packet">
           <option *ngFor="let opt of packetChoices" [ngValue]="opt.value">
             {{opt.displayName}}
@@ -21,7 +21,7 @@ import { Observable, zip } from 'rxjs';
         <nus-field-errors [control]="packet"></nus-field-errors>
       </label>
       <label>
-        <span>Subscription duration*</span>
+        <span i18n>Subscription duration*</span>
         <select [formControl]="duration">
           <option *ngFor="let opt of durationChoices" [ngValue]="opt.value">
             {{opt.displayName}}
@@ -30,7 +30,7 @@ import { Observable, zip } from 'rxjs';
         <nus-field-errors [control]="duration"></nus-field-errors>
       </label>
       <label>
-        <span>Subscription length*</span>
+        <span i18n>Subscription length*</span>
         <select [formControl]="length">
           <option *ngFor="let opt of lengthChoices" [ngValue]="opt.value">
             {{opt.displayName}}

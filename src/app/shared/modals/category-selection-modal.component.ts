@@ -9,14 +9,14 @@ import {CategoryService} from '@nusantara/services';
 @Component({
   selector: 'nus-category-selection-modal',
   template: `<ngx-smart-modal [identifier]="'selectCategory'" #modal [formGroup]="form" [customClass]="'wide-modal'">
-    <h2 class="heading-2">Select Category</h2>
+    <h2 class="heading-2" i18n>Select Category</h2>
     <form #modalForm class="fluid">
       <div class="search">
         <i class="material-icons">search</i>
         <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Category Name">
       </div>
       <input type="hidden" [formControl]="category">
-      <p>Search category name to find more categories.</p>
+      <p i18n>Search category name to find more categories.</p>
       <table>
         <colgroup>
           <col class="product-name">
@@ -25,16 +25,16 @@ import {CategoryService} from '@nusantara/services';
         </colgroup>
         <thead>
         <tr style="background-color: #F4F4F4;">
-          <th>Category Name</th>
-          <th>Category Path</th>
-          <th class="centered">Action</th>
+          <th i18n>Category Name</th>
+          <th i18n>Category Path</th>
+          <th class="centered" i18n>Action</th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let p of displayedResults?.entities">
           <td class="product-name">{{ p.name }}</td>
           <td class="product-sku">{{ p.pathName }}</td>
-          <td class="centered"><a href="#" (click)="selectCategory(p)">Select</a></td>
+          <td class="centered"><a href="#" (click)="selectCategory(p)" i18n>Select</a></td>
         </tr>
         </tbody>
       </table>

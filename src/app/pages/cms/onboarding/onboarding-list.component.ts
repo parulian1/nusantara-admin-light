@@ -6,7 +6,7 @@ import {ActivatedRoute} from '@angular/router';
 @Component({
   selector: 'nus-onboarding-list',
   template: `
-    <nus-list-header
+    <nus-list-header i18n-title
       title="Onboarding"
       description="">
     </nus-list-header>
@@ -17,9 +17,9 @@ import {ActivatedRoute} from '@angular/router';
     <table>
       <thead>
       <tr>
-        <th>Name</th>
-        <th>Page</th>
-        <th>Is Active</th>
+        <th i18n>Name</th>
+        <th i18n>Page</th>
+        <th i18n>Is Active</th>
       </tr>
       </thead>
       <tbody>

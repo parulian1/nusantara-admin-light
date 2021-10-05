@@ -62,6 +62,12 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "en": {
+              "localize": ["en"]
+            },
+            "id": {
+              "localize": ["id"]
             }
           }
         },
@@ -73,6 +79,14 @@
           "configurations": {
             "production": {
               "browserTarget": "nusantara-admin:build:production"
+            },
+            "en": {
+              "browserTarget": "nusantara-admin:build:en",
+              "baseHref": "/",
+            },
+            "id": {
+              "browserTarget": "nusantara-admin:build:id",
+              "baseHref": "/"
             }
           }
         },
@@ -124,6 +138,12 @@
               "devServerTarget": "nusantara-admin:serve:production"
             }
           }
+        }
+      },
+      "i18n": {
+        "sourceLocale": "en",
+        "locales": {
+          "id": "src/locale/id/messages.xlf"
         }
       }
     }

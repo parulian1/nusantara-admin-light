@@ -7,7 +7,7 @@ import { IHighlight } from '@nusantara/models';
 @Component({
   selector: 'nus-highlight-list',
   template: `
-    <nus-list-header
+    <nus-list-header i18n-title
       title="Highlights"
       description="Highlight Products with or without brand">
     </nus-list-header>
@@ -19,10 +19,10 @@ import { IHighlight } from '@nusantara/models';
     <table>
       <thead>
       <tr>
-        <th>Name</th>
-        <th>Vendor</th>
-        <th class="centered">Is Show Homepage</th>
-        <th class="centered">Is Active</th>
+        <th i18n>Name</th>
+        <th i18n>Vendor</th>
+        <th class="centered" i18n>Is Show Homepage</th>
+        <th class="centered" i18n>Is Active</th>
       </tr>
       </thead>
       <tbody>

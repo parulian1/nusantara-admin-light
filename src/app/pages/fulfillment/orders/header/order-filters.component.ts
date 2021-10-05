@@ -10,7 +10,7 @@ import { Utils } from './utils';
   template: `
     <form [formGroup]="filtersForm">
       <label>
-        <span>Filter</span>
+        <span i18n>Filter</span>
         <div class="filters">
           <nus-order-date-filter
             (selectedDate)="onSelectedDateChanged($event)">
@@ -19,7 +19,7 @@ import { Utils } from './utils';
             <mat-select [disableOptionCentering]="true"
               panelClass="mat-select-panel"
               formControlName="platform">
-              <mat-option value="">All Platform</mat-option>
+              <mat-option value="" i18n>All Platform</mat-option>
               <mat-option
                 *ngFor="let platform of orderFilter.platform"
                 [value]="platform.option">
@@ -32,7 +32,7 @@ import { Utils } from './utils';
               [disableOptionCentering]="true"
               panelClass="mat-select-panel"
               formControlName="status">
-              <mat-option value="">All Status</mat-option>
+              <mat-option value="" i18n>All Status</mat-option>
               <mat-option
                 *ngFor="let status of orderFilter.orderStatus"
                 [value]="status.option">
@@ -44,7 +44,7 @@ import { Utils } from './utils';
             <mat-select [disableOptionCentering]="true"
               panelClass="mat-select-panel"
               formControlName="logistic">
-              <mat-option value="">All Logistics</mat-option>
+              <mat-option value="" i18n>All Logistics</mat-option>
               <mat-option
                 *ngFor="let logistic of orderFilter.logistics"
                 [value]="logistic.option">

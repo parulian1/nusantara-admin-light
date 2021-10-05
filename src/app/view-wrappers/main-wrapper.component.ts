@@ -9,17 +9,17 @@ import { SubscriptionLike } from 'rxjs';
   template: `
     <header class="main-header">
       <div id="branding">
-        <img src="/assets/bhisma-logo.png" alt="logo" id="brand-icon">
+        <img src="assets/bhisma-logo.png" alt="logo" id="brand-icon">
         <div>{{ authService?.siteDomain }}</div>
       </div>
 
       <div class="dropdown">
         <button class="dropbtn">
-          <img src="/assets/default-profile-img.svg" alt="Profile Image">
+          <img src="assets/default-profile-img.svg" alt="Profile Image">
           {{ authService?.tokenPayload | getUserDisplayName }}
         </button>
         <div class="dropdown-content">
-          <a [routerLink]="['/auth/logout']"><i class="material-icons">exit_to_app</i>Logout</a>
+          <a [routerLink]="['/auth/logout']" i18n><i class="material-icons">exit_to_app</i>Logout</a>
         </div>
       </div>
     </header>
@@ -336,7 +336,7 @@ export class MainWrapperComponent implements OnInit, OnDestroy {
     }
   }
 
-  get profileImage(): string { return '/assets/default-profile-img.svg'; }
+  get profileImage(): string { return 'assets/default-profile-img.svg'; }
   get currentSiteName(): string { return 'marthatilaarshop.com'; }
 
   onNavigationStarted() {

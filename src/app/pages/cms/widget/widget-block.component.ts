@@ -21,26 +21,26 @@ import { IChoice } from '../../../models/drf';
     <form [formGroup]="form" (ngSubmit)="save()">
 
       <label>
-        <span>Name</span>
+        <span i18n>Name</span>
         <input type="text" [formControl]="name">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
-        <span>Sort Priority</span>
+        <span i18n>Sort Priority</span>
         <input type="number" [formControl]="sortPriority">
         <nus-field-errors [control]="sortPriority"></nus-field-errors>
       </label>
 
       <label>
-        <span>Shell Section</span>
+        <span i18n>Shell Section</span>
         <select [formControl]="shellSection">
           <option *ngFor="let c of shellSections" [ngValue]="c.value">{{c.displayName}}</option>
         </select>
       </label>
 
       <label>
-        <span>URL Path</span>
+        <span i18n>URL Path</span>
         <input type="text" [formControl]="urlPath">
         <nus-field-errors [control]="urlPath"></nus-field-errors>
       </label>
@@ -49,9 +49,9 @@ import { IChoice } from '../../../models/drf';
       <table>
         <thead>
         <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Is Active</th>
+          <th i18n>Name</th>
+          <th i18n>Type</th>
+          <th i18n>Is Active</th>
           <th></th>
         </tr>
         </thead>

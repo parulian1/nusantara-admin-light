@@ -8,19 +8,19 @@ import {INavigation} from '@nusantara/models';
       <div class="filtering">
         <nus-include-deleted></nus-include-deleted>
       </div>
-      <h1>Children</h1>
+      <h1 i18n>Children</h1>
 
       <table>
         <thead>
         <tr>
-          <th>Title</th>
-          <th>Number of Child</th>
+          <th i18n>Title</th>
+          <th i18n>Number of Child</th>
         </tr>
         </thead>
         <tbody>
         <tr *ngIf="children.length === 0">
           <td colspan="3" style="text-align: center;">
-            <i>Doesnt Have Children</i>
+            <i i18n>Doesnt Have Children</i>
           </td>
         </tr>
         <tr *ngFor="let entity of children">

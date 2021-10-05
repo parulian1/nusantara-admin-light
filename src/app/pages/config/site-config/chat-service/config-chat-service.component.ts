@@ -16,12 +16,12 @@ import { Observable, of } from 'rxjs';
   template: `
     <ng-container *ngIf="isLoaded">
       <div>
-        <h2>Chat Service</h2>
+        <h2 i18n>Chat Service</h2>
         <form [formGroup]="form">
           <div>
             <div>
               <select name="" id="" [formControl]="provider" (change)="onProviderChange($event)">
-                <option value="">-- Select Live Chat --</option>
+                <option value="" i18n>-- Select Live Chat --</option>
                 <option
                   *ngFor="let provider of providers"
                   [ngValue]="provider.value"
@@ -33,7 +33,7 @@ import { Observable, of } from 'rxjs';
 
             <div style="margin-top: 0.5rem;">
               <textarea [formControl]="widgetCode"></textarea>
-              <p style="margin: 0;">
+              <p style="margin: 0;" i18n>
                 <i>* Input widget code (script) of chat service in here.</i>
               </p>
             </div>

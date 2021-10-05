@@ -19,7 +19,7 @@ import { PriceListComponent } from './price-list.component';
 @Component({
   selector: 'nus-price-list-host',
   template: `
-    <h4 class="subheading-2">Price List</h4>
+    <h4 class="subheading-2" i18n>Price List</h4>
 
     <nus-price-list
       *ngFor="let priceList of form.controls; let i=index;"

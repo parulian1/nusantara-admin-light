@@ -22,9 +22,9 @@ const logger = new Logger('CSVDialogComponent');
     <ngx-smart-modal [identifier]="'csvDialog'" #modal [customClass]="'wide-modal'">
       <form [formGroup]="form" class="csv-dialog-form">
         <div *ngIf="currentStep == 'start'">
-          <h2 class="heading-2">Choose CSV File (Step 1/2) </h2>
+          <h2 class="heading-2" i18n>Choose CSV File (Step 1/2) </h2>
 
-          <p>Upload a CSV file to bulk upload your products. Don't have a file? <a
+          <p i18n>Upload a CSV file to bulk upload your products. Don't have a file? <a
             href="../../../assets/sample-files/example-csv-stock-adjustment.csv" download>Download Template</a></p>
 
           <div>
@@ -37,7 +37,7 @@ const logger = new Logger('CSVDialogComponent');
               <input type="checkbox"
                      name="csvNoHeader"
                      [formControl]="csvNoHeader"
-                     value="1" (change)="parseCsv()">My CSV has no header</label>
+                     value="1" (change)="parseCsv()" i18n>My CSV has no header</label>
             <!--          </form>-->
 
           </div>
@@ -45,19 +45,19 @@ const logger = new Logger('CSVDialogComponent');
         </div>
 
         <div *ngIf="currentStep === 'mapping'">
-          <h2 class="heading-2">Mapping Attribute (Step 2/2) </h2>
-          <span class="file-name" *ngIf="!!fileTarget">file name : {{fileName}}</span>
+          <h2 class="heading-2" i18n>Mapping Attribute (Step 2/2) </h2>
+          <span class="file-name" *ngIf="!!fileTarget"> i18nfile name : {{fileName}}</span>
 
           <div *ngIf="!!fileTarget">
             <table class="mapping-table">
               <thead>
-              <th class="mapping-th">Bhisma Attributes</th>
+              <th class="mapping-th" i18n>Bhisma Attributes</th>
               <th></th>
-              <th class="mapping-th">CSV Column</th>
+              <th class="mapping-th" i18n>CSV Column</th>
               </thead>
               <tbody>
               <tr>
-                <td class="label-td">UPC</td>
+                <td class="label-td" i18n>UPC</td>
                 <td style="border: none;"></td>
                 <td>
                   <div>
@@ -68,33 +68,33 @@ const logger = new Logger('CSVDialogComponent');
                       </option>
                     </select>
                   </div>
-                  <span *ngIf="upc.hasError('duplicate')">Can be mapped to one attribute only</span>
+                  <span *ngIf="upc.hasError('duplicate')" i18n>Can be mapped to one attribute only</span>
 
                 </td>
               </tr>
               <tr>
-                <td class="label-td">Adjusted Qty</td>
+                <td class="label-td" i18n>Adjusted Qty</td>
                 <td style="border: none;"></td>
                 <td>
                   <div>
                     <select [formControl]="qty" (change)="selectColumn('qty', $event)">
-                      <option [ngValue]="null">Select</option>
+                      <option [ngValue]="null" i18n>Select</option>
                       <option *ngFor="let option of availableOptions" [ngValue]="option.value">
                         {{ option.displayName }}
                       </option>
                     </select>
                   </div>
                   <span *ngIf="qty.hasError('duplicate')"
-                        class="error-detail">Can be mapped to one attribute only</span>
+                        class="error-detail" i18n>Can be mapped to one attribute only</span>
                 </td>
               </tr>
               <tr>
-                <td class="label-td">Reason (Optional)</td>
+                <td class="label-td" i18n>Reason (Optional)</td>
                 <td style="border: none;"></td>
                 <td>
                   <div>
                     <select [formControl]="reason" (change)="selectColumn('reason', $event)">
-                      <option [ngValue]="null">Select</option>
+                      <option [ngValue]="null" i18n>Select</option>
                       <option *ngFor="let option of availableOptions" [ngValue]="option.value">
                         {{ option.displayName }}
                       </option>
@@ -102,16 +102,16 @@ const logger = new Logger('CSVDialogComponent');
 
                   </div>
                   <span *ngIf="reason.hasError('duplicate')"
-                        class="error-detail">Can be mapped to one attribute only</span>
+                        class="error-detail" i18n>Can be mapped to one attribute only</span>
                 </td>
               </tr>
               <tr>
-                <td class="label-td">SKU (Optional)</td>
+                <td class="label-td" i18n>SKU (Optional)</td>
                 <td style="border: none;"></td>
                 <td>
                   <div>
                     <select [formControl]="sku" (change)="selectColumn('sku', $event)">
-                      <option [ngValue]="null">Select</option>
+                      <option [ngValue]="null" i18n>Select</option>
                       <option *ngFor="let option of availableOptions" [ngValue]="option.value">
                         {{ option.displayName }}
                       </option>
@@ -119,16 +119,16 @@ const logger = new Logger('CSVDialogComponent');
 
                   </div>
                   <span *ngIf="sku.hasError('duplicate')"
-                        class="error-detail">Can be mapped to one attribute only</span>
+                        class="error-detail" i18n>Can be mapped to one attribute only</span>
                 </td>
               </tr>
               <tr>
-                <td class="label-td">Notes (Optional)</td>
+                <td class="label-td" i18n>Notes (Optional)</td>
                 <td style="border: none;"></td>
                 <td>
                   <div>
                     <select [formControl]="notes" (change)="selectColumn('notes', $event)">
-                      <option [ngValue]="null">Select</option>
+                      <option [ngValue]="null" i18n>Select</option>
                       <option *ngFor="let option of availableOptions" [ngValue]="option.value">
                         {{ option.displayName }}
                       </option>
@@ -136,7 +136,7 @@ const logger = new Logger('CSVDialogComponent');
 
                   </div>
                   <span *ngIf="notes.hasError('duplicate')"
-                        class="error-detail">Can be mapped to one attribute only</span>
+                        class="error-detail" i18n>Can be mapped to one attribute only</span>
                 </td>
               </tr>
               </tbody>
@@ -147,8 +147,8 @@ const logger = new Logger('CSVDialogComponent');
       </form>
 
       <div class="csv-dialog-actions">
-        <button class="control" (click)="nextStepMap()" [disabled]="disabledCheck()">Next</button>
-        <button class="control secondary ghost" (click)="prevStepMap()">Cancel</button>
+        <button class="control" (click)="nextStepMap()" [disabled]="disabledCheck()" i18n>Next</button>
+        <button class="control secondary ghost" (click)="prevStepMap()" i18n>Cancel</button>
       </div>
 
     </ngx-smart-modal>

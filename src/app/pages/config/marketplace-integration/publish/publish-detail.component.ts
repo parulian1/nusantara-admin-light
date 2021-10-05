@@ -7,49 +7,49 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
 @Component({
   selector: 'nus-marketplace-publish',
   template: `
-    <h1 class="title-1">Publish To Marketplace</h1>
+    <h1 class="title-1" i18n>Publish To Marketplace</h1>
     <div class="wrapper">
       <div>
-        <p class="body-2">Total Product</p>
+        <p class="body-2" i18n>Total Product</p>
         <p class="subheading-2"> {{ order?.totalProduct }} </p>
       </div>
       <div>
-        <p class="body-2">Status</p>
+        <p class="body-2" i18n>Status</p>
         <p class="subheading-2"> {{ order?.receivingStatus }} </p>
       </div>
       <div>
-        <p class="body-2">Warehouse</p>
+        <p class="body-2" i18n>Warehouse</p>
         <p class="subheading-2 warehouse"> {{ order?.warehouse }} </p>
       </div>
       <div >
-        <p class="body-2">Created By</p>
+        <p class="body-2" i18n>Created By</p>
         <p class="subheading-2"> {{ order?.receivedBy ? order.receivedBy : '-' }} </p>
       </div>
       <div>
-        <p class="body-2">Reviewed By</p>
+        <p class="body-2" i18n>Reviewed By</p>
         <p class="subheading-2"> {{ order?.approvedBy ? order.approvedBy : '-' }} </p>
       </div>
       <div>
-        <p>Date</p>
+        <p i18n>Date</p>
         <p class="subheading-2"> {{ order?.created | date: 'dd/MM/yyyy HH:mm:ss' }} </p>
       </div>
     </div>
     <div class="progress-info">
-      <span class="subheading-1">
+      <span class="subheading-1" i18n>
         Publishing Your Product ({{ order?.totalRecord?.published }}/{{order?.totalProduct}})
       </span>
-      <a [routerLink]="" (click)="loadAllData()">Refresh All</a>
+      <a [routerLink]="" (click)="loadAllData()" i18n>Refresh All</a>
     </div>
     <div>
       <nus-tabs>
         <nus-tab [title]="'List Product'">
           <div *ngIf="order?.receivingStatus == 'Error'" class="error-info">
             <div>
-              <h2 class="heading-2">There are Errors When Publishing Products</h2>
+              <h2 class="heading-2" i18n>There are Errors When Publishing Products</h2>
               <ul>
-                <li>Go to "Product Data Error" tab and click "Fix" on each product"</li>
-                <li>Go to "Credentials Error" tab, reconnect the stores, then click "Refresh"</li>
-                <li>
+                <li i18n>Go to "Product Data Error" tab and click "Fix" on each product"</li>
+                <li i18n>Go to "Credentials Error" tab, reconnect the stores, then click "Refresh"</li>
+                <li i18n>
                   Go to "Time Out Error" tab and click "Refresh" on each product or "Refresh All" to reupload all products.
                 </li>
               </ul>
@@ -63,13 +63,13 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
           <table>
             <thead>
               <tr>
-                <th>Product (UPC)</th>
-                <th>SKU</th>
-                <th class="numeric">Quantity</th>
-                <th>Store</th>
-                <th>Location</th>
-                <th>Status</th>
-                <th>Information</th>
+                <th i18n>Product (UPC)</th>
+                <th i18n>SKU</th>
+                <th class="numeric" i18n>Quantity</th>
+                <th i18n>Store</th>
+                <th i18n>Location</th>
+                <th i18n>Status</th>
+                <th i18n>Information</th>
               </tr>
             </thead>
             <tbody>
@@ -93,13 +93,13 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                   </span>
                 </td>
                 <td>
-                  <ng-template [ngIf]="product.errorStatus === 'error_authentication'">
+                  <ng-template [ngIf]="product.errorStatus === 'error_authentication'" i18n>
                     Credentials Error
                   </ng-template>
-                  <ng-template [ngIf]="product.errorStatus === 'error_metadata'">
+                  <ng-template [ngIf]="product.errorStatus === 'error_metadata'" i18n>
                     Product Data Error
                   </ng-template>
-                  <ng-template [ngIf]="product.errorStatus === 'error_timeout'">
+                  <ng-template [ngIf]="product.errorStatus === 'error_timeout'" i18n>
                     Time Out Error
                   </ng-template>
                   <ng-template [ngIf]="product.errorStatus === 'published'">-</ng-template>
@@ -116,11 +116,11 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
         <nus-tab [title]="'Credentials Error (' + order?.totalRecord.errorAuthentication + ')'">
           <div *ngIf="order?.totalRecord.errorAuthentication > 0" class="error-info">
             <div>
-              <h2 class="heading-2">You are not Connected to Some Stores</h2>
-              <p>Click "Reconnect" on each stores to fix this.</p>
+              <h2 class="heading-2" i18n>You are not Connected to Some Stores</h2>
+              <p i18n>Click "Reconnect" on each stores to fix this.</p>
             </div>
             <div>
-              <a [routerLink]="" (click)="fetchCredentialsError()">Refresh</a>
+              <a [routerLink]="" (click)="fetchCredentialsError()" i18n>Refresh</a>
             </div>
           </div>
           <nus-pagination-child
@@ -131,10 +131,10 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
           <table>
             <thead>
               <tr>
-                <th>Store</th>
-                <th>Marketplace</th>
-                <th>Status</th>
-                <th class="centered">Action</th>
+                <th i18n>Store</th>
+                <th i18n>Marketplace</th>
+                <th i18n>Status</th>
+                <th class="centered" i18n>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -150,7 +150,7 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                   </span>
                 </td>
                 <td class="centered">
-                  <a [routerLink]="['/config', 'marketplace-integration', 'connect', shop.slug]">Reconnect</a>
+                  <a [routerLink]="['/config', 'marketplace-integration', 'connect', shop.slug]" i18n>Reconnect</a>
                 </td>
               </tr>
             </tbody>
@@ -164,8 +164,8 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
         <nus-tab [title]="'Product Data Error (' + order?.totalRecord.errorMetadata + ')'">
           <div *ngIf="order?.totalRecord.errorMetadata > 0" class="error-info">
             <div>
-              <h2 class="heading-2"> {{ order?.totalRecord.errorMetadata }} Products Can't be Published</h2>
-              <p>Click "Fix" on each product below.</p>
+              <h2 class="heading-2" i18n> {{ order?.totalRecord.errorMetadata }} Products Can't be Published</h2>
+              <p i18n>Click "Fix" on each product below.</p>
             </div>
           </div>
           <nus-pagination-child
@@ -176,12 +176,12 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
           <table>
             <thead>
               <tr>
-                <th>Product (UPC)</th>
-                <th>SKU</th>
-                <th class="numeric">Quantity</th>
-                <th>Location</th>
-                <th>Status</th>
-                <th class="centered">Action</th>
+                <th i18n>Product (UPC)</th>
+                <th i18n>SKU</th>
+                <th class="numeric" i18n>Quantity</th>
+                <th i18n>Location</th>
+                <th i18n>Status</th>
+                <th class="centered" i18n>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -204,7 +204,7 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                   </span>
                 </td>
                 <td class="centered">
-                  <a [routerLink]="['/catalog/products', product.slug]">Fix</a>
+                  <a [routerLink]="['/catalog/products', product.slug]" i18n>Fix</a>
                 </td>
               </tr>
             </tbody>
@@ -218,11 +218,11 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
         <nus-tab [title]="'Time Out Error (' + order?.totalRecord.errorTimeout + ')'">
           <div *ngIf="order?.totalRecord.errorTimeout > 0" class="error-info">
             <div>
-              <h2 class="heading-2">Unable to Publish to {{ order?.totalRecord.errorTimeout }} Marketplace</h2>
-              <p>Click "Refresh" on each product or click "Refresh All" to reupload all products.</p>
+              <h2 class="heading-2" i18n>Unable to Publish to {{ order?.totalRecord.errorTimeout }} Marketplace</h2>
+              <p i18n>Click "Refresh" on each product or click "Refresh All" to reupload all products.</p>
             </div>
             <div>
-              <a [routerLink]="" (click)="refreshAllTimeoutError($event, receivingOrderId)">Refresh All</a>
+              <a [routerLink]="" (click)="refreshAllTimeoutError($event, receivingOrderId)" i18n>Refresh All</a>
             </div>
           </div>
           <nus-pagination-child
@@ -233,12 +233,12 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
           <table>
             <thead>
               <tr>
-                <th>Product (UPC)</th>
-                <th>SKU</th>
-                <th class="numeric">Quantity</th>
-                <th>Location</th>
-                <th>Status</th>
-                <th class="centered">Action</th>
+                <th i18n>Product (UPC)</th>
+                <th i18n>SKU</th>
+                <th class="numeric" i18n>Quantity</th>
+                <th i18n>Location</th>
+                <th i18n>Status</th>
+                <th class="centered" i18n>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -260,7 +260,7 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                     {{ product.status }}
                   </span>
                 <td class="centered">
-                  <a [routerLink]="" (click)="refreshTimeoutError($event, product.identifier)">Refresh</a>
+                  <a [routerLink]="" (click)="refreshTimeoutError($event, product.identifier)" i18n>Refresh</a>
                 </td>
               </tr>
             </tbody>

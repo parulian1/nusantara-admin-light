@@ -13,16 +13,16 @@ import { marketplace } from '@nusantara/models';
   template: `
     <ngx-smart-modal #modal [identifier]="'marketplaceStockInfoModal'"
     [customClass]="'wide-modal no-padding-modal'">
-      <h2 class="heading-2">Marketplace Information</h2>
+      <h2 class="heading-2" i18n>Marketplace Information</h2>
       <div class="content">
         <div class="table">
           <table>
               <thead>
                   <tr>
-                    <th>Warehouse</th>
-                    <th>Marketplace</th>
-                    <th class="numeric">Stock</th>
-                    <th>Store</th>
+                    <th i18n>Warehouse</th>
+                    <th i18n>Marketplace</th>
+                    <th class="numeric" i18n>Stock</th>
+                    <th i18n>Store</th>
                   </tr>
               </thead>
               <tbody>

@@ -46,7 +46,7 @@ import { IProductClass } from '@nusantara/models/products';
           </div>
           <nus-field-errors [control]="control"></nus-field-errors>
         </div>
-        <button (click)="addLocator()" type="button" class="new-add-button wide" data-qa="add-locator-button">Add</button>
+        <button (click)="addLocator()" type="button" class="new-add-button wide" data-qa="add-locator-button" i18n>Add</button>
       </td>
     </tr>
   `,

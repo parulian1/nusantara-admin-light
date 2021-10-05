@@ -4,21 +4,21 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
 @Component({
   selector: 'nus-pickup-download-shipping-modal',
   template: `
-    <ngx-smart-modal 
-      [identifier]="'pickupDownloadShipping'" 
-      #modal 
+    <ngx-smart-modal
+      [identifier]="'pickupDownloadShipping'"
+      #modal
       [customClass]="'medium-modal no-padding-modal'">
       <div class="wrapper">
         <form #modalForm class="fluid" [formGroup]="">
           <div class="message">
-            <h2 class="title-2">Set Pick Up Service</h2>
-            <p><strong>Order count</strong> will be picked up from your store address by <strong>Shipping service</strong>.</p>
+            <h2 class="title-2" i18n>Set Pick Up Service</h2>
+            <p i18n><strong>Order count</strong> will be picked up from your store address by <strong>Shipping service</strong>.</p>
             <div class="awb-number">
-              <div class="body-2">AWB Number</div>
-              <div class="heading-2">AWB Number</div>
+              <div class="body-2" i18n>AWB Number</div>
+              <div class="heading-2" i18n>AWB Number</div>
             </div>
           </div>
-          <button type="submit" class="control">Download Shipping Label</button>
+          <button type="submit" class="control" i18n>Download Shipping Label</button>
         </form>
       </div>
     </ngx-smart-modal>
@@ -27,7 +27,7 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
     '.wrapper { padding: 16px }',
     '.message { margin: 8px 8px 47px 8px; }',
     '.heading-2 { font-weight: bold; }',
-    `.awb-number { 
+    `.awb-number {
       display: block;
       margin-left: auto;
       margin-right: auto;

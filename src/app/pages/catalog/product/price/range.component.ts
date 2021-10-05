@@ -16,10 +16,10 @@ import { products } from '@nusantara/models';
   selector: 'nus-price-list-range',
   template: `
     <div [formGroup]="form" class="wrapper immediate-error-display">
-      <div>Min</div>
+      <div i18n>Min</div>
       <div></div>
-      <div>Max</div>
-      <div>Price</div>
+      <div i18n>Max</div>
+      <div i18n>Price</div>
       <div></div>
       <div style="text-align: left;">
         <input type="number"
@@ -28,7 +28,7 @@ import { products } from '@nusantara/models';
                [readonly]="isInitialRange"
                data-qa="min-quantity"/>
       </div>
-      <div>To</div>
+      <div i18n>To</div>
       <div>
         <input type="number"
                [formControl]="maxQuantity"

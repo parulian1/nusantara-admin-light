@@ -44,7 +44,7 @@ import { ResellerService } from '@nusantara/services';
         </tr>
         <tr>
           <td colspan="2">
-            <button type="button" (click)="selectGroup()" class="add-button">
+            <button type="button" (click)="selectGroup()" class="add-button" i18n>
               Add Customer Group
             </button>
           </td>

@@ -13,7 +13,7 @@ import * as moment from 'moment';
       <div class="pg-info">
         <span *ngIf="page?.totalResults > 0 && showLabels">
           <mat-checkbox [(ngModel)]="masterSelected"
-          (change)="checkUncheckAll()"> 
+          (change)="checkUncheckAll()" i18n>
             Selected <strong>{{checkedlist? checkedlist.length: 0 }}/{{ page.entities.length }} </strong>
           </mat-checkbox>
           of<strong> {{ page?.totalResults }}</strong>
@@ -21,18 +21,18 @@ import * as moment from 'moment';
       </div>
       <div class="pg-action">
         <div>
-          <button 
+          <button
             class="download control secondary"
             mat-button
             [matMenuTriggerFor]="downloadMenu"
-            (menuOpened)="displayDownloadDateRangeInfo()">
+            (menuOpened)="displayDownloadDateRangeInfo()" i18n>
               Download
             <mat-icon class="icon-secondary" svgIcon="arrow-down"></mat-icon>
           </button>
           <mat-menu #downloadMenu>
-            <button mat-menu-item (click)="downloadProductList()">Product List</button>
+            <button mat-menu-item (click)="downloadProductList()" i18n>Product List</button>
             <!-- <button mat-menu-item>Shipping Label</button> -->
-            <button mat-menu-item (click)="downloadOrderList()">Order List</button>
+            <button mat-menu-item (click)="downloadOrderList()" i18n>Order List</button>
           </mat-menu>
         </div>
         <div class="pg-button">
@@ -44,7 +44,7 @@ import * as moment from 'moment';
     </div>
   `,
   styles: [
-    `.pagination-container { 
+    `.pagination-container {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -59,8 +59,8 @@ import * as moment from 'moment';
     '.pg-button { line-height: 50px; }',
     '.pg-button span { line-height: 50px; }',
     '.pg-button i { font-size: 1em; }',
-    `::ng-deep .download-date-range-info { 
-        padding: 6px 16px; 
+    `::ng-deep .download-date-range-info {
+        padding: 6px 16px;
         background: var(--darken-white);
         border-top: var(--grey) solid 1px;
       }`,
@@ -78,12 +78,12 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
   btnDisabled: boolean;
 
   constructor(
-    router: Router, 
+    router: Router,
     route: ActivatedRoute,
     private orderReportService: OrderReportService,
     private orderDownloadService: OrderDownloadFileService,
-    svgIconService: SvgIconService) { 
-      super(router, route); 
+    svgIconService: SvgIconService) {
+      super(router, route);
       svgIconService.registerIcons();
   }
 
@@ -115,15 +115,15 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
 
   downloadProductList(){
     this.orderReportService.downloadProductList(
-      this.dateRangeValidation(this.appliedFilters), 
+      this.dateRangeValidation(this.appliedFilters),
       this.checkedlist).subscribe((response: string) => {
         this.orderDownloadService.downloadAsCsv(response, 'product-list');
     });
   }
-  
+
   downloadOrderList(){
-    this.orderReportService.downloadOrderList(    
-      this.dateRangeValidation(this.appliedFilters), 
+    this.orderReportService.downloadOrderList(
+      this.dateRangeValidation(this.appliedFilters),
       this.checkedlist).subscribe((response: string) => {
         this.orderDownloadService.downloadAsCsv(response, 'order-list');
     });
@@ -132,7 +132,7 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
   dateRangeValidation(filters: IOrderFilterValue){
     if(moment(filters.date.end).diff(moment(filters.date.start), "days") > 14) {
       const newStartDate = moment(moment(filters.date.end).subtract(14, "days"));
-      filters.date.start = newStartDate.format("YYYY-MM-DDTHH:mm:ss"); 
+      filters.date.start = newStartDate.format("YYYY-MM-DDTHH:mm:ss");
       return filters;
     }
     return filters;

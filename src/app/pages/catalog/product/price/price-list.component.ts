@@ -30,17 +30,17 @@ import { RangeComponent } from './range.component';
 
     <div class="wrapper list">
       <div>
-        <div class="body-2">Type</div>
+        <div class="body-2" i18n>Type</div>
         <div class="subheading-2"> {{ type.value | titlecase }} </div>
       </div>
       <div>
-        <div class="body-2">Start</div>
+        <div class="body-2" i18n>Start</div>
         <div class="subheading-2">
           {{ ranges.controls.length ? ranges.controls[0].value.price : 0 }}
         </div>
       </div>
       <div>
-        <div class="body-2">Ending</div>
+        <div class="body-2" i18n>Ending</div>
         <div class="subheading-2">
           {{ ranges.controls.length ? ranges.controls[ranges.length - 1].value.price : 0 }}
         </div>
@@ -58,7 +58,7 @@ import { RangeComponent } from './range.component';
     <div *ngIf="isExpanded" class="wrapper">
       <div>
         <label>
-          <span>Type</span>
+          <span i18n>Type</span>
           <select [formControl]="type"
             name="pricelist-type"
             data-qa="pricelist-type">
@@ -70,7 +70,7 @@ import { RangeComponent } from './range.component';
         </label>
       </div>
       <div>
-        <label class="without-field-errors">
+        <label class="without-field-errors" i18n>
           <input type="checkbox"
             [formControl]="isProgressive"
               name="is-progressive"
@@ -88,7 +88,7 @@ import { RangeComponent } from './range.component';
         [siblingQuantityChanged]="rangeQuantityChanged">
       </nus-price-list-range>
       <div>
-        <button type="button" (click)="addRange()" class="new-add-button">
+        <button type="button" (click)="addRange()" class="new-add-button" i18n>
           <i class="material-icons">add</i> Add Range
         </button>
       </div>

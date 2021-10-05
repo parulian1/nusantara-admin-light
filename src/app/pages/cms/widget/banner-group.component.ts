@@ -22,13 +22,13 @@ import { IChoice } from '../../../models/drf';
     <form [formGroup]="form" (ngSubmit)="save()">
 
       <label>
-        <span>Name</span>
+        <span i18n>Name</span>
         <input type="text" [formControl]="name">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
-        <span>Type</span>
+        <span i18n>Type</span>
         <select [formControl]="type">
           <option [ngValue]="null">---</option>
           <option *ngFor="let t of bannerGroupTypes" [ngValue]="t.value">{{ t.displayName }}</option>
@@ -37,9 +37,9 @@ import { IChoice } from '../../../models/drf';
 
 
       <div class="actions-container">
-        <button type="submit" [disabled]="!form.valid">Save</button>
-        <button type="button" (click)="navigateToParent(true)">Cancel</button>
-        <button type="button" (click)="delete()" *ngIf="!isNew">Delete</button>
+        <button type="submit" [disabled]="!form.valid" i18n>Save</button>
+        <button type="button" (click)="navigateToParent(true)" i18n>Cancel</button>
+        <button type="button" (click)="delete()" *ngIf="!isNew" i18n>Delete</button>
       </div>
     </form>
   `,

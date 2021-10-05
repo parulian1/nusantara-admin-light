@@ -6,7 +6,7 @@ import {IAuthSocial} from '../../../models/auth-social';
 @Component({
   selector: 'nus-auth-social-list',
   template: `
-    <nus-list-header
+    <nus-list-header i18n-title
       title="Social Login"
       description="Social login configuration">
     </nus-list-header>
@@ -18,9 +18,9 @@ import {IAuthSocial} from '../../../models/auth-social';
     <table>
       <thead>
       <tr>
-        <th>Auth Type</th>
-        <th>App Key</th>
-        <th class="centered">Is Active</th>
+        <th i18n>Auth Type</th>
+        <th i18n>App Key</th>
+        <th class="centered" i18n>Is Active</th>
       </tr>
       </thead>
       <tbody>

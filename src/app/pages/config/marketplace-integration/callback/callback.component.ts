@@ -18,12 +18,12 @@ import { IError } from '@nusantara/models/base/error';
   template: `
     <form [formGroup]="form" (ngSubmit)="callback()">
       <input type="hidden" [formControl]="code">
-      <h3 style="text-align: center">Please Confirm {{marketplace | titlecase}} and Bhisma Authorization</h3>
-      <h3 style="text-align: center">This process will takes times</h3>
-      <h3 style="text-align: center">Please wait and refresh your store list page until the status is connected</h3>
+      <h3 style="text-align: center" i18n>Please Confirm {{marketplace | titlecase}} and Bhisma Authorization</h3>
+      <h3 style="text-align: center" i18n>This process will takes times</h3>
+      <h3 style="text-align: center" i18n>Please wait and refresh your store list page until the status is connected</h3>
       <div class="controls-container">
         <button type="submit" [disabled]="!form.valid || isBusy" class="control">
-          <span>Confirm</span>
+          <span i18n>Confirm</span>
         </button>
       </div>
 
@@ -69,7 +69,7 @@ export class CallbackComponent implements OnInit {
 
     // needed to check marketplace, now only bukalapak and lazada
     this.marketplace = this.activatedRoute.snapshot.paramMap.get('marketplace');
-    
+
     this.activatedRoute.queryParams.subscribe(params => {
         this.codeCallback = params['code'];
     });
