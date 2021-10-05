@@ -82,14 +82,14 @@ import { IProductClass } from '@nusantara/models/products';
           </thead>
           <tbody>
 
-          <nus-inventory-receiving-line
+          <nus-inventory-transfer-line
             *ngFor="let rec of stockRecords.controls; let i=index"
             [productClasses]="productClasses"
             [availableSubLocations]="availableSubLocations"
             (remove)="stockRecords.removeAt(i)"
             [formGroup]="rec"
           >
-          </nus-inventory-receiving-line>
+          </nus-inventory-transfer-line>
 
           <tr>
             <td colspan="9">

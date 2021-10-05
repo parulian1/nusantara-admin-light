@@ -22,11 +22,11 @@ import { products } from '../models';
       <form #modalForm class="fluid">
         <div class="search">
           <i class="material-icons">search</i>
-          <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Product Name or SKU">
+          <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Product Name or UPC">
         </div>
         <input type="hidden" [formControl]="product">
         <div *ngIf="displayedResults?.entities.length; else notFound">
-          <p i18n>Showing 10 recently added products. Search product name or SKU to find more products.</p>
+          <p i18n>Showing 10 recently added products. Search product name or UPC to find more products.</p>
           <table>
             <colgroup>
               <col class="product-name">
