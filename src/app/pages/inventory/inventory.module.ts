@@ -12,7 +12,10 @@ import {
 } from './receiving';
 import { InventoryRoutingModule } from './inventory-routing.module';
 import { InventoryOrderListComponent } from './pending-order';
-import {InventoryTransferOrderComponent} from './transfer-order';
+import {
+  InventoryTransferOrderComponent,
+  InventoryTransferLineItemComponent
+} from './transfer-order';
 import {
   AdjustmentComponent,
   AdjustmentDetailComponent,
@@ -29,6 +32,7 @@ import { StockRecordDialogComponent } from './adjustment/stock-record-dialog.com
 
     InventoryOrderListComponent,
     InventoryTransferOrderComponent,
+    InventoryTransferLineItemComponent,
 
     AdjustmentComponent,
     AdjustmentLineItemComponent,

@@ -2,13 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import {FormArray, FormBuilder, FormControl, Validators} from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import {
   IWarehouse,
   marketplace,
   IError, ISubLocation
 } from '@nusantara/models';
-import {IReceivingOrder, IStockRecord} from '@nusantara/models/inventory';
+import { IReceivingOrder, IStockRecord } from '@nusantara/models/inventory';
 import { AbstractDetailComponent } from '@nusantara/core/components';
 import {
   InventoryReceivingOrderService,
@@ -21,7 +21,7 @@ import {
 } from '@nusantara/shared';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import {IProduct, IProductClass} from '@nusantara/models/products';
+import { IProduct, IProductClass } from '@nusantara/models/products';
 
 
 @Component({
@@ -79,12 +79,12 @@ import {IProduct, IProductClass} from '@nusantara/models/products';
           </th>
           <th>SKU</th>
           <th>Original Quantity</th>
-          <th>Location</th>
-          <th>Locator</th>
           <th>Stock Requested</th>
           <th>Batch Number</th>
           <th>Expiry Date</th>
           <th>Cost</th>
+          <th>Location</th>
+          <th>Locator</th>
         </tr>
         </thead>
         <tbody>
@@ -97,14 +97,6 @@ import {IProduct, IProductClass} from '@nusantara/models/products';
             </td>
             <td data-qa="original-quantity">
               {{ stockRecord.originalQuantity }}
-            </td>
-            <td>
-              <ng-container *ngIf="!stockRecord.location"> - </ng-container>
-              <ng-container *ngIf="!!stockRecord.location">{{ stockRecord.location?.name }}</ng-container>
-            </td>
-            <td>
-              <ng-container *ngIf="!stockRecord.locator"> - </ng-container>
-              <ng-container *ngIf="stockRecord.locator">{{ stockRecord.locator }}</ng-container>
             </td>
             <td data-qa="stock-requested">
               {{ stockRecord.requestingStock }}
@@ -121,6 +113,14 @@ import {IProduct, IProductClass} from '@nusantara/models/products';
               <ng-container *ngIf="!stockRecord.cost"> - </ng-container>
               <ng-container *ngIf="stockRecord.cost">{{ stockRecord.cost | currency:'IDR':'symbol-narrow':'1.0' }}</ng-container>
             </td>
+            <td>
+              <ng-container *ngIf="!stockRecord.location"> - </ng-container>
+              <ng-container *ngIf="!!stockRecord.location">{{ stockRecord.location?.name }}</ng-container>
+            </td>
+            <td>
+              <ng-container *ngIf="!stockRecord.locator"> - </ng-container>
+              <ng-container *ngIf="stockRecord.locator">{{ stockRecord.locator }}</ng-container>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -130,11 +130,11 @@ import {IProduct, IProductClass} from '@nusantara/models/products';
             <th>Product (UPC)</th>
             <th>SKU</th>
             <th>Quantity</th>
-            <th>Location</th>
-            <th>Locator</th>
             <th>Batch</th>
             <th>Expiry Date</th>
             <th>Cost</th>
+            <th>Location</th>
+            <th>Locator</th>
           </tr>
         </thead>
         <tbody>
@@ -176,7 +176,7 @@ import {IProduct, IProductClass} from '@nusantara/models/products';
   styles: [
     'button:not(:first-child) { margin-left: 5px; }',
     'form{max-width: none;}',
-    '#general-table-info, .general-table-product{margin-bottom: 30px;height: 80px;border-radius: 8px}',
+    '#general-table-info, .general-table-product{margin-bottom: 30px;height: 80px;border-radius: 8px; border-collapse: collapse;}',
     'a{background:none;border:none;cursor: pointer;font-weight: 700;}',
     '#general-table-info th{text-align: left;font-weight: 400;}',
     '#general-table-info td{text-align: left;font-weight: 700;color: #5A5A5A;}',
@@ -186,7 +186,7 @@ import {IProduct, IProductClass} from '@nusantara/models/products';
     '.general-table-product thead{background-color: #F4F4F4;}',
     'table.general-table-product{table-layout: fixed;}',
     'div.detail-actions { display: flex }',
-    'button.danger { margin-left: auto }'
+    'button.danger { margin-left: auto }',
   ]
 })
 export class InventoryReceivingDetailComponent extends AbstractDetailComponent<IReceivingOrder> implements OnInit {
@@ -258,6 +258,13 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
 
   reject() {
     this.form.value.status = 'rejected';
+    const stockRecordsForm = this.form.get('stockRecords') as FormArray;
+    // Stock record location is not required if receiving order rejected
+    stockRecordsForm.controls.forEach((item) => {
+      const location = item.get('location');
+      location.get('href').setValidators([]);
+      location.value.href = null;
+    });
     this.save();
   }
 
