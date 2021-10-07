@@ -160,9 +160,19 @@ import { MatDialog } from '@angular/material/dialog';
                     <a
                       *ngIf="isRedirectMarketplaceShowed(children.data[0])"
                       class="control see-order"
+                      [ngClass]="{
+                        'shopee': this.orderDetailData.sourceName === 'shopee',
+                        'tokopedia': this.orderDetailData.sourceName === 'tokopedia',
+                        'bukalapak': this.orderDetailData.sourceName === 'bukalapak'}"
                       href="{{ children.data[0].marketplaceRedirectHref }}"
                       target="_blank" i18n
                     >
+                      <div *ngIf="enableRefreshAwb.includes(this.orderDetailData.sourceName)" class="logo">
+                        <img
+                          [src]="'/assets/marketplace-logo/'+ this.orderDetailData.sourceName +'.svg'"
+                          alt="marketplace-logo"
+                        />
+                      </div>
                       See Order
                     </a>
 
@@ -327,7 +337,18 @@ import { MatDialog } from '@angular/material/dialog';
     ".download-button { min-width: 200px; display: block; margin-left: auto; }",
     "img { height: 64px; width: 64px; }",
     ".no-image { background: var(--lighten-black); }",
-    ".see-order { text-align: center; padding-top: 4px; }",
+    ".see-order { text-align: center; }",
+    ".see-order { display: flex; justify-content: center; align-items: center;}",
+    ".see-order.shopee, .see-order.shopee:hover { background: var(--shopee-color) }",
+    ".see-order.tokopedia, .see-order.tokopedia:hover { background: var(--tokopedia-color) }",
+    ".see-order.bukalapak, .see-order.bukalapak:hover { background: var(--bukalapak-color) }",
+    ".see-order.lazada, .see-order.lazada:hover { background: var(--lazada-color) }",
+    `.see-order.shopee:hover, 
+     .see-order.tokopedia:hover, 
+     .see-order.bukalapak:hover,
+     .see-order.lazada:hover { filter : brightness(0.85); }`,
+    ".see-order div.logo { margin-top: 8px; margin-right: 5px; }",
+    ".see-order div.logo img { width: 20px; height: 20px; border-radius: 4px; background: white; padding: 1px; }",
     ".refresh-awb { margin-left: 5px; font-weight: normal; }",
   ],
 })
