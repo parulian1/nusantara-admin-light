@@ -7582,7 +7582,7 @@
       </trans-unit>
       <trans-unit id="4dab275eb9e4889d5cfb280a0fdb256c6c7e7a02" datatype="html">
         <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>star<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Value</source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>bintang<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Jumlah</target>
+        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>star<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Jumlah</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/users/customer/customer-detail.component.ts</context>
           <context context-type="linenumber">94</context>
