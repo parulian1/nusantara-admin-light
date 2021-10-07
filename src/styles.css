@@ -69,6 +69,13 @@
   --hyperlink-color-active: #034880;
   --input-hover-color: #275efe;
 
+
+  /* marketplace color pallete */
+  --shopee-color: #FE6233; 
+  --tokopedia-color: #5FB64E;
+  --bukalapak-color: #E2004D;
+  --lazada-color: #2742A2;
+
 }
 
 /**

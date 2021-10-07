@@ -1,6 +1,6 @@
 {
   "name": "nusantara-admin",
-  "version": "2.42.0",
+  "version": "2.43.1",
   "scripts": {
     "ng": "ng",
     "start": "npm run env && ng serve --port=4201",
