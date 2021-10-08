@@ -144,7 +144,7 @@
       </trans-unit>
       <trans-unit id="8c5d12330d2c43c98ea5ff3f178c8357f5be3336" datatype="html">
         <source>Please enter your new password.</source>
-        <target state="translated">Masukkan password baru</target>
+        <target state="translated">Masukkan password baru.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/auth/pages/reset-password.component.ts</context>
           <context context-type="linenumber">8,9</context>
@@ -6874,7 +6874,7 @@
       </trans-unit>
       <trans-unit id="472f2890e75d2f37dbe1da8bb859594b5e22a933" datatype="html">
         <source>Created Date</source>
-        <target state="translated">Tanggal Buat</target>
+        <target state="translated">Tanggal Di Buat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -6882,7 +6882,7 @@
       </trans-unit>
       <trans-unit id="6fb68b8ca05d72766e3c70f85572ba2e4976bc83" datatype="html">
         <source>DO Number (Optional)</source>
-        <target state="translated">Nomor DO</target>
+        <target state="translated">Nomor DO (Opsional)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -6890,7 +6890,7 @@
       </trans-unit>
       <trans-unit id="8e06cffadfb5222970681a11379cee253b7ef150" datatype="html">
         <source>*) Required fields</source>
-        <target state="translated">*) Harus di isi</target>
+        <target state="translated">*) Required field</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
           <context context-type="linenumber">92</context>
@@ -6898,7 +6898,7 @@
       </trans-unit>
       <trans-unit id="5c892fecd999003ead13bf825101ee8f6fc319cf" datatype="html">
         <source>Product Name (UPC)*</source>
-        <target state="translated">Nama Produk</target>
+        <target state="translated">Nama Produk (UPC)*</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
           <context context-type="linenumber">96</context>
@@ -6906,7 +6906,7 @@
       </trans-unit>
       <trans-unit id="2cd5e2f09b70013eb42df61473287786b8120177" datatype="html">
         <source>SKU*</source>
-        <target state="translated">SKU</target>
+        <target state="translated">SKU*</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
           <context context-type="linenumber">97</context>
@@ -6914,7 +6914,7 @@
       </trans-unit>
       <trans-unit id="a46aef2b264c46f6c2589b8645d2d4e5b893a85f" datatype="html">
         <source>Quantity*</source>
-        <target state="translated">Kuantitas</target>
+        <target state="translated">Jumlah*</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
           <context context-type="linenumber">98</context>
@@ -6930,7 +6930,7 @@
       </trans-unit>
       <trans-unit id="c81b254007317d38080e67ba00f3b83298778d8c" datatype="html">
         <source>Input SKU</source>
-        <target state="translated">Masukkan SKU</target>
+        <target state="translated">Masukan SKU</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/line-item.component.ts</context>
           <context context-type="linenumber">13</context>
@@ -7582,7 +7582,7 @@
       </trans-unit>
       <trans-unit id="4dab275eb9e4889d5cfb280a0fdb256c6c7e7a02" datatype="html">
         <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>star<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Value</source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>bintang<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Jumlah</target>
+        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>star<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Jumlah</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/users/customer/customer-detail.component.ts</context>
           <context context-type="linenumber">94</context>
@@ -8126,7 +8126,7 @@
       </trans-unit>
       <trans-unit id="5ff77df30fde5c1c38206d8d6b66604c140186ec" datatype="html">
         <source>Showing 10 recently added products. Search product name or UPC to find more products.</source>
-        <target state="translated">Menampilkan 10 produk terakhir. Cari nama produk atau UPC</target>
+        <target state="translated">Menampilkan 10 produk terakhir. Cari nama produk atau UPC.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/product-selection-modal.component.ts</context>
           <context context-type="linenumber">29</context>
