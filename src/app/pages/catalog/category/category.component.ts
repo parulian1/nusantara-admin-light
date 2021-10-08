@@ -170,13 +170,14 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
     this.form.controls.isInterestedCategory.markAsTouched();
 
     this.setIconImagePreview(entity?.image);
+    this.selectedCategory = null;
+    if (!!entity?.parent) {
+      this.service.fetch(getSlugFromHref(entity?.parent)).subscribe(res => {
+        this.selectedCategory = res;
+      }, err => {
 
-    this.service.fetch(getSlugFromHref(entity?.parent)).subscribe( res => {
-      this.selectedCategory = res;
-    }, err => {
-      this.selectedCategory = null;
-    });
-
+      });
+    }
     entity?.sourceMappings.forEach(
       (value) => { this.addMapping(value); }
     );

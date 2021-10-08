@@ -101,6 +101,7 @@ describe('CategoryComponent', () => {
     component.sourceMappings.push(sm1);
     component.sourceMappings.push(sm2);
     component.form.value.image = image64;
+
     component.save();
 
     const mock = httpTestingController.expectOne('/api/catalog/category/');
@@ -130,6 +131,17 @@ describe('CategoryComponent', () => {
     const sm2 = component.fb.control(categoryUpdateResp.sourceMappings[1]);
     component.sourceMappings.push(sm1);
     component.sourceMappings.push(sm2);
+
+    httpTestingController.match('/api/catalog/category/body-care-7/').map(req => req.flush({
+      name: 'default product class',
+      href: 'https://staging.bhisma.cloud/api/catalog/category/body-care-7/',
+      requiresShipping: true,
+      trackStock: true,
+      isPerishable: false,
+      type: 'physical',
+    }, {status: 200, statusText: 'OK'}));
+    fixture.detectChanges();
+    httpTestingController.verify();
     component.save();
 
     const mock = httpTestingController.expectOne(categoryUpdateResp.href);
