@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
   <file source-language="en" datatype="plaintext" original="ng2.template" target-language="id">
     <body>
@@ -631,24 +631,24 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ad6087e3c7b7438816aa08b783327e2f0dc06adf" datatype="html">
-        <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;checkbox&quot; [formControl]=&quot;requiresShipping&quot; name=&quot;requiresShipping&quot;&gt;"/> Requires Shipping? </source>
-        <target state="translated"><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;checkbox&quot; [formControl]=&quot;requiresShipping&quot; name=&quot;requiresShipping&quot;&gt;"/>Perlu Pengiriman? </target>
+        <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;checkbox&quot; [formControl]=&quot;requiresShipping&quot; name=&quot;requiresShipping&quot;>"/> Requires Shipping? </source>
+        <target state="translated"><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;checkbox&quot; [formControl]=&quot;requiresShipping&quot; name=&quot;requiresShipping&quot;>"/>Perlu Pengiriman? </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product-class/product-class.component.ts</context>
           <context context-type="linenumber">38,40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a5fcc2801752447ec462fd32df5237413d6de375" datatype="html">
-        <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;checkbox&quot; [formControl]=&quot;trackStock&quot; name=&quot;trackStock&quot;&gt;"/> Track Stock? </source>
-        <target state="translated"><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;checkbox&quot; [formControl]=&quot;trackStock&quot; name=&quot;trackStock&quot;&gt;"/>Pantau Stok? </target>
+        <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;checkbox&quot; [formControl]=&quot;trackStock&quot; name=&quot;trackStock&quot;>"/> Track Stock? </source>
+        <target state="translated"><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;checkbox&quot; [formControl]=&quot;trackStock&quot; name=&quot;trackStock&quot;>"/>Pantau Stok? </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product-class/product-class.component.ts</context>
           <context context-type="linenumber">42,44</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d2c25325d8070b2fcc06b48d88e10c39fdd9c660" datatype="html">
-        <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;checkbox&quot; [formControl]=&quot;isPerishable&quot; name=&quot;isPerishable&quot;&gt;"/> Is Perishable? </source>
-        <target state="translated"><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;checkbox&quot; [formControl]=&quot;isPerishable&quot; name=&quot;isPerishable&quot;&gt;"/>Benda Mudah Rusak? </target>
+        <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;checkbox&quot; [formControl]=&quot;isPerishable&quot; name=&quot;isPerishable&quot;>"/> Is Perishable? </source>
+        <target state="translated"><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;checkbox&quot; [formControl]=&quot;isPerishable&quot; name=&quot;isPerishable&quot;>"/>Benda Mudah Rusak? </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product-class/product-class.component.ts</context>
           <context context-type="linenumber">46,48</context>
@@ -1191,8 +1191,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="7e0ffce09f4b82ee09ff9bc67efa0dea95e917f8" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Add Store </source>
-        <target state="needs-translation"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>Tambah<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Tambah Toko </target>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/>Add Store </source>
+        <target state="needs-translation"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>Tambah<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/>Tambah Toko </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/marketplace/marketplace-information.component.ts</context>
           <context context-type="linenumber">158,159</context>
@@ -1311,8 +1311,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="940bf18ff36445be2bd91d769b1a63b917afdefd" datatype="html">
-        <source>Media <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button (click)=&quot;openImageModal()&quot; type=&quot;button&quot; title=&quot;Add new Image&quot;&gt;"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>image<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/><x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/><x id="START_TAG_BUTTON_1" ctype="x-button_1" equiv-text="&lt;button (click)=&quot;openVideoModal()&quot; type=&quot;button&quot; title=&quot;Add new YouTube video&quot;&gt;"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>ondemand_video<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/><x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/></source>
-        <target state="needs-adaptation">Media<x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button (click)=&quot;newImageModal.open()&quot; type=&quot;button&quot; title=&quot;Add new Image&quot;&gt;"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>gambar<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/><x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/><x id="START_TAG_BUTTON_1" ctype="x-button_1" equiv-text="&lt;button (click)=&quot;newYoutubeModal.open()&quot; type=&quot;button&quot; title=&quot;Add new YouTube video&quot;&gt;"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>video_ondemand<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/><x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/></target>
+        <source>Media <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button (click)=&quot;openImageModal()&quot; type=&quot;button&quot; title=&quot;Add new Image&quot;>"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>image<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/><x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button>"/><x id="START_TAG_BUTTON_1" ctype="x-button_1" equiv-text="&lt;button (click)=&quot;openVideoModal()&quot; type=&quot;button&quot; title=&quot;Add new YouTube video&quot;>"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>ondemand_video<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/><x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button>"/></source>
+        <target state="needs-adaptation">Media<x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button (click)=&quot;newImageModal.open()&quot; type=&quot;button&quot; title=&quot;Add new Image&quot;>"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>gambar<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/><x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button>"/><x id="START_TAG_BUTTON_1" ctype="x-button_1" equiv-text="&lt;button (click)=&quot;newYoutubeModal.open()&quot; type=&quot;button&quot; title=&quot;Add new YouTube video&quot;>"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>video_ondemand<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/><x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/media/product-media-host.component.ts</context>
           <context context-type="linenumber">25,31</context>
@@ -1415,16 +1415,16 @@
         </context-group>
       </trans-unit>
       <trans-unit id="99caaf20d674b866890453d347bdaf69e4f1af56" datatype="html">
-        <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;checkbox&quot;             [formControl]=&quot;isProgressive&quot;               name=&quot;is-progressive&quot;               data-qa=&quot;is-progressive&quot;&gt;"/> Is Progressive </source>
-        <target state="translated"><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;checkbox&quot;             [formControl]=&quot;isProgressive&quot;               name=&quot;is-progressive&quot;               data-qa=&quot;is-progressive&quot;&gt;"/>Harga Progresif </target>
+        <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;checkbox&quot;             [formControl]=&quot;isProgressive&quot;               name=&quot;is-progressive&quot;               data-qa=&quot;is-progressive&quot;>"/> Is Progressive </source>
+        <target state="translated"><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;checkbox&quot;             [formControl]=&quot;isProgressive&quot;               name=&quot;is-progressive&quot;               data-qa=&quot;is-progressive&quot;>"/>Harga Progresif </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/price/price-list.component.ts</context>
           <context context-type="linenumber">74,79</context>
         </context-group>
       </trans-unit>
       <trans-unit id="884d19eaa0fc0286da761e7440722d38006d1cd2" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Add Range </source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Tambah Range </target>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Add Range </source>
+        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Tambah Range </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/price/price-list.component.ts</context>
           <context context-type="linenumber">92,93</context>
@@ -1699,8 +1699,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="b322541c76adc82aac09222f68e4ed2b3735888d" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Add Variant </source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Tambah Varian </target>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Add Variant </source>
+        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Tambah Varian </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">169,170</context>
@@ -1791,8 +1791,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="8998079cd8ef07bf43f5bf4a0307fc97322c1032" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Add Tag </source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Tambah Tag </target>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Add Tag </source>
+        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Tambah Tag </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">269,270</context>
@@ -1961,8 +1961,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="05af637fc8443a62df55f1542d7c8571b33ab996" datatype="html">
-        <source>To input quantity, add warehouse first - ( <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;goToWarehouse()&quot;&gt;"/>Manage Warehouse<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> )</source>
-        <target state="translated">Untuk input stok, tambah warehouse terlebih dahulu - (<x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;goToWarehouse()&quot;&gt;"/>Atur Warehouse<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>)</target>
+        <source>To input quantity, add warehouse first - ( <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;goToWarehouse()&quot;>"/>Manage Warehouse<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> )</source>
+        <target state="translated">Untuk input stok, tambah warehouse terlebih dahulu - (<x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;goToWarehouse()&quot;>"/>Atur Warehouse<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/stock-input/stock-input.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -2661,8 +2661,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="6749861fe89940a49d188c8fc8181f1604aafc54" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Add new content </source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Tambah konten baru </target>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Add new content </source>
+        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Tambah konten baru </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/cms/onboarding/onboarding-content-host.component.ts</context>
           <context context-type="linenumber">21,22</context>
@@ -2733,8 +2733,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="aabbd25e32152797c5185a13a7a07fad4680e695" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>visibility<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Preview </source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>visibility<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Preview </target>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>visibility<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/>Preview </source>
+        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>visibility<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/>Preview </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/cms/onboarding/onboarding.component.ts</context>
           <context context-type="linenumber">48,49</context>
@@ -3345,8 +3345,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="7459d3222967f9c05e8b712debc02d9eb7892869" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Add</source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Tambah</target>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Add</source>
+        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Tambah</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/connect/connect.component.ts</context>
           <context context-type="linenumber">26</context>
@@ -3509,8 +3509,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="cd05b4ccbcf6eee9caa331ac376269c7b6c6006a" datatype="html">
-        <source>Username <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;usernameInfo&quot;&gt;"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip&gt;"/></source>
-        <target state="translated">Username <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;usernameInfo&quot;&gt;"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip&gt;"/></target>
+        <source>Username <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;usernameInfo&quot;>"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip>"/></source>
+        <target state="translated">Username <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;usernameInfo&quot;>"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/connect/form/bukalapak-form.component.ts</context>
           <context context-type="linenumber">21,22</context>
@@ -3561,8 +3561,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="24816d0d3ba4043233b2b6de2df0711c04ca7570" datatype="html">
-        <source>Seller Email <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;sellerEmailinfo&quot;&gt;"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip&gt;"/></source>
-        <target state="translated">Email Seller <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;sellerEmailinfo&quot;&gt;"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip&gt;"/></target>
+        <source>Seller Email <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;sellerEmailinfo&quot;>"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip>"/></source>
+        <target state="translated">Email Seller <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;sellerEmailinfo&quot;>"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/connect/form/lazada-form.component.ts</context>
           <context context-type="linenumber">21,22</context>
@@ -3597,8 +3597,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1cda7e896753c2605bb6175dca7b7c62456d5274" datatype="html">
-        <source>Shop ID <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;shopIdInfo&quot;&gt;"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip&gt;"/></source>
-        <target state="translated">Shop ID <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;shopIdInfo&quot;&gt;"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip&gt;"/></target>
+        <source>Shop ID <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;shopIdInfo&quot;>"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip>"/></source>
+        <target state="translated">Shop ID <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;shopIdInfo&quot;>"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/connect/form/shopee-form.component.ts</context>
           <context context-type="linenumber">21,22</context>
@@ -3621,8 +3621,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1aa25e27b1210f083b2dcc8a87192e672e846146" datatype="html">
-        <source>Partner ID <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;partnerIdInfo&quot;&gt;"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip&gt;"/></source>
-        <target state="translated">Partner ID <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;partnerIdInfo&quot;&gt;"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip&gt;"/></target>
+        <source>Partner ID <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;partnerIdInfo&quot;>"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip>"/></source>
+        <target state="translated">Partner ID <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;partnerIdInfo&quot;>"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/connect/form/shopee-form.component.ts</context>
           <context context-type="linenumber">35,36</context>
@@ -3637,8 +3637,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="2eb85a3b293c075c8a31cbedd845fe5337f808df" datatype="html">
-        <source>Partner Key <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;partnerKeyInfo&quot;&gt;"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip&gt;"/></source>
-        <target state="translated">Partner Key <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;partnerKeyInfo&quot;&gt;"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip&gt;"/></target>
+        <source>Partner Key <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;partnerKeyInfo&quot;>"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip>"/></source>
+        <target state="translated">Partner Key <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;partnerKeyInfo&quot;>"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/connect/form/shopee-form.component.ts</context>
           <context context-type="linenumber">46,47</context>
@@ -3661,8 +3661,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="2ed81196c39534d0d51f276c4909327dc66726af" datatype="html">
-        <source>FS ID <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;fsIdInfo&quot;&gt;"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip&gt;"/></source>
-        <target state="translated">FS ID <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;fsIdInfo&quot;&gt;"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip&gt;"/></target>
+        <source>FS ID <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;fsIdInfo&quot;>"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip>"/></source>
+        <target state="translated">FS ID <x id="START_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;nus-tooltip [text]=&quot;fsIdInfo&quot;>"/><x id="CLOSE_TAG_NUS_TOOLTIP" ctype="x-nus_tooltip" equiv-text="&lt;/nus-tooltip>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/connect/form/tokopedia-form.component.ts</context>
           <context context-type="linenumber">37,38</context>
@@ -4829,8 +4829,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="f4a1df99db85a1bff1bc9bd5e24b86aab1873d38" datatype="html">
-        <source><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon class=&quot;icon&quot; svgIcon=&quot;add&quot;&gt;"/><x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/> Add Product </source>
-        <target state="translated"><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon class=&quot;icon&quot; svgIcon=&quot;add&quot;&gt;"/><x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/> Tambah Produk </target>
+        <source><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon class=&quot;icon&quot; svgIcon=&quot;add&quot;>"/><x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon>"/> Add Product </source>
+        <target state="translated"><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon class=&quot;icon&quot; svgIcon=&quot;add&quot;>"/><x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon>"/> Tambah Produk </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/marketplace-integration/setup/showcase/showcase.component.ts</context>
           <context context-type="linenumber">55,56</context>
@@ -5205,8 +5205,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="49b42b5064496f74f5ca44025b28d8af27b30fd1" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>* Input widget code (script) of chat service in here.<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/></source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>* Masukkan kode widget (script) dari jasa chat.<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/></target>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i>"/>* Input widget code (script) of chat service in here.<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/></source>
+        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i>"/>* Masukkan kode widget (script) dari jasa chat.<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/site-config/chat-service/config-chat-service.component.ts</context>
           <context context-type="linenumber">37</context>
@@ -5397,8 +5397,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="8b830624ddbb1418bbeedd86ee0107f36467d0e4" datatype="html">
-        <source>Type <x id="START_TAG_SELECT" ctype="x-select" equiv-text="&lt;select formControlName=&quot;type&quot; name=&quot;type&quot;&gt;"/><x id="START_TAG_OPTION" ctype="x-option" equiv-text="&lt;option *ngFor=&quot;let opt of types&quot; [ngValue]=&quot;opt.value&quot;&gt;"/> <x id="INTERPOLATION" equiv-text="{{opt.displayName}}"/> <x id="CLOSE_TAG_OPTION" ctype="x-option" equiv-text="&lt;/option&gt;"/><x id="CLOSE_TAG_SELECT" ctype="x-select" equiv-text="&lt;/select&gt;"/><x id="START_TAG_NUS_FIELD_ERRORS" ctype="x-nus_field_errors" equiv-text="&lt;nus-field-errors [control]=&quot;form.get('type')&quot;&gt;"/><x id="CLOSE_TAG_NUS_FIELD_ERRORS" ctype="x-nus_field_errors" equiv-text="&lt;/nus-field-errors&gt;"/></source>
-        <target state="translated">Tipe <x id="START_TAG_SELECT" ctype="x-select" equiv-text="&lt;select formControlName=&quot;type&quot; name=&quot;type&quot;&gt;"/><x id="START_TAG_OPTION" ctype="x-option" equiv-text="&lt;option *ngFor=&quot;let opt of types&quot; [ngValue]=&quot;opt.value&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{opt.displayName}}"/><x id="CLOSE_TAG_OPTION" ctype="x-option" equiv-text="&lt;/option&gt;"/><x id="CLOSE_TAG_SELECT" ctype="x-select" equiv-text="&lt;/select&gt;"/><x id="START_TAG_NUS_FIELD_ERRORS" ctype="x-nus_field_errors" equiv-text="&lt;nus-field-errors [control]=&quot;form.get('type')&quot;&gt;"/><x id="CLOSE_TAG_NUS_FIELD_ERRORS" ctype="x-nus_field_errors" equiv-text="&lt;/nus-field-errors&gt;"/></target>
+        <source>Type <x id="START_TAG_SELECT" ctype="x-select" equiv-text="&lt;select formControlName=&quot;type&quot; name=&quot;type&quot;>"/><x id="START_TAG_OPTION" ctype="x-option" equiv-text="&lt;option *ngFor=&quot;let opt of types&quot; [ngValue]=&quot;opt.value&quot;>"/> <x id="INTERPOLATION" equiv-text="{{opt.displayName}}"/> <x id="CLOSE_TAG_OPTION" ctype="x-option" equiv-text="&lt;/option>"/><x id="CLOSE_TAG_SELECT" ctype="x-select" equiv-text="&lt;/select>"/><x id="START_TAG_NUS_FIELD_ERRORS" ctype="x-nus_field_errors" equiv-text="&lt;nus-field-errors [control]=&quot;form.get('type')&quot;>"/><x id="CLOSE_TAG_NUS_FIELD_ERRORS" ctype="x-nus_field_errors" equiv-text="&lt;/nus-field-errors>"/></source>
+        <target state="translated">Tipe <x id="START_TAG_SELECT" ctype="x-select" equiv-text="&lt;select formControlName=&quot;type&quot; name=&quot;type&quot;>"/><x id="START_TAG_OPTION" ctype="x-option" equiv-text="&lt;option *ngFor=&quot;let opt of types&quot; [ngValue]=&quot;opt.value&quot;>"/><x id="INTERPOLATION" equiv-text="{{opt.displayName}}"/><x id="CLOSE_TAG_OPTION" ctype="x-option" equiv-text="&lt;/option>"/><x id="CLOSE_TAG_SELECT" ctype="x-select" equiv-text="&lt;/select>"/><x id="START_TAG_NUS_FIELD_ERRORS" ctype="x-nus_field_errors" equiv-text="&lt;nus-field-errors [control]=&quot;form.get('type')&quot;>"/><x id="CLOSE_TAG_NUS_FIELD_ERRORS" ctype="x-nus_field_errors" equiv-text="&lt;/nus-field-errors>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/warehouse/warehouse.component.ts</context>
           <context context-type="linenumber">36,42</context>
@@ -5541,8 +5541,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="20cbdb3d5394b16b74d8cdc7a482b1ab3d6272bf" datatype="html">
-        <source><x id="START_SUPERSCRIPT" ctype="x-sup" equiv-text="&lt;sup&gt;"/>*<x id="CLOSE_SUPERSCRIPT" ctype="x-sup" equiv-text="&lt;/sup&gt;"/>Select up to 14 days</source>
-        <target state="translated"><x id="START_SUPERSCRIPT" ctype="x-sup" equiv-text="&lt;sup&gt;"/>*<x id="CLOSE_SUPERSCRIPT" ctype="x-sup" equiv-text="&lt;/sup&gt;"/>Pilih sampai 14 hari</target>
+        <source><x id="START_SUPERSCRIPT" ctype="x-sup" equiv-text="&lt;sup>"/>*<x id="CLOSE_SUPERSCRIPT" ctype="x-sup" equiv-text="&lt;/sup>"/>Select up to 14 days</source>
+        <target state="translated"><x id="START_SUPERSCRIPT" ctype="x-sup" equiv-text="&lt;sup>"/>*<x id="CLOSE_SUPERSCRIPT" ctype="x-sup" equiv-text="&lt;/sup>"/>Pilih sampai 14 hari</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/header/order-date-filter.component.ts</context>
           <context context-type="linenumber">88</context>
@@ -5589,16 +5589,16 @@
         </context-group>
       </trans-unit>
       <trans-unit id="5553f3e883e25acab5f4a1b127603efc90ac10a8" datatype="html">
-        <source>Selected <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{checkedlist? checkedlist.length: 0 }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ page.entities.length }}"/> <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated">Terpilih <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{checkedlist? checkedlist.length: 0 }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ page.entities.length }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <source>Selected <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/><x id="INTERPOLATION" equiv-text="{{checkedlist? checkedlist.length: 0 }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ page.entities.length }}"/> <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/></source>
+        <target state="translated">Terpilih <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/><x id="INTERPOLATION" equiv-text="{{checkedlist? checkedlist.length: 0 }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ page.entities.length }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/header/order-pagination.component.ts</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="298555f36efe3740e607ffc6384edf367d1f1a0b" datatype="html">
-        <source>Download <x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon class=&quot;icon-secondary&quot; svgIcon=&quot;arrow-down&quot;&gt;"/><x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/></source>
-        <target state="translated">Download <x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon class=&quot;icon-secondary&quot; svgIcon=&quot;arrow-down&quot;&gt;"/><x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/></target>
+        <source>Download <x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon class=&quot;icon-secondary&quot; svgIcon=&quot;arrow-down&quot;>"/><x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon>"/></source>
+        <target state="translated">Download <x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon class=&quot;icon-secondary&quot; svgIcon=&quot;arrow-down&quot;>"/><x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/header/order-pagination.component.ts</context>
           <context context-type="linenumber">29,30</context>
@@ -5641,8 +5641,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="939424be9feb999a086e7d23df9e77ff90b99913" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Order count<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> will be delivered to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Logistic<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> counter.</source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Order count<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> akan diantarkan ke konter <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Logistik<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Order count<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> will be delivered to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Logistic<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> counter.</source>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Order count<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> akan diantarkan ke konter <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Logistik<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/modals/auto-generated-awb/deliver-to-counter-auto-awb-modal.component.ts</context>
           <context context-type="linenumber">15</context>
@@ -5697,8 +5697,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="0834337a83ba18adab40f56849e4ea645e779643" datatype="html">
-        <source>Deliver your package to the nearest <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Logistic Name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> counter.</source>
-        <target state="translated">Antar paket ke lokasi konter <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Logistic Name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> terdekat.</target>
+        <source>Deliver your package to the nearest <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Logistic Name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> counter.</source>
+        <target state="translated">Antar paket ke lokasi konter <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Logistic Name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> terdekat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/modals/auto-generated-awb/deliver-to-counter-auto-awb-modal.component.ts</context>
           <context context-type="linenumber">24</context>
@@ -5737,8 +5737,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="3639c542437db70a04cc2928723b02b467106c3b" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Order count<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> will be picked up from your store address by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Shipping service<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Order count<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> akan dijemput dari alamat toko oleh <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/> jasa pengiriman <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Order count<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> will be picked up from your store address by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Shipping service<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>.</source>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Order count<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> akan dijemput dari alamat toko oleh <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/> jasa pengiriman <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/modals/auto-generated-awb/pickup-download-shipping-modal.component.ts</context>
           <context context-type="linenumber">15</context>
@@ -5805,8 +5805,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="b5d7ffd536167872732188408fbe32a7ee8d57e0" datatype="html">
-        <source>Your package will be picked up from this address. If this address is incorrect, go to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Makertplace<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> admin and change the address.</source>
-        <target state="translated">Paket Anda akan dijemput dari alamat ini. Jika alamat salah, pergi ke halaman admin<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/> Marketplace <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> untuk ubah alamat.</target>
+        <source>Your package will be picked up from this address. If this address is incorrect, go to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Makertplace<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> admin and change the address.</source>
+        <target state="translated">Paket Anda akan dijemput dari alamat ini. Jika alamat salah, pergi ke halaman admin<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/> Marketplace <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> untuk ubah alamat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/modals/auto-generated-awb/set-pickup-service-modal.component.ts</context>
           <context context-type="linenumber">32</context>
@@ -5837,8 +5837,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1d73cc5c62568f182e54fc5d5a5a1c284140eeec" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{orderData.sourceName | titlecase }}"/> | <x id="INTERPOLATION_1" equiv-text="{{orderData.storeName}}"/> | <x id="INTERPOLATION_2" equiv-text="{{shippingMethod ? shippingMethod : &quot;-&quot; }}"/> <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{orderData.sourceName | titlecase }}"/> | <x id="INTERPOLATION_1" equiv-text="{{orderData.storeName}}"/> | <x id="INTERPOLATION_2" equiv-text="{{shippingMethod ? shippingMethod : &quot;-&quot; }}"/> <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/><x id="INTERPOLATION" equiv-text="{{orderData.sourceName | titlecase }}"/> | <x id="INTERPOLATION_1" equiv-text="{{orderData.storeName}}"/> | <x id="INTERPOLATION_2" equiv-text="{{shippingMethod ? shippingMethod : &quot;-&quot; }}"/> <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/></source>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/><x id="INTERPOLATION" equiv-text="{{orderData.sourceName | titlecase }}"/> | <x id="INTERPOLATION_1" equiv-text="{{orderData.storeName}}"/> | <x id="INTERPOLATION_2" equiv-text="{{shippingMethod ? shippingMethod : &quot;-&quot; }}"/> <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/modals/auto-generated-awb/transport-to-counter-selection-modal.component.ts</context>
           <context context-type="linenumber">14</context>
@@ -5853,8 +5853,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="4ac0b04f32dee19a1defb81c280fec2c7bc4014d" datatype="html">
-        <source>Deliver your packages to the closest <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{shippingMethod}}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> counter. </source>
-        <target state="translated">Antar paket ke konter <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{shippingMethod}}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> terdekat. </target>
+        <source>Deliver your packages to the closest <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/><x id="INTERPOLATION" equiv-text="{{shippingMethod}}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> counter. </source>
+        <target state="translated">Antar paket ke konter <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/><x id="INTERPOLATION" equiv-text="{{shippingMethod}}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> terdekat. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/modals/auto-generated-awb/transport-to-counter-selection-modal.component.ts</context>
           <context context-type="linenumber">24,25</context>
@@ -5869,8 +5869,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="966d9df9064fef4b164971bae50fbf03232eefc5" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{shippingMethod ? shippingMethod : &quot;-&quot; }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> will pick up the packages from your address. </source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{shippingMethod ? shippingMethod : &quot;-&quot; }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> akan menjemput paket dari alamat Anda. </target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/><x id="INTERPOLATION" equiv-text="{{shippingMethod ? shippingMethod : &quot;-&quot; }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> will pick up the packages from your address. </source>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/><x id="INTERPOLATION" equiv-text="{{shippingMethod ? shippingMethod : &quot;-&quot; }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> akan menjemput paket dari alamat Anda. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/modals/auto-generated-awb/transport-to-counter-selection-modal.component.ts</context>
           <context context-type="linenumber">36,37</context>
@@ -5957,8 +5957,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="f72854d795b4ec888f2fe3b93afc7077ee88c176" datatype="html">
-        <source>Enter AWB number you received from <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Logistic Name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> counter.</source>
-        <target state="translated">Masukkan nomor AWB yang Anda dapatkan dari konter <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Logistic Name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
+        <source>Enter AWB number you received from <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Logistic Name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> counter.</source>
+        <target state="translated">Masukkan nomor AWB yang Anda dapatkan dari konter <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Logistic Name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/modals/manual-input-awb/input-awb-modal.component.ts</context>
           <context context-type="linenumber">16</context>
@@ -6209,16 +6209,16 @@
         </context-group>
       </trans-unit>
       <trans-unit id="3f74c544b6961f7c74191914e1e50de647e9d395" datatype="html">
-        <source>Paid Date <x id="START_TAG_NUS_SORT_TOGGLE" ctype="x-nus_sort_toggle" equiv-text="&lt;nus-sort-toggle field=&quot;paid_time&quot;&gt;"/><x id="CLOSE_TAG_NUS_SORT_TOGGLE" ctype="x-nus_sort_toggle" equiv-text="&lt;/nus-sort-toggle&gt;"/></source>
-        <target state="translated">Tanggal Dibayar <x id="START_TAG_NUS_SORT_TOGGLE" ctype="x-nus_sort_toggle" equiv-text="&lt;nus-sort-toggle field=&quot;paid_time&quot;&gt;"/><x id="CLOSE_TAG_NUS_SORT_TOGGLE" ctype="x-nus_sort_toggle" equiv-text="&lt;/nus-sort-toggle&gt;"/></target>
+        <source>Paid Date <x id="START_TAG_NUS_SORT_TOGGLE" ctype="x-nus_sort_toggle" equiv-text="&lt;nus-sort-toggle field=&quot;paid_time&quot;>"/><x id="CLOSE_TAG_NUS_SORT_TOGGLE" ctype="x-nus_sort_toggle" equiv-text="&lt;/nus-sort-toggle>"/></source>
+        <target state="translated">Tanggal Dibayar <x id="START_TAG_NUS_SORT_TOGGLE" ctype="x-nus_sort_toggle" equiv-text="&lt;nus-sort-toggle field=&quot;paid_time&quot;>"/><x id="CLOSE_TAG_NUS_SORT_TOGGLE" ctype="x-nus_sort_toggle" equiv-text="&lt;/nus-sort-toggle>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/order-list.component.ts</context>
           <context context-type="linenumber">38,39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a65a6b3aaf4cf225687c7e0ebb5245fdd40ac4fe" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Add </source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Tambah </target>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/>Add </source>
+        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/>Tambah </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/fulfillment/orders/order-payment-confirm.component.ts</context>
           <context context-type="linenumber">19,20</context>
@@ -6541,8 +6541,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="07bc55fabff7e52c145230ccd7fbeadc3600a62d" datatype="html">
-        <source><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;material-icons&quot;&gt;"/>warning<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>Update </source>
-        <target state="translated"><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;material-icons&quot;&gt;"/>warning<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>Update </target>
+        <source><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;material-icons&quot;>"/>warning<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span>"/>Update </source>
+        <target state="translated"><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;material-icons&quot;>"/>warning<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span>"/>Update </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/adjustment/adjustment-line-item.component.ts</context>
           <context context-type="linenumber">79,80</context>
@@ -6661,8 +6661,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="334e197558851b9efbb9b10cfb7b81b33783978a" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Add Record </source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Tambah </target>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Add Record </source>
+        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Tambah </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/adjustment/adjustment.component.ts</context>
           <context context-type="linenumber">200,201</context>
@@ -6874,7 +6874,7 @@
       </trans-unit>
       <trans-unit id="472f2890e75d2f37dbe1da8bb859594b5e22a933" datatype="html">
         <source>Created Date</source>
-        <target state="needs-translation"/>
+        <target state="translated">Tanggal Buat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -6882,7 +6882,7 @@
       </trans-unit>
       <trans-unit id="6fb68b8ca05d72766e3c70f85572ba2e4976bc83" datatype="html">
         <source>DO Number (Optional)</source>
-        <target state="needs-translation"/>
+        <target state="translated">Nomor DO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -6890,7 +6890,7 @@
       </trans-unit>
       <trans-unit id="8e06cffadfb5222970681a11379cee253b7ef150" datatype="html">
         <source>*) Required fields</source>
-        <target state="needs-translation"/>
+        <target state="translated">*) Harus di isi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
           <context context-type="linenumber">92</context>
@@ -6898,7 +6898,7 @@
       </trans-unit>
       <trans-unit id="5c892fecd999003ead13bf825101ee8f6fc319cf" datatype="html">
         <source>Product Name (UPC)*</source>
-        <target state="needs-translation"/>
+        <target state="translated">Nama Produk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
           <context context-type="linenumber">96</context>
@@ -6906,7 +6906,7 @@
       </trans-unit>
       <trans-unit id="2cd5e2f09b70013eb42df61473287786b8120177" datatype="html">
         <source>SKU*</source>
-        <target state="needs-translation"/>
+        <target state="translated">SKU</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
           <context context-type="linenumber">97</context>
@@ -6914,15 +6914,15 @@
       </trans-unit>
       <trans-unit id="a46aef2b264c46f6c2589b8645d2d4e5b893a85f" datatype="html">
         <source>Quantity*</source>
-        <target state="needs-translation"/>
+        <target state="translated">Kuantitas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
           <context context-type="linenumber">98</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9ce75d386d35e322e7794c6f98cc54b0720275f0" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Add Record </source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Tambah Record </target>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Add Record </source>
+        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Tambah Record </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
           <context context-type="linenumber">118,119</context>
@@ -6930,7 +6930,7 @@
       </trans-unit>
       <trans-unit id="c81b254007317d38080e67ba00f3b83298778d8c" datatype="html">
         <source>Input SKU</source>
-        <target state="needs-translation"/>
+        <target state="translated">Masukkan SKU</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/line-item.component.ts</context>
           <context context-type="linenumber">13</context>
@@ -6938,7 +6938,7 @@
       </trans-unit>
       <trans-unit id="86f1643081809c28a4e81f9ab9f7313b3acf7c33" datatype="html">
         <source>Input Batch</source>
-        <target state="needs-translation"/>
+        <target state="translated">Input Batch</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/line-item.component.ts</context>
           <context context-type="linenumber">21</context>
@@ -6946,7 +6946,7 @@
       </trans-unit>
       <trans-unit id="0ea0d0def5221f18ace218f255739c3259561eab" datatype="html">
         <source>Ensure that there are no more than 16 digits</source>
-        <target state="needs-translation"/>
+        <target state="translated">Pastikan tidak lebih dari 16 dijit.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/line-item.component.ts</context>
           <context context-type="linenumber">32</context>
@@ -7053,48 +7053,48 @@
         </context-group>
       </trans-unit>
       <trans-unit id="45d8507e0a49375ec497d0c11a902779d1d2cd87" datatype="html">
-        <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;radio&quot; id=&quot;tab_rounding_up&quot; value=&quot;up&quot; formControlName=&quot;rounding&quot;&gt;"/> Rounding Up </source>
-        <target state="translated"><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;radio&quot; id=&quot;tab_rounding_up&quot; value=&quot;up&quot; formControlName=&quot;rounding&quot;&gt;"/> Pembulatan ke Atas </target>
+        <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;radio&quot; id=&quot;tab_rounding_up&quot; value=&quot;up&quot; formControlName=&quot;rounding&quot;>"/> Rounding Up </source>
+        <target state="translated"><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;radio&quot; id=&quot;tab_rounding_up&quot; value=&quot;up&quot; formControlName=&quot;rounding&quot;>"/> Pembulatan ke Atas </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
           <context context-type="linenumber">44,46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5dabf814331c8ba86f5a0107394aa7f5e454264a" datatype="html">
-        <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;radio&quot; id=&quot;tab_rounding_down&quot; value=&quot;down&quot; formControlName=&quot;rounding&quot;&gt;"/> Rounding Down </source>
-        <target state="translated"><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;radio&quot; id=&quot;tab_rounding_down&quot; value=&quot;down&quot; formControlName=&quot;rounding&quot;&gt;"/> Pembulatan ke Bawah </target>
+        <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;radio&quot; id=&quot;tab_rounding_down&quot; value=&quot;down&quot; formControlName=&quot;rounding&quot;>"/> Rounding Down </source>
+        <target state="translated"><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;radio&quot; id=&quot;tab_rounding_down&quot; value=&quot;down&quot; formControlName=&quot;rounding&quot;>"/> Pembulatan ke Bawah </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
           <context context-type="linenumber">49,51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f4bb7395c2b274140b443067891d2be0b630c225" datatype="html">
-        <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;radio&quot; id=&quot;tab_nearest&quot; value=&quot;nearest&quot; formControlName=&quot;rounding&quot;&gt;"/> Nearest </source>
-        <target state="translated"><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;radio&quot; id=&quot;tab_nearest&quot; value=&quot;nearest&quot; formControlName=&quot;rounding&quot;&gt;"/> Pembulatan Terdekat </target>
+        <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;radio&quot; id=&quot;tab_nearest&quot; value=&quot;nearest&quot; formControlName=&quot;rounding&quot;>"/> Nearest </source>
+        <target state="translated"><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;radio&quot; id=&quot;tab_nearest&quot; value=&quot;nearest&quot; formControlName=&quot;rounding&quot;>"/> Pembulatan Terdekat </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
           <context context-type="linenumber">54,56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7e8b3f04e015488a168c93d062411055911b1169" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Pembulatan ke atas (Rounding Up): Jika nilainya Rp 1,6x, maka pelanggan mendapatkan 2y point </source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Pembulatan ke atas: Jika nilainya Rp 1,6x, maka pelanggan mendapatkan 2y point </target>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/>Pembulatan ke atas (Rounding Up): Jika nilainya Rp 1,6x, maka pelanggan mendapatkan 2y point </source>
+        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/>Pembulatan ke atas: Jika nilainya Rp 1,6x, maka pelanggan mendapatkan 2y point </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
           <context context-type="linenumber">62,64</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7c4e2e08c1338a592d14228ea55ed7d874b247bd" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Pembulatan ke bawah (Rounding Down): Jika nilainya Rp 1,6x, maka pelanggan mendapatkan 1y point </source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Pembulatan ke bawah: Jika nilainya Rp 1,6x, maka pelanggan mendapatkan 1y </target>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/>Pembulatan ke bawah (Rounding Down): Jika nilainya Rp 1,6x, maka pelanggan mendapatkan 1y point </source>
+        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/>Pembulatan ke bawah: Jika nilainya Rp 1,6x, maka pelanggan mendapatkan 1y </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
           <context context-type="linenumber">65,67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bd467ff5f73f4a6e4bcac1367d8f8d5e5929c5a8" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Pembulatan terdekat (Nearest): Jika nilainya Rp 1,6x, maka pelanggan mendapatkan 2y point dan Jika nilainya Rp 1,4x, maka pelanggan mendapatkan 1y point </source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Pembulatan terdekat: Jika nilainya Rp 1,6x, maka pelanggan mendapatkan 2y point dan Jika nilainya Rp 1,4x, maka pelanggan mendapatkan 1y point </target>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/>Pembulatan terdekat (Nearest): Jika nilainya Rp 1,6x, maka pelanggan mendapatkan 2y point dan Jika nilainya Rp 1,4x, maka pelanggan mendapatkan 1y point </source>
+        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/>Pembulatan terdekat: Jika nilainya Rp 1,6x, maka pelanggan mendapatkan 2y point dan Jika nilainya Rp 1,4x, maka pelanggan mendapatkan 1y point </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
           <context context-type="linenumber">68,70</context>
@@ -7141,8 +7141,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="5645ea4da38cd69bbc27cf6e463a80078f00f781" datatype="html">
-        <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;radio&quot; id=&quot;tab_never&quot; value=&quot;never&quot; formControlName=&quot;expireType&quot;&gt;"/> Never </source>
-        <target state="translated"><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;radio&quot; id=&quot;tab_never&quot; value=&quot;never&quot; formControlName=&quot;expireType&quot;&gt;"/>Tidak Pernah </target>
+        <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;radio&quot; id=&quot;tab_never&quot; value=&quot;never&quot; formControlName=&quot;expireType&quot;>"/> Never </source>
+        <target state="translated"><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;radio&quot; id=&quot;tab_never&quot; value=&quot;never&quot; formControlName=&quot;expireType&quot;>"/>Tidak Pernah </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
           <context context-type="linenumber">89,91</context>
@@ -7177,8 +7177,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="987cf0473f0b548f9d2e1b553baffe477681a1b2" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Add Product </source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Tambah Produk </target>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Add Product </source>
+        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Tambah Produk </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
           <context context-type="linenumber">146,147</context>
@@ -7217,8 +7217,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="779a84ccec454a67eea0a323c9f1800db7e59b54" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Add Product </source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Tambah Produk </target>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Add Product </source>
+        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Tambah Produk </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/promotion/product-promotion.component.ts</context>
           <context context-type="linenumber">100,101</context>
@@ -7369,16 +7369,16 @@
         </context-group>
       </trans-unit>
       <trans-unit id="65b1e179735c6022467372dc96e9d58bf7faf8fc" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Add Product </source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Tambah Produk </target>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Add Product </source>
+        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Tambah Produk </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/voucher/voucher.component.ts</context>
           <context context-type="linenumber">148,149</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7b0cf601e778ca24fb766396031b67d88c319925" datatype="html">
-        <source>Banner <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button (click)=&quot;newImageModal.open()&quot; type=&quot;button&quot; title=&quot;Add new Image&quot;&gt;"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>image<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/><x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/></source>
-        <target state="translated">Banner<x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button (click)=&quot;newImageModal.open()&quot; type=&quot;button&quot; title=&quot;Add new Image&quot;&gt;"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>image<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/><x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/></target>
+        <source>Banner <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button (click)=&quot;newImageModal.open()&quot; type=&quot;button&quot; title=&quot;Add new Image&quot;>"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>image<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/><x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button>"/></source>
+        <target state="translated">Banner<x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button (click)=&quot;newImageModal.open()&quot; type=&quot;button&quot; title=&quot;Add new Image&quot;>"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>image<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/><x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/theme/media/theme-media-host.component.ts</context>
           <context context-type="linenumber">21,24</context>
@@ -7525,8 +7525,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="be45f1a0d9fa5dd83d9c851d66b8007d69fb24ff" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>verified<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Acquisition</source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>verified<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Akuisisi</target>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>verified<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Acquisition</source>
+        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>verified<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Akuisisi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/users/customer/customer-detail.component.ts</context>
           <context context-type="linenumber">80</context>
@@ -7581,8 +7581,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="4dab275eb9e4889d5cfb280a0fdb256c6c7e7a02" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>star<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Value</source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>bintang<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Jumlah</target>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>star<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Value</source>
+        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>bintang<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> Jumlah</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/users/customer/customer-detail.component.ts</context>
           <context context-type="linenumber">94</context>
@@ -7793,8 +7793,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="d1881dc4539bfdd04673d27e6a36462fbd9997a5" datatype="html">
-        <source>Default PIN has not been filled, please fill in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a           routerLink=&quot;/config/pos-integration/default-pin-config&quot; style=&quot;color:#EA730B;&quot; &gt;"/>here<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="translated">PIN bawaan belum diisi. Mohon isi <x id="START_LINK" ctype="x-a" equiv-text="&lt;a           routerLink=&quot;/config/pos-integration/default-pin-config&quot; style=&quot;color:#EA730B;&quot; &gt;"/> di sini<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <source>Default PIN has not been filled, please fill in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a           routerLink=&quot;/config/pos-integration/default-pin-config&quot; style=&quot;color:#EA730B;&quot; >"/>here<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/></source>
+        <target state="translated">PIN bawaan belum diisi. Mohon isi <x id="START_LINK" ctype="x-a" equiv-text="&lt;a           routerLink=&quot;/config/pos-integration/default-pin-config&quot; style=&quot;color:#EA730B;&quot; >"/> di sini<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/users/employee/employee.component.ts</context>
           <context context-type="linenumber">97,98</context>
@@ -7865,8 +7865,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="90bf43b9a31e43272c3065c96e46e4c208987760" datatype="html">
-        <source>Upload a CSV file to bulk upload your products. Don't have a file? <x id="START_LINK" ctype="x-a" equiv-text="&lt;a             href=&quot;../../../assets/sample-files/example-csv-stock-adjustment.csv&quot; download&gt;"/>Download Template<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="translated">Upload CSV untuk menambahkan banyak produk sekaligus. Tidak memiliki file CSV? <x id="START_LINK" ctype="x-a" equiv-text="&lt;a             href=&quot;../../../assets/sample-files/example-csv-stock-adjustment.csv&quot; download&gt;"/> Download Template<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <source>Upload a CSV file to bulk upload your products. Don't have a file? <x id="START_LINK" ctype="x-a" equiv-text="&lt;a             href=&quot;../../../assets/sample-files/example-csv-stock-adjustment.csv&quot; download>"/>Download Template<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/></source>
+        <target state="translated">Upload CSV untuk menambahkan banyak produk sekaligus. Tidak memiliki file CSV? <x id="START_LINK" ctype="x-a" equiv-text="&lt;a             href=&quot;../../../assets/sample-files/example-csv-stock-adjustment.csv&quot; download>"/> Download Template<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/csv-dialog/csv-dialog.component.ts</context>
           <context context-type="linenumber">27,28</context>
@@ -8113,8 +8113,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="415040806e2c1299946309ba8102dfb852993b17" datatype="html">
-        <source>Showing <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ startingIndex }}"/>-<x id="INTERPOLATION_1" equiv-text="{{ endingIndex }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_2" equiv-text="{{ page?.totalResults }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated">Menampilkan <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ startingIndex }}"/>-<x id="INTERPOLATION_1" equiv-text="{{ endingIndex }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> dari <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_2" equiv-text="{{ page?.totalResults }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <source>Showing <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/><x id="INTERPOLATION" equiv-text="{{ startingIndex }}"/>-<x id="INTERPOLATION_1" equiv-text="{{ endingIndex }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/><x id="INTERPOLATION_2" equiv-text="{{ page?.totalResults }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/></source>
+        <target state="translated">Menampilkan <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/><x id="INTERPOLATION" equiv-text="{{ startingIndex }}"/>-<x id="INTERPOLATION_1" equiv-text="{{ endingIndex }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> dari <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/><x id="INTERPOLATION_2" equiv-text="{{ page?.totalResults }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pagination-child.component.ts</context>
           <context context-type="linenumber">12,14</context>
@@ -8126,7 +8126,7 @@
       </trans-unit>
       <trans-unit id="5ff77df30fde5c1c38206d8d6b66604c140186ec" datatype="html">
         <source>Showing 10 recently added products. Search product name or UPC to find more products.</source>
-        <target state="needs-translation"/>
+        <target state="translated">Menampilkan 10 produk terakhir. Cari nama produk atau UPC</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/product-selection-modal.component.ts</context>
           <context context-type="linenumber">29</context>
@@ -8173,8 +8173,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="7cefd2d1bee46865e3432f2ae542d950d171d66b" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>exit_to_app<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Logout</source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>exit_to_app<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Keluar</target>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>exit_to_app<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/>Logout</source>
+        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>exit_to_app<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/>Keluar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/view-wrappers/main-wrapper.component.ts</context>
           <context context-type="linenumber">22</context>
@@ -8325,8 +8325,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="136a89eb1f7f8b42ecca17d2b49847f9958359f9" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>assessment<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Reports </source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>assessment<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Laporan </target>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>assessment<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/>Reports </source>
+        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;>"/>assessment<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/>Laporan </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/view-wrappers/main-wrapper.component.ts</context>
           <context context-type="linenumber">114,115</context>
