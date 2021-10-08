@@ -64,7 +64,7 @@ export abstract class AbstractCrudService<T extends base.IHrefEntity> {
    * **Use with caution!!**.
    */
   fetchAll(query?: string): Observable<T[]> {
-    const params = new HttpParams({fromObject: {per_page: '250'}});
+    const params = new HttpParams({fromObject: {per_page: '500'}});
     return this.httpClient.get<T[]>(
       `${this.baseUrl}/`,
       {observe: 'body', responseType: 'json', params});

@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import { FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -6,6 +6,7 @@ import {ICategory, INamedHrefEntity} from '@nusantara/models';
 import { CategoryService } from '@nusantara/services';
 import {AbstractDetailComponent, DialogResult, ToastService} from '@nusantara/core';
 import {CategorySelectionModalComponent} from '@nusantara/shared/modals/category-selection-modal.component';
+import {getSlugFromHref} from '@nusantara/shared/helpers';
 
 @Component({
   selector: 'nus-category',
@@ -111,7 +112,7 @@ import {CategorySelectionModalComponent} from '@nusantara/shared/modals/category
     'input[type=file] { display: none; }',
   ]
 })
-export class CategoryComponent extends AbstractDetailComponent<ICategory> implements OnInit {
+export class CategoryComponent extends AbstractDetailComponent<ICategory> implements OnInit, AfterViewInit {
 
   parentOptions: ICategory[] = [];
   imagePreviewUrl: string;
@@ -169,6 +170,12 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
     this.form.controls.isInterestedCategory.markAsTouched();
 
     this.setIconImagePreview(entity?.image);
+
+    this.service.fetch(getSlugFromHref(entity?.parent)).subscribe( res => {
+      this.selectedCategory = res;
+    }, err => {
+      this.selectedCategory = null;
+    });
 
     entity?.sourceMappings.forEach(
       (value) => { this.addMapping(value); }
