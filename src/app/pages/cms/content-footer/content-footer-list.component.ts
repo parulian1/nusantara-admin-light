@@ -10,6 +10,10 @@ import {ActivatedRoute} from '@angular/router';
       title="Content Footer"
       description="The Content Footer">
     </nus-list-header>
+    <div class="filtering">
+      <nus-include-deleted></nus-include-deleted>
+    </div>
+
 
     <nus-pagination [page]="page"></nus-pagination>
 

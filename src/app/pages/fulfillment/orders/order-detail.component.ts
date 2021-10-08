@@ -169,7 +169,7 @@ import { MatDialog } from '@angular/material/dialog';
                     >
                       <div *ngIf="enableRefreshAwb.includes(this.orderDetailData.sourceName)" class="logo">
                         <img
-                          [src]="'/assets/marketplace-logo/'+ this.orderDetailData.sourceName +'.svg'"
+                          [src]="'assets/marketplace-logo/'+ this.orderDetailData.sourceName +'.svg'"
                           alt="marketplace-logo"
                         />
                       </div>
@@ -343,8 +343,8 @@ import { MatDialog } from '@angular/material/dialog';
     ".see-order.tokopedia, .see-order.tokopedia:hover { background: var(--tokopedia-color) }",
     ".see-order.bukalapak, .see-order.bukalapak:hover { background: var(--bukalapak-color) }",
     ".see-order.lazada, .see-order.lazada:hover { background: var(--lazada-color) }",
-    `.see-order.shopee:hover, 
-     .see-order.tokopedia:hover, 
+    `.see-order.shopee:hover,
+     .see-order.tokopedia:hover,
      .see-order.bukalapak:hover,
      .see-order.lazada:hover { filter : brightness(0.85); }`,
     ".see-order div.logo { margin-top: 8px; margin-right: 5px; }",

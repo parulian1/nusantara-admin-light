@@ -93,7 +93,7 @@ export class ListHeaderComponent implements OnInit {
     } else {
       this.timeoutId = setTimeout(() => {
         // wait to see if the user is still typing more before navigating
-        const params = {q: this.queryText.value};
+        const params = {q: this.queryText.value, page: 1};
         this.router.navigate(
           ['.'],
           {
