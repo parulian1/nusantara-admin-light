@@ -26,7 +26,8 @@ export class ProductOptionService extends AbstractCrudService<products.IProductO
   fetchActiveProductOptions(): Observable<products.IProductOption[]> {
 
     const params = new HttpParams()
-      .append('is_active', 'true');
+      .append('is_active', 'true')
+      .append('per_page', '500');
 
     return this.httpClient
       .get<products.IProductOption[]>(`${this.baseUrl}/`, {observe: 'body', responseType: 'json', params});

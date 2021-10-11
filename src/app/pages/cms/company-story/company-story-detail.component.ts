@@ -36,7 +36,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 
       <label>
         <span i18n>Image</span>
-        <img [src]="imageData.base64 || imageData.url" alt="Company Story Picture" class="preview">
+        <img [src]="imageData.base64 || imageData.url" alt="Company Story Picture" class="preview" *ngIf="imageData.base64 || imageData.url">
         <small i18n>Recommended: Format .jpg, Size min 540px x 402px, file size max. 500kb</small>
         <input type="file"
                [formControl]="image"
