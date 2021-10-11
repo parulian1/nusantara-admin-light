@@ -1,5 +1,5 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   AbstractDetailComponent,
   DialogResult,
@@ -8,24 +8,24 @@ import {
   ToastLevelEnum,
   ToastService,
 } from '@nusantara/core';
-import {drf, inventory, ISubLocation, IWarehouse, marketplace} from '@nusantara/models';
-import {IAdjustment, IStockRecord, ReceivingOrderStatusChoices} from '@nusantara/models/inventory';
-import {AuthService} from '@nusantara/auth';
+import { drf, inventory, ISubLocation, IWarehouse, marketplace } from '@nusantara/models';
+import { IAdjustment, IStockRecord, ReceivingOrderStatusChoices } from '@nusantara/models/inventory';
+import { AuthService } from '@nusantara/auth';
 import {
   InventoryAdjustmentOrderService,
   InventoryStockRecordService,
   MarketplaceClientService,
   WarehouseService
 } from '@nusantara/services';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ConfirmModalReceivingOrderComponent, StockRecordSelectionModalComponent} from '@nusantara/shared';
-import {CsvDialogComponent} from '@nusantara/shared/csv-dialog/csv-dialog.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ConfirmModalInvetoryOrderComponent, StockRecordSelectionModalComponent } from '@nusantara/shared';
+import { CsvDialogComponent} from '@nusantara/shared/csv-dialog/csv-dialog.component';
 import * as Papa from 'papaparse';
-import {HttpParams} from '@angular/common/http';
-import {StockRecordDialogComponent} from '@nusantara/pages/inventory/adjustment/stock-record-dialog.component';
-import {ChangeDetectorRef} from '@angular/core';
-import {isNumeric} from 'rxjs/internal/util/isNumeric';
-import {DomSanitizer} from '@angular/platform-browser';
+import { HttpParams } from '@angular/common/http';
+import { StockRecordDialogComponent } from '@nusantara/pages/inventory/adjustment/stock-record-dialog.component';
+import { ChangeDetectorRef } from '@angular/core';
+import { isNumeric } from 'rxjs/internal/util/isNumeric';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'nus-adjustment',
@@ -213,7 +213,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 
     <!-- Modals -->
     <nus-stock-record-selection-modal [isInStock]="false"></nus-stock-record-selection-modal>
-    <nus-confirm-receiving-modal [cancelWithoutReload]="true"></nus-confirm-receiving-modal>
+    <nus-confirm-inventory-modal [cancelWithoutReload]="true"></nus-confirm-inventory-modal>
     <nus-csv-dialog></nus-csv-dialog>
     <nus-stock-record-dialog></nus-stock-record-dialog>
   `,
@@ -251,7 +251,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   form: FormGroup;
 
   @ViewChild(StockRecordSelectionModalComponent) stockRecordSelectionModal: StockRecordSelectionModalComponent;
-  @ViewChild(ConfirmModalReceivingOrderComponent) confirmModalReceiving: ConfirmModalReceivingOrderComponent;
+  @ViewChild(ConfirmModalInvetoryOrderComponent) confirmModalReceiving: ConfirmModalInvetoryOrderComponent;
   @ViewChild(CsvDialogComponent) csvDialog: CsvDialogComponent;
   @ViewChild(StockRecordDialogComponent) stockRecordDialog: StockRecordDialogComponent;
 
@@ -341,6 +341,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   }
 
   addLine() {
+    console.log('form2a', this.form);
     this.stockRecordSelectionModal.filters = {
       warehouse: getSlugFromHref(this.warehouse.value?.href),
       receiving_order_status: ReceivingOrderStatusChoices.APPROVED,
@@ -408,6 +409,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     this.invalidCsv = [];
     this.upcList = [];
     this.resetStockRecordDialog();
+    console.log('form2', this.form);
   }
 
   confirmModal() {

@@ -11,6 +11,7 @@ import { IProductClass } from '@nusantara/models/products';
 import { catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { of } from 'rxjs';
+import { ConfirmModalInvetoryOrderComponent } from '@nusantara/shared';
 
 /**
  * Allows a user to receive a new batch of inventory.
@@ -104,7 +105,7 @@ import { of } from 'rxjs';
 
         <nus-detail-actions
           [component]="this"
-          (cancel)="resetForm(true)"
+          (cancel)="confirmModal()"
           (delete)="delete()">
         </nus-detail-actions>
       </div>
@@ -112,6 +113,7 @@ import { of } from 'rxjs';
 
     <!-- Modals -->
     <nus-product-selection-modal></nus-product-selection-modal>
+    <nus-confirm-inventory-modal [cancelWithoutReload]="true"></nus-confirm-inventory-modal>
   `,
   styles: [`
     form { width: 58vw; max-width: 100%; }
@@ -129,10 +131,12 @@ import { of } from 'rxjs';
 })
 export class InventoryTransferOrderComponent extends AbstractDetailComponent<inventory.ITransferOrder> implements OnInit, AfterViewInit {
 
+  form: FormGroup;
   warehouses: IWarehouse[];
   availableSubLocations: ISubLocation[] = [];
   productClasses: IProductClass[] = [];
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
+  @ViewChild(ConfirmModalInvetoryOrderComponent) confirmModalReceiving: ConfirmModalInvetoryOrderComponent;
   currentDate: Date;
   destinationWarehouses: IWarehouse[];
 
@@ -149,7 +153,7 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
   get destinationWarehouse(): FormGroup { return this.form.get('destinationWarehouse') as FormGroup; }
   get stockRecords(): FormArray { return this.form.get('stockRecords') as FormArray; }
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
     this.route.data.subscribe((data: { warehouses: IWarehouse[], productClasses: IProductClass[]}) => {
       this.productClasses = data.productClasses;
@@ -158,12 +162,14 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
     this.currentDate = new Date();
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     // wire-up modal closed callback
+    super.ngAfterViewInit();
     this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
+    this.confirmModalReceiving.onClose.subscribe(() => this.onConfirmModalClosed());
   }
 
-  initializeForm(entity?: inventory.ITransferOrder) {
+  initializeForm(entity?: inventory.ITransferOrder): void {
     // TODO: replace this! maybe embed href identity in token claims?
     this.form = this.fb.group({
       href: [],
@@ -185,7 +191,9 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
   }
 
   addLine() {
+    this.form.updateValueAndValidity();
     this.productSelectionModal.openWithStockAmount();
+    console.log('form valid', this.form.valid, this.form);
   }
 
   confirmWarehouse(): void {
@@ -270,20 +278,26 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
     );
   }
 
-  resetForm(warnOnDirty = false) {
-    if (warnOnDirty && this.form?.dirty) {
-      const leavePage = confirm('Your changes will be lost.  Do you want to continue?');
-      if (!leavePage) {
-        return;
-      }
-    }
-    this.form.reset();
-    this.warehouse.enable();
-    this.stockRecords.clear();
-  }
-
   getFromWarehouseHref(): string {
     const warehouse: IWarehouse = this.warehouse.value;
     return warehouse?.href;
+  }
+
+  confirmModal() {
+    this.confirmModalReceiving.open();
+  }
+
+  onConfirmModalClosed() {
+    if (this.confirmModalReceiving.result === DialogResult.OK) {
+      this.resetForm();
+    }
+  }
+
+  resetForm() {
+    this.form.reset();
+    this.warehouse.enable();
+    this.destinationWarehouse.enable();
+    this.stockRecords.clear();
+    this.initializeForm();
   }
 }

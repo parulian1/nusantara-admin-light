@@ -7,7 +7,7 @@ import {NgxSmartModalComponent} from 'ngx-smart-modal';
  *
  */
 @Component({
-  selector: 'nus-confirm-receiving-modal',
+  selector: 'nus-confirm-inventory-modal',
   template: `
     <ngx-smart-modal [identifier]="'confirm'" #modal [customClass]="'no-close-icon-modal no-padding-modal'">
       <div class="wrapper">
@@ -34,7 +34,7 @@ import {NgxSmartModalComponent} from 'ngx-smart-modal';
     'button:not(:first-of-type) { margin-left: 5px; }',
   ],
 })
-export class ConfirmModalReceivingOrderComponent {
+export class ConfirmModalInvetoryOrderComponent {
   @ViewChild('modal') modal: NgxSmartModalComponent;
   result: DialogResult = DialogResult.Cancelled;
   @Input() title = 'Are You Sure?';

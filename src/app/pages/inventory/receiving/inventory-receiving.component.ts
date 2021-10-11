@@ -13,7 +13,7 @@ import {
 import { InventoryReceivingService, MarketplaceClientService } from '../../../services';
 import {IProduct, IProductClass} from '../../../models/products';
 import {
-  ConfirmModalReceivingOrderComponent,
+  ConfirmModalInvetoryOrderComponent,
   MarketplaceChannelInfoModalComponent,
   ProductSelectionModalComponent
 } from '../../../shared';
@@ -116,13 +116,13 @@ import { IError } from '../../../models/base/error';
             (remove)="stockRecords.removeAt(i)">
           </nus-inventory-receiving-line>
 
-            <tr>
-              <td colspan="9">
-                <button type="button" (click)="addLine()" class="new-add-button wide">
-                  <i class="material-icons">add</i> Add Record
-                </button>
-              </td>
-            </tr>
+          <tr>
+            <td colspan="9">
+              <button type="button" (click)="addLine()" class="new-add-button wide">
+                <i class="material-icons">add</i> Add Record
+              </button>
+            </td>
+          </tr>
           </tbody>
         </table>
 
@@ -136,7 +136,7 @@ import { IError } from '../../../models/base/error';
     <!-- Modals -->
     <nus-product-selection-modal></nus-product-selection-modal>
     <nus-marketplace-channel-info-modal [warehouseInfoDetail]="warehouseDetail"></nus-marketplace-channel-info-modal>
-    <nus-confirm-receiving-modal></nus-confirm-receiving-modal>
+    <nus-confirm-inventory-modal></nus-confirm-inventory-modal>
 
   `,
   styles: [
@@ -166,7 +166,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
 
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
   @ViewChild(MarketplaceChannelInfoModalComponent) marketplaceChannelInfo: MarketplaceChannelInfoModalComponent;
-  @ViewChild(ConfirmModalReceivingOrderComponent) confirmModalReceiving: ConfirmModalReceivingOrderComponent;
+  @ViewChild(ConfirmModalInvetoryOrderComponent) confirmModalReceiving: ConfirmModalInvetoryOrderComponent;
 
   currentDate: Date;
   productValue = 0;
