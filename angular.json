@@ -64,10 +64,12 @@
               ]
             },
             "en": {
-              "localize": ["en"]
+              "localize": ["en"],
+              "baseHref": "/en"
             },
             "id": {
-              "localize": ["id"]
+              "localize": ["id"],
+              "baseHref": "/id"
             }
           }
         },
@@ -81,12 +83,10 @@
               "browserTarget": "nusantara-admin:build:production"
             },
             "en": {
-              "browserTarget": "nusantara-admin:build:en",
-              "baseHref": "/",
+              "browserTarget": "nusantara-admin:build:en"
             },
             "id": {
-              "browserTarget": "nusantara-admin:build:id",
-              "baseHref": "/"
+              "browserTarget": "nusantara-admin:build:id"
             }
           }
         },
