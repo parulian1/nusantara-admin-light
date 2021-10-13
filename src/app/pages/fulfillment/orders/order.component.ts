@@ -68,7 +68,7 @@ import {
             <div class="subheading-2">
               <ng-container *ngIf="this.orderDetailData && this.orderDetailData.orderAddress; else noAddress">
                 <div>{{ orderDetailData.orderAddress.shipToName }}</div>
-                <div>{{ orderDetailData.orderAddress.street +' '+ orderDetailData.orderAddress.city }}</div>
+                <div style="word-wrap:break-word">{{ orderDetailData.orderAddress.street +' '+ orderDetailData.orderAddress.city }}</div>
                 <div>{{ orderDetailData.orderAddress.state +' - '+ orderDetailData.orderAddress.zipcode }}</div>
               </ng-container>
               <ng-template #noAddress>-</ng-template>
