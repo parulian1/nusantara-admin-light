@@ -379,7 +379,7 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   notManagedAwbSources = ["tokopedia", "lazada", "shopee", "bukalapak"];
 
   // enable refresh AWB for following source name
-  enableRefreshAwb = ["tokopedia", "shopee", "bukalapak"];
+  enableRefreshAwb = ["tokopedia", "shopee", "bukalapak", "lazada"];
 
   constructor(
     public route: ActivatedRoute,
