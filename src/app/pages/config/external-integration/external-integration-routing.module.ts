@@ -1,0 +1,23 @@
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import {ExternalIntegrationComponent} from '@nusantara/pages/config/external-integration/external-integration.component';
+import {KgxWmsComponent} from '@nusantara/pages/config/external-integration/kgx-wms/kgx-wms.component';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: ExternalIntegrationComponent,
+    runGuardsAndResolvers: 'always'
+  },
+  {
+    path: 'kgx-wms',
+    component: KgxWmsComponent,
+    runGuardsAndResolvers: 'always'
+  }
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class ExternalIntegrationRoutingModule { }

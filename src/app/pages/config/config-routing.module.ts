@@ -13,6 +13,14 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'external-integration',
+    canActivate: [RequireIsEnterpriseGuard, ],
+    loadChildren: () =>
+      import('./external-integration/external-integration.module').then(
+        (m) => m.ExternalIntegrationModule
+      ),
+  },
+  {
     path: 'website-settings',
     loadChildren: () =>
       import('./website-settings/website-settings.module').then(

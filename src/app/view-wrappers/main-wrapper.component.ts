@@ -125,6 +125,10 @@ import { SubscriptionLike } from 'rxjs';
             Integration</a>
         </li>
         <li *ngIf="enterpriseGuard.canActivate(null, null)">
+          <a [routerLink]="['/config/external-integration']" routerLinkActive="active" i18n>External
+            Integration</a>
+        </li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null)">
           <a [routerLink]="['/config/pos-integration']" routerLinkActive="active" i18n>POS Integration</a>
         </li>
         <li><a [routerLink]="['/config/general-settings']" routerLinkActive="active" i18n>General</a></li>
