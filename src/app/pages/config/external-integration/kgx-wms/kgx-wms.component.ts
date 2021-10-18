@@ -49,11 +49,16 @@ import {KgxWmsService} from '@nusantara/services/integrations/kgx-wms.service';
           <input type="text" [formControl]="pickingTypeId" name="pickingTypeId" maxlength="50">
           <nus-field-errors [control]="pickingTypeId"></nus-field-errors>
         </label>
+        <label>
+          <span i18n="WMS Customer ID">Customer ID</span>
+          <input type="text" [formControl]="customerId" name="customerId" maxlength="50">
+          <nus-field-errors [control]="customerId"></nus-field-errors>
+        </label>
       </div>
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
-        (delete)="delete()" [hideDelete]="true">
+        [hideDelete]="true">
       </nus-detail-actions>
     </form>
   `,
@@ -102,6 +107,10 @@ export class KgxWmsComponent extends AbstractDetailComponent<IKgxWms> implements
     return this.form.get('pickingTypeId') as FormControl;
   }
 
+  get customerId(): FormControl {
+    return this.form.get('customerId') as FormControl;
+  }
+
   get authToken(): FormControl {
     return this.form.get('authToken') as FormControl;
   }
@@ -111,10 +120,11 @@ export class KgxWmsComponent extends AbstractDetailComponent<IKgxWms> implements
         href: [entity?.href,],
         companyId: [entity?.companyId, [Validators.required, Validators.pattern('^[0-9]*$')]],
         categoryId: [entity?.categoryId, [Validators.required, Validators.pattern('^[0-9]*$')]],
-        uomId: [entity?.categoryId, [Validators.required, Validators.pattern('^[0-9]*$')]],
-        consignmentPoId: [entity?.categoryId, [Validators.required, Validators.pattern('^[0-9]*$')]],
-        supplierId: [entity?.categoryId, [Validators.required, Validators.pattern('^[0-9]*$')]],
-        pickingTypeId: [entity?.categoryId, [Validators.required, Validators.pattern('^[0-9]*$')]],
+        uomId: [entity?.uomId, [Validators.required, Validators.pattern('^[0-9]*$')]],
+        consignmentPoId: [entity?.consignmentPoId, [Validators.required, Validators.pattern('^[0-9]*$')]],
+        supplierId: [entity?.supplierId, [Validators.required, Validators.pattern('^[0-9]*$')]],
+        pickingTypeId: [entity?.pickingTypeId, [Validators.required, Validators.pattern('^[0-9]*$')]],
+        customerId: [entity?.customerId, [Validators.required, Validators.pattern('^[0-9]*$')]],
         authToken: [entity?.categoryId, [Validators.required,]],
       }
     );

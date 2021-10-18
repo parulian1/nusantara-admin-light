@@ -6,5 +6,6 @@ export interface IKgxWms {
   consignmentPoId: number;
   supplierId: number;
   pickingTypeId: number;
+  customerId: number;
   authToken: string;
 }
