@@ -14,6 +14,17 @@ import { Component, OnInit } from '@angular/core';
         <button routerLink="kgx-wms" class="control" i18n>Open</button>
       </div>
     </div>
+
+    <div class="wrapper">
+      <div>
+        <h1 class="heading-1" i18n>Warehouse Mapping</h1>
+        <p i18n>Manage warehouse mapping to partner id
+        </p>
+      </div>
+      <div>
+        <button routerLink="warehouse-mapping" class="control" i18n>Open</button>
+      </div>
+    </div>
   `,
   styles: [
     `

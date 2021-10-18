@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { KgxWmsComponent } from './kgx-wms.component';
+import { WarehouseMappingComponent } from './warehouse-mapping.component';
 import {RouterTestingModule} from '@angular/router/testing';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
-describe('KgxWmsComponent', () => {
-  let component: KgxWmsComponent;
-  let fixture: ComponentFixture<KgxWmsComponent>;
+describe('WarehouseMappingComponent', () => {
+  let component: WarehouseMappingComponent;
+  let fixture: ComponentFixture<WarehouseMappingComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -17,13 +17,13 @@ describe('KgxWmsComponent', () => {
         ReactiveFormsModule,
         FormsModule,
       ],
-      declarations: [ KgxWmsComponent ]
+      declarations: [ WarehouseMappingComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(KgxWmsComponent);
+    fixture = TestBed.createComponent(WarehouseMappingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

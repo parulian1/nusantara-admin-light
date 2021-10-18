@@ -37,7 +37,7 @@ export class KgxWmsService {
     return this.httpClient
       .post<IKgxWms>(`${this.baseUrl}/${this.keyBackend}/`, entity, {observe: 'response', responseType: 'json', headers})
       .pipe(map(resp => {
-        if (resp.status === 201) {
+        if (resp.status === 200) {
           return new SuccessCreatedResult<IKgxWms>(resp.headers.get('Location'), [], resp.body);
         }
         return new ErrorResult(resp.body, resp.status);

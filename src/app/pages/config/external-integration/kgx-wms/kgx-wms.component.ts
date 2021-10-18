@@ -125,11 +125,14 @@ export class KgxWmsComponent extends AbstractDetailComponent<IKgxWms> implements
         supplierId: [entity?.supplierId, [Validators.required, Validators.pattern('^[0-9]*$')]],
         pickingTypeId: [entity?.pickingTypeId, [Validators.required, Validators.pattern('^[0-9]*$')]],
         customerId: [entity?.customerId, [Validators.required, Validators.pattern('^[0-9]*$')]],
-        authToken: [entity?.categoryId, [Validators.required,]],
+        authToken: [entity?.authToken, [Validators.required,]],
       }
     );
 
     this.entity = entity;
+  }
+  save() {
+    super.save();
   }
 
 }
