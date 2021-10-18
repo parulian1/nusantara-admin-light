@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {ExternalIntegrationComponent} from '@nusantara/pages/config/external-integration/external-integration.component';
 import {KgxWmsComponent} from '@nusantara/pages/config/external-integration/kgx-wms/kgx-wms.component';
+import {KgxWmsResolver} from '@nusantara/resolvers/integrations/kgx-wms.resolver';
 
 const routes: Routes = [
   {
@@ -12,7 +13,11 @@ const routes: Routes = [
   {
     path: 'kgx-wms',
     component: KgxWmsComponent,
-    runGuardsAndResolvers: 'always'
+    runGuardsAndResolvers: 'always',
+    resolve: {
+      entity: KgxWmsResolver,
+    },
+    data: { animation: 'Detail', },
   }
 ];
 

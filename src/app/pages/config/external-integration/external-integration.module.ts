@@ -5,6 +5,7 @@ import { ExternalIntegrationRoutingModule } from './external-integration-routing
 import { KgxWmsComponent } from './kgx-wms/kgx-wms.component';
 import { ExternalIntegrationComponent } from './external-integration.component';
 import {SharedModule} from '@nusantara/shared';
+import {ReactiveFormsModule} from '@angular/forms';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import {SharedModule} from '@nusantara/shared';
     imports: [
         CommonModule,
         ExternalIntegrationRoutingModule,
-        SharedModule
+        SharedModule,
+        ReactiveFormsModule
     ]
 })
 export class ExternalIntegrationModule { }
