@@ -106,6 +106,8 @@ export class WarehouseMappingComponent extends AbstractDetailComponent<IWarehous
       }),
       warehouseId: [entity?.warehouseId, [Validators.required]]
     });
+    this.selectedLocationValue = entity.location;
+    this.location_href.setValue(this.selectedLocationValue.href);
   }
 
   selectSubLocation() {
@@ -116,7 +118,9 @@ export class WarehouseMappingComponent extends AbstractDetailComponent<IWarehous
     if (this.subLocationModal.result === DialogResult.OK) {
       this.selectedLocationValue = this.subLocationModal.subLocation.value as ISubLocation;
       this.location_href.setValue(this.selectedLocationValue.href);
-      console.log(this.selectedLocationValue);
     }
+  }
+  delete() {
+    this.toast?.addMessage('Contact admin removing', 'info');
   }
 }
