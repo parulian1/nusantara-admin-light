@@ -191,10 +191,12 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
     this.form.controls.isActive.markAsTouched();
 
     const defaultSubLoc: ISubLocation = {
+      id: null,
       href: null,
       name: 'default',
       code: 'default',
-      type: 'omni_channel'
+      type: 'omni_channel',
+      isActive: true
     };
 
     for (const subLoc of entity?.subLocations ?? [defaultSubLoc, ]) {
@@ -204,10 +206,12 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
 
   addSubLocation(subLocation?: ISubLocation) {
     const arr = this.fb.group({
+      id : [subLocation?.id, []],
       name: [subLocation?.name, [Validators.required, ]],
       code: [subLocation?.code, [Validators.required, ]],
       type: [subLocation?.type, [Validators.required, ]],
       href: [subLocation?.href, []],
+      isActive: [subLocation?.isActive ?? true, []],
     });
     this.subLocations.push(arr);
   }
