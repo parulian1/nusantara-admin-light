@@ -253,6 +253,20 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
 
   approve() {
     this.form.value.status = 'approved';
+
+    const stockRecords = this.form.value.stockRecords;
+
+    let errorLocation = 0;
+    stockRecords.forEach((stock) => {
+      if (stock.location.href === null) {
+        errorLocation += 1;
+      }
+    });
+
+    if (errorLocation > 0) {
+      this.toast?.addError('Location is required. Please check your input again.', 'Failed to Save');
+    }
+
     this.save();
   }
 
