@@ -91,3 +91,5 @@ export * from './svg-icon.service';
 
 export  * from './default-pin-config.service';
 export * from './product-related.service';
+
+export * from './advanced-price-list.service';

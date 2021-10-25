@@ -26,6 +26,8 @@ import { ProductOptionListComponent, AllProductOptionResolver, ProductOptionComp
 import { DurationListResolver, LengthListResolver, PacketListResolver } from './product/subscription';
 import { RequireIsEnterpriseGuard } from '@nusantara/auth/guards';
 import { EditShippingComponent } from '../config/marketplace-integration';
+import { AllVendorResolver } from './product/all-vendor.resolver';
+import { AdvancedPriceComponent, AdvancedPriceListComponent } from '@nusantara/pages/catalog/advanced-price';
 
 const routes: Routes = [
   {
@@ -246,6 +248,31 @@ const routes: Routes = [
     component: EditShippingComponent,
     resolve: { logistics: MarketplaceLogisticListResolver },
     runGuardsAndResolvers: 'always',
+  },
+  {
+    path: 'advanced-price',
+    canActivate: [RequireIsEnterpriseGuard],
+    children: [
+      {
+        path: '',
+        component: AdvancedPriceListComponent,
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'List' },
+      },
+      {
+        path: 'new',
+        component: AdvancedPriceComponent,
+        runGuardsAndResolvers: 'always',
+        resolve: { warehouses: config.warehouse.AllWarehouseResolver, },
+        data: { animation: 'Detail', },
+      },
+      {
+        path: ':slug',
+        component: AdvancedPriceComponent,
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      }
+    ]
   },
 ];
 
