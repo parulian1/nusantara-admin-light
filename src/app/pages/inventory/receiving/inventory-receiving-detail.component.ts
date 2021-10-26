@@ -265,6 +265,7 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
 
     if (errorLocation > 0) {
       this.toast?.addError('Location is required. Please check your input again.', 'Failed to Save');
+      return;
     }
 
     this.save();
