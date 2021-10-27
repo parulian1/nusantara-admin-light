@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractDetailComponent, ToastService } from '@nusantara/core';
@@ -23,13 +23,13 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
 
       <label>
         <span i18n>Name</span>
-        <input type="text" formControlName="name" name="name">
+        <input type="text" formControlName="name" name="name" maxlength="100">
         <nus-field-errors [control]="form.get('name')"></nus-field-errors>
       </label>
 
       <label>
         <span i18n>Code</span>
-        <input type="text" formControlName="code" name="code">
+        <input type="text" formControlName="code" name="code" maxlength="250">
         <nus-field-errors [control]="form.get('code')"></nus-field-errors>
       </label>
 
@@ -73,6 +73,12 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
         <nus-field-errors [control]="form.get('isActive')"></nus-field-errors>
       </label>
 
+      <label class="checkbox">
+        <input type="checkbox" formControlName="isManagedKgx" name="isManagedKgx" 
+        (change)="onIsManagedKgxChange( )" i18n> Is Managed by KGX
+        <nus-field-errors [control]="form.get('isManagedKgx')"></nus-field-errors>
+      </label>
+
       <div *ngIf="enterpriseGuard.canActivate(null, null)">
         <h2>
           <span i18n>Inventory Locations</span>
@@ -87,19 +93,23 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
             <th i18n>Name</th>
             <th i18n>Code</th>
             <th i18n>Type</th>
+            <th *ngIf="wmsIdShown">WMS ID</th>
             <th></th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let subLoc of subLocations.controls; let i=index" [formGroup]="subLoc">
-            <td><input type="text" formControlName="name" maxlength="255"></td>
-            <td><input type="text" formControlName="code" maxlength="255"></td>
+            <td><input type="text" formControlName="name" maxlength="100"></td>
+            <td><input type="text" formControlName="code" maxlength="250"></td>
             <td>
               <select formControlName="type">
                 <option *ngFor="let opt of subLocationTypes" [ngValue]="opt.value">
                   {{opt.displayName}}
                 </option>
               </select>
+            </td>
+            <td *ngIf="wmsIdShown">
+              <input type="number" formControlName="wmsId" maxlength="8">
             </td>
             <td>
               <button (click)="removeSubLocation(i)" i18n>Remove</button>
@@ -123,9 +133,9 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
   types: Array<drf.IChoice>;
   subLocationTypes: Array<drf.IChoice>;
   disableIsActive: boolean;
+  wmsIdShown: boolean = false;
 
   warehouses: Array<{ href: string, name: string, code: string }>;
-
   constructor(service: WarehouseService,
               router: Router,
               route: ActivatedRoute,
@@ -159,6 +169,8 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
       this.warehouses = data.allWarehouses;
       this.warehouses.unshift({href: null, name: '---', code: ''});
     });
+
+    this.addRemoveWmsField();
   }
 
   initializeForm(entity?: IWarehouse) {
@@ -172,6 +184,7 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
       allowReassignmentFrom: this.fb.array([]),
       subLocations: this.fb.array([]),
       isActive: [entity?.isActive ?? true],
+      isManagedKgx: [ entity?.isManagedKgx ?? false],
       address: this.fb.group({
         country: [entity?.address?.street || 'id', [Validators.required, ]],
         province: [entity?.address?.province, [Validators.required, ]],
@@ -189,6 +202,7 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
 
     // need to mark as touched to make custom styling works
     this.form.controls.isActive.markAsTouched();
+    this.form.controls.isManagedKgx.markAsTouched();
 
     const defaultSubLoc: ISubLocation = {
       id: null,
@@ -196,7 +210,8 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
       name: 'default',
       code: 'default',
       type: 'omni_channel',
-      isActive: true
+      isActive: true,
+      wmsId: 0,
     };
 
     for (const subLoc of entity?.subLocations ?? [defaultSubLoc, ]) {
@@ -212,6 +227,7 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
       type: [subLocation?.type, [Validators.required, ]],
       href: [subLocation?.href, []],
       isActive: [subLocation?.isActive ?? true, []],
+      wmsId: [subLocation?.wmsId ?? true, []]
     });
     this.subLocations.push(arr);
   }
@@ -220,5 +236,24 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
     this.subLocations.removeAt(index);
   }
 
+
+  onIsManagedKgxChange() {
+    this.addRemoveWmsField()
+  }
+
+  addRemoveWmsField(): void {
+    const isManagedKgx = this.form.get("isManagedKgx").value;
+    if (isManagedKgx) {
+      this.subLocations.controls.forEach((element: FormGroup) => {
+        element.addControl("wmsId", new FormControl("", Validators.required));
+      });
+      this.wmsIdShown = true;
+    } else {
+      this.subLocations.controls.forEach((element: FormGroup) => {
+        element.removeControl("wmsId");
+      });
+      this.wmsIdShown = false;
+    }
+  }
 }
 

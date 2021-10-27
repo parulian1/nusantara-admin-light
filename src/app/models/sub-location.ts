@@ -5,4 +5,5 @@ export class ISubLocation {
   code: string;
   type: string;
   isActive: boolean;
+  wmsId?: number;
 }
