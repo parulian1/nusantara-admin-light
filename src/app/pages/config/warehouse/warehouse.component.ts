@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractDetailComponent, ToastService } from '@nusantara/core';
@@ -135,6 +135,7 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
   disableIsActive: boolean;
   wmsIdShown: boolean = false;
 
+  entity: IWarehouse;
   warehouses: Array<{ href: string, name: string, code: string }>;
   constructor(service: WarehouseService,
               router: Router,
@@ -153,10 +154,12 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
   ngOnInit() {
     super.ngOnInit();
     this.route.data.subscribe((data: {
+      entity: IWarehouse,
       types: drf.IChoice[],
       subLocationTypes: drf.IChoice[],
       allWarehouses: IWarehouse[]
     }) => {
+      this.entity = data.entity; 
       this.types = data.types;
       this.subLocationTypes = data.subLocationTypes;
 
@@ -173,6 +176,17 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
     this.addRemoveWmsField();
   }
 
+  getFormValue() {
+    this.form.value.subLocations.map(sublocation => {
+      // override key for wmsId into wms_id
+      // this is required to POST to API only
+      if(sublocation.hasOwnProperty('wmsId')){
+        delete Object.assign(sublocation, {['wms_id']: sublocation['wmsId'] })['wmsId'];
+      }
+    });
+    return this.form.value;
+  }
+  
   initializeForm(entity?: IWarehouse) {
     this.form = this.fb.group({
       name: [entity?.name, [Validators.required, Validators.maxLength(50), ]],
@@ -182,7 +196,7 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
       internalNotes: [entity?.internalNotes || '', []],
       financialReportingAs: [entity?.financialReportingAs, []],
       allowReassignmentFrom: this.fb.array([]),
-      subLocations: this.fb.array([]),
+      subLocations: this.fb.array([], this.validateWmsId()),
       isActive: [entity?.isActive ?? true],
       isManagedKgx: [ entity?.isManagedKgx ?? false],
       address: this.fb.group({
@@ -227,7 +241,7 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
       type: [subLocation?.type, [Validators.required, ]],
       href: [subLocation?.href, []],
       isActive: [subLocation?.isActive ?? true, []],
-      wmsId: [subLocation?.wmsId ?? true, []]
+      wmsId: [subLocation?.wmsId, []]
     });
     this.subLocations.push(arr);
   }
@@ -244,8 +258,9 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
   addRemoveWmsField(): void {
     const isManagedKgx = this.form.get("isManagedKgx").value;
     if (isManagedKgx) {
-      this.subLocations.controls.forEach((element: FormGroup) => {
-        element.addControl("wmsId", new FormControl("", Validators.required));
+      this.subLocations.controls.forEach((element: FormGroup, index) => {
+        element.addControl("wmsId", new FormControl(
+          this.entity?.subLocations[index].wmsId));
       });
       this.wmsIdShown = true;
     } else {
@@ -254,6 +269,20 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
       });
       this.wmsIdShown = false;
     }
+    this.subLocations.updateValueAndValidity();
+  }
+
+  validateWmsId(): ValidatorFn {
+    return (formArray: FormArray): { [key: string]: any } | null => {
+      let fieldCount = formArray.controls.length;
+      let totalInvalid = 0;
+      formArray.controls.forEach((sublocation: FormGroup) => {
+        if (sublocation.get("wmsId") && sublocation.value.wmsId == null) {
+          totalInvalid++;
+        }
+      });
+      return fieldCount == totalInvalid ? { error: "WMS ID must be filled at least one." } : null;
+    };
   }
 }
 
