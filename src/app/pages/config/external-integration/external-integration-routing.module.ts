@@ -8,12 +8,43 @@ import {WarehouseMappingListResolver} from '@nusantara/resolvers/integrations/wa
 import {WarehouseMappingComponent} from '@nusantara/pages/config/external-integration/warehouse-mapping/warehouse-mapping.component';
 import {WarehouseMappingTypeResolver} from '@nusantara/resolvers/integrations/warehouse-mapping-type.resolver';
 import {WarehouseMappingResolver} from '@nusantara/resolvers/integrations/warehouse-mapping.resolver';
+import { PartnerListComponent, PartnerComponent } from './partner';
+import { PartnerListResolver } from '@nusantara/resolvers/integrations/partner-list.resolver';
+import { PartnerResolver } from '@nusantara/resolvers/integrations/partner.resolver';
 
 const routes: Routes = [
   {
     path: '',
     component: ExternalIntegrationComponent,
     runGuardsAndResolvers: 'always'
+  },
+  {
+    path: 'partners',
+    children: [
+      {
+        path: '',
+        component: PartnerListComponent,
+        runGuardsAndResolvers: 'always',
+        resolve: {
+          page: PartnerListResolver,
+        }
+      },
+      {
+        path: 'new',
+        component: PartnerComponent,
+        runGuardsAndResolvers: 'always',
+        resolve: {
+        }
+      },
+      {
+        path: ':slug',
+        component: PartnerComponent,
+        resolve: {
+          entity: PartnerResolver,
+        },
+        runGuardsAndResolvers: 'always',
+      },
+    ]
   },
   {
     path: 'kgx-wms',

@@ -6,23 +6,12 @@ import { Component, OnInit } from '@angular/core';
     <h1 class="title-1" i18n>External Integration Configuration</h1>
     <div class="wrapper">
       <div>
-        <h1 class="heading-1" i18n>Connect to KGX WMS</h1>
-        <p i18n>Add connection to KGX WMS System
+        <h1 class="heading-1" i18n>Connect to partner</h1>
+        <p i18n>Add connection to partner
         </p>
       </div>
       <div>
-        <button routerLink="kgx-wms" class="control" i18n>Open</button>
-      </div>
-    </div>
-
-    <div class="wrapper">
-      <div>
-        <h1 class="heading-1" i18n>Warehouse Mapping</h1>
-        <p i18n>Manage warehouse mapping to partner id
-        </p>
-      </div>
-      <div>
-        <button routerLink="warehouse-mapping" class="control" i18n>Open</button>
+        <button routerLink="partners" class="control" i18n>Open</button>
       </div>
     </div>
   `,
