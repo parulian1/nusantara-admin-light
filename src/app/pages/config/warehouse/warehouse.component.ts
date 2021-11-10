@@ -99,8 +99,8 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
           </thead>
           <tbody>
           <tr *ngFor="let subLoc of subLocations.controls; let i=index" [formGroup]="subLoc">
-            <td><input type="text" formControlName="name" maxlength="100"></td>
-            <td><input type="text" formControlName="code" maxlength="250"></td>
+            <td><input type="text" formControlName="name" maxlength="50"></td>
+            <td><input type="text" formControlName="code" maxlength="50"></td>
             <td>
               <select formControlName="type">
                 <option *ngFor="let opt of subLocationTypes" [ngValue]="opt.value">
@@ -109,7 +109,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
               </select>
             </td>
             <td *ngIf="wmsIdShown">
-              <input type="number" formControlName="wmsId" maxlength="8">
+              <input type="number" formControlName="wmsId">
             </td>
             <td>
               <button (click)="removeSubLocation(i)" i18n>Remove</button>
@@ -241,13 +241,14 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
       type: [subLocation?.type, [Validators.required, ]],
       href: [subLocation?.href, []],
       isActive: [subLocation?.isActive ?? true, []],
-      wmsId: [subLocation?.wmsId, []]
+      wmsId: [subLocation?.wmsId, [Validators.max(99999999), ]]
     });
     this.subLocations.push(arr);
   }
 
   removeSubLocation(index: number) {
     this.subLocations.removeAt(index);
+    this.subLocations.updateValueAndValidity();
   }
 
 
@@ -260,7 +261,7 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
     if (isManagedKgx) {
       this.subLocations.controls.forEach((element: FormGroup, index) => {
         element.addControl("wmsId", new FormControl(
-          this.entity?.subLocations[index].wmsId));
+          this.entity?.subLocations[index]?.wmsId, [Validators.max(99999999), ]));
       });
       this.wmsIdShown = true;
     } else {
