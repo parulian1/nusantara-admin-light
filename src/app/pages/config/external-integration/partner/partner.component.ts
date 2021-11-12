@@ -79,6 +79,18 @@ import { PartnerService } from "@nusantara/services/integrations/partner.service
         <nus-field-errors [control]="form.get('access')"></nus-field-errors>
       </label>
 
+      <label class="checkbox">
+        <input
+          type="checkbox"
+          formControlName="isActive"
+          name="isActive"
+          i18n
+        />
+        Auto push to WMS
+        <nus-tooltip [text]="'For enabled send product and received PO / SO automatically'"></nus-tooltip>
+        <nus-field-errors [control]="form.get('isActive')"></nus-field-errors>
+      </label>
+
       <nus-detail-actions
         [component]="this"
         [hideDelete]="true"
@@ -143,7 +155,11 @@ export class PartnerComponent
         [Validators.required, Validators.max(99999999)],
       ],
       access: [entity?.access, [Validators.required]],
+      isActive: [entity?.isActive ?? true],
     });
+
+    // need to mark as touched to make custom styling works
+    this.form.controls.isActive.markAsTouched();
   }
 
   getFormValue() {

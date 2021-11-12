@@ -7,4 +7,5 @@ export interface IPartner {
   categoryId: number;
   customerId: number;
   access: string;
+  isActive: boolean;
 }
