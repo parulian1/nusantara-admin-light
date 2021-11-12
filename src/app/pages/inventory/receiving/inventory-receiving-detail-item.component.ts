@@ -11,13 +11,13 @@ import { IProductClass } from '@nusantara/models/products';
     <tr [formGroup]="form">
       <td>{{ displayedProductName }}</td>
       <td class="immediate-error-display">
-        {{sku.value}}
+        {{ sku.value }}
       </td>
       <td>
-        {{originalQuantity.value}}
+        {{ originalQuantity.value }}
       </td>
       <td>
-        <span *ngIf="batchNumber.value">{{batchNumber.value}}</span>
+        <span *ngIf="batchNumber.value">{{ batchNumber.value }}</span>
         <span *ngIf="!batchNumber.value"> - </span>
       </td>
       <td>

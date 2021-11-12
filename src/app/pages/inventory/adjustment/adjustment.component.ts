@@ -1,5 +1,5 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   AbstractDetailComponent,
   DialogResult,
@@ -8,24 +8,23 @@ import {
   ToastLevelEnum,
   ToastService,
 } from '@nusantara/core';
-import {drf, inventory, ISubLocation, IWarehouse, marketplace} from '@nusantara/models';
-import {IAdjustment, IStockRecord, ReceivingOrderStatusChoices} from '@nusantara/models/inventory';
-import {AuthService} from '@nusantara/auth';
+import { drf, inventory, ISubLocation, IWarehouse, marketplace } from '@nusantara/models';
+import { IAdjustment, IStockRecord, ReceivingOrderStatusChoices } from '@nusantara/models/inventory';
+import { AuthService } from '@nusantara/auth';
 import {
   InventoryAdjustmentOrderService,
   InventoryStockRecordService,
   MarketplaceClientService,
   WarehouseService
 } from '@nusantara/services';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ConfirmModalReceivingOrderComponent, StockRecordSelectionModalComponent} from '@nusantara/shared';
-import {CsvDialogComponent} from '@nusantara/shared/csv-dialog/csv-dialog.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ConfirmModalReceivingOrderComponent, StockRecordSelectionModalComponent } from '@nusantara/shared';
+import { CsvDialogComponent } from '@nusantara/shared/csv-dialog/csv-dialog.component';
 import * as Papa from 'papaparse';
-import {HttpParams} from '@angular/common/http';
-import {StockRecordDialogComponent} from '@nusantara/pages/inventory/adjustment/stock-record-dialog.component';
-import {ChangeDetectorRef} from '@angular/core';
-import {isNumeric} from 'rxjs/internal/util/isNumeric';
-import {DomSanitizer} from '@angular/platform-browser';
+import { StockRecordDialogComponent } from '@nusantara/pages/inventory/adjustment/stock-record-dialog.component';
+import { ChangeDetectorRef } from '@angular/core';
+import { isNumeric } from 'rxjs/internal/util/isNumeric';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'nus-adjustment',
@@ -577,7 +576,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
                 if (res.totalResults > 0) {
                   this.csvData.push(dataResult);
                   const selectedStock = res.entities[0];
-                  const sku = mappedValue.sku || selectedStock.sku;
+                  const sku = selectedStock.sku;
                   const newReceiving = this.fb.group({
                     href: [null, []],
                     receivingOrder: [selectedStock.receivingOrder, [Validators.required]],

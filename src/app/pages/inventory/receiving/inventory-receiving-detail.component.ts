@@ -45,25 +45,25 @@ import { IProduct, IProductClass } from '@nusantara/models/products';
       <tbody>
         <td>
           <span *ngIf="!entity.doNumber">-</span>
-          <span>{{entity.doNumber}}</span>
+          <span>{{ entity.doNumber }}</span>
         </td>
         <td>
           <span *ngIf="!entity.dcPic">-</span>
-          <span>{{entity.dcPic}}</span>
+          <span>{{ entity.dcPic }}</span>
         </td>
-        <td>{{entity.type}}</td>
-        <td>{{entity.status}}</td>
+        <td>{{ entity.type }}</td>
+        <td>{{ entity.status }}</td>
         <td>
-          <a (click)="showWarehouseDetail()">{{entity.warehouse.name}}</a>
+          <a (click)="showWarehouseDetail()">{{ entity.warehouse.name }}</a>
         </td>
 
         <td *ngIf="!entity.createdBy?.name">-</td>
-        <td *ngIf="entity.createdBy?.name">{{entity.createdBy?.name}}</td>
+        <td *ngIf="entity.createdBy?.name">{{ entity.createdBy?.name }}</td>
 
         <td *ngIf="!entity.reviewedBy?.name">-</td>
-        <td *ngIf="entity.reviewedBy?.name">{{entity.reviewedBy?.name}}</td>
+        <td *ngIf="entity.reviewedBy?.name">{{ entity.reviewedBy?.name }}</td>
 
-        <td>{{entity.created | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+        <td>{{ entity.created | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
       </tbody>
     </table>
     <ul class="non-field-errors" *ngIf="!!nonFieldErrors.length">
