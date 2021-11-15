@@ -10,7 +10,7 @@ import { IAdvancedPriceList } from '@nusantara/models/products/advanced-price-li
     <nus-list-header
       title="Advanced Price List">
     </nus-list-header>
-<!--    <nus-pagination [page]="page"></nus-pagination>-->
+    <nus-pagination [page]="page"></nus-pagination>
     <table>
       <thead>
         <tr>
@@ -18,14 +18,18 @@ import { IAdvancedPriceList } from '@nusantara/models/products/advanced-price-li
           <th translate>Type</th>
         </tr>
       </thead>
-<!--      <tbody>-->
-<!--        <tr *ngFor="let entity of page.entities">-->
-<!--          <td><a [routerLink]="[entity|entityToSlug]">{{ entity.name }}</a></td>-->
-<!--          <td>Warehouse</td>-->
-<!--        </tr>-->
-<!--      </tbody>-->
+      <tbody>
+        <tr *ngFor="let entity of page.entities">
+          <td><a [routerLink]="[entity|entityToSlug]">{{ entity.name }}</a></td>
+          <td>Warehouse (
+            <span *ngFor="let warehouse of entity.warehouses">
+              {{warehouse.name}}
+            </span>
+          )</td>
+        </tr>
+      </tbody>
     </table>
-<!--    <nus-pagination [page]="page"></nus-pagination>-->
+    <nus-pagination [page]="page"></nus-pagination>
   `,
 })
 

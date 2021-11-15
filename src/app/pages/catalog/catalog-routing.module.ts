@@ -27,7 +27,12 @@ import { DurationListResolver, LengthListResolver, PacketListResolver } from './
 import { RequireIsEnterpriseGuard } from '@nusantara/auth/guards';
 import { EditShippingComponent } from '../config/marketplace-integration';
 import { AllVendorResolver } from './product/all-vendor.resolver';
-import { AdvancedPriceComponent, AdvancedPriceListComponent } from '@nusantara/pages/catalog/advanced-price';
+import {
+  AdvancedPriceComponent,
+  AdvancedPriceListComponent,
+  AdvancedPriceListResolver
+} from '@nusantara/pages/catalog/advanced-price';
+import {AdvancedPriceResolver} from "@nusantara/pages/catalog/advanced-price/advanced-price.resolver";
 
 const routes: Routes = [
   {
@@ -256,6 +261,7 @@ const routes: Routes = [
       {
         path: '',
         component: AdvancedPriceListComponent,
+        resolve: { page: AdvancedPriceListResolver },
         runGuardsAndResolvers: 'always',
         data: { animation: 'List' },
       },
@@ -269,6 +275,10 @@ const routes: Routes = [
       {
         path: ':slug',
         component: AdvancedPriceComponent,
+        resolve: {
+          entity: AdvancedPriceResolver,
+          warehouses: config.warehouse.AllWarehouseResolver,
+        },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },
       }

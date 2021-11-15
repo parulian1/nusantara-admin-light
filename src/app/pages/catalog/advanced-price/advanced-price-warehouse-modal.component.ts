@@ -29,9 +29,9 @@ import { DialogResult } from '@nusantara/core';
               <label class="checkbox">
                 <input
                   type="checkbox"
-                  name="{{ choice.code }}"
-                  [value]="choice.code"
-                  [checked]="(selectedWarehouses && (-1 !== selectedWarehouses.value.indexOf(choice.code)) ? 'checked' : '')"
+                  name="{{ choice.href }}"
+                  [value]="choice.href"
+                  [checked]="checkedItem(choice.href)"
                   (change)="onCheckboxChange($event)"
                 >
                 <span>{{ choice.name }}</span>
@@ -97,7 +97,7 @@ export class AdvancedPriceWarehouseModalComponent implements OnInit, AfterViewIn
     this.modal.onOpen.subscribe(() => {
       this.initializeForm();
       this.selectedWarehouses.value.forEach((wh) => {
-        this.warehouses.push(new FormControl(wh.code));
+        this.warehouses.push(new FormControl(wh.href));
       });
     });
   }
@@ -140,5 +140,12 @@ export class AdvancedPriceWarehouseModalComponent implements OnInit, AfterViewIn
 
   cancel() {
     this.modal.close();
+  }
+
+  checkedItem(href) {
+    if (this.selectedWarehouses && ( -1 !== this.selectedWarehouses.value.findIndex(obj => obj.href === href) )) {
+      return 'checked';
+    }
+    return '';
   }
 }

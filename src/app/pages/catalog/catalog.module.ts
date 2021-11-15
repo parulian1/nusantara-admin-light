@@ -24,7 +24,7 @@ import { BundleLineComponent } from '@nusantara/pages/catalog/product/bundle';
 import {
   AdvancedPriceComponent,
   AdvancedPriceListComponent,
-  AdvancedPriceProductComponent, AdvancedPriceSublocationModalComponent, AdvancedPriceWarehouseModalComponent
+  AdvancedPriceProductComponent, AdvancedPriceWarehouseModalComponent
 } from '@nusantara/pages/catalog/advanced-price';
 @NgModule({
   declarations: [
@@ -66,8 +66,7 @@ import {
     AdvancedPriceListComponent,
     AdvancedPriceComponent,
     AdvancedPriceProductComponent,
-    AdvancedPriceWarehouseModalComponent,
-    AdvancedPriceSublocationModalComponent
+    AdvancedPriceWarehouseModalComponent
   ],
   imports: [
     CommonModule,
