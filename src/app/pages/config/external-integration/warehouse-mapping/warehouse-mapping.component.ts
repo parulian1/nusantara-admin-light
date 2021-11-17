@@ -106,8 +106,8 @@ export class WarehouseMappingComponent extends AbstractDetailComponent<IWarehous
       }),
       warehouseId: [entity?.warehouseId, [Validators.required]]
     });
-    this.selectedLocationValue = entity.location;
-    this.location_href.setValue(this.selectedLocationValue.href);
+    this.selectedLocationValue = entity?.location;
+    this.location_href.setValue(this.selectedLocationValue?.href);
   }
 
   selectSubLocation() {

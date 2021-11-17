@@ -4,6 +4,7 @@ import { WarehouseMappingComponent } from './warehouse-mapping.component';
 import {RouterTestingModule} from '@angular/router/testing';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { SharedModule } from '@nusantara/shared';
 
 describe('WarehouseMappingComponent', () => {
   let component: WarehouseMappingComponent;
@@ -16,6 +17,7 @@ describe('WarehouseMappingComponent', () => {
         HttpClientTestingModule,
         ReactiveFormsModule,
         FormsModule,
+        SharedModule,
       ],
       declarations: [ WarehouseMappingComponent ]
     })
