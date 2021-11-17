@@ -1,4 +1,6 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder } from '@angular/forms';
 
 import { WarehouseLocationModalComponent } from './warehouse-location-modal.component';
 
@@ -8,7 +10,11 @@ describe('WarehouseLocationModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WarehouseLocationModalComponent ]
+      imports: [HttpClientTestingModule],
+      declarations: [ WarehouseLocationModalComponent ],
+      providers: [
+        FormBuilder
+      ],
     })
     .compileComponents();
   });
