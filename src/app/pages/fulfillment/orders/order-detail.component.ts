@@ -376,7 +376,7 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   isRequestShipment = false;
 
   // marketplace source name that not using default AWB handler
-  notManagedAwbSources = ["tokopedia", "lazada", "shopee", "bukalapak"];
+  notManagedAwbSources = ["tokopedia", "lazada", "shopee"];
 
   // enable refresh AWB for following source name
   enableRefreshAwb = ["tokopedia", "shopee", "bukalapak", "lazada"];
@@ -433,12 +433,22 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
       this.orderDetailData.children.forEach((children) => {
         children.data.forEach((childrenData) => {
           if (childrenData.shipmentHistory?.href) {
-            this.shipmentService
+
+            if(this.orderDetailData.source == "marketplace" &&
+            this.orderDetailData.sourceName == "bukalapak") {
+              // set shipping history href as shipping label url
+              // for marketplace bukalapak only
+              childrenData.shipmentHistory.shippingLabelUrl = childrenData.shipmentHistory?.href
+            
+            } else {
+              this.shipmentService
               .fetch(getSlugFromHref(childrenData.shipmentHistory?.href))
               .subscribe((entity) => {
                 childrenData.shipmentHistory.shippingLabelUrl =
                   entity.shippingLabelUrl;
               });
+            }
+
           }
         });
       });
@@ -453,6 +463,8 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   }
 
   printConnote(labelUrl: string) {
+    console.log(labelUrl);
+
     let windowContent = "<!DOCTYPE html>";
     windowContent += "<html>";
     windowContent += "<head><title>Print</title></head>";
