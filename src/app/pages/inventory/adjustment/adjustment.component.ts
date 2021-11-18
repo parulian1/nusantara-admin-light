@@ -19,9 +19,8 @@ import {
 } from '@nusantara/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmModalInvetoryOrderComponent, StockRecordSelectionModalComponent } from '@nusantara/shared';
-import { CsvDialogComponent} from '@nusantara/shared/csv-dialog/csv-dialog.component';
+import { CsvDialogComponent } from '@nusantara/shared/csv-dialog/csv-dialog.component';
 import * as Papa from 'papaparse';
-import { HttpParams } from '@angular/common/http';
 import { StockRecordDialogComponent } from '@nusantara/pages/inventory/adjustment/stock-record-dialog.component';
 import { ChangeDetectorRef } from '@angular/core';
 import { isNumeric } from 'rxjs/internal/util/isNumeric';
@@ -30,35 +29,35 @@ import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'nus-adjustment',
   template: `
-    <h1>Adjustment Order</h1>
+    <h1 i18n>Adjustment Order</h1>
 
     <form [formGroup]="form" (ngSubmit)="save()">
       <div class="container">
         <div class="general-info">
-          <h3>General Information</h3>
+          <h3 i18n>General Information</h3>
           <div>
-            <label>Adjusted By</label>
+            <label i18n>Adjusted By</label>
             <span>{{ userDisplayName }}</span>
           </div>
           <div>
-            <label>Approved By</label>
+            <label i18n>Approved By</label>
             <span>-</span>
           </div>
           <div>
-            <label>Adjustment Date</label>
+            <label i18n>Adjustment Date</label>
             <span>{{ currentDate|date }}</span>
           </div>
           <div>
-            <label>Status</label>
-            <span>Pending</span>
+            <label i18n>Status</label>
+            <span i18n>Pending</span>
           </div>
           <div>
-            <label>Warehouse</label>
+            <label i18n>Warehouse</label>
             <div class="confirm-warehouse">
 
               <div [formGroup]="warehouse">
                 <select formControlName="href" (change)="warehouseSelected($event)">
-                  <option [ngValue]="null">Select Warehouse</option>
+                  <option [ngValue]="null" i18n>Select Warehouse</option>
                   <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
                     {{ wh.name }}
                   </option>
@@ -67,7 +66,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 
               <div [formGroup]="subLocation">
                 <select formControlName="href" (change)="subLocationSelected($event)">
-                  <option [ngValue]="null">Select Location</option>
+                  <option [ngValue]="null" i18n>Select Location</option>
                   <option *ngFor="let subLocation of availableSubLocations" [ngValue]="subLocation.href">
                     {{ subLocation.name }}
                   </option>
@@ -77,7 +76,7 @@ import { DomSanitizer } from '@angular/platform-browser';
               <div class="confirm-warehouse-action">
                 <button (click)="confirmWarehouse()" type="button"
                         [disabled]="subLocation.disabled || !warehouse.valid || !subLocation.valid"
-                        class="control confirm">Manual Update
+                        class="control confirm" i18n>Manual Update
                 </button>
                 <div class="dropdown" [class.disabled]="subLocation.disabled || !warehouse.valid || !subLocation.valid">
                   <button type="button"
@@ -87,7 +86,7 @@ import { DomSanitizer } from '@angular/platform-browser';
                   <div class="dropdown-content">
                     <button (click)="manualUpload()" type="button"
                             [disabled]="subLocation.disabled || !warehouse.valid"
-                            class="control confirm secondary">
+                            class="control confirm secondary" i18n>
                       Manual Upload
                     </button>
                   </div>
@@ -123,7 +122,7 @@ import { DomSanitizer } from '@angular/platform-browser';
       <div class="product-list" *ngIf="warehouse.disabled && adjustmentMode === 'csv'">
         <div *ngIf="invalidCsv.length > 0">
           <div>
-            <a [href]="getInvalidCsv()" target="_blank" class="error-detail">Get invalid csv ({{invalidCsv.length}}
+            <a [href]="getInvalidCsv()" target="_blank" class="error-detail" i18n>Get invalid csv ({{invalidCsv.length}}
               records)</a>
           </div>
           <div *ngFor="let iCsv of invalidCsv" hidden="true">
@@ -133,15 +132,15 @@ import { DomSanitizer } from '@angular/platform-browser';
         <table>
           <thead>
           <tr id="mp-add-product-head">
-            <th>Receiving ID / Product Name / Location</th>
-            <th>SKU</th>
-            <th>Receiving Date</th>
-            <th>Available Stock In Product Record</th>
-            <th>Expected Qty</th>
-            <th>Different Qty</th>
-            <th>Reason</th>
-            <th>Notes</th>
-            <th>Remove</th>
+            <th i18n>Receiving ID / Product Name / Location</th>
+            <th i18n>SKU</th>
+            <th i18n>Receiving Date</th>
+            <th i18n>Available Stock In Product Record</th>
+            <th i18n>Expected Qty</th>
+            <th i18n>Different Qty</th>
+            <th i18n>Reason</th>
+            <th i18n>Notes</th>
+            <th i18n>Remove</th>
           </tr>
           </thead>
           <tbody>
@@ -170,15 +169,15 @@ import { DomSanitizer } from '@angular/platform-browser';
         <table>
           <thead>
           <tr id="mp-add-product-head">
-            <th>Receiving ID / Product Name / Location</th>
-            <th>SKU</th>
-            <th>Receiving Date</th>
-            <th>Available Stock In Product Record</th>
-            <th>Expected Qty</th>
-            <th>Different Qty</th>
-            <th>Reason</th>
-            <th>Notes</th>
-            <th>Remove</th>
+            <th i18n>Receiving ID / Product Name / Location</th>
+            <th i18n>SKU</th>
+            <th i18n>Receiving Date</th>
+            <th i18n>Available Stock In Product Record</th>
+            <th i18n>Expected Qty</th>
+            <th i18n>Different Qty</th>
+            <th i18n>Reason</th>
+            <th i18n>Notes</th>
+            <th i18n>Remove</th>
           </tr>
           </thead>
           <tbody>
@@ -196,7 +195,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 
           <tr>
             <td colspan="10">
-              <button type="button" (click)="addLine()" class="new-add-button wide">
+              <button type="button" (click)="addLine()" class="new-add-button wide" i18n>
                 <i class="material-icons">add</i> Add Record
               </button>
             </td>
@@ -341,7 +340,6 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   }
 
   addLine() {
-    console.log('form2a', this.form);
     this.stockRecordSelectionModal.filters = {
       warehouse: getSlugFromHref(this.warehouse.value?.href),
       receiving_order_status: ReceivingOrderStatusChoices.APPROVED,
@@ -409,7 +407,6 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     this.invalidCsv = [];
     this.upcList = [];
     this.resetStockRecordDialog();
-    console.log('form2', this.form);
   }
 
   confirmModal() {
@@ -579,7 +576,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
                 if (res.totalResults > 0) {
                   this.csvData.push(dataResult);
                   const selectedStock = res.entities[0];
-                  const sku = mappedValue.sku || selectedStock.sku;
+                  const sku = selectedStock.sku;
                   const newReceiving = this.fb.group({
                     href: [null, []],
                     receivingOrder: [selectedStock.receivingOrder, [Validators.required]],

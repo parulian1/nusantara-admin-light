@@ -39,10 +39,11 @@ export interface IGroupControlComponentData {
       <div>
         <label>
           <span *ngIf="formLabel; else defaultLabel"
+                 i18n
             >{{ formLabel }} Subcategory
           </span>
           <ng-template #defaultLabel>
-            <span>{{ currentShop }} Category</span>
+            <span i18n>{{ currentShop }} Category</span>
           </ng-template>
           <select formControlName="category" (ngModelChange)="onSelect($event)">
             <option *ngFor="let c of categories" [ngValue]="c">

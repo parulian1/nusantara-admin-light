@@ -17,19 +17,19 @@ import {device} from '@nusantara/models';
     <form [formGroup]="form" (ngSubmit)="save()">
 
       <label>
-        <span>Wordpress Blog URL (only domain name)</span>
+        <span i18n>Wordpress Blog URL (only domain name)</span>
         <input type="url" [formControl]="blogUrl" name="blogUrl">
         <nus-field-errors [control]="blogUrl"></nus-field-errors>
       </label>
 
       <label>
-        <span>RSS Blog feed URL</span>
+        <span i18n>RSS Blog feed URL</span>
         <input type="text" [formControl]="blogFeedUrl" name="blogFeedUrl">
         <nus-field-errors [control]="blogFeedUrl"></nus-field-errors>
       </label>
 
       <label>
-        <span>
+        <span i18n>
           Cache result for how many hour(s)
         </span>
         <input type="number" [formControl]="blogFeedCacheTime"

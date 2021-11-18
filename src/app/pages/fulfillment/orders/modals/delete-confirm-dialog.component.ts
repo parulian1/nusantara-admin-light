@@ -9,12 +9,12 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
     <ngx-smart-modal [identifier]="'deleteConfirmInfo'" #modal [customClass]="'no-close-icon-modal no-padding-modal'">
       <div class="wrapper">
         <div class="message">
-          <h2 class="heading-2">Delete Confirmation Information?</h2>
-          <p class="body-2">You won't be able to recover this information.</p>
+          <h2 class="heading-2" i18n>Delete Confirmation Information?</h2>
+          <p class="body-2" i18n>You won't be able to recover this information.</p>
         </div>
         <div class="action">
-          <button class="control" (click)="close()" type="button">Delete</button>
-          <button class="control secondary ghost" (click)="cancel()" type="button">
+          <button class="control" (click)="close()" type="button" i18n>Delete</button>
+          <button class="control secondary ghost" (click)="cancel()" type="button" i18n>
             Cancel
           </button>
         </div>

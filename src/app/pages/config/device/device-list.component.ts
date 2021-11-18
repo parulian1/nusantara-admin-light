@@ -7,7 +7,7 @@ import { device } from '@nusantara/models';
 @Component({
   selector: 'nus-device-list',
   template: `
-    <nus-list-header
+    <nus-list-header i18n-title
       title="Device"
       description="A device registered information." [canAddNew]="false">
     </nus-list-header>
@@ -17,10 +17,10 @@ import { device } from '@nusantara/models';
     <table>
       <thead>
         <tr>
-          <th>Warehouse</th>
-          <th>Device Name</th>
-          <th>Register Data</th>
-          <th class="centered">Is Approved</th>
+          <th i18n>Warehouse</th>
+          <th i18n>Device Name</th>
+          <th i18n>Register Data</th>
+          <th class="centered" i18n>Is Approved</th>
         </tr>
       </thead>
       <tbody>

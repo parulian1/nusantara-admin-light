@@ -16,7 +16,7 @@ import { CustomerPointModalComponent } from '@nusantara/pages/users/customer/cus
 @Component({
   selector: 'nus-customer-detail',
   template: `
-    <h1 class="title-1">Customer Details</h1>
+    <h1 class="title-1" i18n>Customer Details</h1>
 
     <ul class="non-field-errors">
       <li *ngFor="let err of nonFieldErrors">{{ err }}</li>
@@ -25,82 +25,82 @@ import { CustomerPointModalComponent } from '@nusantara/pages/users/customer/cus
     <form [formGroup]="form" (ngSubmit)="save()">
 
       <label>
-        <span>First Name</span>
+        <span i18n>First Name</span>
         <input type="text" formControlName="firstName">
       </label>
 
       <label>
-        <span>Last Name</span>
+        <span i18n>Last Name</span>
         <input type="text" formControlName="lastName">
       </label>
 
       <label>
-        <span>Email Address</span>
+        <span i18n>Email Address</span>
         <input type="email" formControlName="email">
       </label>
 
       <label>
-        <span>Phone Number</span>
+        <span i18n>Phone Number</span>
         <input type="tel" formControlName="phoneNumber">
       </label>
 
       <label>
-        <span>Home Phone Number</span>
+        <span i18n>Home Phone Number</span>
         <input type="tel" formControlName="homePhoneNumber">
       </label>
 
       <div class="tab-header">
         <label [ngClass]="{'active': currentTab === 'summary'}">
           <i class="material-icons">analytics</i>
-          <input type="radio" id="tab_summary" value="summary" formControlName="currentTab">
+          <input type="radio" id="tab_summary" value="summary" formControlName="currentTab" i18n>
           Summary
         </label>
 
         <label [ngClass]="{'active': currentTab === 'profile'}">
           <i class="material-icons">face</i>
-          <input type="radio" id="tab_profile" value="profile" formControlName="currentTab">
+          <input type="radio" id="tab_profile" value="profile" formControlName="currentTab" i18n>
           Profile
         </label>
 
         <label [ngClass]="{'active': currentTab === 'orders'}">
           <i class="material-icons">receipt_long</i>
-          <input type="radio" id="tab_profile" value="orders" formControlName="currentTab">
+          <input type="radio" id="tab_profile" value="orders" formControlName="currentTab" i18n>
           Orders
         </label>
 
         <label [ngClass]="{'active': currentTab === 'groups'}" *ngIf="enterpriseGuard.canActivate(null, null)">
           <i class="material-icons">group_work</i>
-          <input type="radio" id="tab_profile" value="groups" formControlName="currentTab">
+          <input type="radio" id="tab_profile" value="groups" formControlName="currentTab" i18n>
           Groups
         </label>
       </div>
 
       <div *ngIf="currentTab === 'summary'" id="summary">
         <div class="shadow-box" id="summary-acquisition">
-          <h2><i class="material-icons">verified</i> Acquisition</h2>
+          <h2 i18n><i class="material-icons">verified</i> Acquisition</h2>
           <dl>
-            <dt>Registration Date</dt>
+            <dt i18n>Registration Date</dt>
             <dd>{{ dateJoined|date }}</dd>
-            <dt>Campaign</dt>
+            <dt i18n>Campaign</dt>
             <dd>{{ registrationCampaign || 'None' }}</dd>
-            <dt>Channel</dt>
+            <dt i18n>Channel</dt>
             <dd>{{ profile.registrationChannel }}</dd>
-            <dt>Last Login</dt>
+            <dt i18n>Last Login</dt>
             <dd>{{ (lastLogin|date) || 'Never' }}</dd>
           </dl>
         </div>
 
         <div class="shadow-box">
-          <h2><i class="material-icons">star</i> Value</h2>
+          <h2 i18n><i class="material-icons">star</i> Value</h2>
           <dl>
-            <dt>Lifetime Value</dt>
+            <dt i18n>Lifetime Value</dt>
             <dd>{{ profile.lifetimeValue|currency:"IDR" }}</dd>
-            <dt>Orders</dt>
+            <dt i18n>Orders</dt>
             <dd>{{ profile.purchaseCount }}</dd>
-            <dt>Avg Basket Size</dt>
+            <dt i18n>Avg Basket Size</dt>
             <!-- just divide by 1 if purchase count is 0 so no divide-by-zero error -->
             <dd>{{ (profile.lifetimeValue/(profile.purchaseCount || 1)) |currency:"IDR" }}</dd>
-            <dt>Last Purchase</dt>
+            <dt i18n>Last Purchase</dt>
             <dd>{{ (profile.lastPurchaseDate|date) || "None" }}</dd>
           </dl>
         </div>
@@ -109,18 +109,18 @@ import { CustomerPointModalComponent } from '@nusantara/pages/users/customer/cus
       <div *ngIf="currentTab === 'profile'" id="profile">
         <section id="customer-point-summary">
           <div id="customer-total-point">
-            <img src="/assets/point-icon.svg" alt="Profile Image">
-            <span>{{ userPoint | number }} Point</span>
+            <img src="assets/point-icon.svg" alt="Profile Image">
+            <span i18n>{{ userPoint | number }} Point</span>
           </div>
           <div>
-            <a (click)="pointHistory()">Points History</a>
+            <a (click)="pointHistory()" i18n>Points History</a>
           </div>
         </section>
         <table>
           <thead>
           <tr>
-            <th>Attribute</th>
-            <th>Value</th>
+            <th i18n>Attribute</th>
+            <th i18n>Value</th>
           </tr>
           </thead>
           <tbody>
@@ -135,12 +135,12 @@ import { CustomerPointModalComponent } from '@nusantara/pages/users/customer/cus
       <div *ngIf="currentTab === 'orders'" id="orders">
         <table>
           <thead>
-            <th>Number</th>
-            <th>Date</th>
-            <th>Channel</th>
-            <th>Type</th>
-            <th>Status</th>
-            <th>Grand Total</th>
+            <th i18n>Number</th>
+            <th i18n>Date</th>
+            <th i18n>Channel</th>
+            <th i18n>Type</th>
+            <th i18n>Status</th>
+            <th i18n>Grand Total</th>
           </thead>
           <tbody>
             <tr *ngFor="let order of orders">
@@ -162,7 +162,7 @@ import { CustomerPointModalComponent } from '@nusantara/pages/users/customer/cus
         <table>
           <thead>
           <tr>
-            <th>Group Name</th>
+            <th i18n>Group Name</th>
           </tr>
           </thead>
           <tbody>

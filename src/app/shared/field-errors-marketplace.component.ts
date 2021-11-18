@@ -22,8 +22,8 @@ import { FormControl } from '@angular/forms';
   selector: 'nus-field-errors-marketplace',
   template: `
     <div *ngIf="control.invalid && (control.dirty || control.touched)" class="error-detail">
-      <div *ngIf="control.errors.required">{{variable}} is Required</div>
-      <div *ngIf="control.errors.maxlength">{{variable}} Max Length is 100</div>
+      <div *ngIf="control.errors.required" i18n>{{variable}} is Required</div>
+      <div *ngIf="control.errors.maxlength" i18n>{{variable}} Max Length is 100</div>
       <div *ngIf="control.errors.apiError">{{ control.getError('apiError') }}</div>
     </div>
   `

@@ -13,15 +13,15 @@ import { MarketplaceShopService } from '@nusantara/services';
   template: `
     <ngx-smart-modal  #modal [identifier]="'marketplaceShippingInfoModal'"
       [customClass]="'wide-modal no-padding-modal'">
-      <h2 class="heading-2">Shipping</h2>
+      <h2 class="heading-2" i18n>Shipping</h2>
       <div class="content">
         <div class="table">
           <table>
             <thead>
               <tr>
-                <th>Store</th>
-                <th>Marketplace</th>
-                <th>Action</th>
+                <th i18n>Store</th>
+                <th i18n>Marketplace</th>
+                <th i18n>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -32,7 +32,7 @@ import { MarketplaceShopService } from '@nusantara/services';
                   <td>
                     <div class="toggle">
                       <a [routerLink]="['/config/marketplace-integration/setup/edit-shipping/', data.storeSlug]"
-                        [state]="{ shop: {name: data.storeName, marketplace: data.storeMarketplace, isConnected:true} }">
+                        [state]="{ shop: {name: data.storeName, marketplace: data.storeMarketplace, isConnected:true} }" i18n>
                         Manage Shipping
                       </a>
                       <button type="button" (click)="isExpanded[i] = !isExpanded[i];" class="expand">
@@ -44,7 +44,7 @@ import { MarketplaceShopService } from '@nusantara/services';
                 <tr *ngIf="isExpanded[i]">
                   <td colspan="3">
                     <div class="logistic">
-                      <div class="subheading-2">Shipping</div>
+                      <div class="subheading-2" i18n>Shipping</div>
                       <div class="logistic-item">
                         <div *ngFor="let logisticData of data.storeLogistic">
                         {{ logisticData }}

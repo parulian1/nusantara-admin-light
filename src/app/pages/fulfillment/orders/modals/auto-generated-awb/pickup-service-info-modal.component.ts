@@ -5,22 +5,22 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
   selector: 'nus-pickup-service-info-modal',
   template: `
     <ngx-smart-modal [identifier]="'pickupServiceInfo'" #modal [customClass]="'medium-modal'">
-      <h2 class="title-2">Pick Up Service</h2>
+      <h2 class="title-2" i18n>Pick Up Service</h2>
       <div class="info">
-        <div class="body-2">Date</div>
-        <div class="subheading-2">Date</div>
+        <div class="body-2" i18n>Date</div>
+        <div class="subheading-2" i18n>Date</div>
       </div>
       <div class="info">
-        <div class="body-2">Time</div>
-        <div class="subheading-2">Time</div>
+        <div class="body-2" i18n>Time</div>
+        <div class="subheading-2" i18n>Time</div>
       </div>
       <div class="info">
-        <div class="body-2">Note</div>
-        <div class="subheading-2">Note</div>
+        <div class="body-2" i18n>Note</div>
+        <div class="subheading-2" i18n>Note</div>
       </div>
       <div class="info">
-        <div class="body-2">Store Address</div>
-        <div class="subheading-2">Store Address</div>
+        <div class="body-2" i18n>Store Address</div>
+        <div class="subheading-2" i18n>Store Address</div>
       </div>
     </ngx-smart-modal>
   `,

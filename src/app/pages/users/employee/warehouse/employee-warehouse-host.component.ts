@@ -16,8 +16,8 @@ import { IJwtClaims } from '@nusantara/auth/models';
     <table>
       <thead>
         <tr>
-          <th>Warehouse</th>
-          <th>Delete</th>
+          <th i18n>Warehouse</th>
+          <th i18n>Delete</th>
         </tr>
       </thead>
       <tbody>
@@ -30,7 +30,7 @@ import { IJwtClaims } from '@nusantara/auth/models';
         </nus-employee-warehouse-list>
         <tr>
           <td colspan="2">
-            <a (click)="addToForm()" style="cursor: pointer;">Add new Warehouse</a>
+            <a (click)="addToForm()" style="cursor: pointer;" i18n>Add new Warehouse</a>
           </td>
         </tr>
       </tbody>

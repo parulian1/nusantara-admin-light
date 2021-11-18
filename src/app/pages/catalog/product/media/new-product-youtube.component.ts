@@ -13,7 +13,7 @@ import { GoogleService } from '@nusantara/services';
   selector: 'nus-new-product-youtube',
   template: `
     <ngx-smart-modal [identifier]="'newYoutubeModal'" #modal [formGroup]="form" *ngIf="!!form">
-      <h1>Select YouTube Video</h1>
+      <h1 i18n>Select YouTube Video</h1>
       <form #modalForm>
         <img [src]="imagePreviewUrl" alt="Image Preview">
 
@@ -23,13 +23,13 @@ import { GoogleService } from '@nusantara/services';
         <input type="hidden" [formControl]="sortPriority" name="sortPriority">
         <input type="hidden" [formControl]="identifier" name="identifier">
         <label>
-          <span>Video ID</span>
-          <input type="text" [formControl]="youtubeVideoId" name="youtubeVideoId" placeholder="Enter Video ID">
+          <span i18n>Video ID</span>
+          <input type="text" [formControl]="youtubeVideoId" name="youtubeVideoId" placeholder="Enter Video ID" i18n-placeholder>
           <nus-field-errors [control]="youtubeVideoId"></nus-field-errors>
         </label>
 
-        <button [disabled]="form.invalid" (click)="close()" type="button">Save</button>
-        <button (click)="cancel()" type="button">Cancel</button>
+        <button [disabled]="form.invalid" (click)="close()" type="button" i18n>Save</button>
+        <button (click)="cancel()" type="button" i18n>Cancel</button>
       </form>
     </ngx-smart-modal>
   `,

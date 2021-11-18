@@ -7,7 +7,7 @@ import { IFlatPage } from '@nusantara/models';
 @Component({
   selector: 'nus-flat-page-list',
   template: `
-    <nus-list-header
+    <nus-list-header i18n-title
       title="Pages"
       description="Static content for pages such as 'About-Us'">
     </nus-list-header>
@@ -17,8 +17,8 @@ import { IFlatPage } from '@nusantara/models';
     <table>
       <thead>
         <tr>
-          <th>Name</th>
-          <th>URL Path</th>
+          <th i18n>Name</th>
+          <th i18n>URL Path</th>
         </tr>
       </thead>
       <tbody>

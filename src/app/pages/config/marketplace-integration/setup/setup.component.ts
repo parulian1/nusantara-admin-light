@@ -10,7 +10,7 @@ import { MarketplaceClientEnum } from '../connect/markeplace-client-enum';
 
 @Component({
   selector: 'nus-marketplace-setup',
-  template: `<h1 class="title-1">Marketplace Set Up</h1>
+  template: `<h1 class="title-1" i18n>Marketplace Set Up</h1>
     <nus-empty-list
       *ngIf="!page?.entities?.length; else elseBlock"
       title="No Connected Store Yet!"
@@ -23,10 +23,10 @@ import { MarketplaceClientEnum } from '../connect/markeplace-client-enum';
       <table>
         <thead>
           <tr>
-            <th>Store Name</th>
-            <th>Warehouse</th>
-            <th>Status</th>
-            <th>Action</th>
+            <th i18n>Store Name</th>
+            <th i18n>Warehouse</th>
+            <th i18n>Status</th>
+            <th i18n>Action</th>
             <th></th>
           </tr>
         </thead>
@@ -36,23 +36,23 @@ import { MarketplaceClientEnum } from '../connect/markeplace-client-enum';
             <td>{{ entity.warehouse.name }}</td>
 
             <td *ngIf="entity.isConnected == false">
-              <span class="badge alert">Not Connected</span>
+              <span class="badge alert" i18n>Not Connected</span>
             </td>
             <td *ngIf="entity.isConnected == true">
-              <span class="badge success">Connected</span>
+              <span class="badge success" i18n>Connected</span>
             </td>
 
             <td>
               <a [routerLink]="['edit-shipping/', entity.slug]"
                 (click)="setSelectedShop(entity)"
-                [ngClass]="{'disabled': entity.isConnected === false}">
+                [ngClass]="{'disabled': entity.isConnected === false}" i18n>
                 Edit Shipping
               </a>
             </td>
             <td>
               <a [routerLink]="['showcase/', entity.slug]"
                 (click)="setSelectedShop(entity)"
-                [ngClass]="{ disabled: isDisabledShowcase(entity) }">
+                [ngClass]="{ disabled: isDisabledShowcase(entity) }" i18n>
                 Set Up Showcase
               </a>
             </td>

@@ -12,7 +12,7 @@ import { IWarehouse } from '@nusantara/models';
           (change)="changeWarehouse($event)"
           [formControl]="href"
         >
-          <option [ngValue]="''">Choose warehouse</option>
+          <option [ngValue]="''" i18n>Choose warehouse</option>
           <option *ngFor="let warehouse of choices" [ngValue]="warehouse.href">
             <span *ngIf="!warehouse?.isActive">(In-Active)</span>
             {{ warehouse.code }} - {{ warehouse.name }}

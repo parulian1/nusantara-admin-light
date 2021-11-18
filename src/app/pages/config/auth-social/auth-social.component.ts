@@ -18,7 +18,7 @@ import {drf} from '../../../models';
 
     <form [formGroup]="form" (ngSubmit)="save()" #f>
       <label>
-        <span>Type</span>
+        <span i18n>Type</span>
         <select [formControl]="authType">
           <option *ngFor="let opt of authTypeChoice" [value]="opt.value">
             {{opt.displayName}}
@@ -28,22 +28,22 @@ import {drf} from '../../../models';
       </label>
 
       <label>
-        <span>App KEY</span>
+        <span i18n>App KEY</span>
         <input type="text" [formControl]="appKey" name="appKey">
         <nus-field-errors [control]="appKey"></nus-field-errors>
       </label>
       <label>
-        <span>App Secret</span>
+        <span i18n>App Secret</span>
         <input type="text" [formControl]="appSecret" name="appSecret">
         <nus-field-errors [control]="appSecret"></nus-field-errors>
       </label>
       <label>
-        <span>Redirect URL</span>
+        <span i18n>Redirect URL</span>
         <input type="text" [formControl]="redirectUrl" name="redirectUrl">
         <nus-field-errors [control]="redirectUrl"></nus-field-errors>
       </label>
       <label class="checkbox">
-        <span>Is Active</span>
+        <span i18n>Is Active</span>
         <input type="checkbox" [formControl]="isActive" name="isActive">
       </label>
 

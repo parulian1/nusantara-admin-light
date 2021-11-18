@@ -1,4 +1,4 @@
-import { ErrorHandler, Inject, NgModule } from '@angular/core';
+import {ErrorHandler, Inject, LOCALE_ID, NgModule} from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -14,6 +14,7 @@ import { SharedModule } from '@nusantara/shared';
 import { AnonWrapperComponent, MainWrapperComponent } from '@nusantara/view-wrappers';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import {APP_BASE_HREF} from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,11 @@ import { AppComponent } from './app.component';
     {
       provide: ErrorHandler,
       useClass: ApmErrorHandler
+    },
+    {
+      provide: APP_BASE_HREF,
+      useFactory: (locale: string) => `/${locale}`,
+      deps: [LOCALE_ID]
     },
   ],
   bootstrap: [AppComponent]

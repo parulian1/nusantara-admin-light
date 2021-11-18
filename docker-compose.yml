@@ -9,43 +9,42 @@ services:
     image: nginx:stable-alpine
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
-    depends_on:
-      - iam
+      - ./dist/nusantara-admin:/usr/share/nginx/html:ro
     ports:
-      - "4201:80"
-
-  # APIs
-  iam:
-    container_name: nusadm-iam
-    image: gramedia/nusantara-iam-api:dev
-    environment:
-      NUS_DEBUG: "true"
-      NUS_RABBITMQ_URL: amqp://dev:dev@rabbitmq:5672
-      NUS_DB_PRIMARY: postgresql://iam:iam@db:5432/dev
-      NUS_DB_REPLICA: postgresql://iam:iam@db:5432/dev
-      NUS_REDIS_URL: redis://redis:6379/1
-      NUS_SITE_ID: 1
-    depends_on:
-      - db
-      - rabbitmq
-      - redis
-
-  # Supporting Services
-  db:
-    container_name: nusadm-db
-    image: postgres:12
-    environment:
-      POSTGRES_USER: dev
-      POSTGRES_PASSWORD: dev
-      POSTGRES_DB: dev
-
-  rabbitmq:
-    container_name: nusadm-rabbitmq
-    image: rabbitmq:3.8-management
-    environment:
-      RABBITMQ_DEFAULT_USER: dev
-      RABBITMQ_DEFAULT_PASS: dev
-
-  redis:
-    container_name: nusadm-redis
-    image: redis:5
+      - "4202:80"
+#
+#  # APIs
+#  iam:
+#    container_name: nusadm-iam
+#    image: gramedia/nusantara-iam-api:dev
+#    environment:
+#      NUS_DEBUG: "true"
+#      NUS_RABBITMQ_URL: amqp://dev:dev@rabbitmq:5672
+#      NUS_DB_PRIMARY: postgresql://iam:iam@db:5432/dev
+#      NUS_DB_REPLICA: postgresql://iam:iam@db:5432/dev
+#      NUS_REDIS_URL: redis://redis:6379/1
+#      NUS_SITE_ID: 1
+#    depends_on:
+#      - db
+#      - rabbitmq
+#      - redis
+#
+#  # Supporting Services
+#  db:
+#    container_name: nusadm-db
+#    image: postgres:12
+#    environment:
+#      POSTGRES_USER: dev
+#      POSTGRES_PASSWORD: dev
+#      POSTGRES_DB: dev
+#
+#  rabbitmq:
+#    container_name: nusadm-rabbitmq
+#    image: rabbitmq:3.8-management
+#    environment:
+#      RABBITMQ_DEFAULT_USER: dev
+#      RABBITMQ_DEFAULT_PASS: dev
+#
+#  redis:
+#    container_name: nusadm-redis
+#    image: redis:5

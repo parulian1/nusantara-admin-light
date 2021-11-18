@@ -7,7 +7,7 @@ import { ISla } from '@nusantara/models';
 @Component({
   selector: 'nus-flat-page-list',
   template: `
-    <nus-list-header
+    <nus-list-header i18n-title
       title="SLA"
       description="Service Level Agreement">
     </nus-list-header>
@@ -17,10 +17,10 @@ import { ISla } from '@nusantara/models';
     <table>
       <thead>
         <tr>
-          <th>Title</th>
-          <th>Description</th>
-          <th>Sort Priority</th>
-          <th>Is Active</th>
+          <th i18n>Title</th>
+          <th i18n>Description</th>
+          <th i18n>Sort Priority</th>
+          <th i18n>Is Active</th>
         </tr>
       </thead>
       <tbody>

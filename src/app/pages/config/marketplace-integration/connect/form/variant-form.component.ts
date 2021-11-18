@@ -14,8 +14,8 @@ import { marketplace } from '@nusantara/models';
     <form [formGroup]="form" class="fluid">
       <div formArrayName="variantFormArray">
         <div>
-          <h1 class="heading-1">Variant Configuration</h1>
-            <p>Once you choose, you can't change back.</p>
+          <h1 class="heading-1" i18n>Variant Configuration</h1>
+            <p i18n>Once you choose, you can't change back.</p>
             <div class="variant-option">
               <span *ngFor="let order of variantFormArray.controls;
                 let i = index" [formGroupName]="i">
@@ -30,16 +30,16 @@ import { marketplace } from '@nusantara/models';
         </div>
         <div class="description">
           <div *ngIf="showDescriptionMerge">
-            <div>Merge will set the items into parent and variant as child</div>
+            <div i18n>Merge will set the items into parent and variant as child</div>
             <div class="example">Example:</div>
-            <div>Bhisma product A with 2 variant (red color and blue color)</div>
-            <div>MP product A will be 1 parent (red color) and 1 child inside the parent (blue color)</div>
+            <div i18n>Bhisma product A with 2 variant (red color and blue color)</div>
+            <div i18n>MP product A will be 1 parent (red color) and 1 child inside the parent (blue color)</div>
           </div>
           <div *ngIf="showDescriptionSplit">
-            <div>Split will set all item into parent only or item with no variant/child</div>
-            <div>Example:</div>
-            <div>Bhisma product A with 2 variant (red color and blue color)</div>
-            <div>MP product A will be 1 parent (red color) and 1 more parent (blue color)</div>
+            <div i18n>Split will set all item into parent only or item with no variant/child</div>
+            <div i18n>Example:</div>
+            <div i18n>Bhisma product A with 2 variant (red color and blue color)</div>
+            <div i18n>MP product A will be 1 parent (red color) and 1 more parent (blue color)</div>
           </div>
         </div>
       </div>

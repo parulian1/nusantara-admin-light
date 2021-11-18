@@ -25,15 +25,15 @@ import {IVendor} from '@nusantara/models';
     <form [formGroup]="form" (ngSubmit)="save()" #f validate-non-visible-controls>
 
       <label>
-        <span>Name</span>
+        <span i18n>Name</span>
         <input type="text" [formControl]="name" name="name">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
-        <span>Icon</span>
+        <span i18n>Icon</span>
         <img [src]="photoPreviewUrl" alt="Testimonial Picture" class="preview">
-        <small>Recommended: A size</small>
+        <small i18n>Recommended: A size</small>
         <input type="file"
                [formControl]="photo"
                (change)="setPhotoPreview($event)"
@@ -42,43 +42,43 @@ import {IVendor} from '@nusantara/models';
       </label>
 
       <label>
-        <span>Product</span>
+        <span i18n>Product</span>
         <input type="hidden" [formControl]="product">
         <input type="text" (click)="selectProduct()" readonly [value]="selectedProduct?.name">
         <nus-field-errors [control]="product"></nus-field-errors>
       </label>
 
       <label>
-        <span>Vendor</span>
+        <span i18n>Vendor</span>
         <input type="hidden" [formControl]="vendor">
         <input type="text" (click)="selectVendor()" readonly [value]="selectedVendor?.name">
         <nus-field-errors [control]="vendor"></nus-field-errors>
       </label>
 
       <label>
-        <span>Reviewer Name</span>
+        <span i18n>Reviewer Name</span>
         <input type="text" [formControl]="reviewerName" name="reviewerName">
         <nus-field-errors [control]="reviewerName"></nus-field-errors>
       </label>
 
       <label>
-        <span>Reviewer Job Title</span>
+        <span i18n>Reviewer Job Title</span>
         <input type="text" [formControl]="reviewerJobTitle" name="reviewerJobTitle">
         <nus-field-errors [control]="reviewerJobTitle"></nus-field-errors>
       </label>
 
       <label>
-        <span>Sort Priority</span>
+        <span i18n>Sort Priority</span>
         <input type="number" [formControl]="sortPriority" name="sortPriority">
         <nus-field-errors [control]="sortPriority"></nus-field-errors>
       </label>
 
       <label class="without-field-errors checkbox">
-        <input type="checkbox" [formControl]="isActive" name="isActive"> Is Active
+        <input type="checkbox" [formControl]="isActive" name="isActive" i18n> Is Active
       </label>
 
       <div>
-        <label for="content" class="external"><span>Content</span></label>
+        <label for="content" class="external"><span i18n>Content</span></label>
         <ckeditor [editor]="Editor" [config]="editorConfig"
                   [formControl]="content" id="content" name="content"></ckeditor>
         <nus-field-errors [control]="content"></nus-field-errors>

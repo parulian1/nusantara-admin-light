@@ -20,13 +20,13 @@ import { enumToArray } from '@nusantara/shared/helpers';
     <form [formGroup]="form" (ngSubmit)="save()">
 
       <label>
-        <span>Name</span>
+        <span i18n>Name</span>
         <input type="text" [formControl]="name" name="name">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
-        <span>Type</span>
+        <span i18n>Type</span>
         <select [formControl]="type" name="type">
             <option *ngFor="let opt of typeChoices" [ngValue]="opt.value">
               {{opt.displayName}}
@@ -34,20 +34,20 @@ import { enumToArray } from '@nusantara/shared/helpers';
         </select>
       </label>
 
-      <label [ngClass]="{'hidden': isDigitalProduct}" class="without-field-errors checkbox">
+      <label [ngClass]="{'hidden': isDigitalProduct}" class="without-field-errors checkbox" i18n>
         <input type="checkbox" [formControl]="requiresShipping" name="requiresShipping">
         Requires Shipping?
       </label>
-      <label [ngClass]="{'hidden': isDigitalProduct}" class="without-field-errors checkbox">
+      <label [ngClass]="{'hidden': isDigitalProduct}" class="without-field-errors checkbox" i18n>
         <input type="checkbox" [formControl]="trackStock" name="trackStock">
         Track Stock?
       </label>
-      <label [ngClass]="{'hidden': isDigitalProduct}" class="without-field-errors checkbox">
+      <label [ngClass]="{'hidden': isDigitalProduct}" class="without-field-errors checkbox" i18n>
         <input type="checkbox" [formControl]="isPerishable" name="isPerishable">
         Is Perishable?
       </label>
 
-      <h2>Attributes</h2>
+      <h2 i18n>Attributes</h2>
       <nus-product-class-attributes
         [attributes]="entity?.attributes"
         [choices]="attributeTypeChoices"
@@ -60,7 +60,7 @@ import { enumToArray } from '@nusantara/shared/helpers';
       <table *ngIf="enterpriseLicense()">
         <tr>
           <td class="immediate-error-display">
-            <h2>Product Options</h2>
+            <h2 i18n>Product Options</h2>
           </td>
           <td class="immediate-error-display">
             <select [formControl]="option" name="option">

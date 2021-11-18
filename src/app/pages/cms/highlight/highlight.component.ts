@@ -1,13 +1,13 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {FormArray, FormBuilder, FormControl, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
 
-import { ToastService, AbstractDetailComponent, DialogResult } from '@nusantara/core';
-import { INamedHrefEntity } from '@nusantara/models/base';
-import { HighlightService } from '@nusantara/services';
-import { IHighlight } from '@nusantara/models';
-import { ProductSelectionModalComponent } from '@nusantara/shared';
-import { IProduct } from '@nusantara/models/products';
+import {ToastService, AbstractDetailComponent, DialogResult} from '@nusantara/core';
+import {INamedHrefEntity} from '@nusantara/models/base';
+import {HighlightService} from '@nusantara/services';
+import {IHighlight, IVendor} from '@nusantara/models';
+import {ProductSelectionModalComponent, VendorSelectionModalComponent} from '@nusantara/shared';
+import {IProduct} from '@nusantara/models/products';
 
 
 @Component({
@@ -23,31 +23,34 @@ import { IProduct } from '@nusantara/models/products';
     <form [formGroup]="form" (ngSubmit)="save()">
 
       <label>
-        <span>Name</span>
+        <span i18n>Name</span>
         <input type="text" [formControl]="name" name="name">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
-        <span>Description</span>
+        <span i18n>Description</span>
         <textarea [formControl]="description" id="description" name="description"></textarea>
         <nus-field-errors [control]="description"></nus-field-errors>
       </label>
 
       <label>
-        <span>Vendor</span>
-        <select [formControl]="forVendor" name="forVendor">
-          <option [value]=''> </option>
-          <option *ngFor="let v of vendorChoices" [ngValue]="v.href">{{ v.name }}</option>
-        </select>
-        <small> if choosen it will show in brand detail page </small>
+        <span i18n>Vendor</span>
+        <input type="hidden" [formControl]="forVendor">
+        <span class="grouped-form">
+        <input type="text" (click)="selectVendor()" readonly [value]="selectedVendor?.name">
+        <button (click)="clearVendor()" type="button" class="remove-button">
+          <i class="material-icons">remove_circle_outline</i>
+        </button>
+          </span>
+        <small i18n> if choosen it will show in brand detail page </small>
         <nus-field-errors [control]="forVendor"></nus-field-errors>
       </label>
 
       <table>
         <thead>
         <tr>
-          <th>Product</th>
+          <th i18n>Product</th>
           <th></th>
         </tr>
         </thead>
@@ -62,7 +65,7 @@ import { IProduct } from '@nusantara/models/products';
         </tr>
         <tr>
           <td colspan="2">
-            <button type="button" (click)="selectProduct()" class="add-button">
+            <button type="button" (click)="selectProduct()" class="add-button" i18n>
               Add Product
             </button>
           </td>
@@ -114,22 +117,27 @@ import { IProduct } from '@nusantara/models/products';
 
       <!-- Modals -->
       <nus-product-selection-modal></nus-product-selection-modal>
+      <nus-vendor-selection-modal #vendorModal></nus-vendor-selection-modal>
     </form>
   `,
   styles: [
     '.ck-editor__main { min-height: 150px; }',
     'img { max-height: 240px; max-width: 240px; }',
     'form label {margin-bottom: 10px;}',
-    'table {margin-bottom: 20px}'
+    'table {margin-bottom: 20px}',
+    '.grouped-form { display: flex;}'
   ]
 })
 export class HighlightComponent extends AbstractDetailComponent<IHighlight> implements OnInit, AfterViewInit {
 
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
+  @ViewChild('vendorModal') vendorSelectionModal: VendorSelectionModalComponent;
 
   bannerPreviewUrl: string;
   backgroundPreviewUrl: string;
   vendorChoices: Array<INamedHrefEntity> = [];
+
+  selectedVendor: INamedHrefEntity = null;
 
   entity?: IHighlight;
 
@@ -174,10 +182,13 @@ export class HighlightComponent extends AbstractDetailComponent<IHighlight> impl
     for (const prod of entity?.productHighlights ?? []) {
       this.addProduct(prod);
     }
+    this.selectedVendor = entity?.forVendor;
   }
 
   ngAfterViewInit() {
     this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
+    this.vendorSelectionModal.onClose.subscribe(() => this.onVendorSelectionModalClosed());
+
   }
 
   get name(): FormControl {
@@ -241,6 +252,17 @@ export class HighlightComponent extends AbstractDetailComponent<IHighlight> impl
     }
   }
 
+  selectVendor() {
+    this.vendorSelectionModal.open();
+  }
+
+  onVendorSelectionModalClosed() {
+    if (this.vendorSelectionModal.result === DialogResult.OK) {
+      this.selectedVendor = this.vendorSelectionModal.vendor.value as IVendor;
+      this.forVendor.setValue(this.selectedVendor.href);
+    }
+  }
+
   setPhotoPreview(data?: Event | string, code?: string) {
     super.setImagePreview(data, (dataAsUrl) => {
       if (code === 'banner') {
@@ -249,6 +271,11 @@ export class HighlightComponent extends AbstractDetailComponent<IHighlight> impl
         this.backgroundPreviewUrl = dataAsUrl;
       }
     });
+  }
+
+  clearVendor(): void {
+    this.forVendor.patchValue(null);
+    this.selectedVendor = null;
   }
 
   save() {

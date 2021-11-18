@@ -8,7 +8,7 @@ import { SiteConfigService } from '@nusantara/services';
 @Component({
   selector: 'nus-warehouse-list',
   template: `
-    <nus-list-header
+    <nus-list-header i18n-title
       title="Warehouses"
       description="A warehouse is any location where inventory is held;  This can involved retail locations."
       [canAddNew]="canAddNew()"
@@ -24,12 +24,12 @@ import { SiteConfigService } from '@nusantara/services';
     <table>
       <thead>
         <tr>
-          <th>Name/Code</th>
-          <th>Street</th>
-          <th>City</th>
-          <th>Type</th>
-          <th class="numeric">Stock Locations</th>
-          <th class="centered">Is Active</th>
+          <th i18n>Name/Code</th>
+          <th i18n>Street</th>
+          <th i18n>City</th>
+          <th i18n>Type</th>
+          <th class="numeric" i18n>Stock Locations</th>
+          <th class="centered" i18n>Is Active</th>
         </tr>
       </thead>
       <tbody>

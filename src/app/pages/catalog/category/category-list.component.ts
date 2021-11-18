@@ -18,10 +18,10 @@ import { ICategory } from '@nusantara/models';
     <table>
       <thead>
         <tr>
-          <th translate>Name</th>
-          <th translatec class="numeric">Depth</th>
-          <th translate class="centered">Has Icon?</th>
-          <th translate class="numeric">Product Count</th>
+          <th translate i18n>Name</th>
+          <th translate class="numeric" i18n>Depth</th>
+          <th translate class="centered" i18n>Has Icon?</th>
+          <th translate class="numeric" i18n>Product Count</th>
         </tr>
       </thead>
       <tbody>

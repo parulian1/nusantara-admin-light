@@ -11,7 +11,7 @@ import { Component, OnInit } from '@angular/core';
   selector: 'nus-anon-wrapper',
   template: `
     <div id="auth-container">
-      <img src="/assets/bhisma-logo.png" alt="Logo">
+      <img src="assets/bhisma-logo.png" alt="Logo">
       <router-outlet></router-outlet>
       <nus-copyright-notice></nus-copyright-notice>
     </div>

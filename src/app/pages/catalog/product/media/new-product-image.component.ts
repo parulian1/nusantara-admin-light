@@ -14,7 +14,7 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
   selector: 'nus-new-product-image',
   template: `
     <ngx-smart-modal [identifier]="'newImageModal'" #modal [formGroup]="form" [title]="'Upload Image'" *ngIf="!!form">
-      <h1>Upload Image</h1>
+      <h1 i18n>Upload Image</h1>
       <form #modalForm>
         <img [src]="imagePreviewUrl" alt="Image Preview">
         <input type="hidden" [formControl]="href" name="href">
@@ -24,8 +24,8 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
         <input type="file" [formControl]="image" (change)="setMediaImage($event)" #imageInput name="image">
         <input type="hidden" [formControl]="sortPriority" name="sortPriority">
         <input type="hidden" [formControl]="identifier" name="identifier">
-        <button [disabled]="form.invalid" (click)="close()" type="button" class="control">Save</button>
-        <button (click)="cancel()" type="button" class="control secondary">Cancel</button>
+        <button [disabled]="form.invalid" (click)="close()" type="button" class="control" i18n>Save</button>
+        <button (click)="cancel()" type="button" class="control secondary" i18n>Cancel</button>
       </form>
     </ngx-smart-modal>
   `,

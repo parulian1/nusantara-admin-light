@@ -106,7 +106,7 @@ const routes: Routes = [
         component: ProductComponent,
         resolve: {
           entity: ProductResolver,
-          productClasses: AllProductClassResolver,
+          // productClasses: AllProductClassResolver,
           // vendors: AllVendorResolver,
           // categories: AllCategoryResolver,
           mediaTypes: MediaTypeResolver,

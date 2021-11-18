@@ -13,17 +13,17 @@ import {map} from 'rxjs/operators';
 @Component({
   selector: 'nus-points',
   template: `
-    <h1 class="title-1">Points</h1>
+    <h1 class="title-1" i18n>Points</h1>
     <form [formGroup]="form" (ngSubmit)="save()" class="fluid">
       <nus-tabs>
         <nus-tab [title]="'Configuration'">
           <div class="points-config">
 
-            <span class="subheading-2">Transaction Value</span>
+            <span class="subheading-2" i18n>Transaction Value</span>
 
             <div class="transaction-points">
               <label>
-                <span>Every transaction of</span>
+                <span i18n>Every transaction of</span>
                 <span class="rp-text">Rp</span>
                 <input type="text" mask="separator" thousandSeparator="." [formControl]="transactionAmount"
                        placeholder="x">
@@ -31,26 +31,26 @@ import {map} from 'rxjs/operators';
               </label>
 
               <label>
-                <span class="customer-get">customer get</span>
+                <span class="customer-get" i18n>customer get</span>
                 <input type="text" mask="separator" thousandSeparator="." [formControl]="point" placeholder="y Points">
                 <nus-field-errors [control]="point"></nus-field-errors>
               </label>
             </div>
 
-            <span class="subheading-2">Rounding off transaction value to points</span>
+            <span class="subheading-2" i18n>Rounding off transaction value to points</span>
 
             <div class="transaction-rounding">
-              <label [ngClass]="{'active': rounding === 'up'}">
+              <label [ngClass]="{'active': rounding === 'up'}" i18n>
                 <input type="radio" id="tab_rounding_up" value="up" formControlName="rounding">
                 Rounding Up
               </label>
 
-              <label [ngClass]="{'active': rounding === 'down'}">
+              <label [ngClass]="{'active': rounding === 'down'}" i18n>
                 <input type="radio" id="tab_rounding_down" value="down" formControlName="rounding">
                 Rounding Down
               </label>
 
-              <label [ngClass]="{'active': rounding === 'nearest'}">
+              <label [ngClass]="{'active': rounding === 'nearest'}" i18n>
                 <input type="radio" id="tab_nearest" value="nearest" formControlName="rounding">
                 Nearest
               </label>
@@ -59,57 +59,57 @@ import {map} from 'rxjs/operators';
 
             <div class="rounding-description">
               <ul>
-                <li><i class="material-icons">info_outline</i>Pembulatan ke atas (Rounding Up): Jika nilainya Rp 1,6x,
+                <li i18n><i class="material-icons">info_outline</i>Pembulatan ke atas (Rounding Up): Jika nilainya Rp 1,6x,
                   maka pelanggan mendapatkan 2y point
                 </li>
-                <li><i class="material-icons">info_outline</i>Pembulatan ke bawah (Rounding Down): Jika nilainya Rp
+                <li i18n><i class="material-icons">info_outline</i>Pembulatan ke bawah (Rounding Down): Jika nilainya Rp
                   1,6x, maka pelanggan mendapatkan 1y point
                 </li>
-                <li><i class="material-icons">info_outline</i>Pembulatan terdekat (Nearest): Jika nilainya Rp 1,6x,
+                <li i18n><i class="material-icons">info_outline</i>Pembulatan terdekat (Nearest): Jika nilainya Rp 1,6x,
                   maka pelanggan mendapatkan 2y point dan Jika nilainya Rp 1,4x, maka pelanggan mendapatkan 1y point
                 </li>
               </ul>
             </div>
 
             <div class="earning-points">
-              <span class="subheading-2">Earning Points Platform</span>
+              <span class="subheading-2" i18n>Earning Points Platform</span>
               <label class="checkbox">
                 <input type="checkbox" [formControl]="appliedOnOnline" name="appliedOnOnline">
-                <span>Online (Website)</span>
+                <span i18n>Online (Website)</span>
               </label>
               <label class="checkbox">
                 <input type="checkbox" [formControl]="appliedOnOffline" name="appliedOnOffline">
-                <span>Offline (POS)</span>
+                <span i18n>Offline (POS)</span>
               </label>
             </div>
 
             <div class="points-expire">
-              <span class="subheading-2">Points Expire</span>
-              <label [ngClass]="{'active': expireType === 'never'}" class="radio">
+              <span class="subheading-2" i18n>Points Expire</span>
+              <label [ngClass]="{'active': expireType === 'never'}" class="radio" i18n>
                 <input type="radio" id="tab_never" value="never" formControlName="expireType">
                 Never
               </label>
               <label [ngClass]="{'active': expireType === 'after_earning'}" class="radio">
-                <input type="radio" id="tab_after_earning" value="after_earning" formControlName="expireType">
+                <input type="radio" id="tab_after_earning" value="after_earning" formControlName="expireType" i18n>
                 After earning
                 <input type="number" class="expire-at" [(ngModel)]="expireAtAfterEarning"
                        [ngModelOptions]="{standalone: true}" [hidden]="expireType !== 'after_earning'"
                        placeholder="x Days">
-                <span class="subheading-2" [hidden]="expireType !== 'after_earning'">Days</span>
+                <span class="subheading-2" [hidden]="expireType !== 'after_earning'" i18n>Days</span>
               </label>
 
               <label [ngClass]="{'active': expireType === 'customer_not_active'}" class="radio">
                 <input type="radio" id="tab_customer_not_active" value="customer_not_active"
-                        formControlName="expireType">
+                        formControlName="expireType" i18n>
                 If customer not active
                 <input type="number" class="expire-at" [(ngModel)]="expireAtCustomerNotActive"
                        [ngModelOptions]="{standalone: true}" [hidden]="expireType !== 'customer_not_active'"
                        placeholder=" x Days">
-                <span class="subheading-2" [hidden]="expireType !== 'customer_not_active'">Days</span>
+                <span class="subheading-2" [hidden]="expireType !== 'customer_not_active'" i18n>Days</span>
               </label>
 
               <label [ngClass]="{'active': expireType === 'every_year'}" class="radio">
-                <input type="radio" id="tab_every_year" value="every_year" formControlName="expireType">
+                <input type="radio" id="tab_every_year" value="every_year" formControlName="expireType" i18n>
                 Every year on
                 <input type="text" mask="d0-m0" [dropSpecialCharacters]="false" class="expire-at"
                        [(ngModel)]="expireAtEveryYear" [ngModelOptions]="{standalone: true}"
@@ -120,7 +120,7 @@ import {map} from 'rxjs/operators';
         </nus-tab>
         <nus-tab [title]="'Products'">
           <div class="product-table">
-            <p class="subheading-2">Products that can be exchanged for points</p>
+            <p class="subheading-2" i18n>Products that can be exchanged for points</p>
             <div class="product-table__search control">
               <i class="material-icons">search</i>
               <input type="search" placeholder="Search Product Name or SKU" [formControl]="queryText">
@@ -128,9 +128,9 @@ import {map} from 'rxjs/operators';
             <table>
               <thead>
                 <tr>
-                  <th>Product</th>
-                  <th>Product Price</th>
-                  <th>Points</th>
+                  <th i18n>Product</th>
+                  <th i18n>Product Price</th>
+                  <th i18n>Points</th>
                   <th></th>
                 </tr>
               </thead>
@@ -142,7 +142,7 @@ import {map} from 'rxjs/operators';
                 ></nus-product-points>
                 <tr>
                   <td colspan="4">
-                    <button type="button" (click)="selectProduct()" class="new-add-button wide">
+                    <button type="button" (click)="selectProduct()" class="new-add-button wide" i18n>
                       <i class="material-icons">add</i> Add Product
                     </button>
                   </td>

@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'nus-vendor-list',
   template: `
-    <nus-list-header
+    <nus-list-header i18n-title
       title="Vendors"
       description="Principals or distributors that provides the products sold.">
     </nus-list-header>
@@ -20,10 +20,10 @@ import { ActivatedRoute } from '@angular/router';
     <table>
       <thead>
       <tr>
-        <th translate>Name</th>
-        <th class="centered">Has Icon</th>
-        <th class="centered">Has Banner</th>
-        <th class="numeric">Product Count</th>
+        <th translate i18n>Name</th>
+        <th class="centered" i18n>Has Icon</th>
+        <th class="centered" i18n>Has Banner</th>
+        <th class="numeric" i18n>Product Count</th>
         <th class="centered">Is Active</th>
       </tr>
       </thead>

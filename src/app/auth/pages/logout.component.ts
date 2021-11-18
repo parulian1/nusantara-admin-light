@@ -10,7 +10,7 @@ import { ToastService } from '@nusantara/core';
  */
 @Component({
   selector: 'nus-logout',
-  template: '<h1>Logout</h1>',
+  template: '<h1 i18n>Logout</h1>',
   styles: []
 })
 export class LogoutComponent implements OnInit {

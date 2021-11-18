@@ -19,27 +19,27 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
     <div class="wrapper">
     <form [formGroup]="form">
         <div class="general-info">
-          <h1 class="heading-1">General Information</h1>
+          <h1 class="heading-1" i18n>General Information</h1>
           <div class="box">
             <label>
-              <span>Showcase Display Name</span>
+              <span i18n>Showcase Display Name</span>
               <div class="display-name">
                 <input type="text" formControlName="showCaseName">
-                <button class="control" (click)="updateShowcaseName()">
+                <button class="control" (click)="updateShowcaseName()" i18n>
                   Update
                 </button>
-              </div>        
+              </div>
             </label>
           </div>
           <div>
             <label>
-              <span>Products</span>
+              <span i18n>Products</span>
               <p>{{totalProduct}}</p>
             </label>
           </div>
           <div *ngIf="!isDisabled">
             <label>
-              <span>Display On/Off</span>
+              <span i18n>Display On/Off</span>
               <div class="switcher">
                 <mat-slide-toggle>
                 </mat-slide-toggle>
@@ -48,18 +48,18 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
           </div>
         </div>
       </form>
-      <label class="info-showcase">Showcase is automatically updated after adding or removing products.</label>
+      <label class="info-showcase" i18n>Showcase is automatically updated after adding or removing products.</label>
       <table class="table-scroll">
         <tr class="button-add">
-          <button (click)="productSelectionModal.open()" type="button" class="new-add-button wide">
+          <button (click)="productSelectionModal.open()" type="button" class="new-add-button wide" i18n>
             <mat-icon class="icon" svgIcon="add"></mat-icon> Add Product
           </button>
         </tr>
         <thead>
           <tr>
-            <th>Product Name</th>
-            <th>SKU</th>
-            <th class="centered">Remove</th>
+            <th i18n>Product Name</th>
+            <th i18n>SKU</th>
+            <th class="centered" i18n>Remove</th>
           </tr>
         </thead>
         <tbody>
@@ -77,12 +77,12 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
       <div class="confirm-action-button">
         <div class="cancel">
-          <button class="control" (click)="confirmModal.open()"> 
+          <button class="control" (click)="confirmModal.open()" i18n>
             Back
           </button>
         </div>
         <div class="delete">
-          <button class="control" (click)="deleteShowcaseModal.open(showcaseId)"> 
+          <button class="control" (click)="deleteShowcaseModal.open(showcaseId)" i18n>
             Delete
           </button>
         </div>
@@ -90,7 +90,7 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
     </div>
     <!-- Modals -->
-    <nus-showcase-product-selection-modal 
+    <nus-showcase-product-selection-modal
       [shopSlug]="shopSlug"
       [showcaseId]="showcaseId">
     </nus-showcase-product-selection-modal>
@@ -113,11 +113,11 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
     '.display-name { display: flex; justify-content: space-between; gap: 16px; }',
     'table thead tr th:last-child { padding-right: 22px;}',
     '.table-scroll { display: block; empty-cells: show; }',
-    '.table-scroll thead { position: relative; display: block; width: 100%; }', 
+    '.table-scroll thead { position: relative; display: block; width: 100%; }',
     `.table-scroll tbody {
         display: block;
         position: relative;
-        width: 100%; 
+        width: 100%;
         overflow-y: scroll;
         max-height: 75vh;
       }
@@ -169,10 +169,10 @@ export class ShowcaseComponent implements OnInit {
     "Changes you made on General Information will not be saved if you go back.";
   confirmOk = 'Go Back';
   confirmCancel = 'Cancel Anyway';
-  
+
 
   constructor(
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
     private service: MarketplaceShowcaseService,
     private toast: ToastService,
     public fb: FormBuilder,
@@ -180,7 +180,7 @@ export class ShowcaseComponent implements OnInit {
     svgIconService: SvgIconService) {
     svgIconService.registerIcons();
   }
-  
+
   ngOnInit() {
     this.shopSlug = this.route.snapshot.paramMap.get("shop-slug");
     this.showcaseId = +this.route.snapshot.paramMap.get("showcase-id");
@@ -218,7 +218,7 @@ export class ShowcaseComponent implements OnInit {
           this.form.patchValue({
             showCaseName: data.name,
           });
-          
+
           console.log(data)
           this.displayName = data.name;
           this.totalProduct = data.total;

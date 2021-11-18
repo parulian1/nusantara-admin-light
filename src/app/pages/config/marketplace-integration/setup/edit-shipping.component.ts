@@ -12,23 +12,23 @@ import * as fromReducer from '@nusantara/reducers';
 @Component({
   selector: 'nus-edit-shipping',
   template: `
-    <h1 class="title-1">Edit Shipping</h1>
+    <h1 class="title-1" i18n>Edit Shipping</h1>
     <div class="container">
       <div class="wrapper store-info">
         <div>
-          <div>Store</div>
+          <div i18n>Store</div>
           <div>
             <strong>{{ (currentShop$ | async)?.name }}</strong>
           </div>
         </div>
         <div>
-          <div>Marketplace</div>
+          <div i18n>Marketplace</div>
           <div>
             <strong>{{ (currentShop$ | async)?.marketplace | titlecase }}</strong>
           </div>
         </div>
         <div>
-          <div>Status</div>
+          <div i18n>Status</div>
           <div>
             <strong>
               {{ (currentShop$ | async)?.isConnected === true? 'Connected':'Not Connected'}}
@@ -41,8 +41,8 @@ import * as fromReducer from '@nusantara/reducers';
         <table>
           <thead>
             <tr>
-              <th>Logistic</th>
-              <th class="centered">Is Active</th>
+              <th i18n>Logistic</th>
+              <th class="centered" i18n>Is Active</th>
             </tr>
           </thead>
           <tbody>
@@ -68,11 +68,11 @@ import * as fromReducer from '@nusantara/reducers';
             type="button"
             class="control"
             (click)="onSubmit()"
-            [disabled]="isBusy">
+            [disabled]="isBusy" i18n>
             Save
           </button>
           <button type="button" class="control" (click)="onBack()"
-            [ngClass]="{ 'secondary ghost': !readOnly.includes((currentShop$ | async)?.marketplace) }">
+            [ngClass]="{ 'secondary ghost': !readOnly.includes((currentShop$ | async)?.marketplace) }" i18n>
             Cancel
           </button>
         </div>

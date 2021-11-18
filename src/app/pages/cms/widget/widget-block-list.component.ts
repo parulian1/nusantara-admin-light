@@ -7,16 +7,16 @@ import { AbstractListComponent } from '@nusantara/core';
 @Component({
   selector: 'nus-widget-list',
   template: `
-    <nus-list-header
+    <nus-list-header i18n-title
       title="Widgets Blocks"
       description="Blocks in which widgets are displayed">
     </nus-list-header>
     <table>
       <thead>
         <tr>
-          <th translate>Name</th>
-          <th>Page</th>
-          <th>Widgets</th>
+          <th translate i18n>Name</th>
+          <th i18n>Page</th>
+          <th i18n>Widgets</th>
         </tr>
       </thead>
       <tbody>

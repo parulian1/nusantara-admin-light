@@ -18,7 +18,7 @@ import { NewThemeImageComponent } from './new-theme-image.component';
 @Component({
   selector: 'nus-theme-media-host',
   template: `
-    <h2>Banner
+    <h2 i18n>Banner
       <button (click)="newImageModal.open()" type="button" title="Add new Image">
         <i class="material-icons">image</i>
       </button>

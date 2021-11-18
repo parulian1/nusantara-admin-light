@@ -22,7 +22,7 @@ import {IProductMedia} from '@nusantara/models/products';
 @Component({
   selector: 'nus-product-media-host',
   template: `
-    <h2>Media
+    <h2 i18n>Media
       <button (click)="openImageModal()" type="button" title="Add new Image">
         <i class="material-icons">image</i>
       </button>

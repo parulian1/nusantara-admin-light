@@ -18,26 +18,26 @@ import {ActivatedRoute, Router} from '@angular/router';
     <form [formGroup]="form" (ngSubmit)="save()">
 
       <label>
-        <span>Title</span>
+        <span i18n>Title</span>
         <input type="text" [formControl]="name" name="title">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
-        <span>Description</span>
+        <span i18n>Description</span>
         <textarea type="text" [formControl]="description" name="description"></textarea>
         <nus-field-errors [control]="description"></nus-field-errors>
       </label>
 
       <label class="checkbox">
-        <input type="checkbox" [formControl]="isActive" name="isActive"> Is Active
+        <input type="checkbox" [formControl]="isActive" name="isActive" i18n> Is Active
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
       <label>
-        <span>Image</span>
-        <img [src]="imageData.base64 || imageData.url" alt="Company Story Picture" class="preview">
-        <small>Recommended: Format .jpg, Size min 540px x 402px, file size max. 500kb</small>
+        <span i18n>Image</span>
+        <img [src]="imageData.base64 || imageData.url" alt="Company Story Picture" class="preview" *ngIf="imageData.base64 || imageData.url">
+        <small i18n>Recommended: Format .jpg, Size min 540px x 402px, file size max. 500kb</small>
         <input type="file"
                [formControl]="image"
                (change)="setImageFromEvent($event)"

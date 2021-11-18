@@ -18,7 +18,7 @@ import { ReviewService } from '@nusantara/services';
 
     <form [formGroup]="form" (ngSubmit)="save()">
       <label>
-        <span>Title</span>
+        <span i18n>Title</span>
         <input type="text" [formControl]="title">
         <nus-field-errors [control]="title"></nus-field-errors>
       </label>

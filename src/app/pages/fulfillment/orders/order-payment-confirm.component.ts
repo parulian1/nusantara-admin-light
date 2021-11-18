@@ -15,26 +15,26 @@ import { DeleteConfirmDialogComponent } from './modals';
   selector: 'nus-order-confirm',
   template: `
     <div class="wrapper">
-      <button (click)="openModal()" class="control add-payment-confirm" [disabled]="!canUpdateConfirmData()">
+      <button (click)="openModal()" class="control add-payment-confirm" [disabled]="!canUpdateConfirmData()" i18n>
         <i class="material-icons">add</i>Add
       </button>
       <table>
         <thead>
           <tr>
-            <th>Sender Name</th>
-            <th class="numeric">Date</th>
-            <th class="numeric">Transfer Amount</th>
-            <th>Payment To</th>
-            <th>Receipt File</th>
-            <th>Action</th>
+            <th i18n>Sender Name</th>
+            <th class="numeric" i18n>Date</th>
+            <th class="numeric" i18n>Transfer Amount</th>
+            <th i18n>Payment To</th>
+            <th i18n>Receipt File</th>
+            <th i18n>Action</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngIf="paymentConfirms?.length == 0">
             <td colspan="7" class="empty-table">
-              <div class="heading-1">No Payment Confirmation Yet</div>
-              <div class="body-2">Payment confirmation information will appear here once the customer confirm the order.</div>
+              <div class="heading-1" i18n>No Payment Confirmation Yet</div>
+              <div class="body-2" i18n>Payment confirmation information will appear here once the customer confirm the order.</div>
             </td>
           </tr>
 
@@ -46,14 +46,14 @@ import { DeleteConfirmDialogComponent } from './modals';
             <td class="numeric">{{ paymentConfirm.transferAmount | currency: "IDR" }}</td>
             <td>{{ paymentConfirm.paymentGateway.accountHoldNumber }}</td>
             <td>
-              <a href="{{ paymentConfirm.proofImage }}" target="_blank">
+              <a href="{{ paymentConfirm.proofImage }}" target="_blank" i18n>
                 Click Here
               </a>
             </td>
             <td>
               <a
                 (click)="openModal(paymentConfirm)"
-                [ngClass]="{'disabled': !canUpdateConfirmData()}">
+                [ngClass]="{'disabled': !canUpdateConfirmData()}" i18n>
                 Edit
               </a>
             </td>
@@ -91,9 +91,9 @@ import { DeleteConfirmDialogComponent } from './modals';
   styles: [
     '.wrapper { margin: 16px 0; }',
     `.add-payment-confirm {
-        display: flex; 
-        justify-content: center; 
-        align-items: center; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
         margin-left: auto;
         margin-bottom: 16px;
       }
@@ -121,7 +121,7 @@ export class OrderPaymentConfirmComponent implements OnInit, OnDestroy {
     private paymentGatewayService: PaymentGatewayService,
     public ngxSmartModalService: NgxSmartModalService,
     private toast: ToastService,
-    svgIconService: SvgIconService, 
+    svgIconService: SvgIconService,
   ) {
     svgIconService.registerIcons();
   }

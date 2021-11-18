@@ -58,9 +58,9 @@ const log = new Logger('ProductComponent');
 
         <form [formGroup]="form" (ngSubmit)="save()" class="fluid">
           <div id="general-info" class="wrapper">
-            <h1 class="heading-1">General Information</h1>
+            <h1 class="heading-1" i18n>General Information</h1>
             <label>
-              <span>Name</span>
+              <span i18n>Name</span>
               <input type="text"
                      [formControl]="name"
                      name="name"
@@ -74,12 +74,12 @@ const log = new Logger('ProductComponent');
                      [formControl]="isActive"
                      name="is-active"
                      data-qa="is-active"/>
-              <span>Is Active</span>
+              <span i18n>Is Active</span>
               <nus-field-errors [control]="isActive"></nus-field-errors>
             </label>
 
             <label *ngIf="!!structure && structure.value === 'parent'">
-              <span>Product Category</span>
+              <span i18n>Product Category</span>
               <div class="manage">
                 <div>
                   <input type="hidden" [formControl]="category" data-qa="category">
@@ -92,12 +92,12 @@ const log = new Logger('ProductComponent');
                   <!--                  </select>-->
                   <nus-field-errors [control]="category"></nus-field-errors>
                 </div>
-                <div><a [routerLink]="['/catalog', 'categories']"> Manage Category</a></div>
+                <div><a [routerLink]="['/catalog', 'categories']" i18n> Manage Category</a></div>
               </div>
             </label>
 
             <label *ngIf="!!structure && structure.value === 'parent'">
-              <span>Product Class</span>
+              <span i18n>Product Class</span>
               <div class="manage">
                 <div>
                   <input type="hidden" [formControl]="productClass" data-qa="product-class">
@@ -110,7 +110,7 @@ const log = new Logger('ProductComponent');
                   <!--                  </select>-->
                   <nus-field-errors [control]="productClass"></nus-field-errors>
                 </div>
-                <div><a [routerLink]="['/catalog', 'product-classes']" target="_blank">Manage Class</a>
+                <div><a [routerLink]="['/catalog', 'product-classes']" target="_blank" i18n>Manage Class</a>
                 </div>
               </div>
             </label>
@@ -168,10 +168,10 @@ const log = new Logger('ProductComponent');
           </div>
 
           <div id="product-info" class="wrapper">
-            <h1 class="heading-1">Product Information</h1>
+            <h1 class="heading-1" i18n>Product Information</h1>
 
             <div class="rich-text-container">
-              <label for="content" class="external"><span>Description</span></label>
+              <label for="content" class="external"><span i18n>Description</span></label>
               <ckeditor [editor]="Editor" [config]="editorConfig"
                         [formControl]="description"
                         id="description"
@@ -182,7 +182,7 @@ const log = new Logger('ProductComponent');
             </div>
 
             <label *ngIf="structure.value === 'parent'">
-              <span>Vendor</span>
+              <span i18n>Vendor</span>
               <div class="manage">
                 <div>
                   <input type="hidden" [formControl]="vendor" data-qa="vendor">
@@ -195,20 +195,20 @@ const log = new Logger('ProductComponent');
                   <!--                  </select>-->
                   <nus-field-errors [control]="vendor"></nus-field-errors>
                 </div>
-                <div><a [routerLink]="['/catalog', 'vendors']" target="_blank"> Manage Vendor </a></div>
+                <div><a [routerLink]="['/catalog', 'vendors']" target="_blank" i18n> Manage Vendor </a></div>
               </div>
             </label>
           </div>
 
           <div id="product-management" class="wrapper">
-            <h1 class="heading-1">Product Management</h1>
+            <h1 class="heading-1" i18n>Product Management</h1>
             <ng-template [ngIf]="structure.value === 'parent' && productFormType !== 'bundling'">
               <label>
-                <span>Variant Table</span>
+                <span i18n>Variant Table</span>
                 <table>
                   <thead>
                   <tr>
-                    <th>Name</th>
+                    <th i18n>Name</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -219,7 +219,7 @@ const log = new Logger('ProductComponent');
                   </tr>
                   <tr>
                     <td style="padding: 14px;">
-                      <button [disabled]="isNew" (click)="addVariant()" type="button" class="new-add-button wide">
+                      <button [disabled]="isNew" (click)="addVariant()" type="button" class="new-add-button wide" i18n>
                         <i class="material-icons">add</i> Add Variant
                       </button>
                     </td>
@@ -230,7 +230,7 @@ const log = new Logger('ProductComponent');
             </ng-template>
 
             <label>
-              <span>UPC</span>
+              <span i18n>UPC</span>
               <input type="text"
                      [formControl]="upc"
                      name="upc"
@@ -240,7 +240,7 @@ const log = new Logger('ProductComponent');
             </label>
 
             <label class="single-price" *ngIf="!enterpriseLicense()">
-              <span>Price</span>
+              <span i18n>Price</span>
               <input type="number" [formControl]="price" name="price" min="0" appOnlyNumber decimal="true"
                      (change)="setSinglePrice($event)">
               <nus-field-errors [control]="price"></nus-field-errors>
@@ -252,19 +252,19 @@ const log = new Logger('ProductComponent');
           </div>
 
           <div id="product-subscription" class="wrapper" *ngIf="isProductOptionDomain">
-            <h1 class="heading-1">Subscription Information:</h1>
+            <h1 class="heading-1" i18n>Subscription Information:</h1>
             <nus-product-subscription [form]="subscription"></nus-product-subscription>
           </div>
 
           <div id="product-media" class="wrapper">
-            <h1 class="heading-1">Media</h1>
+            <h1 class="heading-1" i18n>Media</h1>
             <nus-product-media-host [form]="media"></nus-product-media-host>
           </div>
 
           <div id="product-packaging" class="wrapper">
-            <h1 class="heading-1">Product Packaging</h1>
+            <h1 class="heading-1" i18n>Product Packaging</h1>
             <label>
-              <span>Package Weight (kg)</span>
+              <span i18n>Package Weight (kg)</span>
               <input type="number" [formControl]="weight"
                      name="weight"
                      placeholder="Input Weight"
@@ -273,7 +273,7 @@ const log = new Logger('ProductComponent');
             </label>
             <div formGroupName="dimensions" class="product-dimension">
               <label>
-                <span>Length (cm)</span>
+                <span i18n>Length (cm)</span>
                 <input
                   type="number"
                   name="length"
@@ -284,7 +284,7 @@ const log = new Logger('ProductComponent');
                 <nus-field-errors [control]="dimensions.get('currentLength')"></nus-field-errors>
               </label>
               <label>
-                <span>Width (cm)</span>
+                <span i18n>Width (cm)</span>
                 <input
                   type="number"
                   name="width"
@@ -295,7 +295,7 @@ const log = new Logger('ProductComponent');
                 <nus-field-errors [control]="dimensions.get('currentWidth')"></nus-field-errors>
               </label>
               <label>
-                <span>Height (cm)</span>
+                <span i18n>Height (cm)</span>
                 <input
                   type="number"
                   name="height"
@@ -309,9 +309,9 @@ const log = new Logger('ProductComponent');
           </div>
 
           <div *ngIf="enterpriseLicense()" id="product-tag" class="wrapper">
-            <h1 class="heading-1">Product Tag</h1>
+            <h1 class="heading-1" i18n>Product Tag</h1>
             <label *ngFor="let t of tags.controls; let i = index">
-              <span>Tag {{ i + 1 }}</span>
+              <span i18n>Tag {{ i + 1 }}</span>
               <div style="display: flex;">
                 <input type="text" [formControl]="t" name="tag" data-qa="tag"/>
                 <button type="button" class="delete" (click)="tags.removeAt(i)">
@@ -319,15 +319,15 @@ const log = new Logger('ProductComponent');
                 </button>
               </div>
             </label>
-            <button (click)="addTag()" type="button" class="new-add-button wide">
+            <button (click)="addTag()" type="button" class="new-add-button wide" i18n>
               <i class="material-icons">add</i> Add Tag
             </button>
           </div>
 
           <div id="product-other" class="wrapper">
-            <h1 class="heading-1">Other</h1>
+            <h1 class="heading-1" i18n>Other</h1>
             <label>
-              <span>Meta Description</span>
+              <span i18n>Meta Description</span>
               <textarea
                 [formControl]="seoDescription"
                 name="seo-description"
@@ -337,7 +337,7 @@ const log = new Logger('ProductComponent');
               <nus-field-errors [control]="seoDescription"></nus-field-errors>
             </label>
             <label>
-              <span>Meta Keywords</span>
+              <span i18n>Meta Keywords</span>
               <input type="text"
                      [formControl]="seoMeta"
                      name="seo-meta"
@@ -364,38 +364,38 @@ const log = new Logger('ProductComponent');
             </ng-container>
           </div>
 
-          <div id="product-recommendation" class="wrapper">
-            <h1 class="heading-1">Product Recommendation</h1>
-            <table>
-              <thead>
-              <tr>
-                <th>Product</th>
-                <th>Remove</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr *ngFor="let control of productRelated.controls; let i=index">
-                <td>
-                  <a [routerLink]="['/catalog','products', control.get('href').value|entityToSlug]" target="_blank">
+            <div id="product-recommendation" class="wrapper">
+              <h1 class="heading-1" i18n>Product Recommendation</h1>
+              <table>
+                <thead>
+                <tr>
+                  <th i18n>Product</th>
+                  <th i18n>Remove</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let control of productRelated.controls; let i=index">
+                  <td>
+                    <a [routerLink]="['/catalog','products', control.get('href').value|entityToSlug]" target="_blank">
                     {{ control.get('name').value }}
-                  </a>
-                </td>
-                <td>
-                  <button (click)="removeRelated(i)" type="button" class="remove-button">
-                    <mat-icon class="icon" svgIcon="trash"></mat-icon>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td colspan="2">
-                  <button type="button" (click)="selectProduct()" class="new-add-button wide">
-                    Add Product
-                  </button>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
+                    </a>
+                  </td>
+                  <td>
+                    <button (click)="removeRelated(i)" type="button" class="remove-button">
+                        <mat-icon class="icon" svgIcon="trash"></mat-icon>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <button type="button" (click)="selectProduct()" class="new-add-button wide" i18n>
+                      Add Product
+                    </button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
 
           <nus-detail-actions
             [component]="this"
@@ -409,35 +409,35 @@ const log = new Logger('ProductComponent');
       <div class="side-nav">
         <ul>
           <li [ngClass]="{ active: currentActive === 'general-info' }">
-            <a (click)="scrollTo('general-info')">General Information</a>
+            <a (click)="scrollTo('general-info')" i18n>General Information</a>
           </li>
           <li [ngClass]="{ active: currentActive === 'product-info' }">
-            <a (click)="scrollTo('product-info')">Product Information</a>
+            <a (click)="scrollTo('product-info')" i18n>Product Information</a>
           </li>
           <li [ngClass]="{ active: currentActive === 'product-management' }">
-            <a (click)="scrollTo('product-management')">Product Management</a>
+            <a (click)="scrollTo('product-management')" i18n>Product Management</a>
           </li>
           <li [ngClass]="{ active: currentActive === 'product-media' }">
-            <a (click)="scrollTo('product-media')">Media</a>
+            <a (click)="scrollTo('product-media')" i18n>Media</a>
           </li>
           <li [ngClass]="{ active: currentActive === 'product-packaging' }">
-            <a (click)="scrollTo('product-packaging')">Product Packaging</a>
+            <a (click)="scrollTo('product-packaging')" i18n>Product Packaging</a>
           </li>
           <li *ngIf="enterpriseLicense()" [ngClass]="{ active: currentActive === 'product-tag' }">
-            <a (click)="scrollTo('product-tag')">Product Tag</a>
+            <a (click)="scrollTo('product-tag')" i18n>Product Tag</a>
           </li>
           <li [ngClass]="{ active: currentActive === 'product-other' }">
-            <a (click)="scrollTo('product-other')">Other</a>
+            <a (click)="scrollTo('product-other')" i18n>Other</a>
           </li>
           <li *ngIf="!isNew && isPhysical() && enterpriseLicense()"
               [ngClass]="{ active: currentActive === 'marketplace-information' }">
-            <a (click)="scrollTo('marketplace-information')">Marketplace Information</a>
+            <a (click)="scrollTo('marketplace-information')" i18n>Marketplace Information</a>
           </li>
           <li *ngIf="!isNew" [ngClass]="{ active: currentActive === 'product-inventory' }">
-            <a (click)="scrollTo('product-inventory')">Product Inventory</a>
+            <a (click)="scrollTo('product-inventory')" i18n>Product Inventory</a>
           </li>
           <li *ngIf="!isNew" [ngClass]="{ active: currentActive === 'product-recommendation' }">
-            <a (click)="scrollTo('product-recommendation')">Product Recommendation</a>
+            <a (click)="scrollTo('product-recommendation')" i18n>Product Recommendation</a>
           </li>
         </ul>
       </div>
@@ -456,7 +456,7 @@ const log = new Logger('ProductComponent');
     '.manage { display: grid; grid-template-columns: 7fr 1fr; grid-gap: 20px; align-items: center; }',
     '.product-dimension { display: grid; grid-template-columns: repeat(3, 1fr); grid-column-gap: 16px; }',
     '.heading-1 { margin-bottom: 16px; }',
-    'label.toggle { padding-bottom: 20px 0; width: fit-content; min-height: 0; }',
+    'label.toggle { padding-bottom: 20px 0px; width: fit-content; min-height: 0; }',
     'label.toggle > input { margin-right: 16px }',
     '.rich-text-container { padding-bottom: 16px; margin: 0 !important; }',
     'ul { list-style: none; margin: 0; padding: 0; }',

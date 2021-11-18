@@ -7,7 +7,7 @@ import { IPaymentGateway } from '@nusantara/models';
 @Component({
   selector: 'nus-payment-gateway-list',
   template: `
-    <nus-list-header
+    <nus-list-header i18n-title
       title="Payment Gateway"
       description="A processor that accepts and processes payments;  May have one or more payment channels.">
     </nus-list-header>
@@ -17,8 +17,8 @@ import { IPaymentGateway } from '@nusantara/models';
     <table>
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Type</th>
+          <th i18n>Name</th>
+          <th i18n>Type</th>
         </tr>
       </thead>
       <tbody>

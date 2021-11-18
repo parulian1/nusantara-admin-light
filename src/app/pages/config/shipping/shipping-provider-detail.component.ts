@@ -19,13 +19,13 @@ import { Kgx, ShippingServicesTypes } from './shipping-service/constants';
 
     <form [formGroup]="form" (ngSubmit)="save()" #f>
       <label>
-        <span>Name</span>
+        <span i18n>Name</span>
         <input type="text" formControlName="name" maxlength="25">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
-        <span>Type</span>
+        <span i18n>Type</span>
         <select formControlName="type">
           <option *ngFor="let choice of types" [ngValue]="choice.value">{{ choice.displayName }}</option>
         </select>
@@ -33,24 +33,24 @@ import { Kgx, ShippingServicesTypes } from './shipping-service/constants';
       </label>
 
       <label>
-        <span>Auth User</span>
+        <span i18n>Auth User</span>
         <input type="text" formControlName="authUser">
         <nus-field-errors [control]="authUser"></nus-field-errors>
       </label>
 
       <label>
-        <span>Auth Key</span>
+        <span i18n>Auth Key</span>
         <input type="text" formControlName="authPass">
         <nus-field-errors [control]="authPass"></nus-field-errors>
       </label>
 
       <label class="checkbox">
-        <span>Is Active</span>
+        <span i18n>Is Active</span>
         <input type="checkbox" formControlName="isActive">
       </label>
 
       <label>
-        <span>Icon</span>
+        <span i18n>Icon</span>
         <img [src]="iconPreviewUrl" alt="Shipping Method Icon" class="preview">
         <input type="file" [formControl]="icon" (change)="setIconImagePreview($event)"
                name="icon" accept="image/*">
@@ -58,32 +58,32 @@ import { Kgx, ShippingServicesTypes } from './shipping-service/constants';
       </label>
 
       <label>
-        <span>Description</span>
+        <span i18n>Description</span>
         <input type="text" formControlName="description">
         <nus-field-errors [control]="description"></nus-field-errors>
       </label>
 
       <label>
-        <span>Sender Name</span>
+        <span i18n>Sender Name</span>
         <input type="text" formControlName="senderName">
         <nus-field-errors [control]="senderName"></nus-field-errors>
       </label>
 
       <label>
-        <span>Sender Email</span>
+        <span i18n>Sender Email</span>
         <input type="text" formControlName="senderEmail">
         <nus-field-errors [control]="senderEmail"></nus-field-errors>
       </label>
 
       <label>
-        <span>Sender Phone</span>
+        <span i18n>Sender Phone</span>
         <input type="text" formControlName="senderPhone">
         <nus-field-errors [control]="senderPhone"></nus-field-errors>
       </label>
 
       <ng-container *ngIf="type.value">
         <div class="sosmed-title">
-          <h3>
+          <h3 i18n>
             Shipping Service Settings
           </h3>
         </div>
@@ -91,7 +91,7 @@ import { Kgx, ShippingServicesTypes } from './shipping-service/constants';
         <table class="line-items">
           <thead>
           <tr>
-            <th>Type</th>
+            <th i18n>Type</th>
             <th></th>
           </tr>
           </thead>
@@ -109,7 +109,7 @@ import { Kgx, ShippingServicesTypes } from './shipping-service/constants';
           </nus-shipping-service-host>
           <tr *ngIf="selectedService.length !== shippingServiceTypes.length">
             <td colspan="9">
-              <button type="button" (click)="addService()" class="add-button">
+              <button type="button" (click)="addService()" class="add-button" i18n>
                 Add Record
               </button>
             </td>

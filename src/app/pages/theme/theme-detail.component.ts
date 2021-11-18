@@ -15,7 +15,7 @@ import { of } from 'rxjs';
 @Component({
   selector: 'nus-theme-detail',
   template: `
-    <h1 class="title-1">Theme Details</h1>
+    <h1 class="title-1" i18n>Theme Details</h1>
 
     <ul class="non-field-errors">
       <li *ngFor="let err of nonFieldErrors">{{ err }}</li>
@@ -23,17 +23,17 @@ import { of } from 'rxjs';
 
     <form [formGroup]="form" (ngSubmit)="submit()">
       <label>
-        <span>Themes Name*</span>
+        <span i18n>Themes Name*</span>
         <input type="text" formControlName="name">
       </label>
 
       <label>
-        <span>Is Active?</span>
+        <span i18n>Is Active?</span>
         <input type="checkbox" formControlName="isActive">
       </label>
 
       <label>
-        <span>Subscription Type*</span>
+        <span i18n>Subscription Type*</span>
         <select formControlName="subscriptionType">
           <option *ngFor="let opt of typeChoices" [ngValue]="opt.value">
             {{opt.displayName}}
@@ -42,20 +42,20 @@ import { of } from 'rxjs';
       </label>
 
       <label>
-        <span>Price</span>
+        <span i18n>Price</span>
         <input type="number" formControlName="price">
       </label>
 
       <label>
-        <span>Themes Description*</span>
+        <span i18n>Themes Description*</span>
         <textarea formControlName="description" rows="3"></textarea>
       </label>
 
       <nus-theme-media-host [form]="media"></nus-theme-media-host>
 
       <div class="actions-container">
-        <button type="submit" [disabled]="!form.valid">Save</button>
-        <button type="button" (click)="navigateToParent(true)">Cancel</button>
+        <button type="submit" [disabled]="!form.valid" i18n>Save</button>
+        <button type="button" (click)="navigateToParent(true)" i18n>Cancel</button>
       </div>
     </form>
   `,

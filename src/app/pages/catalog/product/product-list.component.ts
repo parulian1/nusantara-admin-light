@@ -19,7 +19,7 @@ import { WarehouseService } from '@nusantara/services';
     <!--    </nus-list-header>-->
 
     <header>
-      <h1 class="title-1">Products</h1>
+      <h1 class="title-1" i18n>Products</h1>
       <div class="top-action">
         <div class="left-menu">
           <div class="search control">
@@ -45,7 +45,7 @@ import { WarehouseService } from '@nusantara/services';
             <a [routerLink]="['new']"> Add</a>
             <span class="material-icons" (click)="addBundleProduct()">expand_more</span>
             <div class="add-bundle-product"
-                 *ngIf="isBundling"><a [routerLink]="['new','bundling']">Bundling Product</a>
+                 *ngIf="isBundling"><a [routerLink]="['new','bundling']" i18n>Bundling Product</a>
             </div>
           </div>
         </ng-template>
@@ -56,22 +56,22 @@ import { WarehouseService } from '@nusantara/services';
 
     <div class="filtering">
       <!-- Soft deleted product but change the wording into InActive -->
-      <nus-include-deleted text="Show Inactive Product"></nus-include-deleted>
+      <nus-include-deleted text="Show Inactive Product" i18n-text></nus-include-deleted>
     </div>
     <nus-pagination [page]="page"></nus-pagination>
 
     <table>
       <thead>
-      <tr>
-        <th translate>Name</th>
-        <th>UPC</th>
-        <th class="numeric">Variants</th>
-        <th class="centered">Has Image</th>
-        <th>Category</th>
-        <th>Product Class</th>
-        <th>Vendor</th>
-        <th class="centered">Is Active</th>
-      </tr>
+        <tr>
+          <th translate i18n>Name</th>
+          <th i18n>UPC</th>
+          <th class="numeric" i18n>Variants</th>
+          <th class="centered" i18n>Has Image</th>
+          <th i18n>Category</th>
+          <th i18n>Product Class</th>
+          <th i18n>Vendor</th>
+          <th class="centered" i18n>Is Active</th>
+        </tr>
       </thead>
       <tbody>
       <tr *ngFor="let entity of page.entities">

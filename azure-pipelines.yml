@@ -60,6 +60,12 @@ jobs:
           feedId: $(FEED_ID)
           buildPath: $(BUILD_DEST_PATH)
           envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=True APM_ENVIRONMENT=production APM_URL=$(APM_URL)'
+          buildCommand: 'build:prod'
+          buildArgs: '--localize'
+          postBuildScript: |
+            tee $(BUILD_DEST_PATH)/index.html << EOF
+            <!DOCTYPE html><html><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Nusantara Admin</title><script>const lang=navigator.language||navigator.browserLanguage;if(lang.includes("id")){window.location.href="/id/";}else{window.location.href="/en/";}</script></head><body></body></html>
+            EOF
 
       - task: ECRPullImage@1
         displayName: Pull base image
@@ -118,6 +124,11 @@ jobs:
           feedId: $(FEED_ID)
           buildPath: $(BUILD_DEST_PATH)
           envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=False APM_ENVIRONMENT=staging APM_URL=$(APM_URL)'
+          buildArgs: '--localize'
+          postBuildScript: |
+            tee $(BUILD_DEST_PATH)/index.html << EOF
+            <!DOCTYPE html><html><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Nusantara Admin Staging</title><script>const lang=navigator.language||navigator.browserLanguage;if(lang.includes("id")){window.location.href="/id/";}else{window.location.href="/en/";}</script></head><body></body></html>
+            EOF
 
       - task: ECRPullImage@1
         displayName: Pull base image

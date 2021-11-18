@@ -19,26 +19,26 @@ import { ConfirmModalInvetoryOrderComponent } from '@nusantara/shared';
 @Component({
   selector: 'nus-inventory-transfer',
   template: `
-    <h1 class="title-1">Transfer Inventory Order</h1>
+    <h1 class="title-1" i18n>Transfer Inventory Order</h1>
 
     <form [formGroup]="form" (ngSubmit)="save()">
 
       <table class="inventory-order-meta">
         <tbody>
         <tr>
-          <th>Received By</th><td colspan="2">{{ userDisplayName }}</td>
+          <th i18n>Received By</th><td colspan="2">{{ userDisplayName }}</td>
         </tr>
         <tr>
-          <th>Approved By</th><td colspan="2">---</td>
+          <th i18n>Approved By</th><td colspan="2">---</td>
         </tr>
         <tr>
-          <th>Receiving Date</th><td colspan="2">{{ currentDate|date }}</td>
+          <th i18n>Receiving Date</th><td colspan="2">{{ currentDate|date }}</td>
         </tr>
         <tr>
-          <th>Status</th><td colspan="2">Pending</td>
+          <th i18n>Status</th><td colspan="2" i18n>Pending</td>
         </tr>
         <tr>
-          <th>From Warehouse</th>
+          <th i18n>From Warehouse</th>
           <td [formGroup]="warehouse">
             <select formControlName="href" (change)="updateDestinationWarehouses($event)" data-qa="from-warehouse">
               <option [ngValue]="null">---</option>
@@ -50,7 +50,7 @@ import { ConfirmModalInvetoryOrderComponent } from '@nusantara/shared';
           <td>
         </tr>
         <tr>
-          <th>Destination Warehouse</th>
+          <th i18n>Destination Warehouse</th>
           <td [formGroup]="destinationWarehouse">
             <select formControlName="href" data-qa="destination-warehouse">
               <option [ngValue]="null">---</option>
@@ -63,7 +63,7 @@ import { ConfirmModalInvetoryOrderComponent } from '@nusantara/shared';
             <button (click)="confirmWarehouse()"
                     type="button"
                     [disabled]="warehouse.disabled || !warehouse.valid"
-                    class="control">Confirm</button>
+                    class="control" i18n>Confirm</button>
           </td>
         </tr>
         </tbody>
@@ -73,11 +73,14 @@ import { ConfirmModalInvetoryOrderComponent } from '@nusantara/shared';
         <table class="line-items">
           <thead>
           <tr>
-            <th>Product (UPC)</th>
-            <th>Location</th>
-            <th>Current Stock</th>
-            <th>Requesting Stock</th>
-            <th>Cost</th>
+            <th i18n>Product (UPC)</th>
+            <th i18n>Location</th>
+            <th i18n>Quantity</th>
+            <th i18n>SKU</th>
+            <th i18n>Batch</th>
+            <th i18n>Locator</th>
+            <th i18n>Expiry Date</th>
+            <th i18n>Cost</th>
             <th></th>
           </tr>
           </thead>
@@ -95,7 +98,7 @@ import { ConfirmModalInvetoryOrderComponent } from '@nusantara/shared';
 
           <tr>
             <td colspan="9">
-              <button type="button" (click)="addLine()" class="add-button">
+              <button type="button" (click)="addLine()" class="add-button" i18n>
                 Add Record
               </button>
             </td>

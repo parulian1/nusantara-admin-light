@@ -7,7 +7,7 @@ import { IAccessGroup } from '@nusantara/models';
 @Component({
   selector: 'nus-group-list',
   template: `
-    <nus-list-header
+    <nus-list-header i18n-title
       title="Group"
       description="A group with permission information." [canAddNew]="false">
     </nus-list-header>
@@ -17,7 +17,7 @@ import { IAccessGroup } from '@nusantara/models';
     <table>
       <thead>
         <tr>
-          <th>Name</th>
+          <th i18n>Name</th>
         </tr>
       </thead>
       <tbody>

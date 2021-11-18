@@ -16,8 +16,8 @@ import {NgxSmartModalComponent} from 'ngx-smart-modal';
           <p class="body-2">{{ content }}</p>
         </div>
         <div class="action">
-          <button class="control" (click)="close()" type="button">Yes</button>
-          <button class="control secondary ghost" (click)="cancel()" type="button">
+          <button class="control" (click)="close()" type="button" i18n>Yes</button>
+          <button class="control secondary ghost" (click)="cancel()" type="button" i18n>
             Cancel
           </button>
         </div>

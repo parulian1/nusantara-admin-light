@@ -27,20 +27,20 @@ const log = new Logger('ProductPromotionComponent');
     <form [formGroup]="form" (ngSubmit)="save()">
 
       <label>
-        <span>Name</span>
+        <span i18n>Name</span>
         <input type="text" [formControl]="name" maxlength="50">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
-        <span>Type</span>
+        <span i18n>Type</span>
         <select [formControl]="type" (ngModelChange)="onPromoTypeChange($event)">
           <option *ngFor="let t of types" [ngValue]="t">{{ t }}</option>
         </select>
       </label>
 
       <label *ngIf="!isPromoBundling">
-        <span>Minimum Order Value</span>
+        <span i18n>Minimum Order Value</span>
         <input type="number" [formControl]="minimumOrderAmount"
                placeholder="ex. 1000000">
         <nus-field-errors [control]="minimumOrderAmount"></nus-field-errors>
@@ -48,13 +48,13 @@ const log = new Logger('ProductPromotionComponent');
 
       <div class="promo-date">
         <label class="promo-date-label">
-          <span class="subtitle">Valid From</span>
+          <span class="subtitle" i18n>Valid From</span>
           <nus-field-datetime [control]="validFrom" [minDate]="minDateValidFrom" [maxDate]="maxDateValidFrom"></nus-field-datetime>
           <nus-field-errors [control]="validFrom"></nus-field-errors>
         </label>
 
         <label class="promo-date-label">
-          <span class="subtitle">Valid To</span>
+          <span class="subtitle" i18n>Valid To</span>
           <nus-field-datetime [control]="validTo" [minDate]="minDateValidTo" [maxDate]="maxDateValidTo"></nus-field-datetime>
           <nus-field-errors [control]="validTo"></nus-field-errors>
         </label>
@@ -62,29 +62,29 @@ const log = new Logger('ProductPromotionComponent');
 
 
       <label *ngIf="!isPromoBundling">
-        <span>Amount</span>
+        <span i18n>Amount</span>
         <input type="number" [formControl]="amount"
                placeholder="ex. 1000000">
         <nus-field-errors [control]="amount"></nus-field-errors>
       </label>
 
       <label *ngIf="!isPromoBundling">
-        <span>Max Amount</span>
+        <span i18n>Max Amount</span>
         <input type="number" [formControl]="maxAmount"
                placeholder="ex. 1000000">
         <nus-field-errors [control]="maxAmount"></nus-field-errors>
       </label>
 
       <div class="promo-bundling-condition" *ngIf="isPromoBundling">
-        <span class="subheading-2">Condition</span>
+        <span class="subheading-2" i18n>Condition</span>
         <span
-          class="subtitle-condition">Requirements that customers need to meet in order for the promo to be used</span>
+          class="subtitle-condition" i18n>Requirements that customers need to meet in order for the promo to be used</span>
         <table>
           <thead>
           <tr>
             <th>#</th>
-            <th>Product</th>
-            <th>Quantity</th>
+            <th i18n>Product</th>
+            <th i18n>Quantity</th>
           </tr>
           </thead>
           <tbody>
@@ -96,7 +96,7 @@ const log = new Logger('ProductPromotionComponent');
           </nus-product-promo-quantity>
           <tr>
             <td colspan="3">
-              <button type="button" (click)="selectProductBundlingCondition()" class="new-add-button wide">
+              <button type="button" (click)="selectProductBundlingCondition()" class="new-add-button wide" i18n>
                 <i class="material-icons">add</i> Add Product
               </button>
             </td>
@@ -106,15 +106,15 @@ const log = new Logger('ProductPromotionComponent');
       </div>
 
       <div class="promo-bundling-benefit" *ngIf="isPromoBundling">
-        <span class="subheading-2">Benefit</span>
+        <span class="subheading-2" i18n>Benefit</span>
         <span
-          class="subtitle-condition">The benefits that customers will get</span>
+          class="subtitle-condition" i18n>The benefits that customers will get</span>
         <table>
           <thead>
           <tr>
             <th>#</th>
-            <th>Product</th>
-            <th>Quantity</th>
+            <th i18n>Product</th>
+            <th i18n>Quantity</th>
           </tr>
           </thead>
           <tbody>
@@ -126,7 +126,7 @@ const log = new Logger('ProductPromotionComponent');
           </nus-product-promo-quantity>
           <tr>
             <td colspan="3">
-              <button type="button" (click)="selectProductBundlingBenefit()" class="new-add-button wide">
+              <button type="button" (click)="selectProductBundlingBenefit()" class="new-add-button wide" i18n>
                 <i class="material-icons">add</i> Add Product
               </button>
             </td>
@@ -137,10 +137,10 @@ const log = new Logger('ProductPromotionComponent');
 
       <div class="promo-products" *ngIf="!isPromoBundling">
         <span class="upload-product">
-          <h2 class="title-2">Promotion Products</h2>
+          <h2 class="title-2" i18n>Promotion Products</h2>
           <button type="button" class="control" (click)="uploadProductXLSX()" [disabled]="checkPromoDateValid()">
             <i class="material-icons">publish</i>
-            <span>Upload from XLSX</span>
+            <span i18n>Upload from XLSX</span>
           </button>
         </span>
 
@@ -148,8 +148,8 @@ const log = new Logger('ProductPromotionComponent');
           <thead>
           <tr>
             <th class="numeric">#</th>
-            <th>Product</th>
-            <th>Action</th>
+            <th i18n>Product</th>
+            <th i18n>Action</th>
           </tr>
           </thead>
           <tbody>
@@ -164,7 +164,7 @@ const log = new Logger('ProductPromotionComponent');
           </tr>
           <tr>
             <td colspan="3">
-              <button type="button" (click)="selectProduct()" [disabled]="checkPromoDateValid()" class="new-add-button wide">
+              <button type="button" (click)="selectProduct()" [disabled]="checkPromoDateValid()" class="new-add-button wide" i18n>
                 <i class="material-icons">add</i> Add Product
               </button>
             </td>
@@ -172,49 +172,49 @@ const log = new Logger('ProductPromotionComponent');
           </tbody>
         </table>
 
-        <a class="download-product" href="{{ service.productListDownloadUrl }}" target="_blank" *ngIf="hasProductUrl">Download
+        <a class="download-product" href="{{ service.productListDownloadUrl }}" target="_blank" *ngIf="hasProductUrl" i18n>Download
           Product
           List</a>
       </div>
 
       <label *ngIf="!isPromoBundling" class="checkbox">
         <input type="checkbox" class="input-checkbox" [formControl]="isExclusive">
-        <span>Is Exclusive</span>
+        <span i18n>Is Exclusive</span>
         <nus-field-errors [control]="isExclusive"></nus-field-errors>
       </label>
 
       <label class="checkbox">
         <input type="checkbox" class="input-checkbox" [formControl]="isActive">
-        <span>Is Active</span>
+        <span i18n>Is Active</span>
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
       <label *ngIf="isPromoBundling" class="checkbox">
         <input type="checkbox" class="input-checkbox" [formControl]="multiplyItem">
-        <span>Multiply Item</span>
+        <span i18n>Multiply Item</span>
         <nus-field-errors [control]="multiplyItem"></nus-field-errors>
       </label>
 
       <label *ngIf="!isPromoBundling" class="promo-platform">
-        <span class="subtitle">Platform</span>
+        <span class="subtitle" i18n>Platform</span>
         <label class="checkbox">
           <input type="checkbox" [formControl]="appliedOnOnline" name="appliedOnOnline">
-          <span>Online (Website)</span>
+          <span i18n>Online (Website)</span>
         </label>
         <label class="checkbox" *ngIf="enterpriseLicense()">
           <input type="checkbox" [formControl]="appliedOnOffline" name="appliedOnOffline">
-          <span>Offline (POS)</span>
+          <span i18n>Offline (POS)</span>
         </label>
       </label>
 
       <label class="checkbox">
-        <span class="subtitle">Priority</span>
+        <span class="subtitle" i18n>Priority</span>
         <input type="number" [formControl]="priority">
         <nus-field-errors [control]="priority"></nus-field-errors>
       </label>
 
       <label *ngIf="!isPromoBundling">
-        <span class="subtitle">Image</span>
+        <span class="subtitle" i18n>Image</span>
         <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Banner Image" class="preview">
         <input type="file" [formControl]="banner" (change)="setImagePromoPreview($event)"
                name="bannerImage" accept="image/*">

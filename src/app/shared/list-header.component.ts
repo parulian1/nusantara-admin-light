@@ -13,7 +13,7 @@ import { FormControl } from '@angular/forms';
           <i class="material-icons">search</i>
           <input type="search" placeholder="Search" [formControl]="queryText">
         </div>
-        <a [routerLink]="['new']" class="control" *ngIf="canAddNew"><i class="material-icons">add</i> Add</a>
+        <a [routerLink]="['new']" class="control" *ngIf="canAddNew" i18n><i class="material-icons">add</i> Add</a>
       </div>
     </header>
   `,
@@ -93,7 +93,7 @@ export class ListHeaderComponent implements OnInit {
     } else {
       this.timeoutId = setTimeout(() => {
         // wait to see if the user is still typing more before navigating
-        const params = {q: this.queryText.value};
+        const params = {q: this.queryText.value, page: 1};
         this.router.navigate(
           ['.'],
           {

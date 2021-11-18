@@ -8,7 +8,7 @@ import {getSlugFromHref} from '@nusantara/shared/helpers';
 @Component({
   selector: 'nus-shopify-message-list',
   template: `
-    <nus-list-header
+    <nus-list-header i18n-title
       title="Shopify Order Message"
       description="A list of receive shopify webhook message." [canAddNew]="false">
     </nus-list-header>
@@ -18,11 +18,11 @@ import {getSlugFromHref} from '@nusantara/shared/helpers';
     <table>
       <thead>
       <tr>
-        <th>ID</th>
-        <th>Created</th>
-        <th class="centered">Type</th>
-        <th class="centered">Status</th>
-        <th class="centered">Action</th>
+        <th i18n>ID</th>
+        <th i18n>Created</th>
+        <th class="centered" i18n>Type</th>
+        <th class="centered" i18n>Status</th>
+        <th class="centered" i18n>Action</th>
       </tr>
       </thead>
       <tbody>
@@ -31,7 +31,7 @@ import {getSlugFromHref} from '@nusantara/shared/helpers';
         <td>{{ entity.created}}</td>
         <td class="centered">{{entity.messageType}}</td>
         <td class="centered">{{entity.status}}</td>
-        <td class="centered"><a (click)="processMessage(entity.href)" class="button" *ngIf="entity.status!=='processed'">Process</a> </td>
+        <td class="centered"><a (click)="processMessage(entity.href)" class="button" *ngIf="entity.status!=='processed'" i18n>Process</a> </td>
       </tr>
       </tbody>
     </table>

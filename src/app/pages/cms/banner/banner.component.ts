@@ -19,13 +19,13 @@ import { enumToArray } from '@nusantara/shared/helpers';
 
     <form [formGroup]="form" (ngSubmit)="save()" class="entity-detail-form" #f>
       <label>
-        <span>Name</span>
+        <span i18n>Name</span>
         <input type="text" [formControl]="name" name="name">
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
       <label>
-        <span>Type</span>
+        <span i18n>Type</span>
         <select formControlName="type">
           <option *ngFor="let choice of typeChoices" [ngValue]="choice.value">{{ choice.displayName }}</option>
         </select>
@@ -37,25 +37,25 @@ import { enumToArray } from '@nusantara/shared/helpers';
                class="toggle"
                [formControl]="isActive"
                name="is-active"/>
-        <span>Is Active</span>
+        <span i18n>Is Active</span>
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
       <label>
-        <span>Valid From</span>
+        <span i18n>Valid From</span>
         <nus-field-datetime [control]="validFrom"></nus-field-datetime>
         <nus-field-errors [control]="validFrom"></nus-field-errors>
       </label>
 
       <label>
-        <span>Valid To</span>
+        <span i18n>Valid To</span>
         <nus-field-datetime [control]="validTo"></nus-field-datetime>
         <nus-field-errors [control]="validTo"></nus-field-errors>
       </label>
 
 
       <label>
-        <span>Image</span>
+        <span i18n>Image</span>
         <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Banner Image" class="preview">
         <input type="file" [formControl]="image" (change)="setImagePreview($event)"
                name="icon" accept="image/*">
@@ -63,7 +63,7 @@ import { enumToArray } from '@nusantara/shared/helpers';
       </label>
 
       <label>
-        <span>Phone Image</span>
+        <span i18n>Phone Image</span>
         <img *ngIf="phoneImagePreviewUrl" [src]="phoneImagePreviewUrl" alt="Banner Phone Image" class="preview">
         <input type="file" [formControl]="phoneImage" (change)="setPhoneImagePreview($event)"
                name="phoneImage" accept="image/*">
@@ -71,7 +71,7 @@ import { enumToArray } from '@nusantara/shared/helpers';
       </label>
 
       <label>
-        <span>Tablet Image</span>
+        <span i18n>Tablet Image</span>
         <img *ngIf="tabletImagePreviewUrl" [src]="tabletImagePreviewUrl" alt="Banner Tablet Image" class="preview">
         <input type="file" [formControl]="tabletImage" (change)="setTabletImagePreview($event)"
                name="tabletImage" accept="image/*">
@@ -79,23 +79,23 @@ import { enumToArray } from '@nusantara/shared/helpers';
       </label>
 
       <label>
-        <span>Click Url</span>
+        <span i18n>Click Url</span>
         <input type="url" [formControl]="clickUrl" name="clickUrl">
         <nus-field-errors [control]="clickUrl"></nus-field-errors>
       </label>
 
       <label class="checkbox">
-        <span>Is Display at Homepage</span>
+        <span i18n>Is Display at Homepage</span>
         <input type="checkbox" [formControl]="displayHomepage" name="displayHomepage">
       </label>
       <label>
-        <span>Sort Priority</span>
+        <span i18n>Sort Priority</span>
         <input type="text" [formControl]="sortPriority" name="sortPriority">
         <nus-field-errors [control]="sortPriority"></nus-field-errors>
       </label>
 
       <label>
-        <span>Description</span>
+        <span i18n>Description</span>
         <textarea [formControl]="description" name="description"></textarea>
         <nus-field-errors [control]="description"></nus-field-errors>
       </label>

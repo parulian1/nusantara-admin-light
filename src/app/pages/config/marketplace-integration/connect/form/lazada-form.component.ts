@@ -18,7 +18,7 @@ import { MarketplaceClientEnum } from '../markeplace-client-enum';
   template: `
     <form [formGroup]="form" class="fluid">
       <label>
-        <span>Seller Email
+        <span i18n>Seller Email
           <nus-tooltip [text]="sellerEmailinfo"></nus-tooltip>
         </span>
         <input type="email" formControlName="sellerEmail" placeholder="Input Seller Email"/>
@@ -29,9 +29,9 @@ import { MarketplaceClientEnum } from '../markeplace-client-enum';
       </label>
 
       <label>
-        <span>Warehouse</span>
+        <span i18n>Warehouse</span>
         <select formControlName="warehouseId">
-          <option [value]="null">Select Warehouse</option>
+          <option [value]="null" i18n>Select Warehouse</option>
           <option *ngFor="let opt of warehouses" [ngValue]="opt.warehouseId">
             {{ opt.name }}
           </option>
@@ -47,17 +47,17 @@ import { MarketplaceClientEnum } from '../markeplace-client-enum';
           type="submit"
           [disabled]="!form.valid"
           class="control"
-          (click)="onUpdate()">
+          (click)="onUpdate()" i18n>
           Connect
         </button>
         <button *ngIf="!isEdit"
           type="submit"
           [disabled]="!form.valid"
           class="control"
-          (click)="onConnect()">
+          (click)="onConnect()" i18n>
           Connect
         </button>
-        <button type="button" (click)="onCancel()" class="control secondary ghost">
+        <button type="button" (click)="onCancel()" class="control secondary ghost" i18n>
           Cancel
         </button>
       </div>

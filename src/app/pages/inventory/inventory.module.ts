@@ -12,7 +12,7 @@ import {
 } from './receiving';
 import { InventoryRoutingModule } from './inventory-routing.module';
 import { InventoryOrderListComponent } from './pending-order';
-import {InventoryTransferDetailComponent, InventoryTransferOrderComponent} from './transfer-order';
+import { InventoryTransferDetailComponent, InventoryTransferOrderComponent } from './transfer-order';
 import {
   AdjustmentComponent,
   AdjustmentDetailComponent,

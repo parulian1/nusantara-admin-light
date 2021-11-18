@@ -18,8 +18,8 @@ import {Router} from '@angular/router';
         <p class="body-2">{{ content }}</p>
       </div>
       <div class="action">
-        <button class="control" (click)="close()" type="button">View Progress</button>
-        <button class="control secondary ghost" (click)="cancel()" type="button">
+        <button class="control" (click)="close()" type="button" i18n>View Progress</button>
+        <button class="control secondary ghost" (click)="cancel()" type="button" i18n>
         Go to Approved Order
         </button>
       </div>

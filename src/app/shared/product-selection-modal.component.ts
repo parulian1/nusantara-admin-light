@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { DialogResult, PagedResponse } from '../core';
 import { ProductService, WarehouseService } from '../services';
 import { products } from '../models';
-import {IStockSearch} from '@nusantara/models/products/stock-search';
+import { IStockSearch } from '@nusantara/models/products/stock-search';
 
 /**
  * Shows the user a list of products they can select from.
@@ -19,15 +19,15 @@ import {IStockSearch} from '@nusantara/models/products/stock-search';
   selector: 'nus-product-selection-modal',
   template: `
     <ngx-smart-modal [identifier]="'selectProduct'" #modal [formGroup]="form" [customClass]="'wide-modal'">
-      <h2 class="heading-2">Select Product</h2>
+      <h2 class="heading-2" i18n>Select Product</h2>
       <form #modalForm class="fluid">
         <div class="search">
           <i class="material-icons">search</i>
-          <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Product Name or SKU">
+          <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Product Name or UPC">
         </div>
         <input type="hidden" [formControl]="product">
         <div *ngIf="displayedResults?.entities.length; else notFound">
-          <p>Showing 10 recently added products. Search product name or SKU to find more products.</p>
+          <p i18n>Showing 10 recently added products. Search product name or UPC to find more products.</p>
           <table>
             <colgroup>
               <col class="product-name">
@@ -36,29 +36,26 @@ import {IStockSearch} from '@nusantara/models/products/stock-search';
             </colgroup>
             <thead>
             <tr>
-              <th>Product Name</th>
-              <th>SKU</th>
-<!--              <th *ngIf="!!showStockAmount">Current Stock</th>-->
-              <th class="centered">Action</th>
+              <th i18n>Product Name</th>
+              <th i18n>SKU</th>
+              <th class="centered" i18n>Action</th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let p of displayedResults?.entities">
               <td class="product-name">{{ p.name }}</td>
               <td class="product-sku">{{ p.upc }}</td>
-<!--              TODO : NEED TO CREATE API FOR SHOWING WHICH PRODUCTS THAT AVAILABLE FOR THAT WAREHOUSE-->
-<!--              <td class="product-stock" *ngIf="!!showStockAmount">{{ p.stockAmount }}</td>-->
-              <td class="centered"><a href="#" (click)="selectProduct(p)">Add</a></td>
+              <td class="centered"><a href="#" (click)="selectProduct(p)" i18n>Add</a></td>
             </tr>
             </tbody>
           </table>
         </div>
         <ng-template #notFound>
           <div class="not-found">
-            <h1 class="heading-1">
+            <h1 class="heading-1" i18n>
               Product Not Found
             </h1>
-            <p class="body-2">Try searching another name or SKU again.</p>
+            <p class="body-2" i18n>Try searching another name or SKU again.</p>
           </div>
         </ng-template>
       </form>

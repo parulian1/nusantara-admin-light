@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthService } from '../../../auth';
@@ -8,10 +8,11 @@ import {
   inventory,
   ISubLocation,
   IWarehouse,
-  marketplace
+  marketplace,
+  IError
 } from '@nusantara/models';
 import { InventoryReceivingService, MarketplaceClientService } from '../../../services';
-import {IProduct, IProductClass} from '../../../models/products';
+import { IProduct, IProductClass } from '../../../models/products';
 import {
   ConfirmModalInvetoryOrderComponent,
   MarketplaceChannelInfoModalComponent,
@@ -20,7 +21,6 @@ import {
 import { catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { of } from 'rxjs';
-import { IError } from '../../../models/base/error';
 
 /**
  * Allows a user to receive a new batch of inventory.
@@ -28,83 +28,78 @@ import { IError } from '../../../models/base/error';
 @Component({
   selector: 'nus-inventory-receiving',
   template: `
-    <h1>Delivery Order</h1>
+    <h1 i18n>Delivery Order</h1>
 
     <form [formGroup]="form" (ngSubmit)="saveForm()">
       <div class="container">
         <div class="general-info">
-          <h3>General Information</h3>
-          <div>
-            <label>Received By</label>
-            <span>{{ userDisplayName }}</span>
+          <div class="general-info--header box-container">
+            <div>
+              <label i18n>Created By</label>
+              <span>{{ userDisplayName }}</span>
+            </div>
+            <div>
+              <label i18n>Created Date</label>
+              <span>{{ currentDate|date }}</span>
+            </div>
           </div>
-          <div>
-            <label>Approved By</label>
-            <span>-</span>
-          </div>
-          <div>
-            <label>Receiving Date</label>
-            <span>{{ currentDate|date }}</span>
-          </div>
-          <div>
-            <label>Status</label>
-            <span>Pending</span>
-          </div>
-          <div>
-            <label>DO Number</label>
-            <input type="text" [formControl]="doNumber">
-          </div>
-          <div>
-            <label for="">DC PIC</label>
-            <input type="text" [formControl]="dcPic">
-          </div>
-          <div [formGroup]="warehouse">
-            <label>Warehouse</label>
-            <div class="confirm-warehouse">
-              <select formControlName="href">
-                <option [ngValue]="null">Select Warehouse</option>
-                <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
-                  {{ wh.name }}
-                </option>
-              </select>
-              <button (click)="confirmWarehouse()" type="button"
-                      [disabled]="warehouse.disabled || !warehouse.valid"
-                      class="control confirm">
-                Confirm
-              </button>
+          <div class="general-info--detail box-container">
+            <h3 i18n>General Information</h3>
+            <div>
+              <label for="do-number" i18n>DO Number (Optional)</label>
+              <input id="do-number" type="text" [formControl]="doNumber" placeholder="Input DO Number">
+            </div>
+            <div>
+              <label for="pic-sender">PIC Sender (Optional)</label>
+              <input id="pic-sender" type="text" [formControl]="dcPic" placeholder="Input PIC Sender">
+            </div>
+            <div [formGroup]="warehouse">
+              <label for="warehouse" i18n>Warehouse</label>
+              <div class="confirm-warehouse">
+                <select id="warehouse" formControlName="href">
+                  <option [ngValue]="null" i18n>Select Warehouse</option>
+                  <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
+                    {{ wh.name }}
+                  </option>
+                </select>
+                <button (click)="confirmWarehouse()" type="button"
+                        [disabled]="warehouse.disabled || !warehouse.valid"
+                        class="control confirm">
+                  Confirm
+                </button>
+              </div>
             </div>
           </div>
         </div>
-        <div class="mp-info">
+        <div class="mp-info box-container">
           <h3>Marketplace Information</h3>
           <div>
-            <div>Product</div>
+            <div i18n>Product</div>
             <div class="count">{{ productValue }}</div>
           </div>
           <div>
-            <div>Marketplace</div>
+            <div i18n>Marketplace</div>
             <div class="count">{{ marketplaceValue }}</div>
           </div>
           <div>
-            <div>Store</div>
+            <div i18n>Store</div>
             <div class="count">{{ storeValue }}</div>
           </div>
-          <a (click)="showMarketplaceDetail()">More Detail</a>
+          <a (click)="showMarketplaceDetail()" i18n>More Detail</a>
         </div>
       </div>
       <div class="product-list" *ngIf="warehouse.disabled">
+        <p i18n>*) Required fields</p>
         <table>
           <thead>
           <tr id="mp-add-product-head">
-            <th>Product (UPC)</th>
-            <th>Location</th>
-            <th>Quantity</th>
-            <th>SKU</th>
-            <th>Batch</th>
-            <th>Locator</th>
-            <th>Expiry Date</th>
-            <th>Cost</th>
-            <th>Remove</th>
+            <th i18n>Product Name (UPC)*</th>
+            <th i18n>SKU*</th>
+            <th i18n>Quantity*</th>
+            <th i18n>Batch</th>
+            <th i18n>Expiry Date</th>
+            <th i18n>Cost</th>
+            <th i18n>Remove</th>
           </tr>
           </thead>
           <tbody>
@@ -113,16 +108,17 @@ import { IError } from '../../../models/base/error';
             *ngFor="let rec of stockRecords.controls; let i=index"
             [formGroup]="rec"
             [availableSubLocations]="availableSubLocations"
+            [productClasses]="productClasses"
             (remove)="stockRecords.removeAt(i)">
           </nus-inventory-receiving-line>
 
-          <tr>
-            <td colspan="9">
-              <button type="button" (click)="addLine()" class="new-add-button wide">
-                <i class="material-icons">add</i> Add Record
-              </button>
-            </td>
-          </tr>
+            <tr>
+              <td colspan="9">
+                <button type="button" (click)="addLine()" class="new-add-button wide" i18n>
+                  <i class="material-icons">add</i> Add Record
+                </button>
+              </td>
+            </tr>
           </tbody>
         </table>
 
@@ -140,21 +136,31 @@ import { IError } from '../../../models/base/error';
 
   `,
   styles: [
+    'h1 { margin-bottom: 24px;}',
     'form{ max-width: none;}',
     'h3 { font-size: 20px; margin: 0; }',
     'button.confirm { width: auto }',
     '.container { display: grid; grid-template-columns: 4fr 1fr; grid-gap: 24px; }',
-    '.container > div { border: 1px solid var(--grey); border-radius: 4px; padding: 16px 24px; }',
-    '.general-info > h3 { margin-bottom: 20px; }',
-    '.general-info > div:not(:last-child) { margin-bottom: 23px; }',
-    '.general-info label { min-height: 0; }',
-    '.general-info span{ font-weight: 700; color: var(--darken-grey); }',
+    '.box-container { border: 1px solid var(--grey); border-radius: 4px; padding: 16px 24px; }',
+    '.general-info h3 { margin-bottom: 20px; }',
+    '.general-info > div:not(:last-child), .general-info--detail > div:not(:last-child) { margin-bottom: 23px; }',
+    '.general-info label { min-height: 0; line-height: 20px; color: var(--darken-grey); padding-bottom: 0;}',
+    '.general-info--detail label { color: var(--lighten-black); font-weight: bold; }',
+    '.general-info span{ font-weight: 700; color: var(--lighten-black); }',
+    '.general-info--header { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); }',
+    `
+      @media (max-width: 768px) {
+        .general-info--header { display: grid; grid-template-columns: 1fr; }
+        .general-info--header > div:not(:last-child) { margin-bottom: 23px; }
+      }
+    `,
     '.mp-info > h3 { margin-bottom: 16px; }',
     '.mp-info > div { text-align: center; border: 1px solid var(--grey); border-radius: 4px; padding: 12px 16px; margin-bottom: 12px; }',
     '.mp-info > a { display: block; margin-top: 16px; }',
     '.mp-info .count { font-size: 28px; font-weight: 700; }',
     '.confirm-warehouse { display: grid; grid-template-columns: 5fr 1fr; grid-gap: 24px; }',
     '.product-list { margin-top: 24px; }',
+    '.product-list > p { color: var(--darken-grey); }'
   ]
 })
 export class InventoryReceivingComponent extends AbstractDetailComponent<inventory.IReceivingOrder> implements OnInit, AfterViewInit {
@@ -240,15 +246,6 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
   }
 
   saveForm() {
-    // check if sku is empty, set the sku value to be `upc` value
-    for (const [i, val] of this.form.value.stockRecords.entries()) {
-      if (val.sku === '') {
-        this.stockRecords.at(i).patchValue({
-          sku: val.product.upc
-        });
-      }
-    }
-
     this.service.save(this.getFormValue()).pipe(catchError(err => {
       if (err instanceof HttpErrorResponse) {
         return of(new ErrorResult<IError>(err.error, err.status));
@@ -320,27 +317,19 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
 
       const selectedProduct = this.productSelectionModal.product.value as IProduct;
 
-      let defaultSku;
-      if (selectedProduct.upc) {
-        defaultSku = selectedProduct.upc;
-      } else {
-        defaultSku = '';
-      }
-
       const oneProduct = this.fb.group({
         inventoryReceiving: [null, []],
         product: [selectedProduct, [Validators.required]],
         href: [null, []],
         location: this.fb.group({
           href: [defaultSubLocations, []],
-          // name: ['', ],
         }),
-        sku: [defaultSku, []],
+        sku: ['', Validators.required],
         originalQuantity: [1, [Validators.required, Validators.min(1)]],
         batchNumber: ['', []],
         locator: this.fb.array([]),
         expiryDate: [null, []],
-        cost: [0, [Validators.required]]
+        cost: [0, [Validators.max(9999999999999998), Validators.min(0)]]
       });
       this.stockRecords.push(oneProduct);
     }
@@ -353,7 +342,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     const fullname = firstName.concat(' ', lastName);
 
     if (lastName && firstName && email) {
-      return [fullname, `(${email})`, ].join(', ').trim();
+      return [fullname, `(${email})`, ].join(' ').trim();
     } else {
       return email;
     }

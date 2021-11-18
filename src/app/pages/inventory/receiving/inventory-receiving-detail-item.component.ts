@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
-import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { products, ISubLocation } from '@nusantara/models';
-import {IProductClass} from '@nusantara/models/products';
+import { IProductClass } from '@nusantara/models/products';
 
 @Component({
   selector: 'nus-inventory-receiving-detail-item',
@@ -11,16 +11,28 @@ import {IProductClass} from '@nusantara/models/products';
     <tr [formGroup]="form">
       <td>{{ displayedProductName }}</td>
       <td class="immediate-error-display">
-        {{sku.value}}
+        {{ sku.value }}
       </td>
       <td>
-        {{originalQuantity.value}}
+        {{ originalQuantity.value }}
+      </td>
+      <td>
+        <span *ngIf="batchNumber.value">{{ batchNumber.value }}</span>
+        <span *ngIf="!batchNumber.value"> - </span>
+      </td>
+      <td>
+        <span *ngIf="!expiryDate.value"> - </span>
+        <span *ngIf="expiryDate.value">{{ expiryDate.value|date: 'dd MMM yyyy HH:mm' }}</span>
+      </td>
+      <td>
+        <span *ngIf="!cost.value"> - </span>
+        <span *ngIf="cost.value">{{ cost.value | currency:'IDR':'symbol-narrow':'1.0' }}</span>
       </td>
       <td [formGroup]="location">
         <select formControlName="href" data-qa="location">
           <option [ngValue]="null">---</option>
           <option *ngFor="let loc of availableSubLocations" [ngValue]="loc.href">
-            {{ loc.name }} ({{ loc.code }})
+            {{ loc.name }} ({{ loc.type }})
           </option>
         </select>
       </td>
@@ -29,21 +41,12 @@ import {IProductClass} from '@nusantara/models/products';
           <div class="locator-item-container__input">
             <input [formControl]="control" name="locator" data-qa="locator" maxlength="5">
             <button (click)="locator.removeAt(ctr)" type="button" class="remove-button" data-qa="remove-locator-button">
-              <i class="material-icons">remove_circle_outline</i>
+              <i class="material-icons">delete_outline</i>
             </button>
           </div>
           <nus-field-errors [control]="control"></nus-field-errors>
         </div>
-        <button (click)="addLocator()" type="button" class="new-add-button wide" data-qa="add-locator-button">Add</button>
-      </td>
-      <td>
-        <input type="text" [formControl]="batchNumber" data-qa="batch-number">
-      </td>
-      <td class="immediate-error-display">
-        <input *ngIf="isPerishable" type="date" [formControl]="expiryDate" data-qa="expiry-date">
-      </td>
-      <td>
-        <input type="number" [formControl]="cost" data-qa="cost">
+        <button (click)="addLocator()" type="button" class="new-add-button wide" data-qa="add-locator-button" i18n>Add</button>
       </td>
     </tr>
   `,
@@ -52,6 +55,8 @@ import {IProductClass} from '@nusantara/models/products';
     `
       .locator-item-container { margin-bottom: 15px; }
       .locator-item-container__input { display: flex; }
+      tr {border: solid 1px #B4B4B4}
+      tr td { vertical-align: top;}
     `,
   ]
 })
@@ -70,20 +75,6 @@ export class InventoryReceivingDetailItemComponent implements OnInit, AfterViewI
     return `${p.name}`;
   }
 
-  get isPerishable(): boolean {
-    const p = this.product.value as products.IProduct;
-    let currentPc = [];
-    if (!!this.productClasses) {
-      currentPc = this.productClasses.filter(pc => pc.href === p.productClass.href);
-    }
-
-    if (currentPc.length > 0) {
-      return currentPc[0].isPerishable;
-    } else {
-      return false;
-    }
-  }
-
   get product(): FormControl { return this.form.get('product') as FormControl; }
   get sku(): FormControl { return this.form.get('sku') as FormControl; }
   get originalQuantity(): FormControl { return this.form.get('originalQuantity') as FormControl; }
@@ -95,13 +86,7 @@ export class InventoryReceivingDetailItemComponent implements OnInit, AfterViewI
 
   ngOnInit() {}
 
-  ngAfterViewInit() {
-    if (this.isPerishable) {
-      this.expiryDate.setValidators([Validators.required, ]);
-    } else {
-      this.expiryDate.clearValidators();
-    }
-  }
+  ngAfterViewInit() {}
 
   addLocator() {
     this.locator.push(new FormControl(''));

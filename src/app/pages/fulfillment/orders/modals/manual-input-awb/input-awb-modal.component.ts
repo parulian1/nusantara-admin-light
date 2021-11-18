@@ -12,16 +12,16 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
       [customClass]="'medium-modal no-padding-modal'">
       <div class="wrapper">
         <div class="message">
-          <h2 class="title-2">Input AWB</h2>
-          <p>Enter AWB number you received from <strong>Logistic Name</strong> counter.</p>
+          <h2 class="title-2" i18n>Input AWB</h2>
+          <p i18n>Enter AWB number you received from <strong>Logistic Name</strong> counter.</p>
           <label>
-            <span>AWB</span>
+            <span i18n>AWB</span>
             <input type="text" placeholder="Input AWB" [formControl]="awbNumber">
             <nus-field-errors [control]="awbNumber"></nus-field-errors>
           </label>
         </div>
         <input type="hidden" [formControl]="orderNumber"/>
-        <button type="submit" class="control" (click)="close()" [disabled]="!form.valid">Submit</button>
+        <button type="submit" class="control" (click)="close()" [disabled]="!form.valid" i18n>Submit</button>
       </div>
     </ngx-smart-modal>
   `,

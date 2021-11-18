@@ -12,38 +12,38 @@ import { IError } from '@nusantara/models';
 @Component({
   selector: 'nus-forgot-password',
   template: `
-    <h1>Forgot Password</h1>
+    <h1 i18n>Forgot Password</h1>
     <ul class="non-field-errors">
       <li *ngFor="let err of nonFieldErrors">{{ err }}</li>
     </ul>
     <form [formGroup]="form" (ngSubmit)="submitPasswordReset()">
 
       <label>
-        <span>Site Domain</span>
+        <span i18n>Site Domain</span>
         <input type="text" formControlName="siteDomain" placeholder="Ex, www.mysite.com">
         <div *ngIf="siteDomain.invalid && (siteDomain.touched || siteDomain.dirty)" class="error-detail">
-          <div *ngIf="siteDomain.errors?.required">Site Domain is required</div>
+          <div *ngIf="siteDomain.errors?.required" i18n>Site Domain is required</div>
           <div *ngIf="siteDomain.errors?.apiError">{{ siteDomain.getError('apiError') }}</div>
         </div>
       </label>
 
       <label>
-        <span>Email Address</span>
+        <span i18n>Email Address</span>
         <input type="email" formControlName="email" placeholder="email@domain.com">
         <div *ngIf="email.invalid && (email.touched || email.dirty)" class="error-detail">
-          <div *ngIf="email.errors?.required">Email is required</div>
+          <div *ngIf="email.errors?.required" i18n>Email is required</div>
           <div *ngIf="email.errors?.apiError">{{ email.getError('apiError') }}</div>
         </div>
       </label>
 
       <div class="controls-container">
-        <button type="submit" [disabled]="!form.valid" class="control">Reset Your Password</button>
+        <button type="submit" [disabled]="!form.valid" class="control" i18n>Reset Your Password</button>
       </div>
 
     </form>
 
     <nav>
-      <a [routerLink]="['/auth/login']">Back to Login</a>
+      <a [routerLink]="['/auth/login']" i18n>Back to Login</a>
     </nav>
   `,
   styles: [`

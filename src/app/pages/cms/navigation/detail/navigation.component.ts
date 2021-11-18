@@ -17,19 +17,19 @@ import {ActivatedRoute, Router} from '@angular/router';
 
     <form [formGroup]="form" (ngSubmit)="save()">
       <label>
-        <span>Title</span>
+        <span i18n>Title</span>
         <input type="text" [formControl]="title">
         <nus-field-errors [control]="title"></nus-field-errors>
       </label>
 
       <label>
-        <span>URL Path</span>
+        <span i18n>URL Path</span>
         <input type="text" [formControl]="url">
         <nus-field-errors [control]="url"></nus-field-errors>
       </label>
 
       <label>
-        <span>Page</span>
+        <span i18n>Page</span>
         <select [formControl]="page" name="page">
           <option value=""><i>-- set an empty --</i></option>
           <option *ngFor="let page of flatPages"
@@ -38,11 +38,11 @@ import {ActivatedRoute, Router} from '@angular/router';
           </option>
         </select>
         &nbsp;
-        <span style="font-size: 13px;">(* If you set a page, than url field will ignored</span>
+        <span style="font-size: 13px;" i18n>(* If you set a page, than url field will ignored</span>
       </label>
 
       <label>
-        <span>Position</span>
+        <span i18n>Position</span>
         <select [formControl]="position" name="position">
           <option value=""><i>-- set an empty --</i></option>
           <option *ngFor="let position of positionChoices"
@@ -53,7 +53,7 @@ import {ActivatedRoute, Router} from '@angular/router';
       </label>
 
       <label>
-        <span>Relative to</span>
+        <span i18n>Relative to</span>
         <select [formControl]="relativeTo" name="relativeTo">
           <option *ngFor="let relTo of relativeToChoices"
                   [ngValue]="relTo.href"
@@ -63,7 +63,7 @@ import {ActivatedRoute, Router} from '@angular/router';
       </label>
 
       <label class="checkbox">
-        <span>Is Active</span>
+        <span i18n>Is Active</span>
         <input type="checkbox" [formControl]="isActive">
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
