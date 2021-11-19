@@ -123,7 +123,7 @@ import { AuthService } from '@nusantara/auth';
     '#general-table-info td{text-align: left;font-weight: 700;color: #5A5A5A;}',
     '#general-table-product th{font-weight: 700;color: #5A5A5A;}',
     '#general-table-product td{height: 56px}',
-    '#general-table-product td div{white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}',
+    '#general-table-product td div{overflow: hidden;text-overflow: ellipsis;}',
     '#general-table-product thead{background-color: #F4F4F4;}',
     'table#general-table-product{table-layout: fixed;}',
     'div.detail-actions { display: flex }',
