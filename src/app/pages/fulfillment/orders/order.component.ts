@@ -119,6 +119,7 @@ import {
           </ng-container>
           <td colspan="3" class="other-action">
               <button class="download-button control secondary"
+                  *ngIf="this.orderDetailData.source !== 'marketplace'"
                   (click)="markAsTestingModal.open()"
                   [disabled]="orderDetailData.isTesting"
                   style="margin-right: 10px;" i18n>
