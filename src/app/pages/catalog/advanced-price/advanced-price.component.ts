@@ -1,13 +1,16 @@
-import {AbstractDetailComponent, DialogResult, ToastService} from '@nusantara/core';
+import {AbstractDetailComponent, DialogResult, ErrorResult, ToastService} from '@nusantara/core';
 import {IAdvancedPriceList, IAdvancedPriceListProduct} from '@nusantara/models/products/advanced-price-list';
 import {AdvancedPriceListService} from '@nusantara/services';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormArray, FormBuilder, FormControl, Validators} from '@angular/forms';
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {INamedHrefEntity, IWarehouse} from '@nusantara/models';
+import {IHttpFailure, INamedHrefEntity, IWarehouse} from '@nusantara/models';
 import {IProduct} from '@nusantara/models/products';
 import {ProductSelectionModalComponent} from '@nusantara/shared';
 import {AdvancedPriceWarehouseModalComponent} from '@nusantara/pages/catalog/advanced-price/advanced-price-warehouse-modal.component';
+import {catchError} from 'rxjs/operators';
+import {HttpErrorResponse} from '@angular/common/http';
+import {of} from 'rxjs';
 
 @Component({
   selector: 'nus-advanced-price-detail',
@@ -41,10 +44,10 @@ import {AdvancedPriceWarehouseModalComponent} from '@nusantara/pages/catalog/adv
             </label>
           </div>
           <div id="setting-wrapper" class="wrapper">
-            <h2 class="heading-1">Setting</h2>
-            <div class="non-field-errors">
-              <p i18n>This section can't be edited, please create a new one to make changes.</p>
+            <div *ngIf="href" class="non-field-warning">
+              <span class="body-2" i18n>This section can't be edited, please create a new one to make changes.</span>
             </div>
+            <h2 class="heading-1">Setting</h2>
             <div id="warehouse-wrapper">
               <label>
                 <span i18n>Warehouse</span>
@@ -85,6 +88,14 @@ import {AdvancedPriceWarehouseModalComponent} from '@nusantara/pages/catalog/adv
                   <span i18n>Amount</span>
                 </label>
               </div>
+              <div class="input-group">
+                <select class="material-icons" [formControl]="defaultAmountSign">
+                  <option class="material-icons" value="negative" aria-label="negative">remove</option>
+                  <option class="material-icons" value="positive" aria-label="positive">add</option>
+                </select>
+                <input type="number" [formControl]="defaultAmountNumber" min="1" />
+                <span *ngIf="type == 'percentage'" class="input-group-text">%</span>
+              </div>
             </div>
           </div>
           <nus-detail-actions
@@ -94,11 +105,11 @@ import {AdvancedPriceWarehouseModalComponent} from '@nusantara/pages/catalog/adv
           </nus-detail-actions>
         </nus-tab>
         <nus-tab [title]="'Product List'">
-          <div class="non-field-errors">
-            <p i18n>There was an error setting the price to the product.</p>
-          </div>
           <div class="product-table">
             <p class="body-2" i18n>Total {{ products.length }} items</p>
+            <div *ngIf="priceError()"  class="non-field-errors">
+              <span class="heading-2" i18n>There was an error setting the price to the product.</span>
+            </div>
             <table>
               <thead>
               <tr>
@@ -115,7 +126,10 @@ import {AdvancedPriceWarehouseModalComponent} from '@nusantara/pages/catalog/adv
                 *ngFor="let productControl of products.controls; let i=index"
                 [form]="productControl"
                 [type]="this.type"
+                [defaultAmountSign]="this.defaultAmountSign.value"
+                [defaultAmountNumber]="this.defaultAmountNumber.value"
                 (remove)="removeProduct(i)"
+                (priceError)="priceError()"
               ></nus-advanced-price-product>
               <tr>
                 <td colspan="6">
@@ -175,14 +189,50 @@ import {AdvancedPriceWarehouseModalComponent} from '@nusantara/pages/catalog/adv
       min-height: auto;
     }
 
-    .non-field-errors {
+    .non-field-warning {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      padding: 4px 8px;
+      background: var(--alert-lighten);
+      border-radius: 4px;
+      margin-bottom: 16px;
+    }
+
+    div.non-field-errors {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 16px 24px;
+      background: var(--error-lighten);
+      border-radius: 4px;
       color: var(--error);
-      min-height: 50px;
-      list-style-type: none;
-      padding: 0;
-      text-align: left;
-      margin: 0;
-      display: block;
+      margin: 16px 0;
+      font-weight: 700;
+    }
+
+    .input-group {
+      display: flex;
+      align-content: stretch;
+      max-width: 25%;
+    }
+
+    .input-group-text {
+      background: var(--white);
+      border: solid var(--grey);
+      box-sizing: border-box;
+      border-radius: 0 4px 4px 0;
+      border-width: 1px 1px 1px 0;
+      padding: 10px;
+    }
+
+    .input-group select {
+      width: fit-content;
+      border-radius: 4px 0 0 4px;
+      border-width: 1px 0 1px 1px;
+    }
+    .input-group input {
+      border-radius: 0 4px 4px 0;
     }
   `]
 })
@@ -199,6 +249,9 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
   queryText = new FormControl('');
 
   isDisabled = false;
+
+  defaultAmountSign: FormControl;
+  defaultAmountNumber: FormControl ;
 
   constructor(service: AdvancedPriceListService,
               route: ActivatedRoute,
@@ -219,6 +272,10 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
   ngAfterViewInit() {
     this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
     this.advancedPriceWarehouseModal.onClose.subscribe(() => this.onWarehouseSelectionModalClosed());
+  }
+
+  get href(): FormControl {
+    return this.form.get('href') as FormControl;
   }
 
   get name(): FormControl {
@@ -245,6 +302,10 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
     return this.form.get('type').value;
   }
 
+  get defaultAmount(): FormControl {
+    return this.form.get('defaultAmount') as FormControl;
+  }
+
   get products(): FormArray {
     return this.form.get('products') as FormArray;
   }
@@ -253,14 +314,19 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
     this.entity = entity;
 
     this.form = this.fb.group({
+      href: [entity?.href, []],
       name: [entity?.name, [Validators.required, Validators.maxLength(50)]],
-      isActive: [entity?.isActive, []],
+      isActive: [entity?.isActive ?? false, []],
       warehouses: this.fb.array([], [Validators.minLength(1)]),
       isOnline: [entity?.isOnline ?? false, []],
       isOffline: [entity?.isOffline ?? false, []],
       type: [entity?.type ?? 'percentage', []],
+      defaultAmount: [entity?.defaultAmount ?? 0, [Validators.required]],
       products: this.fb.array([])
     });
+
+    this.defaultAmountSign = new FormControl('positive', []);
+    this.defaultAmountNumber = new FormControl(Math.abs(entity?.defaultAmount) ?? 0, [Validators.required]);
 
     this.form.controls.isActive.markAsTouched();
     this.form.controls.isOnline.markAsTouched();
@@ -276,9 +342,18 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
 
     this.isDisabled = !!this.entity;
     if (!!this.entity) {
-      this.form.controls.isOnline.disable();
-      this.form.controls.isOffline.disable();
+      if (this.defaultAmount.value < 0) {
+        this.defaultAmountSign.setValue('negative');
+      } else {
+        this.defaultAmountSign.setValue('positive');
+      }
+
+      // Disable setting form input
+      this.form.controls.isOnline.disable({emitEvent: false});
+      this.form.controls.isOffline.disable({emitEvent: false});
       this.form.controls.type.disable();
+      this.defaultAmountNumber.disable({emitEvent: false});
+      this.defaultAmountSign.disable({emitEvent: false});
     }
   }
   /* WAREHOUSE SELECTION */
@@ -332,6 +407,7 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
 
   addProduct(product?: IAdvancedPriceListProduct): void {
     const f = this.fb.group({
+      id: [product?.id, []],
       product: this.fb.group({
         href: [product?.product.href, []],
         name: [product?.product.name, []],
@@ -392,5 +468,27 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
     return basePrice;
   }
 
+  priceError() {
+    // Check if there is an error in products child item
+    return this.products.invalid;
+  }
   /* PRODUCT SELECTION */
+
+  save() {
+    this.service.save(this.form.getRawValue()).pipe(catchError(err => {
+      if (err instanceof HttpErrorResponse) {
+        return of(new ErrorResult<IHttpFailure>(err.error, err.status));
+      } else {
+        return of(new ErrorResult<IHttpFailure>({detail: 'Network error.. probably?'}, err.status));
+      }
+    })).subscribe(
+      resp => {
+        if (resp.success) {
+          this.onSaveSuccess(resp);
+        } else {
+          this.onSaveError(resp);
+        }
+      }
+    );
+  }
 }

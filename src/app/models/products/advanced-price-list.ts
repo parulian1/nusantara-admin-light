@@ -11,6 +11,7 @@ export interface IAdvancedPriceList extends INamedHrefEntity {
   isOffline: boolean;
   type: AdvancedPriceListType;
   products: Array<IAdvancedPriceListProduct>;
+  defaultAmount: number;
 }
 
 export interface IAdvancedPriceListProduct {

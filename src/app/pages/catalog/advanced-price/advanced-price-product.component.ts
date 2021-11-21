@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'nus-advanced-price-product',
@@ -8,19 +8,16 @@ import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn} 
       <td>{{ form.get('product').get('name').value }}</td>
       <td>{{ form.get('product').get('upc').value }}</td>
       <td>{{ form.get('product').get('price').value | currency:'IDR':'symbol-narrow':'1.0' }}</td>
-      <td class="numeric immediate-error-display">
+      <td class="numeric" [ngClass]="{'error-price': errorInput}">
         <div class="input-group">
           <select class="material-icons" [formControl]="amountSign">
             <option class="material-icons" value="negative" aria-label="negative">remove</option>
             <option class="material-icons" value="positive" aria-label="positive">add</option>
           </select>
           <input type="number" [formControl]="amountInput" min="1" />
-          <span class="input-group-text" [hidden]="type != 'percentage'">%</span>
+          <span *ngIf="type == 'percentage'" class="input-group-text">%</span>
         </div>
         <nus-field-errors [control]="amountInput"></nus-field-errors>
-        <div *ngIf="amountInput.errors?.minusPrice" class="error-detail" i18n>
-          Check
-        </div>
       </td>
       <td>{{ finalPrice | currency:'IDR':'symbol-narrow':'1.0' }}</td>
       <td>
@@ -55,6 +52,14 @@ import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn} 
       .input-group input {
         border-radius: 0 4px 4px 0;
       }
+
+      .error-price .input-group select{
+        border-color: var(--error) !important;
+      }
+      .error-price .input-group input{
+        border-color: var(--error) !important;
+        background: url('../../../../assets/warning-24px.svg') no-repeat scroll right 5px center !important;
+      }
     `
   ]
 })
@@ -63,15 +68,19 @@ export class AdvancedPriceProductComponent implements OnInit {
 
   @Input() form: FormGroup;
   @Input() type: string;
+  @Input() defaultAmountSign: string;
+  @Input() defaultAmountNumber: number;
   @Output() remove: EventEmitter<void> = new EventEmitter();
+  @Output() priceError: EventEmitter<void> = new EventEmitter();
 
   timeoutId: any;
   reloadTimeout = 650;
   finalPrice = 0;
   basePrice = 0;
 
-  amountSign = new FormControl('positive');
-  amountInput = new FormControl(0, [this.finalPriceValidator]);
+  amountSign = new FormControl('positive', []);
+  amountInput = new FormControl(0, [Validators.min(1)]);
+  errorInput = false;
 
   ngOnInit(): void {
     this.finalPrice = this.form.get('product').get('price').value;
@@ -79,14 +88,29 @@ export class AdvancedPriceProductComponent implements OnInit {
 
     // Calculate the final price each time the user changes the sign or amount
     this.amountInput.valueChanges.subscribe(
-      (newValue) => { this.calculateFinalPrice(newValue); }
+      (newValue) => {
+        this.calculateFinalPrice(newValue);
+      }
     );
     this.amountSign.valueChanges.subscribe(
-      () => { this.calculateFinalPrice(this.amountInput.value); }
+      () => {
+        this.calculateFinalPrice(this.amountInput.value);
+      }
     );
 
     // Set amount input if data already exists
-    this.amountInput.setValue(this.amount.value);
+    if (this.form.get('id')) {
+      this.amountInput.setValue(Math.abs(this.amount.value));
+
+      if (this.amount.value < 0) {
+        this.amountSign.setValue('negative');
+      } else {
+        this.amountSign.setValue('positive');
+      }
+    } else {
+      this.amountInput.setValue(this.defaultAmountNumber);
+      this.amountSign.setValue(this.defaultAmountSign);
+    }
   }
 
   get amount(): FormControl {
@@ -114,14 +138,16 @@ export class AdvancedPriceProductComponent implements OnInit {
 
       // Set product amount for the advance price
       this.amount.setValue(amountWithSign);
-    }, this.reloadTimeout);
-  }
 
-  finalPriceValidator(): ValidatorFn {
-    console.log('first');
-    return (control: FormControl): { [key: string]: any } | null =>  {
-      console.log('halo');
-      return this.finalPrice > 0 ? null : {minusPrice: true};
-    };
+      // Set error to input field if final price below zero
+      this.amountSign.setErrors(this.finalPrice < 0 ? {minusPrice: true} : null);
+      this.amount.setErrors(this.finalPrice < 0 ? {minusPrice: true} : null);
+      this.form.get('amount').setErrors(this.finalPrice < 0 ? {minusPrice: true} : null);
+      this.errorInput = this.finalPrice < 0;
+      if (this.finalPrice < 0) {
+        this.priceError.emit();
+      }
+
+    }, this.reloadTimeout);
   }
 }
