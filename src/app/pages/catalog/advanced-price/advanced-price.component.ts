@@ -44,7 +44,7 @@ import {of} from 'rxjs';
             </label>
           </div>
           <div id="setting-wrapper" class="wrapper">
-            <div *ngIf="href" class="non-field-warning">
+            <div *ngIf="!this.isNew" class="non-field-warning">
               <span class="body-2" i18n>This section can't be edited, please create a new one to make changes.</span>
             </div>
             <h2 class="heading-1">Setting</h2>
@@ -107,7 +107,7 @@ import {of} from 'rxjs';
         <nus-tab [title]="'Product List'">
           <div class="product-table">
             <p class="body-2" i18n>Total {{ products.length }} items</p>
-            <div *ngIf="products.invalid"  class="non-field-errors">
+            <div *ngIf="products.length > 1 && products.invalid"  class="non-field-errors">
               <span class="heading-2" i18n>There was an error setting the price to the product.</span>
             </div>
             <table>
@@ -271,6 +271,18 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
   ngAfterViewInit() {
     this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
     this.advancedPriceWarehouseModal.onClose.subscribe(() => this.onWarehouseSelectionModalClosed());
+
+    // Calculate the default amount each time the user changes the sign or amount
+    this.defaultAmountSign.valueChanges.subscribe(
+      () => {
+        this.updateDefaultAmount(this.defaultAmountNumber.value);
+      }
+    );
+    this.defaultAmountNumber.valueChanges.subscribe(
+      (newValue) => {
+        this.updateDefaultAmount(newValue);
+      }
+    );
   }
 
   get href(): FormControl {
@@ -316,7 +328,7 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
       href: [entity?.href, []],
       name: [entity?.name, [Validators.required, Validators.maxLength(50)]],
       isActive: [entity?.isActive ?? false, []],
-      warehouses: this.fb.array([], [Validators.minLength(1)]),
+      warehouses: this.fb.array([], [Validators.required, Validators.minLength(1)]),
       isOnline: [entity?.isOnline ?? false, []],
       isOffline: [entity?.isOffline ?? false, []],
       type: [entity?.type ?? 'percentage', []],
@@ -325,7 +337,7 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
     });
 
     this.defaultAmountSign = new FormControl('positive', []);
-    this.defaultAmountNumber = new FormControl(Math.abs(entity?.defaultAmount) ?? 0, [Validators.required]);
+    this.defaultAmountNumber = new FormControl(0, [Validators.required]);
 
     this.form.controls.isActive.markAsTouched();
     this.form.controls.isOnline.markAsTouched();
@@ -338,6 +350,9 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
     entity?.products.forEach((value) => {
       this.addProduct(value);
     });
+    if (entity) {
+      this.defaultAmountNumber.setValue(Math.abs(entity?.defaultAmount));
+    }
 
     this.isDisabled = !!this.entity;
     if (!!this.entity) {
@@ -468,7 +483,30 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
   }
   /* PRODUCT SELECTION */
 
+  updateDefaultAmount(newValue: number) {
+    if (!!this.timeoutId) {
+      clearTimeout(this.timeoutId);
+    }
+
+    let amountWithoutSign = 0;
+    // wait to see if the user is still typing more before searching
+    this.timeoutId = setTimeout(() => {
+      amountWithoutSign = Math.abs(newValue);
+
+      // convert amount to negative / positive value based on user selection
+      const amountWithSign = this.defaultAmountSign.value === 'positive' ? amountWithoutSign : -amountWithoutSign;
+
+      // Set product amount for the advance price
+      this.defaultAmount.setValue(amountWithSign);
+
+    }, this.reloadTimeout);
+  }
+
   save() {
+    if (this.isOnline.value === 'false' || this.isOffline.value === 'false') {
+      this.toast?.addError('Please select platform', 'Failed to Save');
+      return;
+    }
     this.service.save(this.form.getRawValue()).pipe(catchError(err => {
       if (err instanceof HttpErrorResponse) {
         return of(new ErrorResult<IHttpFailure>(err.error, err.status));
