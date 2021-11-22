@@ -503,8 +503,12 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
   }
 
   save() {
-    if (this.isOnline.value === 'false' || this.isOffline.value === 'false') {
-      this.toast?.addError('Please select platform', 'Failed to Save');
+    if (this.isOnline.value === false && this.isOffline.value === false) {
+      this.toast?.addError('Please choose at least 1 platform', 'Failed to Save');
+      return;
+    }
+    if (this.products.value.length === 0) {
+      this.toast?.addError('Please add at least 1 product', 'Failed to Save');
       return;
     }
     this.service.save(this.form.getRawValue()).pipe(catchError(err => {
