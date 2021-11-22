@@ -71,7 +71,6 @@ export class AdvancedPriceProductComponent implements OnInit {
   @Input() defaultAmountSign: string;
   @Input() defaultAmountNumber: number;
   @Output() remove: EventEmitter<void> = new EventEmitter();
-  @Output() priceError: EventEmitter<void> = new EventEmitter();
 
   timeoutId: any;
   reloadTimeout = 650;
@@ -142,11 +141,7 @@ export class AdvancedPriceProductComponent implements OnInit {
       // Set error to input field if final price below zero
       this.amountSign.setErrors(this.finalPrice < 0 ? {minusPrice: true} : null);
       this.amount.setErrors(this.finalPrice < 0 ? {minusPrice: true} : null);
-      this.form.get('amount').setErrors(this.finalPrice < 0 ? {minusPrice: true} : null);
       this.errorInput = this.finalPrice < 0;
-      if (this.finalPrice < 0) {
-        this.priceError.emit();
-      }
 
     }, this.reloadTimeout);
   }

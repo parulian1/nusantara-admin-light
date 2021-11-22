@@ -107,7 +107,7 @@ import {of} from 'rxjs';
         <nus-tab [title]="'Product List'">
           <div class="product-table">
             <p class="body-2" i18n>Total {{ products.length }} items</p>
-            <div *ngIf="priceError()"  class="non-field-errors">
+            <div *ngIf="products.invalid"  class="non-field-errors">
               <span class="heading-2" i18n>There was an error setting the price to the product.</span>
             </div>
             <table>
@@ -129,7 +129,6 @@ import {of} from 'rxjs';
                 [defaultAmountSign]="this.defaultAmountSign.value"
                 [defaultAmountNumber]="this.defaultAmountNumber.value"
                 (remove)="removeProduct(i)"
-                (priceError)="priceError()"
               ></nus-advanced-price-product>
               <tr>
                 <td colspan="6">
@@ -466,11 +465,6 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
     }
 
     return basePrice;
-  }
-
-  priceError() {
-    // Check if there is an error in products child item
-    return this.products.invalid;
   }
   /* PRODUCT SELECTION */
 
