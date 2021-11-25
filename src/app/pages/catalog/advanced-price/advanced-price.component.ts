@@ -1,16 +1,14 @@
-import {AbstractDetailComponent, DialogResult, ErrorResult, ToastService} from '@nusantara/core';
+import {AbstractDetailComponent, DialogResult, ToastService} from '@nusantara/core';
 import {IAdvancedPriceList, IAdvancedPriceListProduct} from '@nusantara/models/products/advanced-price-list';
 import {AdvancedPriceListService} from '@nusantara/services';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormArray, FormBuilder, FormControl, Validators} from '@angular/forms';
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {IHttpFailure, INamedHrefEntity, IWarehouse} from '@nusantara/models';
+import {INamedHrefEntity, IWarehouse} from '@nusantara/models';
 import {IProduct} from '@nusantara/models/products';
 import {ProductSelectionModalComponent} from '@nusantara/shared';
 import {AdvancedPriceWarehouseModalComponent} from '@nusantara/pages/catalog/advanced-price/advanced-price-warehouse-modal.component';
-import {catchError} from 'rxjs/operators';
-import {HttpErrorResponse} from '@angular/common/http';
-import {of} from 'rxjs';
+import {getProductBasePrice} from '@nusantara/shared/helpers';
 
 @Component({
   selector: 'nus-advanced-price-detail',
@@ -93,7 +91,10 @@ import {of} from 'rxjs';
                   <option class="material-icons" value="negative" aria-label="negative">remove</option>
                   <option class="material-icons" value="positive" aria-label="positive">add</option>
                 </select>
-                <input type="number" [formControl]="defaultAmountNumber" min="1" />
+                <input *ngIf="type == 'percentage'" type="number" [formControl]="defaultAmountNumber" min="1" max="99"
+                       step="1" appOnlyNumber/>
+                <input *ngIf="type != 'percentage'" type="number" [formControl]="defaultAmountNumber" min="1"
+                       appOnlyNumber/>
                 <span *ngIf="type == 'percentage'" class="input-group-text">%</span>
               </div>
             </div>
@@ -363,11 +364,13 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
       }
 
       // Disable setting form input
-      this.form.controls.isOnline.disable({emitEvent: false});
-      this.form.controls.isOffline.disable({emitEvent: false});
+      this.form.controls.isOnline.disable();
+      this.form.controls.isOffline.disable();
       this.form.controls.type.disable();
-      this.defaultAmountNumber.disable({emitEvent: false});
-      this.defaultAmountSign.disable({emitEvent: false});
+      this.form.controls.warehouses.disable();
+      this.form.controls.defaultAmount.disable();
+      this.defaultAmountNumber.disable();
+      this.defaultAmountSign.disable();
     }
   }
   /* WAREHOUSE SELECTION */
@@ -438,7 +441,7 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
     if (this.productSelectionModal.result === DialogResult.OK) {
 
       const selectedProduct = this.productSelectionModal.product.value as IProduct;
-      const basePrice = this.getProductBasePrice(selectedProduct.priceLists);
+      const basePrice = getProductBasePrice(selectedProduct.priceLists);
 
       const checkDuplicate = this.products.controls.filter(data => data.value.product.href === selectedProduct.href);
       if (checkDuplicate.length > 0) {
@@ -463,24 +466,6 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
   removeProduct(i: number): void {
     this.products.removeAt(i);
   }
-
-  getProductBasePrice(priceLists: Array<any>) {
-    const priceData = priceLists.find(obj => {
-      return obj.type === 'default';
-    });
-    let basePrice = 0;
-    if (priceData !== undefined) {
-      const priceRange = priceData.ranges.find(range => {
-        return range.minQuantity === 1;
-      });
-
-      if (priceRange !== undefined) {
-        basePrice = priceRange.price;
-      }
-    }
-
-    return basePrice;
-  }
   /* PRODUCT SELECTION */
 
   updateDefaultAmount(newValue: number) {
@@ -497,7 +482,11 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
       const amountWithSign = this.defaultAmountSign.value === 'positive' ? amountWithoutSign : -amountWithoutSign;
 
       // Set product amount for the advance price
-      this.defaultAmount.setValue(amountWithSign);
+      if (this.type === 'percentage') {
+        this.defaultAmount.setValue(newValue);
+      } else {
+        this.defaultAmount.setValue(amountWithSign);
+      }
 
     }, this.reloadTimeout);
   }
@@ -511,20 +500,7 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
       this.toast?.addError('Please add at least 1 product', 'Failed to Save');
       return;
     }
-    this.service.save(this.form.getRawValue()).pipe(catchError(err => {
-      if (err instanceof HttpErrorResponse) {
-        return of(new ErrorResult<IHttpFailure>(err.error, err.status));
-      } else {
-        return of(new ErrorResult<IHttpFailure>({detail: 'Network error.. probably?'}, err.status));
-      }
-    })).subscribe(
-      resp => {
-        if (resp.success) {
-          this.onSaveSuccess(resp);
-        } else {
-          this.onSaveError(resp);
-        }
-      }
-    );
+
+    super.save();
   }
 }

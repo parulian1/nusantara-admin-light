@@ -14,7 +14,8 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
             <option class="material-icons" value="negative" aria-label="negative">remove</option>
             <option class="material-icons" value="positive" aria-label="positive">add</option>
           </select>
-          <input type="number" [formControl]="amountInput" min="1" />
+          <input *ngIf="type == 'percentage'" type="number" [formControl]="amountInput" min="0" max="99" appOnlyNumber/>
+          <input *ngIf="type != 'percentage'" type="number" [formControl]="amountInput" min="0" appOnlyNumber/>
           <span *ngIf="type == 'percentage'" class="input-group-text">%</span>
         </div>
         <nus-field-errors [control]="amountInput"></nus-field-errors>
@@ -136,12 +137,16 @@ export class AdvancedPriceProductComponent implements OnInit {
       this.finalPrice = this.basePrice + amountWithSign;
 
       // Set product amount for the advance price
-      this.amount.setValue(amountWithSign);
+      if (this.type === 'percentage') {
+        this.amount.setValue(newValue);
+      } else {
+        this.amount.setValue(amountWithSign);
+      }
 
       // Set error to input field if final price below zero
-      this.amountSign.setErrors(this.finalPrice < 0 ? {minusPrice: true} : null);
-      this.amount.setErrors(this.finalPrice < 0 ? {minusPrice: true} : null);
-      this.errorInput = this.finalPrice < 0;
+      this.amountSign.setErrors(this.finalPrice <= 0 ? {minusPrice: true} : null);
+      this.amount.setErrors(this.finalPrice <= 0 ? {minusPrice: true} : null);
+      this.errorInput = this.finalPrice <= 0;
 
     }, this.reloadTimeout);
   }
