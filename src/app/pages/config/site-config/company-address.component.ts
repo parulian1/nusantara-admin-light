@@ -1,9 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ICompanyAddress, INamedHrefEntity} from '@nusantara/models';
-import {ICityPostalInfo} from '@nusantara/shared/address';
-import {AddressAutocompleteService} from '@nusantara/shared/address/address-autocomplete.service';
-import {InternalAddressValue} from '@nusantara/shared/address/internal-address-value';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ICompanyAddress, INamedHrefEntity } from '@nusantara/models';
+import { ICityPostalInfo } from '@nusantara/shared/address';
+import { AddressAutocompleteService } from '@nusantara/shared/address/address-autocomplete.service';
+import { InternalAddressValue } from '@nusantara/shared/address/internal-address-value';
 
 
 @Component({

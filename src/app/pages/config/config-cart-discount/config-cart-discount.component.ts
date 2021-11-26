@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {AbstractDetailComponent, ToastService} from '@nusantara/core';
-import {IConfigCartDiscount} from '@nusantara/models/config-cart-discount';
-import {ConfigCartDiscountService} from '@nusantara/services/config-cart-discount.service';
-import {FormBuilder, FormControl} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { AbstractDetailComponent, ToastService } from '@nusantara/core';
+import { IConfigCartDiscount } from '@nusantara/models/config-cart-discount';
+import { ConfigCartDiscountService } from '@nusantara/services/config-cart-discount.service';
+import { FormBuilder, FormControl } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'nus-config-cart-discount',

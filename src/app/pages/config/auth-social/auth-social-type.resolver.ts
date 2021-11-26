@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {AbstractChoiceResolver} from '../../../core';
-import {AuthSocialService} from '../../../services';
+import { Injectable } from '@angular/core';
+import { AbstractChoiceResolver } from '../../../core';
+import { AuthSocialService } from '../../../services';
 
 @Injectable({
   providedIn: 'root'

@@ -7,13 +7,13 @@ import * as ClassicEditor from '@gdnnusantara/ckeditor5-build/build/ckeditor';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import {EMPTY, of} from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import {ProductClassService, SvgIconService} from '@nusantara/services';
 import {
   ProductRelatedService,
   ProductService,
   SiteConfigService,
   SvgIconService,
-  WarehouseService
+  WarehouseService,
+  ProductClassService
 } from '@nusantara/services';
 import {
   AbstractDetailComponent,

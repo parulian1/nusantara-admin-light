@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {AbstractListComponent} from '../../../core';
-import {IAuthSocial} from '../../../models/auth-social';
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { AbstractListComponent } from '../../../core';
+import { IAuthSocial } from '../../../models/auth-social';
 
 @Component({
   selector: 'nus-auth-social-list',

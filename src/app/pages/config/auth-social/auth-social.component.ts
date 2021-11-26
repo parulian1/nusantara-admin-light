@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {AbstractDetailComponent, ToastService} from '../../../core';
-import {IAuthSocial} from '../../../models/auth-social';
-import {AuthSocialService} from '../../../services';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormControl, Validators} from '@angular/forms';
-import {drf} from '../../../models';
+import { AbstractDetailComponent, ToastService } from '../../../core';
+import { IAuthSocial } from '../../../models/auth-social';
+import { AuthSocialService } from '../../../services';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { drf } from '../../../models';
 
 @Component({
   selector: 'nus-auth-social',

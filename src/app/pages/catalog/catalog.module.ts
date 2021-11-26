@@ -19,8 +19,8 @@ import { StockInputComponent } from './product/stock-input/stock-input.component
 
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import {DragDropModule} from '@angular/cdk/drag-drop';
-import {BundleLineComponent} from '@nusantara/pages/catalog/product/bundle';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { BundleLineComponent } from '@nusantara/pages/catalog/product/bundle';
 @NgModule({
   declarations: [
     CategoryListComponent,
