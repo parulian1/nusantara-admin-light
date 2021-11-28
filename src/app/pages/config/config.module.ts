@@ -25,6 +25,7 @@ import { ReindexingComponent } from './reindexing/reindexing.component';
 import { ShopifyWebhookComponent } from './shopify/shopify-webhook.component';
 import { ShopifyHubComponent } from './shopify/shopify-hub.component';
 import { DefaultPinConfigComponent } from '@nusantara/pages/config/default-pin-config';
+import { LowStockConfigComponent } from './low-stock-config/low-stock-config.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { DefaultPinConfigComponent } from '@nusantara/pages/config/default-pin-c
     ShopifyWebhookComponent,
     ShopifyHubComponent,
     DefaultPinConfigComponent,
+    LowStockConfigComponent,
   ],
   imports: [
     CommonModule,

@@ -45,6 +45,14 @@ import {RequireIsEnterpriseGuard} from '@nusantara/auth';
         <button routerLink="shipping-methods" class="control" i18n>Open</button>
       </div>
     </div>
+    <div class="wrapper">
+      <div>
+        <h1 class="heading-1" i18n>Low Stock Config</h1>
+      </div>
+      <div>
+        <button routerLink="low-stock" class="control" i18n>Open</button>
+      </div>
+    </div>
   `,
   styles: [
     `
