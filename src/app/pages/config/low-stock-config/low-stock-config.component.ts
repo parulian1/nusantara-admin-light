@@ -32,12 +32,14 @@ import {LowStockService} from '@nusantara/services/low-stock.service';
               <span i18n class="email-label">Send daily email notification when stock is low. / Email notification will be send regularly every 6 am</span>
               <div class="email-input">
                 <input type="text"
-                       placeholder="insert email to send daily notification"
+                       placeholder="insert email to receive daily notification"
+                       (keydown)="removeChipAlert()"
                        (keydown.enter)="addChips()"
                        [formControl]="email"
                        #emailInput>
                 <button type="button" class="control" (click)="addChips()">Add</button>
               </div>
+              <div class="email-chip-error">{{emailChipError}}</div>
               <nus-field-errors [control]="email"></nus-field-errors>
             </label>
 
@@ -65,7 +67,7 @@ import {LowStockService} from '@nusantara/services/low-stock.service';
   styles: [`
     .low-stock-config {
       margin-top: 24px;
-      border: 1px solid #B4B4B4;
+      border: 1px solid var(--grey);
       border-radius: 8px;
       padding: 8px 16px;
       width: 65%;
@@ -76,7 +78,7 @@ import {LowStockService} from '@nusantara/services/low-stock.service';
     }
 
     .low-stock-config label .email-label {
-      color: #5A5A5A;
+      color: var(--darken-grey);
       line-height: 20px;
     }
 
@@ -90,6 +92,11 @@ import {LowStockService} from '@nusantara/services/low-stock.service';
       max-width: 600px;
     }
 
+    .low-stock-config label .email-chip-error {
+      font-size: 11px;
+      color: var(--error);
+    }
+
     .low-stock-config .email-chips {
       display: flex;
       flex-wrap: wrap;
@@ -99,10 +106,17 @@ import {LowStockService} from '@nusantara/services/low-stock.service';
       display: flex;
       flex-direction: row;
       align-items: center;
-      background: #F4F4F4;
+      background: var(--darken-white);
       border-radius: 24px;
       padding: 6px 8px;
       margin: 4px 2px 0 0;
+    }
+
+    .low-stock-config .email-chips .email-chip-item span {
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 20px;
+      color: var(--darken-grey);
     }
 
     .low-stock-config .email-chips .email-chip-item button {
@@ -121,6 +135,7 @@ export class LowStockConfigComponent extends AbstractDetailComponent<ILowStock> 
   entity: ILowStock;
 
   listEmail: string[] = [];
+  emailChipError = '';
 
   constructor(route: ActivatedRoute,
               router: Router,
@@ -149,19 +164,34 @@ export class LowStockConfigComponent extends AbstractDetailComponent<ILowStock> 
   initializeForm(entity?: ILowStock) {
     this.form = this.fb.group({
       isActive: [entity?.isActive, []],
-      quantity: [entity?.quantity, []],
-      email: [entity?.email, [Validators.pattern(`^(([^<>()[\\]\\\\.,;:\\s@\\"]+(\\.[^<>()[\\]\\\\.,;:\\s@\\"]+)*)|(\\".+\\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$`)]],
+      quantity: [entity?.quantity, [Validators.required, Validators.min(1), Validators.pattern(`^\\d+$`)]],
+      email: [entity?.email, [Validators.required, Validators.pattern(`^(([^<>()[\\]\\\\.,;:\\s@\\"]+(\\.[^<>()[\\]\\\\.,;:\\s@\\"]+)*)|(\\".+\\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$`)]],
     });
   }
 
   addChips() {
+    if (this.emailInput.nativeElement.value === '') {
+      return;
+    }
+
+    if (this.listEmail.find((email) => email === this.email.value)) {
+      this.emailChipError = 'Email already inserted. Please check again';
+      return;
+    }
+
     if (this.email.valid) {
-      this.listEmail.push(this.email.value);
+      this.listEmail.push(this.email.value.toLowerCase());
       this.emailInput.nativeElement.value = '';
+    } else {
+      this.emailChipError = 'Invalid email. Please enter valid email.';
     }
   }
 
   removeChips(email: string) {
     this.listEmail.splice(this.listEmail.indexOf(email), 1);
+  }
+
+  removeChipAlert() {
+    this.emailChipError = '';
   }
 }
