@@ -10,7 +10,7 @@ import {LowStockService} from '@nusantara/services/low-stock.service';
   selector: 'nus-low-stock-config',
   template: `
     <h1 class="title-1" i18n>Low Stock Config</h1>
-    <form [formGroup]="form" (ngSubmit)="save()" class="fluid">
+    <form [formGroup]="form" class="fluid">
       <nus-tabs>
         <nus-tab [title]="'Stock Configuration'">
           <div class="low-stock-config">
@@ -31,9 +31,12 @@ import {LowStockService} from '@nusantara/services/low-stock.service';
               <span i18n>Email Alert</span>
               <span i18n class="email-label">Send daily email notification when stock is low. / Email notification will be send regularly every 6 am</span>
               <div class="email-input">
-                <input type="text" placeholder="insert email to send daily notification" [formControl]="email"
+                <input type="text"
+                       placeholder="insert email to send daily notification"
+                       (keydown.enter)="addChips()"
+                       [formControl]="email"
                        #emailInput>
-                <button type="button" class="control" (click)="addChips($event)">Add</button>
+                <button type="button" class="control" (click)="addChips()">Add</button>
               </div>
               <nus-field-errors [control]="email"></nus-field-errors>
             </label>
@@ -41,8 +44,8 @@ import {LowStockService} from '@nusantara/services/low-stock.service';
             <div class="email-chips">
               <div class="email-chip-item" *ngFor="let email of listEmail; let i=index">
                 <span>{{email}}</span>
-                <button (click)="removeChips(i)">
-                  <img src="./../../../../assets/cross-circle.svg">
+                <button type="button">
+                  <img src="./../../../../assets/cross-circle.svg" (click)="removeChips(email)">
                 </button>
               </div>
             </div>
@@ -117,7 +120,7 @@ export class LowStockConfigComponent extends AbstractDetailComponent<ILowStock> 
 
   entity: ILowStock;
 
-  listEmail = [];
+  listEmail: string[] = [];
 
   constructor(route: ActivatedRoute,
               router: Router,
@@ -151,15 +154,14 @@ export class LowStockConfigComponent extends AbstractDetailComponent<ILowStock> 
     });
   }
 
-  addChips($event: any) {
+  addChips() {
     if (this.email.valid) {
       this.listEmail.push(this.email.value);
-      console.log(this.emailInput);
       this.emailInput.nativeElement.value = '';
     }
   }
 
-  removeChips(index: number) {
-    console.log(`remove chips-${index}`);
+  removeChips(email: string) {
+    this.listEmail.splice(this.listEmail.indexOf(email), 1);
   }
 }
