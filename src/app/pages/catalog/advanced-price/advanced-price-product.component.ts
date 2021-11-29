@@ -14,8 +14,8 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
             <option class="material-icons" value="negative" aria-label="negative">remove</option>
             <option class="material-icons" value="positive" aria-label="positive">add</option>
           </select>
-          <input *ngIf="type == 'percentage'" type="number" [formControl]="amountInput" min="0" max="99" appOnlyNumber/>
-          <input *ngIf="type != 'percentage'" type="number" [formControl]="amountInput" min="0" appOnlyNumber/>
+          <input *ngIf="type == 'percentage'" type="number" [formControl]="amountInput" min="1" max="99" appOnlyNumber/>
+          <input *ngIf="type != 'percentage'" type="number" [formControl]="amountInput" min="1" appOnlyNumber/>
           <span *ngIf="type == 'percentage'" class="input-group-text">%</span>
         </div>
         <nus-field-errors [control]="amountInput"></nus-field-errors>
@@ -79,7 +79,7 @@ export class AdvancedPriceProductComponent implements OnInit {
   basePrice = 0;
 
   amountSign = new FormControl('positive', []);
-  amountInput = new FormControl(0, [Validators.min(1)]);
+  amountInput = new FormControl(1, [Validators.min(1)]);
   errorInput = false;
 
   ngOnInit(): void {
@@ -121,7 +121,7 @@ export class AdvancedPriceProductComponent implements OnInit {
     if (!!this.timeoutId) {
       clearTimeout(this.timeoutId);
     }
-
+    console.log('calculateFinalPrice');
     let amountWithoutSign = 0;
     // wait to see if the user is still typing more before searching
     this.timeoutId = setTimeout(() => {
@@ -144,10 +144,23 @@ export class AdvancedPriceProductComponent implements OnInit {
       }
 
       // Set error to input field if final price below zero
-      this.amountSign.setErrors(this.finalPrice <= 0 ? {minusPrice: true} : null);
-      this.amount.setErrors(this.finalPrice <= 0 ? {minusPrice: true} : null);
-      this.errorInput = this.finalPrice <= 0;
+      this.amountInput.setErrors(this.checkAmount() ? {invalidAmount: true} : null );
+      this.amountSign.setErrors(this.checkAmount() ? {invalidAmount: true} : null);
+      this.amount.setErrors(this.checkAmount() ? {invalidAmount: true} : null);
+      this.errorInput = this.checkAmount();
 
     }, this.reloadTimeout);
+  }
+
+  checkAmount() {
+    const amount = this.amountInput.value;
+
+    if (this.type === 'percentage' && amount > 100) {
+      return true;
+    }
+
+    if (this.finalPrice <= 0) {
+      return true;
+    }
   }
 }

@@ -74,7 +74,7 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
                 <span i18n>Offline (POS)</span>
               </label>
             </div>
-            <div id="modify-type">
+            <div id="modify-type" [ngClass]="{'error-default-amount': errorInputDefaultAmount}">
               <p id="radio_label" class="subheading-2">Modify Price by</p>
               <div class="inline-option" role="radiogroup" aria-labelledby="radio_label">
                 <label [ngClass]="{'active': type === 'percentage'}" class="radio" role="radio">
@@ -97,6 +97,9 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
                        appOnlyNumber/>
                 <span *ngIf="type == 'percentage'" class="input-group-text">%</span>
               </div>
+              <span id="error-message" *ngIf="errorInputDefaultAmount" i18n>
+                Maximum percentage is 99%
+              </span>
             </div>
           </div>
           <nus-detail-actions
@@ -107,7 +110,7 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
         </nus-tab>
         <nus-tab [title]="'Product List'">
           <div class="product-table">
-            <p class="body-2" i18n>Total {{ products.length }} items</p>
+            <p class="body-2" i18n>Total {{ products.length }} items {{products.invalid}}</p>
             <div *ngIf="products.length > 1 && products.invalid"  class="non-field-errors">
               <span class="heading-2" i18n>There was an error setting the price to the product.</span>
             </div>
@@ -216,7 +219,6 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
       align-content: stretch;
       max-width: 25%;
     }
-
     .input-group-text {
       background: var(--white);
       border: solid var(--grey);
@@ -225,7 +227,6 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
       border-width: 1px 1px 1px 0;
       padding: 10px;
     }
-
     .input-group select {
       width: fit-content;
       border-radius: 4px 0 0 4px;
@@ -233,6 +234,19 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
     }
     .input-group input {
       border-radius: 0 4px 4px 0;
+    }
+
+    .error-default-amount .input-group select{
+      border-color: var(--error) !important;
+    }
+    .error-default-amount .input-group input{
+      border-color: var(--error) !important;
+      background: url('../../../../assets/warning-24px.svg') no-repeat scroll right 5px center !important;
+    }
+    .error-default-amount #error-message {
+      color: var(--error);
+      font-size: 10px;
+      margin-top: 2px;
     }
   `]
 })
@@ -252,6 +266,7 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
 
   defaultAmountSign: FormControl;
   defaultAmountNumber: FormControl ;
+  errorInputDefaultAmount = false;
 
   constructor(service: AdvancedPriceListService,
               route: ActivatedRoute,
@@ -267,11 +282,6 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
     });
 
     super.ngOnInit();
-  }
-
-  ngAfterViewInit() {
-    this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
-    this.advancedPriceWarehouseModal.onClose.subscribe(() => this.onWarehouseSelectionModalClosed());
 
     // Calculate the default amount each time the user changes the sign or amount
     this.defaultAmountSign.valueChanges.subscribe(
@@ -284,6 +294,23 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
         this.updateDefaultAmount(newValue);
       }
     );
+
+    this.form.get('type').valueChanges.subscribe(
+      (newValue) => {
+        console.log('hello');
+        // Set product amount for the advance price
+        if (newValue === 'percentage') {
+          this.errorInputDefaultAmount = this.defaultAmountNumber.value > 100;
+        } else {
+          this.errorInputDefaultAmount = false;
+        }
+      }
+    );
+  }
+
+  ngAfterViewInit() {
+    this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
+    this.advancedPriceWarehouseModal.onClose.subscribe(() => this.onWarehouseSelectionModalClosed());
   }
 
   get href(): FormControl {
@@ -333,12 +360,12 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
       isOnline: [entity?.isOnline ?? false, []],
       isOffline: [entity?.isOffline ?? false, []],
       type: [entity?.type ?? 'percentage', []],
-      defaultAmount: [entity?.defaultAmount ?? 0, [Validators.required]],
+      defaultAmount: [entity?.defaultAmount ?? 1, [Validators.required]],
       products: this.fb.array([])
     });
 
     this.defaultAmountSign = new FormControl('positive', []);
-    this.defaultAmountNumber = new FormControl(0, [Validators.required]);
+    this.defaultAmountNumber = new FormControl(1, [Validators.required]);
 
     this.form.controls.isActive.markAsTouched();
     this.form.controls.isOnline.markAsTouched();
@@ -472,7 +499,7 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
     if (!!this.timeoutId) {
       clearTimeout(this.timeoutId);
     }
-
+    console.log('updateDefaultAmount');
     let amountWithoutSign = 0;
     // wait to see if the user is still typing more before searching
     this.timeoutId = setTimeout(() => {
@@ -498,6 +525,11 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
     }
     if (this.products.value.length === 0) {
       this.toast?.addError('Please add at least 1 product', 'Failed to Save');
+      return;
+    }
+
+    if (this.errorInputDefaultAmount) {
+      this.toast?.addError('Please check your amount input', 'Failed to Save');
       return;
     }
 
