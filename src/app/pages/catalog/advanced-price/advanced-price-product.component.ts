@@ -121,7 +121,6 @@ export class AdvancedPriceProductComponent implements OnInit {
     if (!!this.timeoutId) {
       clearTimeout(this.timeoutId);
     }
-    console.log('calculateFinalPrice');
     let amountWithoutSign = 0;
     // wait to see if the user is still typing more before searching
     this.timeoutId = setTimeout(() => {

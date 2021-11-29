@@ -297,7 +297,6 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
 
     this.form.get('type').valueChanges.subscribe(
       (newValue) => {
-        console.log('hello');
         // Set product amount for the advance price
         if (newValue === 'percentage') {
           this.errorInputDefaultAmount = this.defaultAmountNumber.value > 100;
@@ -499,7 +498,6 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
     if (!!this.timeoutId) {
       clearTimeout(this.timeoutId);
     }
-    console.log('updateDefaultAmount');
     let amountWithoutSign = 0;
     // wait to see if the user is still typing more before searching
     this.timeoutId = setTimeout(() => {
