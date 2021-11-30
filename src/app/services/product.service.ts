@@ -69,7 +69,7 @@ export class ProductService extends AbstractCrudService<products.IProduct> {
     }
 
     // set params for online stock
-    params = params.set('online_stock', String(true));
+    params = params.set('available_online', String(true));
 
     return this.httpClient
       .get<products.IProduct[]>(`${this.baseUrl}/`, {observe: 'response', responseType: 'json', params})
