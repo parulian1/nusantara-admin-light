@@ -57,7 +57,8 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
               <div class="pill-wrapper">
                 <div *ngFor="let wh of warehouses.value; let i=index" class="pill">
                   <span class="subheading-2">{{ wh.name }}</span>
-                  <button type="button" class="remove-button" (click)="removeWarehouse(wh.code)" [disabled]="isDisabled">
+                  <button type="button" class="remove-button" (click)="removeWarehouse(wh.code)"
+                          [disabled]="isDisabled">
                     <i class="material-icons">highlight_off</i>
                   </button>
                 </div>
@@ -74,7 +75,7 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
                 <span i18n>Offline (POS)</span>
               </label>
             </div>
-            <div id="modify-type" [ngClass]="{'error-default-amount': errorInputDefaultAmount}">
+            <div id="modify-type" [ngClass]="{'error-default-amount': errorDefaultPercentage || defaultAmountNumber.errors?.max}">
               <p id="radio_label" class="subheading-2">Modify Price by</p>
               <div class="inline-option" role="radiogroup" aria-labelledby="radio_label">
                 <label [ngClass]="{'active': type === 'percentage'}" class="radio" role="radio">
@@ -97,9 +98,12 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
                        appOnlyNumber/>
                 <span *ngIf="type == 'percentage'" class="input-group-text">%</span>
               </div>
-              <span id="error-message" *ngIf="errorInputDefaultAmount" i18n>
-                Maximum percentage is 99%
-              </span>
+              <p class="error-message" *ngIf="errorDefaultPercentage" i18n>
+                Maximum percentage is 100%
+              </p>
+              <p class="error-message" *ngIf="defaultAmountNumber.errors?.max" i18n>
+                Ensure that there are no more than 16 digits
+              </p>
             </div>
           </div>
           <nus-detail-actions
@@ -111,7 +115,7 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
         <nus-tab [title]="'Product List'">
           <div class="product-table">
             <p class="body-2" i18n>Total {{ products.length }} items {{products.invalid}}</p>
-            <div *ngIf="products.length > 1 && products.invalid"  class="non-field-errors">
+            <div *ngIf="products.length > 0 && products.invalid" class="non-field-errors">
               <span class="heading-2" i18n>There was an error setting the price to the product.</span>
             </div>
             <table>
@@ -243,7 +247,7 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
       border-color: var(--error) !important;
       background: url('../../../../assets/warning-24px.svg') no-repeat scroll right 5px center !important;
     }
-    .error-default-amount #error-message {
+    .error-default-amount .error-message {
       color: var(--error);
       font-size: 10px;
       margin-top: 2px;
@@ -266,7 +270,7 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
 
   defaultAmountSign: FormControl;
   defaultAmountNumber: FormControl ;
-  errorInputDefaultAmount = false;
+  errorDefaultPercentage = false;
 
   constructor(service: AdvancedPriceListService,
               route: ActivatedRoute,
@@ -299,9 +303,9 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
       (newValue) => {
         // Set product amount for the advance price
         if (newValue === 'percentage') {
-          this.errorInputDefaultAmount = this.defaultAmountNumber.value > 100;
+          this.errorDefaultPercentage = this.defaultAmountNumber.value > 100;
         } else {
-          this.errorInputDefaultAmount = false;
+          this.errorDefaultPercentage = false;
         }
       }
     );
@@ -359,12 +363,12 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
       isOnline: [entity?.isOnline ?? false, []],
       isOffline: [entity?.isOffline ?? false, []],
       type: [entity?.type ?? 'percentage', []],
-      defaultAmount: [entity?.defaultAmount ?? 1, [Validators.required]],
+      defaultAmount: [entity?.defaultAmount ?? 1, [Validators.required, Validators.max(9999999999999998)]],
       products: this.fb.array([])
     });
 
     this.defaultAmountSign = new FormControl('positive', []);
-    this.defaultAmountNumber = new FormControl(1, [Validators.required]);
+    this.defaultAmountNumber = new FormControl(1, [Validators.required, Validators.max(9999999999999998)]);
 
     this.form.controls.isActive.markAsTouched();
     this.form.controls.isOnline.markAsTouched();
@@ -401,6 +405,10 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
   }
   /* WAREHOUSE SELECTION */
   selectWarehouse() {
+    if (!this.isNew) {
+      this.toast?.addError('This section can\'t be edited, please create a new one to make changes.', 'Failed to add warehouse');
+      return;
+    }
     this.advancedPriceWarehouseModal.open();
   }
 
@@ -438,6 +446,10 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
   }
 
   removeWarehouse(whHref: string): void {
+    if (!this.isNew) {
+      this.toast?.addError('This section can\'t be edited, please create a new one to make changes.', 'Failed to remove warehouse');
+      return;
+    }
     const index = this.warehouses.value.findIndex(wh => wh.href === whHref);
     this.warehouses.removeAt(index);
   }
@@ -457,7 +469,7 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
         price: [product?.product.price, []],
         upc: [product?.product.upc, []]
       }),
-      amount: [product.amount, [Validators.required, Validators.min(1)]]
+      amount: [product?.amount ?? 1, [Validators.required, Validators.min(1), Validators.max(9999999999999998)]]
     });
 
     this.products.push(f);
@@ -482,7 +494,7 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
           price: [basePrice, []],
           upc: [selectedProduct.upc, []]
         }),
-        amount: [0, [Validators.required, Validators.min(1)]]
+        amount: [1, [Validators.required, Validators.min(1), Validators.max(9999999999999998)]]
       });
 
       this.products.push(f);
@@ -498,20 +510,10 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
     if (!!this.timeoutId) {
       clearTimeout(this.timeoutId);
     }
-    let amountWithoutSign = 0;
+
     // wait to see if the user is still typing more before searching
     this.timeoutId = setTimeout(() => {
-      amountWithoutSign = Math.abs(newValue);
-
-      // convert amount to negative / positive value based on user selection
-      const amountWithSign = this.defaultAmountSign.value === 'positive' ? amountWithoutSign : -amountWithoutSign;
-
-      // Set product amount for the advance price
-      if (this.type === 'percentage') {
-        this.defaultAmount.setValue(newValue);
-      } else {
-        this.defaultAmount.setValue(amountWithSign);
-      }
+      this.defaultAmount.setValue(this.defaultAmountSign.value === 'positive' ? Math.abs(newValue) : -Math.abs(newValue));
 
     }, this.reloadTimeout);
   }
@@ -526,7 +528,7 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
       return;
     }
 
-    if (this.errorInputDefaultAmount) {
+    if (this.errorDefaultPercentage) {
       this.toast?.addError('Please check your amount input', 'Failed to Save');
       return;
     }

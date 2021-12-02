@@ -12,7 +12,7 @@ import { IAdvancedPriceList } from '@nusantara/models/products/advanced-price-li
     </nus-list-header>
     <div class="filtering">
       <!-- Soft deleted product but change the wording into InActive -->
-      <nus-include-deleted text="Show Inactive Vendor"></nus-include-deleted>
+      <nus-include-deleted text="Show Inactive Advanced Price"></nus-include-deleted>
     </div>
     <nus-pagination [page]="page"></nus-pagination>
     <table>

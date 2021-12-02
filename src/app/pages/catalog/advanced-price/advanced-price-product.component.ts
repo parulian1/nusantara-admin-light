@@ -121,13 +121,9 @@ export class AdvancedPriceProductComponent implements OnInit {
     if (!!this.timeoutId) {
       clearTimeout(this.timeoutId);
     }
-    let amountWithoutSign = 0;
     // wait to see if the user is still typing more before searching
     this.timeoutId = setTimeout(() => {
-      amountWithoutSign = newValue;
-      if (this.type === 'percentage') {
-        amountWithoutSign = this.basePrice * (newValue / 100);
-      }
+      const amountWithoutSign = this.type === 'percentage' ? this.basePrice * (newValue / 100) : newValue;
 
       // convert amount to negative / positive value based on user selection
       const amountWithSign = this.amountSign.value === 'positive' ? Math.abs(amountWithoutSign) : -Math.abs(amountWithoutSign);
@@ -135,12 +131,7 @@ export class AdvancedPriceProductComponent implements OnInit {
       // Calculate product final price for display
       this.finalPrice = this.basePrice + amountWithSign;
 
-      // Set product amount for the advance price
-      if (this.type === 'percentage') {
-        this.amount.setValue(newValue);
-      } else {
-        this.amount.setValue(amountWithSign);
-      }
+      this.amount.setValue(this.amountSign.value === 'positive' ? Math.abs(newValue) : -Math.abs(newValue));
 
       // Set error to input field if final price below zero
       this.amountInput.setErrors(this.checkAmount() ? {invalidAmount: true} : null );
@@ -158,7 +149,7 @@ export class AdvancedPriceProductComponent implements OnInit {
       return true;
     }
 
-    if (this.finalPrice <= 0) {
+    if (this.finalPrice < 0) {
       return true;
     }
   }
