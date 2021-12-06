@@ -1,10 +1,10 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
+import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 
-import { IWarehouse } from '@nusantara/models';
+import {IWarehouse} from '@nusantara/models';
 
-import { NgxSmartModalComponent } from 'ngx-smart-modal';
-import { DialogResult } from '@nusantara/core';
+import {NgxSmartModalComponent} from 'ngx-smart-modal';
+import {DialogResult} from '@nusantara/core';
 
 @Component({
   selector: 'nus-advanced-price-warehouse-modal',
@@ -55,10 +55,12 @@ import { DialogResult } from '@nusantara/core';
     .warehouse-table {
       margin-top: 16px;
     }
+
     .warehouse-table__name > label {
       min-height: fit-content;
       padding-bottom: 0;
     }
+
     .actions-container {
       display: flex;
       flex-direction: row;
@@ -66,10 +68,14 @@ import { DialogResult } from '@nusantara/core';
       justify-content: space-between;
       margin-top: 1.5em;
     }
+
     .actions-container > button {
       width: 48%;
     }
-    button { min-width: 105px; }
+
+    button {
+      min-width: 105px;
+    }
   `]
 })
 export class AdvancedPriceWarehouseModalComponent implements OnInit, AfterViewInit {
@@ -83,10 +89,15 @@ export class AdvancedPriceWarehouseModalComponent implements OnInit, AfterViewIn
 
   constructor(
     private fb: FormBuilder,
-  ) {}
+  ) {
+  }
 
   get warehouses(): FormArray {
     return this.form.get('warehouses') as FormArray;
+  }
+
+  get onClose(): EventEmitter<any> {
+    return this.modal.onClose;
   }
 
   ngOnInit(): void {
@@ -99,15 +110,6 @@ export class AdvancedPriceWarehouseModalComponent implements OnInit, AfterViewIn
       this.selectedWarehouses.value.forEach((wh) => {
         this.warehouses.push(new FormControl(wh.href));
       });
-    });
-  }
-
-  /**
-   * Sets the modals form to a new empty set of data.
-   */
-  private initializeForm(): void {
-    this.form = this.fb.group({
-      warehouses: this.fb.array([]),
     });
   }
 
@@ -129,20 +131,36 @@ export class AdvancedPriceWarehouseModalComponent implements OnInit, AfterViewIn
     this.modal.open();
   }
 
-  get onClose(): EventEmitter<any> {
-    return this.modal.onClose;
-  }
-
   close() {
     this.result = DialogResult.OK;
     this.modal.close();
   }
 
   cancel() {
+    if (this.selectedWarehouses.length === 0) {
+      this.warehouses.clear();
+      const v = this.formView.nativeElement.getElementsByTagName('input');
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < v.length; i++) {
+        if (v[i].type === 'checkbox') {
+          v[i].checked = false;
+        }
+      }
+    }
+
     this.modal.close();
   }
 
   checkedItem(href) {
     return this.selectedWarehouses && (this.selectedWarehouses.value.findIndex(obj => obj.href === href) !== -1);
+  }
+
+  /**
+   * Sets the modals form to a new empty set of data.
+   */
+  private initializeForm(): void {
+    this.form = this.fb.group({
+      warehouses: this.fb.array([]),
+    });
   }
 }
