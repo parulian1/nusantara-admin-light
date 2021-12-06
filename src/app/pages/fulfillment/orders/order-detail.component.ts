@@ -35,6 +35,7 @@ import {
 import { MarketplaceOrderService } from '@nusantara/services/marketplace-order.service';
 import { IOrderChildren } from '@nusantara/models/order/order-children';
 import { MatDialog } from '@angular/material/dialog';
+import { OrderDownloadShippingLabel } from '@nusantara/services/order-download-shipping-label.service';
 
 
 @Component({
@@ -140,7 +141,7 @@ import { MatDialog } from '@angular/material/dialog';
                       *ngIf="!isShipButtonHidden(children.data[0])"
                       type="button"
                       class="control"
-                      [disabled]="!isManagedAwb"
+                      [disabled]="!isAwbManagedByMarketplace"
                       (click)="manualShipment(children.data[0])"
                        i18n
                     >
@@ -194,9 +195,9 @@ import { MatDialog } from '@angular/material/dialog';
 
                   <button
                     class="download-button control secondary"
-                    [disabled]="!getConnote(children.data[0])"
+                    [disabled]="!isDownloadable(children.data[0])"
                     (click)="
-                      printConnote(
+                      getShippingLabel(
                         children.data[0].shipmentHistory.shippingLabelUrl
                       )
                     "
@@ -375,8 +376,8 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   isDetailShowed = false;
   isRequestShipment = false;
 
-  // marketplace source name that not using default AWB handler
-  notManagedAwbSources = ["tokopedia", "lazada", "shopee", "bukalapak"];
+  // marketplace list for custom handling download shipping label
+  customHandlingAWB = ["tokopedia", "shopee", "bukalapak", "lazada"];
 
   // enable refresh AWB for following source name
   enableRefreshAwb = ["tokopedia", "shopee", "bukalapak", "lazada"];
@@ -387,7 +388,8 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
     public mpService: MarketplaceOrderService,
     public shipmentService: ShipmentService,
     private dialog: MatDialog,
-    private toast: ToastService
+    private toast: ToastService,
+    private shippingLabelDownloadService: OrderDownloadShippingLabel
   ) {}
 
   ngOnInit(): void {
@@ -400,11 +402,8 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
         this.isShippableOrder = !!this.orderDetailData.orderAddress;
       }
     );
-
-    // For managed AWB only, AWB that not synced ex: from various marketplace that not supported
-    if (this.isManagedAwb) {
-      this.fetchAwbUrl();
-    }
+    
+    this.fetchAwbUrl();
   }
 
   getcurrentMilestone(status: string) {
@@ -419,13 +418,14 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
     return "";
   }
 
-  getConnote(childrenData: any) {
-    // Exclude this action for not managed AWB
-    if (childrenData.shipmentHistory?.awbNumber && this.isManagedAwb) {
-      return childrenData.shipmentHistory.awbNumber;
+  isDownloadable(childrenData: any) {
+    // Downlaod condition for marketplace
+    if (this.isAwbManagedByMarketplace && childrenData.status === "shipped"){
+      return true;
+    } else if (this.orderDetailData.source == "web" && childrenData.shipmentHistory?.awbNumber) { // for WEB
+      return true;
     }
-
-    return "";
+    return false;
   }
 
   fetchAwbUrl(selectedOrderDetail?: any) {
@@ -433,12 +433,21 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
       this.orderDetailData.children.forEach((children) => {
         children.data.forEach((childrenData) => {
           if (childrenData.shipmentHistory?.href) {
-            this.shipmentService
+
+            if(this.isAwbManagedByMarketplace) {
+              // set shipping history href as shipping label url
+              // for marketplace bukalapak only
+              childrenData.shipmentHistory.shippingLabelUrl = childrenData.shipmentHistory?.href
+            
+            } else {
+              this.shipmentService
               .fetch(getSlugFromHref(childrenData.shipmentHistory?.href))
               .subscribe((entity) => {
                 childrenData.shipmentHistory.shippingLabelUrl =
                   entity.shippingLabelUrl;
               });
+            }
+
           }
         });
       });
@@ -452,33 +461,16 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
     }
   }
 
-  printConnote(labelUrl: string) {
-    let windowContent = "<!DOCTYPE html>";
-    windowContent += "<html>";
-    windowContent += "<head><title>Print</title></head>";
-    windowContent += "<body>";
-    windowContent += '<img src="' + labelUrl + '">';
-    windowContent += "</body>";
-    windowContent += "</html>";
-
-    const printWin = window.open(
-      "",
-      "",
-      "width=" + screen.availWidth + ",height=" + screen.availHeight
-    );
-    printWin.document.open();
-    printWin.document.write(windowContent);
-
-    printWin.document.addEventListener(
-      "load",
-      () => {
-        printWin.focus();
-        printWin.print();
-        printWin.document.close();
-        printWin.close();
-      },
-      true
-    );
+  getShippingLabel(labelUrl: string) {
+    if(this.isAwbManagedByMarketplace){
+      if (this.orderDetailData.sourceName === 'lazada'){
+        window.open("https://sellercenter.lazada.co.id/", '_blank');
+      } else {
+        this.shippingLabelDownloadService.getFile(labelUrl);  
+      }
+    } else {
+      this.shippingLabelDownloadService.openDownloadWindow(labelUrl);
+    }
   }
 
   /**
@@ -508,8 +500,8 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
             (response) => {
               this.orderDetailData = response as any;
 
-              // for non managed AWB option don't fetch awb
-              if (this.isManagedAwb) {
+              // Fetch AWB for WEB and TSC 
+              if (!this.isAwbManagedByMarketplace) {
                 this.fetchAwbUrl();
               }
 
@@ -538,7 +530,10 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
     } else if (childrenData.status === "shipped") {
       alert(`Order already shipped`);
     } else {
-      if (this.isManagedAwb) {
+      if (this.isAwbManagedByMarketplace) {
+        // shipping label managed by marketplace
+        this.updateOrder(childrenData, "shipped");
+      } else {
         this.isRequestShipment = true;
         this.shipmentService
           .createAWB({
@@ -564,9 +559,6 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
             }
             this.isRequestShipment = false;
           });
-      } else {
-        // non managed AWB
-        this.updateOrder(childrenData, "shipped");
       }
     }
   }
@@ -676,10 +668,10 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
     }
   }
 
-  get isManagedAwb() {
-    return !(
+  get isAwbManagedByMarketplace() {
+    return (
       this.orderDetailData.source == "marketplace" &&
-      this.notManagedAwbSources.includes(this.orderDetailData.sourceName)
+      this.customHandlingAWB.includes(this.orderDetailData.sourceName)
     );
   }
 
