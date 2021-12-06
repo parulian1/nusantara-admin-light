@@ -143,9 +143,6 @@ export class AdvancedPriceWarehouseModalComponent implements OnInit, AfterViewIn
   }
 
   checkedItem(href) {
-    if (this.selectedWarehouses && ( -1 !== this.selectedWarehouses.value.findIndex(obj => obj.href === href) )) {
-      return 'checked';
-    }
-    return '';
+    return this.selectedWarehouses && (this.selectedWarehouses.value.findIndex(obj => obj.href === href) !== -1);
   }
 }

@@ -75,7 +75,8 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
                 <span i18n>Offline (POS)</span>
               </label>
             </div>
-            <div id="modify-type" [ngClass]="{'error-default-amount': errorDefaultPercentage || defaultAmountNumber.errors?.max}">
+            <div id="modify-type"
+                 [ngClass]="{'error-default-amount': errorDefaultAmount || defaultAmountNumber.errors?.max}">
               <p id="radio_label" class="subheading-2">Modify Price by</p>
               <div class="inline-option" role="radiogroup" aria-labelledby="radio_label">
                 <label [ngClass]="{'active': type === 'percentage'}" class="radio" role="radio">
@@ -92,16 +93,16 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
                   <option class="material-icons" value="negative" aria-label="negative">remove</option>
                   <option class="material-icons" value="positive" aria-label="positive">add</option>
                 </select>
-                <input *ngIf="type == 'percentage'" type="number" [formControl]="defaultAmountNumber" min="1" max="99"
-                       step="1" appOnlyNumber/>
-                <input *ngIf="type != 'percentage'" type="number" [formControl]="defaultAmountNumber" min="1"
-                       appOnlyNumber/>
+                <input type="number" [formControl]="defaultAmountNumber" min="1" appOnlyNumber/>
                 <span *ngIf="type == 'percentage'" class="input-group-text">%</span>
               </div>
-              <p class="error-message" *ngIf="errorDefaultPercentage" i18n>
-                Maximum percentage is 100%
+              <p class="error-message" *ngIf="defaultAmountNumber.errors?.invalidMinimumAmount" i18n>
+                Minimum amount 1
               </p>
-              <p class="error-message" *ngIf="defaultAmountNumber.errors?.max" i18n>
+              <p class="error-message" *ngIf="defaultAmountNumber.errors?.invalidMaxPercentage" i18n>
+                Percentage only 1-100%
+              </p>
+              <p class="error-message" *ngIf="defaultAmountNumber.errors?.invalidMaxDigit" i18n>
                 Ensure that there are no more than 16 digits
               </p>
             </div>
@@ -114,7 +115,7 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
         </nus-tab>
         <nus-tab [title]="'Product List'">
           <div class="product-table">
-            <p class="body-2" i18n>Total {{ products.length }} items {{products.invalid}}</p>
+            <p class="body-2" i18n>Total {{ products.length }} items</p>
             <div *ngIf="products.length > 0 && products.invalid" class="non-field-errors">
               <span class="heading-2" i18n>There was an error setting the price to the product.</span>
             </div>
@@ -270,7 +271,7 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
 
   defaultAmountSign: FormControl;
   defaultAmountNumber: FormControl ;
-  errorDefaultPercentage = false;
+  errorDefaultAmount = false;
 
   constructor(service: AdvancedPriceListService,
               route: ActivatedRoute,
@@ -300,13 +301,8 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
     );
 
     this.form.get('type').valueChanges.subscribe(
-      (newValue) => {
-        // Set product amount for the advance price
-        if (newValue === 'percentage') {
-          this.errorDefaultPercentage = this.defaultAmountNumber.value > 100;
-        } else {
-          this.errorDefaultPercentage = false;
-        }
+      () => {
+        this.checkDefaultAmount();
       }
     );
   }
@@ -368,7 +364,7 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
     });
 
     this.defaultAmountSign = new FormControl('positive', []);
-    this.defaultAmountNumber = new FormControl(1, [Validators.required, Validators.max(9999999999999998)]);
+    this.defaultAmountNumber = new FormControl(1, [Validators.required]);
 
     this.form.controls.isActive.markAsTouched();
     this.form.controls.isOnline.markAsTouched();
@@ -469,7 +465,7 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
         price: [product?.product.price, []],
         upc: [product?.product.upc, []]
       }),
-      amount: [product?.amount ?? 1, [Validators.required, Validators.min(1), Validators.max(9999999999999998)]]
+      amount: [product?.amount ?? 1, [Validators.required]]
     });
 
     this.products.push(f);
@@ -494,7 +490,7 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
           price: [basePrice, []],
           upc: [selectedProduct.upc, []]
         }),
-        amount: [1, [Validators.required, Validators.min(1), Validators.max(9999999999999998)]]
+        amount: [1, [Validators.required]]
       });
 
       this.products.push(f);
@@ -514,8 +510,31 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
     // wait to see if the user is still typing more before searching
     this.timeoutId = setTimeout(() => {
       this.defaultAmount.setValue(this.defaultAmountSign.value === 'positive' ? Math.abs(newValue) : -Math.abs(newValue));
-
+      this.checkDefaultAmount();
     }, this.reloadTimeout);
+  }
+
+  checkDefaultAmount() {
+    const amount = this.defaultAmountNumber.value;
+    let errorObject = null;
+
+    if (amount < 1) {
+      errorObject = {invalidMinimumAmount: true};
+    }
+
+    if (this.type === 'percentage' && amount > 100) {
+      errorObject = {invalidMaxPercentage: true};
+    }
+
+    if (this.type === 'amount' && amount > 9999999999999998) {
+      errorObject = {invalidMaxDigit: true};
+    }
+
+    this.defaultAmountNumber.setErrors(errorObject);
+    this.defaultAmountSign.setErrors(errorObject);
+    this.defaultAmount.setErrors(errorObject);
+    this.errorDefaultAmount = errorObject != null;
+    return;
   }
 
   save() {
@@ -528,7 +547,7 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
       return;
     }
 
-    if (this.errorDefaultPercentage) {
+    if (this.errorDefaultAmount) {
       this.toast?.addError('Please check your amount input', 'Failed to Save');
       return;
     }

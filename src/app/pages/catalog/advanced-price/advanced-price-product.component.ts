@@ -14,8 +14,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
             <option class="material-icons" value="negative" aria-label="negative">remove</option>
             <option class="material-icons" value="positive" aria-label="positive">add</option>
           </select>
-          <input *ngIf="type == 'percentage'" type="number" [formControl]="amountInput" min="1" max="99" appOnlyNumber/>
-          <input *ngIf="type != 'percentage'" type="number" [formControl]="amountInput" min="1" appOnlyNumber/>
+          <input type="number" [formControl]="amountInput" min="1" appOnlyNumber/>
           <span *ngIf="type == 'percentage'" class="input-group-text">%</span>
         </div>
         <nus-field-errors [control]="amountInput"></nus-field-errors>
@@ -134,23 +133,30 @@ export class AdvancedPriceProductComponent implements OnInit {
       this.amount.setValue(this.amountSign.value === 'positive' ? Math.abs(newValue) : -Math.abs(newValue));
 
       // Set error to input field if final price below zero
-      this.amountInput.setErrors(this.checkAmount() ? {invalidAmount: true} : null );
-      this.amountSign.setErrors(this.checkAmount() ? {invalidAmount: true} : null);
-      this.amount.setErrors(this.checkAmount() ? {invalidAmount: true} : null);
-      this.errorInput = this.checkAmount();
-
+      this.checkAmount();
     }, this.reloadTimeout);
   }
 
   checkAmount() {
     const amount = this.amountInput.value;
+    let errorObject = null;
+
+    if (amount < 1) {
+      errorObject = {invalidMinimumAmount: true};
+    }
 
     if (this.type === 'percentage' && amount > 100) {
-      return true;
+      errorObject = {invalidMaxPercentage: true};
     }
 
-    if (this.finalPrice < 0) {
-      return true;
+    if (this.type === 'amount' && amount > 9999999999999998) {
+      errorObject = {invalidMaxDigit: true};
     }
+
+    this.amountInput.setErrors(errorObject);
+    this.amountSign.setErrors(errorObject);
+    this.amount.setErrors(errorObject);
+    this.errorInput = errorObject != null;
+    return;
   }
 }
