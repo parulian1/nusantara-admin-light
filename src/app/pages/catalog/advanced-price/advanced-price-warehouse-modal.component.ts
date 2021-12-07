@@ -32,7 +32,6 @@ import {DialogResult} from '@nusantara/core';
                   name="{{ choice.href }}"
                   [value]="choice.href"
                   [checked]="checkedItem(choice.href)"
-                  (change)="onCheckboxChange($event)"
                 >
                 <span>{{ choice.name }}</span>
               </label>
@@ -113,16 +112,23 @@ export class AdvancedPriceWarehouseModalComponent implements OnInit, AfterViewIn
     });
   }
 
-  onCheckboxChange(e) {
-    if (e.target.checked) {
-      this.warehouses.push(new FormControl(e.target.value));
-    } else {
-      const index = this.warehouses.controls.findIndex(x => x.value === e.target.value);
-      this.warehouses.removeAt(index);
-    }
-  }
-
   submit() {
+    const v = this.formView.nativeElement.getElementsByTagName('input');
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < v.length; i++) {
+      if (v[i].type === 'checkbox') {
+        if (v[i].checked) {
+          if (this.warehouses.controls.findIndex(x => x.value === v[i].value) < 0) {
+            this.warehouses.push(new FormControl(v[i].value));
+          }
+        } else {
+          const index = this.warehouses.controls.findIndex(x => x.value === v[i].value);
+          if (index >= 0) {
+            this.warehouses.removeAt(index);
+          }
+        }
+      }
+    }
     this.close();
     return false;
   }
