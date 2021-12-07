@@ -153,6 +153,10 @@ export class AdvancedPriceProductComponent implements OnInit {
       errorObject = {invalidMaxDigit: true};
     }
 
+    if (this.finalPrice < 0) {
+      errorObject = {invalidFinalPrice: true};
+    }
+
     this.amountInput.setErrors(errorObject);
     this.amountSign.setErrors(errorObject);
     this.amount.setErrors(errorObject);
