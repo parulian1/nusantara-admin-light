@@ -17,7 +17,7 @@ import {
 } from '@nusantara/core';
 import { OrderService, ShipmentService } from '@nusantara/services';
 import {
-  drf,
+  drf, IOrder,
   IOrderChildrenData,
   order,
   OrderStatusType,
@@ -31,15 +31,18 @@ import {
   PickupServiceInfoModalComponent,
   SetPickUpServiceComponent,
   TransportToCounterSelectionModalComponent,
-} from "./modals";
+} from './modals';
 import { MarketplaceOrderService } from '@nusantara/services/marketplace-order.service';
 import { IOrderChildren } from '@nusantara/models/order/order-children';
 import { MatDialog } from '@angular/material/dialog';
 import { OrderDownloadShippingLabel } from '@nusantara/services/order-download-shipping-label.service';
 
+function isShopifyOrder(orderData: order.IOrderDetail) {
+  return orderData.source === 'marketplace' && orderData.sourceName === 'shopify';
+}
 
 @Component({
-  selector: "nus-order-detail",
+  selector: 'nus-order-detail',
   template: `
     <div class="wrapper">
       <ng-container *ngFor="let children of orderDetailData.children">
@@ -316,41 +319,41 @@ import { OrderDownloadShippingLabel } from '@nusantara/services/order-download-s
     <nus-activity-tracking-modal></nus-activity-tracking-modal>
   `,
   styles: [
-    ".wrapper { margin: 16px 0; }",
-    "table { margin-bottom: 24px; }",
-    "h3 { color: var(--lighten-black); margin-bottom: 0; }",
-    ".order-status td { padding: 20px 24px; vertical-align: top; width: 20%; }",
-    ".status-action-row { padding-left: 10px !important; }",
-    ".button-status-action { display: flex; align-items: center; gap: 16px; }",
-    ".button-status-action button { padding: 0 10px; }",
-    ".subheading-2 { color: var(--lighten-black); margin-bottom: 2px; }",
-    ".product-item td { border-bottom: none; padding: 8px 24px; }",
-    ".product-item-detail { display: flex; gap: 16px; align-items: center; }",
-    ".product-item-detail > span:first-child { width: 64px; }",
-    ".product-item-detail > span:nth-child(2) { min-width: 240px; flex-basis: 390px;}",
-    ".product-item-detail > span:nth-child(3) { min-width: 120px; flex-basis: 200px; }",
-    ".product-item-detail .caption-1 { overflow: hidden; text-overflow: ellipsis; }",
-    "tr.product-title > td { padding: 16px 24px; border-bottom: none; width: 100%; }",
-    ".summary thead { background: transparent; }",
-    ".summary th { padding: 20px 24px; }",
-    ".summary td { width: 50%; padding: 14px 24px; }",
-    ":host nus-milestone { width: 180px; }",
-    ".download-button { min-width: 200px; display: block; margin-left: auto; }",
-    "img { height: 64px; width: 64px; }",
-    ".no-image { background: var(--lighten-black); }",
-    ".see-order { text-align: center; }",
-    ".see-order { display: flex; justify-content: center; align-items: center;}",
-    ".see-order.shopee, .see-order.shopee:hover { background: var(--shopee-color) }",
-    ".see-order.tokopedia, .see-order.tokopedia:hover { background: var(--tokopedia-color) }",
-    ".see-order.bukalapak, .see-order.bukalapak:hover { background: var(--bukalapak-color) }",
-    ".see-order.lazada, .see-order.lazada:hover { background: var(--lazada-color) }",
+    '.wrapper { margin: 16px 0; }',
+    'table { margin-bottom: 24px; }',
+    'h3 { color: var(--lighten-black); margin-bottom: 0; }',
+    '.order-status td { padding: 20px 24px; vertical-align: top; width: 20%; }',
+    '.status-action-row { padding-left: 10px !important; }',
+    '.button-status-action { display: flex; align-items: center; gap: 16px; }',
+    '.button-status-action button { padding: 0 10px; }',
+    '.subheading-2 { color: var(--lighten-black); margin-bottom: 2px; }',
+    '.product-item td { border-bottom: none; padding: 8px 24px; }',
+    '.product-item-detail { display: flex; gap: 16px; align-items: center; }',
+    '.product-item-detail > span:first-child { width: 64px; }',
+    '.product-item-detail > span:nth-child(2) { min-width: 240px; flex-basis: 390px;}',
+    '.product-item-detail > span:nth-child(3) { min-width: 120px; flex-basis: 200px; }',
+    '.product-item-detail .caption-1 { overflow: hidden; text-overflow: ellipsis; }',
+    'tr.product-title > td { padding: 16px 24px; border-bottom: none; width: 100%; }',
+    '.summary thead { background: transparent; }',
+    '.summary th { padding: 20px 24px; }',
+    '.summary td { width: 50%; padding: 14px 24px; }',
+    ':host nus-milestone { width: 180px; }',
+    '.download-button { min-width: 200px; display: block; margin-left: auto; }',
+    'img { height: 64px; width: 64px; }',
+    '.no-image { background: var(--lighten-black); }',
+    '.see-order { text-align: center; }',
+    '.see-order { display: flex; justify-content: center; align-items: center;}',
+    '.see-order.shopee, .see-order.shopee:hover { background: var(--shopee-color) }',
+    '.see-order.tokopedia, .see-order.tokopedia:hover { background: var(--tokopedia-color) }',
+    '.see-order.bukalapak, .see-order.bukalapak:hover { background: var(--bukalapak-color) }',
+    '.see-order.lazada, .see-order.lazada:hover { background: var(--lazada-color) }',
     `.see-order.shopee:hover,
      .see-order.tokopedia:hover,
      .see-order.bukalapak:hover,
      .see-order.lazada:hover { filter : brightness(0.85); }`,
-    ".see-order div.logo { margin-top: 8px; margin-right: 5px; }",
-    ".see-order div.logo img { width: 20px; height: 20px; border-radius: 4px; background: white; padding: 1px; }",
-    ".refresh-awb { margin-left: 5px; font-weight: normal; }",
+    '.see-order div.logo { margin-top: 8px; margin-right: 5px; }',
+    '.see-order div.logo img { width: 20px; height: 20px; border-radius: 4px; background: white; padding: 1px; }',
+    '.refresh-awb { margin-left: 5px; font-weight: normal; }',
   ],
 })
 export class OrderDetailComponent implements OnInit, AfterViewInit {
@@ -377,10 +380,10 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   isRequestShipment = false;
 
   // marketplace list for custom handling download shipping label
-  customHandlingAWB = ["tokopedia", "shopee", "bukalapak", "lazada"];
+  customHandlingAWB = ['tokopedia', 'shopee', 'bukalapak', 'lazada'];
 
   // enable refresh AWB for following source name
-  enableRefreshAwb = ["tokopedia", "shopee", "bukalapak", "lazada"];
+  enableRefreshAwb = ['tokopedia', 'shopee', 'bukalapak', 'lazada'];
 
   constructor(
     public route: ActivatedRoute,
@@ -402,12 +405,12 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
         this.isShippableOrder = !!this.orderDetailData.orderAddress;
       }
     );
-    
+
     this.fetchAwbUrl();
   }
 
   getcurrentMilestone(status: string) {
-    return status === "shipped" ? "ship" : status;
+    return status === 'shipped' ? 'ship' : status;
   }
 
   getAwbNumber(childrenData: any) {
@@ -415,14 +418,15 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
     if (childrenData.shipmentHistory?.awbNumber) {
       return childrenData.shipmentHistory.awbNumber;
     }
-    return "";
+    return '';
   }
 
   isDownloadable(childrenData: any) {
     // Downlaod condition for marketplace
-    if (this.isAwbManagedByMarketplace && childrenData.status === "shipped"){
+    if (this.isAwbManagedByMarketplace && childrenData.status === 'shipped'){
       return true;
-    } else if (this.orderDetailData.source == "web" && childrenData.shipmentHistory?.awbNumber) { // for WEB
+    } else if ((this.orderDetailData.source === 'web' || isShopifyOrder(this.orderDetailData)) &&
+      childrenData.shipmentHistory?.awbNumber) { // for WEB
       return true;
     }
     return false;
@@ -434,11 +438,11 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
         children.data.forEach((childrenData) => {
           if (childrenData.shipmentHistory?.href) {
 
-            if(this.isAwbManagedByMarketplace) {
+            if (this.isAwbManagedByMarketplace) {
               // set shipping history href as shipping label url
               // for marketplace bukalapak only
-              childrenData.shipmentHistory.shippingLabelUrl = childrenData.shipmentHistory?.href
-            
+              childrenData.shipmentHistory.shippingLabelUrl = childrenData.shipmentHistory?.href;
+
             } else {
               this.shipmentService
               .fetch(getSlugFromHref(childrenData.shipmentHistory?.href))
@@ -462,11 +466,11 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   }
 
   getShippingLabel(labelUrl: string) {
-    if(this.isAwbManagedByMarketplace){
+    if (this.isAwbManagedByMarketplace){
       if (this.orderDetailData.sourceName === 'lazada'){
-        window.open("https://sellercenter.lazada.co.id/", '_blank');
+        window.open('https://sellercenter.lazada.co.id/', '_blank');
       } else {
-        this.shippingLabelDownloadService.getFile(labelUrl);  
+        this.shippingLabelDownloadService.getFile(labelUrl);
       }
     } else {
       this.shippingLabelDownloadService.openDownloadWindow(labelUrl);
@@ -477,15 +481,15 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
    * Check manual transfer or not
    */
   isManualTransfer(orderData: order.IOrderDetail): boolean {
-    return orderData?.orderPayment?.paymentGateway.type === "manual_transfer";
+    return orderData?.orderPayment?.paymentGateway.type === 'manual_transfer';
   }
 
   updateOrder(childrenData: any, status: OrderStatusType) {
-    if (status === "ready" && childrenData.status !== "paid") {
-      alert("Cannot change unpaid order");
-    } else if (status === "shipped" && childrenData.status !== "ready") {
+    if (status === 'ready' && childrenData.status !== 'paid') {
+      alert('Cannot change unpaid order');
+    } else if (status === 'shipped' && childrenData.status !== 'ready') {
       alert(`Cannot change order that wasn't ready`);
-    } else if (status === "complete" && childrenData.status !== "shipped") {
+    } else if (status === 'complete' && childrenData.status !== 'shipped') {
       alert(`Cannot change order that wasn't shipped`);
     } else {
       const entity = {
@@ -500,7 +504,7 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
             (response) => {
               this.orderDetailData = response as any;
 
-              // Fetch AWB for WEB and TSC 
+              // Fetch AWB for WEB and TSC
               if (!this.isAwbManagedByMarketplace) {
                 this.fetchAwbUrl();
               }
@@ -513,26 +517,26 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
               this.updateOrderStatus.emit();
             },
             (error) => {
-              console.log("Error", error);
+              console.log('Error', error);
             }
           );
         },
         (error) => {
-          console.log("error", error);
+          console.log('error', error);
         }
       );
     }
   }
 
   requestShipmentAndUpdateOrder(childrenData: any) {
-    if (childrenData.status !== "ready") {
+    if (childrenData.status !== 'ready') {
       alert(`Cannot ship order that wasn't ready`);
-    } else if (childrenData.status === "shipped") {
+    } else if (childrenData.status === 'shipped') {
       alert(`Order already shipped`);
     } else {
       if (this.isAwbManagedByMarketplace) {
         // shipping label managed by marketplace
-        this.updateOrder(childrenData, "shipped");
+        this.updateOrder(childrenData, 'shipped');
       } else {
         this.isRequestShipment = true;
         this.shipmentService
@@ -542,8 +546,8 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
           .subscribe((response) => {
             if (response instanceof ErrorResult) {
               this.toast?.addMessage(
-                "Please try again or contact the administrator.",
-                "Unable to Proceed",
+                'Please try again or contact the administrator.',
+                'Unable to Proceed',
                 ToastLevelEnum.error
               );
             } else {
@@ -551,11 +555,11 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
                 childrenData.shipmentHistory = new Object({
                   awbNumber: null,
                   href: null,
-                  shippingLabelUrl: "",
+                  shippingLabelUrl: '',
                 });
               }
               this.fetchAwbUrl(childrenData);
-              this.updateOrder(childrenData, "shipped");
+              this.updateOrder(childrenData, 'shipped');
             }
             this.isRequestShipment = false;
           });
@@ -564,14 +568,14 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   }
 
   isReadyButtonDisabled(childrenData: any): boolean {
-    return childrenData === "unpaid";
+    return childrenData === 'unpaid';
   }
 
   isReadyButtonHidden(childrenData: any): boolean {
     if (
-      childrenData.status !== "paid" ||
-      childrenData.status === "ready" ||
-      childrenData.status === "waiting"
+      childrenData.status !== 'paid' ||
+      childrenData.status === 'ready' ||
+      childrenData.status === 'waiting'
     ) {
       return true;
     }
@@ -580,8 +584,8 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
 
   isShipButtonHidden(childrenData: any): boolean {
     if (
-      childrenData.status !== "ready" ||
-      childrenData.status === "shipped" ||
+      childrenData.status !== 'ready' ||
+      childrenData.status === 'shipped' ||
       this.isRequestShipment
     ) {
       return true;
@@ -591,8 +595,8 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
 
   isCompleteButtonHidden(childrenData: any): boolean {
     if (
-      childrenData.status !== "shipped" ||
-      childrenData.status === "complete" ||
+      childrenData.status !== 'shipped' ||
+      childrenData.status === 'complete' ||
       this.isRedirectMarketplaceShowed(childrenData)
     ) {
       return true;
@@ -602,7 +606,7 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
 
   // trigger cancel button on main order page
   updateCanCancelOrder() {
-    if (["unpaid", "waiting", "ready"].includes(this.orderDetailData.status)) {
+    if (['unpaid', 'waiting', 'ready'].includes(this.orderDetailData.status)) {
       this.enableCancelOrder.emit(true);
     } else {
       this.enableCancelOrder.emit(false);
@@ -632,8 +636,8 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
           .subscribe((response) => {
             if (response instanceof ErrorResult) {
               this.toast?.addMessage(
-                "Please try again or contact the administrator.",
-                "Unable to Proceed",
+                'Please try again or contact the administrator.',
+                'Unable to Proceed',
                 ToastLevelEnum.error
               );
             } else {
@@ -647,11 +651,11 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
                       childrenData.shipmentHistory = {
                         awbNumber: null,
                         href: null,
-                        shippingLabelUrl: "",
+                        shippingLabelUrl: '',
                       };
                     }
                     this.fetchAwbUrl(childrenData);
-                    this.updateOrder(childrenData, "shipped");
+                    this.updateOrder(childrenData, 'shipped');
                   }
                 });
               });
@@ -660,8 +664,8 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
           });
       } else {
         this.toast?.addMessage(
-          "Your AWB entry is not valid.",
-          "Unable to Proceed",
+          'Your AWB entry is not valid.',
+          'Unable to Proceed',
           ToastLevelEnum.error
         );
       }
@@ -670,15 +674,15 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
 
   get isAwbManagedByMarketplace() {
     return (
-      this.orderDetailData.source == "marketplace" &&
+      this.orderDetailData.source === 'marketplace' && this.orderDetailData.sourceName !== 'shopify' &&
       this.customHandlingAWB.includes(this.orderDetailData.sourceName)
     );
   }
 
   get isCancelOrderSupported() {
     return !(
-      ["web", "pos"].includes(this.orderDetailData.source) ||
-      this.orderDetailData.sourceName == "tsc"
+      ['web', 'pos'].includes(this.orderDetailData.source) ||
+      this.orderDetailData.sourceName === 'tsc'
     );
   }
 
@@ -687,7 +691,7 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   get isfulfillmentException() {
     return (
       this.enableRefreshAwb.includes(this.orderDetailData.sourceName) &&
-      this.orderDetailData.status === "shipped"
+      this.orderDetailData.status === 'shipped'
     );
   }
 
@@ -719,11 +723,11 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
     this.mpService
       .fetchLogisticInfo(this.orderDetailData.orderNumber, this.orderDetailData.storeId)
       .subscribe((response) => {
-          if(response.type.length!=0){
+          if (response.type.length !== 0){
             this.dialog.open(TransportToCounterSelectionModalComponent, {
-              data: {"logistic": response, "orderDetail": this.orderDetailData},
-              width: "540px",
-              height: "640px",
+              data: {logistic: response, orderDetail: this.orderDetailData},
+              width: '540px',
+              height: '640px',
             });
           }
       });
