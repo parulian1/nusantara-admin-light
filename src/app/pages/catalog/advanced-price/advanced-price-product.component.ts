@@ -67,10 +67,26 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 export class AdvancedPriceProductComponent implements OnInit {
 
   @Input() form: FormGroup;
-  @Input() type: string;
+  // @Input() type: string;
   @Input() defaultAmountSign: string;
   @Input() defaultAmountNumber: number;
   @Output() remove: EventEmitter<void> = new EventEmitter();
+
+  // tslint:disable-next-line:variable-name
+  private _type: string;
+
+  @Input() set type(value: string) {
+
+    this._type = value;
+    this.calculateFinalPrice(this.amountInput.value);
+
+  }
+
+  get type(): string {
+
+    return this._type;
+
+  }
 
   timeoutId: any;
   reloadTimeout = 650;
