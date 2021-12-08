@@ -40,6 +40,9 @@ import { OrderDownloadShippingLabel } from '@nusantara/services/order-download-s
 function isShopifyOrder(orderData: order.IOrderDetail) {
   return orderData.source === 'marketplace' && orderData.sourceName === 'shopify';
 }
+function isTSCOrder(orderData: order.IOrderDetail) {
+  return orderData.source === 'marketplace' && orderData.sourceName === 'tsc';
+}
 
 @Component({
   selector: 'nus-order-detail',
@@ -425,7 +428,7 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
     // Downlaod condition for marketplace
     if (this.isAwbManagedByMarketplace && childrenData.status === 'shipped'){
       return true;
-    } else if ((this.orderDetailData.source === 'web' || isShopifyOrder(this.orderDetailData)) &&
+    } else if ((this.orderDetailData.source === 'web' || isShopifyOrder(this.orderDetailData) || isTSCOrder(this.orderDetailData)) &&
       childrenData.shipmentHistory?.awbNumber) { // for WEB
       return true;
     }
