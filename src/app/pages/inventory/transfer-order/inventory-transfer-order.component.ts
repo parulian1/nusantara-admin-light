@@ -115,7 +115,7 @@ import { ConfirmModalInvetoryOrderComponent } from '@nusantara/shared';
     </form>
 
     <!-- Modals -->
-    <nus-product-selection-modal></nus-product-selection-modal>
+    <nus-product-selection-modal [productType]="productType"></nus-product-selection-modal>
     <nus-confirm-inventory-modal [cancelWithoutReload]="true"></nus-confirm-inventory-modal>
   `,
   styles: [`
@@ -142,6 +142,7 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
   @ViewChild(ConfirmModalInvetoryOrderComponent) confirmModalReceiving: ConfirmModalInvetoryOrderComponent;
   currentDate: Date;
   destinationWarehouses: IWarehouse[];
+  productType: string = 'single';
 
   constructor(private fb: FormBuilder,
               toast: ToastService,

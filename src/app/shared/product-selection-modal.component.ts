@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgxSmartModalComponent } from 'ngx-smart-modal';
 import { Subscription } from 'rxjs';
@@ -94,6 +94,7 @@ export class ProductSelectionModalComponent implements OnInit, AfterViewInit {
   @ViewChild('imageInput') imageInput: ElementRef;
   @ViewChild('modalForm') formView: ElementRef<HTMLFormElement>;
   @ViewChild('modal') modal: NgxSmartModalComponent;
+  @Input() productType?: string;
 
   form: FormGroup;
   result: DialogResult = DialogResult.Cancelled;
@@ -177,9 +178,12 @@ export class ProductSelectionModalComponent implements OnInit, AfterViewInit {
 
     // wait to see if the user is still typing, before we reload
     this.timeoutId = setTimeout(() => {
-      this.service.fetchList(this.searchText.value, 1, 10).subscribe((page) => {
+      let otherParams = {};
+      if (this.productType) {
+        otherParams['productType'] = this.productType;
+      }
+      this.service.fetchList(this.searchText.value, 1, 10, otherParams).subscribe((page) => {
         this.displayedResults = page;
-
       });
     }, this.reloadTimeout);
 
