@@ -130,7 +130,7 @@ import { of } from 'rxjs';
       </div>
     </form>
     <!-- Modals -->
-    <nus-product-selection-modal></nus-product-selection-modal>
+    <nus-product-selection-modal [productType]="productType"></nus-product-selection-modal>
     <nus-marketplace-channel-info-modal [warehouseInfoDetail]="warehouseDetail"></nus-marketplace-channel-info-modal>
     <nus-confirm-receiving-modal></nus-confirm-receiving-modal>
 
@@ -179,6 +179,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
   storeValue = 0;
   marketplaceValue = 0;
   showDetail = false;
+  productType: string = 'single';
 
   constructor(private fb: FormBuilder,
               public toast: ToastService,

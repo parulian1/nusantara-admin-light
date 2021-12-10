@@ -36,7 +36,7 @@ export abstract class AbstractCrudService<T extends base.IHrefEntity> {
    * @param page the page number to fetch from the API; default 1.
    * @param perPage the size of the page to be returned (API default = 50, max 250)
    */
-  fetchList(query?: string, page: number = 1, perPage?: number): Observable<PagedResponse<T>> {
+  fetchList(query?: string, page: number = 1, perPage?: number, otherParams?: any): Observable<PagedResponse<T>> {
     // create query params --> ?q=maybe&page=1
     let params = new HttpParams().set('page', page.toFixed(0).toString());
 
@@ -48,6 +48,12 @@ export abstract class AbstractCrudService<T extends base.IHrefEntity> {
       params = params.set('q', query);
     }
 
+    if (otherParams) {
+      const keys = Object.keys(otherParams);
+      if (keys.indexOf('productType') !== -1) {
+        params = params.set('product_type', otherParams['productType']);
+      }
+    }
 
     return this.httpClient
       .get<T[]>(`${this.baseUrl}/`, {observe: 'response', responseType: 'json', params})

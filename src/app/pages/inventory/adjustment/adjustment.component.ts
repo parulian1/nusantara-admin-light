@@ -8,7 +8,7 @@ import {
   ToastLevelEnum,
   ToastService,
 } from '@nusantara/core';
-import { drf, inventory, ISubLocation, IWarehouse, marketplace } from '@nusantara/models';
+import { drf, inventory, ISubLocation, IWarehouse } from '@nusantara/models';
 import { IAdjustment, IStockRecord, ReceivingOrderStatusChoices } from '@nusantara/models/inventory';
 import { AuthService } from '@nusantara/auth';
 import {
@@ -343,6 +343,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     this.stockRecordSelectionModal.filters = {
       warehouse: getSlugFromHref(this.warehouse.value?.href),
       receiving_order_status: ReceivingOrderStatusChoices.APPROVED,
+      product_type: 'single'
     };
 
     this.stockRecordSelectionModal.displayedResults = null;
@@ -544,7 +545,8 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
                 warehouse: getSlugFromHref(this.warehouse.value?.href),
                 sub_location: getSlugFromHref(this.subLocation.value?.href),
                 receiving_order_status: ReceivingOrderStatusChoices.APPROVED,
-                search_fields: '=product__upc'
+                search_fields: '=product__upc',
+                product_type: 'single',
               };
               const upc = this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['upc']] : value[+(this.csvDialog.columnChoices['upc']) - 1];
               if (upc.length < 2) {
