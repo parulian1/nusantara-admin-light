@@ -49,6 +49,7 @@ import { CategorySelectionModalComponent } from './modals/category-selection-mod
 import { ProductClassSelectionModalComponent } from './modals/product-class-selection-modal.component';
 import { ClickOutsideDirective } from './click-outside.directive';
 import { ProductOnlineSelectionModalComponent } from '@nusantara/shared/product-online-selection-modal.component';
+import { WarehouseLocationModalComponent } from './modals/warehouse-location-modal.component';
 
 /**
  * The purpose of this module is to make common code (like pipes)
@@ -99,7 +100,9 @@ import { ProductOnlineSelectionModalComponent } from '@nusantara/shared/product-
     CategorySelectionModalComponent,
     ProductClassSelectionModalComponent,
     ClickOutsideDirective,
-    ProductOnlineSelectionModalComponent
+    ProductOnlineSelectionModalComponent,
+    ProductClassSelectionModalComponent,
+    WarehouseLocationModalComponent
   ],
   exports: [
     EntityToSlugPipe,
@@ -144,7 +147,9 @@ import { ProductOnlineSelectionModalComponent } from '@nusantara/shared/product-
     CategorySelectionModalComponent,
     ProductClassSelectionModalComponent,
     ClickOutsideDirective,
-    ProductOnlineSelectionModalComponent
+    ProductOnlineSelectionModalComponent,
+    ProductClassSelectionModalComponent,
+    WarehouseLocationModalComponent
   ],
   imports: [
     CommonModule,

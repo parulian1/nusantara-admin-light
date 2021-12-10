@@ -25,7 +25,7 @@ const logger = new Logger('CSVDialogComponent');
           <h2 class="heading-2" i18n>Choose CSV File (Step 1/2) </h2>
 
           <p i18n>Upload a CSV file to bulk upload your products. Don't have a file? <a
-            href="../../../assets/sample-files/example-csv-stock-adjustment.csv" download>Download Template</a></p>
+            href="assets/sample-files/example-csv-stock-adjustment.csv" download>Download Template</a></p>
 
           <div>
             <!--          <form [formGroup]="form">-->

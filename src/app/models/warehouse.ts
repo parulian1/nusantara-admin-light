@@ -12,5 +12,6 @@ export class IWarehouse {
   financialReportingAs?: string;
   allowReassignmentFrom?: string[];
   isActive: boolean;
+  isManagedKgx: boolean;
   phoneNumber: string;
 }

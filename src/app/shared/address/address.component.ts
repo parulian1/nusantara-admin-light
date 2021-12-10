@@ -24,7 +24,7 @@ import { InternalAddressValue } from './internal-address-value';
     <div [formGroup]="innerForm">
       <label>
         <span i18n>Street</span>
-        <input [formControl]="street" name="street">
+        <input [formControl]="street" name="street" maxlength="250">
         <nus-field-errors [control]="form.get('street')"></nus-field-errors>
       </label>
 

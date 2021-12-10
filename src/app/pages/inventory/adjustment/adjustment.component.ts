@@ -544,7 +544,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
                 warehouse: getSlugFromHref(this.warehouse.value?.href),
                 sub_location: getSlugFromHref(this.subLocation.value?.href),
                 receiving_order_status: ReceivingOrderStatusChoices.APPROVED,
-                search_fields: 'product__upc'
+                search_fields: '=product__upc'
               };
               const upc = this.csvDialog.hasCsvHeader ? value[this.csvDialog.columnChoices['upc']] : value[+(this.csvDialog.columnChoices['upc']) - 1];
               if (upc.length < 2) {
