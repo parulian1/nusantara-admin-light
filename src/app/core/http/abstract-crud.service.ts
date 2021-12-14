@@ -155,7 +155,7 @@ export abstract class AbstractCrudService<T extends base.IHrefEntity> {
       .pipe(map(resp => resp.status === 204 ? new SuccessResult() : new ErrorResult(resp.body, resp.status)));
   }
 
-  private getEntityUrl(entity: T | base.IHrefEntity | FormData) {
+  protected getEntityUrl(entity: T | base.IHrefEntity | FormData) {
     if (entity instanceof FormData) {
       return entity.get('href') as string;
     }

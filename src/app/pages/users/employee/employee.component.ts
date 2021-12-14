@@ -16,7 +16,7 @@ import { IAccessGroup, IEmployee, IHttpFailure, IWarehouse } from '@nusantara/mo
 import { EmployeeService, SiteConfigService, WarehouseService, DefaultPinConfigService } from '@nusantara/services';
 import {
   AbstractDetailComponent, DialogResult,
-  ErrorResult, IResultResponse, ToastLevelEnum,
+  ErrorResult, IResultResponse, Logger, ToastLevelEnum,
   ToastService,
 } from '@nusantara/core';
 
@@ -27,6 +27,7 @@ import { IJwtClaims } from '@nusantara/auth/models';
 import { ConfirmModalResetPinComponent } from '@nusantara/shared/confirm-modal-reset-pin.component';
 import { getSlugFromHref } from '@nusantara/shared/helpers';
 
+const logger = new Logger('EmployeeComponent');
 
 @Component({
   selector: 'nus-employee-detail',
@@ -117,11 +118,20 @@ import { getSlugFromHref } from '@nusantara/shared/helpers';
       </div>
 
       <div style="margin-top: 1rem;" *ngIf="enterpriseGuard.canActivate(null, null)">
-        <nus-employee-access-group-host
-          [entity]="entity"
-          [choices]="accessGroupChoices"
-          [form]="accessGroups">
-        </nus-employee-access-group-host>
+        <table>
+          <thead>
+          <tr>
+            <th i18n>Access Group</th>
+            <th i18n>Delete</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let groupEntity of entity?.groups?.entities">
+            <td>{{ groupEntity.name }}</td>
+            <td></td>
+          </tr>
+          </tbody>
+        </table>
       </div>
 
       <div class="mt-3" *ngIf="entity">
@@ -235,9 +245,10 @@ export class EmployeeComponent
     this.route.data.subscribe((data: { warehouses: IWarehouse[], accessGroups: IAccessGroup[] }) => {
       this.warehouseChoices = data.warehouses;
       this.accessGroupChoices = data.accessGroups;
+      logger.debug('OnInit data Subscribe', data);
     });
-
     super.ngOnInit();
+    logger.debug('OnInit this entity', this.entity);
     this.handleCurrentUser();
     this.setWarehouseValidator();
     this.checkDefaultPinConfig();
@@ -370,9 +381,9 @@ export class EmployeeComponent
     } else {
       this.warehouseService.deleteAllEmployeeWarehouse(getSlugFromHref(result.entity.href)).subscribe(() => {});
     }
-    if (this.enterpriseGuard.canActivate(null, null)) {
-      this.EmployeeAccessGroupHostComponent.saveAll(result.entity.href).subscribe(() => {});
-    }
+    // if (this.enterpriseGuard.canActivate(null, null)) {
+    //   this.EmployeeAccessGroupHostComponent.saveAll(result.entity.href).subscribe(() => {});
+    // }
 
     super.onSaveSuccess(result);
   }
