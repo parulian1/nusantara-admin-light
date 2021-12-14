@@ -8,6 +8,6 @@ export interface IUser extends INamedHrefEntity {
 
   // meh.
 
-  isStaff: string;
-  dateJoined: string;
+  isStaff?: string;
+  dateJoined?: string;
 }

@@ -9,6 +9,7 @@ import { SharedModule } from '@nusantara/shared';
 import { CoreModule } from '@nusantara/core';
 import { MockJwtHelperService } from './helpers/mocks';
 import {Router} from '@angular/router';
+import {ServiceWorkerModule} from '@angular/service-worker';
 
 describe('AppComponent', () => {
 
@@ -24,6 +25,7 @@ describe('AppComponent', () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
+        ServiceWorkerModule.register('', {enabled: false}),
         AuthModule,
         SharedModule,
         CoreModule,

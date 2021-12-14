@@ -16,6 +16,7 @@ import {
   GroupProviderResolver
 } from '@nusantara/pages/config/group';
 import {SiteConfigComponent, SiteConfigResolver, SocialMediaTypeResolver} from '@nusantara/pages/config';
+import {GroupUserListResolver} from '@nusantara/pages/config/group/resolvers/group-user-list.resolver';
 
 const routes: Routes = [
   {
@@ -124,7 +125,7 @@ const routes: Routes = [
       {
         path: ':slug',
         component: GroupComponent,
-        resolve: { entity: GroupProviderResolver },
+        resolve: { entity: GroupProviderResolver, userList: GroupUserListResolver },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },
       },

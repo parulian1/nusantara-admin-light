@@ -92,7 +92,12 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
     return this.form.value;
   }
 
+  beforeSave(): void {
+
+  }
+
   save(headers?: any) {
+    this.beforeSave();
     this.service.save(this.getFormValue(), headers).pipe(catchError(err => {
       if (err instanceof HttpErrorResponse) {
         return of(new ErrorResult<IHttpFailure>(err.error, err.status));
