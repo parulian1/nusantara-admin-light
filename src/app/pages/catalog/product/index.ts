@@ -7,10 +7,12 @@ export * from './parent-product.resolver';
 
 export * from './product-full-list.resolver';
 
+
 import * as attribute from './attribute';
 import * as price from './price';
 import * as media from './media';
 import * as subscription from './subscription';
 import * as marketplace from './marketplace';
+import * as bundle from './bundle';
 
-export { media, price, attribute, subscription, marketplace };
+export { media, price, attribute, subscription, marketplace, bundle };

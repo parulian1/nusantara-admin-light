@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpParams} from '@angular/common/http';
 
-import { AbstractCrudService, PagedResponse } from '@nusantara/core';
-import { products } from '@nusantara/models';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {AbstractCrudService, PagedResponse} from '@nusantara/core';
+import {products} from '@nusantara/models';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 /**
  * Service for product CRUD.
@@ -25,9 +25,11 @@ export class ProductService extends AbstractCrudService<products.IProduct> {
    */
   fetchParentList(query?: string, page: number = 1, perPage?: number): Observable<PagedResponse<products.IProduct>> {
 
-    let params = new HttpParams({fromObject: {
-      page: page.toFixed(0).toString(),
-    }});
+    let params = new HttpParams({
+      fromObject: {
+        page: page.toFixed(0).toString(),
+      }
+    });
 
     if (perPage) {
       params = params.set('per_page', perPage.toFixed(0).toString());
@@ -45,10 +47,32 @@ export class ProductService extends AbstractCrudService<products.IProduct> {
   }
 
   fetch(slug: string): Observable<products.IProduct> {
-    const params = new HttpParams({fromObject: {
+    const params = new HttpParams({
+      fromObject: {
         include_deleted: 'true',
-      }});
+      }
+    });
     return this.httpClient
       .get<products.IProduct>(`${this.baseUrl}/${slug}/`, {observe: 'body', responseType: 'json', params});
+  }
+
+  fetchOnlineList(query?: string, page: number = 1, perPage?: number): Observable<PagedResponse<products.IProduct>> {
+    // create query params --> ?q=maybe&page=1
+    let params = new HttpParams().set('page', page.toFixed(0).toString());
+
+    if (perPage) {
+      params = params.set('per_page', perPage.toFixed(0).toString());
+    }
+
+    if (query) {
+      params = params.set('q', query);
+    }
+
+    // set params for online stock
+    params = params.set('available_online', String(true));
+
+    return this.httpClient
+      .get<products.IProduct[]>(`${this.baseUrl}/`, {observe: 'response', responseType: 'json', params})
+      .pipe(map(resp => new PagedResponse(resp)));
   }
 }

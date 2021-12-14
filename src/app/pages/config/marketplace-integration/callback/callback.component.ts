@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthService } from '@nusantara/auth/auth.service';
-import {MarketplaceShopService} from '@nusantara/services';
+import { MarketplaceShopService } from '@nusantara/services';
 
 import { ErrorResult } from '@nusantara/core/responses';
 import { IError } from '@nusantara/models/base/error';

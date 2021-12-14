@@ -1,36 +1,45 @@
 import { StockInputComponent } from './stock-input/stock-input.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Validators, FormBuilder, FormArray, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as ClassicEditor from '@gdnnusantara/ckeditor5-build/build/ckeditor';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import {EMPTY, of} from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import {ProductClassService, SvgIconService} from '@nusantara/services';
 import {
-  ToastService,
+  ProductRelatedService,
+  ProductService,
+  SiteConfigService,
+  SvgIconService,
+  WarehouseService,
+  ProductClassService
+} from '@nusantara/services';
+import {
   AbstractDetailComponent,
-  getSlugFromHref,
-  NusantaraValidators,
-  ErrorResult,
-  Logger,
   DialogResult,
-  ToastLevelEnum
+  ErrorResult,
+  getSlugFromHref, IResultResponse,
+  Logger,
+  NusantaraValidators,
+  ToastLevelEnum,
+  ToastService
 } from '@nusantara/core';
-import {ICategory, IVendor, drf, products, INamedHrefEntity} from '@nusantara/models';
-import { IError } from '@nusantara/models/base/error';
-import { ProductService, SiteConfigService, ProductRelatedService } from '@nusantara/services';
-import { PriceListHostComponent } from './price';
-import { ProductMediaHostComponent } from './media';
-import { ProductAttributeHostComponent } from './attribute';
-import { ProductSubscriptonHostComponent } from './subscription';
-import { MarketplaceInfoHostComponent } from './marketplace';
+import { drf, ICategory, INamedHrefEntity, IVendor, products } from '@nusantara/models';
+import { IError} from '@nusantara/models/base/error';
+import { PriceListHostComponent} from './price';
+import { ProductMediaHostComponent} from './media';
+import { ProductAttributeHostComponent} from './attribute';
+import { ProductSubscriptonHostComponent} from './subscription';
+import { MarketplaceInfoHostComponent} from './marketplace';
 
-import {ProductSelectionModalComponent, VendorSelectionModalComponent} from '@nusantara/shared';
-import {IProductClass, IProductRelation} from '@nusantara/models/products';
-import {CategorySelectionModalComponent} from '@nusantara/shared/modals/category-selection-modal.component';
-import {ProductClassSelectionModalComponent} from '@nusantara/shared/modals/product-class-selection-modal.component';
+import { ProductSelectionModalComponent, VendorSelectionModalComponent } from '@nusantara/shared';
+import { IProduct, IProductClass } from '@nusantara/models/products';
+import { CategorySelectionModalComponent } from '@nusantara/shared/modals/category-selection-modal.component';
+import { ProductClassSelectionModalComponent } from '@nusantara/shared/modals/product-class-selection-modal.component';
+import { ProductOnlineSelectionModalComponent } from '@nusantara/shared/product-online-selection-modal.component';
+import { IBundleStockSearch } from '@nusantara/models/products/stock-search';
+import { IProductBundle } from '@nusantara/models/products/product-bundle';
 
 const log = new Logger('ProductComponent');
 
@@ -69,41 +78,43 @@ const log = new Logger('ProductComponent');
               <nus-field-errors [control]="isActive"></nus-field-errors>
             </label>
 
-            <label *ngIf="structure.value === 'parent'">
+            <label *ngIf="!!structure && structure.value === 'parent'">
               <span i18n>Product Category</span>
               <div class="manage">
                 <div>
                   <input type="hidden" [formControl]="category" data-qa="category">
-                  <input type="text" (click)="selectCategory()" readonly [value]="selectedCategory?.name" data-qa="category-pop">
-<!--                  <select [formControl]="category" name="category" data-qa="category">-->
-<!--                    <option *ngFor="let c of categories" [ngValue]="c.href">-->
-<!--                      {{ c.pathName }}-->
-<!--                    </option>-->
-<!--                  </select>-->
+                  <input type="text" (click)="selectCategory()" readonly [value]="selectedCategory?.name"
+                         data-qa="category-pop">
+                  <!--                  <select [formControl]="category" name="category" data-qa="category">-->
+                  <!--                    <option *ngFor="let c of categories" [ngValue]="c.href">-->
+                  <!--                      {{ c.pathName }}-->
+                  <!--                    </option>-->
+                  <!--                  </select>-->
                   <nus-field-errors [control]="category"></nus-field-errors>
                 </div>
                 <div><a [routerLink]="['/catalog', 'categories']" i18n> Manage Category</a></div>
               </div>
             </label>
 
-            <label *ngIf="structure.value === 'parent'">
+            <label *ngIf="!!structure && structure.value === 'parent'">
               <span i18n>Product Class</span>
               <div class="manage">
                 <div>
                   <input type="hidden" [formControl]="productClass" data-qa="product-class">
-                  <input type="text" (click)="selectProductClass()" readonly [value]="selectedProductClassValue?.name" data-qa="product-class-pop">
-<!--                  <select [formControl]="productClass" name="product-class" data-qa="product-class">-->
-<!--                    <option *ngFor="let pc of productClasses" [ngValue]="pc.href">-->
-<!--                      {{ pc.name }}-->
-<!--                    </option>-->
-<!--                  </select>-->
+                  <input type="text" (click)="selectProductClass()" readonly [value]="selectedProductClassValue?.name"
+                         data-qa="product-class-pop">
+                  <!--                  <select [formControl]="productClass" name="product-class" data-qa="product-class">-->
+                  <!--                    <option *ngFor="let pc of productClasses" [ngValue]="pc.href">-->
+                  <!--                      {{ pc.name }}-->
+                  <!--                    </option>-->
+                  <!--                  </select>-->
                   <nus-field-errors [control]="productClass"></nus-field-errors>
                 </div>
                 <div><a [routerLink]="['/catalog', 'product-classes']" target="_blank" i18n>Manage Class</a>
                 </div>
               </div>
             </label>
-            <div *ngIf="productClass.value">
+            <div *ngIf="productClass?.value && productFormType !== 'bundling'">
               <nus-product-attribute-host
                 [form]="attributes"
                 [productClass]="productClass"
@@ -112,6 +123,48 @@ const log = new Logger('ProductComponent');
                 *ngIf="originalAttributeValues">
               </nus-product-attribute-host>
             </div>
+          </div>
+
+          <div id="product-bundling" class="wrapper" *ngIf="productFormType === 'bundling' ">
+            <h1 class="heading-1">Product Bundling</h1>
+            <label>
+              <span>Bundling Table (Optional)</span>
+              <table style="margin-bottom: 16px; table-layout: fixed;">
+                <thead>
+                <tr>
+                  <th class="product-name">Product Name</th>
+                  <th>UPC</th>
+                  <th>Weight</th>
+                  <th>Qty</th>
+                  <th>Price Perunit</th>
+                  <th>Remove</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                  <nus-bundle-line *ngFor="let control of productBundling.controls; let i=index"
+                      [formGroup]="control" (remove)="removeProductBundling(i)"
+                                   (update)="updateVirtualAmountAndPriceListAndWeight()">
+                  </nus-bundle-line>
+                  <tr class="total-price">
+                    <td colspan="5">
+                      Total
+                    </td>
+                    <td class="price">
+                      {{ totalPrice | currency: 'Rp ': 'symbol' : '1.0' }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <button (click)="addBundling()" type="button" class="new-add-button wide">
+                <i class="material-icons">add</i> Add Product
+              </button>
+              <div *ngIf="virtualPackageAmount !== null" class="package-info">
+                <div class="label">Total Potential Virtual Stock</div>
+                <div class="stock-amount">{{ virtualPackageAmount }} package</div>
+              </div>
+            </label>
+
           </div>
 
           <div id="product-info" class="wrapper">
@@ -133,12 +186,13 @@ const log = new Logger('ProductComponent');
               <div class="manage">
                 <div>
                   <input type="hidden" [formControl]="vendor" data-qa="vendor">
-                  <input type="text" (click)="selectVendor()" readonly [value]="selectedVendor?.name" data-qa="vendor-pop">
-<!--                  <select [formControl]="vendor" name="vendor" data-qa="vendor">-->
-<!--                    <option *ngFor="let v of vendors" [ngValue]="v.href">-->
-<!--                      {{ v.name }}-->
-<!--                    </option>-->
-<!--                  </select>-->
+                  <input type="text" (click)="selectVendor()" readonly [value]="selectedVendor?.name"
+                         data-qa="vendor-pop">
+                  <!--                  <select [formControl]="vendor" name="vendor" data-qa="vendor">-->
+                  <!--                    <option *ngFor="let v of vendors" [ngValue]="v.href">-->
+                  <!--                      {{ v.name }}-->
+                  <!--                    </option>-->
+                  <!--                  </select>-->
                   <nus-field-errors [control]="vendor"></nus-field-errors>
                 </div>
                 <div><a [routerLink]="['/catalog', 'vendors']" target="_blank" i18n> Manage Vendor </a></div>
@@ -148,7 +202,7 @@ const log = new Logger('ProductComponent');
 
           <div id="product-management" class="wrapper">
             <h1 class="heading-1" i18n>Product Management</h1>
-            <ng-template [ngIf]="structure.value === 'parent'">
+            <ng-template [ngIf]="structure.value === 'parent' && productFormType !== 'bundling'">
               <label>
                 <span i18n>Variant Table</span>
                 <table>
@@ -298,10 +352,10 @@ const log = new Logger('ProductComponent');
                                 [productClass]="selectedProductClass">
           </nus-marketplace-info>
 
-          <div *ngIf="!isNew && enterpriseLicense()" class="wrapper" id="product-inventory">
-            <ng-container *ngIf="!!entity">
+          <div *ngIf="!isNew && enterpriseLicense() && !!showNonBundlingComponent()"
+               class="wrapper"
+               id="product-inventory">
               <nus-stock-search [productHref]="entity?.href"></nus-stock-search>
-            </ng-container>
           </div>
 
           <div class="wrapper" [ngClass]="{'hidden' : enterpriseLicense()}" id="product-inventory">
@@ -390,7 +444,8 @@ const log = new Logger('ProductComponent');
     </div>
 
     <!-- Modals -->
-    <nus-product-selection-modal></nus-product-selection-modal>
+    <nus-product-selection-modal #productRecommendationModal></nus-product-selection-modal>
+    <nus-product-online-selection-modal #productBundlingModal></nus-product-online-selection-modal>
     <nus-vendor-selection-modal #vendorModal></nus-vendor-selection-modal>
     <nus-category-selection-modal #categoryModal></nus-category-selection-modal>
     <nus-product-class-selection-modal #productClassModal></nus-product-class-selection-modal>
@@ -409,7 +464,11 @@ const log = new Logger('ProductComponent');
     '.side-nav li.active { padding: 10px 24px; color: white; background: var(--tertiary-lighten); border-left: solid 8px var(--secondary); border-radius: 4px; }',
     '.side-nav li a { text-decoration: none; color: inherit; }',
     '.delete { background: none; border: none; outline: none; font-size: 18px; cursor: pointer; opacity: .5; }',
-
+    '.package-info {line-height: 18px; margin-top: 26px; font-weight: bold; }',
+    '.package-info .label { float: left; width: 25%; }',
+    'table tr th.product-name { width: 25%; }',
+    '.total-price { font-weight: bold; }',
+    '.total-price td.price { text-align: right; }',
   ]
 })
 export class ProductComponent extends AbstractDetailComponent<products.IProduct> implements OnInit, AfterViewInit {
@@ -486,6 +545,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   productRelatedSlug: string;
   productSlug: string;
+  productFormType: string;
+  virtualPackageAmount: number = null;
+  totalPrice: number = 0;
 
   @ViewChild(ProductMediaHostComponent) mediaHost: ProductMediaHostComponent;
   @ViewChild(PriceListHostComponent) priceListHost: PriceListHostComponent;
@@ -494,7 +556,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   @ViewChild(StockInputComponent) stockInput: StockInputComponent;
   @ViewChild(MarketplaceInfoHostComponent) marketplaceHost: MarketplaceInfoHostComponent;
 
-  @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
+  @ViewChild('productRecommendationModal') productRecommendationSelectionModal: ProductSelectionModalComponent;
+  @ViewChild('productBundlingModal') productBundlingSelectionModal: ProductOnlineSelectionModalComponent;
 
   @ViewChild('vendorModal') vendorSelectionModal: VendorSelectionModalComponent;
   @ViewChild('categoryModal') categorySelectionModal: CategorySelectionModalComponent;
@@ -505,22 +568,15 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
               private fb: FormBuilder,
               route: ActivatedRoute,
               toast: ToastService,
-              private RelatedService: ProductRelatedService,
+              private relatedService: ProductRelatedService,
               private configSercvice: SiteConfigService,
               router: Router,
               svgIconService: SvgIconService,
               public modal: NgxSmartModalService,
-              public productClassService: ProductClassService) {
+              public productClassService: ProductClassService,
+              private warehouseService: WarehouseService) {
     super(route, router, toast, service);
     svgIconService.registerIcons();
-  }
-
-  ngAfterViewInit() {
-    super.ngAfterViewInit();
-    this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
-    this.vendorSelectionModal.onClose.subscribe(() => this.onVendorSelectionModalClosed());
-    this.categorySelectionModal.onClose.subscribe(() => this.onCategorySelectionModalClosed());
-    this.productClassSelectionModal.onClose.subscribe(() => this.onProductClassSelectionModalClosed());
   }
 
   get name(): FormControl {
@@ -611,6 +667,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     return this.form.get('productRelated') as FormArray;
   }
 
+  get productBundling(): FormArray {
+    return this.form.get('bundle') as FormArray;
+  }
 
   get isProductOptionDomain(): boolean {
     let pc;
@@ -621,6 +680,15 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       return true;
     }
     return false;
+  }
+
+  ngAfterViewInit() {
+    super.ngAfterViewInit();
+    this.productRecommendationSelectionModal.onClose.subscribe(() => this.onProductRecommendationSelectionModalClosed());
+    this.vendorSelectionModal.onClose.subscribe(() => this.onVendorSelectionModalClosed());
+    this.categorySelectionModal.onClose.subscribe(() => this.onCategorySelectionModalClosed());
+    this.productClassSelectionModal.onClose.subscribe(() => this.onProductClassSelectionModalClosed());
+    this.productBundlingSelectionModal.onClose.subscribe(() => this.onProductBundlingSelectionModalClosed());
   }
 
   getSlugFromHref(href: string): string {
@@ -647,9 +715,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       this.entity = data.entity;
     });
 
+    this.getProductFormType();
+
     super.ngOnInit();
   }
-
 
 
   /**
@@ -688,6 +757,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       tags: this.fb.array([], [NusantaraValidators.preventArrayDuplicates()]),
       subscription: this.fb.group({}),
       productRelated: this.fb.array([]),
+      bundle: this.fb.array([]),
     });
 
 
@@ -716,7 +786,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     this.variants = entity?.variants ?? [];
     this.originalAttributeValues = entity?.attributes ?? {};
     if (!!this.productSlug) {
-      this.RelatedService.fetch(this.productSlug)
+      this.relatedService.fetch(this.productSlug)
         .subscribe((data: products.IProductRelation[]) => {
           if (data) {
             for (const prod of data) {
@@ -762,6 +832,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     if (entity?.subscription) {
       this.subscriptionHost.add(entity?.subscription);
     }
+
+    this.addProductBundling(entity);
   }
 
   /**
@@ -771,7 +843,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
    */
   getFormValue(): any {
     const formValue = {};
-    this.form.value.productRelated.forEach( (v) => { delete v.name; delete v.href; });
+    this.form.value.productRelated.forEach(function (v) {
+      delete v.name, delete v.href
+    });
     Object.assign(formValue, this.form.value);
 
     if (!formValue.hasOwnProperty('attributes')) {
@@ -797,6 +871,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   save() {
     if (this.isValidForm()) {
       this.service.save(this.getFormValue()).pipe(catchError(err => {
+        log.debug('err', err);
         if (err instanceof HttpErrorResponse) {
           return of(new ErrorResult<IError>(err.error, err.status));
         } else {
@@ -824,7 +899,6 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
                 log.debug('validate', component.validatePriceRange(), component.maxQuantity.value);
               });
             });
-
             if (this.priceListHost.validatePriceListHost()) {
               this.priceListHost.saveAll(resp.entity).pipe(catchError(childErr => {
                 if (childErr instanceof HttpErrorResponse) {
@@ -876,10 +950,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   navigateToParent(warnOnDirty: boolean = false) {
-    if (this.structure.value === 'parent') {
+    if (this.structure.value === 'parent' && this.productFormType !== 'bundling') {
       super.navigateToParent(warnOnDirty);
     } else {
-      this.router.navigateByUrl('/catalog/products', );
+      this.router.navigateByUrl('/catalog/products',);
     }
   }
 
@@ -976,7 +1050,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   selectProduct() {
-    this.productSelectionModal.open();
+    this.productRecommendationSelectionModal.open();
   }
 
   showErrorToast(err) {
@@ -1001,9 +1075,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       actionStatus = 'remove';
     }
 
-    this.RelatedService.post(productValue).subscribe(
+    this.relatedService.post(productValue).subscribe(
       (resp) => {
-        if (action === 'add'){
+        if (action === "add") {
           // if "add" then it will be push to array
           this.productRelated.push(product);
         } else {
@@ -1034,10 +1108,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       }));
   }
 
-  onProductSelectionModalClosed() {
-    if (this.productSelectionModal.result === DialogResult.OK) {
-      const selectedProduct = this.productSelectionModal.product.value as products.IProductRelation;
-      const productRelatedSlug = getSlugFromHref(this.productSelectionModal.product.value.href);
+  onProductRecommendationSelectionModalClosed() {
+    if (this.productRecommendationSelectionModal.result === DialogResult.OK) {
+      const selectedProduct = this.productRecommendationSelectionModal.product.value as products.IProductRelation;
+      const productRelatedSlug = getSlugFromHref(this.productRecommendationSelectionModal.product.value.href);
       const primarySlug = getSlugFromHref(this.entity?.href);
 
       const f = this.fb.group({
@@ -1049,6 +1123,57 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       });
 
       this.apiPostRelatedProduct(f.value, 'add', f);
+    }
+  }
+
+  selectVendor(): void {
+    this.vendorSelectionModal.open();
+  }
+
+  selectCategory(): void {
+    this.categorySelectionModal.open();
+  }
+
+  selectProductClass(): void {
+    this.productClassSelectionModal.open();
+  }
+
+  addBundling(): void {
+    this.productBundlingSelectionModal.open();
+  }
+
+  onProductBundlingSelectionModalClosed() {
+    if (this.productBundlingSelectionModal.result === DialogResult.OK) {
+
+      const selectedProduct = this.productBundlingSelectionModal.product.value as IProduct;
+      const selectedProductPrice = this.defaultProductPriceForBundling(selectedProduct);
+      const isSameProduct = this.getSameProductBundlingIndex(selectedProduct.name);
+
+      if (isSameProduct !== -1) {
+        log.debug('productBundling', this.productBundling.value);
+        const currentQty = this.productBundling.at(isSameProduct).value.quantity;
+        this.productBundling.at(isSameProduct).patchValue({quantity: Number(currentQty) + 1});
+        log.debug('productBundling', this.productBundling.value);
+      } else {
+        const defaultQty = 1;
+
+        const f = this.fb.group({
+          product: [{
+            href: selectedProduct.href,
+            name: selectedProduct.name
+          }, []],
+          name: [selectedProduct.name, []],
+          upc: [selectedProduct.upc, []],
+          weight: [selectedProduct.weight, []],
+          quantity: [defaultQty, Validators.required],
+          price: [selectedProductPrice, []],
+          media: [selectedProduct.media, []]
+        });
+        this.productBundling.push(f);
+        log.debug(this.productBundling);
+        this.setProductBundlingMedia(selectedProduct);
+      }
+      this.updateVirtualAmountAndPriceListAndWeight();
     }
   }
 
@@ -1066,23 +1191,214 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     }
   }
 
-  selectVendor(): void {
-    this.vendorSelectionModal.open();
-  }
-
-  selectCategory(): void {
-    this.categorySelectionModal.open();
-  }
-
-  selectProductClass(): void {
-    this.productClassSelectionModal.open();
-  }
-
   private onProductClassSelectionModalClosed() {
     if (this.productClassSelectionModal.result === DialogResult.OK) {
       this.selectedProductClassValue = this.productClassSelectionModal.productClass.value as IProductClass;
       this.selectedProductClass = this.productClassSelectionModal.productClass.value as IProductClass;
       this.productClass.setValue(this.selectedProductClassValue.href);
     }
+  }
+
+  private getProductFormType(): void {
+    this.route.params?.subscribe((param) => {
+      if (param) {
+        this.productFormType = param.type;
+      }
+    });
+    if (!!this.entity?.bundle && this.entity.bundle.length > 0) {
+      this.productFormType = 'bundling';
+    }
+  }
+
+  private defaultProductPriceForBundling(selectedProduct: IProduct) {
+    const productRanges = selectedProduct.priceLists.filter((priceList) => priceList.type === 'default')[0].ranges[0];
+
+    if (productRanges) {
+      return productRanges.price;
+    }
+
+    return 0;
+  }
+
+  getVirtualPackageAmount(): void {
+    let bundle: Array<{product: string, quantity: number}> = [];
+    this.totalPrice = 0;
+    this.virtualPackageAmount = null;
+    this.productBundling.controls.forEach((product) => {
+      const productValue = product.value as IBundleStockSearch;
+      if (!!productValue.quantity) {
+        if (typeof productValue.product === 'string') {
+          bundle.push({
+            product: productValue.product,
+            quantity: productValue.quantity
+          });
+          this.totalPrice += productValue.price * productValue.quantity;
+        } else {
+          const newProductValue = product.value as IProductBundle;
+          bundle.push({
+            product: newProductValue.product.href,
+            quantity: newProductValue.quantity
+          });
+          this.totalPrice += newProductValue.price * newProductValue.quantity;
+        }
+      }
+    });
+    if (!!bundle && bundle.length > 0) {
+      this.warehouseService.warehouseStockBundleSearch(bundle).subscribe((resp) => {
+        this.virtualPackageAmount = resp.length > 0 ? resp[0].quantity : 0;
+      });
+    }
+
+  }
+
+  removeProductBundling(index: number): void {
+    this.removeProductBundlingMedia(this.productBundling.at(index).value);
+    this.productBundling.removeAt(index);
+    this.updateVirtualAmountAndPriceListAndWeight();
+  }
+
+  addProductBundling(entity: IProduct): void {
+    if (!!entity?.bundle) {
+      entity?.bundle?.forEach((productInfo) => {
+        const f = this.fb.group({
+          product: [{
+            href: productInfo.product.href,
+            name: productInfo.product.name
+          }, []],
+          name: [productInfo.product.name, []],
+          upc: [productInfo.product.upc, []],
+          weight: [productInfo.product.weight, []],
+          quantity: [productInfo.quantity, Validators.required],
+          media: [productInfo.product.media, []],
+          price: [productInfo.product.defaultPrice, []]
+        });
+        this.productBundling.push(f);
+      });
+
+      log.debug(this.productBundling);
+      this.getVirtualPackageAmount();
+    }
+  }
+
+  showNonBundlingComponent(): boolean {
+    if (!this.entity) {
+      return false;
+    } else if (!!this.entity && !!this.entity.bundle && this.entity.bundle.length > 0) {
+      return false;
+    }
+    return true;
+  }
+
+  private setDescription(): void {
+    let productBundlingDescription = '';
+
+    if (!this.description.dirty && !this.entity) {
+      if (this.productBundling.length === 0) {
+        productBundlingDescription = '';
+      } else {
+        productBundlingDescription = 'Paket berisi : ';
+        productBundlingDescription += '<ul>';
+
+        for (const product of this.productBundling.value) {
+          productBundlingDescription += '<li>' + product.quantity + ' ' + product.name + '</li><br>';
+        }
+        productBundlingDescription += '</ul>';
+
+      }
+      this.description.setValue(productBundlingDescription);
+    }
+  }
+
+  private setWeight(): void {
+    let totalWeight = 0;
+    if (!this.entity) {
+      for (const product of this.productBundling.value) {
+        totalWeight += (product.weight * product.quantity);
+      }
+
+      this.weight.patchValue(totalWeight);
+    }
+  }
+
+  private setProductBundlingMedia(selectedProduct: IProduct): void {
+    const productMedia = selectedProduct.media;
+    const firstImage = productMedia.find((img) => img.type === 'image');
+    const firstVideo = productMedia.find((video) => video.type === 'you_tube');
+    if (!this.entity) {
+      if (!!firstImage) {
+        this.mediaHost.add(firstImage);
+      }
+
+      if (!!firstVideo) {
+        this.mediaHost.add(firstVideo);
+      }
+    }
+
+  }
+
+  private getSameProductBundlingIndex(name: string): number {
+    return this.productBundling.value.findIndex((product) => product.name === name);
+  }
+
+  private setPriceProductBundling(): void {
+    if (!this.entity) {
+      if (!this.entity?.priceLists) {
+        this.priceListHost?.updatePriceList({
+          href: null,
+          product: null,
+          type: 'default',
+          platforms: [],
+          locations: [],
+          isProgressive: false,
+          ranges: [
+            {href: null, priceList: null, price: this.totalPrice, minQuantity: 1, maxQuantity: null}
+          ]
+        }, 0);
+      } else {
+        for (const priceList of this.entity?.priceLists ?? []) {
+          priceList.ranges[0].price = this.totalPrice;
+          this.priceListHost.updatePriceList(priceList, 0);
+        }
+      }
+    }
+  }
+
+  updateVirtualAmountAndPriceListAndWeight(): void {
+    this.getVirtualPackageAmount();
+    this.setPriceProductBundling();
+    this.setWeight();
+    this.setDescription();
+  }
+
+  private removeProductBundlingMedia(product: any): void {
+    if (!this.entity) {
+      if (!!this.mediaHost.entities) {
+        const removeImage = this.mediaHost.entities.findIndex((x) => {
+          return (x.product === product.href || x.product === product.product.href) && x.type === 'image';
+        });
+        if (removeImage !== -1) {
+          this.mediaHost.remove(removeImage);
+        }
+        const removeVideo = this.mediaHost.entities.findIndex((x) => {
+          return (x.product === product.href || x.product === product.product.href) && x.type === 'you_tube';
+        });
+        if (removeVideo !== -1) {
+          this.mediaHost.remove(removeVideo);
+        }
+      }
+    }
+  }
+
+  protected onSaveSuccess(result: IResultResponse<any>) {
+    this.form.enable();
+    this.toast?.addMessage(`"${this.form.get('name')?.value ?? 'data'}" was saved successfully.`, 'Saved', ToastLevelEnum.success);
+    this.navigateToParent();
+  }
+
+  protected onDeleteSuccess() {
+    this.form.enable();
+    const message = this.form.get('name')?.value ?? this.form.get('title')?.value;
+    this.toast?.addMessage(`"${message}" was deleted successfully.`, 'Deleted', ToastLevelEnum.success);
+    this.navigateToParent(false);
   }
 }

@@ -4,7 +4,7 @@ import {IAddress} from '../../shared/address';
 
 export interface IStockSearch extends INamedHrefEntity {
   href: string;
-  quantity: string;
+  quantity: number;
   name: string;
   code: string;
   type: string;
@@ -14,4 +14,13 @@ export interface IStockSearch extends INamedHrefEntity {
 
 export interface ISubLocationWithQuantity extends ISubLocation {
   quantity?: number;
+}
+
+export interface IBundleStockSearch {
+  product: string;
+  name: string;
+  upc: string;
+  weight?: number;
+  quantity?: number;
+  price?: number;
 }

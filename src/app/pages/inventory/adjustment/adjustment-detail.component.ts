@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {AbstractDetailComponent, ErrorResult, getSlugFromHref, ToastService} from '@nusantara/core';
+import { AbstractDetailComponent, ErrorResult, getSlugFromHref, ToastService } from '@nusantara/core';
 import { IAdjustmentReadOnly } from '@nusantara/models/inventory';
-import {InventoryAdjustmentOrderService, InventoryReceivingOrderService} from '@nusantara/services';
+import { InventoryAdjustmentOrderService } from '@nusantara/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { Location } from '@angular/common';

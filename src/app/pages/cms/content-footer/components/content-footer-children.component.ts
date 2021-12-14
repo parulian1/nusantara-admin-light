@@ -1,6 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
-import {IContentFooter} from '@nusantara/models';
+import { IContentFooter } from '@nusantara/models';
 
 
 @Component({

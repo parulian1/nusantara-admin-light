@@ -110,7 +110,7 @@ import { IProductClass } from '@nusantara/models/products';
     </form>
 
     <!-- Modals -->
-    <nus-product-selection-modal></nus-product-selection-modal>
+    <nus-product-selection-modal [productType]="productType"></nus-product-selection-modal>
   `,
   styles: [`
     form { width: 58vw; max-width: 100%; }
@@ -134,6 +134,7 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
   currentDate: Date;
   destinationWarehouses: IWarehouse[];
+  productType: string = 'single';
 
   constructor(private fb: FormBuilder,
               toast: ToastService,

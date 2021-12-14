@@ -1,10 +1,10 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractEditingComponent } from '@nusantara/core';
 import { products } from '@nusantara/models';
-import {IProductClass} from '@nusantara/models/products';
+import { IProductClass } from '@nusantara/models/products';
 
 @Component({
   selector: 'nus-product-attribute-host',

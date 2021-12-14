@@ -3,7 +3,7 @@ import { AbstractDetailComponent, ToastService } from '@nusantara/core';
 import { ICompanyStory } from '@nusantara/models';
 import { CompanyStoryService } from '@nusantara/services';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'nus-company-story-list',

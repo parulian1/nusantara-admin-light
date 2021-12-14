@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import {ICompanyStory, IWarehouse} from '@nusantara/models';
-import {CompanyStoryService, WarehouseService} from '@nusantara/services';
+import { ICompanyStory } from '@nusantara/models';
+import { CompanyStoryService } from '@nusantara/services';
 import { HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 

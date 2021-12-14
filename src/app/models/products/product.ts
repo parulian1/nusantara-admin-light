@@ -6,6 +6,7 @@ import { IVariantSummary } from './variant-summary';
 import { IRelatedProductSummary } from './related-product-summary';
 import { IProductSubscription } from './product-subscription';
 import { IProductRelation } from './product-relation';
+import { IProductBundle } from './product-bundle';
 
 /**
  * Anything that is available for sale.
@@ -40,4 +41,5 @@ export interface IProduct extends INamedHrefEntity {
   dimensions: IDimensions;
   inStock?: boolean;
   productRelated: Array<IProductRelation>;
+  bundle?: Array<IProductBundle>;
 }

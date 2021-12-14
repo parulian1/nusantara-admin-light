@@ -1,12 +1,12 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import {ICategory, INamedHrefEntity} from '@nusantara/models';
+import { ICategory, INamedHrefEntity } from '@nusantara/models';
 import { CategoryService } from '@nusantara/services';
-import {AbstractDetailComponent, DialogResult, ToastService} from '@nusantara/core';
-import {CategorySelectionModalComponent} from '@nusantara/shared/modals/category-selection-modal.component';
-import {getSlugFromHref} from '@nusantara/shared/helpers';
+import { AbstractDetailComponent, DialogResult, ToastService } from '@nusantara/core';
+import { CategorySelectionModalComponent } from '@nusantara/shared/modals/category-selection-modal.component';
+import { getSlugFromHref } from '@nusantara/shared/helpers';
 
 @Component({
   selector: 'nus-category',
