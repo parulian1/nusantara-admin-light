@@ -729,7 +729,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
    * 2. From a parent, the variants array is READ-ONLY at the API, so we DO NOT set it on this form.
    */
   initializeForm(entity?: products.IProduct) {
-
+    let bundleInitialValue = this.fb.array([]);
+    if (this.productFormType !== 'bundling') {
+      bundleInitialValue = null;
+    }
     this.form = this.fb.group({
       name: [entity?.name, [Validators.required, Validators.maxLength(120)]],
       isActive: [entity?.isActive, []],
@@ -757,7 +760,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       tags: this.fb.array([], [NusantaraValidators.preventArrayDuplicates()]),
       subscription: this.fb.group({}),
       productRelated: this.fb.array([]),
-      bundle: this.fb.array([]),
+      bundle: bundleInitialValue,
     });
 
 
