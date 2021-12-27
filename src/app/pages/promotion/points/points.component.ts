@@ -9,6 +9,7 @@ import {PointsService} from '@nusantara/services';
 import {ProductSelectionModalComponent} from '@nusantara/shared';
 import {of} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {getProductBasePrice} from '@nusantara/shared/helpers';
 
 @Component({
   selector: 'nus-points',
@@ -421,7 +422,7 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
   }
 
   addProduct(product?: IProductPoints): void {
-    const basePrice = this.getProductBasePrice(product?.product.priceLists);
+    const basePrice = getProductBasePrice(product?.product.priceLists);
     const f = this.fb.group({
       product: this.fb.group({
         href: [product?.product.href, []],
@@ -439,7 +440,7 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
     if (this.productSelectionModal.result === DialogResult.OK) {
 
       const selectedProduct = this.productSelectionModal.product.value as IProduct;
-      const basePrice = this.getProductBasePrice(selectedProduct.priceLists);
+      const basePrice = getProductBasePrice(selectedProduct.priceLists);
 
       const checkDuplicate = this.products.controls.filter(data => data.value.product.href === selectedProduct.href);
       if (checkDuplicate.length > 0) {
@@ -485,24 +486,6 @@ export class PointsComponent extends AbstractDetailComponent<IPoints> implements
     const index = this.products.value.findIndex( p => p.product.name === selectedProduct.product.name);
     this.products.removeAt(index);
     this.onQueryTextChanged(this.queryText.value);
-  }
-
-  getProductBasePrice(priceLists: Array<any>) {
-    const priceData = priceLists.find(obj => {
-      return obj.type === 'default';
-    });
-    let basePrice = 0;
-    if (priceData !== undefined) {
-      const priceRange = priceData.ranges.find(range => {
-        return range.minQuantity === 1;
-      });
-
-      if (priceRange !== undefined) {
-        basePrice = priceRange.price;
-      }
-    }
-
-    return basePrice;
   }
 
   onQueryTextChanged(newValue: string) {

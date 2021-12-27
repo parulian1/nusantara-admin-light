@@ -21,6 +21,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { BundleLineComponent } from '@nusantara/pages/catalog/product/bundle';
+import {
+  AdvancedPriceComponent,
+  AdvancedPriceListComponent,
+  AdvancedPriceProductComponent, AdvancedPriceWarehouseModalComponent
+} from '@nusantara/pages/catalog/advanced-price';
 @NgModule({
   declarations: [
     CategoryListComponent,
@@ -57,6 +62,11 @@ import { BundleLineComponent } from '@nusantara/pages/catalog/product/bundle';
     StockSearchComponent,
     StockInputComponent,
     BundleLineComponent,
+
+    AdvancedPriceListComponent,
+    AdvancedPriceComponent,
+    AdvancedPriceProductComponent,
+    AdvancedPriceWarehouseModalComponent
   ],
   imports: [
     CommonModule,

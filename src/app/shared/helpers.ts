@@ -213,3 +213,25 @@ export function enumToArray(enumme) {
       .filter(StringIsNumber)
       .map(key => enumme[key]);
 }
+
+/**
+ * Get product base price from price list
+ */
+export function getProductBasePrice(priceLists: Array<any>) {
+  const priceData = priceLists.find(obj => {
+    return obj.type === 'default';
+  });
+
+  let basePrice = 0;
+  if (priceData !== undefined) {
+    const priceRange = priceData.ranges.find(range => {
+      return range.minQuantity === 1;
+    });
+
+    if (priceRange !== undefined) {
+      basePrice = priceRange.price;
+    }
+  }
+
+  return basePrice;
+}

@@ -71,7 +71,7 @@
 
 
   /* marketplace color pallete */
-  --shopee-color: #FE6233; 
+  --shopee-color: #FE6233;
   --tokopedia-color: #5FB64E;
   --bukalapak-color: #E2004D;
   --lazada-color: #2742A2;
@@ -334,6 +334,7 @@ input.ng-untouched {
     border-radius: 50%;
     border: 2px solid var(--bc, var(--border));
     background: var(--active-inner);
+    margin-right: 12px;
   }
   input[type="radio"]:after {
     width: 20px;

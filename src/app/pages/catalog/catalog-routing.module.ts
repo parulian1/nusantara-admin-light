@@ -26,6 +26,13 @@ import { ProductOptionListComponent, AllProductOptionResolver, ProductOptionComp
 import { DurationListResolver, LengthListResolver, PacketListResolver } from './product/subscription';
 import { RequireIsEnterpriseGuard } from '@nusantara/auth/guards';
 import { EditShippingComponent } from '../config/marketplace-integration';
+import { AllVendorResolver } from './product/all-vendor.resolver';
+import {
+  AdvancedPriceComponent,
+  AdvancedPriceListComponent,
+  AdvancedPriceListResolver
+} from '@nusantara/pages/catalog/advanced-price';
+import {AdvancedPriceResolver} from "@nusantara/pages/catalog/advanced-price/advanced-price.resolver";
 
 const routes: Routes = [
   {
@@ -246,6 +253,36 @@ const routes: Routes = [
     component: EditShippingComponent,
     resolve: { logistics: MarketplaceLogisticListResolver },
     runGuardsAndResolvers: 'always',
+  },
+  {
+    path: 'advanced-price',
+    canActivate: [RequireIsEnterpriseGuard],
+    children: [
+      {
+        path: '',
+        component: AdvancedPriceListComponent,
+        resolve: { page: AdvancedPriceListResolver },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'List' },
+      },
+      {
+        path: 'new',
+        component: AdvancedPriceComponent,
+        runGuardsAndResolvers: 'always',
+        resolve: { warehouses: config.warehouse.AllWarehouseResolver, },
+        data: { animation: 'Detail', },
+      },
+      {
+        path: ':slug',
+        component: AdvancedPriceComponent,
+        resolve: {
+          entity: AdvancedPriceResolver,
+          warehouses: config.warehouse.AllWarehouseResolver,
+        },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      }
+    ]
   },
 ];
 

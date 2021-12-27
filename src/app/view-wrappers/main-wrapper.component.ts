@@ -38,6 +38,8 @@ import { SubscriptionLike } from 'rxjs';
           <span i18n>Catalog Management</span>
         </li>
         <li><a [routerLink]="['/catalog/products']" routerLinkActive="active" translate i18n>Products</a></li>
+        <li><a [routerLink]="['/catalog/advanced-price']" routerLinkActive="active" translate i18n>Advanced Price
+          List</a></li>
         <li><a [routerLink]="['/catalog/categories']" routerLinkActive="active" translate i18n>Categories</a></li>
         <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/catalog/product-options']" routerLinkActive="active" translate i18n>Product Options</a></li>
         <li><a [routerLink]="['/catalog/product-classes']" routerLinkActive="active" translate i18n>Product Classes</a></li>
