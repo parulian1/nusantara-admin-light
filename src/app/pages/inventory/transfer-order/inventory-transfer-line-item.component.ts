@@ -73,6 +73,7 @@ export class InventoryTransferLineItemComponent implements OnInit, AfterViewInit
   @Input() availableSubLocations: ISubLocation[] = [];
   @Input() productClasses: IProductClass[];
   // @Input() form: FormGroup;
+  @Input() warehouseHref: string;
   @Output() remove = new EventEmitter<void>();
   form: FormGroup;
 

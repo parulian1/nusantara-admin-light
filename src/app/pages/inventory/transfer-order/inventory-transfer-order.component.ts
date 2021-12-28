@@ -90,7 +90,6 @@ import { ConfirmModalInvetoryOrderComponent } from '@nusantara/shared';
             *ngFor="let rec of stockRecords.controls; let i=index"
             [productClasses]="productClasses"
             [availableSubLocations]="availableSubLocations"
-            [warehouseHref]="getFromWarehouseHref()"
             (remove)="stockRecords.removeAt(i)"
             [formGroup]="rec"
           >
