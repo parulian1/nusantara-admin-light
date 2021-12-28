@@ -57,7 +57,7 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
               <div class="pill-wrapper">
                 <div *ngFor="let wh of warehouses.value; let i=index" class="pill">
                   <span class="subheading-2">{{ wh.name }}</span>
-                  <button type="button" class="remove-button" (click)="removeWarehouse(wh.code)"
+                  <button type="button" class="remove-button" (click)="removeWarehouse(wh.href)"
                           [disabled]="isDisabled">
                     <i class="material-icons">highlight_off</i>
                   </button>
