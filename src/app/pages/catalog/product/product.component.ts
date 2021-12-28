@@ -8,12 +8,12 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 import { EMPTY, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import {
-  ProductClassService,
   ProductRelatedService,
   ProductService,
   SiteConfigService,
   SvgIconService,
-  WarehouseService
+  WarehouseService,
+  ProductClassService
 } from '@nusantara/services';
 import {
   AbstractDetailComponent,
@@ -26,12 +26,12 @@ import {
   ToastService
 } from '@nusantara/core';
 import { drf, ICategory, INamedHrefEntity, IVendor, products } from '@nusantara/models';
-import { IError } from '@nusantara/models/base/error';
-import { PriceListHostComponent } from './price';
-import { ProductMediaHostComponent } from './media';
-import { ProductAttributeHostComponent } from './attribute';
-import { ProductSubscriptonHostComponent } from './subscription';
-import { MarketplaceInfoHostComponent } from './marketplace';
+import { IError} from '@nusantara/models/base/error';
+import { PriceListHostComponent} from './price';
+import { ProductMediaHostComponent} from './media';
+import { ProductAttributeHostComponent} from './attribute';
+import { ProductSubscriptonHostComponent} from './subscription';
+import { MarketplaceInfoHostComponent} from './marketplace';
 
 import { ProductSelectionModalComponent, VendorSelectionModalComponent } from '@nusantara/shared';
 import { IProduct, IProductClass } from '@nusantara/models/products';
@@ -573,8 +573,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
               router: Router,
               svgIconService: SvgIconService,
               public modal: NgxSmartModalService,
-              private warehouseService: WarehouseService,
-              public productClassService: ProductClassService) {
+              public productClassService: ProductClassService,
+              private warehouseService: WarehouseService) {
     super(route, router, toast, service);
     svgIconService.registerIcons();
   }
@@ -729,7 +729,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
    * 2. From a parent, the variants array is READ-ONLY at the API, so we DO NOT set it on this form.
    */
   initializeForm(entity?: products.IProduct) {
-
+    let bundleInitialValue = this.fb.array([]);
+    if (this.productFormType !== 'bundling') {
+      bundleInitialValue = null;
+    }
     this.form = this.fb.group({
       name: [entity?.name, [Validators.required, Validators.maxLength(120)]],
       isActive: [entity?.isActive, []],
@@ -757,7 +760,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       tags: this.fb.array([], [NusantaraValidators.preventArrayDuplicates()]),
       subscription: this.fb.group({}),
       productRelated: this.fb.array([]),
-      bundle: this.fb.array([]),
+      bundle: bundleInitialValue,
     });
 
 

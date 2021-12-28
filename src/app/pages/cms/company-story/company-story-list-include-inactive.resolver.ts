@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 
-import {AbstractListResolver, PagedResponse} from '@nusantara/core';
+import { AbstractListResolver, PagedResponse } from '@nusantara/core';
 import { ICompanyStory } from '@nusantara/models';
 import { CompanyStoryService } from '@nusantara/services';
-import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {Observable} from 'rxjs';
-import {HttpParams} from '@angular/common/http';
-import {map} from 'rxjs/operators';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Observable } from 'rxjs';
+import { HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'

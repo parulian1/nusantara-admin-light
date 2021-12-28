@@ -147,7 +147,7 @@ function isTSCOrder(orderData: order.IOrderDetail) {
                       *ngIf="!isShipButtonHidden(children.data[0])"
                       type="button"
                       class="control"
-                      [disabled]="!isAwbManagedByMarketplace"
+                      [disabled]="isAwbManagedByMarketplace"
                       (click)="manualShipment(children.data[0])"
                        i18n
                     >

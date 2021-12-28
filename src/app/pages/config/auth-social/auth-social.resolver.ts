@@ -1,8 +1,8 @@
-import {ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot} from '@angular/router';
-import {IAuthSocial} from '@nusantara/models/auth-social';
-import {Observable} from 'rxjs';
-import {Injectable} from '@angular/core';
-import {AuthSocialService} from '../../../services/auth-social.service';
+import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
+import { IAuthSocial } from '@nusantara/models/auth-social';
+import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { AuthSocialService } from '../../../services/auth-social.service';
 
 @Injectable({
   providedIn: 'root',

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import {AbstractListComponent} from '@nusantara/core';
-import {IContentFooter} from '@nusantara/models/content-footer';
-import {ActivatedRoute} from '@angular/router';
+import { Component } from '@angular/core';
+import { AbstractListComponent } from '@nusantara/core';
+import { IContentFooter } from '@nusantara/models/content-footer';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'nus-content-footer',

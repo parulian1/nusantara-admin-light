@@ -1,12 +1,11 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import {products, ISubLocation, drf} from '@nusantara/models';
-import {IProductClass} from '@nusantara/models/products';
-import {InventoryAdjustmentOrderService} from '@nusantara/services';
-import {getSlugFromHref, PagedResponse} from '@nusantara/core';
-import {IStockRecord} from '@nusantara/models/inventory';
+import { products, ISubLocation, drf } from '@nusantara/models';
+import { IProductClass } from '@nusantara/models/products';
+import { getSlugFromHref, PagedResponse } from '@nusantara/core';
+import { IStockRecord } from '@nusantara/models/inventory';
 
 @Component({
   selector: 'nus-adjustment-line',

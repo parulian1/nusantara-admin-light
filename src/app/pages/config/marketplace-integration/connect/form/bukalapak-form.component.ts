@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, forwardRef} from '@angular/core';
+import { Component, OnInit, Input, forwardRef } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -9,7 +9,7 @@ import {
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastLevelEnum, ToastService } from '@nusantara/core';
-import {MarketplaceClientService} from '@nusantara/services';
+import { MarketplaceClientService } from '@nusantara/services';
 import { marketplace } from '@nusantara/models';
 import { MarketplaceClientEnum } from '../markeplace-client-enum';
 

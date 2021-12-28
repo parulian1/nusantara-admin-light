@@ -1,10 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {BlogFeedConfigService} from '@nusantara/services/blog-feed-config.service';
-import {AbstractDetailComponent, IResultResponse, ToastLevelEnum, ToastService} from '@nusantara/core';
-import {IBlogFeedSetting} from '@nusantara/models/blog-feed-setting';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormControl} from '@angular/forms';
-import {device} from '@nusantara/models';
+import { Component, OnInit } from '@angular/core';
+import { BlogFeedConfigService } from '@nusantara/services/blog-feed-config.service';
+import { AbstractDetailComponent, ToastService} from '@nusantara/core';
+import { IBlogFeedSetting } from '@nusantara/models/blog-feed-setting';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'nus-blog-feed',

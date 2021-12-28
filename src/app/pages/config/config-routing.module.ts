@@ -1,7 +1,7 @@
-import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
-import {RequireIsEnterpriseGuard} from '@nusantara/auth';
-import {ReindexingComponent} from './reindexing/reindexing.component';
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { RequireIsEnterpriseGuard } from '@nusantara/auth';
+import { ReindexingComponent } from './reindexing/reindexing.component';
 
 const routes: Routes = [
   {

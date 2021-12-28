@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 
 import { IFlatPage } from '@nusantara/models';
 import { FlatPageService } from '@nusantara/services';
-import {tap} from 'rxjs/operators';
 
 /**
  * Fetches a non-paginated list of all flatPage.

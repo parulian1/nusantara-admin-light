@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {AbstractListComponent, IResultResponse, ToastLevelEnum, ToastService} from '@nusantara/core';
+import { Component, OnInit } from '@angular/core';
+import { ToastLevelEnum, ToastService } from '@nusantara/core';
 import { ICompanyStory } from '@nusantara/models';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
-import {forkJoin} from 'rxjs';
-import {HttpErrorResponse} from '@angular/common/http';
-import {CompanyStoryService} from '@nusantara/services';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder } from '@angular/forms';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { forkJoin } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { CompanyStoryService } from '@nusantara/services';
 
 @Component({
   selector: 'nus-company-story-list-ordering',

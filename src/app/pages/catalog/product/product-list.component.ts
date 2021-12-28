@@ -23,7 +23,7 @@ import { WarehouseService } from '@nusantara/services';
       <div class="top-action">
         <div class="left-menu">
           <div class="search control">
-            <i class="material-icons">search</i>
+            <i class="material-icons" i18n>search</i>
             <input type="search" placeholder="Search" [formControl]="queryText">
           </div>
 
@@ -37,12 +37,12 @@ import { WarehouseService } from '@nusantara/services';
         </div>
         <ng-container *ngIf="!showBundling; else bundlingAddComponent;">
           <div  class="add-product control">
-            <a [routerLink]="['new']" class="control"><i class="material-icons">add</i> Add</a>
+            <a [routerLink]="['new']" class="control" i18n><i class="material-icons">add</i> Add</a>
           </div>
         </ng-container>
         <ng-template #bundlingAddComponent>
           <div *ngIf="!!showBundling" class="add-product control" (nusClickOutside)="close()">
-            <a [routerLink]="['new']"> Add</a>
+            <a [routerLink]="['new']" i18n> Add</a>
             <span class="material-icons" (click)="addBundleProduct()">expand_more</span>
             <div class="add-bundle-product"
                  *ngIf="isBundling"><a [routerLink]="['new','bundling']" i18n>Bundling Product</a>

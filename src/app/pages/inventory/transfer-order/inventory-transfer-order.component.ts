@@ -86,7 +86,7 @@ import { ConfirmModalInvetoryOrderComponent } from '@nusantara/shared';
           </thead>
           <tbody>
 
-          <nus-transfer-order-line
+          <nus-inventory-transfer-line
             *ngFor="let rec of stockRecords.controls; let i=index"
             [productClasses]="productClasses"
             [availableSubLocations]="availableSubLocations"
@@ -94,7 +94,7 @@ import { ConfirmModalInvetoryOrderComponent } from '@nusantara/shared';
             (remove)="stockRecords.removeAt(i)"
             [formGroup]="rec"
           >
-          </nus-transfer-order-line>
+          </nus-inventory-transfer-line>
 
           <tr>
             <td colspan="9">

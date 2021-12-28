@@ -47,9 +47,10 @@ import { CsvDialogComponent } from './csv-dialog/csv-dialog.component';
 import { VendorSelectionModalComponent } from '@nusantara/shared/vendor-selection-modal/vendor-selection-modal.component';
 import { CategorySelectionModalComponent } from './modals/category-selection-modal.component';
 import { ProductClassSelectionModalComponent } from './modals/product-class-selection-modal.component';
+import { WarehouseLocationModalComponent } from './modals/warehouse-location-modal.component';
 import { ClickOutsideDirective } from './click-outside.directive';
 import { ProductOnlineSelectionModalComponent } from '@nusantara/shared/product-online-selection-modal.component';
-import { WarehouseLocationModalComponent } from './modals/warehouse-location-modal.component';
+
 
 /**
  * The purpose of this module is to make common code (like pipes)
@@ -99,10 +100,9 @@ import { WarehouseLocationModalComponent } from './modals/warehouse-location-mod
     VendorSelectionModalComponent,
     CategorySelectionModalComponent,
     ProductClassSelectionModalComponent,
+    WarehouseLocationModalComponent,
     ClickOutsideDirective,
-    ProductOnlineSelectionModalComponent,
-    ProductClassSelectionModalComponent,
-    WarehouseLocationModalComponent
+    ProductOnlineSelectionModalComponent
   ],
   exports: [
     EntityToSlugPipe,
@@ -146,10 +146,9 @@ import { WarehouseLocationModalComponent } from './modals/warehouse-location-mod
     VendorSelectionModalComponent,
     CategorySelectionModalComponent,
     ProductClassSelectionModalComponent,
+    WarehouseLocationModalComponent,
     ClickOutsideDirective,
-    ProductOnlineSelectionModalComponent,
-    ProductClassSelectionModalComponent,
-    WarehouseLocationModalComponent
+    ProductOnlineSelectionModalComponent
   ],
   imports: [
     CommonModule,
