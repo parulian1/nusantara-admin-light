@@ -20,6 +20,9 @@ import {
 } from './adjustment';
 import { StockRecordDialogComponent } from './adjustment/stock-record-dialog.component';
 import {TransferOrderLineItemComponent} from '@nusantara/pages/inventory/transfer-order/transfer-order-line-item.component';
+import {
+  InventoryTransferLineItemComponent
+} from '@nusantara/pages/inventory/transfer-order/inventory-transfer-line-item.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +40,7 @@ import {TransferOrderLineItemComponent} from '@nusantara/pages/inventory/transfe
     StockRecordDialogComponent,
     TransferOrderLineItemComponent,
     InventoryTransferDetailComponent,
+    InventoryTransferLineItemComponent
   ],
   imports: [
     CommonModule,
