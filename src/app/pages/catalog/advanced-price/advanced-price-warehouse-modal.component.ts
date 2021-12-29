@@ -12,33 +12,40 @@ import {DialogResult} from '@nusantara/core';
     <ngx-smart-modal [identifier]="'selectProduct'" #modal [formGroup]="form" [customClass]="'wide-modal'">
       <h2 class="title-2">Select Warehouse</h2>
       <form #modalForm class="fluid" (ngSubmit)="submit()">
-        <table class="warehouse-table">
-          <thead>
-          <tr>
-            <th class="subheading-2 warehouse-table__name">
-              <label class="checkbox">
-                <input type="checkbox">
-                <span>Name</span>
-              </label>
-            </th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let choice of choices">
-            <td class="warehouse-table__name">
-              <label class="checkbox">
-                <input
-                  type="checkbox"
-                  name="{{ choice.href }}"
-                  [value]="choice.href"
-                  [checked]="checkedItem(choice.href)"
-                >
-                <span>{{ choice.name }}</span>
-              </label>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+        <div class="tableFixHead">
+          <table class="warehouse-table">
+            <thead>
+            <tr>
+              <th class="subheading-2 warehouse-table__name">
+                <label class="checkbox">
+                  <input type="checkbox"
+                         name="checkUncheckAll"
+                         class="checkUncheckAll"
+                         value="all"
+                         (change)="checkUncheckAll()"
+                        [checked]="isAllSelected()">
+                  <span>Name</span>
+                </label>
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let choice of choices">
+              <td class="warehouse-table__name">
+                <label class="checkbox">
+                  <input
+                    type="checkbox"
+                    name="{{ choice.href }}"
+                    [value]="choice.href"
+                    [checked]="checkedItem(choice.href)"
+                  >
+                  <span>{{ choice.name }}</span>
+                </label>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
         <div class="actions-container">
           <button type="submit" [disabled]="!form.valid" class="control">
             Submit
@@ -51,8 +58,26 @@ import {DialogResult} from '@nusantara/core';
     </ngx-smart-modal>
   `,
   styles: [`
-    .warehouse-table {
+    .tableFixHead {
+      overflow: auto;
+      max-height: 500px;
       margin-top: 16px;
+    }
+
+    .warehouse-table {
+      width: 100%;
+      border-top: none;
+    }
+
+    .warehouse-table thead {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .warehouse-table th {
+      border-top: solid 1px var(--grey);
+      border-bottom: solid 1px var(--grey);
     }
 
     .warehouse-table__name > label {
@@ -85,10 +110,12 @@ export class AdvancedPriceWarehouseModalComponent implements OnInit, AfterViewIn
 
   form: FormGroup;
   result: DialogResult = DialogResult.Cancelled;
+  isMasterSel: boolean;
 
   constructor(
     private fb: FormBuilder,
   ) {
+    this.isMasterSel = false;
   }
 
   get warehouses(): FormArray {
@@ -159,6 +186,23 @@ export class AdvancedPriceWarehouseModalComponent implements OnInit, AfterViewIn
 
   checkedItem(href) {
     return this.selectedWarehouses && (this.selectedWarehouses.value.findIndex(obj => obj.href === href) !== -1);
+  }
+
+  checkUncheckAll() {
+    const v = this.formView.nativeElement.getElementsByTagName('input');
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < v.length; i++) {
+      if (v[i].type === 'checkbox' && v[i].name !== 'checkUncheckAll') {
+        v[i].checked = this.isMasterSel;
+        this.checkedItem(v[i].value);
+      } else {
+        this.isMasterSel = v[i].checked;
+      }
+    }
+  }
+
+  isAllSelected() {
+    return this.isMasterSel = this.selectedWarehouses.length === this.choices.length;
   }
 
   /**
