@@ -9,8 +9,8 @@ import { IProductClass } from '@nusantara/models/products';
   selector: 'nus-inventory-receiving-detail-item',
   template: `
     <tr [formGroup]="form">
-      <td>{{ displayedProductName }}</td>
-      <td class="immediate-error-display">
+      <td title="{{ displayedProductName }}">{{ displayedProductName }}</td>
+      <td class="immediate-error-display" title="{{ sku.value }}">
         {{ sku.value }}
       </td>
       <td>

@@ -1,9 +1,9 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { IOption, IOrderFilter, IOrderFilterValue } from '@nusantara/models/order/filter';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {IOption, IOrderFilter, IOrderFilterValue} from '@nusantara/models/order/filter';
 import * as moment from 'moment';
-import { Utils } from './utils';
+import {Utils} from './utils';
 
 @Component({
   selector: 'nus-order-filters',
@@ -17,13 +17,13 @@ import { Utils } from './utils';
           </nus-order-date-filter>
           <mat-form-field>
             <mat-select [disableOptionCentering]="true"
-              panelClass="mat-select-panel"
-              formControlName="platform">
+                        panelClass="mat-select-panel"
+                        formControlName="platform">
               <mat-option value="" i18n>All Platform</mat-option>
               <mat-option
                 *ngFor="let platform of orderFilter.platform"
                 [value]="platform.option">
-              {{ platform.title }}
+                {{ platform.title }}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -42,8 +42,8 @@ import { Utils } from './utils';
           </mat-form-field>
           <mat-form-field>
             <mat-select [disableOptionCentering]="true"
-              panelClass="mat-select-panel"
-              formControlName="logistic">
+                        panelClass="mat-select-panel"
+                        formControlName="logistic">
               <mat-option value="" i18n>All Logistics</mat-option>
               <mat-option
                 *ngFor="let logistic of orderFilter.logistics"
@@ -67,23 +67,23 @@ import { Utils } from './utils';
     '.button-action button:not(:first-child) { margin-left: 16px; }',
     '.select-date { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 20px; }',
     `.svg {
-        content: "";
-        position: absolute;
-        height: 10px;
-        width: 10%;
-        // background-image: url("assets/arrow-down.svg");
-        background-size: 12px;
-      }`,
+      content: "";
+      position: absolute;
+      height: 10px;
+      width: 10%;
+    / / background-image: url("assets/arrow-down.svg");
+      background-size: 12px;
+    }`,
   ]
 })
 export class OrderFiltersComponent implements OnInit {
-  @Output() filterApplied =  new EventEmitter<IOrderFilterValue>();
+  @Output() filterApplied = new EventEmitter<IOrderFilterValue>();
   orderStatuses: Array<IOption>;
   orderFilter: IOrderFilter;
 
   filtersForm: FormGroup;
   filtersValue: IOrderFilterValue = {
-    date : {
+    date: {
       type: null,
       start: null,
       end: null,
@@ -112,6 +112,17 @@ export class OrderFiltersComponent implements OnInit {
       (data: { orderStatus: IOption[]; orderFilter: IOrderFilter }) => {
         this.orderStatuses = data.orderStatus;
         this.orderFilter = data.orderFilter;
+        const oFilter = {
+          platform: [{
+            option: '0',
+            title: 'Web Order',
+          } as IOption].concat(this.orderFilter.platform.map( vl => {
+            return { option: `${vl.option}`, title: vl.title};
+          })),
+          orderStatus: this.orderFilter.orderStatus,
+          logistics: this.orderFilter.logistics,
+        } as IOrderFilter;
+        this.orderFilter = oFilter;
       }
     );
 
@@ -120,66 +131,66 @@ export class OrderFiltersComponent implements OnInit {
     this.route.queryParamMap.subscribe((value) => {
       // date
       const startTime = moment(value.get(this.START_TIME_PARAM)).isValid
-      ? value.get(this.START_TIME_PARAM)
-      : null;
+        ? value.get(this.START_TIME_PARAM)
+        : null;
 
       const endTime = moment(value.get(this.END_TIME_PARAM)).isValid
-      ? value.get(this.END_TIME_PARAM)
-      : null;
+        ? value.get(this.END_TIME_PARAM)
+        : null;
 
-      var utils = new Utils();
+      let utils = new Utils();
       const dateType = utils.getDateOption(startTime, endTime);
       this.updateDate(dateType, startTime, endTime);
 
 
-      const platform = value.get(this.PLATFORM_PARAM)
-      ? this.getValidOption(
-          +value.get(this.PLATFORM_PARAM),
+      const platform = value.get(this.PLATFORM_PARAM) !== null
+        ? this.getValidOption(
+          value.get(this.PLATFORM_PARAM),
           this.orderFilter.platform
         )
-      : null;
+        : null;
 
-      const status =  value.get(this.STATUS_PARAM)
-      ? this.getValidOption(
+      const status = value.get(this.STATUS_PARAM)
+        ? this.getValidOption(
           value.get(this.STATUS_PARAM),
           this.orderFilter.orderStatus
         )
-      : null;
+        : null;
 
       const logistic = value.get(this.LOGISTIC_PARAM)
-      ? this.getValidOption(
+        ? this.getValidOption(
           decodeURI(value.get(this.LOGISTIC_PARAM)),
           this.orderFilter.logistics
         )
-      : null;
-      const q = value.get('q')? value.get('q') : null;
+        : null;
+      const q = value.get('q') ? value.get('q') : null;
 
       const isTesting = moment(value.get(this.TESTING_PARAM)).isValid
-      ? value.get(this.TESTING_PARAM)
-      : null;
+        ? value.get(this.TESTING_PARAM)
+        : null;
 
 
-      if(platform){
-        this.updatePlatform(platform)
+      if (platform) {
+        this.updatePlatform(platform);
       }
-      if(status){
-        this.updateStatus(status)
+      if (status) {
+        this.updateStatus(status);
       }
-      if(logistic){
-        this.updateLogistic(logistic)
+      if (logistic) {
+        this.updateLogistic(logistic);
       }
-      if(q){
+      if (q) {
         this.updateQuery(q);
       }
-      if(!!isTesting && isTesting.toLowerCase() === 'true') {
+      if (!!isTesting && isTesting.toLowerCase() === 'true') {
         this.updateTesting(isTesting);
       }
 
       this.filtersForm.patchValue({
-        platform: platform? platform : '',
-        status: status? status : '',
-        logistic: logistic? logistic: '',
-        isTesting: isTesting? isTesting.toLowerCase() === 'true': false,
+        platform: platform ? platform : '',
+        status: status ? status : '',
+        logistic: logistic ? logistic : '',
+        isTesting: isTesting ? isTesting.toLowerCase() === 'true' : false,
       });
 
       this.filtersForm.valueChanges.subscribe((newValue) => {
@@ -197,7 +208,7 @@ export class OrderFiltersComponent implements OnInit {
     });
   }
 
-  initializeForm(){
+  initializeForm() {
     this.filtersForm = this.fb.group({
       platform: new FormControl(''),
       status: new FormControl('paid'),
@@ -207,14 +218,14 @@ export class OrderFiltersComponent implements OnInit {
   }
 
   onSelectedDateChanged(selectedDate: { type: string, startDate: string; endDate: string }) {
-    if(!!selectedDate){
+    if (!!selectedDate) {
       if (!!this.filtersValue.date) {
         this.filtersValue.date.type = selectedDate.type;
       }
-      if(selectedDate?.startDate){
+      if (selectedDate?.startDate) {
         this.filtersValue.date.start = selectedDate.startDate;
       }
-      if(selectedDate?.endDate){
+      if (selectedDate?.endDate) {
         this.filtersValue.date.end = selectedDate.startDate;
       }
     } else {
@@ -228,7 +239,7 @@ export class OrderFiltersComponent implements OnInit {
     });
   }
 
-  updateRoute(params: {[x:string]: string}){
+  updateRoute(params: { [x: string]: string }) {
     this.router.navigate(["."], {
       queryParams: params,
       queryParamsHandling: "merge",
@@ -237,8 +248,8 @@ export class OrderFiltersComponent implements OnInit {
   }
 
   getValidOption(param: any, options: Array<IOption>) {
-    const result = options.find( ({ option }) => option === param );
-    return result? param : '';
+    const result = options.find(({option}) => option === param);
+    return result ? param : '';
   }
 
   updateDate(type: string, startDate: string, endDate: string) {
@@ -271,7 +282,7 @@ export class OrderFiltersComponent implements OnInit {
   }
 
   updateTesting(isTesting: string) {
-    if(isTesting){
+    if (isTesting) {
       this.filtersValue.isTesting = isTesting;
     } else {
       this.filtersValue.date = null;

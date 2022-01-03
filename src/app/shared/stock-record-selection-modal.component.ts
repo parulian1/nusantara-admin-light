@@ -45,12 +45,12 @@ import { map } from 'rxjs/operators';
           </thead>
           <tbody *ngIf="displayedResults; else loading">
           <tr *ngFor="let p of displayedResults?.entities">
-            <td class="product-name">
+            <td class="product-name" title="{{ displayReceivingID(p?.receivingOrder?.href) }} / {{ p?.product?.name }} / {{ p?.location?.name }}">
               {{ displayReceivingID(p?.receivingOrder?.href) }} / {{ p?.product?.name }} / {{ p?.location?.name }}
             </td>
-            <td class="product-sku">{{ p.sku }}</td>
-            <td class="stock-date">{{ p.expiryDate | date }}</td>
-            <td class="product-original-qty">{{ p.originalQuantity }}</td>
+            <td class="product-sku" title="{{ p.sku }}">{{ p.sku }}</td>
+            <td class="stock-date" title="{{ p.expiryDate | date }}">{{ p.expiryDate | date }}</td>
+            <td class="product-original-qty" title="{{ p.originalQuantity }}">{{ p.originalQuantity }}</td>
             <td class="centered"><a href="#" (click)="selectStockRecord(p)" i18n>Add</a></td>
           </tr>
           </tbody>
@@ -76,6 +76,11 @@ import { map } from 'rxjs/operators';
     ` .product-sku {
         width: 15%;
       }
+    td.product-sku {
+      white-space: pre-wrap;
+      overflow: initial;
+      text-overflow: unset;
+    }
       .product-original-qty, .centered {
         width: 10%;
       }
