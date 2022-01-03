@@ -1,16 +1,12 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { parse } from 'iso8601-duration';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {FormArray, FormBuilder, FormControl, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {parse} from 'iso8601-duration';
 
-import {
-  AbstractDetailComponent,
-  DialogResult,
-  ToastService
-} from '@nusantara/core';
-import { ICustomerGroup, CustomerGroupType, drf, IEmailHrefUserEntity, ICustomer } from '@nusantara/models';
-import { CustomerGroupService } from '@nusantara/services';
-import { UserSelectionModalComponent } from '@nusantara/shared';
+import {AbstractDetailComponent, DialogResult, getSlugFromHref, ToastService} from '@nusantara/core';
+import {CustomerGroupType, drf, ICustomer, ICustomerGroup, IEmailHrefUserEntity} from '@nusantara/models';
+import {CustomerGroupService} from '@nusantara/services';
+import {UserSelectionModalComponent} from '@nusantara/shared';
 
 @Component({
   selector: 'nus-customer-group-detail',
@@ -23,69 +19,76 @@ import { UserSelectionModalComponent } from '@nusantara/shared';
     <ul class="non-field-errors">
       <li *ngFor="let err of nonFieldErrors">{{ err }}</li>
     </ul>
+    <nus-tabs>
+      <nus-tab title="General" value="general">
+        <form [formGroup]="form" (ngSubmit)="save()">
+          <label>
+            <span i18n>Name</span>
+            <input type="text" [formControl]="name">
+            <nus-field-errors [control]="name"></nus-field-errors>
+          </label>
 
-    <form [formGroup]="form" (ngSubmit)="save()">
-      <label>
-        <span i18n>Name</span>
-        <input type="text" [formControl]="name">
-        <nus-field-errors [control]="name"></nus-field-errors>
-      </label>
+          <label>
+            <span i18n>Type</span>
+            <select [formControl]="type">
+              <option *ngFor="let opt of typeChoices" [ngValue]="opt.value">
+                {{ opt.displayName }}
+              </option>
+            </select>
+            <nus-field-errors [control]="type"></nus-field-errors>
+          </label>
 
-      <label>
-        <span i18n>Type</span>
-        <select [formControl]="type">
-          <option *ngFor="let opt of typeChoices" [ngValue]="opt.value">
-            {{ opt.displayName }}
-          </option>
-        </select>
-        <nus-field-errors [control]="type"></nus-field-errors>
-      </label>
+          <label [class.hidden]="timeThreshold.disabled">
+            <span>{{ timeThresholdLabel }}</span>
+            <input type="number" [formControl]="timeThreshold">
+          </label>
 
-      <label [class.hidden]="timeThreshold.disabled">
-        <span>{{ timeThresholdLabel }}</span>
-        <input type="number" [formControl]="timeThreshold">
-      </label>
+          <label [class.hidden]="amountThreshold.disabled">
+            <span>{{ amountThresholdLabel }}</span>
+            <input type="number" [formControl]="amountThreshold">
+          </label>
 
-      <label [class.hidden]="amountThreshold.disabled">
-        <span>{{ amountThresholdLabel }}</span>
-        <input type="number" [formControl]="amountThreshold">
-      </label>
 
-      <table *ngIf="type.value === manual">
-        <thead>
-        <tr>
-          <th i18n>User</th>
-          <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let control of customers.controls; let i=index">
-          <td>{{ control.get('email').value }}</td>
-          <td>
-            <button (click)="customers.removeAt(i)" type="button" class="remove-button">
-              <i class="material-icons">remove_circle_outline</i>
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">
-            <button type="button" (click)="selectUser()" class="add-button" i18n>
-              Add User
-            </button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+          <nus-detail-actions
+            [component]="this"
+            (cancel)="navigateToParent(true)"
+            (delete)="delete()">
+          </nus-detail-actions>
 
-      <nus-user-selection-modal [selectedUsers]="entity?.customers"></nus-user-selection-modal>
+        </form>
+      </nus-tab>
+      <nus-tab title="Customers" value="x" *ngIf="showCustomerTab">
+        <table *ngIf="type.value === manual">
+          <thead>
+          <tr>
+            <th i18n>User</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let control of customers.controls; let i=index">
+            <td>{{ control.get('email').value }}</td>
+            <td>
+              <button (click)="removeCustomer(control.get('href').value, i)" type="button" class="remove-button">
+                <i class="material-icons">remove_circle_outline</i>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <button type="button" (click)="selectUser()" class="add-button" i18n>
+                Add User
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
 
-      <nus-detail-actions
-        [component]="this"
-        (cancel)="navigateToParent(true)"
-        (delete)="delete()">
-      </nus-detail-actions>
 
-    </form>
+      </nus-tab>
+
+    </nus-tabs>
+    <nus-user-selection-modal [selectedUsers]="entity?.customers"></nus-user-selection-modal>
   `,
   styles: [
     'label { display: block; }',
@@ -104,7 +107,9 @@ export class CustomerGroupDetailComponent extends AbstractDetailComponent<ICusto
   entity?: ICustomerGroup;
   manual: string =  CustomerGroupType.manual;
 
-  constructor(service: CustomerGroupService,
+  showCustomerTab = false;
+
+  constructor(public service: CustomerGroupService,
               route: ActivatedRoute,
               router: Router,
               private fb: FormBuilder,
@@ -128,6 +133,7 @@ export class CustomerGroupDetailComponent extends AbstractDetailComponent<ICusto
 
   initializeForm(entity?: ICustomerGroup) {
     this.entity = entity;
+    this.showCustomerTab = !!entity && entity.type === CustomerGroupType.manual;
     this.form = this.fb.group({
       name: [entity?.name, [Validators.required, ]],
       href: [entity?.href, []],
@@ -213,6 +219,13 @@ export class CustomerGroupDetailComponent extends AbstractDetailComponent<ICusto
 
       const selectedUser = this.userSelectionModal.user.value as ICustomer;
 
+      const data = {
+        customer: selectedUser.username
+      };
+      this.service.assignUser(this.entity, data).subscribe(res => {
+        console.log(res);
+      });
+
       const f = this.fb.group({
         href: [selectedUser.href, []],
         email: [selectedUser.email, []]
@@ -228,5 +241,15 @@ export class CustomerGroupDetailComponent extends AbstractDetailComponent<ICusto
       timeThreshold: `P${formValue.timeThreshold || '0'}D`
     };
     return formValue;
+  }
+
+  removeCustomer(href: string, i: number) {
+    this.service.revokeUser(this.entity, {
+      customer: getSlugFromHref(href)
+    }).subscribe(res => {
+      console.log(res);
+      this.customers.removeAt(i);
+    });
+
   }
 }

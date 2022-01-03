@@ -6,7 +6,7 @@ import { ReindexingComponent } from './reindexing/reindexing.component';
 const routes: Routes = [
   {
     path: 'marketplace-integration',
-    canActivate: [RequireIsEnterpriseGuard, ],
+    canActivate: [RequireIsEnterpriseGuard,],
     loadChildren: () =>
       import('./marketplace-integration/marketplace-integration.module').then(
         (m) => m.MarketplaceIntegrationModule
@@ -14,7 +14,7 @@ const routes: Routes = [
   },
   {
     path: 'external-integration',
-    canActivate: [RequireIsEnterpriseGuard, ],
+    canActivate: [RequireIsEnterpriseGuard,],
     loadChildren: () =>
       import('./external-integration/external-integration.module').then(
         (m) => m.ExternalIntegrationModule
@@ -29,7 +29,7 @@ const routes: Routes = [
   },
   {
     path: 'pos-integration',
-    canActivate: [RequireIsEnterpriseGuard, ],
+    canActivate: [RequireIsEnterpriseGuard,],
     loadChildren: () =>
       import('./pos-integration/pos-integration.module').then(
         (m) => m.PosIntegrationModule
@@ -46,13 +46,18 @@ const routes: Routes = [
     path: 'reindex',
     children: [
       {
+        path: '',
+        component: ReindexingComponent,
+        resolve: {},
+        runGuardsAndResolvers: 'always',
+        data: {animation: 'Detail',},
+      },
+      {
         path: ':slug',
         component: ReindexingComponent,
-        resolve: {
-
-        },
+        resolve: {},
         runGuardsAndResolvers: 'always',
-        data: { animation: 'Detail', },
+        data: {animation: 'Detail',},
       }
     ]
   },
@@ -62,4 +67,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class ConfigRoutingModule {}
+export class ConfigRoutingModule {
+}

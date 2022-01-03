@@ -1,89 +1,73 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ReindexingService} from '@nusantara/pages/config/reindexing/reindexing.service';
 import {ActivatedRoute, ActivatedRouteSnapshot, Router} from '@angular/router';
+import {catchError} from 'rxjs/operators';
+import {HttpErrorResponse} from '@angular/common/http';
+import {of} from 'rxjs';
+import {ErrorResult, ToastLevelEnum, ToastService} from '@nusantara/core';
+import {IHttpFailure} from '@nusantara/models';
 
 @Component({
   selector: 'nus-reindexing',
-  templateUrl: './reindexing.component.html',
+  template: `
+    <h1 class="title-1" i18n>Reindexing</h1>
+    <div class="wrapper">
+      <div>
+        <h1 class="heading-1" i18n>Reindex Product (SOLR)</h1>
+      </div>
+      <div>
+        <button (click)="doReindex('product')" class="control" i18n>Open</button>
+      </div>
+    </div>
+    <div class="wrapper">
+      <div>
+        <h1 class="heading-1" i18n>Reindex Auth User</h1>
+      </div>
+      <div>
+        <button (click)="doReindex('users')" class="control" i18n>Open</button>
+      </div>
+    </div>
+    <div class="wrapper">
+      <div>
+        <h1 class="heading-1" i18n>Reindex Auth Group User</h1>
+      </div>
+      <div>
+        <button (click)="doReindex('group')" class="control" i18n>Open</button>
+      </div>
+    </div>
+  `,
   styleUrls: ['./reindexing.component.css']
 })
 export class ReindexingComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private reindexingService: ReindexingService) { }
+    private reindexingService: ReindexingService,
+    public toast: ToastService, ) {
+  }
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe(data => {
-      console.log(data);
       const slug = data.get('slug');
-      switch (slug) {
-        case 'product':
-          this.reindexingService.doService().subscribe(res => {
-            console.log(res);
-          });
-          break;
-        case 'stock':
-          this.reindexingService.reindexStock().subscribe(res => {
-            console.log(res);
-          });
-          break;
-        case 'approved-stock':
-          this.reindexingService.reindexStockApproved().subscribe(res => {
-            console.log(res);
-          });
-          break;
-        case 'reference':
-          this.reindexingService.reindexReference().subscribe(res => {
-            console.log(res);
-          });
-          break;
-        case 'vendor':
-          this.reindexingService.reindexVendor().subscribe(res => {
-            console.log(res);
-          });
-          break;
-        case 'category':
-          this.reindexingService.reindexCategory().subscribe(res => {
-            console.log(res);
-          });
-          break;
+      if (!!slug) {
+        this.doReindex(slug);
+      }
+    });
+  }
 
-        case 'product-class':
-          this.reindexingService.reindexProductClass().subscribe(res => {
-            console.log(res);
-          });
-          break;
-        case 'highlight':
-          this.reindexingService.reindexHighlight().subscribe(res => {
-            console.log(res);
-          });
-          break;
-        case 'product-image':
-          this.reindexingService.reindexProductImage().subscribe(res => {
-            console.log(res);
-          });
-          break;
-        case 'price-list':
-          this.reindexingService.reindexPriceList().subscribe(res => {
-            console.log(res);
-          });
-          break;
-        case 'users':
-          this.reindexingService.republishUsers().subscribe(res => {
-            console.log(res);
-          });
-          break;
-        case 'customer-group':
-          this.reindexingService.republishCustomerGroup().subscribe(res => {
-            console.log(res);
-          });
-          break;
-        case 'google-feed':
-          this.reindexingService.googleDataFeed().subscribe(res => {
-            console.log(res);
-          });
-          break;
+  doReindex(slug: string) {
+    this.reindexingService.doTask(slug).pipe(catchError(err => {
+      if (err instanceof HttpErrorResponse) {
+        return of(new ErrorResult<IHttpFailure>(err.error, err.status));
+      } else {
+        return of(new ErrorResult<IHttpFailure>({detail: 'Network error.. probably?'}, err.status));
+      }
+    })).subscribe(res => {
+      console.log(res);
+      if (res.ok) {
+        this.toast?.addMessage(`"Reindex ${slug}" was successfull.`, 'Success', ToastLevelEnum.success);
+      } else {
+        this.toast?.addError('Failed', 'Failed to Reindex');
       }
     });
   }
