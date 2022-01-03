@@ -68,12 +68,12 @@ import { AuthService } from '@nusantara/auth';
         </thead>
         <tbody>
         <tr *ngFor="let stock_record of entity.stockRecords">
-          <td data-qa="product">
+          <td data-qa="product" class="product-name">
             <div>
               {{ displayedName(stock_record.receivingOrder.href, stock_record.product.name, stock_record.location.href) }}
             </div>
           </td>
-          <td data-qa="sku">
+          <td data-qa="sku" class="product-sku">
             <div>{{ stock_record.sku }}</div>
           </td>
           <td data-qa="created">
@@ -122,10 +122,12 @@ import { AuthService } from '@nusantara/auth';
     '#general-table-info th{text-align: left;font-weight: 400;}',
     '#general-table-info td{text-align: left;font-weight: 700;color: #5A5A5A;}',
     '#general-table-product th{font-weight: 700;color: #5A5A5A;}',
-    '#general-table-product td{height: 56px}',
+    '#general-table-product td{height: 56px;width:8%;}',
+    '#general-table-product td.product-name{width:35%;overflow: hidden;text-overflow: ellipsis;}',
+    '#general-table-product td.product-sku{overflow: hidden;text-overflow: ellipsis;}',
     '#general-table-product td div{overflow: hidden;text-overflow: ellipsis;}',
     '#general-table-product thead{background-color: #F4F4F4;}',
-    'table#general-table-product{table-layout: fixed;}',
+    'table#general-table-product{}',
     'div.detail-actions { display: flex }',
     'button.danger { margin-left: auto }'
   ]

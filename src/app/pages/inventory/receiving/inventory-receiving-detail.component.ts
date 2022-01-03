@@ -89,10 +89,10 @@ import { IProduct, IProductClass } from '@nusantara/models/products';
         </thead>
         <tbody>
           <tr *ngFor="let stockRecord of entity.stockRecords">
-            <td data-qa="product">
+            <td data-qa="product" title="{{ stockRecord.product.name }}" class="product-name">
               <div>{{ stockRecord.product.name }}</div>
             </td>
-            <td>
+            <td title="{{ stockRecord.sku }}" class="product-sku">
               <div>{{ stockRecord.sku }}</div>
             </td>
             <td data-qa="original-quantity">
@@ -181,10 +181,11 @@ import { IProduct, IProductClass } from '@nusantara/models/products';
     '#general-table-info th{text-align: left;font-weight: 400;}',
     '#general-table-info td{text-align: left;font-weight: 700;color: #5A5A5A;}',
     '.general-table-product th{font-weight: 700;color: #5A5A5A;}',
-    '.general-table-product td{height: 56px}',
+    '.general-table-product td{height: 56px;width:8%}',
+    '.general-table-product td.product-name{width: 30%}',
     '.general-table-product td div{white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}',
     '.general-table-product thead{background-color: #F4F4F4;}',
-    'table.general-table-product{table-layout: fixed;}',
+    'table.general-table-product{table-layout: auto;}',
     'div.detail-actions { display: flex }',
     'button.danger { margin-left: auto }',
   ]

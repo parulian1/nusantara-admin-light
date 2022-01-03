@@ -20,17 +20,17 @@ export class OrderListResolver extends AbstractListResolver<IOrder> {
     for (const keyParam of Object.keys(theQuery)) {
       if (
         [
-          "q",
-          "ordering",
-          "start_time",
-          "end_time",
-          "store_id",
-          "order_status_admin",
-          "shipping_method",
-          "page",
-          "per_page",
-          "order",
-          "is_testing",
+          'q',
+          'ordering',
+          'start_time',
+          'end_time',
+          'store_id',
+          'order_status_admin',
+          'shipping_method',
+          'page',
+          'per_page',
+          'order',
+          'is_testing',
         ].indexOf(keyParam) >= 0
       ) {
         if ('page' === keyParam || keyParam === 'per_page') {

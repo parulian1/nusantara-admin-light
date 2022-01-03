@@ -32,10 +32,10 @@ import {getSlugFromHref} from '@nusantara/shared/helpers';
           </thead>
           <tbody *ngIf="displayedResults; else loading">
           <tr *ngFor="let p of displayedResults?.entities">
-            <td class="product-name">
+            <td class="product-name" title="{{ displayReceivingID(p.receivingOrder.href) }} / {{ p.product.name }} / {{ p.location.name }}">
               {{ displayReceivingID(p.receivingOrder.href) }} / {{ p.product.name }} / {{ p.location.name }}
             </td>
-            <td class="product-sku">{{ p.sku }}</td>
+            <td class="product-sku" title="{{ p.sku }}">{{ p.sku }}</td>
             <td class="stock-date">{{ p.expiryDate | date }}</td>
             <td class="product-original-qty">{{ p.originalQuantity }}</td>
             <td class="centered"><a href="#" (click)="selectStockRecord(p)" i18n>Add</a></td>
