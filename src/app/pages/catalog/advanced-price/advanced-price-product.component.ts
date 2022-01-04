@@ -138,7 +138,7 @@ export class AdvancedPriceProductComponent implements OnInit {
     }
     // wait to see if the user is still typing more before searching
     this.timeoutId = setTimeout(() => {
-      const amountWithoutSign = this.type === 'percentage' ? this.basePrice * (newValue / 100) : newValue;
+      const amountWithoutSign = this.type === 'percentage' ? Math.ceil(this.basePrice * (newValue / 100)) : newValue;
 
       // convert amount to negative / positive value based on user selection
       const amountWithSign = this.amountSign.value === 'positive' ? Math.abs(amountWithoutSign) : -Math.abs(amountWithoutSign);
@@ -165,7 +165,7 @@ export class AdvancedPriceProductComponent implements OnInit {
       errorObject = {invalidMaxPercentage: true};
     }
 
-    if (this.type === 'amount' && amount > 9999999999999998) {
+    if (this.type === 'amount' && amount > 999999999) {
       errorObject = {invalidMaxDigit: true};
     }
 
