@@ -526,7 +526,7 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
       errorObject = {invalidMaxPercentage: true};
     }
 
-    if (this.type === 'amount' && amount > 9999999999999998) {
+    if (this.type === 'amount' && amount > 999999999) {
       errorObject = {invalidMaxDigit: true};
     }
 

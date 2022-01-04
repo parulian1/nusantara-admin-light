@@ -165,7 +165,7 @@ export class AdvancedPriceProductComponent implements OnInit {
       errorObject = {invalidMaxPercentage: true};
     }
 
-    if (this.type === 'amount' && amount > 9999999999999998) {
+    if (this.type === 'amount' && amount > 999999999) {
       errorObject = {invalidMaxDigit: true};
     }
 
