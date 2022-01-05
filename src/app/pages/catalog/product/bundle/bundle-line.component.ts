@@ -16,6 +16,9 @@ import { ControlContainer, FormControl, FormGroup } from '@angular/forms';
     <td>
       <input type="number" [formControl]="quantity" (ngModelChange)="update.emit()"
              [min]="1" (keypress)="onlyNumberNonDecimal($event)">
+      <div *ngIf="quantity.value > 999999" class="error-detail">
+        <div i18n>Max. quantity 999999 </div>
+      </div>
     </td>
     <td>{{ price.value | currency: 'Rp ': 'symbol' : '1.0'}}</td>
     <td>
