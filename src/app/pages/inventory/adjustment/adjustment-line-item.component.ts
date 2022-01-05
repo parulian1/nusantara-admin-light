@@ -11,7 +11,7 @@ import { IStockRecord } from '@nusantara/models/inventory';
   selector: 'nus-adjustment-line',
   template: `
     <tr [formGroup]="form">
-      <td><a>{{ displayedName }}</a></td>
+      <td title="{{ displayedName }}"><a title="{{ displayedName }}">{{ displayedName }}</a></td>
 
       <td class="immediate-error-display">
         <input type="text" [formControl]="sku" data-qa="sku">

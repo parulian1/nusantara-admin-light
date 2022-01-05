@@ -43,8 +43,8 @@ import { IStockSearch } from '@nusantara/models/products/stock-search';
             </thead>
             <tbody>
             <tr *ngFor="let p of displayedResults?.entities">
-              <td class="product-name">{{ p.name }}</td>
-              <td class="product-sku">{{ p.upc }}</td>
+              <td class="product-name" title="{{ p.name }}">{{ p.name }}</td>
+              <td class="product-sku" title="{{ p.upc }}">{{ p.upc }}</td>
               <td class="centered"><a href="#" (click)="selectProduct(p)" i18n>Add</a></td>
             </tr>
             </tbody>
