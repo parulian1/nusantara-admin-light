@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { FormBuilder, FormArray } from '@angular/forms';
+import {FormBuilder, FormArray, Validators} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, zip } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -75,7 +75,7 @@ export class PriceListHostComponent extends AbstractEditingComponent<FormArray> 
         this.fb.group({
           href: [range.href, []],
           priceList: [range.priceList, []],
-          price: [range.price, []],
+          price: [range.price, [Validators.max(999999999)]],
           maxQuantity: [range.maxQuantity, []],
           minQuantity: [range.minQuantity, []]
         })

@@ -13,7 +13,7 @@ import {
   SiteConfigService,
   SvgIconService,
   WarehouseService,
-  ProductClassService
+  ProductClassService, AdvancedPriceListService
 } from '@nusantara/services';
 import {
   AbstractDetailComponent,
@@ -40,6 +40,8 @@ import { ProductClassSelectionModalComponent } from '@nusantara/shared/modals/pr
 import { ProductOnlineSelectionModalComponent } from '@nusantara/shared/product-online-selection-modal.component';
 import { IBundleStockSearch } from '@nusantara/models/products/stock-search';
 import { IProductBundle } from '@nusantara/models/products/product-bundle';
+import { ConfirmModalComponent } from '@nusantara/shared/confirm-modal.component';
+import { IAdvancedPriceList } from '@nusantara/models/products/advanced-price-list';
 
 const log = new Logger('ProductComponent');
 
@@ -56,7 +58,7 @@ const log = new Logger('ProductComponent');
           [nonFieldErrors]="nonFieldErrors">
         </nus-non-field-errors>
 
-        <form [formGroup]="form" (ngSubmit)="save()" class="fluid">
+        <form [formGroup]="form" (ngSubmit)="preSave()" class="fluid">
           <div id="general-info" class="wrapper">
             <h1 class="heading-1" i18n>General Information</h1>
             <label>
@@ -142,18 +144,18 @@ const log = new Logger('ProductComponent');
                 </thead>
                 <tbody>
 
-                  <nus-bundle-line *ngFor="let control of productBundling.controls; let i=index"
-                      [formGroup]="control" (remove)="removeProductBundling(i)"
-                                   (update)="updateVirtualAmountAndPriceListAndWeight()">
-                  </nus-bundle-line>
-                  <tr class="total-price">
-                    <td colspan="5">
-                      Total
-                    </td>
-                    <td class="price">
-                      {{ totalPrice | currency: 'Rp ': 'symbol' : '1.0' }}
-                    </td>
-                  </tr>
+                <nus-bundle-line *ngFor="let control of productBundling.controls; let i=index"
+                                 [formGroup]="control" (remove)="removeProductBundling(i)"
+                                 (update)="updateVirtualAmountAndPriceListAndWeight()">
+                </nus-bundle-line>
+                <tr class="total-price">
+                  <td colspan="5">
+                    Total
+                  </td>
+                  <td class="price">
+                    {{ totalPrice | currency: 'Rp ': 'symbol' : '1.0' }}
+                  </td>
+                </tr>
                 </tbody>
               </table>
               <button (click)="addBundling()" type="button" class="new-add-button wide">
@@ -355,7 +357,7 @@ const log = new Logger('ProductComponent');
           <div *ngIf="!isNew && enterpriseLicense() && !!showNonBundlingComponent()"
                class="wrapper"
                id="product-inventory">
-              <nus-stock-search [productHref]="entity?.href"></nus-stock-search>
+            <nus-stock-search [productHref]="entity?.href"></nus-stock-search>
           </div>
 
           <div class="wrapper" [ngClass]="{'hidden' : enterpriseLicense()}" id="product-inventory">
@@ -364,38 +366,38 @@ const log = new Logger('ProductComponent');
             </ng-container>
           </div>
 
-            <div id="product-recommendation" class="wrapper">
-              <h1 class="heading-1" i18n>Product Recommendation</h1>
-              <table>
-                <thead>
-                <tr>
-                  <th i18n>Product</th>
-                  <th i18n>Remove</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let control of productRelated.controls; let i=index">
-                  <td>
-                    <a [routerLink]="['/catalog','products', control.get('href').value|entityToSlug]" target="_blank">
+          <div id="product-recommendation" class="wrapper">
+            <h1 class="heading-1" i18n>Product Recommendation</h1>
+            <table>
+              <thead>
+              <tr>
+                <th i18n>Product</th>
+                <th i18n>Remove</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let control of productRelated.controls; let i=index">
+                <td>
+                  <a [routerLink]="['/catalog','products', control.get('href').value|entityToSlug]" target="_blank">
                     {{ control.get('name').value }}
-                    </a>
-                  </td>
-                  <td>
-                    <button (click)="removeRelated(i)" type="button" class="remove-button">
-                        <mat-icon class="icon" svgIcon="trash"></mat-icon>
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="2">
-                    <button type="button" (click)="selectProduct()" class="new-add-button wide" i18n>
-                      Add Product
-                    </button>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
+                  </a>
+                </td>
+                <td>
+                  <button (click)="removeRelated(i)" type="button" class="remove-button">
+                    <mat-icon class="icon" svgIcon="trash"></mat-icon>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <button type="button" (click)="selectProduct()" class="new-add-button wide" i18n>
+                    Add Product
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
 
           <nus-detail-actions
             [component]="this"
@@ -449,6 +451,10 @@ const log = new Logger('ProductComponent');
     <nus-vendor-selection-modal #vendorModal></nus-vendor-selection-modal>
     <nus-category-selection-modal #categoryModal></nus-category-selection-modal>
     <nus-product-class-selection-modal #productClassModal></nus-product-class-selection-modal>
+    <nus-confirm-modal
+      [title]="confirmAdvancedPriceTitle"
+      [content]="confirmAdvancedPriceText">
+    </nus-confirm-modal>
   `,
   styles: [
     '.container { display: grid; grid-template-columns: 3fr 1fr; grid-column-gap: 24px; }',
@@ -456,7 +462,7 @@ const log = new Logger('ProductComponent');
     '.manage { display: grid; grid-template-columns: 7fr 1fr; grid-gap: 20px; align-items: center; }',
     '.product-dimension { display: grid; grid-template-columns: repeat(3, 1fr); grid-column-gap: 16px; }',
     '.heading-1 { margin-bottom: 16px; }',
-    'label.toggle { padding-bottom: 20px 0px; width: fit-content; min-height: 0; }',
+    'label.toggle { padding-bottom: 20px; width: fit-content; min-height: 0; }',
     'label.toggle > input { margin-right: 16px }',
     '.rich-text-container { padding-bottom: 16px; margin: 0 !important; }',
     'ul { list-style: none; margin: 0; padding: 0; }',
@@ -549,6 +555,11 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   virtualPackageAmount: number = null;
   totalPrice: number = 0;
 
+  isAdvancePriceAvailable = false;
+  confirmAdvancedPriceTitle = 'Update this product?';
+  confirmAdvancedPriceText =
+    'This product has an "Advanced Price", if you change the default price, it might impact on the “Advance Price" as well.';
+
   @ViewChild(ProductMediaHostComponent) mediaHost: ProductMediaHostComponent;
   @ViewChild(PriceListHostComponent) priceListHost: PriceListHostComponent;
   @ViewChild(ProductAttributeHostComponent) attributeHost: ProductAttributeHostComponent;
@@ -563,18 +574,22 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   @ViewChild('categoryModal') categorySelectionModal: CategorySelectionModalComponent;
   @ViewChild('productClassModal') productClassSelectionModal: ProductClassSelectionModalComponent;
 
+  // Confirm modal if product has advanced price
+  @ViewChild(ConfirmModalComponent)confirmModal: ConfirmModalComponent;
+
 
   constructor(service: ProductService,
               private fb: FormBuilder,
               route: ActivatedRoute,
               toast: ToastService,
               private relatedService: ProductRelatedService,
-              private configSercvice: SiteConfigService,
+              private configService: SiteConfigService,
               router: Router,
               svgIconService: SvgIconService,
               public modal: NgxSmartModalService,
               public productClassService: ProductClassService,
-              private warehouseService: WarehouseService) {
+              private warehouseService: WarehouseService,
+              private advancedPriceListService: AdvancedPriceListService) {
     super(route, router, toast, service);
     svgIconService.registerIcons();
   }
@@ -689,6 +704,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     this.categorySelectionModal.onClose.subscribe(() => this.onCategorySelectionModalClosed());
     this.productClassSelectionModal.onClose.subscribe(() => this.onProductClassSelectionModalClosed());
     this.productBundlingSelectionModal.onClose.subscribe(() => this.onProductBundlingSelectionModalClosed());
+    this.confirmModal.onClose.subscribe(() => this.onConfirmModalClosed());
   }
 
   getSlugFromHref(href: string): string {
@@ -716,6 +732,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     });
 
     this.getProductFormType();
+    this.getAdvancePrice();
 
     super.ngOnInit();
   }
@@ -742,7 +759,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       structure: [entity?.structure ?? 'parent', [Validators.required, ]],
       description: [entity?.description, [Validators.required, ]],
       weight: [entity?.weight, [Validators.required, ]],
-      price: [0, [Validators.minLength(0)]],
+      price: [0, [Validators.minLength(0), Validators.max(999999999)]],
       dimensions: this.fb.group({
         currentLength: [entity?.dimensions?.currentLength, ],
         currentWidth: [entity?.dimensions?.currentWidth, ],
@@ -802,7 +819,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       this.addTag(t);
     }
 
-    // listen for any changes to this so we can disable weight when appropriate
+    // listen for any changes to this, so we can disable weight when appropriate
     this.onProductClassChanged(this.productClass.value?.href ?? this.productClass.value);
     this.productClass.valueChanges.subscribe(val => this.onProductClassChanged(val));
 
@@ -846,8 +863,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
    */
   getFormValue(): any {
     const formValue = {};
-    this.form.value.productRelated.forEach(function (v) {
-      delete v.name, delete v.href
+    this.form.value.productRelated.forEach((v) => {
+      delete v.name, delete v.href;
     });
     Object.assign(formValue, this.form.value);
 
@@ -869,6 +886,33 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
 
     return formValue;
+  }
+
+  onConfirmModalClosed(){
+    if (this.confirmModal.result === DialogResult.OK){
+      this.save();
+    }
+  }
+
+  getAdvancePrice() {
+    this.advancedPriceListService.search_by_product_slug(this.productSlug).pipe(catchError(err => {
+      log.debug('Cannot get advanced price');
+      return of(EMPTY);
+    })).subscribe((data: Array<IAdvancedPriceList>) => {
+      this.isAdvancePriceAvailable = data.length > 0;
+    });
+  }
+
+  preSave() {
+    if (!!this.productSlug) {
+      // If the product has an advanced price and the price list has been touched (assuming the user changed it),
+      // open the warning confirmation modal
+      if (this.isAdvancePriceAvailable && !this.priceLists.pristine) {
+        this.confirmModal.open();
+        return;
+      }
+    }
+    this.save();
   }
 
   save() {
@@ -896,12 +940,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
             this.mediaHost?.saveAll(resp.entity)?.subscribe(() => {
             });
-            this.priceListHost.priceLists.forEach((priceList) => {
-              log.debug('pricelist', priceList.validatePriceList());
-              priceList.rangeComponents.forEach((component) => {
-                log.debug('validate', component.validatePriceRange(), component.maxQuantity.value);
-              });
-            });
+            this.validatePriceList();
+            console.log(resp.entity);
             if (this.priceListHost.validatePriceListHost()) {
               this.priceListHost.saveAll(resp.entity).pipe(catchError(childErr => {
                 if (childErr instanceof HttpErrorResponse) {
@@ -918,7 +958,6 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
                 }
               );
             }
-
           }
         }
       );
@@ -927,20 +966,23 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       }
     } else {
       window.alert('Please check your input.');
-      this.priceListHost?.priceLists.forEach((priceList) => {
-        log.debug('pricelist', priceList.validatePriceList());
-        priceList.rangeComponents.forEach((component) => {
-          log.debug('validate', component.validatePriceRange(), component.maxQuantity.value);
-        });
-      });
+      this.validatePriceList();
     }
     this.form.enable();
+  }
+
+  validatePriceList() {
+    this.priceListHost?.priceLists.forEach((priceList) => {
+      log.debug('pricelist', priceList.validatePriceList());
+      priceList.rangeComponents.forEach((component) => {
+        log.debug('validate', component.validatePriceRange(), component.maxQuantity.value);
+      });
+    });
   }
 
   addVariant() {
     this.router.navigate(['./variants/new'], {relativeTo: this.route});
   }
-
 
   addTag(value?: string) {
     this.tags.push(
@@ -956,7 +998,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     if (this.structure.value === 'parent' && this.productFormType !== 'bundling') {
       super.navigateToParent(warnOnDirty);
     } else {
-      this.router.navigateByUrl('/catalog/products',);
+      this.router.navigateByUrl('/catalog/products', );
     }
   }
 
@@ -1005,7 +1047,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   enterpriseLicense() {
-    return this.configSercvice.isEnterpriseLicense();
+    return this.configService.isEnterpriseLicense();
   }
 
   setSinglePrice(event) {
@@ -1080,11 +1122,11 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
     this.relatedService.post(productValue).subscribe(
       (resp) => {
-        if (action === "add") {
-          // if "add" then it will be push to array
+        if (action === 'add') {
+          // if "add" then it will be pushed to array
           this.productRelated.push(product);
         } else {
-          // this will remove from the table if remove sucess
+          // this will remove from the table if remove success
           this.productRelated.removeAt(index);
         }
         this.showInfoWindow(resp.status, actionStatus);
@@ -1224,7 +1266,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   getVirtualPackageAmount(): void {
-    let bundle: Array<{product: string, quantity: number}> = [];
+    const bundle: Array<{product: string, quantity: number}> = [];
     this.totalPrice = 0;
     this.virtualPackageAmount = null;
     this.productBundling.controls.forEach((product) => {

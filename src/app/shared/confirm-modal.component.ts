@@ -40,7 +40,7 @@ export class ConfirmModalComponent {
   @Input() title = 'Go Back to Previous Page?';
   @Input() content = 'Changes you made on this form will not be saved.';
   @Input() okText = 'Yes';
-  @Input() cancelText = 'Cancel' 
+  @Input() cancelText = 'Cancel';
 
   open() {
     this.modal.open();
