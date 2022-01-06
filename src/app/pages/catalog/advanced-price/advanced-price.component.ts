@@ -66,10 +66,11 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
             </div>
             <div class="advanced-price-platform">
               <span class="subheading-2" i18n>Platform</span>
-              <label class="checkbox">
-                <input type="checkbox" [formControl]="isOnline" name="isOnline">
-                <span i18n>Online (Website)</span>
-              </label>
+<!--              Not implemented for now-->
+<!--              <label class="checkbox">-->
+<!--                <input type="checkbox" [formControl]="isOnline" name="isOnline">-->
+<!--                <span i18n>Online (Website)</span>-->
+<!--              </label>-->
               <label class="checkbox">
                 <input type="checkbox" [formControl]="isOffline" name="isOffline">
                 <span i18n>Offline (POS)</span>
