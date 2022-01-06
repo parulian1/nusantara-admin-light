@@ -895,12 +895,14 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   getAdvancePrice() {
-    this.advancedPriceListService.search_by_product_slug(this.productSlug).pipe(catchError(err => {
-      log.debug('Cannot get advanced price');
-      return of(EMPTY);
-    })).subscribe((data: Array<IAdvancedPriceList>) => {
-      this.isAdvancePriceAvailable = data.length > 0;
-    });
+    if (!!this.productSlug) {
+      this.advancedPriceListService.search_by_product_slug(this.productSlug).pipe(catchError(err => {
+        log.debug('Cannot get advanced price');
+        return of(EMPTY);
+      })).subscribe((data: Array<IAdvancedPriceList>) => {
+        this.isAdvancePriceAvailable = data.length > 0;
+      });
+    }
   }
 
   preSave() {
