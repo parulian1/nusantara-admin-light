@@ -21,7 +21,47 @@ import {IHttpFailure} from '@nusantara/models';
     </div>
     <div class="wrapper">
       <div>
-        <h1 class="heading-1" i18n>Reindex Auth User</h1>
+        <h1 class="heading-1" i18n>Reindex Product Reference</h1>
+      </div>
+      <div>
+        <button (click)="doReindex('reference')" class="control" i18n>Open</button>
+      </div>
+    </div>
+    <div class="wrapper">
+      <div>
+        <h1 class="heading-1" i18n>Reindex Vendor</h1>
+      </div>
+      <div>
+        <button (click)="doReindex('vendor')" class="control" i18n>Open</button>
+      </div>
+    </div>
+    <div class="wrapper">
+      <div>
+        <h1 class="heading-1" i18n>Reindex Product Category</h1>
+      </div>
+      <div>
+        <button (click)="doReindex('category')" class="control" i18n>Open</button>
+      </div>
+    </div>
+    <div class="wrapper">
+      <div>
+        <h1 class="heading-1" i18n>Reindex Product Class</h1>
+      </div>
+      <div>
+        <button (click)="doReindex('product-class')" class="control" i18n>Open</button>
+      </div>
+    </div>
+    <div class="wrapper">
+      <div>
+        <h1 class="heading-1" i18n>Reindex Highlight</h1>
+      </div>
+      <div>
+        <button (click)="doReindex('highlight')" class="control" i18n>Open</button>
+      </div>
+    </div>
+    <div class="wrapper">
+      <div>
+        <h1 class="heading-1" i18n>Reindex User</h1>
       </div>
       <div>
         <button (click)="doReindex('users')" class="control" i18n>Open</button>
@@ -33,6 +73,22 @@ import {IHttpFailure} from '@nusantara/models';
       </div>
       <div>
         <button (click)="doReindex('group')" class="control" i18n>Open</button>
+      </div>
+    </div>
+    <div class="wrapper">
+      <div>
+        <h1 class="heading-1" i18n>Reindex Customer Group User</h1>
+      </div>
+      <div>
+        <button (click)="doReindex('customer-group')" class="control" i18n>Open</button>
+      </div>
+    </div>
+    <div class="wrapper">
+      <div>
+        <h1 class="heading-1" i18n>Recreate Google Data Feed</h1>
+      </div>
+      <div>
+        <button (click)="doReindex('google-feed')" class="control" i18n>Open</button>
       </div>
     </div>
   `,
