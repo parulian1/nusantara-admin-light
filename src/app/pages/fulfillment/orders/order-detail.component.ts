@@ -239,16 +239,16 @@ function isTSCOrder(orderData: order.IOrderDetail) {
                       </ng-template>
                     </span>
                     <span>
-                      <div class="subheading-2">
+                      <div class="subheading-2" title="{{ lineItems.product.name }}">
                         {{ lineItems.product.name }}
                       </div>
-                      <div class="caption-1">
+                      <div class="caption-1" title="{{ lineItems.product.upc }}">
                         {{ lineItems.product.upc }}
                       </div>
                     </span>
                     <span>
                       <div class="body-2" i18n>Item Price</div>
-                      <div class="subheading-2">
+                      <div class="subheading-2" title="{{ lineItems.price | currency: 'IDR' }}" >
                         {{ lineItems.price | currency: "IDR" }}
                       </div>
                     </span>
@@ -258,7 +258,7 @@ function isTSCOrder(orderData: order.IOrderDetail) {
                     </span>
                   </div>
                 </td>
-                <td coslpan="1"></td>
+                <td colspan="1"></td>
               </tr>
             </ng-container>
           </tbody>

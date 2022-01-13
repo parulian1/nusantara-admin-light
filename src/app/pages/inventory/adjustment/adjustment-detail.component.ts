@@ -68,12 +68,12 @@ import { AuthService } from '@nusantara/auth';
         </thead>
         <tbody>
         <tr *ngFor="let stock_record of entity.stockRecords">
-          <td data-qa="product" class="product-name">
+          <td data-qa="product" class="product-name" title="{{ displayedName(stock_record.receivingOrder.href, stock_record.product.name, stock_record.location.href) }}">
             <div>
               {{ displayedName(stock_record.receivingOrder.href, stock_record.product.name, stock_record.location.href) }}
             </div>
           </td>
-          <td data-qa="sku" class="product-sku">
+          <td data-qa="sku" class="product-sku" title="{{ stock_record.sku }}">
             <div>{{ stock_record.sku }}</div>
           </td>
           <td data-qa="created">
