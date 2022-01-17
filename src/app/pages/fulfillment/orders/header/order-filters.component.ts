@@ -241,6 +241,7 @@ export class OrderFiltersComponent implements OnInit {
 
     this.filterApplied.next(this.filtersValue);
     this.updateRoute({
+      page: '1',
       start_time: selectedDate.startDate,
       end_time: selectedDate.endDate,
     });
