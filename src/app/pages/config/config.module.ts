@@ -13,8 +13,7 @@ import { GroupComponent, GroupListComponent, UserGroupComponent } from './group'
 import { SiteConfigComponent, SocialMediaHostComponent, ConfigChatServiceComponent, ConfigAnalyticToolComponent, CompanyAddressComponent } from './site-config';
 import { ResellerComponent } from './reseller';
 import { BlogFeedComponent } from './blog-feed';
-import { AuthSocialComponent } from './auth-social';
-import { AuthSocialListComponent } from './auth-social';
+import { AuthSocialComponent, AuthSocialListComponent } from './auth-social';
 import { PaymentGatewayMetaComponent } from './payment-gateways/payment-gateway-meta/payment-gateway-meta.component';
 import { PaymentGatewayInstoreComponent } from './payment-gateways/payment-gateway-instore/payment-gateway-instore.component';
 import { ShippingServiceHostComponent } from './shipping/shipping-service/shipping-service-host.component';
@@ -25,7 +24,7 @@ import { ReindexingComponent } from './reindexing/reindexing.component';
 import { ShopifyWebhookComponent } from './shopify/shopify-webhook.component';
 import { ShopifyHubComponent } from './shopify/shopify-hub.component';
 import { DefaultPinConfigComponent } from '@nusantara/pages/config/default-pin-config';
-import { LowStockConfigComponent } from './low-stock-config/low-stock-config.component';
+import { LowStockConfigComponent, LowStockProductListComponent } from './low-stock-config';
 
 @NgModule({
   declarations: [
@@ -61,6 +60,7 @@ import { LowStockConfigComponent } from './low-stock-config/low-stock-config.com
     ShopifyHubComponent,
     DefaultPinConfigComponent,
     LowStockConfigComponent,
+    LowStockProductListComponent,
   ],
   imports: [
     CommonModule,

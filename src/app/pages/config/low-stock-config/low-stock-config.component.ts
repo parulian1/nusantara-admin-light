@@ -29,7 +29,7 @@ import {LowStockService} from '@nusantara/services/low-stock.service';
 
             <label>
               <span i18n>Email Alert</span>
-              <span i18n class="email-label">Send daily email notification when stock is low. / Email notification will be send regularly every 6 am</span>
+              <p i18n class="body-2">Send daily email notification when stock is low. / Email notification will be send regularly every 6 am</p>
               <div class="email-input">
                 <input type="text"
                        placeholder="insert email to receive daily notification"
@@ -37,7 +37,7 @@ import {LowStockService} from '@nusantara/services/low-stock.service';
                        (keydown.enter)="addChips()"
                        [formControl]="email"
                        #emailInput>
-                <button type="button" class="control" (click)="addChips()">Add</button>
+                <button type="button" class="control" [disabled]="!this.email.valid" (click)="addChips()">Add</button>
               </div>
               <div class="email-chip-error">{{emailChipError}}</div>
               <nus-field-errors [control]="email"></nus-field-errors>
@@ -47,22 +47,26 @@ import {LowStockService} from '@nusantara/services/low-stock.service';
               <div class="email-chip-item" *ngFor="let email of listEmail; let i=index">
                 <span>{{email}}</span>
                 <button type="button">
-                  <img src="./../../../../assets/cross-circle.svg" (click)="removeChips(email)">
+                  <img src="./../../../../assets/cross-circle.svg" (click)="removeChips(email)" alt="x">
                 </button>
               </div>
             </div>
 
+            <button type="submit" [disabled]="!this.form.valid" class="control save" i18n>
+              Save
+            </button>
           </div>
         </nus-tab>
         <nus-tab [title]="'Product List'">
+          <nus-low-stock-product-list></nus-low-stock-product-list>
         </nus-tab>
       </nus-tabs>
-      <nus-detail-actions
-        [component]="this"
-        [hideDelete]="true"
-        (cancel)="navigateToParent(true)">
-      </nus-detail-actions>
     </form>
+    <div class="footer-actions">
+      <button type="button" (click)="navigateToParent(true)" class="control" i18n>
+        Back
+      </button>
+    </div>
   `,
   styles: [`
     .low-stock-config {
@@ -75,11 +79,6 @@ import {LowStockService} from '@nusantara/services/low-stock.service';
 
     .low-stock-config h3 {
       margin: 8px 0 16px 0;
-    }
-
-    .low-stock-config label .email-label {
-      color: var(--darken-grey);
-      line-height: 20px;
     }
 
     .low-stock-config label .email-input {
@@ -100,6 +99,7 @@ import {LowStockService} from '@nusantara/services/low-stock.service';
     .low-stock-config .email-chips {
       display: flex;
       flex-wrap: wrap;
+      margin-bottom: 16px;
     }
 
     .low-stock-config .email-chips .email-chip-item {
@@ -127,6 +127,10 @@ import {LowStockService} from '@nusantara/services/low-stock.service';
       justify-content: center;
       flex-direction: row;
     }
+
+    .low-stock-config button[type=submit] { width: 280px; }
+
+    .footer-actions { display: flex; margin-top: 1.5em; }
   `]
 })
 export class LowStockConfigComponent extends AbstractDetailComponent<ILowStock> implements OnInit {
@@ -159,6 +163,10 @@ export class LowStockConfigComponent extends AbstractDetailComponent<ILowStock> 
 
   ngOnInit(): void {
     super.ngOnInit();
+
+    this.route.data.subscribe((data: { entity: ILowStock }) => {
+      this.entity = data.entity;
+    });
   }
 
   initializeForm(entity?: ILowStock) {
@@ -166,6 +174,13 @@ export class LowStockConfigComponent extends AbstractDetailComponent<ILowStock> 
       isActive: [entity?.isActive, []],
       quantity: [entity?.quantity, [Validators.required, Validators.min(1), Validators.pattern(`^\\d+$`)]],
       email: [entity?.email, [Validators.required, Validators.pattern(`^(([^<>()[\\]\\\\.,;:\\s@\\"]+(\\.[^<>()[\\]\\\\.,;:\\s@\\"]+)*)|(\\".+\\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$`)]],
+      emails: this.fb.array([])
+    });
+
+    this.form.controls.isActive.markAsTouched();
+
+    entity?.emails.forEach(value => {
+      this.listEmail.push(value.toLowerCase());
     });
   }
 

@@ -20,6 +20,7 @@ import {
 import {SiteConfigComponent, SiteConfigResolver, SocialMediaTypeResolver} from '@nusantara/pages/config';
 import {GroupUserListResolver} from '@nusantara/pages/config/group/resolvers/group-user-list.resolver';
 import {LowStockConfigComponent} from "@nusantara/pages/config/low-stock-config/low-stock-config.component";
+import {LowStockConfigResolver} from '@nusantara/pages/config/low-stock-config';
 
 const routes: Routes = [
   {
@@ -130,7 +131,7 @@ const routes: Routes = [
         component: GroupComponent,
         resolve: { entity: GroupProviderResolver, userList: GroupUserListResolver },
         runGuardsAndResolvers: 'always',
-        data: {animation: 'Detail',},
+        data: {animation: 'Detail', },
       },
     ]
   },
@@ -142,13 +143,9 @@ const routes: Routes = [
   },
   {
     path: 'low-stock',
-    children: [
-      {
-        path: '',
-        component: LowStockConfigComponent,
-        runGuardsAndResolvers: 'always'
-      }
-    ]
+    component: LowStockConfigComponent,
+    resolve: {entity: LowStockConfigResolver},
+    runGuardsAndResolvers: 'always'
   }
 ];
 

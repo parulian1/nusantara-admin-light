@@ -1,0 +1,146 @@
+import {PagedResponse} from '@nusantara/core';
+import {ILowStockProduct} from '@nusantara/models/products';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {LowStockProductService} from '@nusantara/services/low-stock-product.service';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {Subscription} from 'rxjs';
+import {map} from 'rxjs/operators';
+
+@Component({
+  selector: 'nus-low-stock-product-list',
+  template: `
+    <form class="fluid">
+      <div class="list-page-header">
+        <div class="search">
+          <i class="material-icons">search</i>
+          <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Product Name or SKU">
+        </div>
+        <a class="control secondary" i18n>Export</a>
+      </div>
+      <nus-pagination [page]="displayedResults"></nus-pagination>
+      <table>
+        <thead>
+        <tr>
+          <th i18n>Name</th>
+          <th i18n>Warehouse</th>
+          <th i18n>Location</th>
+          <th i18n>Qty</th>
+        </tr>
+        </thead>
+        <tbody *ngIf="displayedResults.entities.length > 0">
+        <tr *ngFor="let entity of displayedResults.entities">
+          <td>{{entity.name}}</td>
+          <td>{{entity.warehouseName}}</td>
+          <td>{{entity.sublocationName}}</td>
+          <td>{{entity.latestStock}}</td>
+        </tr>
+        </tbody>
+        <tbody *ngIf="displayedResults.entities.length == 0">
+        <tr>
+          <td colspan="4" class="centered">
+            <p class="body-1" i18n>No low stock product found</p>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <nus-pagination [page]="displayedResults"></nus-pagination>
+    </form>
+  `,
+  styles: [`
+    .list-page-header { margin-top: 24px; margin-bottom: 25px; display: flex; }
+    input[type=search] { font-size: 15px; padding-right: 5px; width: 325px; }
+    a { display: flex; justify-content: center; align-items: center; margin-left: auto; }
+    a > i {
+      line-height: 31px;
+      font-size: 20px;
+    }
+
+    .search {
+      display: flex;
+      border: solid 1px var(--grey);
+      background-color: transparent;
+      align-items: center
+    }
+    div.search > i {
+      background-color: white;
+      color: var(--nav-background);
+      line-height: 31px;
+      padding-left: 13px;
+    }
+    .search > input[type=search] {
+      border: none !important;
+    }
+  `]
+})
+
+export class LowStockProductListComponent implements OnInit, AfterViewInit {
+  entity: ILowStockProduct;
+
+  form: FormGroup;
+  searchTextChanged$: Subscription;
+
+  displayedResults: PagedResponse<ILowStockProduct> = null;
+  timeoutId: any;
+  reloadTimeout = 650;
+  originalValue: string = null;
+  filters = {};
+
+  constructor(protected service: LowStockProductService, protected fb: FormBuilder) {
+  }
+
+  get searchText(): FormControl {
+    return this.form.get('searchText') as FormControl;
+  }
+
+  get warehouse(): FormControl {
+    return this.form.get('warehouse') as FormControl;
+  }
+
+  ngOnInit(): void {
+    this.initializeForm();
+    this.onSearchTextChanged('');
+  }
+
+  ngAfterViewInit(): void {
+    this.searchTextChanged$ = this.searchText.valueChanges.subscribe(
+      (value) => {
+        this.onSearchTextChanged(value);
+      }
+    );
+  }
+
+  /**
+   * Sets the modals form to a new empty set of data.
+   */
+  private initializeForm(): void {
+    this.form = this.fb.group({
+      searchText: ['', []],
+      warehouse: ['', []],
+    });
+  }
+
+  /**
+   * Whenever the user changes the search text, reload
+   * the currently-displayed products (after a slight delay
+   * to ensure they're not still typing; 650ms)
+   *
+   * @param newValue The new value the user has typed.
+   */
+  onSearchTextChanged(newValue: string) {
+    if (!!this.timeoutId) {
+      clearTimeout(this.timeoutId);
+    }
+
+    if (newValue === this.originalValue) {
+      return;
+    }
+
+    this.timeoutId = setTimeout(() => {
+      this.service.fetchListWithFilter(this.searchText.value, 1, 10, this.filters).pipe(map(results => {
+        return results;
+      })).subscribe((page) => {
+        this.displayedResults = page;
+      });
+    }, this.reloadTimeout);
+  }
+}
