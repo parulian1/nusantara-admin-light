@@ -8,7 +8,7 @@ import { IProductClass } from '../../../models/products';
   selector: 'nus-inventory-receiving-line',
   template: `
     <tr [formGroup]="form">
-      <td>{{ displayedProductName }}</td>
+      <td title="{{ displayedProductName }}">{{ displayedProductName }}</td>
       <td class="immediate-error-display">
         <input type="text" [formControl]="sku" data-qa="sku" placeholder="Input SKU" i18n-placeholder>
         <nus-field-errors [control]="sku"></nus-field-errors>
