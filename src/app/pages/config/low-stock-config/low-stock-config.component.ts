@@ -1,10 +1,11 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormControl, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {AbstractDetailComponent, ToastService} from '@nusantara/core';
 import {ILowStock} from '@nusantara/models/products';
 import {LowStockService} from '@nusantara/services/low-stock.service';
+import {drf, IWarehouse} from '@nusantara/models';
 
 @Component({
   selector: 'nus-low-stock-config',
@@ -29,7 +30,8 @@ import {LowStockService} from '@nusantara/services/low-stock.service';
 
             <label>
               <span i18n>Email Alert</span>
-              <p i18n class="body-2">Send daily email notification when stock is low. / Email notification will be send regularly every 6 am</p>
+              <p i18n class="body-2">Send daily email notification when stock is low. / Email notification will be send
+                regularly every 6 am</p>
               <div class="email-input">
                 <input type="text"
                        placeholder="insert email to receive daily notification"
@@ -58,7 +60,10 @@ import {LowStockService} from '@nusantara/services/low-stock.service';
           </div>
         </nus-tab>
         <nus-tab [title]="'Product List'">
-          <nus-low-stock-product-list></nus-low-stock-product-list>
+          <nus-low-stock-product-list
+            [warehouses]="warehouses"
+            [subLocationTypes]="subLocationTypes"
+          ></nus-low-stock-product-list>
         </nus-tab>
       </nus-tabs>
     </form>
@@ -128,15 +133,22 @@ import {LowStockService} from '@nusantara/services/low-stock.service';
       flex-direction: row;
     }
 
-    .low-stock-config button[type=submit] { width: 280px; }
+    .low-stock-config button[type=submit] {
+      width: 280px;
+    }
 
-    .footer-actions { display: flex; margin-top: 1.5em; }
+    .footer-actions {
+      display: flex;
+      margin-top: 1.5em;
+    }
   `]
 })
 export class LowStockConfigComponent extends AbstractDetailComponent<ILowStock> implements OnInit {
   @ViewChild('emailInput') emailInput: ElementRef;
 
   entity: ILowStock;
+  warehouses: Array<{ href: string, name: string, code: string }>;
+  subLocationTypes: Array<drf.IChoice>;
 
   listEmail: string[] = [];
   emailChipError = '';
@@ -161,11 +173,22 @@ export class LowStockConfigComponent extends AbstractDetailComponent<ILowStock> 
     return this.form.get('quantity') as FormControl;
   }
 
+  get emails(): FormArray {
+    return this.form.get('emails') as FormArray;
+  }
+
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.route.data.subscribe((data: { entity: ILowStock }) => {
+    this.route.data.subscribe((data: {
+      entity: ILowStock,
+      subLocationTypes: drf.IChoice[],
+      allWarehouses: IWarehouse[]
+    }) => {
       this.entity = data.entity;
+      this.subLocationTypes = data.subLocationTypes;
+      this.warehouses = data.allWarehouses;
+      this.warehouses.unshift({href: null, name: 'Select Warehouse', code: ''});
     });
   }
 

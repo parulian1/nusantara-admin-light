@@ -18,6 +18,7 @@ export interface ILowStockProduct {
   originalQuantity: number;
   latestStock: number;
   sublocationName: string;
+  sublocationType: string;
   warehouseName: string;
   siteId: number ;
 }

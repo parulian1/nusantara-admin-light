@@ -1,19 +1,39 @@
 import {PagedResponse} from '@nusantara/core';
 import {ILowStockProduct} from '@nusantara/models/products';
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
 import {LowStockProductService} from '@nusantara/services/low-stock-product.service';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {drf} from '@nusantara/models';
+import {MatSelectChange} from '@angular/material/select';
 
 @Component({
   selector: 'nus-low-stock-product-list',
   template: `
-    <form class="fluid">
+    <form [formGroup]="form" class="fluid">
       <div class="list-page-header">
-        <div class="search">
-          <i class="material-icons">search</i>
-          <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Product Name or SKU">
+        <div class="filters">
+          <div class="search">
+            <i class="material-icons">search</i>
+            <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Product Name or SKU">
+          </div>
+<!--          <label>-->
+<!--            <span i18n>Filters</span>-->
+<!--          </label>-->
+          <mat-form-field>
+            <mat-select [disableOptionCentering]="true"
+                        panelClass="mat-select-panel"
+                        formControlName="warehouse"
+                        (selectionChange)="selectChange($event)">
+              <mat-option value="" i18n>Select Warehouse</mat-option>
+              <mat-option
+                *ngFor="let warehouse of warehouses"
+                [value]="warehouse.name">
+                {{ warehouse.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
         <a class="control secondary" i18n>Export</a>
       </div>
@@ -31,7 +51,7 @@ import {map} from 'rxjs/operators';
         <tr *ngFor="let entity of displayedResults.entities">
           <td>{{entity.name}}</td>
           <td>{{entity.warehouseName}}</td>
-          <td>{{entity.sublocationName}}</td>
+          <td>{{entity.sublocationName}} ({{entity.sublocationType}})</td>
           <td>{{entity.latestStock}}</td>
         </tr>
         </tbody>
@@ -48,13 +68,9 @@ import {map} from 'rxjs/operators';
   `,
   styles: [`
     .list-page-header { margin-top: 24px; margin-bottom: 25px; display: flex; }
+    .filters { display: grid; grid-template-columns: repeat(4, 1fr); grid-gap: 16px; }
     input[type=search] { font-size: 15px; padding-right: 5px; width: 325px; }
     a { display: flex; justify-content: center; align-items: center; margin-left: auto; }
-    a > i {
-      line-height: 31px;
-      font-size: 20px;
-    }
-
     .search {
       display: flex;
       border: solid 1px var(--grey);
@@ -64,8 +80,8 @@ import {map} from 'rxjs/operators';
     div.search > i {
       background-color: white;
       color: var(--nav-background);
-      line-height: 31px;
       padding-left: 13px;
+      font-size: 20px;
     }
     .search > input[type=search] {
       border: none !important;
@@ -74,6 +90,9 @@ import {map} from 'rxjs/operators';
 })
 
 export class LowStockProductListComponent implements OnInit, AfterViewInit {
+  @Input() warehouses: Array<{ href: string, name: string, code: string }>;
+  @Input() subLocationTypes: Array<drf.IChoice>;
+
   entity: ILowStockProduct;
 
   form: FormGroup;
@@ -98,7 +117,7 @@ export class LowStockProductListComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.initializeForm();
-    this.onSearchTextChanged('');
+    this.fetchProduct();
   }
 
   ngAfterViewInit(): void {
@@ -107,6 +126,10 @@ export class LowStockProductListComponent implements OnInit, AfterViewInit {
         this.onSearchTextChanged(value);
       }
     );
+
+    this.warehouse.valueChanges.subscribe(value => {
+      this.selectChange(value);
+    });
   }
 
   /**
@@ -136,11 +159,24 @@ export class LowStockProductListComponent implements OnInit, AfterViewInit {
     }
 
     this.timeoutId = setTimeout(() => {
-      this.service.fetchListWithFilter(this.searchText.value, 1, 10, this.filters).pipe(map(results => {
-        return results;
-      })).subscribe((page) => {
-        this.displayedResults = page;
-      });
+      this.fetchProduct();
     }, this.reloadTimeout);
+  }
+
+  selectChange($event: MatSelectChange) {
+    if (!!$event.value && $event.value !== '') {
+      this.filters = {warehouse: $event.value};
+    } else {
+      this.filters = {};
+    }
+    this.fetchProduct();
+  }
+
+  fetchProduct() {
+    this.service.fetchListWithFilter(this.searchText.value, 1, 10, this.filters).pipe(map(results => {
+      return results;
+    })).subscribe((page) => {
+      this.displayedResults = page;
+    });
   }
 }

@@ -16,7 +16,7 @@ import { BlogFeedComponent } from './blog-feed';
 import { AuthSocialComponent, AuthSocialListComponent } from './auth-social';
 import { PaymentGatewayMetaComponent } from './payment-gateways/payment-gateway-meta/payment-gateway-meta.component';
 import { PaymentGatewayInstoreComponent } from './payment-gateways/payment-gateway-instore/payment-gateway-instore.component';
-import { ShippingServiceHostComponent } from './shipping/shipping-service/shipping-service-host.component';
+import { ShippingServiceHostComponent } from '@nusantara/pages/config/shipping/shipping-service';
 import { ConfigCartDiscountComponent } from '@nusantara/pages/config/config-cart-discount';
 import { ShopifyComponent } from './shopify/shopify.component';
 import { ShopifyMessageListComponent } from './shopify/shopify-message-list.component';
@@ -25,6 +25,9 @@ import { ShopifyWebhookComponent } from './shopify/shopify-webhook.component';
 import { ShopifyHubComponent } from './shopify/shopify-hub.component';
 import { DefaultPinConfigComponent } from '@nusantara/pages/config/default-pin-config';
 import { LowStockConfigComponent, LowStockProductListComponent } from './low-stock-config';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MAT_RIPPLE_GLOBAL_OPTIONS } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -70,6 +73,12 @@ import { LowStockConfigComponent, LowStockProductListComponent } from './low-sto
     ConfigRoutingModule,
     CKEditorModule,
     FormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
   ],
+  providers: [
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { floatLabel: 'never', appearance: 'outline' } },
+    { provide: MAT_RIPPLE_GLOBAL_OPTIONS, useValue: { disabled: true } },
+  ]
 })
 export class ConfigModule { }

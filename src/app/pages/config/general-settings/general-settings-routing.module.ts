@@ -144,7 +144,11 @@ const routes: Routes = [
   {
     path: 'low-stock',
     component: LowStockConfigComponent,
-    resolve: {entity: LowStockConfigResolver},
+    resolve: {
+      entity: LowStockConfigResolver,
+      subLocationTypes: wh.SubLocationTypeResolver,
+      allWarehouses: wh.WarehouseFullListResolver,
+    },
     runGuardsAndResolvers: 'always'
   }
 ];
