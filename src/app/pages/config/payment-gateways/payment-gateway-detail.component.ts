@@ -416,12 +416,7 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
       this.setCurrentTypeAndValidatorFields(change);
     });
 
-    const defaultCustomerGroup: INamedHrefEntity = {
-      href: null,
-      name: null,
-    };
-
-    for (const customerGroup of entity?.customerGroups ?? [defaultCustomerGroup, ]) {
+    for (const customerGroup of entity?.customerGroups ?? []) {
       this.addCustomerGroup(customerGroup);
     }
   }

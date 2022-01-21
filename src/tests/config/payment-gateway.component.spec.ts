@@ -140,7 +140,7 @@ describe('PaymentGatewayDetailComponent', () => {
     expect(mock.request.body.type).toBe(PaymentGatewayResp.type);
     expect(mock.request.body.clientKey).toBe(PaymentGatewayResp.clientKey);
     expect(mock.request.body.serverKey).toBe(PaymentGatewayResp.serverKey);
-    expect(mock.request.body.customerGroups).toBe(PaymentGatewayResp.customerGroups);
+    expect(mock.request.body.customerGroups).toEqual(PaymentGatewayResp.customerGroups);
     mock.flush(PaymentGatewayResp, {status: 201, statusText: 'CREATED'});
     httpTestingController.verify();
   });
@@ -195,7 +195,7 @@ describe('PaymentGatewayDetailComponent', () => {
     expect(mock.request.body.type).toBe(UpdatePaymentGateway.type);
     expect(mock.request.body.clientKey).toBe(UpdatePaymentGateway.clientKey);
     expect(mock.request.body.serverKey).toBe(UpdatePaymentGateway.serverKey);
-    expect(mock.request.body.customerGroups).toBe(UpdatePaymentGateway.customerGroups);
+    expect(mock.request.body.customerGroups).toEqual(UpdatePaymentGateway.customerGroups);
     mock.flush(UpdatePaymentGateway, {status: 200, statusText: 'OK'});
     httpTestingController.verify();
   });
