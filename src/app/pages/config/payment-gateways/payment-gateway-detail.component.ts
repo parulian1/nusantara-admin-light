@@ -189,9 +189,6 @@ import { CustomerGroupModalComponent } from '@nusantara/shared';
       <div *ngIf="enterpriseGuard.canActivate(null, null)">
         <h2>
           <span i18n>Customer Groups</span>
-          <button type="button" (click)="addCustomerGroup()" class="add-button">
-            <i class="material-icons">add_circle</i>
-          </button>
         </h2>
 
         <table>
