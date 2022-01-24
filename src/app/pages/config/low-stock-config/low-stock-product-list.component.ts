@@ -47,7 +47,7 @@ import {MatSelectChange} from '@angular/material/select';
           <th i18n>Qty</th>
         </tr>
         </thead>
-        <tbody *ngIf="displayedResults.entities.length > 0">
+        <tbody>
         <tr *ngFor="let entity of displayedResults.entities">
           <td>{{entity.name}}</td>
           <td>{{entity.warehouseName}}</td>
@@ -55,13 +55,13 @@ import {MatSelectChange} from '@angular/material/select';
           <td>{{entity.latestStock}}</td>
         </tr>
         </tbody>
-        <tbody *ngIf="displayedResults.entities.length == 0">
-        <tr>
-          <td colspan="4" class="centered">
-            <p class="body-1" i18n>No low stock product found</p>
-          </td>
-        </tr>
-        </tbody>
+<!--        <tbody *ngIf="displayedResults.entities.length == 0">-->
+<!--        <tr>-->
+<!--          <td colspan="4" class="centered">-->
+<!--            <p class="body-1" i18n>No low stock product found</p>-->
+<!--          </td>-->
+<!--        </tr>-->
+<!--        </tbody>-->
       </table>
       <nus-pagination [page]="displayedResults"></nus-pagination>
     </form>

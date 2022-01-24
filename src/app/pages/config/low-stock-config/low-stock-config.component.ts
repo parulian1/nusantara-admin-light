@@ -11,7 +11,7 @@ import {drf, IWarehouse} from '@nusantara/models';
   selector: 'nus-low-stock-config',
   template: `
     <h1 class="title-1" i18n>Low Stock Config</h1>
-    <form [formGroup]="form" class="fluid">
+    <form [formGroup]="form" (ngSubmit)="save()" class="fluid">
       <nus-tabs>
         <nus-tab [title]="'Stock Configuration'">
           <div class="low-stock-config">
@@ -46,7 +46,7 @@ import {drf, IWarehouse} from '@nusantara/models';
             </label>
 
             <div class="email-chips">
-              <div class="email-chip-item" *ngFor="let email of listEmail; let i=index">
+              <div class="email-chip-item" *ngFor="let email of emails.value; let i=index">
                 <span>{{email}}</span>
                 <button type="button">
                   <img src="./../../../../assets/cross-circle.svg" (click)="removeChips(email)" alt="x">
@@ -54,7 +54,7 @@ import {drf, IWarehouse} from '@nusantara/models';
               </div>
             </div>
 
-            <button type="submit" [disabled]="!this.form.valid" class="control save" i18n>
+            <button type="submit" class="control save" i18n>
               Save
             </button>
           </div>
@@ -150,7 +150,6 @@ export class LowStockConfigComponent extends AbstractDetailComponent<ILowStock> 
   warehouses: Array<{ href: string, name: string, code: string }>;
   subLocationTypes: Array<drf.IChoice>;
 
-  listEmail: string[] = [];
   emailChipError = '';
 
   constructor(route: ActivatedRoute,
@@ -194,6 +193,7 @@ export class LowStockConfigComponent extends AbstractDetailComponent<ILowStock> 
 
   initializeForm(entity?: ILowStock) {
     this.form = this.fb.group({
+      href: [entity?.href, []],
       isActive: [entity?.isActive, []],
       quantity: [entity?.quantity, [Validators.required, Validators.min(1), Validators.pattern(`^\\d+$`)]],
       email: [entity?.email, [Validators.required, Validators.pattern(`^(([^<>()[\\]\\\\.,;:\\s@\\"]+(\\.[^<>()[\\]\\\\.,;:\\s@\\"]+)*)|(\\".+\\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$`)]],
@@ -203,7 +203,7 @@ export class LowStockConfigComponent extends AbstractDetailComponent<ILowStock> 
     this.form.controls.isActive.markAsTouched();
 
     entity?.emails.forEach(value => {
-      this.listEmail.push(value.toLowerCase());
+      this.emails.push(this.fb.control(value.toLowerCase(), []));
     });
   }
 
@@ -212,13 +212,13 @@ export class LowStockConfigComponent extends AbstractDetailComponent<ILowStock> 
       return;
     }
 
-    if (this.listEmail.find((email) => email === this.email.value)) {
+    if (this.emails.value.findIndex(item => item === this.email.value) !== -1) {
       this.emailChipError = 'Email already inserted. Please check again';
       return;
     }
 
     if (this.email.valid) {
-      this.listEmail.push(this.email.value.toLowerCase());
+      this.emails.push(this.fb.control(this.email.value.toLowerCase(), []));
       this.emailInput.nativeElement.value = '';
     } else {
       this.emailChipError = 'Invalid email. Please enter valid email.';
@@ -226,7 +226,8 @@ export class LowStockConfigComponent extends AbstractDetailComponent<ILowStock> 
   }
 
   removeChips(email: string) {
-    this.listEmail.splice(this.listEmail.indexOf(email), 1);
+    const index = this.emails.value.findIndex(item => item === email);
+    this.emails.removeAt(index);
   }
 
   removeChipAlert() {
