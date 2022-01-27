@@ -187,7 +187,6 @@ export class LowStockConfigComponent extends AbstractDetailComponent<ILowStock> 
       this.entity = data.entity;
       this.subLocationTypes = data.subLocationTypes;
       this.warehouses = data.allWarehouses;
-      this.warehouses.unshift({href: null, name: 'Select Warehouse', code: ''});
     });
   }
 

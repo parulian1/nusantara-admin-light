@@ -14,8 +14,8 @@ import {MatSelectChange} from '@angular/material/select';
     <form [formGroup]="form" class="fluid">
       <div class="list-page-header">
         <div class="filters">
-          <div class="search">
-            <i class="material-icons">search</i>
+          <div class="search control">
+            <i class="material-icons" i18n>search</i>
             <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Product Name or SKU">
           </div>
 <!--          <label>-->
@@ -35,9 +35,13 @@ import {MatSelectChange} from '@angular/material/select';
             </mat-select>
           </mat-form-field>
         </div>
-        <a class="control secondary" i18n>Export</a>
+        <a class="control secondary" (click)="downloadProductList()" i18n>Export</a>
       </div>
-      <nus-pagination [page]="displayedResults"></nus-pagination>
+      <nus-low-stock-product-pagination
+        *ngIf="displayedResults"
+        [page]="displayedResults"
+        (updatePage)="updatePage($event)">
+      </nus-low-stock-product-pagination>
       <table>
         <thead>
         <tr>
@@ -47,7 +51,7 @@ import {MatSelectChange} from '@angular/material/select';
           <th i18n>Qty</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody *ngIf="displayedResults">
         <tr *ngFor="let entity of displayedResults.entities">
           <td>{{entity.name}}</td>
           <td>{{entity.warehouseName}}</td>
@@ -55,21 +59,25 @@ import {MatSelectChange} from '@angular/material/select';
           <td>{{entity.latestStock}}</td>
         </tr>
         </tbody>
-<!--        <tbody *ngIf="displayedResults.entities.length == 0">-->
-<!--        <tr>-->
-<!--          <td colspan="4" class="centered">-->
-<!--            <p class="body-1" i18n>No low stock product found</p>-->
-<!--          </td>-->
-<!--        </tr>-->
-<!--        </tbody>-->
+        <tbody *ngIf="!displayedResults">
+        <tr>
+          <td colspan="4" class="centered">
+            <p class="body-1" i18n>No low stock product found</p>
+          </td>
+        </tr>
+        </tbody>
       </table>
-      <nus-pagination [page]="displayedResults"></nus-pagination>
+      <nus-low-stock-product-pagination
+        *ngIf="displayedResults"
+        [page]="displayedResults"
+        (updatePage)="updatePage($event)">
+      </nus-low-stock-product-pagination>
     </form>
   `,
   styles: [`
     .list-page-header { margin-top: 24px; margin-bottom: 25px; display: flex; }
     .filters { display: grid; grid-template-columns: repeat(4, 1fr); grid-gap: 16px; }
-    input[type=search] { font-size: 15px; padding-right: 5px; width: 325px; }
+    input[type=search] { font-size: 14px; padding-right: 5px; width: 325px; }
     a { display: flex; justify-content: center; align-items: center; margin-left: auto; }
     .search {
       display: flex;
@@ -80,8 +88,8 @@ import {MatSelectChange} from '@angular/material/select';
     div.search > i {
       background-color: white;
       color: var(--nav-background);
+      line-height: 31px;
       padding-left: 13px;
-      font-size: 20px;
     }
     .search > input[type=search] {
       border: none !important;
@@ -103,6 +111,8 @@ export class LowStockProductListComponent implements OnInit, AfterViewInit {
   reloadTimeout = 650;
   originalValue: string = null;
   filters = {};
+
+  currentPage = 1;
 
   constructor(protected service: LowStockProductService, protected fb: FormBuilder) {
   }
@@ -159,6 +169,7 @@ export class LowStockProductListComponent implements OnInit, AfterViewInit {
     }
 
     this.timeoutId = setTimeout(() => {
+      this.currentPage = 1;
       this.fetchProduct();
     }, this.reloadTimeout);
   }
@@ -169,14 +180,35 @@ export class LowStockProductListComponent implements OnInit, AfterViewInit {
     } else {
       this.filters = {};
     }
+    this.currentPage = 1;
     this.fetchProduct();
   }
 
   fetchProduct() {
-    this.service.fetchListWithFilter(this.searchText.value, 1, 10, this.filters).pipe(map(results => {
+    this.service.fetchListWithFilter(this.searchText.value, this.currentPage, 10, this.filters).pipe(map(results => {
       return results;
     })).subscribe((page) => {
       this.displayedResults = page;
+    });
+  }
+
+  updatePage(page) {
+    this.currentPage = page;
+    this.fetchProduct();
+  }
+
+  downloadProductList(){
+    let tempFilter = {};
+    if (this.searchText.value) {
+      tempFilter = {
+        product: this.searchText.value
+      };
+    }
+
+    const filterList = {...tempFilter, ...this.filters};
+
+    this.service.downloadProductList(filterList).subscribe((response: string) => {
+      this.service.downloadAsCsv(response);
     });
   }
 }

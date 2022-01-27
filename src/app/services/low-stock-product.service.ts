@@ -4,6 +4,7 @@ import { PagedResponse } from '@nusantara/core';
 import { ILowStockProduct } from '@nusantara/models/products';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +35,39 @@ export class LowStockProductService  {
     return this.httpClient
       .get<ILowStockProduct[]>(`${this.baseUrl}/`, {observe: 'response', responseType: 'json', params})
       .pipe(map(resp => new PagedResponse(resp)));
+  }
+
+  downloadProductList(filters = {}) {
+    return this.httpClient.post(
+      `${this.baseUrl}/download/`,
+      filters,
+      { responseType: 'text' as 'json' }
+    );
+  }
+
+  downloadAsCsv(data: string) {
+    const today = moment().format('YYYY-MM-DD').toString();
+    const filename = `LSP-${today}`;
+    const blob = new Blob(['\ufeff' + data], {
+      type: 'text/csv;charset=utf-8;',
+    });
+
+    const dwldLink = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    const isSafariBrowser =
+      navigator.userAgent.indexOf('Safari') !== -1 &&
+      navigator.userAgent.indexOf('Chrome') === -1;
+
+    // if Safari open in new window to save file with random filename.
+    if (isSafariBrowser) {
+      dwldLink.setAttribute('target', '_blank');
+    }
+
+    dwldLink.setAttribute('href', url);
+    dwldLink.setAttribute('download', filename + '.csv');
+    dwldLink.style.visibility = 'hidden';
+    document.body.appendChild(dwldLink);
+    dwldLink.click();
+    document.body.removeChild(dwldLink);
   }
 }
