@@ -23,7 +23,7 @@ import {MatSelectChange} from '@angular/material/select';
                         panelClass="mat-select-panel"
                         formControlName="warehouse"
                         (selectionChange)="selectChange($event)">
-              <mat-option value="null" i18n>Select Warehouse</mat-option>
+              <mat-option value="" i18n>Select Warehouse</mat-option>
               <mat-option
                 *ngFor="let warehouse of warehouses"
                 [value]="warehouse.name">
@@ -160,7 +160,7 @@ export class LowStockProductListComponent implements OnInit, AfterViewInit {
   private initializeForm(): void {
     this.form = this.fb.group({
       searchText: ['', []],
-      warehouse: ['null', []],
+      warehouse: ['', []],
     });
   }
 
