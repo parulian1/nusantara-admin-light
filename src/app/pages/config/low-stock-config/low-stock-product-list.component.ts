@@ -13,20 +13,17 @@ import {MatSelectChange} from '@angular/material/select';
   template: `
     <form [formGroup]="form" class="fluid">
       <div class="list-page-header">
-        <div class="filters">
-          <div class="search control">
-            <i class="material-icons" i18n>search</i>
-            <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Product Name or SKU">
-          </div>
-<!--          <label>-->
-<!--            <span i18n>Filters</span>-->
-<!--          </label>-->
+        <div class="search control">
+          <i class="material-icons" i18n>search</i>
+          <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Product Name or SKU">
+        </div>
+        <div class="filter">
           <mat-form-field>
             <mat-select [disableOptionCentering]="true"
                         panelClass="mat-select-panel"
                         formControlName="warehouse"
                         (selectionChange)="selectChange($event)">
-              <mat-option value="" i18n>Select Warehouse</mat-option>
+              <mat-option value="null" i18n>Select Warehouse</mat-option>
               <mat-option
                 *ngFor="let warehouse of warehouses"
                 [value]="warehouse.name">
@@ -35,7 +32,9 @@ import {MatSelectChange} from '@angular/material/select';
             </mat-select>
           </mat-form-field>
         </div>
-        <a class="control secondary" (click)="downloadProductList()" i18n>Export</a>
+        <div class="action">
+          <a class="control secondary" (click)="downloadProductList()" i18n>Export</a>
+        </div>
       </div>
       <nus-low-stock-product-pagination
         *ngIf="displayedResults"
@@ -51,7 +50,7 @@ import {MatSelectChange} from '@angular/material/select';
           <th i18n>Qty</th>
         </tr>
         </thead>
-        <tbody *ngIf="displayedResults">
+        <tbody *ngIf="displayedResults?.totalResults > 0">
         <tr *ngFor="let entity of displayedResults.entities">
           <td>{{entity.name}}</td>
           <td>{{entity.warehouseName}}</td>
@@ -59,7 +58,7 @@ import {MatSelectChange} from '@angular/material/select';
           <td>{{entity.latestStock}}</td>
         </tr>
         </tbody>
-        <tbody *ngIf="!displayedResults">
+        <tbody *ngIf="displayedResults?.totalResults == 0">
         <tr>
           <td colspan="4" class="centered">
             <p class="body-1" i18n>No low stock product found</p>
@@ -75,25 +74,42 @@ import {MatSelectChange} from '@angular/material/select';
     </form>
   `,
   styles: [`
-    .list-page-header { margin-top: 24px; margin-bottom: 25px; display: flex; }
-    .filters { display: grid; grid-template-columns: repeat(4, 1fr); grid-gap: 16px; }
-    input[type=search] { font-size: 14px; padding-right: 5px; width: 325px; }
-    a { display: flex; justify-content: center; align-items: center; margin-left: auto; }
+    .list-page-header {
+      margin-top: 24px;
+      margin-bottom: 25px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 16px;
+      grid-template-areas:"search filter . action";
+    }
     .search {
       display: flex;
       border: solid 1px var(--grey);
       background-color: transparent;
-      align-items: center
+      align-items: center;
+      grid-area: search;
+      margin: 0.25em 0;
     }
-    div.search > i {
+    .search > i {
       background-color: white;
       color: var(--nav-background);
-      line-height: 31px;
       padding-left: 13px;
+      font-size: 20px;
     }
     .search > input[type=search] {
+      font-size: 14px;
+      padding: 0 0 0 5px;
       border: none !important;
+      height: 38px;
     }
+    .filter {
+        grid-area: filter;
+    }
+    .action {
+      grid-area: action;
+      display: flex; justify-content: center; align-items: center; margin-left: auto;
+    }
+    .action > a {text-align: center;}
   `]
 })
 
@@ -136,10 +152,6 @@ export class LowStockProductListComponent implements OnInit, AfterViewInit {
         this.onSearchTextChanged(value);
       }
     );
-
-    this.warehouse.valueChanges.subscribe(value => {
-      this.selectChange(value);
-    });
   }
 
   /**
@@ -148,7 +160,7 @@ export class LowStockProductListComponent implements OnInit, AfterViewInit {
   private initializeForm(): void {
     this.form = this.fb.group({
       searchText: ['', []],
-      warehouse: ['', []],
+      warehouse: ['null', []],
     });
   }
 
@@ -175,12 +187,12 @@ export class LowStockProductListComponent implements OnInit, AfterViewInit {
   }
 
   selectChange($event: MatSelectChange) {
+    this.currentPage = 1;
     if (!!$event.value && $event.value !== '') {
       this.filters = {warehouse: $event.value};
     } else {
       this.filters = {};
     }
-    this.currentPage = 1;
     this.fetchProduct();
   }
 
