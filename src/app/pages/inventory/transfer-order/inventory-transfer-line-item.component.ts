@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ControlContainer, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ControlContainer, FormArray, FormControl, FormGroup } from '@angular/forms';
 
 import { products, ISubLocation } from '@nusantara/models';
 import { IProductClass } from '../../../models/products';
@@ -28,7 +28,7 @@ import { IProductClass } from '../../../models/products';
       <td>
         <input type="text" [formControl]="batchNumber" data-qa="batch-number">
       </td>
-      <td>
+      <td *ngIf="!!locator.controls">
         <div class="locator-item-container" *ngFor="let child_control of locator.controls; index as ctr">
           <div class="locator-item-container__input">
             <input [formControl]="child_control" name="locator" data-qa="locator" maxlength="5">
@@ -41,10 +41,10 @@ import { IProductClass } from '../../../models/products';
         <button (click)="addLocator()" type="button" class="new-add-button wide" data-qa="add-locator-button">Add</button>
       </td>
       <td class="immediate-error-display">
-        <input *ngIf="isPerishable" type="date" [formControl]="expiryDate" data-qa="expiry-date">
+        <input *ngIf="isPerishable" type="date" formControlName="expiryDate" data-qa="expiry-date">
         <nus-field-errors [control]="expiryDate"></nus-field-errors>
       </td>
-      <td>
+      <td *ngIf="!!cost">
         <input type="number" [formControl]="cost" data-qa="cost" maxlength="20">
         <nus-field-errors [control]="cost"></nus-field-errors>
       </td>
@@ -77,8 +77,28 @@ export class InventoryTransferLineItemComponent implements OnInit, AfterViewInit
   @Output() remove = new EventEmitter<void>();
   form: FormGroup;
 
+  get product(): FormControl { return this.form.get('product') as FormControl; }
+  get location(): FormGroup { return this.form.get('location') as FormGroup; }
+  get originalQuantity(): FormControl { return this.form.get('originalQuantity') as FormControl; }
+  get sku(): FormControl { return this.form.get('sku') as FormControl; }
+  get locator(): FormArray { return this.form.get('locator') as FormArray; }
+  get expiryDate(): FormControl { return this.form.get('expiryDate') as FormControl; }
+  get batchNumber(): FormControl { return this.form.get('batchNumber') as FormControl; }
+  get cost(): FormControl { return this.form.get('cost') as FormControl; }
 
   constructor(private controlContainer: ControlContainer) {
+  }
+
+  ngOnInit() {
+    this.form = (this.controlContainer.control as FormGroup);
+  }
+
+  ngAfterViewInit() {
+    if (!this.isPerishable ) {
+      this.expiryDate.setErrors(null);
+      this.expiryDate.clearValidators();
+    }
+    this.expiryDate.updateValueAndValidity();
   }
 
   get displayedProductName(): string {
@@ -100,26 +120,7 @@ export class InventoryTransferLineItemComponent implements OnInit, AfterViewInit
     }
   }
 
-  get product(): FormControl { return this.form.get('product') as FormControl; }
-  get location(): FormGroup { return this.form.get('location') as FormGroup; }
-  get originalQuantity(): FormControl { return this.form.get('originalQuantity') as FormControl; }
-  get sku(): FormControl { return this.form.get('sku') as FormControl; }
-  get locator(): FormArray { return this.form.get('locator') as FormArray; }
-  get expiryDate(): FormControl { return this.form.get('expiryDate') as FormControl; }
-  get batchNumber(): FormControl { return this.form.get('batchNumber') as FormControl; }
-  get cost(): FormControl { return this.form.get('cost') as FormControl; }
 
-  ngOnInit() {
-    this.form = (this.controlContainer.control as FormGroup);
-  }
-
-  ngAfterViewInit() {
-    if (this.isPerishable) {
-      this.expiryDate.setValidators([Validators.required, ]);
-    } else {
-      this.expiryDate.clearValidators();
-    }
-  }
 
   addLocator() {
     this.locator.push(new FormControl('', []));
