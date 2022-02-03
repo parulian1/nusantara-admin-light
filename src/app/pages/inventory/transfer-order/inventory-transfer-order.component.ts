@@ -237,8 +237,11 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
           href: [null, Validators.required],
           // name: ['', ],
         }),
+        sku: ['', [Validators.required, ]],
         originalQuantity: [1, [Validators.required, Validators.min(1), ]],
-        cost: [{value: 0, disabled: true}, [Validators.required, Validators.min(0)]]
+        batchNumber: ['', []],
+        locator: this.fb.array([], [Validators.minLength(1)]),
+        expiryDate: [null, []]
       });
       this.stockRecords.push(f);
     }
