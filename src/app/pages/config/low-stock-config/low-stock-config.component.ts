@@ -48,7 +48,7 @@ import {drf, IWarehouse} from '@nusantara/models';
             <div class="email-chips">
               <div class="email-chip-item" *ngFor="let email of emails.value; let i=index">
                 <span>{{email}}</span>
-                <button type="button" class="remove-button">
+                <button type="button" class="remove-button" (click)="removeChips(email)">
                   <i class="material-icons">highlight_off</i>
                 </button>
               </div>
