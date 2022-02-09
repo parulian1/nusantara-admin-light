@@ -18,4 +18,5 @@ export interface IProductPromotion extends INamedHrefEntity {
   multiplyItem?: boolean;
   appliedOnOnline: boolean;
   appliedOnOffline: boolean;
+  customerGroups?: INamedHrefEntity[];
 }
