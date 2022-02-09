@@ -7,7 +7,7 @@ import {drf, INamedHrefEntity, IVoucher} from '@nusantara/models';
 import {ProductService, VoucherService} from '@nusantara/services';
 import {IProduct} from '../../../models/products';
 import * as XLSX from 'xlsx';
-import {ProductSelectionModalComponent} from '../../../shared';
+import {CustomerGroupModalComponent, ProductSelectionModalComponent} from '../../../shared';
 
 declare var window: any; // Needed on Angular 8+
 
@@ -91,8 +91,8 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
         <select [formControl]="maxUsed">
           <option *ngFor="let t of maxUsedChoices" [ngValue]="t.value">{{ t.displayName }}</option>
         </select>
-        <!--        <input type="number" [formControl]="maxUsed" placeholder="Ex, 10000000">-->
-        <!--        <nus-field-errors [control]="maxUsed"></nus-field-errors>-->
+        <input type="number" [formControl]="maxUsedQty" placeholder="Ex, 10000000">
+        <nus-field-errors [control]="maxUsedQty"></nus-field-errors>
       </label>
 
       <label>
@@ -152,6 +152,55 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
         </tbody>
       </table>
 
+      <div id="warehouse-wrapper">
+        <label>
+          <span i18n>Customer Group</span>
+          <button type="button" (click)="selectCustomerGroup()" class="new-add-button">
+            <i class="material-icons">add</i>
+            <span i18n>Select Customer Group</span>
+          </button>
+        </label>
+        <div class="pill-wrapper">
+          <div *ngFor="let customerGroup of customerGroups.value; let i=index" class="pill">
+            <span class="subheading-2">{{ customerGroup.name }}</span>
+            <button type="button" class="remove-button" (click)="customerGroups.removeAt(i)">
+              <i class="material-icons">highlight_off</i>
+            </button>
+          </div>
+        </div>
+      </div>
+<!--      <div class="voucher-customer-groups" >-->
+<!--        <span class="upload-product">-->
+<!--          <h2 class="title-2" i18n>Customer Groups</h2>-->
+<!--        </span>-->
+
+<!--        <table>-->
+<!--          <thead>-->
+<!--          <tr>-->
+<!--            <th i18n>Name</th>-->
+<!--            <th i18n>Action</th>-->
+<!--          </tr>-->
+<!--          </thead>-->
+<!--          <tbody>-->
+<!--          <tr *ngFor="let control of customerGroups?.controls; let i=index">-->
+<!--            <td>{{ control.get('name').value }}</td>-->
+<!--            <td>-->
+<!--              <button (click)="customerGroups.removeAt(i)" type="button" class="remove-button">-->
+<!--                <i class="material-icons">remove_circle_outline</i>-->
+<!--              </button>-->
+<!--            </td>-->
+<!--          </tr>-->
+<!--          <tr>-->
+<!--            <td colspan="3">-->
+<!--              <button type="button" (click)="selectCustomerGroup()" class="new-add-button wide" i18n>-->
+<!--                <i class="material-icons">add</i> Add Customer Group-->
+<!--              </button>-->
+<!--            </td>-->
+<!--          </tr>-->
+<!--          </tbody>-->
+<!--        </table>-->
+<!--      </div>-->
+
       <a href="{{ service.productListDownloadUrl }}" target="_blank" *ngIf="hasProductUrl" i18n>Download Product List</a>
 
       <nus-detail-actions
@@ -164,10 +213,23 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
 
     <!-- Modals -->
     <nus-product-selection-modal></nus-product-selection-modal>
+    <nus-customer-group-selection-modal [selectedGroups]="entity?.customerGroups" #customerGroupModal>
+    </nus-customer-group-selection-modal>
   `,
   styles: [
     '.eligible-product { display: flex; margin-bottom: 10px; justify-content: space-between; }',
     '.eligible-product button { display: flex; align-items: center; }',
+    `
+      .voucher-customer-groups {
+        margin: 10px 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .pill-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+      }
+    `
   ]
 })
 export class VoucherComponent extends AbstractDetailComponent<IVoucher> implements OnInit, AfterViewInit {
@@ -196,6 +258,7 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
   public entity: IVoucher;
 
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
+  @ViewChild('customerGroupModal') customerGroupSelectionModal: CustomerGroupModalComponent;
 
   constructor(service: VoucherService,
               private fb: FormBuilder,
@@ -254,6 +317,14 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
     return this.form.get('isActive') as FormControl;
   }
 
+  get maxUsedQty(): FormControl {
+    return this.form.get('maxUsedQty') as FormControl;
+  }
+
+  get customerGroups(): FormArray {
+    return this.form.get('customerGroups') as FormArray;
+  }
+
   initializeForm(entity?: IVoucher) {
     this.entity = entity;
     this.form = this.fb.group({
@@ -270,6 +341,8 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
       validTo: [this.convertDateTime(entity?.validTo), [Validators.required]],
       isActive: [entity?.isActive, []],
       products: this.fb.array([]),
+      maxUsedQty: [entity?.maxUsedQty, [Validators.max(32767)]],
+      customerGroups: this.fb.array([])
     }, {
       validator: DiscAmountValidator
     });
@@ -304,10 +377,15 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
       this.minDateValidFrom = entity.validFrom;
       this.maxDateValidFrom = entity.validFrom;
     }
+
+    for (const customerGroup of entity?.customerGroups ?? []) {
+      this.addCustomerGroup(customerGroup);
+    }
   }
 
   ngAfterViewInit() {
     this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
+    this.customerGroupSelectionModal.onClose.subscribe(() => this.onCustomerGroupSelectionModalClosed());
   }
 
   addProduct(product: INamedHrefEntity) {
@@ -405,5 +483,44 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
     // Disable button if its not new form and voucher is ongoing, passed/historical
     const today = new Date();
     return this.entity && today > new Date(this.validFrom.value);
+  }
+
+  addCustomerGroup(customerGroup: INamedHrefEntity) {
+    if ((this.customerGroups.value as Array<INamedHrefEntity>).filter((p) => {
+      return p.href === customerGroup.href;
+    }).length > 0) {
+      log.info('Customer Group already in list -- skipping');
+      return;
+    }
+
+    const f = this.fb.group({
+      name: [customerGroup.name],
+      href: [customerGroup.href]
+    });
+
+    this.customerGroups.push(f);
+  }
+
+  onCustomerGroupSelectionModalClosed() {
+    if (this.customerGroupSelectionModal.result === DialogResult.OK) {
+      const selectedCustomerGroup = this.customerGroupSelectionModal.group.value as INamedHrefEntity;
+
+      if ((this.customerGroups.value as Array<INamedHrefEntity>).filter((p) => {
+        return p.href === selectedCustomerGroup.href;
+      }).length > 0) {
+        log.info('Customer Group already in list -- skipping');
+        return;
+      }
+      const f = this.fb.group({
+        name: [selectedCustomerGroup.name, []],
+        href: [selectedCustomerGroup.href, []],
+      });
+      this.customerGroups.push(f);
+
+    }
+  }
+
+  selectCustomerGroup() {
+    this.customerGroupSelectionModal.open();
   }
 }

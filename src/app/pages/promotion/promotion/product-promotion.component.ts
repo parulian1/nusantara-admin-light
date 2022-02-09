@@ -8,7 +8,7 @@ import { AbstractDetailComponent, DialogResult, Logger, ToastService } from '@nu
 import { INamedHrefEntity } from '@nusantara/models/base';
 import { IProductBundling, IProductPromotion, ProductPromotionType } from '@nusantara/models';
 import { IProduct } from '@nusantara/models/products';
-import { ProductSelectionModalComponent } from '@nusantara/shared';
+import {CustomerGroupModalComponent, ProductSelectionModalComponent} from '@nusantara/shared';
 
 declare var window: any; // Needed on Angular 8+
 
@@ -221,6 +221,38 @@ const log = new Logger('ProductPromotionComponent');
         <nus-field-errors [control]="banner"></nus-field-errors>
       </label>
 
+      <div class="promo-customer-groups" >
+        <span class="upload-product">
+          <h2 class="title-2" i18n>Customer Groups</h2>
+        </span>
+
+        <table>
+          <thead>
+          <tr>
+            <th i18n>Name</th>
+            <th i18n>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let control of customerGroups?.controls; let i=index">
+            <td>{{ control.get('name').value }}</td>
+            <td>
+              <button (click)="customerGroups.removeAt(i)" type="button" class="remove-button">
+                <i class="material-icons">remove_circle_outline</i>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3">
+              <button type="button" (click)="selectCustomerGroup()" class="new-add-button wide" i18n>
+                <i class="material-icons">add</i> Add Customer Group
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
@@ -231,7 +263,8 @@ const log = new Logger('ProductPromotionComponent');
       <nus-product-selection-modal #conditionModal></nus-product-selection-modal>
       <nus-product-selection-modal #benefitModal></nus-product-selection-modal>
       <nus-product-selection-modal #productModal></nus-product-selection-modal>
-
+      <nus-customer-group-selection-modal [selectedGroups]="entity?.customerGroups" #customerGroupModal>
+      </nus-customer-group-selection-modal>
     </form>
   `,
   styles: [`
@@ -247,7 +280,7 @@ const log = new Logger('ProductPromotionComponent');
       width: fit-content
     }
 
-    .promo-products {
+    .promo-products, .promo-customer-groups {
       margin: 10px 0;
       display: flex;
       flex-direction: column;
@@ -304,6 +337,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
   @ViewChild('productModal') productSelectionModal: ProductSelectionModalComponent;
   @ViewChild('conditionModal') productBundlingConditionSelectionModal: ProductSelectionModalComponent;
   @ViewChild('benefitModal') productBundlingBenefitSelectionModal: ProductSelectionModalComponent;
+  @ViewChild('customerGroupModal') customerGroupSelectionModal: CustomerGroupModalComponent;
 
   constructor(service: ProductPromotionService,
               route: ActivatedRoute,
@@ -342,7 +376,8 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
       banner: ['', []],
       productBundlingBenefit: this.fb.array([]),
       productBundlingCondition: this.fb.array([]),
-      multiplyItem: [entity?.multiplyItem ?? false, []]
+      multiplyItem: [entity?.multiplyItem ?? false, []],
+      customerGroups: this.fb.array([])
     });
 
 
@@ -370,14 +405,12 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
       this.isPromoBundling = true;
     }
 
-
     this.setImagePromoPreview(entity?.banner);
 
     if ((window.localStorage.getItem('site_domain') === 'marthatilaarshop.com') || (window.localStorage.getItem('site_domain') === 'www.marthatilaarshop.com')) {
       // TODO: Bad thing, should get this from API
       this.hasProductUrl = true;
     }
-
 
     const today = new Date();
     this.minDateValidTo = entity?.validTo ? entity.validTo : today;
@@ -397,6 +430,10 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
       this.minDateValidFrom = entity.validFrom;
       this.maxDateValidFrom = entity.validFrom;
     }
+
+    for (const customerGroup of entity?.customerGroups ?? []) {
+      this.addCustomerGroup(customerGroup);
+    }
   }
 
   setImagePromoPreview(data?: Event | string) {
@@ -407,6 +444,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
     this.productBundlingConditionSelectionModal.onClose.subscribe(() => this.onProductBundlingConditionSelectionModalClosed());
     this.productBundlingBenefitSelectionModal.onClose.subscribe(() => this.onProductBundlingBenefitSelectionModalClosed());
+    this.customerGroupSelectionModal.onClose.subscribe(() => this.onCustomerGroupSelectionModalClosed());
   }
 
   get name(): FormControl {
@@ -475,6 +513,10 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
 
   get multiplyItem(): FormControl {
     return this.form.get('multiplyItem') as FormControl;
+  }
+
+  get customerGroups(): FormArray {
+    return this.form.get('customerGroups') as FormArray;
   }
 
   addProduct(product: INamedHrefEntity) {
@@ -696,5 +738,35 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     return this.entity && today > new Date(this.validFrom.value);
   }
 
+  addCustomerGroup(customerGroup: INamedHrefEntity) {
+    if ((this.customerGroups.value as Array<INamedHrefEntity>).filter(p => p.href === customerGroup.href).length > 0) {
+      log.info('Customer Group already in list -- skipping');
+      return;
+    }
+
+    const f = this.fb.group({
+      name: [customerGroup.name],
+      href: [customerGroup.href]
+    });
+
+    this.customerGroups.push(f);
+  }
+
+  onCustomerGroupSelectionModalClosed() {
+    if (this.customerGroupSelectionModal.result === DialogResult.OK) {
+      const selectedCustomerGroup = this.customerGroupSelectionModal.group.value as INamedHrefEntity;
+
+      const f = this.fb.group({
+        name: [selectedCustomerGroup.name, []],
+        href: [selectedCustomerGroup.href, []],
+      });
+      this.customerGroups.push(f);
+
+    }
+  }
+
+  selectCustomerGroup() {
+    this.customerGroupSelectionModal.open();
+  }
 }
 
