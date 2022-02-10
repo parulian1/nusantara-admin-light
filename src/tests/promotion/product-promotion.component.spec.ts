@@ -37,7 +37,8 @@ describe('ProductPromotionComponent', () => {
     maxAmount: 1000000.0,
     isExclusive: false,
     validFrom: '2020-08-06T23:50:23.213000+07:00',
-    validTo: null
+    validTo: null,
+    customerGroups: []
   };
 
   const productPromoUpdatedResponse = {
@@ -58,7 +59,8 @@ describe('ProductPromotionComponent', () => {
     isExclusive: true,
     validFrom: '2020-09-07T23:50:23.213000+07:00',
     validTo: '2020-10-28T23:50:23.213000+07:00',
-    priority: 1
+    priority: 1,
+    customerGroups: []
   };
 
   beforeEach( async() => {
@@ -151,7 +153,8 @@ describe('ProductPromotionComponent', () => {
       appliedOnOffline: 1,
       productBundlingBenefit: [],
       productBundlingCondition: [],
-      multiplyItem: false
+      multiplyItem: false,
+      customerGroups: []
     });
     // @ts-ignore
     const p1 = component.fb.group({
@@ -203,7 +206,8 @@ describe('ProductPromotionComponent', () => {
       appliedOnOffline: 1,
       productBundlingBenefit: [],
       productBundlingCondition: [],
-      multiplyItem: false
+      multiplyItem: false,
+      customerGroups: []
     });
 
     component.save();
