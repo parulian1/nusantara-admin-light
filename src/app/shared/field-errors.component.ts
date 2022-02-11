@@ -25,6 +25,10 @@ import { FormControl } from '@angular/forms';
       <div *ngIf="control?.errors?.required" i18n>Required</div>
       <div *ngIf="control?.errors?.maxlength" i18n>Maximum length {{ control.getError('maxlength')?.requiredLength }} characters</div>
       <div *ngIf="control?.errors?.minlength" i18n>Minimum length {{ control.getError('minlength')?.requiredLength }} characters</div>
+      <div *ngIf="control?.errors?.min" i18n>Minimum value is {{ control.getError('min')?.min }}</div>
+      <div *ngIf="control?.errors?.max" i18n>
+        Ensure this value is less than or equal to {{ control.getError('max')?.max }}
+      </div>
     </div>
     <div *ngIf="control?.hasError('apiError')" class="error-detail">
       <div *ngIf="control.errors.apiError">{{ control.getError('apiError') }}</div>

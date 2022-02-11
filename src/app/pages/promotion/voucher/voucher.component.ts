@@ -88,10 +88,13 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
 
       <label>
         <span i18n>Maximum Usage</span>
-        <select [formControl]="maxUsed">
-          <option *ngFor="let t of maxUsedChoices" [ngValue]="t.value">{{ t.displayName }}</option>
-        </select>
-        <input type="number" [formControl]="maxUsedQty" placeholder="Ex, 10000000">
+        <span class="type-options">
+          <label *ngFor="let option of maxUsedChoices" class="types">
+            <input type="radio" name="types" [value]="option.value" [formControl]="maxUsed"
+              (change)="optionChange(option.value)"> {{ option.displayName}}
+          </label>
+        </span>
+        <input type="number" [formControl]="maxUsedQty" placeholder="Ex, 10000000" [disabled]="disableMaxUsedQty">
         <nus-field-errors [control]="maxUsedQty"></nus-field-errors>
       </label>
 
@@ -152,9 +155,9 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
         </tbody>
       </table>
 
-      <div id="warehouse-wrapper">
+      <div id="customer-groups-wrapper">
         <label>
-          <span i18n>Customer Group</span>
+          <h3 i18n>Customer Groups</h3>
           <button type="button" (click)="selectCustomerGroup()" class="new-add-button">
             <i class="material-icons">add</i>
             <span i18n>Select Customer Group</span>
@@ -169,37 +172,6 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
           </div>
         </div>
       </div>
-<!--      <div class="voucher-customer-groups" >-->
-<!--        <span class="upload-product">-->
-<!--          <h2 class="title-2" i18n>Customer Groups</h2>-->
-<!--        </span>-->
-
-<!--        <table>-->
-<!--          <thead>-->
-<!--          <tr>-->
-<!--            <th i18n>Name</th>-->
-<!--            <th i18n>Action</th>-->
-<!--          </tr>-->
-<!--          </thead>-->
-<!--          <tbody>-->
-<!--          <tr *ngFor="let control of customerGroups?.controls; let i=index">-->
-<!--            <td>{{ control.get('name').value }}</td>-->
-<!--            <td>-->
-<!--              <button (click)="customerGroups.removeAt(i)" type="button" class="remove-button">-->
-<!--                <i class="material-icons">remove_circle_outline</i>-->
-<!--              </button>-->
-<!--            </td>-->
-<!--          </tr>-->
-<!--          <tr>-->
-<!--            <td colspan="3">-->
-<!--              <button type="button" (click)="selectCustomerGroup()" class="new-add-button wide" i18n>-->
-<!--                <i class="material-icons">add</i> Add Customer Group-->
-<!--              </button>-->
-<!--            </td>-->
-<!--          </tr>-->
-<!--          </tbody>-->
-<!--        </table>-->
-<!--      </div>-->
 
       <a href="{{ service.productListDownloadUrl }}" target="_blank" *ngIf="hasProductUrl" i18n>Download Product List</a>
 
@@ -220,14 +192,15 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
     '.eligible-product { display: flex; margin-bottom: 10px; justify-content: space-between; }',
     '.eligible-product button { display: flex; align-items: center; }',
     `
-      .voucher-customer-groups {
-        margin: 10px 0;
-        display: flex;
-        flex-direction: column;
+      #customer-groups-wrapper {
+        margin-top: 10px;
       }
-      .pill-wrapper {
+      .pill-wrapper, .type-options {
         display: flex;
         flex-wrap: wrap;
+      }
+      .types {
+        margin-right: 20px;
       }
     `
   ]
@@ -254,6 +227,8 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
   maxDateValidTo: string | Date = null;
   minDateValidFrom: string | Date = null;
   maxDateValidFrom: string | Date = null;
+
+  disableMaxUsedQty = false;
 
   public entity: IVoucher;
 
@@ -336,12 +311,12 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
       amount: [entity?.amount, [Validators.required, Validators.min(1)]],
       minimumOrderAmount: [entity?.minimumOrderAmount, [Validators.required, Validators.min(1)]],
       maxAmount: [entity?.maxAmount, [Validators.required, Validators.min(1)]],
-      maxUsed: [entity?.maxUsed, [Validators.required, Validators.min(1)]],
+      maxUsed: [entity?.maxUsed ?? 'one_time', [Validators.required, Validators.min(1)]],
       validFrom: [this.convertDateTime(entity?.validFrom), [Validators.required]],
       validTo: [this.convertDateTime(entity?.validTo), [Validators.required]],
       isActive: [entity?.isActive, []],
       products: this.fb.array([]),
-      maxUsedQty: [entity?.maxUsedQty, [Validators.max(32767)]],
+      maxUsedQty: [entity?.maxUsedQty ?? 1, [Validators.max(32767), Validators.min(1)]],
       customerGroups: this.fb.array([])
     }, {
       validator: DiscAmountValidator
@@ -380,6 +355,10 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
 
     for (const customerGroup of entity?.customerGroups ?? []) {
       this.addCustomerGroup(customerGroup);
+    }
+
+    if (entity?.maxUsed !== 'one_time') {
+      this.disableMaxUsedQty = false;
     }
   }
 
@@ -522,5 +501,14 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
 
   selectCustomerGroup() {
     this.customerGroupSelectionModal.open();
+  }
+
+  optionChange(value: string) {
+    if (value !== 'one_time') {
+      this.disableMaxUsedQty = false;
+    } else {
+      this.disableMaxUsedQty = true;
+      this.maxUsedQty.setValue(1);
+    }
   }
 }
