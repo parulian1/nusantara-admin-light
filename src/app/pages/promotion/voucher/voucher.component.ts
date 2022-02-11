@@ -88,7 +88,7 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
       </label>
 
 
-      <label>
+      <label class="max-usage-setting">
         <span i18n>Maximum Usage</span>
         <span class="type-options">
           <label *ngFor="let option of maxUsedChoices" class="types">
@@ -96,8 +96,9 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
               (change)="optionChange(option.value)"> {{ option.displayName}}
           </label>
         </span>
-        <input type="number" [formControl]="maxUsedQty" placeholder="Ex, 10000000" [disabled]="disableMaxUsedQty">
-        <nus-field-errors [control]="maxUsedQty"></nus-field-errors>
+        <input type="number" [formControl]="maxUsedQty" placeholder="Ex, 10000000"
+               [disabled]="disableMaxUsedQty" [hidden]="disableMaxUsedQty">
+        <nus-field-errors [control]="maxUsedQty" [hidden]="disableMaxUsedQty"></nus-field-errors>
       </label>
 
       <label>
@@ -195,7 +196,7 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
     '.eligible-product button { display: flex; align-items: center; }',
     `
       #customer-groups-wrapper {
-        margin-top: 10px;
+        margin-top: 20px;
       }
       .pill-wrapper, .type-options {
         display: flex;
@@ -203,6 +204,9 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
       }
       .types {
         margin-right: 20px;
+      }
+      .max-usage-setting, .types {
+        min-height: 40px;
       }
     `
   ]
@@ -230,7 +234,7 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
   minDateValidFrom: string | Date = null;
   maxDateValidFrom: string | Date = null;
 
-  disableMaxUsedQty = false;
+  disableMaxUsedQty = true;
 
   public entity: IVoucher;
 
@@ -359,7 +363,8 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
       this.addCustomerGroup(customerGroup);
     }
 
-    if (entity?.maxUsed !== 'one_time') {
+    console.log('this.maxUsed.value', this.maxUsed.value);
+    if (this.maxUsed.value !== 'one_time') {
       this.disableMaxUsedQty = false;
     }
   }
