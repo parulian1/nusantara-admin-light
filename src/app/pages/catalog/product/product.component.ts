@@ -241,6 +241,15 @@ const log = new Logger('ProductComponent');
               <nus-field-errors [control]="upc"></nus-field-errors>
             </label>
 
+            <label>
+              <span i18n>Barcode</span>
+              <input type="text"
+                     [formControl]="barcode"
+                     name="barcode"
+                     data-qa="barcode"/>
+              <nus-field-errors [control]="barcode"></nus-field-errors>
+            </label>
+
             <label class="single-price" *ngIf="!enterpriseLicense()">
               <span i18n>Price</span>
               <input type="number" [formControl]="price" name="price" min="0" appOnlyNumber decimal="true"
@@ -697,6 +706,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     return false;
   }
 
+  get barcode(): FormControl {
+    return this.form?.get('barcode') as FormControl;
+  }
+
   ngAfterViewInit() {
     super.ngAfterViewInit();
     this.productRecommendationSelectionModal.onClose.subscribe(() => this.onProductRecommendationSelectionModalClosed());
@@ -778,6 +791,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       subscription: this.fb.group({}),
       productRelated: this.fb.array([]),
       bundle: bundleInitialValue,
+      barcode: [entity?.barcode, []],
     });
 
 
