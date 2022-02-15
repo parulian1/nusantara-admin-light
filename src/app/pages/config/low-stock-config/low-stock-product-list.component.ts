@@ -33,7 +33,8 @@ import {MatSelectChange} from '@angular/material/select';
           </mat-form-field>
         </div>
         <div class="action">
-          <a class="control secondary" (click)="downloadProductList()" i18n>Export</a>
+          <a class="control secondary" (click)="downloadProductList()" *ngIf="displayedResults?.totalResults > 0"
+             i18n>Export</a>
         </div>
       </div>
       <nus-low-stock-product-pagination
