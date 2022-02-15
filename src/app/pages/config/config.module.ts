@@ -13,11 +13,10 @@ import { GroupComponent, GroupListComponent, UserGroupComponent } from './group'
 import { SiteConfigComponent, SocialMediaHostComponent, ConfigChatServiceComponent, ConfigAnalyticToolComponent, CompanyAddressComponent } from './site-config';
 import { ResellerComponent } from './reseller';
 import { BlogFeedComponent } from './blog-feed';
-import { AuthSocialComponent } from './auth-social';
-import { AuthSocialListComponent } from './auth-social';
+import { AuthSocialComponent, AuthSocialListComponent } from './auth-social';
 import { PaymentGatewayMetaComponent } from './payment-gateways/payment-gateway-meta/payment-gateway-meta.component';
 import { PaymentGatewayInstoreComponent } from './payment-gateways/payment-gateway-instore/payment-gateway-instore.component';
-import { ShippingServiceHostComponent } from './shipping/shipping-service/shipping-service-host.component';
+import { ShippingServiceHostComponent } from '@nusantara/pages/config/shipping/shipping-service';
 import { ConfigCartDiscountComponent } from '@nusantara/pages/config/config-cart-discount';
 import { ShopifyComponent } from './shopify/shopify.component';
 import { ShopifyMessageListComponent } from './shopify/shopify-message-list.component';
@@ -25,6 +24,14 @@ import { ReindexingComponent } from './reindexing/reindexing.component';
 import { ShopifyWebhookComponent } from './shopify/shopify-webhook.component';
 import { ShopifyHubComponent } from './shopify/shopify-hub.component';
 import { DefaultPinConfigComponent } from '@nusantara/pages/config/default-pin-config';
+import {
+  LowStockConfigComponent,
+  LowStockProductListComponent,
+  LowStockProductPaginationComponent
+} from './low-stock-config';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MAT_RIPPLE_GLOBAL_OPTIONS } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -59,6 +66,9 @@ import { DefaultPinConfigComponent } from '@nusantara/pages/config/default-pin-c
     ShopifyWebhookComponent,
     ShopifyHubComponent,
     DefaultPinConfigComponent,
+    LowStockConfigComponent,
+    LowStockProductListComponent,
+    LowStockProductPaginationComponent
   ],
   imports: [
     CommonModule,
@@ -68,6 +78,12 @@ import { DefaultPinConfigComponent } from '@nusantara/pages/config/default-pin-c
     ConfigRoutingModule,
     CKEditorModule,
     FormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
   ],
+  providers: [
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { floatLabel: 'never', appearance: 'outline' } },
+    { provide: MAT_RIPPLE_GLOBAL_OPTIONS, useValue: { disabled: true } },
+  ]
 })
 export class ConfigModule { }
