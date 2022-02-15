@@ -24,6 +24,7 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
   originalEntityName = 'Object';
   entityTypeName: string;
   nonFieldErrors: Array<string> = [];
+  continueSave = true;
 
   protected constructor(public route: ActivatedRoute, public router: Router,
                         public toast: ToastService, public service: any) {
@@ -98,21 +99,27 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
 
   save(headers?: any) {
     this.beforeSave();
-    this.service.save(this.getFormValue(), headers).pipe(catchError(err => {
-      if (err instanceof HttpErrorResponse) {
-        return of(new ErrorResult<IHttpFailure>(err.error, err.status));
-      } else {
-        return of(new ErrorResult<IHttpFailure>({detail: 'Network error.. probably?'}, err.status));
-      }
-    })).subscribe(
-      resp => {
-        if (resp.success) {
-          this.onSaveSuccess(resp);
+    if (this.continueSave) {
+      this.continueSave = false;
+      this.service.save(this.getFormValue(), headers).pipe(catchError(err => {
+        if (err instanceof HttpErrorResponse) {
+          return of(new ErrorResult<IHttpFailure>(err.error, err.status));
         } else {
-          this.onSaveError(resp);
+          return of(new ErrorResult<IHttpFailure>({detail: 'Network error.. probably?'}, err.status));
         }
-      }
-    );
+      })).subscribe(
+        resp => {
+          if (resp.success) {
+            this.onSaveSuccess(resp);
+          } else {
+            this.onSaveError(resp);
+          }
+        }, error => {},
+        () => {
+          this.continueSave = true;
+        }
+      );
+    }
   }
 
   /**
