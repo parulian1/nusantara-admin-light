@@ -242,7 +242,10 @@ const log = new Logger('ProductComponent');
             </label>
 
             <label>
-              <span i18n>Barcode</span>
+              <div id="barcode-label" >
+                <span i18n>Barcode</span>
+                <a (click)="copyUpcToBarcode()" i18n>Copy from UPC</a>
+              </div>
               <input type="text"
                      [formControl]="barcode"
                      name="barcode"
@@ -484,6 +487,8 @@ const log = new Logger('ProductComponent');
     'table tr th.product-name { width: 25%; }',
     '.total-price { font-weight: bold; }',
     '.total-price td.price { text-align: right; }',
+    '#barcode-label {display: block; margin-bottom: 4px;}',
+    '#barcode-label > span:first-child {font-size: 14px; line-height: 20px; font-weight: bold; margin-right: 10px;}',
   ]
 })
 export class ProductComponent extends AbstractDetailComponent<products.IProduct> implements OnInit, AfterViewInit {
@@ -1461,5 +1466,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     const message = this.form.get('name')?.value ?? this.form.get('title')?.value;
     this.toast?.addMessage(`"${message}" was deleted successfully.`, 'Deleted', ToastLevelEnum.success);
     this.navigateToParent(false);
+  }
+
+  copyUpcToBarcode() {
+    const upc = this.upc.value;
+    this.barcode.setValue(upc);
   }
 }
