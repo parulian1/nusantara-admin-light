@@ -796,7 +796,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       subscription: this.fb.group({}),
       productRelated: this.fb.array([]),
       bundle: bundleInitialValue,
-      barcode: [entity?.barcode, []],
+      barcode: [entity?.barcode, [Validators.required, ]],
     });
 
 
