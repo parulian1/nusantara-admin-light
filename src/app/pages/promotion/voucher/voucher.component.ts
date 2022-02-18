@@ -7,7 +7,7 @@ import {drf, INamedHrefEntity, IVoucher} from '@nusantara/models';
 import {ProductService, VoucherService} from '@nusantara/services';
 import {IProduct} from '../../../models/products';
 import * as XLSX from 'xlsx';
-import {ProductSelectionModalComponent} from '../../../shared';
+import {CustomerGroupModalComponent, ProductSelectionModalComponent} from '../../../shared';
 
 declare var window: any; // Needed on Angular 8+
 
@@ -86,13 +86,17 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
       </label>
 
 
-      <label>
+      <label class="max-usage-setting">
         <span i18n>Maximum Usage</span>
-        <select [formControl]="maxUsed">
-          <option *ngFor="let t of maxUsedChoices" [ngValue]="t.value">{{ t.displayName }}</option>
-        </select>
-        <!--        <input type="number" [formControl]="maxUsed" placeholder="Ex, 10000000">-->
-        <!--        <nus-field-errors [control]="maxUsed"></nus-field-errors>-->
+        <span class="type-options">
+          <label *ngFor="let option of maxUsedChoices" class="types">
+            <input type="radio" name="types" [value]="option.value" [formControl]="maxUsed"
+              (change)="optionChange(option.value)"> {{ option.displayName}}
+          </label>
+        </span>
+        <input type="number" [formControl]="maxUsedQty" placeholder="Ex, 10000000"
+               [disabled]="disableMaxUsedQty" [hidden]="disableMaxUsedQty">
+        <nus-field-errors [control]="maxUsedQty" [hidden]="disableMaxUsedQty"></nus-field-errors>
       </label>
 
       <label>
@@ -152,6 +156,24 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
         </tbody>
       </table>
 
+      <div id="customer-groups-wrapper">
+        <label>
+          <h3 i18n>Customer Groups</h3>
+          <button type="button" (click)="selectCustomerGroup()" class="new-add-button">
+            <i class="material-icons">add</i>
+            <span i18n>Select Customer Group</span>
+          </button>
+        </label>
+        <div class="pill-wrapper">
+          <div *ngFor="let customerGroup of customerGroups.value; let i=index" class="pill">
+            <span class="subheading-2">{{ customerGroup.name }}</span>
+            <button type="button" class="remove-button" (click)="customerGroups.removeAt(i)">
+              <i class="material-icons">highlight_off</i>
+            </button>
+          </div>
+        </div>
+      </div>
+
       <a href="{{ service.productListDownloadUrl }}" target="_blank" *ngIf="hasProductUrl" i18n>Download Product List</a>
 
       <nus-detail-actions
@@ -164,10 +186,27 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
 
     <!-- Modals -->
     <nus-product-selection-modal></nus-product-selection-modal>
+    <nus-customer-group-selection-modal [selectedGroups]="entity?.customerGroups" #customerGroupModal>
+    </nus-customer-group-selection-modal>
   `,
   styles: [
     '.eligible-product { display: flex; margin-bottom: 10px; justify-content: space-between; }',
     '.eligible-product button { display: flex; align-items: center; }',
+    `
+      #customer-groups-wrapper {
+        margin-top: 20px;
+      }
+      .pill-wrapper, .type-options {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .types {
+        margin-right: 20px;
+      }
+      .max-usage-setting, .types {
+        min-height: 40px;
+      }
+    `
   ]
 })
 export class VoucherComponent extends AbstractDetailComponent<IVoucher> implements OnInit, AfterViewInit {
@@ -193,9 +232,12 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
   minDateValidFrom: string | Date = null;
   maxDateValidFrom: string | Date = null;
 
+  disableMaxUsedQty = true;
+
   public entity: IVoucher;
 
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
+  @ViewChild('customerGroupModal') customerGroupSelectionModal: CustomerGroupModalComponent;
 
   constructor(service: VoucherService,
               private fb: FormBuilder,
@@ -254,6 +296,14 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
     return this.form.get('isActive') as FormControl;
   }
 
+  get maxUsedQty(): FormControl {
+    return this.form.get('maxUsedQty') as FormControl;
+  }
+
+  get customerGroups(): FormArray {
+    return this.form.get('customerGroups') as FormArray;
+  }
+
   initializeForm(entity?: IVoucher) {
     this.entity = entity;
     this.form = this.fb.group({
@@ -265,11 +315,13 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
       amount: [entity?.amount, [Validators.required, Validators.min(1)]],
       minimumOrderAmount: [entity?.minimumOrderAmount, [Validators.required, Validators.min(1)]],
       maxAmount: [entity?.maxAmount, [Validators.required, Validators.min(1)]],
-      maxUsed: [entity?.maxUsed, [Validators.required, Validators.min(1)]],
+      maxUsed: [entity?.maxUsed ?? 'one_time', [Validators.required, Validators.min(1)]],
       validFrom: [this.convertDateTime(entity?.validFrom), [Validators.required]],
       validTo: [this.convertDateTime(entity?.validTo), [Validators.required]],
       isActive: [entity?.isActive, []],
       products: this.fb.array([]),
+      maxUsedQty: [entity?.maxUsedQty ?? 1, [Validators.max(32767), Validators.min(1)]],
+      customerGroups: this.fb.array([])
     }, {
       validator: DiscAmountValidator
     });
@@ -304,10 +356,20 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
       this.minDateValidFrom = entity.validFrom;
       this.maxDateValidFrom = entity.validFrom;
     }
+
+    for (const customerGroup of entity?.customerGroups ?? []) {
+      this.addCustomerGroup(customerGroup);
+    }
+
+    console.log('this.maxUsed.value', this.maxUsed.value);
+    if (this.maxUsed.value !== 'one_time') {
+      this.disableMaxUsedQty = false;
+    }
   }
 
   ngAfterViewInit() {
     this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
+    this.customerGroupSelectionModal.onClose.subscribe(() => this.onCustomerGroupSelectionModalClosed());
   }
 
   addProduct(product: INamedHrefEntity) {
@@ -405,5 +467,53 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
     // Disable button if its not new form and voucher is ongoing, passed/historical
     const today = new Date();
     return this.entity && today > new Date(this.validFrom.value);
+  }
+
+  addCustomerGroup(customerGroup: INamedHrefEntity) {
+    if ((this.customerGroups.value as Array<INamedHrefEntity>).filter((p) => {
+      return p.href === customerGroup.href;
+    }).length > 0) {
+      log.info('Customer Group already in list -- skipping');
+      return;
+    }
+
+    const f = this.fb.group({
+      name: [customerGroup.name],
+      href: [customerGroup.href]
+    });
+
+    this.customerGroups.push(f);
+  }
+
+  onCustomerGroupSelectionModalClosed() {
+    if (this.customerGroupSelectionModal.result === DialogResult.OK) {
+      const selectedCustomerGroup = this.customerGroupSelectionModal.group.value as INamedHrefEntity;
+
+      if ((this.customerGroups.value as Array<INamedHrefEntity>).filter((p) => {
+        return p.href === selectedCustomerGroup.href;
+      }).length > 0) {
+        log.info('Customer Group already in list -- skipping');
+        return;
+      }
+      const f = this.fb.group({
+        name: [selectedCustomerGroup.name, []],
+        href: [selectedCustomerGroup.href, []],
+      });
+      this.customerGroups.push(f);
+
+    }
+  }
+
+  selectCustomerGroup() {
+    this.customerGroupSelectionModal.open();
+  }
+
+  optionChange(value: string) {
+    if (value !== 'one_time') {
+      this.disableMaxUsedQty = false;
+    } else {
+      this.disableMaxUsedQty = true;
+      this.maxUsedQty.setValue(1);
+    }
   }
 }
