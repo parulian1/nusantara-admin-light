@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators, FormBuilder, FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ToastService, AbstractDetailComponent, NusantaraValidators } from '@nusantara/core';
-import { drf, IPaymentGateway, PaymentTypeSmeClient } from '@nusantara/models';
+import {ToastService, AbstractDetailComponent, NusantaraValidators, DialogResult} from '@nusantara/core';
+import {drf, INamedHrefEntity, IPaymentGateway, ISubLocation, PaymentTypeSmeClient} from '@nusantara/models';
 import { PaymentGatewayService, SiteConfigService } from '@nusantara/services';
 import * as ClassicEditor from '@gdnnusantara/ckeditor5-build/build/ckeditor';
 import { setAndClearValidators } from './utils';
 import { enumToArray } from '@nusantara/shared/helpers';
 import { RequireIsEnterpriseGuard } from '@nusantara/auth';
+import { CustomerGroupModalComponent } from '@nusantara/shared';
 
 @Component({
   selector: 'nus-payment-gateway',
@@ -184,11 +185,45 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
                   [formControl]="description" id="description" maxlength="255"></ckeditor>
         <nus-field-errors [control]="description"></nus-field-errors>
       </div>
+
+      <div *ngIf="enterpriseGuard.canActivate(null, null)">
+        <h2>
+          <span i18n>Customer Groups</span>
+        </h2>
+
+        <table>
+          <thead>
+          <tr>
+            <th i18n>Name</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let control of customerGroups.controls; let i=index">
+            <td>{{ control.get('name').value }}</td>
+            <td>
+              <button (click)="customerGroups.removeAt(i)" type="button" class="remove-button">
+                <i class="material-icons">remove_circle_outline</i>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <button type="button" (click)="selectCustomerGroup()" class="add-button" i18n>
+                Add Customer Group
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
         (delete)="delete()">
       </nus-detail-actions>
+      <nus-customer-group-selection-modal [selectedGroups]="entity?.customerGroups" >
+      </nus-customer-group-selection-modal>
     </form>
   `,
   styles: [
@@ -197,7 +232,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
     'table { margin-bottom: 24px;}',
   ]
 })
-export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaymentGateway> implements OnInit {
+export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaymentGateway> implements OnInit, AfterViewInit {
 
   public Editor = ClassicEditor;
   editorConfig = {
@@ -237,6 +272,8 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     {displayName: 'Salary Deduction', value: 'salary_deduction'},
   ];
   expiryReminderChoices: drf.IChoice[];
+
+  @ViewChild(CustomerGroupModalComponent) customerGroupSelectionModal: CustomerGroupModalComponent;
 
   constructor(service: PaymentGatewayService,
               public fb: FormBuilder,
@@ -349,6 +386,7 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
         }
       ),
       expiryReminder: [entity?.expiryReminder ?? 0, []],
+      customerGroups: this.fb.array([]),
     });
 
     this.entity = entity;
@@ -374,6 +412,10 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     this.type?.valueChanges.subscribe(change => {
       this.setCurrentTypeAndValidatorFields(change);
     });
+
+    for (const customerGroup of entity?.customerGroups ?? []) {
+      this.addCustomerGroup(customerGroup);
+    }
   }
 
   addLineBank(value?: string) {
@@ -439,4 +481,41 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     }
   }
 
+  get customerGroups(): FormArray {
+    return this.form.get('customerGroups') as FormArray;
+  }
+
+  addCustomerGroup(customerGroup?: INamedHrefEntity) {
+    const arr = this.fb.group({
+      name: [customerGroup?.name, [Validators.required, ]],
+      href: [customerGroup?.href, []],
+    });
+    this.customerGroups.push(arr);
+  }
+
+  removeCustomerGroup(index: number) {
+    this.customerGroups.removeAt(index);
+    this.customerGroups.updateValueAndValidity();
+  }
+
+  selectCustomerGroup() {
+    this.customerGroupSelectionModal.open();
+  }
+
+  ngAfterViewInit() {
+    this.customerGroupSelectionModal.onClose.subscribe(() => this.onGroupSelectionModalClosed());
+  }
+
+  onGroupSelectionModalClosed() {
+    if (this.customerGroupSelectionModal.result === DialogResult.OK) {
+
+      const selectedGroup = this.customerGroupSelectionModal.group.value as INamedHrefEntity;
+
+      const f = this.fb.group({
+        href: [selectedGroup.href, []],
+        name: [selectedGroup.name, []]
+      });
+      this.customerGroups.push(f);
+    }
+  }
 }
