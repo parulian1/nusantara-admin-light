@@ -19,7 +19,7 @@ import {getSlugFromHref} from '@nusantara/shared/helpers';
         <ng-container *ngFor="let ent of entity; let i = index">
           <tr>
             <td>
-              <a [routerLink]="['/catalog', 'advance-price', ent.href|entityToSlug]"
+              <a [routerLink]="['/catalog', 'advanced-price', ent.href|entityToSlug]" target="_blank"
                  [title]="ent.name">{{ ent.name }}</a>
             </td>
           </tr>
