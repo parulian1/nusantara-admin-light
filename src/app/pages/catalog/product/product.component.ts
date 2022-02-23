@@ -251,6 +251,9 @@ const log = new Logger('ProductComponent');
             <div [ngClass]="{'hidden' : !enterpriseLicense()}">
               <nus-price-list-host [form]="priceLists"></nus-price-list-host>
             </div>
+            <div [ngClass]="{'hidden' : !enterpriseLicense()}">
+              <nus-advance-price [productHref]="entity.href"></nus-advance-price>
+            </div>
           </div>
 
           <div id="product-subscription" class="wrapper" *ngIf="isProductOptionDomain">
