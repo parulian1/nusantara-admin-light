@@ -26,6 +26,7 @@ import {
   AdvancedPriceListComponent,
   AdvancedPriceProductComponent, AdvancedPriceWarehouseModalComponent
 } from '@nusantara/pages/catalog/advanced-price';
+import { AdvancePriceComponent } from './product/advance-price/advance-price.component';
 @NgModule({
   declarations: [
     CategoryListComponent,
@@ -66,7 +67,8 @@ import {
     AdvancedPriceListComponent,
     AdvancedPriceComponent,
     AdvancedPriceProductComponent,
-    AdvancedPriceWarehouseModalComponent
+    AdvancedPriceWarehouseModalComponent,
+    AdvancePriceComponent
   ],
   imports: [
     CommonModule,
