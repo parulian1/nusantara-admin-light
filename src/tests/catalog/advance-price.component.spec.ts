@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AdvancePriceComponent } from './advance-price.component';
+import { AdvancePriceComponent } from '@nusantara/pages/catalog/product/advance-price/advance-price.component';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('AdvancePriceComponent', () => {
   let component: AdvancePriceComponent;
@@ -8,7 +10,11 @@ describe('AdvancePriceComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AdvancePriceComponent ]
+      declarations: [ AdvancePriceComponent ],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+      ]
     })
     .compileComponents();
   });

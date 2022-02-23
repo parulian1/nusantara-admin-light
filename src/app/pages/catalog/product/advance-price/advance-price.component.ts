@@ -49,8 +49,9 @@ export class AdvancePriceComponent implements OnInit, OnChanges {
       if (changes.hasOwnProperty(propName)) {
         switch (propName) {
           case 'productHref': {
-            this.entity$ = this.service.search_by_product_slug(getSlugFromHref(this.productHref));
-
+            if (!!changes[propName].currentValue) {
+              this.entity$ = this.service.search_by_product_slug(getSlugFromHref(changes[propName].currentValue));
+            }
             break;
           }
         }
