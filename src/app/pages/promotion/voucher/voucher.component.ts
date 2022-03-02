@@ -99,6 +99,12 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
         <nus-field-errors [control]="maxUsedQty" [hidden]="disableMaxUsedQty"></nus-field-errors>
       </label>
 
+      <label class="max-usage-per-user-setting">
+        <span i18n>Maximum Usage Per User</span>
+        <input type="number" [formControl]="maxUsedUser" placeholder="Ex, 10000000">
+        <nus-field-errors [control]="maxUsedUser"></nus-field-errors>
+      </label>
+
       <label>
         <span i18n>Valid From</span>
         <nus-field-datetime [control]="validFrom" [minDate]="minDateValidFrom" [maxDate]="maxDateValidFrom"></nus-field-datetime>
@@ -233,6 +239,7 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
   maxDateValidFrom: string | Date = null;
 
   disableMaxUsedQty = true;
+  disableMaxUsedUser = true;
 
   public entity: IVoucher;
 
@@ -304,6 +311,10 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
     return this.form.get('customerGroups') as FormArray;
   }
 
+  get maxUsedUser(): FormControl {
+    return this.form.get('maxUsedUser') as FormControl;
+  }
+
   initializeForm(entity?: IVoucher) {
     this.entity = entity;
     this.form = this.fb.group({
@@ -312,16 +323,17 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
       type: [entity?.type, [Validators.required]],
       discountBase: [entity?.discountBase, [Validators.required]],
       code: [entity?.code, [Validators.required, Validators.maxLength(10)]],
-      amount: [entity?.amount, [Validators.required, Validators.min(1)]],
-      minimumOrderAmount: [entity?.minimumOrderAmount, [Validators.required, Validators.min(1)]],
-      maxAmount: [entity?.maxAmount, [Validators.required, Validators.min(1)]],
+      amount: [entity?.amount, [Validators.required, Validators.min(0)]],
+      minimumOrderAmount: [entity?.minimumOrderAmount ?? 0, [Validators.required, Validators.min(0)]],
+      maxAmount: [entity?.maxAmount ?? 0, [Validators.required, Validators.min(0)]],
       maxUsed: [entity?.maxUsed ?? 'one_time', [Validators.required, Validators.min(1)]],
       validFrom: [this.convertDateTime(entity?.validFrom), [Validators.required]],
       validTo: [this.convertDateTime(entity?.validTo), [Validators.required]],
       isActive: [entity?.isActive, []],
       products: this.fb.array([]),
-      maxUsedQty: [entity?.maxUsedQty ?? 1, [Validators.max(32767), Validators.min(1)]],
-      customerGroups: this.fb.array([])
+      maxUsedQty: [entity?.maxUsedQty ?? 0, [Validators.max(32767), Validators.min(0)]],
+      customerGroups: this.fb.array([]),
+      maxUsedUser: [entity?.maxUsedUser ?? 0, [Validators.max(32767), Validators.min(0)]],
     }, {
       validator: DiscAmountValidator
     });
