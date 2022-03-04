@@ -101,13 +101,15 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
 
       <label>
         <span i18n>Valid From</span>
-        <nus-field-datetime [control]="validFrom" [minDate]="minDateValidFrom" [maxDate]="maxDateValidFrom"></nus-field-datetime>
+        <nus-field-datetime [control]="validFrom" [minDate]="minDateValidFrom" [maxDate]="maxDateValidFrom">
+        </nus-field-datetime>
         <nus-field-errors [control]="validFrom"></nus-field-errors>
       </label>
 
       <label>
         <span i18n>Valid To</span>
-        <nus-field-datetime [control]="validTo" [minDate]="minDateValidTo" [maxDate]="maxDateValidTo"></nus-field-datetime>
+        <nus-field-datetime [control]="validTo" [minDate]="minDateValidTo" [maxDate]="maxDateValidTo">
+        </nus-field-datetime>
         <nus-field-errors [control]="validTo"></nus-field-errors>
       </label>
 
@@ -141,14 +143,16 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
           <td class="numeric">{{ i + 1 }}</td>
           <td>{{ control.get('name').value }}</td>
           <td>
-            <button (click)="products.removeAt(i)" type="button" [disabled]="checkVoucherDateValid()" class="remove-button">
+            <button (click)="products.removeAt(i)" type="button" [disabled]="checkVoucherDateValid()"
+                    class="remove-button">
               <i class="material-icons">remove_circle_outline</i>
             </button>
           </td>
         </tr>
         <tr>
           <td colspan="3">
-            <button type="button" (click)="selectProduct()"  [disabled]="checkVoucherDateValid()" class="new-add-button wide" i18n>
+            <button type="button" (click)="selectProduct()"  [disabled]="checkVoucherDateValid()"
+                    class="new-add-button wide" i18n>
               <i class="material-icons">add</i> Add Product
             </button>
           </td>
@@ -159,7 +163,8 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
       <div id="customer-groups-wrapper">
         <label>
           <h3 i18n>Customer Groups</h3>
-          <button type="button" (click)="selectCustomerGroup()" class="new-add-button">
+          <button type="button" (click)="selectCustomerGroup()" class="new-add-button"
+                  [disabled]="checkVoucherDateValid()" i18n>
             <i class="material-icons">add</i>
             <span i18n>Select Customer Group</span>
           </button>
@@ -167,14 +172,17 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
         <div class="pill-wrapper">
           <div *ngFor="let customerGroup of customerGroups.value; let i=index" class="pill">
             <span class="subheading-2">{{ customerGroup.name }}</span>
-            <button type="button" class="remove-button" (click)="customerGroups.removeAt(i)">
+            <button type="button" class="remove-button" (click)="customerGroups.removeAt(i)"
+                    [disabled]="checkVoucherDateValid()" i18n>
               <i class="material-icons">highlight_off</i>
             </button>
           </div>
         </div>
       </div>
 
-      <a href="{{ service.productListDownloadUrl }}" target="_blank" *ngIf="hasProductUrl" i18n>Download Product List</a>
+      <a href="{{ service.productListDownloadUrl }}" target="_blank" *ngIf="hasProductUrl" i18n>
+        Download Product List
+      </a>
 
       <nus-detail-actions
         [component]="this"
@@ -329,10 +337,6 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
     // need to mark as touched to make custom styling works
     this.form.controls.isActive.markAsTouched();
 
-    for (const prod of entity?.products ?? []) {
-      this.addProduct(prod);
-    }
-
     if ((window.localStorage.getItem('site_domain') === 'marthatilaarshop.com') || (window.localStorage.getItem('site_domain') === 'www.marthatilaarshop.com')) {
       // TODO: Bad thing, should get this from API
       this.hasProductUrl = true;
@@ -361,7 +365,10 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
       this.addCustomerGroup(customerGroup);
     }
 
-    console.log('this.maxUsed.value', this.maxUsed.value);
+    for (const prod of entity?.products ?? []) {
+      this.addProduct(prod);
+    }
+
     if (this.maxUsed.value !== 'one_time') {
       this.disableMaxUsedQty = false;
     }
