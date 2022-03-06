@@ -166,7 +166,7 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
           <button type="button" (click)="selectCustomerGroup()" class="new-add-button"
                   [disabled]="checkVoucherDateValid()" i18n>
             <i class="material-icons">add</i>
-            <span i18n>Select Customer Group</span>
+            <span>Select Customer Group</span>
           </button>
         </label>
         <div class="pill-wrapper">
