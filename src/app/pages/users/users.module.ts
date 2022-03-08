@@ -11,9 +11,11 @@ import {
   EmployeeAccessGroupHostComponent, EmployeeAccessGroupListComponent,
   EmployeeComponent, EmployeeListComponent,
   EmployeeWarehouseHostComponent, EmployeeWarehouseListComponent,
+  FilterPosEmployeeComponent
 } from './employee';
 import { EmptyDataPipe } from './empty-data.pipe';
-import {NgxSmartModalModule} from 'ngx-smart-modal';
+import { NgxSmartModalModule } from 'ngx-smart-modal';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,7 @@ import {NgxSmartModalModule} from 'ngx-smart-modal';
     EmployeeListComponent,
     EmployeeWarehouseHostComponent,
     EmployeeAccessGroupHostComponent,
+    FilterPosEmployeeComponent,
 
     CustomerGroupListComponent,
     CustomerGroupDetailComponent,
@@ -34,13 +37,14 @@ import {NgxSmartModalModule} from 'ngx-smart-modal';
     // pipes
     EmptyDataPipe,
   ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    FormsModule,
-    ReactiveFormsModule,
-    UsersRoutingModule,
-    NgxSmartModalModule,
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        FormsModule,
+        ReactiveFormsModule,
+        UsersRoutingModule,
+        NgxSmartModalModule,
+        MatCheckboxModule,
+    ],
 })
 export class UsersModule { }
