@@ -7,8 +7,8 @@ import { IEmployee } from '@nusantara/models/user';
 @Component({
   selector: 'nus-employee-list',
   template: `
-    <nus-list-header title="Employees" i18n-title>
-    </nus-list-header>
+    <nus-list-header title="Employees" i18n-title></nus-list-header>
+    <nus-filter-pos-employee></nus-filter-pos-employee>
 
     <nus-pagination [page]="page"></nus-pagination>
 
