@@ -18,45 +18,52 @@ import { DeviceService } from '@nusantara/services';
       <li *ngFor="let err of nonFieldErrors">{{ err }}</li>
     </ul>
 
-    <form [formGroup]="form" (ngSubmit)="save()">
+    <p class="body-2">Registered devices for BHISMA POS application</p>
 
-      <label>
-        <span i18n>Warehouse</span>
-        <input type="text" [value]="entity.warehouse.name" readonly>
-      </label>
+    <form [formGroup]="form" (ngSubmit)="save()" class="fluid">
+      <div id="personal-info" class="wrapper">
+        <h1 class="heading-1" i18n>General Information</h1>
+        <label>
+          <span i18n>Warehouse</span>
+          <span>{{entity.warehouse.name}}</span>
+        </label>
 
-      <label>
-        <span i18n>Device Name</span>
-        <input type="text" [value]="entity.data.name" readonly>
-      </label>
+        <label>
+          <span i18n>Device Name</span>
+          <span>{{entity.data.name}}</span>
+        </label>
 
-      <label>
-        <span i18n>Device Model</span>
-        <input type="text" [value]="entity.data.model? entity.data.model: ''" readonly>
-      </label>
+        <label>
+          <span i18n>Device Model</span>
+          <span>{{entity.data.model? entity.data.model: '-'}}</span>
+        </label>
 
-      <label>
-        <span i18n>
-          Device Id
-        </span>
-        <input type="text" [value]="entity.data.firebaseId" readonly>
-      </label>
+        <label>
+          <span i18n>Device Id</span>
+          <span>{{entity.data.firebaseId}}</span>
+        </label>
 
-      <label>
-        <span i18n>Register Date</span>
-        <input type="datetime-local" [value]="convertDateTime(entity.created)" readonly>
-      </label>
+        <label>
+          <span i18n>Register Date</span>
+          <span>{{entity.created|date: 'dd/MM/yyyy HH:mm:ss'}}</span>
+        </label>
 
-      <label>
-        <span i18n>Notes</span>
-        <textarea [formControl]="notes" name="notes"></textarea>
-        <nus-field-errors [control]="notes"></nus-field-errors>
-      </label>
+        <label>
+          <span i18n>Last Login</span>
+          <span>{{entity.data.lastLogin? (entity.data.lastLogin|date: 'dd/MM/yyyy HH:mm:ss') : '-' }}</span>
+        </label>
 
-      <label class="checkbox">
-        <span i18n>Is Approved</span>
-        <input type="checkbox" [formControl]="isApproved">
-      </label>
+        <label>
+          <span i18n>Notes</span>
+          <textarea [formControl]="notes" name="notes"></textarea>
+          <nus-field-errors [control]="notes"></nus-field-errors>
+        </label>
+
+        <label class="checkbox">
+          <input type="checkbox" [formControl]="isApproved" name="isApproved">
+          <span i18n>Is Approved</span>
+        </label>
+      </div>
 
       <nus-detail-actions
         [component]="this"
@@ -65,11 +72,16 @@ import { DeviceService } from '@nusantara/services';
       </nus-detail-actions>
     </form>
   `,
-  styles: [``]
+  styles: [`
+    .wrapper { padding: 16px 24px; border: solid 1px var(--grey); border-radius: 4px; margin-bottom: 24px; }
+    .heading-1 { margin-bottom: 16px; }
+  `]
 })
 export class DeviceComponent extends AbstractDetailComponent<device.IDevice> implements OnInit {
 
   entity: device.IDevice;
+  originalEntityName = 'POS Device';
+  entityTypeName = 'Device';
 
   constructor(service: DeviceService,
               router: Router,
@@ -94,27 +106,6 @@ export class DeviceComponent extends AbstractDetailComponent<device.IDevice> imp
 
     // need to mark as touched to make custom styling works
     this.form.controls.isApproved.markAsTouched();
-  }
-
-  convertDateTime(timestamp: string) {
-    if (timestamp) {
-      const date = new Date(timestamp);
-
-      const year = date.getFullYear();
-      let month: string | number = date.getMonth() + 1; // getMonth() is zero-indexed, so we'll increment to get the correct month number
-      let day: string | number = date.getDate();
-      let hours: string | number = date.getHours();
-      let minutes: string | number = date.getMinutes();
-      let seconds: string | number = date.getSeconds();
-
-      month = (month < 10) ? '0' + month : month;
-      day = (day < 10) ? '0' + day : day;
-      hours = (hours < 10) ? '0' + hours : hours;
-      minutes = (minutes < 10) ? '0' + minutes : minutes;
-      seconds = (seconds < 10) ? '0' + seconds : seconds;
-      return (`${year}-${month}-${day}T${hours}:${minutes}:${seconds}`);
-    }
-    return '';
   }
 }
 
