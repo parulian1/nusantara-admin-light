@@ -101,7 +101,7 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
         <nus-field-errors [control]="maxUsedQty" [hidden]="disableMaxUsedQty"></nus-field-errors>
       </label>
 
-      <label class="max-usage-per-user-setting">
+      <label class="max-usage-per-user-setting" *ngIf="!disableMaxUsedQty">
         <span i18n>Maximum Usage Per User</span>
         <input type="number" [formControl]="maxUsedUser" placeholder="Ex, 10000000">
         <nus-field-errors [control]="maxUsedUser"></nus-field-errors>
@@ -533,8 +533,8 @@ export class VoucherComponent extends AbstractDetailComponent<IVoucher> implemen
     if (value !== 'one_time') {
       this.disableMaxUsedQty = false;
     } else {
-      this.disableMaxUsedQty = true;
       this.maxUsedQty.setValue(1);
+      this.disableMaxUsedQty = true;
     }
   }
 }
