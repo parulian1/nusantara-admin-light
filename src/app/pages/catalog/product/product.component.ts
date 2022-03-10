@@ -241,6 +241,18 @@ const log = new Logger('ProductComponent');
               <nus-field-errors [control]="upc"></nus-field-errors>
             </label>
 
+            <label>
+              <div id="barcode-label" >
+                <span i18n>Barcode</span>
+                <a (click)="copyUpcToBarcode()" i18n>Copy from UPC</a>
+              </div>
+              <input type="text"
+                     [formControl]="barcode"
+                     name="barcode"
+                     data-qa="barcode"/>
+              <nus-field-errors [control]="barcode"></nus-field-errors>
+            </label>
+
             <label class="single-price" *ngIf="!enterpriseLicense()">
               <span i18n>Price</span>
               <input type="number" [formControl]="price" name="price" min="0" appOnlyNumber decimal="true"
@@ -478,6 +490,8 @@ const log = new Logger('ProductComponent');
     'table tr th.product-name { width: 25%; }',
     '.total-price { font-weight: bold; }',
     '.total-price td.price { text-align: right; }',
+    '#barcode-label {display: block; margin-bottom: 4px;}',
+    '#barcode-label > span:first-child {font-size: 14px; line-height: 20px; font-weight: bold; margin-right: 10px;}',
   ]
 })
 export class ProductComponent extends AbstractDetailComponent<products.IProduct> implements OnInit, AfterViewInit {
@@ -703,6 +717,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     return false;
   }
 
+  get barcode(): FormControl {
+    return this.form?.get('barcode') as FormControl;
+  }
+
   ngAfterViewInit() {
     super.ngAfterViewInit();
     this.productRecommendationSelectionModal.onClose.subscribe(() => this.onProductRecommendationSelectionModalClosed());
@@ -784,6 +802,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       subscription: this.fb.group({}),
       productRelated: this.fb.array([]),
       bundle: bundleInitialValue,
+      barcode: [entity?.barcode, [Validators.required, ]],
     });
 
 
@@ -1456,6 +1475,11 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     const message = this.form.get('name')?.value ?? this.form.get('title')?.value;
     this.toast?.addMessage(`"${message}" was deleted successfully.`, 'Deleted', ToastLevelEnum.success);
     this.navigateToParent(false);
+  }
+
+  copyUpcToBarcode() {
+    const upc = this.upc.value;
+    this.barcode.setValue(upc);
   }
 
   updateProductRelation(productValue: FormData, actionStatus: string) {

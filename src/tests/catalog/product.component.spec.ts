@@ -33,6 +33,7 @@ describe('ProductComponent', () => {
   const addProductResp = {
     href: 'https://superbearzz.dev.bisma.systems/api/catalog/product/pedang/',
     upc: 'pedang',
+    barcode: 'pedang1',
     name: 'pedang',
     description: '<p>pedang</p>',
     category: {
@@ -150,6 +151,7 @@ describe('ProductComponent', () => {
   it('required field validity', () => {
     const name = component.name;
     const upc = component.upc;
+    const barcode = component.barcode;
     const structure = component.structure;
     const description = component.description;
     const weight = component.weight;
@@ -159,6 +161,7 @@ describe('ProductComponent', () => {
 
     name.setValue('');
     upc.setValue('');
+    barcode.setValue('');
     structure.setValue('');
     description.setValue('');
     weight.setValue('');
@@ -167,6 +170,7 @@ describe('ProductComponent', () => {
     vendor.setValue('');
     expect(name.hasError('required')).toBeTruthy();
     expect(upc.hasError('required')).toBeTruthy();
+    expect(barcode.hasError('required')).toBeTruthy();
     expect(structure.hasError('required')).toBeTruthy();
     expect(description.hasError('required')).toBeTruthy();
     expect(weight.hasError('required')).toBeTruthy();
@@ -198,6 +202,7 @@ describe('ProductComponent', () => {
       parent: addProductResp.parent,
       href: '',
       upc: addProductResp.upc,
+      barcode: addProductResp.barcode,
       structure: addProductResp.structure,
       description: addProductResp.description,
       weight: addProductResp.weight,
@@ -241,6 +246,7 @@ describe('ProductComponent', () => {
     expect(mock.request.body.parent).toBe(addProductResp.parent);
     expect(mock.request.body.vendor.href).toBe(addProductResp.vendor.href);
     expect(mock.request.body.upc).toBe(addProductResp.upc);
+    expect(mock.request.body.barcode).toBe(addProductResp.barcode);
     expect(mock.request.body.structure).toBe(addProductResp.structure);
     expect(mock.request.body.description).toBe(addProductResp.description);
 
@@ -280,6 +286,7 @@ describe('ProductComponent', () => {
     const editProductResp = {
       href: 'https://superbearzz.dev.bisma.systems/api/catalog/product/pedang-edit/',
       upc: 'pedang',
+      barcode: 'pedang1',
       name: 'pedang',
       description: '<p>pedang</p>',
       category: {
@@ -333,6 +340,7 @@ describe('ProductComponent', () => {
         href: editProductResp.vendor.href
       },
       upc: editProductResp.upc,
+      barcode: editProductResp.barcode,
       structure: editProductResp.structure,
       description: editProductResp.description,
       weight: editProductResp.weight,
@@ -374,6 +382,7 @@ describe('ProductComponent', () => {
     expect(mock.request.body.parent).toBe(editProductResp.parent);
     expect(mock.request.body.vendor.href).toBe(editProductResp.vendor.href);
     expect(mock.request.body.upc).toBe(editProductResp.upc);
+    expect(mock.request.body.barcode).toBe(editProductResp.barcode);
     expect(mock.request.body.structure).toBe(editProductResp.structure);
     expect(mock.request.body.description).toBe(editProductResp.description);
 
