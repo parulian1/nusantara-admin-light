@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { drf, products } from '@nusantara/models';
@@ -204,7 +204,7 @@ import { WarehouseService } from '@nusantara/services';
       }
     `]
 })
-export class ProductListComponent extends AbstractListComponent<products.IProduct> {
+export class ProductListComponent extends AbstractListComponent<products.IProduct> implements OnInit{
 
   isBundling = false;
   timeoutId: any;
