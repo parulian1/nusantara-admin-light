@@ -5,7 +5,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { ActivatedRoute, Router } from '@angular/router';
 import * as ClassicEditor from '@gdnnusantara/ckeditor5-build/build/ckeditor';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import {EMPTY, of} from 'rxjs';
+import { EMPTY, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import {
   ProductRelatedService,
@@ -26,12 +26,12 @@ import {
   ToastService
 } from '@nusantara/core';
 import { drf, ICategory, INamedHrefEntity, IVendor, products } from '@nusantara/models';
-import { IError} from '@nusantara/models/base/error';
-import { PriceListHostComponent} from './price';
-import { ProductMediaHostComponent} from './media';
-import { ProductAttributeHostComponent} from './attribute';
-import { ProductSubscriptonHostComponent} from './subscription';
-import { MarketplaceInfoHostComponent} from './marketplace';
+import { IError } from '@nusantara/models/base/error';
+import { PriceListHostComponent } from './price';
+import { ProductMediaHostComponent } from './media';
+import { ProductAttributeHostComponent } from './attribute';
+import { ProductSubscriptonHostComponent } from './subscription';
+import { MarketplaceInfoHostComponent } from './marketplace';
 
 import { ProductSelectionModalComponent, VendorSelectionModalComponent } from '@nusantara/shared';
 import { IProduct, IProductClass } from '@nusantara/models/products';
@@ -575,7 +575,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   isAdvancePriceAvailable = false;
   confirmAdvancedPriceTitle = 'Update this product?';
   confirmAdvancedPriceText =
-    'This product has an "Advanced Price", if you change the default price, it might impact on the “Advance Price" as well.';
+    'This product has an "Advanced Price", if you change the default price,' +
+    ' it might impact on the “Advance Price" as well.';
+
+  productRelatedFormData: FormData[] = [];
 
   @ViewChild(ProductMediaHostComponent) mediaHost: ProductMediaHostComponent;
   @ViewChild(PriceListHostComponent) priceListHost: PriceListHostComponent;
@@ -965,7 +968,6 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
             this.mediaHost?.saveAll(resp.entity)?.subscribe(() => {
             });
             this.validatePriceList();
-            console.log(resp.entity);
             if (this.priceListHost.validatePriceListHost()) {
               this.priceListHost.saveAll(resp.entity).pipe(catchError(childErr => {
                 if (childErr instanceof HttpErrorResponse) {
@@ -981,6 +983,13 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
                   }
                 }
               );
+            }
+            if (this.productRelatedFormData.length > 0) {
+              const savedProductEntity = resp.entity as IProduct;
+              this.productRelatedFormData.forEach((productRelatedForm) => {
+                productRelatedForm['primary'] = getSlugFromHref(savedProductEntity.href);
+                this.updateProductRelation(productRelatedForm, 'add');
+              });
             }
           }
         }
@@ -1122,8 +1131,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     this.productRecommendationSelectionModal.open();
   }
 
-  showErrorToast(err) {
-    this.toast?.addMessage(err.error.relation, 'error', ToastLevelEnum.error);
+  showErrorToast(errMsg: string) {
+    this.toast?.addMessage(errMsg, 'error', ToastLevelEnum.error);
   }
 
   showInfoWindow(resp, action) {
@@ -1134,7 +1143,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     }
   }
 
-  apiPostRelatedProduct(productValue, action, product, index= 0){
+  apiPostRelatedProduct(productValue: FormData, action, product, index= 0){
     delete productValue['name'];
     delete productValue['href'];
     let actionStatus = 'add';
@@ -1143,22 +1152,19 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       productValue['action'] = 'remove';
       actionStatus = 'remove';
     }
-
-    this.relatedService.post(productValue).subscribe(
-      (resp) => {
-        if (action === 'add') {
-          // if "add" then it will be pushed to array
-          this.productRelated.push(product);
-        } else {
-          // this will remove from the table if remove success
-          this.productRelated.removeAt(index);
-        }
-        this.showInfoWindow(resp.status, actionStatus);
-      },
-      (err) => {
-        this.showErrorToast(err);
+    if (action === 'add') {
+      // if "add" then it will be pushed to array
+      this.productRelated.push(product);
+      this.productRelatedFormData.push(productValue);
+    } else {
+      // this will remove from the table if remove success
+      this.productRelated.removeAt(index);
+      this.productRelatedFormData.splice(index, 1);
+      if (!!this.entity) {
+        this.updateProductRelation(productValue, actionStatus);
       }
-    );
+    }
+
   }
 
   removeRelated(index: number) {
@@ -1474,5 +1480,16 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   copyUpcToBarcode() {
     const upc = this.upc.value;
     this.barcode.setValue(upc);
+  }
+
+  updateProductRelation(productValue: FormData, actionStatus: string) {
+    this.relatedService.post(productValue).subscribe(
+      (resp) => {
+        this.showInfoWindow(resp.status, actionStatus);
+      },
+      (err) => {
+        this.showErrorToast(err.error.relation);
+      }
+    );
   }
 }
