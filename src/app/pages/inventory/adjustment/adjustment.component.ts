@@ -374,7 +374,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
       }
 
       const newReceiving = this.fb.group({
-        href: [null, []],
+        href: [selectedStock.href, []],
         receivingOrder: [selectedStock.receivingOrder, [Validators.required]],
         location: [selectedStock.location, []],
         product: [selectedStock.product, [Validators.required]],
