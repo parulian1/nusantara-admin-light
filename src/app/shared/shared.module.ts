@@ -50,6 +50,7 @@ import { ProductClassSelectionModalComponent } from './modals/product-class-sele
 import { WarehouseLocationModalComponent } from './modals/warehouse-location-modal.component';
 import { ClickOutsideDirective } from './click-outside.directive';
 import { ProductOnlineSelectionModalComponent } from '@nusantara/shared/product-online-selection-modal.component';
+import { FieldLengthCounterComponent } from './field-length-counter/field-length-counter.component';
 
 
 /**
@@ -102,7 +103,8 @@ import { ProductOnlineSelectionModalComponent } from '@nusantara/shared/product-
     ProductClassSelectionModalComponent,
     WarehouseLocationModalComponent,
     ClickOutsideDirective,
-    ProductOnlineSelectionModalComponent
+    ProductOnlineSelectionModalComponent,
+    FieldLengthCounterComponent
   ],
   exports: [
     EntityToSlugPipe,
@@ -148,7 +150,8 @@ import { ProductOnlineSelectionModalComponent } from '@nusantara/shared/product-
     ProductClassSelectionModalComponent,
     WarehouseLocationModalComponent,
     ClickOutsideDirective,
-    ProductOnlineSelectionModalComponent
+    ProductOnlineSelectionModalComponent,
+    FieldLengthCounterComponent
   ],
   imports: [
     CommonModule,
