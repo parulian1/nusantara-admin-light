@@ -1,10 +1,11 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
-import { AbstractDetailComponent, ToastService } from '@nusantara/core';
-import { IVendor } from '@nusantara/models';
-import { VendorService } from '@nusantara/services';
+import {AbstractDetailComponent, DialogResult, ToastService} from '@nusantara/core';
+import {IVendor} from '@nusantara/models';
+import {VendorService} from '@nusantara/services';
+import {ConfirmModalComponent} from '@nusantara/shared/confirm-modal.component';
 
 @Component({
   selector: 'nus-vendor',
@@ -17,75 +18,85 @@ import { VendorService } from '@nusantara/services';
     <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
 
     <form [formGroup]="form" (ngSubmit)="save()" #f>
+      <div class="wrapper-border">
+        <h1 class="heading-1" i18n>General Information</h1>
+        <input type="hidden" [formControl]="href" name="href"> <!-- required for non-JSON form posting -->
 
-      <input type="hidden" [formControl]="href" name="href"> <!-- required for non-JSON form posting -->
+        <label class="toggle">
+          <input id="s2"
+                 type="checkbox"
+                 class="toggle"
+                 [formControl]="isActive"
+                 name="is-active"
+                 data-qa="is-active"/>
+          <span i18n>Is Active</span>
+          <nus-field-errors [control]="isActive"></nus-field-errors>
+        </label>
+        <label>
+          <span i18n>Name</span>
+          <input type="text" [formControl]="name" name="name"
+                 placeholder="Input vendor name" i18n-placeholder>
+          <nus-field-errors [control]="name"></nus-field-errors>
+        </label>
 
-      <label>
-        <span i18n>Name</span>
-        <input type="text" [formControl]="name" name="name">
-        <nus-field-errors [control]="name"></nus-field-errors>
-      </label>
+        <label>
+          <span i18n>Description</span>
+          <span><textarea [formControl]="description" name="description" placeholder="Input vendor description"></textarea>
+             <nus-field-length-counter [control]="description" [maxLength]="3000"></nus-field-length-counter>
+          </span>
+          <nus-field-errors [control]="description"
+                            placeholder="Input vendor description"
+                            i18n-placeholder></nus-field-errors>
+        </label>
 
-      <label>
-        <span i18n>Description</span>
-        <textarea [formControl]="description" name="description"></textarea>
-        <nus-field-errors [control]="description"></nus-field-errors>
-      </label>
+        <label>
+          <span i18n>Icon Image</span>
+          <small i18n>Recommended 120px x 120px (1:1)</small>
+          <img [src]="iconImagePreviewUrl" id="icon-image-preview" alt="Icon Image" class="preview">
+          <input type="file"
+                 [formControl]="iconImage"
+                 (change)="setIconImagePreview($event)"
+                 name="iconImage"
+                 accept="image/jpeg, image/png">
+          <nus-field-errors [control]="iconImage"></nus-field-errors>
+        </label>
 
-      <label class="toggle">
-        <input id="s2"
-               type="checkbox"
-               class="toggle"
-               [formControl]="isActive"
-               name="is-active"
-               data-qa="is-active"/>
-        <span i18n>Is Active</span>
-        <nus-field-errors [control]="isActive"></nus-field-errors>
-      </label>
+        <label>
+          <span i18n>Banner Image</span>
+          <small i18n>Recommended: 1152px x 350px (16:5)</small>
+          <img [src]="bannerImagePreviewUrl" id="banner-image-preview" alt="Banner Image" class="preview">
+          <input type="file"
+                 [formControl]="bannerImage"
+                 (change)="setBannerImagePreview($event)"
+                 name="bannerImage"
+                 accept="image/jpeg, image/png">
 
-      <label>
-        <span i18n>Icon Image</span>
-        <img [src]="iconImagePreviewUrl" id="icon-image-preview" alt="Icon Image" class="preview">
-        <input type="file"
-               [formControl]="iconImage"
-               (change)="setIconImagePreview($event)"
-               name="iconImage"
-               accept="image/*">
-        <small i18n>Recommended 120px x 120px (1:1)</small>
-        <nus-field-errors [control]="iconImage"></nus-field-errors>
-      </label>
+          <nus-field-errors [control]="bannerImage"></nus-field-errors>
+        </label>
 
-      <label>
-        <span i18n>Banner Image</span>
-        <img [src]="bannerImagePreviewUrl" id="banner-image-preview" alt="Banner Image" class="preview">
-        <input type="file"
-               [formControl]="bannerImage"
-               (change)="setBannerImagePreview($event)"
-               name="bannerImage"
-                accept="image/*">
-        <small i18n>Recommended: 1152px x 350px (16:5)</small>
-        <nus-field-errors [control]="bannerImage"></nus-field-errors>
-      </label>
+        <label>
+          <span i18n>Seo Description</span>
+          <span>
+            <textarea [formControl]="seoDescription" name="seoDescription"
+                      placeholder="Input SEO Description" i18n-placeholder></textarea>
+            <nus-field-length-counter [control]="seoDescription" [maxLength]="160"></nus-field-length-counter>
+          </span>
 
-      <label>
-        <span i18n>Internal Notes</span>
-        <textarea [formControl]="internalNotes" name="internalNotes"></textarea>
-        <nus-field-errors [control]="internalNotes"></nus-field-errors>
-      </label>
+          <nus-field-errors [control]="seoDescription"></nus-field-errors>
+        </label>
 
-      <label>
-        <span i18n>Seo Description</span>
-        <textarea [formControl]="seoDescription" name="seoDescription"></textarea>
-        <nus-field-errors [control]="seoDescription"></nus-field-errors>
-      </label>
+        <label>
+          <span i18n>Seo Keywords</span>
+          <span>
+            <input type="text" [formControl]="seoKeywords" name="seoKeywords" placeholder="Input SEO Keyword"
+                   i18n-placeholder>
+             <nus-field-length-counter [control]="seoKeywords" [maxLength]="160"></nus-field-length-counter>
+          </span>
 
-      <label>
-        <span i18n>Seo Keywords</span>
-        <input type="text" [formControl]="seoKeywords" name="seoKeywords">
-        <nus-field-errors [control]="seoKeywords"></nus-field-errors>
-      </label>
+          <nus-field-errors [control]="seoKeywords"></nus-field-errors>
+        </label>
 
-
+      </div>
 
       <nus-detail-actions
         [component]="this"
@@ -93,6 +104,10 @@ import { VendorService } from '@nusantara/services';
         (delete)="delete()">
       </nus-detail-actions>
     </form>
+    <nus-confirm-modal
+      [title]="confirmCategoryTitle + name?.value + '?'"
+      [content]="confirmCategoryContent">
+    </nus-confirm-modal>
   `,
   styles: [
     '#icon-image-preview { height:120px; width: 120px; }',
@@ -101,8 +116,10 @@ import { VendorService } from '@nusantara/services';
   ]
 })
 export class VendorComponent extends AbstractDetailComponent<IVendor> {
-
+  confirmCategoryTitle = 'Delete this vendor ';
+  confirmCategoryContent = 'Are you sure you want to delete this vendor';
   @ViewChild('f') formView: ElementRef<HTMLFormElement>;
+  @ViewChild(ConfirmModalComponent) confirmModal: ConfirmModalComponent;
 
   iconImagePreviewUrl: string;
   bannerImagePreviewUrl: string;
@@ -117,19 +134,42 @@ export class VendorComponent extends AbstractDetailComponent<IVendor> {
     super(route, router, toast, service);
   }
 
-  get name(): FormControl { return this.form.get('name') as FormControl; }
-  get href(): FormControl { return this.form.get('href') as FormControl; }
-  get description(): FormControl { return this.form.get('description') as FormControl; }
-  get internalNotes(): FormControl { return this.form.get('internalNotes') as FormControl; }
-  get iconImage(): FormControl { return this.form.get('iconImage') as FormControl; }
-  get bannerImage(): FormControl { return this.form.get('bannerImage') as FormControl; }
-  get isActive(): FormControl { return this.form.get('isActive') as FormControl; }
+  get name(): FormControl {
+    return this.form.get('name') as FormControl;
+  }
+
+  get href(): FormControl {
+    return this.form.get('href') as FormControl;
+  }
+
+  get description(): FormControl {
+    return this.form.get('description') as FormControl;
+  }
+
+  get internalNotes(): FormControl {
+    return this.form.get('internalNotes') as FormControl;
+  }
+
+  get iconImage(): FormControl {
+    return this.form.get('iconImage') as FormControl;
+  }
+
+  get bannerImage(): FormControl {
+    return this.form.get('bannerImage') as FormControl;
+  }
+
+  get isActive(): FormControl {
+    return this.form.get('isActive') as FormControl;
+  }
+
   get extra(): FormGroup {
     return this.form.get('extra') as FormGroup;
   }
+
   get seoDescription(): FormControl {
     return this.extra.get('seoDescription') as FormControl;
   }
+
   get seoKeywords(): FormControl {
     return this.extra.get('seoKeywords') as FormControl;
   }
@@ -141,13 +181,13 @@ export class VendorComponent extends AbstractDetailComponent<IVendor> {
       href: [entity?.href, []],
       description: [entity?.description ?? '', []],
       internalNotes: [entity?.internalNotes ?? '', []],
-      iconImage: ['', entity?.iconImage ? [] : [Validators.required, ]],
+      iconImage: ['', entity?.iconImage ? [] : [Validators.required,]],
       bannerImage: ['', []],
       extra: this.fb.group({
         seoDescription: [entity?.extra?.seoDescription ?? '', [Validators.maxLength(160)]],
         seoKeywords: [entity?.extra?.seoKeywords ?? '', [Validators.maxLength(160)]]
       }),
-      isActive: [entity?.isActive]
+      isActive: [!!entity?.href ? entity?.isActive : true,]
     });
 
     this.setBannerImagePreview(entity?.bannerImage);
@@ -155,11 +195,11 @@ export class VendorComponent extends AbstractDetailComponent<IVendor> {
     this.isActive.markAsTouched();
   }
 
-  setIconImagePreview(data?: Event|string) {
-    this.setImagePreview(data,  (dataAsUrl) => this.iconImagePreviewUrl = dataAsUrl);
+  setIconImagePreview(data?: Event | string) {
+    this.setImagePreview(data, (dataAsUrl) => this.iconImagePreviewUrl = dataAsUrl);
   }
 
-  setBannerImagePreview(data?: Event|string) {
+  setBannerImagePreview(data?: Event | string) {
     this.setImagePreview(data, (dataAsUrl) => this.bannerImagePreviewUrl = dataAsUrl);
   }
 
@@ -177,5 +217,25 @@ export class VendorComponent extends AbstractDetailComponent<IVendor> {
       this.form.value.bannerImage = this.bannerImagePreviewUrl;
     }
     super.save();
+  }
+
+
+  delete() {
+    this.confirmModal.open();
+    this.confirmModal.onClose.subscribe(() => {
+      if (this.confirmModal.result === DialogResult.OK) {
+        this.service.delete(this.form.value).subscribe(
+          resp => {
+            if (resp.success) {
+              this.onDeleteSuccess();
+            } else {
+              this.onDeleteError(resp);
+            }
+          },
+          (err) => this.onDeleteError(err)
+        );
+        this.form.disable();
+      }
+    });
   }
 }
