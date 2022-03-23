@@ -93,7 +93,9 @@ import { SubscriptionLike } from 'rxjs';
         <li *ngIf="enterpriseGuard.canActivate(null, null)">
           <a [routerLink]="['/cms/company-story']" routerLinkActive="active" i18n>Company Story</a>
         </li>
-
+        <li *ngIf="enterpriseGuard.canActivate(null, null) || true">
+          <a [routerLink]="['/cms/catalogue']" routerLinkActive="active" translate i18n>Catalogue</a>
+        </li>
 
         <li class="section-header">
           <i class="material-icons">shopping_cart</i>
