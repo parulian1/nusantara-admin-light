@@ -33,6 +33,8 @@ import {
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import * as companyStory from './company-story';
+import { CatalogueComponent } from './catalogue/catalogue.component';
+import { CatalogueListComponent } from './catalogue/catalogue-list.component';
 
 
 @NgModule({
@@ -75,6 +77,8 @@ import * as companyStory from './company-story';
         companyStory.CompanyStoryListComponent,
         companyStory.CompanyStoryDetailComponent,
         companyStory.CompanyStoryListOrderingComponent,
+        CatalogueComponent,
+        CatalogueListComponent,
     ],
   imports: [
     CommonModule,

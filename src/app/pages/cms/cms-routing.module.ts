@@ -50,6 +50,10 @@ import {
 
 import * as companyStory from './company-story';
 import { RequirePermissionGuard } from '@nusantara/auth/guards/require-permission.guard';
+import {CatalogueListComponent} from '@nusantara/pages/cms/catalogue/catalogue-list.component';
+import {CatalogueListResolver} from '@nusantara/resolvers/catalogue/catalogue-list.resolver';
+import {CatalogueComponent} from '@nusantara/pages/cms/catalogue/catalogue.component';
+import {CatalogueDetailResolver} from '@nusantara/resolvers/catalogue/catalogue-detail.resolver';
 
 
 const dashboardRoutes: Routes = [
@@ -385,6 +389,36 @@ const dashboardRoutes: Routes = [
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail' }
       }
+    ]
+  },
+  {
+    path: 'catalogue',
+    children: [
+      {
+        path: '',
+        component: CatalogueListComponent,
+        resolve: {
+          page: CatalogueListResolver,
+        },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'List', },
+      },
+      {
+        path: 'new',
+        component: CatalogueComponent,
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+      {
+        path: ':slug',
+        component: CatalogueComponent,
+        resolve: {
+          entity: CatalogueDetailResolver
+        },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+
     ]
   }
 ];
