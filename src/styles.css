@@ -943,3 +943,7 @@ span.badge {
 input:not([type=checkbox]):not([type=radio]).has-input-icon {
   padding-right: 2em;
 }
+
+textarea.input-description {
+  height: auto;
+}

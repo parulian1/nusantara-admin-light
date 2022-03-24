@@ -15,7 +15,7 @@ const logger = new Logger('VendorComponent');
   template: `
     <nus-detail-title
       [originalName]="originalEntityName"
-      [typeName]="entityTypeName">
+      typeName="Vendor">
     </nus-detail-title>
 
     <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
@@ -82,7 +82,7 @@ const logger = new Logger('VendorComponent');
         </label>
 
         <label>
-          <span i18n>Seo Description</span>
+          <span i18n>SEO Description</span>
 
           <textarea [formControl]="seoDescription" name="seoDescription"
                     placeholder="Input SEO Description" i18n-placeholder></textarea>
@@ -96,7 +96,7 @@ const logger = new Logger('VendorComponent');
         </label>
 
         <label>
-          <span i18n>Seo Keywords</span>
+          <span i18n>SEO Keywords</span>
 
           <textarea type="text" [formControl]="seoKeywords" name="seoKeywords" placeholder="Input SEO Keyword"
                     i18n-placeholder></textarea>
