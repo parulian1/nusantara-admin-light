@@ -8,6 +8,7 @@ import {AbstractDetailComponent, DialogResult, ToastService} from '@nusantara/co
 import {CategorySelectionModalComponent} from '@nusantara/shared/modals/category-selection-modal.component';
 import {getSlugFromHref} from '@nusantara/shared/helpers';
 import {ConfirmModalComponent} from '@nusantara/shared/confirm-modal.component';
+import { fileTypeValidator } from '@nusantara/core/helpers/validators';
 
 @Component({
   selector: 'nus-category',
@@ -23,11 +24,9 @@ import {ConfirmModalComponent} from '@nusantara/shared/confirm-modal.component';
       <div class="wrapper-border">
         <h1 class="heading-1" i18n>General Information</h1>
         <!--      <input type="hidden" [formControl]="href" name="href"> &lt;!&ndash; required for non-JSON form posting &ndash;&gt;-->
-
         <label>
           <span i18n>Name</span>
           <span>
-<!--            <span class="material-icons input-icon-error" *ngIf="name?.errors">warning</span>-->
             <input type="text" [formControl]="name" name="name" class="has-input-icon"
                    placeholder="Input category name"
                    i18n-placeholder>
@@ -38,17 +37,13 @@ import {ConfirmModalComponent} from '@nusantara/shared/confirm-modal.component';
         <label>
           <span i18n>Parent</span>
           <input type="hidden" [formControl]="parent" data-qa="parent">
-          <div>
+          <div class="input-with-button">
             <input type="text" (click)="selectCategory()" [disabled]="!!entity?.href" readonly
-                   [value]="selectedCategory?.name" data-qa="parent-pop">
-            <!--        <select [formControl]="parent" name="parent">-->
-            <!--          <option *ngFor="let parent of parentOptions"-->
-            <!--                  [value]="parent.href">-->
-            <!--            {{ parent.pathName }}-->
-            <!--          </option>-->
-            <!--        </select>-->
-            <button type="button" (click)="clearCategory()" [disabled]="!!entity?.href" i18n data-qa="parent-clear-btn">
-              Clear Selection
+                   [value]="selectedCategory?.name" data-qa="parent-pop" placeholder="Select parent category" i18n-placeholder>
+            <button type="button" (click)="clearCategory()" [disabled]="!!entity?.href"
+                    title="Clear parent category" i18n-title
+                    data-qa="parent-clear-btn">
+              <span class="material-icons">highlight_off</span>
             </button>
           </div>
         </label>
@@ -64,20 +59,20 @@ import {ConfirmModalComponent} from '@nusantara/shared/confirm-modal.component';
         </label>
 
         <label class="checkbox" style="min-height: 1rem;">
-          <input type="checkbox" [formControl]="isInterestedCategory" name="isInterestedCategory" i18n> Show In
-          Homepage?
+          <input type="checkbox" [formControl]="isInterestedCategory" name="isInterestedCategory" i18n> Show On Homepage?
           <nus-field-errors [control]="isInterestedCategory"></nus-field-errors>
         </label>
 
         <label>
           <span i18n>Icon Image</span>
-          <small i18n>Recommended: 65x65</small>
+          <small i18n>Recommended: 65x65 (1:1)</small>
           <img [src]="imagePreviewUrl" alt="Category Icon" class="preview">
           <input type="file"
                  [formControl]="image"
                  (change)="setIconImagePreview($event)"
                  name="image"
                  accept="image/jpeg, image/png">
+          <nus-field-errors [control]="image"></nus-field-errors>
         </label>
 
         <!--      <h2 i18n>Source Mappings (optional)</h2>-->
@@ -125,18 +120,41 @@ import {ConfirmModalComponent} from '@nusantara/shared/confirm-modal.component';
     </form>
     <nus-category-selection-modal #categoryModal></nus-category-selection-modal>
     <nus-confirm-modal
-      [title]="confirmCategoryTitle + name?.value + '?'"
-      [content]="confirmCategoryContent">
+      [title]="confirmCategoryTitle"
+      [content]="confirmCategoryContent"
+      [okText]="confirmOkText"
+      [cancelText]="confirmCancelText"
+    >
     </nus-confirm-modal>
   `,
   styles: [
     'img { height: 65px; width: 65px; }',
     'input[type=file] { display: none; }',
+    `
+    .input-with-button {
+      position: relative;
+    }
+    .input-with-button button {
+      position: absolute;
+      right: 0;
+      z-index: 2;
+      border: none;
+      height: 30px;
+      cursor: pointer;
+      background-color: transparent;
+      color: var(--grey);
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    `
   ]
 })
 export class CategoryComponent extends AbstractDetailComponent<ICategory> implements OnInit, AfterViewInit {
-  confirmCategoryTitle = 'Delete this category ';
-  confirmCategoryContent = 'Are you sure you want to delete this category';
+  CATEGORY_NAME_MAX_LENGTH = 30;
+  confirmCategoryTitle = 'Are you sure you want to Delete?';
+  confirmCategoryContent = 'You can\'t restore the data once it\'s deleted.';
+  confirmOkText = 'Yes, Delete';
+  confirmCancelText = 'Cancel';
 
   parentOptions: ICategory[] = [];
   imagePreviewUrl: string;
@@ -182,7 +200,7 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
 
   initializeForm(entity?: ICategory) {
     this.form = this.fb.group({
-      name: [entity?.name, [Validators.required, Validators.maxLength(50)]],
+      name: [entity?.name, [Validators.required, Validators.maxLength(this.CATEGORY_NAME_MAX_LENGTH)]],
       isActive: [!!entity?.href ? entity?.isActive : true, []],
       isInterestedCategory: [entity?.isInterestedCategory ?? false, []],
       href: [entity?.href, []],
@@ -238,6 +256,12 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
   }
 
   setIconImagePreview(data?: Event | string) {
+    if (data instanceof Event) {
+      this.image.setValidators([
+        fileTypeValidator(['image/jpg', 'image/jpeg', 'image/png'], (data?.target as HTMLInputElement)?.files )
+      ]);
+      this.image.updateValueAndValidity();
+    }
     super.setImagePreview(data, (dataAsUrl) => this.imagePreviewUrl = dataAsUrl);
   }
 
