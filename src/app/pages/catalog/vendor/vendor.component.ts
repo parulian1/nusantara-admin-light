@@ -1,11 +1,14 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 
-import {AbstractDetailComponent, DialogResult, ToastService} from '@nusantara/core';
+import {AbstractDetailComponent, DialogResult, Logger, ToastService} from '@nusantara/core';
 import {IVendor} from '@nusantara/models';
 import {VendorService} from '@nusantara/services';
 import {ConfirmModalComponent} from '@nusantara/shared/confirm-modal.component';
+import {fileTypeValidator} from '@nusantara/core/helpers/validators';
+
+const logger = new Logger('VendorComponent');
 
 @Component({
   selector: 'nus-vendor',
@@ -33,20 +36,24 @@ import {ConfirmModalComponent} from '@nusantara/shared/confirm-modal.component';
           <nus-field-errors [control]="isActive"></nus-field-errors>
         </label>
         <label>
-          <span i18n>Name</span>
+          <span i18n>Vendor Name</span>
           <input type="text" [formControl]="name" name="name"
                  placeholder="Input vendor name" i18n-placeholder>
+          <span class="input-error-info">
           <nus-field-errors [control]="name"></nus-field-errors>
+          </span>
         </label>
 
         <label>
-          <span i18n>Description</span>
-          <span><textarea [formControl]="description" name="description" placeholder="Input vendor description"></textarea>
-             <nus-field-length-counter [control]="description" [maxLength]="3000"></nus-field-length-counter>
+          <span i18n>Description Vendor</span>
+          <textarea [formControl]="description" name="description" rows="10" class="input-description"
+                    placeholder="Input vendor description"></textarea>
+
+          <span class="input-error-info">
+          <nus-field-errors [control]="description"></nus-field-errors>
+             <nus-field-length-counter [control]="description"
+                                       [maxLength]="VENDOR_DESCRIPTION_MAX_LENGTH"></nus-field-length-counter>
           </span>
-          <nus-field-errors [control]="description"
-                            placeholder="Input vendor description"
-                            i18n-placeholder></nus-field-errors>
         </label>
 
         <label>
@@ -76,24 +83,29 @@ import {ConfirmModalComponent} from '@nusantara/shared/confirm-modal.component';
 
         <label>
           <span i18n>Seo Description</span>
-          <span>
-            <textarea [formControl]="seoDescription" name="seoDescription"
-                      placeholder="Input SEO Description" i18n-placeholder></textarea>
-            <nus-field-length-counter [control]="seoDescription" [maxLength]="160"></nus-field-length-counter>
+
+          <textarea [formControl]="seoDescription" name="seoDescription"
+                    placeholder="Input SEO Description" i18n-placeholder></textarea>
+          <span class="input-error-info">
+            <nus-field-errors [control]="seoDescription"></nus-field-errors>
+            <nus-field-length-counter [control]="seoDescription"
+                                      [maxLength]="SEO_MAX_LENGTH"></nus-field-length-counter>
           </span>
 
-          <nus-field-errors [control]="seoDescription"></nus-field-errors>
+
         </label>
 
         <label>
           <span i18n>Seo Keywords</span>
-          <span>
-            <input type="text" [formControl]="seoKeywords" name="seoKeywords" placeholder="Input SEO Keyword"
-                   i18n-placeholder>
-             <nus-field-length-counter [control]="seoKeywords" [maxLength]="160"></nus-field-length-counter>
+
+          <textarea type="text" [formControl]="seoKeywords" name="seoKeywords" placeholder="Input SEO Keyword"
+                    i18n-placeholder></textarea>
+          <span class="input-error-info">
+            <nus-field-errors [control]="seoKeywords"></nus-field-errors>
+             <nus-field-length-counter [control]="seoKeywords" [maxLength]="SEO_MAX_LENGTH"></nus-field-length-counter>
           </span>
 
-          <nus-field-errors [control]="seoKeywords"></nus-field-errors>
+
         </label>
 
       </div>
@@ -113,9 +125,18 @@ import {ConfirmModalComponent} from '@nusantara/shared/confirm-modal.component';
     '#icon-image-preview { height:120px; width: 120px; }',
     '#banner-image-preview { height:125px; width: 400px; }',
     'input[type=file] { display: none }',
+    `.input-error-info {
+      display: flex;
+      justify-content: space-between;
+    }
+    `
   ]
 })
-export class VendorComponent extends AbstractDetailComponent<IVendor> {
+export class VendorComponent extends AbstractDetailComponent<IVendor> implements AfterViewInit {
+  VENDOR_NAME_MAX_LENGTH = 50;
+  VENDOR_DESCRIPTION_MAX_LENGTH = 3000;
+  SEO_MAX_LENGTH = 160;
+
   confirmCategoryTitle = 'Delete this vendor ';
   confirmCategoryContent = 'Are you sure you want to delete this vendor';
   @ViewChild('f') formView: ElementRef<HTMLFormElement>;
@@ -126,12 +147,34 @@ export class VendorComponent extends AbstractDetailComponent<IVendor> {
 
   entity?: IVendor;
 
+
   constructor(service: VendorService,
               route: ActivatedRoute,
               router: Router,
               private fb: FormBuilder,
               toast: ToastService) {
     super(route, router, toast, service);
+  }
+
+  ngAfterViewInit(): void {
+    super.ngAfterViewInit();
+    this.confirmModal.onClose.subscribe(() => this.onConfirmModalClosed());
+  }
+
+  private onConfirmModalClosed(): void {
+    if (this.confirmModal.result === DialogResult.OK) {
+      this.service.delete(this.form.value).subscribe(
+        resp => {
+          if (resp.success) {
+            this.onDeleteSuccess();
+          } else {
+            this.onDeleteError(resp);
+          }
+        },
+        (err) => this.onDeleteError(err)
+      );
+      this.form.disable();
+    }
   }
 
   get name(): FormControl {
@@ -177,15 +220,15 @@ export class VendorComponent extends AbstractDetailComponent<IVendor> {
   initializeForm(entity?: IVendor) {
     this.entity = entity;
     this.form = this.fb.group({
-      name: [entity?.name, [Validators.required, Validators.maxLength(50)]],
+      name: [entity?.name, [Validators.required, Validators.maxLength(this.VENDOR_NAME_MAX_LENGTH)]],
       href: [entity?.href, []],
-      description: [entity?.description ?? '', []],
+      description: [entity?.description ?? '', [Validators.maxLength(this.VENDOR_DESCRIPTION_MAX_LENGTH), ]],
       internalNotes: [entity?.internalNotes ?? '', []],
       iconImage: ['', entity?.iconImage ? [] : [Validators.required,]],
       bannerImage: ['', []],
       extra: this.fb.group({
-        seoDescription: [entity?.extra?.seoDescription ?? '', [Validators.maxLength(160)]],
-        seoKeywords: [entity?.extra?.seoKeywords ?? '', [Validators.maxLength(160)]]
+        seoDescription: [entity?.extra?.seoDescription ?? '', [Validators.maxLength(this.SEO_MAX_LENGTH)]],
+        seoKeywords: [entity?.extra?.seoKeywords ?? '', [Validators.maxLength(this.SEO_MAX_LENGTH)]]
       }),
       isActive: [!!entity?.href ? entity?.isActive : true,]
     });
@@ -196,10 +239,23 @@ export class VendorComponent extends AbstractDetailComponent<IVendor> {
   }
 
   setIconImagePreview(data?: Event | string) {
+    if (data instanceof Event) {
+      this.iconImage.setValidators([
+        Validators.required,
+        fileTypeValidator(['image/jpg', 'image/jpeg', 'image/png'], (data?.target as HTMLInputElement)?.files )
+      ]);
+      this.iconImage.updateValueAndValidity();
+    }
     this.setImagePreview(data, (dataAsUrl) => this.iconImagePreviewUrl = dataAsUrl);
   }
 
   setBannerImagePreview(data?: Event | string) {
+    if (data instanceof Event) {
+      this.bannerImage.setValidators([
+        fileTypeValidator(['image/jpg', 'image/jpeg', 'image/png'], (data?.target as HTMLInputElement)?.files )
+      ]);
+      this.bannerImage.updateValueAndValidity();
+    }
     this.setImagePreview(data, (dataAsUrl) => this.bannerImagePreviewUrl = dataAsUrl);
   }
 
@@ -219,23 +275,7 @@ export class VendorComponent extends AbstractDetailComponent<IVendor> {
     super.save();
   }
 
-
   delete() {
     this.confirmModal.open();
-    this.confirmModal.onClose.subscribe(() => {
-      if (this.confirmModal.result === DialogResult.OK) {
-        this.service.delete(this.form.value).subscribe(
-          resp => {
-            if (resp.success) {
-              this.onDeleteSuccess();
-            } else {
-              this.onDeleteError(resp);
-            }
-          },
-          (err) => this.onDeleteError(err)
-        );
-        this.form.disable();
-      }
-    });
   }
 }
