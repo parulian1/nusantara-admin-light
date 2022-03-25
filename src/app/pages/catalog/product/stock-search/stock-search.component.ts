@@ -26,7 +26,19 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
                   <td>
                     {{ ent.name }} ({{ subLocation.name | titlecase }})
                   </td>
-                  <td data-qa="quantity">{{ subLocation.quantity }}</td>
+                  <td data-qa="quantity">
+                    <div class="sublocation-total-qty">
+                      {{ subLocation.quantity }}
+                      <div class="chevron-round">
+                        <ng-container *ngIf="subLocation.displaySku">
+                          <i class="material-icons">expand_more</i>
+                        </ng-container>
+                        <ng-container *ngIf="!subLocation.displaySku">
+                          <i class="material-icons">expand_less</i>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </td>
                 </tr>
                 <ng-container *ngIf="subLocation.skuList.length > 0">
                   <tr class="panel-body" role="tabpanel" [attr.aria-labelledby]="'heading'+subLocation.id"
@@ -81,17 +93,18 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
         color: var(--bhisma-orange);
       }
 
-      /* Style the accordion panel. Note: hidden by default */
-      /*.collapsed {*/
-      /*  height: 0;*/
-      /*  opacity: 0;*/
-      /*  visibility: hidden;*/
-      /*}*/
-      /*.expanded {*/
-      /*  height: max-content;*/
-      /*  opacity: 1;*/
-      /*  visibility: visible;*/
-      /*}*/
+      .sublocation-total-qty {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .chevron-round {
+        background-color: var(--darken-white);
+        width: 24px;
+        height: 24px;
+        border-radius: 24px;
+      }
     `
   ],
   animations: [
