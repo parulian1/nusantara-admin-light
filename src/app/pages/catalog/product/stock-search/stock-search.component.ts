@@ -87,6 +87,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 
       .panel-heading {
         font-weight: 700;
+        cursor: pointer;
       }
 
       .panel-heading > td:first-child {
@@ -149,6 +150,7 @@ export class StockSearchComponent implements OnInit {
           productHref: this.productHref,
           sublocationHref: locationHref,
           receivingOrderStatus: 'approved',
+          latestStockMin: '1',
           groupBy: ['sku']
         }
       ).subscribe(res => {
