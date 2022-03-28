@@ -40,3 +40,19 @@ export interface IItemAttributeInfo {
   isMapped: boolean;
   attributes: IAttributeInfo[];
 }
+
+export interface IItemMarketplaceInfo {
+  name: string;
+  upc: string;
+  stock: number;
+  price: number;
+  links: IItemMarketplaceLinks[];
+
+}
+
+export interface IItemMarketplaceLinks {
+  shop: string;
+  marketplace: string;
+  urlLink: string;
+}
+

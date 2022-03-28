@@ -25,6 +25,15 @@ export class MarketplaceItemService {
     );
   }
 
+  getItemMarketplaceInfo(
+    id: number
+  ): Observable<marketplace.IItemMarketplaceInfo> {
+    return this.httpClient.get<any>(
+      `${this.baseUrl}/${id}/links/`
+    );
+  }
+
+
   getItemMarketplaceAttribute(
     marketplace: string,
     productClassSlug: string,
