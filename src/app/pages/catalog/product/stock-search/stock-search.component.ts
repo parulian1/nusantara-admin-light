@@ -32,20 +32,22 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
               </div>
             </td>
           </tr>
-          <tr class="panel-body" role="tabpanel" [@contentExpansion]="subLocation.displaySku ? 'expanded':'collapsed'"
+          <tr class="panel-body" role="tabpanel"
               [attr.aria-labelledby]="'heading'+subLocation.id">
             <td colspan="3">
-              <table class="table-accordion-nested">
-                <ng-container *ngIf="subLocation.skuList.length > 0">
-                  <tr *ngFor="let item of subLocation.skuList">
-                    <td>
-                      {{item.sku}}
-                    </td>
-                    <td class="numeric">{{item.latestStock}}</td>
-                    <td></td>
-                  </tr>
-                </ng-container>
-              </table>
+              <div [@contentExpansion]="subLocation.displaySku ? 'expanded':'collapsed'">
+                <table class="table-accordion-nested">
+                  <ng-container *ngIf="subLocation.skuList.length > 0">
+                    <tr *ngFor="let item of subLocation.skuList">
+                      <td>
+                        {{item.sku}}
+                      </td>
+                      <td class="numeric">{{item.latestStock}}</td>
+                      <td></td>
+                    </tr>
+                  </ng-container>
+                </table>
+              </div>
             </td>
           </tr>
         </ng-container>
@@ -71,7 +73,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
         cursor: pointer;
       }
 
-      .panel-heading.expanded > td {
+      .panel-heading > td {
         border-bottom: 0;
       }
 
@@ -79,11 +81,11 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
         color: var(--bhisma-orange);
       }
 
-      .sublocation-total-qty {
-        text-align: right;
+      .panel-body {
+        height: max-content;
       }
 
-      tr.panel-body > td {
+      .panel-body > td {
         padding: 0;
       }
 
@@ -120,10 +122,10 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
   ],
   animations: [
     trigger('contentExpansion', [
-      state('expanded', style({height: 'max-content', opacity: 1, visibility: 'visible'})),
-      state('collapsed', style({height: '0', opacity: 0, visibility: 'hidden'})),
+      state('expanded', style({height: '100%'})),
+      state('collapsed', style({height: '0'})),
       transition('expanded <=> collapsed', [
-        animate('200ms cubic-bezier(.37,1.04,.68,.98)')
+        animate('500ms ease-out')
       ]),
     ])
   ]
