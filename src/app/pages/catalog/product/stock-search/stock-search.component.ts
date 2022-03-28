@@ -11,47 +11,41 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
       <thead>
       <tr>
         <th i18n>Warehouse (Location)</th>
-        <th i18n>Stock</th>
+        <th class="numeric" i18n>Stock</th>
+        <th></th>
       </tr>
       </thead>
       <tbody>
       <ng-container *ngFor="let ent of entity">
         <ng-container *ngFor="let subLocation of ent.subLocations">
-          <tr>
-            <td colspan="2">
-
+          <tr [id]="'heading'+subLocation.id" class="panel-heading" [ngClass]="subLocation.displaySku ? 'expanded': 'collapsed'"
+              role="tab" (click)="fetchSkuList(ent.href, subLocation.href)">
+            <td>
+              {{ ent.name }} ({{ subLocation.name | titlecase }})
+            </td>
+            <td class="numeric" data-qa="quantity">
+              {{ subLocation.quantity }}
+            </td>
+            <td>
+              <div class="chevron-round" [ngClass]="subLocation.displaySku ? 'expanded': 'collapsed'">
+                <i class="material-icons">expand_more</i>
+              </div>
+            </td>
+          </tr>
+          <tr class="panel-body" role="tabpanel" [@contentExpansion]="subLocation.displaySku ? 'expanded':'collapsed'"
+              [attr.aria-labelledby]="'heading'+subLocation.id">
+            <td colspan="3">
               <table class="table-accordion-nested">
-                <tr [id]="'heading'+subLocation.id" class="panel-heading" role="tab"
-                    (click)="fetchSkuList(ent.href, subLocation.href)">
-                  <td>
-                    {{ ent.name }} ({{ subLocation.name | titlecase }})
-                  </td>
-                  <td data-qa="quantity">
-                    <div class="sublocation-total-qty">
-                      {{ subLocation.quantity }}
-                      <div class="chevron-round">
-                        <ng-container *ngIf="subLocation.displaySku">
-                          <i class="material-icons">expand_more</i>
-                        </ng-container>
-                        <ng-container *ngIf="!subLocation.displaySku">
-                          <i class="material-icons">expand_less</i>
-                        </ng-container>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
                 <ng-container *ngIf="subLocation.skuList.length > 0">
-                  <tr class="panel-body" role="tabpanel" [attr.aria-labelledby]="'heading'+subLocation.id"
-                      [@contentExpansion]="subLocation.displaySku ? 'expanded':'collapsed'"
-                      *ngFor="let item of subLocation.skuList">
+                  <tr *ngFor="let item of subLocation.skuList">
                     <td>
-                        {{item.sku}}
+                      {{item.sku}}
                     </td>
-                    <td>{{item.latestStock}}</td>
+                    <td class="numeric">{{item.latestStock}}</td>
+                    <td></td>
                   </tr>
                 </ng-container>
               </table>
-
             </td>
           </tr>
         </ng-container>
@@ -63,12 +57,34 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
   styles: [
     'h3 { font-size: 20px; margin: 0 0 20px 0; }',
     `
-      .table-accordion > tbody > tr > td {
-        padding: 0;
-      }
 
       .table-accordion tr th:first-child {
         width: 85%;
+      }
+
+      .table-accordion tr th:last-child {
+        width: 5%;
+      }
+
+      .panel-heading {
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .panel-heading.expanded > td {
+        border-bottom: 0;
+      }
+
+      .panel-heading > td:first-child {
+        color: var(--bhisma-orange);
+      }
+
+      .sublocation-total-qty {
+        text-align: right;
+      }
+
+      tr.panel-body > td {
+        padding: 0;
       }
 
       .table-accordion-nested {
@@ -79,25 +95,15 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
       .table-accordion-nested tr td {
         border-collapse: collapse;
         border: none;
+        padding: 0 14px;
       }
 
       .table-accordion-nested tr td:first-child {
         width: 85%;
       }
 
-      .panel-heading {
-        font-weight: 700;
-        cursor: pointer;
-      }
-
-      .panel-heading > td:first-child {
-        color: var(--bhisma-orange);
-      }
-
-      .sublocation-total-qty {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+      .table-accordion-nested tr td:last-child {
+        width: 5%;
       }
 
       .chevron-round {
@@ -105,6 +111,10 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
         width: 24px;
         height: 24px;
         border-radius: 24px;
+        transition: transform 0.2s ease-out;
+      }
+      .chevron-round.expanded {
+        transform: rotate(180deg);
       }
     `
   ],
