@@ -40,7 +40,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
                   <ng-container *ngIf="subLocation.skuList.length > 0">
                     <tr *ngFor="let item of subLocation.skuList">
                       <td>
-                        {{item.sku}}
+                        SKU: {{item.sku}}
                       </td>
                       <td class="numeric">{{item.latestStock}}</td>
                       <td></td>
