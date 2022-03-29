@@ -39,7 +39,7 @@ import { FormArray, FormBuilder, Validators } from '@angular/forms';
               <td>
                 <input type="checkbox" formControlName="isFilterable" />
               </td>
-              <td>
+              <td *ngIf="!hideRemoveButton">
                 <button
                   (click)="removeAttribute(i)"
                   type="button"
@@ -67,6 +67,7 @@ export class ProductClassAttributesComponent implements OnInit {
   @Input() attributes: IProductAttribute[] = [];
   @Input() choices: drf.IChoice[] = [];
   @Input() form: FormArray;
+  @Input() hideRemoveButton:boolean
 
   attributeTypesHide: string[] = ['markdown', 'image'];
 
