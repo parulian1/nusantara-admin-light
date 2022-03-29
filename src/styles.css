@@ -404,6 +404,7 @@ label {
   color: var(--lighten-black);
   box-sizing: border-box;
   min-height: 61px;
+  position: relative;
 }
 
 /* special case, ck-editor */
@@ -543,6 +544,10 @@ div.controls-container button {
 /* 2.1.2 Form Error States */
 input.error, select.error, textarea.error {
   border: var(--error) solid 1px
+}
+from .error-text {
+  font-size: 10px;
+  margin-top: 2px;
 }
 form .error-detail {
   /* Small help-text displayed below form input fields when validation fails */
@@ -919,4 +924,26 @@ span.badge {
 
 .new-add-button.wide {
   width: 100%;
+}
+
+.wrapper-border {
+  padding: 16px 24px;
+  border: solid 1px var(--grey);
+  border-radius: 4px;
+  margin-bottom: 24px;
+}
+
+.input-icon-error {
+  position: absolute;
+  display: inline-block;
+  right: 1px;
+  background: transparent;
+  color: var(--error);
+}
+input:not([type=checkbox]):not([type=radio]).has-input-icon {
+  padding-right: 2em;
+}
+
+textarea.input-description {
+  height: auto;
 }

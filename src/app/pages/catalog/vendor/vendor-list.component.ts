@@ -24,7 +24,7 @@ import { ActivatedRoute } from '@angular/router';
         <th class="centered" i18n>Has Icon</th>
         <th class="centered" i18n>Has Banner</th>
         <th class="numeric" i18n>Product Count</th>
-        <th class="centered">Is Active</th>
+        <th class="centered" i18n>Is Active</th>
       </tr>
       </thead>
       <tbody>
