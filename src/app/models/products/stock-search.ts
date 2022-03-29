@@ -1,6 +1,7 @@
 import {INamedHrefEntity} from '../base';
 import {ISubLocation} from '../sub-location';
 import {IAddress} from '../../shared/address';
+import {IStockRecordSearch} from '@nusantara/models/inventory';
 
 export interface IStockSearch extends INamedHrefEntity {
   href: string;
@@ -14,6 +15,8 @@ export interface IStockSearch extends INamedHrefEntity {
 
 export interface ISubLocationWithQuantity extends ISubLocation {
   quantity?: number;
+  skuList?: Array<IStockRecordSearch>;
+  displaySku: boolean;
 }
 
 export interface IBundleStockSearch {
