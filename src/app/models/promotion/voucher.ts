@@ -15,4 +15,5 @@ export interface IVoucher extends INamedHrefEntity {
   isActive?: boolean;
   maxUsedQty?: number;
   customerGroups?: Array<INamedHrefEntity>;
+  maxUsedUser?: number;
 }
