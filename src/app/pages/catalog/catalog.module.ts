@@ -37,6 +37,7 @@ import { AdvancePriceComponent } from './product/advance-price/advance-price.com
     ProductClassAttributesComponent,
 
     product.ProductListComponent,
+    product.ProductPaginationComponent,
     product.ProductComponent,
 
     product.media.NewProductImageComponent,

@@ -7,6 +7,8 @@ export * from './parent-product.resolver';
 
 export * from './product-full-list.resolver';
 
+export * from './product-pagination.component';
+
 
 import * as attribute from './attribute';
 import * as price from './price';
