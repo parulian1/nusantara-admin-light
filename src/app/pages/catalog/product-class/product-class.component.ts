@@ -124,7 +124,7 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
 
       this.entity = data.entity;
       this.attributeTypeChoices = data.attributeTypeChoices;
-      this.productCount = this.entity === undefined ? this.productCount:this.entity.productCount
+      this.productCount = this.entity ? this.entity.productCount: this.productCount
       this.typeChoices = data.typeChoices;
       this.smeLicenseProductType();
       this.optionChoices = data.optionChoices;
