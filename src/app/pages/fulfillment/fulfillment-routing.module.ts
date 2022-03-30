@@ -3,10 +3,12 @@ import { NgModule } from '@angular/core';
 
 import { OrderComponent, OrderListComponent, OrderListResolver, OrderResolver } from './orders';
 import { OrderTypeResolver, OrderStatusResolver, OrderFilterResolver } from '@nusantara/resolvers';
+import { RequirePermissionGuard } from '@nusantara/auth/guards/require-permission.guard';
 
 const routes: Routes = [
   {
     path: 'orders',
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         component: OrderListComponent,

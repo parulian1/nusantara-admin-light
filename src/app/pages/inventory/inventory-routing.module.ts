@@ -13,17 +13,19 @@ import { InventoryOrderListResolver } from './pending-order/inventory-order-list
 import { InventoryTransferOrderComponent } from './transfer-order';
 import { InventoryTransferOrderDetailResolver } from './transfer-order/inventory-transfer-order-detail.resolver';
 
-import {PublishListComponent} from '../config/marketplace-integration';
+import { PublishListComponent } from '../config/marketplace-integration';
 import {
   AdjustmentComponent,
   AdjustmentDetailComponent,
   AdjustmentDetailResolver
 } from '@nusantara/pages/inventory/adjustment';
+import { RequirePermissionGuard } from '@nusantara/auth/guards/require-permission.guard';
 
 
 const routes: Routes = [
   {
     path: 'receiving',
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         path: '',
@@ -47,6 +49,7 @@ const routes: Routes = [
   },
   {
     path: 'transfer-order',
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         path: '',
@@ -69,6 +72,7 @@ const routes: Routes = [
   },
   {
     path: 'orders-list',
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         path: '',
@@ -82,6 +86,7 @@ const routes: Routes = [
   },
   {
     path: 'adjustment',
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         path: '',
@@ -104,6 +109,7 @@ const routes: Routes = [
   },
   {
     path: 'publish',
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         path: '',

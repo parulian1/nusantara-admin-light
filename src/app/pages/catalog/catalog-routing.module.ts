@@ -26,17 +26,18 @@ import { ProductOptionListComponent, AllProductOptionResolver, ProductOptionComp
 import { DurationListResolver, LengthListResolver, PacketListResolver } from './product/subscription';
 import { RequireIsEnterpriseGuard } from '@nusantara/auth/guards';
 import { EditShippingComponent } from '../config/marketplace-integration';
-import { AllVendorResolver } from './product/all-vendor.resolver';
 import {
   AdvancedPriceComponent,
   AdvancedPriceListComponent,
   AdvancedPriceListResolver
 } from '@nusantara/pages/catalog/advanced-price';
-import {AdvancedPriceResolver} from "@nusantara/pages/catalog/advanced-price/advanced-price.resolver";
+import { AdvancedPriceResolver } from '@nusantara/pages/catalog/advanced-price/advanced-price.resolver';
+import { RequirePermissionGuard } from '@nusantara/auth/guards/require-permission.guard';
 
 const routes: Routes = [
   {
     path: 'categories',
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         path: '',
@@ -66,6 +67,7 @@ const routes: Routes = [
   },
   {
     path: 'products',
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         path: '',
@@ -161,6 +163,7 @@ const routes: Routes = [
   },
   {
     path: 'product-classes',
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         path: '',
@@ -196,6 +199,7 @@ const routes: Routes = [
   },
   {
     path: 'vendors',
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         path: '',
@@ -221,7 +225,8 @@ const routes: Routes = [
   },
   {
     path: 'product-options',
-    canActivate: [RequireIsEnterpriseGuard],
+    canActivate: [RequireIsEnterpriseGuard,],
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         path: '',
@@ -250,13 +255,15 @@ const routes: Routes = [
   },
   {
     path: 'edit-shipping/:shop-slug',
+    canActivateChild: [RequirePermissionGuard],
     component: EditShippingComponent,
     resolve: { logistics: MarketplaceLogisticListResolver },
     runGuardsAndResolvers: 'always',
   },
   {
     path: 'advanced-price',
-    canActivate: [RequireIsEnterpriseGuard],
+    canActivate: [RequireIsEnterpriseGuard,],
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         path: '',
