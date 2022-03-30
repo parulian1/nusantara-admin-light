@@ -52,7 +52,7 @@ import { enumToArray } from '@nusantara/shared/helpers';
         [attributes]="entity?.attributes"
         [choices]="attributeTypeChoices"
         [form]="attributes"
-        [hideRemoveButton]="this.productCount > 0 ? true:false"
+        [hideRemoveButton]="productCount > 0 ? true:false"
       >
       </nus-product-class-attributes>
 
@@ -77,7 +77,7 @@ import { enumToArray } from '@nusantara/shared/helpers';
 
       <nus-detail-actions
         [component]="this"
-        [hideDelete]="this.productCount > 0 ? true:false"
+        [hideDelete]="productCount > 0 ? true:false"
         (cancel)="navigateToParent(true)"
         (delete)="delete()">
       </nus-detail-actions>
