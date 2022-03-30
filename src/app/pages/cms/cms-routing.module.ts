@@ -49,11 +49,13 @@ import {
 } from './video-integration';
 
 import * as companyStory from './company-story';
+import { RequirePermissionGuard } from '@nusantara/auth/guards/require-permission.guard';
 
 
 const dashboardRoutes: Routes = [
   {
     path: 'flat-pages',
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         path: '',
@@ -79,6 +81,7 @@ const dashboardRoutes: Routes = [
   },
   {
     path: 'navigation',
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         path: '',
@@ -112,6 +115,7 @@ const dashboardRoutes: Routes = [
   },
   {
     path: 'content-footers',
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         path: '',
@@ -146,6 +150,7 @@ const dashboardRoutes: Routes = [
 
   {
     path: 'testimonials',
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         path: '',
@@ -182,8 +187,6 @@ const dashboardRoutes: Routes = [
         runGuardsAndResolvers: 'always',
         data: { animation: 'List', },
       },
-
-
       {
         path: 'banners/new',
         component: BannerGroupComponent,
@@ -217,6 +220,7 @@ const dashboardRoutes: Routes = [
 
   {
     path: 'banners',
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         path: '',
@@ -248,6 +252,7 @@ const dashboardRoutes: Routes = [
   },
   {
     path: 'highlights',
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         path: '',
@@ -274,6 +279,7 @@ const dashboardRoutes: Routes = [
   },
   {
     path: 'onboardingcontent',
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         path: '',
@@ -301,6 +307,7 @@ const dashboardRoutes: Routes = [
 
   {
     path: 'sla',
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         path: '',
@@ -326,6 +333,7 @@ const dashboardRoutes: Routes = [
   },
   {
     path: 'video-integration',
+    canActivateChild: [RequirePermissionGuard],
     children: [
       { path: '',
         component: VideoIntegrationListComponent,
@@ -349,6 +357,7 @@ const dashboardRoutes: Routes = [
   },
   {
     path: 'company-story',
+    canActivateChild: [RequirePermissionGuard],
     children: [
       { path: '',
         component: companyStory.CompanyStoryListComponent,

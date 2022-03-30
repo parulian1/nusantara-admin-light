@@ -14,11 +14,13 @@ import { CustomerListComponent, CustomerDetailComponent } from './customer';
 import { CustomerGroupListComponent, CustomerGroupDetailComponent } from './customer-group';
 import { EmployeeListComponent, EmployeeComponent, EmployeeListResolver, EmployeeResolver, AllEmployeeWarehouseResolver } from './employee';
 import { AllGroupResolver } from '../config/group/resolvers/all-group.resolver';
+import { RequirePermissionGuard } from '@nusantara/auth/guards/require-permission.guard';
 
 
 const dashboardRoutes: Routes = [
   {
     path: 'customer',
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         path: '',
@@ -41,7 +43,8 @@ const dashboardRoutes: Routes = [
   },
   {
     path: 'customer-groups',
-    canActivate: [RequireIsEnterpriseGuard],
+    canActivate: [RequireIsEnterpriseGuard,],
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         path: '',
@@ -70,6 +73,7 @@ const dashboardRoutes: Routes = [
   },
   {
     path: 'employee',
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         path: '',
