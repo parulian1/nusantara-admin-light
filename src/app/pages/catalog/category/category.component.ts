@@ -292,6 +292,7 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
 
   private onConfirmModalClosed() {
     if (this.confirmModal.result === DialogResult.OK) {
+      this.form.disable();
       this.service.delete(this.form.value).subscribe(
         resp => {
           if (resp.success) {
@@ -302,7 +303,6 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
         },
         (err) => this.onDeleteError(err)
       );
-      this.form.disable();
     }
   }
 
