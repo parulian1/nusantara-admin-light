@@ -22,7 +22,7 @@ import { FormControl } from '@angular/forms';
 @Component({
   selector: 'nus-field-errors',
   template: `
-    <div *ngIf="control?.touched || control?.dirty" class="error-detail">
+    <div *ngIf="!!control?.errors || control?.touched || control?.dirty" class="error-detail">
       <div *ngIf="control?.errors?.required" i18n>Required</div>
       <div *ngIf="control?.errors?.maxlength" i18n>Maximum length {{ control.getError('maxlength')?.requiredLength }} characters</div>
       <div *ngIf="control?.errors?.minlength" i18n>Minimum length {{ control.getError('minlength')?.requiredLength }} characters</div>

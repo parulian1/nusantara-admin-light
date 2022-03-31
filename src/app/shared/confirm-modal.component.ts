@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, ViewChild } from '@angular/core';
-import { DialogResult } from '@nusantara/core';
-import { NgxSmartModalComponent } from 'ngx-smart-modal';
+import {Component, EventEmitter, Input, ViewChild} from '@angular/core';
+import {DialogResult} from '@nusantara/core';
+import {NgxSmartModalComponent} from 'ngx-smart-modal';
 
 /**
  * Simple confirmation modal dialog
@@ -62,6 +62,7 @@ export class ConfirmModalComponent {
   }
 
   cancel() {
+    this.result = DialogResult.Cancelled;
     this.modal.close();
   }
 }
