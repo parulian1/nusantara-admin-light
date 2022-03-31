@@ -15,4 +15,5 @@ export interface IJwtClaims {
   site: string;
   can_use_pos: string;
   identity_number: string;
+  groups?: Array<string>;
 }

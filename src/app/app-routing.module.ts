@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import {RequireLoggedInGuard, RequireIsStaffGuard, RequireSiteMatchGuard} from '@nusantara/auth';
 import { MainWrapperComponent, AnonWrapperComponent } from '@nusantara/view-wrappers';
+import {RequirePermissionGuard} from "@nusantara/auth/guards/require-permission.guard";
 
 const routes: Routes = [
   {

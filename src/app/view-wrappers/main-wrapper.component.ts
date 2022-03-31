@@ -3,6 +3,7 @@ import { AuthService, RequireIsEnterpriseGuard } from '@nusantara/auth';
 import { slideInAnimation } from '@nusantara/route-animations';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { SubscriptionLike } from 'rxjs';
+import { RequirePermissionGuard } from '@nusantara/auth/guards/require-permission.guard';
 
 @Component({
   selector: 'nus-main-wrapper',
@@ -33,83 +34,131 @@ import { SubscriptionLike } from 'rxjs';
             </a>
         </li>
 
-        <li class="section-header">
+        <li class="section-header" *ngIf="permissionGuard.canActivate(null, null, 'catalog')">
           <i class="material-icons">store</i>
           <span i18n>Catalog Management</span>
         </li>
-        <li><a [routerLink]="['/catalog/products']" routerLinkActive="active" translate i18n>Products</a></li>
-        <li><a [routerLink]="['/catalog/advanced-price']" routerLinkActive="active" translate i18n>Advanced Price
-          List</a></li>
-        <li><a [routerLink]="['/catalog/categories']" routerLinkActive="active" translate i18n>Categories</a></li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/catalog/product-options']" routerLinkActive="active" translate i18n>Product Options</a></li>
-        <li><a [routerLink]="['/catalog/product-classes']" routerLinkActive="active" translate i18n>Product Classes</a></li>
-        <li><a [routerLink]="['/catalog/vendors']" routerLinkActive="active" translate i18n>Vendors</a></li>
+        <li *ngIf="permissionGuard.canActivate(null, null, 'catalog')">
+          <a [routerLink]="['/catalog/products']" routerLinkActive="active" translate i18n>Products</a>
+        </li>
+        <li *ngIf="permissionGuard.canActivate(null, null, 'catalog')">
+          <a [routerLink]="['/catalog/advanced-price']" routerLinkActive="active" translate i18n>
+            Advanced Price List
+          </a>
+        </li>
+        <li *ngIf="permissionGuard.canActivate(null, null, 'catalog')">
+          <a [routerLink]="['/catalog/categories']" routerLinkActive="active" translate i18n>Categories</a>
+        </li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null) && permissionGuard.canActivate(null, null, 'catalog')">
+          <a [routerLink]="['/catalog/product-options']" routerLinkActive="active" translate i18n>
+            Product Options
+          </a>
+        </li>
+        <li *ngIf="permissionGuard.canActivate(null, null, 'catalog')">
+          <a [routerLink]="['/catalog/product-classes']" routerLinkActive="active" translate i18n>
+            Product Classes
+          </a>
+        </li>
+        <li *ngIf="permissionGuard.canActivate(null, null, 'catalog')">
+          <a [routerLink]="['/catalog/vendors']" routerLinkActive="active" translate i18n>Vendors</a>
+        </li>
 
-        <li class="section-header" *ngIf="enterpriseGuard.canActivate(null, null)">
+        <li class="section-header"
+            *ngIf="enterpriseGuard.canActivate(null, null) && permissionGuard.canActivate(null, null, 'inventory')">
           <i class="material-icons">assignment</i>
           <span i18n>Inventory Management</span>
         </li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)">
+        <li *ngIf="enterpriseGuard.canActivate(null, null) && permissionGuard.canActivate(null, null, 'inventory')">
           <a [routerLink]="['/inventory/orders-list']" routerLinkActive="active" translate i18n>Pending Orders</a>
         </li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)">
+        <li *ngIf="enterpriseGuard.canActivate(null, null) && permissionGuard.canActivate(null, null, 'inventory')">
           <a [routerLink]="['/inventory/receiving']" routerLinkActive="active" translate i18n>Delivery (Receiving)</a>
         </li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)">
+        <li *ngIf="enterpriseGuard.canActivate(null, null) && permissionGuard.canActivate(null, null, 'inventory')">
           <a [routerLink]="['/inventory/adjustment']" routerLinkActive="active" translate i18n>Stock Adjustment</a>
         </li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)">
+        <li *ngIf="enterpriseGuard.canActivate(null, null) && permissionGuard.canActivate(null, null, 'inventory')">
           <a [routerLink]="['/inventory/transfer-order']" routerLinkActive="active" translate i18n>Transfer</a>
         </li>
 <!--        <li><a [routerLink]="['/inventory/adjustment']" routerLinkActive="active" translate>Adjustment</a></li>-->
 
-        <li class="section-header">
+        <li class="section-header" *ngIf="permissionGuard.canActivate(null, null, 'promotions')">
           <i class="material-icons">local_offer</i>
           <span i18n>Promotion Management</span>
         </li>
-        <li><a [routerLink]="['/promotion/promos']" routerLinkActive="active" translate i18n>Promos</a></li>
-        <li><a [routerLink]="['/promotion/vouchers']" routerLinkActive="active" translate i18n>Vouchers</a></li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/promotion/points']" routerLinkActive="active" translate i18n>Points</a></li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)"><a [routerLink]="['/promotion/gift-voucher']" routerLinkActive="active" translate i18n>Gift Vouchers</a></li>
+        <li *ngIf="permissionGuard.canActivate(null, null, 'promotions')">
+          <a [routerLink]="['/promotion/promos']" routerLinkActive="active" translate i18n>Promos</a>
+        </li>
+        <li *ngIf="permissionGuard.canActivate(null, null, 'promotions')">
+          <a [routerLink]="['/promotion/vouchers']" routerLinkActive="active" translate i18n>Vouchers</a>
+        </li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null) && permissionGuard.canActivate(null, null, 'promotions')">
+          <a [routerLink]="['/promotion/points']" routerLinkActive="active" translate i18n>Points</a>
+        </li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null) && permissionGuard.canActivate(null, null, 'promotions')">
+          <a [routerLink]="['/promotion/gift-voucher']" routerLinkActive="active" translate i18n>
+            Gift Vouchers
+          </a>
+        </li>
 
-        <li class="section-header">
+        <li class="section-header" *ngIf="permissionGuard.canActivate(null, null, 'cms')">
           <i class="material-icons">edit</i>
           <span i18n>CMS</span>
         </li>
 <!--        <li><a [routerLink]="['/cms/widgets']" routerLinkActive="active" translate>Widgets</a></li>-->
-        <li><a [routerLink]="['/cms/banners']" routerLinkActive="active" i18n>Banners</a></li>
-        <li><a [routerLink]="['/cms/testimonials']" routerLinkActive="active" i18n>Testimonials</a></li>
-        <li><a [routerLink]="['/cms/flat-pages']" routerLinkActive="active" i18n>Pages</a></li>
-        <li><a [routerLink]="['/cms/navigation']" routerLinkActive="active" i18n>Header Navigation</a></li>
-        <li><a [routerLink]="['/cms/content-footers']" routerLinkActive="active" i18n>Content Footers</a></li>
-        <li><a [routerLink]="['/cms/highlights']" routerLinkActive="active" i18n>Highlights</a></li>
-        <li><a [routerLink]="['/cms/sla']" routerLinkActive="active" i18n>SLA</a></li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)">
+        <li *ngIf="permissionGuard.canActivate(null, null, 'cms')">
+          <a [routerLink]="['/cms/banners']" routerLinkActive="active" i18n>Banners</a>
+        </li>
+        <li *ngIf="permissionGuard.canActivate(null, null, 'cms')">
+          <a [routerLink]="['/cms/testimonials']" routerLinkActive="active" i18n>Testimonials</a>
+        </li>
+        <li *ngIf="permissionGuard.canActivate(null, null, 'cms')">
+          <a [routerLink]="['/cms/flat-pages']" routerLinkActive="active" i18n>Pages</a>
+        </li>
+        <li *ngIf="permissionGuard.canActivate(null, null, 'cms')">
+          <a [routerLink]="['/cms/navigation']" routerLinkActive="active" i18n>Header Navigation</a>
+        </li>
+        <li *ngIf="permissionGuard.canActivate(null, null, 'cms')">
+          <a [routerLink]="['/cms/content-footers']" routerLinkActive="active" i18n>Content Footers</a>
+        </li>
+        <li *ngIf="permissionGuard.canActivate(null, null, 'cms')">
+          <a [routerLink]="['/cms/highlights']" routerLinkActive="active" i18n>Highlights</a>
+        </li>
+        <li *ngIf="permissionGuard.canActivate(null, null, 'cms')">
+          <a [routerLink]="['/cms/sla']" routerLinkActive="active" i18n>SLA</a>
+        </li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null) && permissionGuard.canActivate(null, null, 'cms')">
           <a [routerLink]="['/cms/video-integration']" routerLinkActive="active" i18n>Video Integration</a>
         </li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)">
+        <li *ngIf="enterpriseGuard.canActivate(null, null) && permissionGuard.canActivate(null, null, 'cms')">
           <a [routerLink]="['/cms/onboardingcontent']" routerLinkActive="active" i18n>Onboarding</a>
         </li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)">
+        <li *ngIf="enterpriseGuard.canActivate(null, null) && permissionGuard.canActivate(null, null, 'cms')">
           <a [routerLink]="['/cms/company-story']" routerLinkActive="active" i18n>Company Story</a>
         </li>
 
 
-        <li class="section-header">
+        <li class="section-header" *ngIf="permissionGuard.canActivate(null, null, 'fulfillment')">
           <i class="material-icons">shopping_cart</i>
           <span i18n>Order Fulfillment</span>
         </li>
-        <li><a [routerLink]="['/fulfillment/orders']" routerLinkActive="active" translate i18n>Orders</a></li>
+        <li *ngIf="permissionGuard.canActivate(null, null, 'fulfillment')">
+          <a [routerLink]="['/fulfillment/orders']" routerLinkActive="active" translate i18n>Orders</a>
+        </li>
 
-        <li class="section-header">
+        <li class="section-header" *ngIf="permissionGuard.canActivate(null, null, 'users')">
           <i class="material-icons">people</i>
           <span i18n>Customers and Users</span>
         </li>
-        <li><a [routerLink]="['/users/customer']" routerLinkActive="active" translate i18n>Customers</a></li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)">
+        <li *ngIf="permissionGuard.canActivate(null, null, 'users')">
+          <a [routerLink]="['/users/customer']" routerLinkActive="active" translate i18n>Customers</a>
+        </li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null) && permissionGuard.canActivate(null, null, 'users')">
           <a [routerLink]="['/users/customer-groups']" routerLinkActive="active" translate i18n>Customer Groups</a>
         </li>
-        <li><a [routerLink]="['/users/employee']" routerLinkActive="active" translate i18n>Employees</a></li>
+        <li *ngIf="permissionGuard.canActivate(null, null, 'users')">
+          <a [routerLink]="['/users/employee']" routerLinkActive="active" translate i18n>Employees</a>
+        </li>
 
         <li *ngIf="enterpriseGuard.canActivate(null, null)" class="icon-button" translate>
           <a href="https://reports.bhisma.cloud" target="_blank" i18n>
@@ -117,23 +166,28 @@ import { SubscriptionLike } from 'rxjs';
           </a>
         </li>
 
-        <li class="section-header">
+        <li class="section-header" *ngIf="permissionGuard.canActivate(null, null, 'config')">
           <i class="material-icons">settings</i>
           <span i18n>Config</span>
         </li>
-        <li><a [routerLink]="['/config/website-settings']" routerLinkActive="active" i18n>Website Settings</a></li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)">
+        <li *ngIf="permissionGuard.canActivate(null, null, 'config')">
+          <a [routerLink]="['/config/website-settings']" routerLinkActive="active" i18n>Website Settings</a>
+        </li>
+        <li *ngIf="enterpriseGuard.canActivate(null, null) && permissionGuard.canActivate(null, null, 'config')">
           <a [routerLink]="['/config/marketplace-integration']" routerLinkActive="active" i18n>Marketplace
             Integration</a>
         </li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)">
-          <a [routerLink]="['/config/external-integration']" routerLinkActive="active" i18n>External
-            Integration</a>
+        <li *ngIf="enterpriseGuard.canActivate(null, null) && permissionGuard.canActivate(null, null, 'config')">
+          <a [routerLink]="['/config/external-integration']" routerLinkActive="active" i18n>
+            External Integration
+          </a>
         </li>
-        <li *ngIf="enterpriseGuard.canActivate(null, null)">
+        <li *ngIf="enterpriseGuard.canActivate(null, null) && permissionGuard.canActivate(null, null, 'config')">
           <a [routerLink]="['/config/pos-integration']" routerLinkActive="active" i18n>POS Integration</a>
         </li>
-        <li><a [routerLink]="['/config/general-settings']" routerLinkActive="active" i18n>General</a></li>
+        <li *ngIf="permissionGuard.canActivate(null, null, 'config')">
+          <a [routerLink]="['/config/general-settings']" routerLinkActive="active" i18n>General</a>
+        </li>
 
         <!-- <li class="section-header">
           <i class="material-icons">palette</i>
@@ -322,7 +376,8 @@ export class MainWrapperComponent implements OnInit, OnDestroy {
 
   constructor(public authService: AuthService,
               public router: Router,
-              public enterpriseGuard: RequireIsEnterpriseGuard) {
+              public enterpriseGuard: RequireIsEnterpriseGuard,
+              public permissionGuard: RequirePermissionGuard) {
 
   }
 

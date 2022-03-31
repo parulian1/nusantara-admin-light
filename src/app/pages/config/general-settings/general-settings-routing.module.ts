@@ -17,10 +17,10 @@ import {
   GroupListResolver,
   GroupProviderResolver
 } from '@nusantara/pages/config/group';
-import {SiteConfigComponent, SiteConfigResolver, SocialMediaTypeResolver} from '@nusantara/pages/config';
-import {GroupUserListResolver} from '@nusantara/pages/config/group/resolvers/group-user-list.resolver';
-import {LowStockConfigComponent} from "@nusantara/pages/config/low-stock-config/low-stock-config.component";
-import {LowStockConfigResolver} from '@nusantara/pages/config/low-stock-config';
+import { SiteConfigComponent, SiteConfigResolver, SocialMediaTypeResolver } from '@nusantara/pages/config';
+import { GroupUserListResolver } from '@nusantara/pages/config/group/resolvers/group-user-list.resolver';
+import { LowStockConfigComponent} from "@nusantara/pages/config/low-stock-config/low-stock-config.component";
+import { LowStockConfigResolver} from '@nusantara/pages/config/low-stock-config';
 
 const routes: Routes = [
   {

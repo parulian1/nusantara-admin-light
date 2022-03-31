@@ -29,15 +29,52 @@ const logger = new Logger('Group Component');
     <nus-tabs>
       <nus-tab title="General" value="general" i18n-title>
         <form [formGroup]="form" (ngSubmit)="save()">
+          <div class="wrapper">
+            <h1 class="heading-1" i18n>General Information</h1>
+            <label>
+              <span i18n>Group Name</span>
+              <input type="text" [value]="entity.name" readonly>
+            </label>
+            <!--          <label>-->
+            <!--            <span i18n>Permissions</span>-->
 
-          <label>
-            <span i18n>Name</span>
-            <input type="text" [value]="entity.name" readonly>
-          </label>
-          <!--          <label>-->
-          <!--            <span i18n>Permissions</span>-->
+            <!--          </label>-->
+            <label>
+              <span i18n>Users</span>
+              <nus-pagination [page]="userEntities" *ngIf="userEntities"></nus-pagination>
+            </label>
+            <table>
+              <thead>
+              <tr>
+                <th i18n>User</th>
+                <th i18n>Email</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let entityUser of userEntities.entities; let i=index">
+                <td>{{ entityUser.firstName }}</td>
+                <td>{{entityUser.email}}</td>
+                <td>
+                  <button (click)="removeUser(entityUser.href,i)"
+                          type="button"
+                          class="remove-button"
+                          title="Remove" i18n-title>
+                    <i class="material-icons">remove_circle_outline</i>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <button type="button" (click)="selectUser()" class="add-button" i18n>
+                    Add User
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
 
-          <!--          </label>-->
 
           <nus-detail-actions
             [component]="this"
@@ -48,44 +85,42 @@ const logger = new Logger('Group Component');
 
         </form>
       </nus-tab>
-      <nus-tab title="Users" value="x" *ngIf="showUserTab" i18n-title>
-        <nus-pagination [page]="userEntities"></nus-pagination>
-        <table>
-          <thead>
-          <tr>
-            <th i18n>User</th>
-            <th i18n>Email</th>
-            <th></th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let entityUser of userEntities.entities; let i=index">
-            <td>{{ entityUser.firstName }}</td>
-            <td>{{entityUser.email}}</td>
-            <td>
-              <button (click)="removeUser(entityUser.href,i)"
-                      type="button"
-                      class="remove-button"
-                      title="Remove" i18n-title>
-                <i class="material-icons">remove_circle_outline</i>
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="2">
-              <button type="button" (click)="selectUser()" class="add-button" i18n>
-                Add User
-              </button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+      <nus-tab title="Access" value="x" *ngIf="showAccessTab" i18n-title>
+        <div class="access-list">
+          <table>
+            <thead>
+            <tr>
+              <th i18n>Menu</th>
+              <th i18n>Access</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let access of accessibilities; let i=index">
+              <td>{{ access.menu }}</td>
+              <td><nus-true-false [value]="access.isAllowed"></nus-true-false></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
       </nus-tab>
     </nus-tabs>
     <nus-user-selection-modal [selectedUsers]="entity?.users"></nus-user-selection-modal>
 
   `,
-  styles: [``]
+  styles: [`
+    .wrapper {
+      padding: 16px 24px; border: solid 1px var(--grey);
+      border-radius: 4px; margin-bottom: 24px; margin-top: 24px;
+    }
+    .heading-1 { margin-bottom: 16px; }
+    ::ng-deep div.tab { max-width: 892px; }
+    form, .access-list {
+      max-width: 892px;
+    }
+    .access-list {
+      margin-top: 24px;
+    }
+  `]
 })
 export class GroupComponent extends AbstractDetailComponent<IAccessGroup> implements OnInit, AfterViewInit {
 
@@ -93,7 +128,13 @@ export class GroupComponent extends AbstractDetailComponent<IAccessGroup> implem
 
   entity?: IAccessGroup;
   userEntities?: PagedResponse<IUser>;
-  showUserTab = false;
+  showAccessTab = false;
+  accessibilities: Array<{menu: string, isAllowed: boolean}> = [
+    { menu: "Dashboard", isAllowed: true }, { menu: "Inventory Management", isAllowed: true },
+    { menu: "Promotion Management", isAllowed: true }, { menu: "CMS", isAllowed: true },
+    { menu: "Order Fulfillment", isAllowed: true }, { menu: "Customers and Users", isAllowed: true },
+    { menu: "Reports", isAllowed: true }, { menu: "Config", isAllowed: true }
+  ]
 
   constructor(service: GroupService,
               public groupUserService: GroupUserService,
@@ -117,6 +158,7 @@ export class GroupComponent extends AbstractDetailComponent<IAccessGroup> implem
     this.route.data.subscribe((data: { userList: PagedResponse<IUser> }) => {
       this.userEntities = data.userList;
     });
+    this.updateAccessibilities();
   }
 
   initializeForm(entity?: IAccessGroup) {
@@ -129,7 +171,7 @@ export class GroupComponent extends AbstractDetailComponent<IAccessGroup> implem
     // for (const user of entity?.users ?? []) {
     //   this.addUser(user);
     // }
-    this.showUserTab = !!entity && !!entity.href;
+    this.showAccessTab = !!entity && !!entity.href;
   }
 
   selectUser() {
@@ -217,6 +259,17 @@ export class GroupComponent extends AbstractDetailComponent<IAccessGroup> implem
       return of(EMPTY);
     })).subscribe(res => {
       this.userEntities = res;
+    });
+  }
+
+  updateAccessibilities(): void {
+    const isFulfill = this.entity?.name.toLowerCase().indexOf('fulfillment') > -1;
+    this.accessibilities.map((access) => {
+      const isMenuFulfill = access.menu.toLowerCase().indexOf('fulfillment') > -1;
+      if (isFulfill && !isMenuFulfill && ['dashboard', 'reports'].indexOf(access.menu.toLowerCase()) === -1) {
+        access.isAllowed = false;
+      }
+      return access;
     });
   }
 }

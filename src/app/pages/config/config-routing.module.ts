@@ -2,11 +2,13 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { RequireIsEnterpriseGuard } from '@nusantara/auth';
 import { ReindexingComponent } from './reindexing/reindexing.component';
+import { RequirePermissionGuard } from '@nusantara/auth/guards/require-permission.guard';
 
 const routes: Routes = [
   {
     path: 'marketplace-integration',
-    canActivate: [RequireIsEnterpriseGuard,],
+    canActivate: [RequireIsEnterpriseGuard],
+    canActivateChild: [RequirePermissionGuard],
     loadChildren: () =>
       import('./marketplace-integration/marketplace-integration.module').then(
         (m) => m.MarketplaceIntegrationModule
@@ -15,6 +17,7 @@ const routes: Routes = [
   {
     path: 'external-integration',
     canActivate: [RequireIsEnterpriseGuard,],
+    canActivateChild: [RequirePermissionGuard],
     loadChildren: () =>
       import('./external-integration/external-integration.module').then(
         (m) => m.ExternalIntegrationModule
@@ -22,6 +25,7 @@ const routes: Routes = [
   },
   {
     path: 'website-settings',
+    canActivateChild: [RequirePermissionGuard],
     loadChildren: () =>
       import('./website-settings/website-settings.module').then(
         (m) => m.WebsiteSettingsModule
@@ -30,6 +34,7 @@ const routes: Routes = [
   {
     path: 'pos-integration',
     canActivate: [RequireIsEnterpriseGuard,],
+    canActivateChild: [RequirePermissionGuard],
     loadChildren: () =>
       import('./pos-integration/pos-integration.module').then(
         (m) => m.PosIntegrationModule
@@ -37,6 +42,8 @@ const routes: Routes = [
   },
   {
     path: 'general-settings',
+    canActivate: [RequirePermissionGuard],
+    canActivateChild: [RequirePermissionGuard],
     loadChildren: () =>
       import('./general-settings/general-settings.module').then(
         (m) => m.GeneralSettingsModule
