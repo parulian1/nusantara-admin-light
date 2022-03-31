@@ -5,7 +5,7 @@ import {AbstractCrudService, PagedResponse} from '@nusantara/core';
 import { IWarehouse } from '@nusantara/models';
 import {Observable} from 'rxjs';
 import {IStockSearch} from '@nusantara/models/products/stock-search';
-import {map} from "rxjs/operators";
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

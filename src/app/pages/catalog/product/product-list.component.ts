@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { drf, products } from '@nusantara/models';
@@ -58,7 +58,8 @@ import { WarehouseService } from '@nusantara/services';
       <!-- Soft deleted product but change the wording into InActive -->
       <nus-include-deleted text="Show Inactive Product" i18n-text></nus-include-deleted>
     </div>
-    <nus-pagination [page]="page"></nus-pagination>
+<!--    <nus-pagination [page]="page"></nus-pagination>-->
+    <nus-product-custom-pagination  [page]="page"></nus-product-custom-pagination>
 
     <table>
       <thead>
@@ -181,12 +182,12 @@ import { WarehouseService } from '@nusantara/services';
       .add-bundle-product {
         position: absolute;
         top: 40px;
-        right: 0px;
+        right: 0;
         color: black;
         border-radius: 4px;
         padding: 8px;
         min-width: 160px;
-        box-shadow: 0px 4px 8px rgb(0 0 0 / 16%), 0px -2px 6px rgb(0 0 0 / 8%);
+        box-shadow: 0 4px 8px rgb(0 0 0 / 16%), 0 -2px 6px rgb(0 0 0 / 8%);
         font-weight: 400;
       }
 
@@ -203,7 +204,7 @@ import { WarehouseService } from '@nusantara/services';
       }
     `]
 })
-export class ProductListComponent extends AbstractListComponent<products.IProduct> {
+export class ProductListComponent extends AbstractListComponent<products.IProduct> implements OnInit{
 
   isBundling = false;
   timeoutId: any;
@@ -243,7 +244,7 @@ export class ProductListComponent extends AbstractListComponent<products.IProduc
       if (resp.totalResults === 1) {
         this.showBundling = true;
       }
-    })
+    });
   }
 
   onQueryTextChanged(newValue: string) {

@@ -14,10 +14,8 @@ export class ApiPrefixInterceptor implements HttpInterceptor {
       let url = `//${window.localStorage.getItem('site_domain')}` + request.url;
       // TODO: need better hack for this
       // for now, force https for non localhost url
-      if (!/^\/\/(localhost(:)|applesignin\.ap\.ngrok\.io)/i.test(url)) {
-        console.log(/^\/\/(localhost|applesignin\.ap\.ngrok\.io):/i);
+      if (!/^\/\/(localhost(:))/i.test(url)) {
           url = 'https:' + url;
-
       }
       request = request.clone({ url });
     }
