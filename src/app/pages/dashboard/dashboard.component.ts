@@ -32,7 +32,7 @@ export class DashboardComponent implements AfterViewInit {
   }
 
   get allowToShow(): boolean {
-    if (!!this.authService.tokenPayload.is_superuser) {
+    if (!!this.authService?.tokenPayload?.is_superuser) {
       return true;
     }
     const otherGroupBesideFulfillment = this.authService.tokenPayload.groups.filter((group) => {
