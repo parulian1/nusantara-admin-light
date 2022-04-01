@@ -26,24 +26,28 @@ export class RequirePermissionGuard implements CanActivate, CanActivateChild {
   }
 
   allowToActivate(path?: string) {
-    const otherGroupFound = !!this.groups().find((group) => {
-      return group.toLocaleLowerCase().indexOf('fulfillment') === -1;
-    });
-    let isFulfillmentSection: boolean;
-    if (!!path) {
-      isFulfillmentSection = path.indexOf('fulfillment') > -1;
+    if (!!this.auth.tokenPayload.is_superuser) {
+      return true;
     } else {
-      isFulfillmentSection = this.router.url.indexOf('fulfillment') > -1
-    }
-    if (isFulfillmentSection) {
-      return !!this.groups().find((group) => {
-        return group.toLocaleLowerCase().indexOf('fulfillment') > -1;
+      const otherGroupFound = !!this.groups().find((group) => {
+        return group.toLocaleLowerCase().indexOf('fulfillment') === -1;
       });
-    } else {
-      if (!otherGroupFound) {
-        return false;
+      let isFulfillmentSection: boolean;
+      if (!!path) {
+        isFulfillmentSection = path.indexOf('fulfillment') > -1;
       } else {
-        return true;
+        isFulfillmentSection = this.router.url.indexOf('fulfillment') > -1
+      }
+      if (isFulfillmentSection) {
+        return !!this.groups().find((group) => {
+          return group.toLocaleLowerCase().indexOf('fulfillment') > -1;
+        });
+      } else {
+        if (!otherGroupFound) {
+          return false;
+        } else {
+          return true;
+        }
       }
     }
   }
