@@ -52,6 +52,7 @@ import { enumToArray } from '@nusantara/shared/helpers';
         [attributes]="entity?.attributes"
         [choices]="attributeTypeChoices"
         [form]="attributes"
+        [hideRemoveButton]="productCount > 0 ? true:false"
       >
       </nus-product-class-attributes>
 
@@ -76,6 +77,7 @@ import { enumToArray } from '@nusantara/shared/helpers';
 
       <nus-detail-actions
         [component]="this"
+        [hideDelete]="productCount > 0 ? true:false"
         (cancel)="navigateToParent(true)"
         (delete)="delete()">
       </nus-detail-actions>
@@ -85,7 +87,7 @@ import { enumToArray } from '@nusantara/shared/helpers';
 })
 export class ProductClassComponent extends AbstractDetailComponent<products.IProductClass> implements OnInit {
   entity: products.IProductClass;
-
+  productCount:number = 0
   typeChoices: drf.IChoice[];
   attributeTypeChoices: drf.IChoice[];
   optionChoices: Array<products.IProductOption>;
@@ -122,6 +124,7 @@ export class ProductClassComponent extends AbstractDetailComponent<products.IPro
 
       this.entity = data.entity;
       this.attributeTypeChoices = data.attributeTypeChoices;
+      this.productCount = this.entity ? this.entity.productCount: this.productCount
       this.typeChoices = data.typeChoices;
       this.smeLicenseProductType();
       this.optionChoices = data.optionChoices;
