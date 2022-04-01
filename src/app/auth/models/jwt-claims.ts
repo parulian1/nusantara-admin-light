@@ -16,4 +16,5 @@ export interface IJwtClaims {
   can_use_pos: string;
   identity_number: string;
   groups?: Array<string>;
+  is_superuser?: boolean;
 }
