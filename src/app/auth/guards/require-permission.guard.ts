@@ -26,7 +26,7 @@ export class RequirePermissionGuard implements CanActivate, CanActivateChild {
   }
 
   allowToActivate(path?: string) {
-    if (!!this.auth.tokenPayload.is_superuser) {
+    if (!!this.auth?.tokenPayload?.is_superuser) {
       return true;
     } else {
       const otherGroupFound = !!this.groups().find((group) => {
