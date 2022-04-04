@@ -20,6 +20,8 @@ import { StockInputComponent } from './product/stock-input/stock-input.component
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { BundleLineComponent } from '@nusantara/pages/catalog/product/bundle';
 import {
   AdvancedPriceComponent,
@@ -27,6 +29,8 @@ import {
   AdvancedPriceProductComponent, AdvancedPriceWarehouseModalComponent
 } from '@nusantara/pages/catalog/advanced-price';
 import { AdvancePriceComponent } from './product/advance-price/advance-price.component';
+
+
 @NgModule({
   declarations: [
     CategoryListComponent,
@@ -83,6 +87,8 @@ import { AdvancePriceComponent } from './product/advance-price/advance-price.com
     // Angular Material
     MatIconModule,
     MatSlideToggleModule,
+    MatMenuModule,
+    MatTooltipModule
   ],
 })
 export class CatalogModule { }
