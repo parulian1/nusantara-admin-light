@@ -202,6 +202,10 @@ import { WarehouseService } from '@nusantara/services';
       td {
         text-align: left;
       }
+
+      div.filtering {
+        width: fit-content;
+      }
     `]
 })
 export class ProductListComponent extends AbstractListComponent<products.IProduct> implements OnInit{
