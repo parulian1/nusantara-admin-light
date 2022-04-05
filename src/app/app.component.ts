@@ -1,10 +1,11 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import {NavigationEnd, Router} from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
 import { AuthService } from '@nusantara/auth';
 import { AppUpdateService } from './core/app-update.service';
+import { environment } from '@env/environment.prod';
 
-declare let gtag: Function;
+declare let gtag: (type: 'config', gtagId: string, option: object) => void;
 
 /**
  * The root component for Nusantara Admin.
@@ -35,9 +36,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
               private appUpdate: AppUpdateService) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd){
-        gtag('config', 'G-JWQWGC80XR',
+        gtag('config', environment.googleAnalytics,
           {
-            page_path: event.urlAfterRedirects
+            page_path: event.urlAfterRedirects,
+            send_page_view: false
           }
         );
       }
