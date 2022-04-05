@@ -136,7 +136,9 @@ import { RequirePermissionGuard } from '@nusantara/auth/guards/require-permissio
         <li *ngIf="enterpriseGuard.canActivate(null, null) && permissionGuard.canActivate(null, null, 'cms')">
           <a [routerLink]="['/cms/company-story']" routerLinkActive="active" i18n>Company Story</a>
         </li>
-
+        <li *ngIf="enterpriseGuard.canActivate(null, null) || true">
+          <a [routerLink]="['/cms/catalogue']" routerLinkActive="active" translate i18n>Catalogue</a>
+        </li>
 
         <li class="section-header" *ngIf="permissionGuard.canActivate(null, null, 'fulfillment')">
           <i class="material-icons">shopping_cart</i>
