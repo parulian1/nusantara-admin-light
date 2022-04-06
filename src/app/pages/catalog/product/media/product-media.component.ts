@@ -15,7 +15,7 @@ import { GoogleService } from '@nusantara/services';
 @Component({
   selector: 'nus-product-media',
   template: `
-    <div>
+    <div class="">
       <button type="button" (click)="remove.emit()" title="Remove" i18n-title><i class="material-icons">remove_circle_outline</i></button>
 
       <div *ngIf="entity?.type === 'image'">

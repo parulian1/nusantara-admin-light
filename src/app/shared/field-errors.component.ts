@@ -43,6 +43,9 @@ import {FormControl} from '@angular/forms';
       <div *ngIf="control?.errors?.fileType" i18n>
         Ensure this image type is  {{ control.getError('fileType')?.value }}
       </div>
+      <div *ngIf="control?.errors?.pattern" i18n>
+        Invalid char
+      </div>
       <div *ngIf="control?.errors?.fileSize" i18n>
         Ensure file size is lower than {{ control.getError('fileSize')?.value }} KB
       </div>

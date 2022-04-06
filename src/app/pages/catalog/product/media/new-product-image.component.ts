@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractEditingComponent, DialogResult } from '@nusantara/core';
 import { NgxSmartModalComponent } from 'ngx-smart-modal';
+import {fileTypeValidator} from '@nusantara/core/helpers/validators';
 
 /**
  * Dialog component that allows the user to select a single image
@@ -21,7 +22,10 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
         <input type="hidden" [formControl]="type" name="type">
         <input type="hidden" [formControl]="youtubeVideoId" name="youtubeVideoId">
 
-        <input type="file" [formControl]="image" (change)="setMediaImage($event)" #imageInput name="image">
+        <input type="file" [formControl]="image"
+               (change)="setMediaImage($event)"
+               accept="image/jpeg, image/png"
+               #imageInput name="image">
         <input type="hidden" [formControl]="sortPriority" name="sortPriority">
         <input type="hidden" [formControl]="identifier" name="identifier">
         <button [disabled]="form.invalid" (click)="close()" type="button" class="control" i18n>Save</button>
@@ -79,6 +83,14 @@ export class NewProductImageComponent extends AbstractEditingComponent implement
   get identifier(): FormControl { return this.form.get('identifier') as FormControl; }
 
   setMediaImage(data?: Event|string) {
+    if (data instanceof Event) {
+      this.image.setValidators([
+        Validators.required,
+        fileTypeValidator(['image/jpg', 'image/jpeg', 'image/png'],
+          (data?.target as HTMLInputElement)?.files )
+      ]);
+      this.image.updateValueAndValidity();
+    }
     this.setImagePreview(data,  (url) => this.imagePreviewUrl = url);
   }
 

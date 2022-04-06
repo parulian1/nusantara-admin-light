@@ -1,12 +1,12 @@
-import { StockInputComponent } from './stock-input/stock-input.component';
-import { HttpErrorResponse } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {StockInputComponent} from './stock-input/stock-input.component';
+import {HttpErrorResponse} from '@angular/common/http';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
 import * as ClassicEditor from '@gdnnusantara/ckeditor5-build/build/ckeditor';
-import { NgxSmartModalService } from 'ngx-smart-modal';
-import { EMPTY, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import {NgxSmartModalService} from 'ngx-smart-modal';
+import {EMPTY, of} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 import {
   ProductRelatedService,
   ProductService,
@@ -27,23 +27,23 @@ import {
   ToastLevelEnum,
   ToastService
 } from '@nusantara/core';
-import { drf, ICategory, INamedHrefEntity, IVendor, products } from '@nusantara/models';
-import { IError } from '@nusantara/models/base/error';
-import { PriceListHostComponent } from './price';
-import { ProductMediaHostComponent } from './media';
-import { ProductAttributeHostComponent } from './attribute';
-import { ProductSubscriptonHostComponent } from './subscription';
-import { MarketplaceInfoHostComponent } from './marketplace';
+import {drf, ICategory, INamedHrefEntity, IVendor, products} from '@nusantara/models';
+import {IError} from '@nusantara/models/base/error';
+import {PriceListHostComponent} from './price';
+import {ProductMediaHostComponent} from './media';
+import {ProductAttributeHostComponent} from './attribute';
+import {ProductSubscriptonHostComponent} from './subscription';
+import {MarketplaceInfoHostComponent} from './marketplace';
 
-import { ProductSelectionModalComponent, VendorSelectionModalComponent } from '@nusantara/shared';
-import { IProduct, IProductClass } from '@nusantara/models/products';
-import { CategorySelectionModalComponent } from '@nusantara/shared/modals/category-selection-modal.component';
-import { ProductClassSelectionModalComponent } from '@nusantara/shared/modals/product-class-selection-modal.component';
-import { ProductOnlineSelectionModalComponent } from '@nusantara/shared/product-online-selection-modal.component';
-import { IBundleStockSearch } from '@nusantara/models/products/stock-search';
-import { IProductBundle } from '@nusantara/models/products/product-bundle';
-import { ConfirmModalComponent } from '@nusantara/shared/confirm-modal.component';
-import { IAdvancedPriceList } from '@nusantara/models/products/advanced-price-list';
+import {ProductSelectionModalComponent, VendorSelectionModalComponent} from '@nusantara/shared';
+import {IProduct, IProductClass} from '@nusantara/models/products';
+import {CategorySelectionModalComponent} from '@nusantara/shared/modals/category-selection-modal.component';
+import {ProductClassSelectionModalComponent} from '@nusantara/shared/modals/product-class-selection-modal.component';
+import {ProductOnlineSelectionModalComponent} from '@nusantara/shared/product-online-selection-modal.component';
+import {IBundleStockSearch} from '@nusantara/models/products/stock-search';
+import {IProductBundle} from '@nusantara/models/products/product-bundle';
+import {ConfirmModalComponent} from '@nusantara/shared/confirm-modal.component';
+import {IAdvancedPriceList} from '@nusantara/models/products/advanced-price-list';
 
 const log = new Logger('ProductComponent');
 
@@ -106,13 +106,10 @@ const log = new Logger('ProductComponent');
               <div class="manage">
                 <div>
                   <input type="hidden" [formControl]="category" data-qa="category">
-                  <input type="text" (click)="selectCategory()" readonly [value]="selectedCategory?.name"
-                         data-qa="category-pop">
-                  <!--                  <select [formControl]="category" name="category" data-qa="category">-->
-                  <!--                    <option *ngFor="let c of categories" [ngValue]="c.href">-->
-                  <!--                      {{ c.pathName }}-->
-                  <!--                    </option>-->
-                  <!--                  </select>-->
+                  <div class="input-with-button">
+                  <input type="text" (click)="selectCategory()" readonly [value]="selectedCategory?.name" data-qa="category-pop">
+                    <button (click)="selectCategory()"  type="button" title="Dropdown Category"  data-qa="category-pop-button"><span class="material-icons">expand_more</span></button>
+                </div>
                   <nus-field-errors [control]="category"></nus-field-errors>
                 </div>
                 <div><a [routerLink]="['/catalog', 'categories']" i18n> Manage Category</a></div>
@@ -124,13 +121,11 @@ const log = new Logger('ProductComponent');
               <div class="manage">
                 <div>
                   <input type="hidden" [formControl]="productClass" data-qa="product-class">
+                  <div class="input-with-button">
                   <input type="text" (click)="selectProductClass()" readonly [value]="selectedProductClassValue?.name"
                          data-qa="product-class-pop">
-                  <!--                  <select [formControl]="productClass" name="product-class" data-qa="product-class">-->
-                  <!--                    <option *ngFor="let pc of productClasses" [ngValue]="pc.href">-->
-                  <!--                      {{ pc.name }}-->
-                  <!--                    </option>-->
-                  <!--                  </select>-->
+                  <button (click)="selectProductClass()"  type="button" title="Dropdown Product Class" data-qa="product-class-pop-button"><span class="material-icons">expand_more</span></button>
+                  </div>
                   <nus-field-errors [control]="productClass"></nus-field-errors>
                 </div>
                 <div><a [routerLink]="['/catalog', 'product-classes']" target="_blank" i18n>Manage Class</a>
@@ -200,10 +195,14 @@ const log = new Logger('ProductComponent');
               <ckeditor [editor]="Editor" [config]="editorConfig"
                         [formControl]="description"
                         id="description"
-                        name="description"
                         data-qa="description">
               </ckeditor>
+              <span class="input-error-info">
               <nus-field-errors [control]="description"></nus-field-errors>
+              <nus-field-length-counter [control]="description"
+                                        [maxLength]="DESCRIPTION_MAX_LENGTH">
+              </nus-field-length-counter>
+              </span>
             </div>
 
             <label *ngIf="structure.value === 'parent'">
@@ -211,13 +210,11 @@ const log = new Logger('ProductComponent');
               <div class="manage">
                 <div>
                   <input type="hidden" [formControl]="vendor" data-qa="vendor">
-                  <input type="text" (click)="selectVendor()" readonly [value]="selectedVendor?.name"
+                  <div class="input-with-button">
+                  <input type="text" (click)="selectVendor()" readonly [value]="selectedVendor?.name" [title]="selectedVendor?.name"
                          data-qa="vendor-pop">
-                  <!--                  <select [formControl]="vendor" name="vendor" data-qa="vendor">-->
-                  <!--                    <option *ngFor="let v of vendors" [ngValue]="v.href">-->
-                  <!--                      {{ v.name }}-->
-                  <!--                    </option>-->
-                  <!--                  </select>-->
+                    <button (click)="selectVendor()"  type="button" title="Dropdown Vendor" data-qa="vendor-pop-button"><span class="material-icons">expand_more</span></button>
+                  </div>
                   <nus-field-errors [control]="vendor"></nus-field-errors>
                 </div>
                 <div><a [routerLink]="['/catalog', 'vendors']" target="_blank" i18n> Manage Vendor </a></div>
@@ -259,13 +256,13 @@ const log = new Logger('ProductComponent');
               <input type="text"
                      [formControl]="upc"
                      name="upc"
-                     placeholder="Input UPC"
+                     placeholder="UPC must be unique"
                      data-qa="upc"/>
               <nus-field-errors [control]="upc"></nus-field-errors>
             </label>
 
             <label>
-              <div id="barcode-label" >
+              <div id="barcode-label">
                 <span i18n>Barcode</span>
                 <a (click)="copyUpcToBarcode()" i18n>Copy from UPC</a>
               </div>
@@ -321,7 +318,7 @@ const log = new Logger('ProductComponent');
                   formControlName="currentLength"
                   placeholder="Input Length"
                   data-qa="length"/>
-                <nus-field-errors [control]="dimensions.get('currentLength')"></nus-field-errors>
+                <nus-field-errors [control]="currentLength"></nus-field-errors>
               </label>
               <label>
                 <span i18n>Width (cm)</span>
@@ -332,7 +329,7 @@ const log = new Logger('ProductComponent');
                   formControlName="currentWidth"
                   placeholder="Input Width"
                   data-qa="width"/>
-                <nus-field-errors [control]="dimensions.get('currentWidth')"></nus-field-errors>
+                <nus-field-errors [control]="currentWidth"></nus-field-errors>
               </label>
               <label>
                 <span i18n>Height (cm)</span>
@@ -343,46 +340,61 @@ const log = new Logger('ProductComponent');
                   formControlName="currentHeight"
                   placeholder="Input Height"
                   data-qa="height"/>
-                <nus-field-errors [control]="dimensions.get('currentHeight')"></nus-field-errors>
+                <nus-field-errors [control]="currentHeight"></nus-field-errors>
               </label>
             </div>
           </div>
 
           <div *ngIf="enterpriseLicense()" id="product-tag" class="wrapper">
             <h1 class="heading-1" i18n>Product Tag</h1>
-            <label *ngFor="let t of tags.controls; let i = index">
-              <span i18n>Tag {{ i + 1 }}</span>
-              <div style="display: flex;">
-                <input type="text" [formControl]="t" name="tag" data-qa="tag"/>
+            <div class="tag-manage">
+              <input type="text" name="input_tag" #inputTag/>
+              <button (click)="addTag(inputTag.value); inputTag.value = ''" type="button" class="new-add-button wide" i18n>
+                <i class="material-icons">add</i> Select Product Tag
+              </button>
+            </div>
+            <div class="tag-list">
+            <label *ngFor="let t of tags.controls; let i = index" class="tag-item">
+              <input type="hidden" [formControl]="t" name="tag" data-qa="tag"/>
+              <span class="tag-chip">{{t.value}}
                 <button type="button" class="delete" (click)="tags.removeAt(i)">
-                  <i class="material-icons">delete_outline</i>
+                  <i class="material-icons">highlight_off</i>
                 </button>
-              </div>
+              </span>
             </label>
-            <button (click)="addTag()" type="button" class="new-add-button wide" i18n>
-              <i class="material-icons">add</i> Add Tag
-            </button>
+            </div>
+
           </div>
 
           <div id="product-other" class="wrapper">
             <h1 class="heading-1" i18n>Other</h1>
             <label>
-              <span i18n>Meta Description</span>
-              <textarea
+              <span i18n>SEO Description</span>
+              <textarea placeholder="Input SEO Description" i18n-placeholder
                 [formControl]="seoDescription"
                 name="seo-description"
                 cols="30" rows="10"
                 data-qa="seo-description">
               </textarea>
+              <span class="input-error-info">
               <nus-field-errors [control]="seoDescription"></nus-field-errors>
+              <nus-field-length-counter [control]="seoDescription"
+                                        [maxLength]="SEO_MAX_LENGTH"></nus-field-length-counter>
+              </span>
             </label>
             <label>
-              <span i18n>Meta Keywords</span>
-              <input type="text"
+              <span i18n>SEO Keywords</span>
+              <textarea placeholder="Input SEO Keywords" i18n-placeholder
                      [formControl]="seoMeta"
                      name="seo-meta"
-                     data-qa="seo-meta"/>
+                        cols="30" rows="10"
+                     data-qa="seo-meta">
+              </textarea>
+              <span class="input-error-info">
               <nus-field-errors [control]="seoMeta"></nus-field-errors>
+              <nus-field-length-counter [control]="seoMeta"
+                                        [maxLength]="SEO_MAX_LENGTH"></nus-field-length-counter>
+              </span>
             </label>
           </div>
 
@@ -411,8 +423,8 @@ const log = new Logger('ProductComponent');
             <table>
               <thead>
               <tr>
-                <th i18n>Product</th>
-                <th i18n>Remove</th>
+                <th i18n>Product Name</th>
+                <th i18n style="width:100px">Action</th>
               </tr>
               </thead>
               <tbody>
@@ -423,15 +435,15 @@ const log = new Logger('ProductComponent');
                   </a>
                 </td>
                 <td>
-                  <button (click)="removeRelated(i)" type="button" class="remove-button">
-                    <mat-icon class="icon" svgIcon="trash"></mat-icon>
+                  <button type="button" class="delete remove-button" (click)="removeRelated(i)">
+                    <i class="material-icons">delete_outline</i>
                   </button>
                 </td>
               </tr>
               <tr>
                 <td colspan="2">
                   <button type="button" (click)="selectProduct()" class="new-add-button wide" i18n>
-                    Add Product
+                    <span class="material-icons">add</span> Add Product
                   </button>
                 </td>
               </tr>
@@ -443,7 +455,7 @@ const log = new Logger('ProductComponent');
             [component]="this"
             (cancel)="navigateToParent(true)"
             (delete)="delete()"
-            [hideDelete]="!entity || !entity.isActive"
+            [hideDelete]="true"
           >
           </nus-detail-actions>
         </form>
@@ -528,9 +540,52 @@ const log = new Logger('ProductComponent');
     '.total-price td.price { text-align: right; }',
     '#barcode-label { display: block; margin-bottom: 4px; }',
     '#barcode-label > span:first-child { font-size: 14px; line-height: 20px; font-weight: bold; margin-right: 10px; }',
+    `.input-error-info {
+      display: flex;
+      justify-content: space-between;
+    }
+    `,
+    '.tag-manage { display: grid; grid-template-columns: 6fr 2fr; grid-gap: 20px; align-items: center; }',
+    `
+      .tag-list {
+        display: flex;
+        margin-top: 8px;
+        max-width: 900px;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      label.tag-item {
+        min-height: initial;
+        padding: 0;
+        gap: 16px;
+      }
+      .tag-chip {
+        /* Auto layout */
+
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 4px 4px 4px 8px;
+        /* UI / Darken White */
+        background: #F4F4F4;
+        border-radius: 24px;
+        flex: none;
+        order: 0;
+        flex-grow: 0;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 20px;
+      }
+    `
   ]
 })
 export class ProductComponent extends AbstractDetailComponent<products.IProduct> implements OnInit, AfterViewInit {
+  readonly DESCRIPTION_MAX_LENGTH = 5000;
+  readonly DESCRIPTION_MIN_LENGTH = 30;
+  readonly SEO_MAX_LENGTH = 160;
+  readonly UPC_MAX_LENGTH = 20;
 
   productClasses: Array<products.IProductClass>;
   categories: Array<ICategory>;
@@ -633,7 +688,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   @ViewChild('productClassModal') productClassSelectionModal: ProductClassSelectionModalComponent;
 
   // Confirm modal if product has advanced price
-  @ViewChild(ConfirmModalComponent)confirmModal: ConfirmModalComponent;
+  @ViewChild(ConfirmModalComponent) confirmModal: ConfirmModalComponent;
+  @ViewChild('inputTag') inputTag: ElementRef;
 
 
   constructor(service: ProductService,
@@ -709,6 +765,19 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     return this.form?.get('dimensions') as FormGroup;
   }
 
+  get currentHeight(): FormControl {
+    return this.dimensions?.get('currentHeight') as FormControl;
+  }
+
+  get currentLength(): FormControl {
+    return this.dimensions?.get('currentLength') as FormControl;
+  }
+
+  get currentWidth(): FormControl {
+    return this.dimensions?.get('currentWidth') as FormControl;
+  }
+
+
   get parent(): FormControl {
     return this.form?.get('parent') as FormControl;
   }
@@ -783,13 +852,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     this.route.data.subscribe((
       data: {
         entity: products.IProduct, parent: products.IProduct,
-        // productClasses: products.IProductClass[],
         mediaTypes: drf.IChoice[]
       }) => {
       this.parentProduct = data.parent;
-      // this.vendors = data.vendors;
-      // this.categories = data.categories;
-      // this.productClasses = data.productClasses;
       this.mediaTypes = data.mediaTypes;
       this.entity = data.entity;
     });
@@ -815,19 +880,37 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       bundleInitialValue = null;
     }
     this.form = this.fb.group({
-      name: [entity?.name, [Validators.required, Validators.maxLength(120)]],
+      name: [entity?.name, [
+        Validators.required,
+        Validators.maxLength(120),
+        Validators.pattern('^[A-Za-z0-9 ]+$')]],
       isActive: [entity?.isActive, []],
       parent: [entity?.parent],
       href: [entity?.href],
-      upc: [entity?.upc, [Validators.required, ]],
-      structure: [entity?.structure ?? 'parent', [Validators.required, ]],
-      description: [entity?.description, [Validators.required, ]],
-      weight: [entity?.weight, [Validators.required, ]],
-      price: [0, [Validators.minLength(0), Validators.max(999999999)]],
+      upc: [entity?.upc, [Validators.required,
+        Validators.maxLength(this.UPC_MAX_LENGTH),
+        Validators.pattern('^[A-Z0-9]+$')]],
+      structure: [entity?.structure ?? 'parent', [Validators.required,]],
+      description: [entity?.description, [
+        Validators.required,
+        Validators.minLength(this.DESCRIPTION_MIN_LENGTH),
+        Validators.maxLength(this.DESCRIPTION_MAX_LENGTH)]],
+      weight: [entity?.weight, [Validators.required, Validators.min(0.01),
+      Validators.max(9999)]],
+      price: [0, [Validators.minLength(0), Validators.max(999999999), Validators.min(1)]],
       dimensions: this.fb.group({
-        currentLength: [entity?.dimensions?.currentLength, ],
-        currentWidth: [entity?.dimensions?.currentWidth, ],
-        currentHeight: [entity?.dimensions?.currentHeight, ]
+        currentLength: [entity?.dimensions?.currentLength, [
+          Validators.min(1),
+          Validators.max(9999),
+        ]],
+        currentWidth: [entity?.dimensions?.currentWidth, [
+          Validators.min(1),
+          Validators.max(9999),
+        ]],
+        currentHeight: [entity?.dimensions?.currentHeight, [
+          Validators.min(0.01),
+          Validators.max(9999),
+        ]]
       }),
       productClass: this.fb.group({href: [entity?.productClass.href, [Validators.required]]}),
       category: this.fb.group({href: [entity?.category.href, [Validators.required]]}),
@@ -842,7 +925,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       subscription: this.fb.group({}),
       productRelated: this.fb.array([]),
       bundle: bundleInitialValue,
-      barcode: [entity?.barcode, [Validators.required, ]],
+      barcode: [entity?.barcode, [Validators.required,
+        Validators.maxLength(120),
+        Validators.pattern('^[A-Z0-9]+$'),
+      ]],
     });
 
 
@@ -894,6 +980,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     } else {
       this.enabledAttributes = this.parentProduct.enabledAttributes ?? [];
     }
+    log.debug(this.form.errors);
+    this.form.markAllAsTouched();
   }
 
   initializeSubViewForms(entity?: products.IProduct) {
@@ -960,8 +1048,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     return formValue;
   }
 
-  onConfirmModalClosed(){
-    if (this.confirmModal.result === DialogResult.OK){
+  onConfirmModalClosed() {
+    if (this.confirmModal.result === DialogResult.OK) {
       this.save();
     }
   }
@@ -1101,7 +1189,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     if (this.structure.value === 'parent' && this.productFormType !== 'bundling') {
       super.navigateToParent(warnOnDirty);
     } else {
-      this.router.navigateByUrl('/catalog/products', );
+      this.router.navigateByUrl('/catalog/products',);
     }
   }
 
@@ -1209,19 +1297,19 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   showInfoWindow(resp, action) {
-    if (action === 'remove'){
+    if (action === 'remove') {
       this.toast?.addMessage(resp, 'Successfully Removed', ToastLevelEnum.info);
     } else {
       this.toast?.addMessage(resp, 'Successfully Add', ToastLevelEnum.success);
     }
   }
 
-  apiPostRelatedProduct(productValue: FormData, action, product, index= 0){
+  apiPostRelatedProduct(productValue: FormData, action, product, index = 0) {
     delete productValue['name'];
     delete productValue['href'];
     let actionStatus = 'add';
 
-    if (action === 'remove'){
+    if (action === 'remove') {
       productValue['action'] = 'remove';
       actionStatus = 'remove';
     }
@@ -1369,7 +1457,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   getVirtualPackageAmount(): void {
-    const bundle: Array<{product: string, quantity: number}> = [];
+    const bundle: Array<{ product: string, quantity: number }> = [];
     this.totalPrice = 0;
     this.virtualPackageAmount = null;
     this.productBundling.controls.forEach((product) => {

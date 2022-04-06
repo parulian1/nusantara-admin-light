@@ -6,7 +6,7 @@ import {FormControl} from '@angular/forms';
   template: `
     <ng-container *ngIf="control?.touched || control?.value?.length>0" >
       <span [class.error-detail]="(!!maxLength && control?.value?.length>maxLength)" class="error-text">
-        ({{control?.value?.length}}<ng-container *ngIf="!!maxLength">/{{maxLength}}</ng-container>)</span>
+        ({{control?.value?.length || 0}}<ng-container *ngIf="!!maxLength">/{{maxLength}}</ng-container>)</span>
     </ng-container>
   `,
   styles: [
