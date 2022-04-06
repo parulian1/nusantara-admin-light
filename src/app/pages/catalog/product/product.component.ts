@@ -275,7 +275,8 @@ const log = new Logger('ProductComponent');
 
             <label class="single-price" *ngIf="!enterpriseLicense()">
               <span i18n>Price</span>
-              <input type="number" [formControl]="price" name="price" min="0" appOnlyNumber decimal="true"
+              <input type="number"
+                     [formControl]="price" name="price" min="0" appOnlyNumber decimal="true"
                      (change)="setSinglePrice($event)">
               <nus-field-errors [control]="price"></nus-field-errors>
             </label>
@@ -295,6 +296,8 @@ const log = new Logger('ProductComponent');
 
           <div id="product-media" class="wrapper">
             <h1 class="heading-1" i18n>Media</h1>
+            <nus-non-field-errors [nonFieldErrors]="mediaError">
+            </nus-non-field-errors>
             <nus-product-media-host [form]="media"></nus-product-media-host>
           </div>
 
@@ -458,6 +461,7 @@ const log = new Logger('ProductComponent');
             [hideDelete]="true"
           >
           </nus-detail-actions>
+          <button type="button" (click)="checkValid()">Validate</button>
         </form>
       </div>
       <div class="side-nav">
@@ -662,7 +666,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   productFormType: string;
   virtualPackageAmount: number = null;
   totalPrice: number = 0;
-  marketplaceLink = []
+  marketplaceLink = [];
 
   isAdvancePriceAvailable = false;
   confirmAdvancedPriceTitle = 'Update this product?';
@@ -672,6 +676,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   productRelatedFormData: FormData[] = [];
   enabledAttributes: INamedHrefEntity[] = [];
+  mediaError: Array<string> = [];
 
   @ViewChild(ProductMediaHostComponent) mediaHost: ProductMediaHostComponent;
   @ViewChild(PriceListHostComponent) priceListHost: PriceListHostComponent;
@@ -690,6 +695,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   // Confirm modal if product has advanced price
   @ViewChild(ConfirmModalComponent) confirmModal: ConfirmModalComponent;
   @ViewChild('inputTag') inputTag: ElementRef;
+
+  priceListEnabled = false;
 
 
   constructor(service: ProductService,
@@ -980,7 +987,6 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     } else {
       this.enabledAttributes = this.parentProduct.enabledAttributes ?? [];
     }
-    log.debug(this.form.errors);
     this.form.markAllAsTouched();
   }
 
@@ -1167,22 +1173,22 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   getMarketplaceLinks(){
     if(this.entity){
       this.marketplaceItemService.getItemMarketplaceInfo(this.entity.id).subscribe((resp) => {
-        this.marketplaceLink = resp.links
+        this.marketplaceLink = resp.links;
       });
     }
   }
 
   open(){
-    document.getElementById("transform").classList.add("hover-rotate");
+    document.getElementById('transform').classList.add('hover-rotate');
     // document.getElementById("down").classList.toggle("show");
   }
 
   close(){
-    document.getElementById("transform").classList.remove("hover-rotate");
+    document.getElementById('transform').classList.remove('hover-rotate');
   }
 
   openLink(link){
-    window.open(link)
+    window.open(link);
   }
 
   navigateToParent(warnOnDirty: boolean = false) {
@@ -1283,9 +1289,15 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     });
     this.currentActive = id;
   }
-
+  checkValid(): void {
+    this.isValidForm();
+  }
   isValidForm(): boolean {
-    return this.form.valid && this.priceListHost.validatePriceListHost();
+    this.mediaError = [];
+    if (!this.mediaHost.validateMedia()) {
+      this.mediaError.push('Media requirement not match. Need at least 3 image and max 9 image, max 1 video');
+    }
+    return this.form.valid  && this.mediaHost.validateMedia() && this.priceListHost.validatePriceListHost();
   }
 
   selectProduct() {
@@ -1609,17 +1621,17 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   private removeProductBundlingMedia(product: any): void {
     if (!this.entity) {
       if (!!this.mediaHost.entities) {
-        const removeImage = this.mediaHost.entities.findIndex((x) => {
+        const removeImage = this.mediaHost.entitiesImage.findIndex((x) => {
           return (x.product === product.href || x.product === product.product.href) && x.type === 'image';
         });
         if (removeImage !== -1) {
-          this.mediaHost.remove(removeImage);
+          this.mediaHost.removeImage(removeImage);
         }
-        const removeVideo = this.mediaHost.entities.findIndex((x) => {
+        const removeVideo = this.mediaHost.entitiesVideo.findIndex((x) => {
           return (x.product === product.href || x.product === product.product.href) && x.type === 'you_tube';
         });
         if (removeVideo !== -1) {
-          this.mediaHost.remove(removeVideo);
+          this.mediaHost.removeVideo(removeVideo);
         }
       }
     }

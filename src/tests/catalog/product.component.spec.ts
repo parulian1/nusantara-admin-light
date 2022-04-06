@@ -12,7 +12,7 @@ import {AdvancedPriceListService, ProductRelatedService, SiteConfigService} from
 import {PriceListHostComponent} from '@nusantara/pages/catalog/product/price';
 import {IPriceList, IProductClass} from '@nusantara/models/products';
 import {StockInputComponent} from '@nusantara/pages/catalog/product/stock-input/stock-input.component';
-import {MockComponent, MockComponents} from 'ng-mocks';
+import {MockComponent, MockComponents, ngMocks} from 'ng-mocks';
 // import {StockInputComponent} from '@nusantara/pages/catalog/product/stock-input/stock-input.component';
 // import {MarketplaceInfoHostComponent} from '@nusantara/pages/catalog/product/marketplace';
 import {ProductMediaHostComponent} from '@nusantara/pages/catalog/product/media';
@@ -238,7 +238,8 @@ describe('ProductComponent', () => {
       type: 'physical',
     }, {status: 200, statusText: 'OK'}));
     fixture.detectChanges();
-
+    const isValidFormSpy = spyOn(component, 'isValidForm');
+    isValidFormSpy.and.returnValue(true);
     component.save();
 
     const mock = httpTestingController.expectOne('/api/catalog/product/');
@@ -376,6 +377,9 @@ describe('ProductComponent', () => {
     }, {status: 200, statusText: 'OK'}));
     fixture.detectChanges();
     httpTestingController.verify();
+
+    const isValidFormSpy = spyOn(component, 'isValidForm');
+    isValidFormSpy.and.returnValue(true);
     component.save();
 
     const mock = httpTestingController.expectOne(editProductResp.href);

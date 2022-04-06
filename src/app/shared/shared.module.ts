@@ -51,6 +51,7 @@ import { WarehouseLocationModalComponent } from './modals/warehouse-location-mod
 import { ClickOutsideDirective } from './click-outside.directive';
 import { ProductOnlineSelectionModalComponent } from '@nusantara/shared/product-online-selection-modal.component';
 import { FieldLengthCounterComponent } from './field-length-counter/field-length-counter.component';
+import { DynamicFilterPipe } from './dynamic-filter.pipe';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { PromoModalComponent } from '@nusantara/shared/modals/promo-modal.component';
 import { PromoTypeToLabelPipe } from '@nusantara/shared/promo-type-to-label.pipe';
@@ -110,6 +111,7 @@ import { PromoCampaignModalComponent } from '@nusantara/shared/modals/promo-camp
     ClickOutsideDirective,
     ProductOnlineSelectionModalComponent,
     FieldLengthCounterComponent,
+    DynamicFilterPipe,
     ProgressBarComponent,
     PromoModalComponent,
     PromoCampaignModalComponent
@@ -161,6 +163,7 @@ import { PromoCampaignModalComponent } from '@nusantara/shared/modals/promo-camp
     ClickOutsideDirective,
     ProductOnlineSelectionModalComponent,
     FieldLengthCounterComponent,
+    DynamicFilterPipe,
     ProgressBarComponent,
     PromoModalComponent,
     PromoCampaignModalComponent
