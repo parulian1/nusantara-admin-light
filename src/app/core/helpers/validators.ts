@@ -10,7 +10,6 @@ export function fileTypeValidator(imageType: Array<string>, files: FileList) {
       logger.debug('fileTypeValidator', 'No Value');
       return null;
     }
-    console.log(files.item(0).type);
     if (imageType.includes(files.item(0).type)) {
       logger.debug('fileTypeValidator', 'image in ', imageType);
       return null;
@@ -22,7 +21,24 @@ export function fileTypeValidator(imageType: Array<string>, files: FileList) {
         fileType: imageType,
       }
     };
-    // console.log(control as any as FileList);
-    // return (control as any as FileList)?.item(0).type in imageType ? {fileType: { value: 'Wrong file type'}} : null;
+  };
+}
+
+
+export function fileNameLengthValidator(maxLength: number, files: FileList) {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+    if (!value) {
+      logger.debug('fileNameLengthValidator', 'No Value');
+      return null;
+    }
+    if (files.item(0).name.length <= maxLength) {
+      return null;
+    }
+    return {
+      fileNameLength: {
+        value: maxLength,
+      }
+    };
   };
 }
