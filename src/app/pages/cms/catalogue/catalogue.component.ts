@@ -5,7 +5,7 @@ import {FormBuilder, FormControl, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CatalogueService} from '@nusantara/services/catalogue.service';
 import {HttpClient} from '@angular/common/http';
-import {fileTypeValidator} from '@nusantara/core/helpers/validators';
+import {fileNameLengthValidator, fileTypeValidator} from '@nusantara/core/helpers/validators';
 
 const logger = new Logger('CatalogueComponent');
 
@@ -180,7 +180,8 @@ export class CatalogueComponent extends AbstractDetailComponent<ICatalogue> {
       const file = (data.target as HTMLInputElement).files[0];
       this.image.setValidators([
         Validators.required,
-        fileTypeValidator(['image/jpg', 'image/jpeg', 'image/png'], (data?.target as HTMLInputElement)?.files)
+        fileTypeValidator(['image/jpg', 'image/jpeg', 'image/png'], (data?.target as HTMLInputElement)?.files),
+        fileNameLengthValidator(100, (data?.target as HTMLInputElement)?.files),
       ]);
       this.form.get('image').updateValueAndValidity();
     }
@@ -194,7 +195,8 @@ export class CatalogueComponent extends AbstractDetailComponent<ICatalogue> {
       const file = ($event.target as HTMLInputElement).files[0];
       this.file.setValidators([
         Validators.required,
-        fileTypeValidator(['application/pdf'], (event?.target as HTMLInputElement)?.files)
+        fileTypeValidator(['application/pdf'], ($event?.target as HTMLInputElement)?.files),
+        fileNameLengthValidator(100, ($event?.target as HTMLInputElement)?.files)
       ]);
       this.form.patchValue({
         file,
@@ -221,16 +223,16 @@ export class CatalogueComponent extends AbstractDetailComponent<ICatalogue> {
     if (!this.formView) {
       throw Error('formView is null');
     }
-    if (!!this.entity?.href && !!this.entity?.image && !this.image?.value) {
-      this.form.removeControl('image');
-    }
-    if (!this.entity?.href && !!this.entity?.file && !this.file?.value) {
-      this.form.removeControl('file');
-      this.form.removeControl('fileName');
-    }
     const formData = new FormData(this.formView.nativeElement);
     if (this.isActive.value === false) {
       formData.append('isActive', 'false');
+    }
+    if (!!this.entity?.href && !!this.entity?.image && !this.image?.value) {
+      formData.delete('image');
+    }
+    if (!!this.entity?.href && !this.file?.value) {
+      formData.delete('file');
+      formData.delete('fileName');
     }
     this.form.disable();
     this.service.save(formData).subscribe(
