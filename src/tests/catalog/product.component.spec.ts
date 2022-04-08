@@ -218,7 +218,6 @@ describe('ProductComponent', () => {
       vendor: {
         href: addProductResp.vendor.href,
       },
-      id: addProductResp.id,
       media: addProductResp.media,
       attributes: addProductResp.attributes,
       marketplace: addProductResp.marketplace,
@@ -354,7 +353,6 @@ describe('ProductComponent', () => {
       category: {
         href: editProductResp.category.href,
       },
-      id:editProductResp.id,
       media: editProductResp.media,
       isActive: editProductResp.isActive,
       attributes: editProductResp.attributes,
