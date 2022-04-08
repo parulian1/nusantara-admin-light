@@ -8,7 +8,7 @@ import {
   ViewChild,
 } from "@angular/core";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import {
   MarketplaceStockInfoModalComponent,
   MarketplaceShippingInfoModalComponent
@@ -50,13 +50,16 @@ import { IClient } from '@nusantara/models/marketplace';
         </div>
         <a (click)="shippingInfo.open();" i18n>More Detail</a>
       </div>
-      <div class="detail">
-        <h4 class="subheading-2" i18n>Marketplace Product Detail</h4>
-        <p i18n>This information will be used as specific per marketplace. Skip this if you don't want to publish to marketplace.</p>
+      <div class="subinfo mt-3">
+        <div>
+          <h4 class="subheading-2" i18n>Marketplace Product Detail</h4>
+          <p i18n>This information will be used as specific per marketplace. Skip this if you don't want to publish to marketplace.</p>
+        </div>
+        <a (click)="edit()">Edit</a>
       </div>
       <div *ngIf="isClientListAvailable" class="detail-store">
         <nus-tabs (select)="getAttributes($event)" [fluid]="true">
-          <nus-tab *ngFor="let client of clientList; let marketplaceIndex = index" 
+          <nus-tab *ngFor="let client of clientList; let marketplaceIndex = index"
             [title]="client.marketplaceName"
             [value]="client.option">
             <ng-container *ngIf="isProductClassMappedAvailable">
@@ -68,7 +71,7 @@ import { IClient } from '@nusantara/models/marketplace';
                         <p class="body-2" i18n>Store</p>
                         <h4 class="subheading-2">{{ data.shop }}</h4>
                       </div>
-                      <button type="button" class="expand" 
+                      <button type="button" class="expand"
                         (click)="toggleStore(marketplaceIndex, storeIndex)">
                         <i class="material-icons" >{{ isStoreExpanded(marketplaceIndex, storeIndex)? 'expand_less':'expand_more' }}</i>
                       </button>
@@ -82,7 +85,7 @@ import { IClient } from '@nusantara/models/marketplace';
                               <th i18n>Name</th>
                               <th i18n>Value</th>
                             </thead>
-                            <tbody formArrayName="attributes" *ngIf="attributesFormArray.controls.length"> 
+                            <tbody formArrayName="attributes" *ngIf="attributesFormArray.controls.length">
                               <ng-container *ngFor="let attr of attributesFormArray.controls; let i = index" [formGroupName]="i">
                               <tr *ngIf="storeIndex === attr.value.indexShop">
                                 <td>
@@ -216,6 +219,7 @@ import { IClient } from '@nusantara/models/marketplace';
 export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormGroup> implements OnInit, OnChanges {
 
   @Input() form: FormGroup;
+  @Input() id:number
   @Input() productClass: products.IProductClass;
 
   @ViewChild(MarketplaceShippingInfoModalComponent) shippingInfo: MarketplaceShippingInfoModalComponent;
@@ -251,6 +255,7 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
   constructor(
     protected route: ActivatedRoute,
     protected fb: FormBuilder,
+    private router: Router,
     private cdRef: ChangeDetectorRef,
     private mpClientService: MarketplaceClientService,
     private mpItemService: MarketplaceItemService,
@@ -291,7 +296,7 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
         );
       });
   }
-  
+
   private initializeForm() {
     this.form = this.fb.group({
       attributes: this.fb.array([]),
@@ -328,7 +333,7 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
       .subscribe((data: marketplace.IItemAttributeInfo[]) => {
         // if not return 404 means product class already mapped
         this.isProductClassMapped = true;
-        
+
         if (!!data) {
           this.itemAttributes = data;
           data.forEach((stores: marketplace.IItemAttributeInfo, index) => {
@@ -354,11 +359,11 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
           );
           this.isExpanded[index].expanded = Array(data.length).fill(false);
         } else {
-          this.itemAttributes = null;  
+          this.itemAttributes = null;
         }
       },
       // for error fetch data i.e 404 not found
-      () => { 
+      () => {
         this.isProductClassMapped = false;
         this.itemAttributes = null;
       });
@@ -386,6 +391,11 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
         formArray.removeAt(0);
       }
     }
+  }
+
+  edit(){
+    this.id.toString()
+    this.router.navigateByUrl(`/catalog/products/${this.id}/marketplace/edit`, )
   }
 
   saveAll(): void {
