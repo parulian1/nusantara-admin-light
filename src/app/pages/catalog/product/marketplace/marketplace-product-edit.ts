@@ -140,18 +140,11 @@ const log = new Logger('ProductComponent');
                       </label>
                     </td>
                   </tr>
-                  <!-- <nus-product-attribute-value
-                    *ngFor="let attr of attributeDefinitions; let i=index"
-                    [attributeDefinition]="attr"
-                    [control]="getFormControlForAttribute(attr)">
-                  </nus-product-attribute-value> -->
-
               </tbody>
             </table>
           </div>
         </ng-container>
         <button class="control spin-tha-wheel" [disabled]="this.loading || !this.form.valid">
-          <!-- <mat-spinner color="primary" [diameter]="35"  style="margin:0 auto; coloer:black"></mat-spinner> -->
           <mat-spinner *ngIf="this.loading" class="track"
           mode="determinate" value="100" [diameter]="30">
           </mat-spinner>
@@ -159,27 +152,9 @@ const log = new Logger('ProductComponent');
           <span *ngIf="!this.loading">Save</span>
         </button>
         <button class="control secondary " type="button" [disabled]="this.loading" (click)="this.navigateToProduct(true)">
-          <!-- <mat-spinner color="primary" [diameter]="35"  style="margin:0 auto; coloer:black"></mat-spinner> -->
           <span>Cancel</span>
         </button>
-        <!-- <nus-detail-actions
-          [component]="this"
-          [hideSave]="true"
-          (cancel)="this.navigateToProduct(true)"
-          [hideDelete]="true"
-        >
-        </nus-detail-actions> -->
       </form>
-    <!-- Modals -->
-    <!-- <nus-product-selection-modal #productRecommendationModal></nus-product-selection-modal>
-    <nus-product-online-selection-modal #productBundlingModal></nus-product-online-selection-modal>
-    <nus-vendor-selection-modal #vendorModal></nus-vendor-selection-modal>
-    <nus-category-selection-modal #categoryModal></nus-category-selection-modal>
-    <nus-product-class-selection-modal #productClassModal></nus-product-class-selection-modal> -->
-    <!-- <nus-confirm-modal
-      [title]="confirmAdvancedPriceTitle"
-      [content]="confirmAdvancedPriceText">
-    </nus-confirm-modal> -->
   `,
   styles: [
     '.container { display: grid; grid-template-columns: 3fr 1fr; grid-column-gap: 24px; }',
@@ -453,15 +428,6 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
     this.form.enable();
   }
 
-  // validatePriceList() {
-    // this.priceListHost?.priceLists.forEach((priceList) => {
-    //   log.debug('pricelist', priceList.validatePriceList());
-    //   priceList.rangeComponents.forEach((component) => {
-    //     log.debug('validate', component.validatePriceRange(), component.maxQuantity.value);
-    //   });
-    // });
-  // }
-
   navigateToProduct(warnOnDirty: boolean = false) {
     if (warnOnDirty && this.form?.dirty) {
       const leavePage = confirm('Your changes will be lost.  Do you want to continue?');
@@ -500,16 +466,4 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
     this.toast?.addMessage(`"${message}" was deleted successfully.`, 'Deleted', ToastLevelEnum.success);
     this.navigateToParent(false);
   }
-
-
-  // updateProductRelation(productValue: FormData, actionStatus: string) {
-    // this.relatedService.post(productValue).subscribe(
-    //   (resp) => {
-    //     this.showInfoWindow(resp.status, actionStatus);
-    //   },
-    //   (err) => {
-    //     this.showErrorToast(err.error.relation);
-    //   }
-    // );
-  // }
 }
