@@ -63,6 +63,7 @@ describe('ProductComponent', () => {
     marketplace: [],
     weight: 1.0,
     attributes: {},
+    id:4076,
     parent: null,
     structure: 'parent',
     productRelated: [],
@@ -217,6 +218,7 @@ describe('ProductComponent', () => {
       vendor: {
         href: addProductResp.vendor.href,
       },
+      id: addProductResp.id,
       media: addProductResp.media,
       attributes: addProductResp.attributes,
       marketplace: addProductResp.marketplace,
@@ -315,6 +317,7 @@ describe('ProductComponent', () => {
       weight: 1.0,
       attributes: {},
       parent: null,
+      id: 4076,
       structure: 'parent',
       productRelated: [],
       variants: [],
@@ -351,6 +354,7 @@ describe('ProductComponent', () => {
       category: {
         href: editProductResp.category.href,
       },
+      id:editProductResp.id,
       media: editProductResp.media,
       isActive: editProductResp.isActive,
       attributes: editProductResp.attributes,
