@@ -40,3 +40,39 @@ export interface IItemAttributeInfo {
   isMapped: boolean;
   attributes: IAttributeInfo[];
 }
+
+export interface IItemMarketplaceInfo {
+  name: string;
+  upc: string;
+  stock: number;
+  price: number;
+  slug:string;
+  links: IItemMarketplaceLinks[];
+  marketplaces: IItemMarketplaceDetail[]
+}
+
+export interface IItemMarketplaceLinks {
+  shop: string;
+  marketplace: string;
+  urlLink: string;
+}
+
+export interface IItemMarketplaceDetail {
+  warehouse: string;
+  sublocation: string;
+  sublocationId: number;
+  isManagedKgx: boolean;
+  originStock:number;
+  stocks: IItemStock[];
+}
+
+export interface IItemStock {
+  isActive:boolean;
+  stock: number;
+  name: string;
+  price: string;
+  shop: string;
+  shopId:number;
+  marketplace:string
+  marketplaceProductId:number;
+}

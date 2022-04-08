@@ -33,6 +33,8 @@ import {
   AdvancedPriceListResolver
 } from '@nusantara/pages/catalog/advanced-price';
 import {AdvancedPriceResolver} from "@nusantara/pages/catalog/advanced-price/advanced-price.resolver";
+import { MarketplaceProductEditComponent } from './product/marketplace/marketplace-product-edit';
+import { ItemMarketplaceResolve } from './product/marketplace/item-marketplace.resolve';
 
 const routes: Routes = [
   {
@@ -104,6 +106,22 @@ const routes: Routes = [
           subscriptionDuration: DurationListResolver,
           subscriptionLength: LengthListResolver,
           warehouses: config.warehouse.AllWarehouseResolver,
+        },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+      {
+        path: ':id/marketplace/edit',
+        component: MarketplaceProductEditComponent,
+        resolve: {
+          entity: ItemMarketplaceResolve,
+          // productClasses: AllProductClassResolver,
+          // vendors: AllVendorResolver,
+          // categories: AllCategoryResolver,
+          // mediaTypes: MediaTypeResolver,
+          // priceListTypes: PriceListTypeResolver,
+          // parent: ParentProductResolver,
+          // warehouses: config.warehouse.AllWarehouseResolver,
         },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },

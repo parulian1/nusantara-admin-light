@@ -19,6 +19,7 @@ import { StockInputComponent } from './product/stock-input/stock-input.component
 
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { BundleLineComponent } from '@nusantara/pages/catalog/product/bundle';
 import {
@@ -54,6 +55,7 @@ import { AdvancePriceComponent } from './product/advance-price/advance-price.com
     product.subscription.ProductSubscriptonHostComponent,
 
     product.marketplace.MarketplaceInfoHostComponent,
+    product.marketplace.MarketplaceProductEditComponent,
 
     VendorListComponent,
     VendorComponent,
@@ -81,6 +83,7 @@ import { AdvancePriceComponent } from './product/advance-price/advance-price.com
     DragDropModule,
     // Angular Material
     MatIconModule,
+    MatProgressSpinnerModule,
     MatSlideToggleModule,
   ],
 })
