@@ -21,6 +21,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { BundleLineComponent } from '@nusantara/pages/catalog/product/bundle';
 import {
   AdvancedPriceComponent,
@@ -28,6 +30,8 @@ import {
   AdvancedPriceProductComponent, AdvancedPriceWarehouseModalComponent
 } from '@nusantara/pages/catalog/advanced-price';
 import { AdvancePriceComponent } from './product/advance-price/advance-price.component';
+
+
 @NgModule({
   declarations: [
     CategoryListComponent,
@@ -38,6 +42,7 @@ import { AdvancePriceComponent } from './product/advance-price/advance-price.com
     ProductClassAttributesComponent,
 
     product.ProductListComponent,
+    product.ProductPaginationComponent,
     product.ProductComponent,
 
     product.media.NewProductImageComponent,
@@ -85,6 +90,8 @@ import { AdvancePriceComponent } from './product/advance-price/advance-price.com
     MatIconModule,
     MatProgressSpinnerModule,
     MatSlideToggleModule,
+    MatMenuModule,
+    MatTooltipModule
   ],
 })
 export class CatalogModule { }

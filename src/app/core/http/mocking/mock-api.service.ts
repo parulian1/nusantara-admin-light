@@ -16,7 +16,7 @@ export class MockApiInterceptorService implements HttpInterceptor {
   constructor(private injector: Injector) {}
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    console.log(`Attempting to Mock API Response for HTTP ${request.method} ${request.url}`);
+    console.log(`Attempting to Mock API Response for HTTP ${request.method} ${request.url} ${request.urlWithParams}`);
 
     if (request.method in HTTP_API_RESPONSES &&
         request.url in HTTP_API_RESPONSES[request.method]) {

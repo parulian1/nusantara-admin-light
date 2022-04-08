@@ -1,18 +1,17 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpParams} from '@angular/common/http';
 
-import { AbstractCrudService } from '@nusantara/core/http';
-import { IStockRecord } from '@nusantara/models/inventory';
-import { Observable } from 'rxjs';
-import { PagedResponse } from '@nusantara/core';
-import { map } from 'rxjs/operators';
+import {AbstractCrudService} from '@nusantara/core/http';
+import {IStockRecord, IStockRecordSearch} from '@nusantara/models/inventory';
+import {Observable} from 'rxjs';
+import {PagedResponse} from '@nusantara/core';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InventoryStockRecordService extends AbstractCrudService<IStockRecord> {
   baseUrl = '/api/fulfillment/stock-record';
-  // baseUrl = 'http://localhost:8000/stock-record';
 
   constructor(httpClient: HttpClient) {
     super(httpClient);
@@ -55,5 +54,13 @@ export class InventoryStockRecordService extends AbstractCrudService<IStockRecor
     return this.httpClient
       .get<IStockRecord[]>(`/api/fulfillment/stock-record/`, {observe: 'response', responseType: 'json', params})
       .pipe(map(resp => new PagedResponse(resp)));
+  }
+
+  fetchListStockRecordSearch(requestBody = {}): Observable<Array<IStockRecordSearch>> {
+    return this.httpClient
+      .post<Array<IStockRecordSearch>>(`/api/fulfillment/stock-record/search/`,
+        requestBody,
+        {observe: 'body', responseType: 'json'}
+      );
   }
 }

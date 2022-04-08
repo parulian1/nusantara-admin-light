@@ -13,7 +13,9 @@ import {
   SiteConfigService,
   SvgIconService,
   WarehouseService,
-  ProductClassService, AdvancedPriceListService
+  ProductClassService,
+  AdvancedPriceListService,
+  MarketplaceItemService
 } from '@nusantara/services';
 import {
   AbstractDetailComponent,
@@ -51,7 +53,26 @@ const log = new Logger('ProductComponent');
 @Component({
   selector: 'nus-product',
   template: `
-    <nus-detail-title [originalName]="originalEntityName" typeName="Product"></nus-detail-title>
+    <div class="container">
+      <div>
+        <nus-detail-title [originalName]="originalEntityName" typeName="Product" class="title"></nus-detail-title>
+        <div class="drpdown" *ngIf="entity && this.marketplaceLink.length > 0">
+          <button
+            class="control secondary btn"
+            mat-button
+            [matMenuTriggerFor]="downloadMenu"
+            (menuOpened)="open()" i18n
+            (menuClosed)="close()">
+            <span class="judul">View Product</span>
+            <i id="transform" class="material-icons icon">expand_more</i>
+          </button>
+          <mat-menu #downloadMenu xPosition="before" class="">
+            <button mat-menu-item i18n matTooltip="{{link.marketplace}} - {{link.shop}}" matTooltipClass="tooltip" [matTooltipShowDelay]="1500" [matTooltipPosition]="'after'" *ngFor="let link of marketplaceLink" (click)="openLink(link.urlLink)" >{{link.marketplace}} - {{link.shop}}</button>
+          </mat-menu>
+        </div>
+      </div>
+      <div></div>
+    </div>
     <div class="container">
       <div>
         <nus-non-field-errors
@@ -484,6 +505,14 @@ const log = new Logger('ProductComponent');
     'ul { list-style: none; margin: 0; padding: 0; }',
     '.side-nav li { font-size: 14px; line-height: 20px; font-weight: bold; color: var(--tertiary); padding: 10px 32px; cursor: pointer; }',
     '.side-nav li.active { padding: 10px 24px; color: white; background: var(--tertiary-lighten); border-left: solid 8px var(--secondary); border-radius: 4px; }',
+    '.icon{position: absolute; top: 9px; padding-left: 2px; color:#EA730B; transition: transform .5s; transform: rotateZ(0deg)}',
+    '.drpdown{float:right}',
+    '.title{float:left}',
+    '.judul {color:#EA730B; height: 1rem; line-height: 1rem; padding:7px; margin:6px 0; border-right-style: solid; display:inherit; font-weight:bold}',
+    '.btn { border: 2px solid #EA730B; position:relative; padding-right:30px}',
+    '.hover-rotate{ transition: transform .4s; transform: rotateZ(180deg)}',
+    '.mat-menu-item {width: 300px;}',
+    '::ng-deep .tooltip {font-size: 11pt;}',
     '.side-nav li a { text-decoration: none; color: inherit; }',
     '.delete { background: none; border: none; outline: none; font-size: 18px; cursor: pointer; opacity: .5; }',
     '.package-info {line-height: 18px; margin-top: 26px; font-weight: bold; }',
@@ -572,6 +601,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   productFormType: string;
   virtualPackageAmount: number = null;
   totalPrice: number = 0;
+  marketplaceLink = []
 
   isAdvancePriceAvailable = false;
   confirmAdvancedPriceTitle = 'Update this product?';
@@ -610,7 +640,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
               public modal: NgxSmartModalService,
               public productClassService: ProductClassService,
               private warehouseService: WarehouseService,
-              private advancedPriceListService: AdvancedPriceListService) {
+              private advancedPriceListService: AdvancedPriceListService,
+              private marketplaceItemService: MarketplaceItemService) {
     super(route, router, toast, service);
     svgIconService.registerIcons();
   }
@@ -756,6 +787,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       this.entity = data.entity;
     });
 
+    this.getMarketplaceLinks();
     this.getProductFormType();
     this.getAdvancePrice();
 
@@ -1026,6 +1058,27 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   addRelatedProduct() {
     throw Error('Not Implemented');
+  }
+
+  getMarketplaceLinks(){
+    if(this.entity){
+      this.marketplaceItemService.getItemMarketplaceInfo(this.entity.id).subscribe((resp) => {
+        this.marketplaceLink = resp.links
+      });
+    }
+  }
+
+  open(){
+    document.getElementById("transform").classList.add("hover-rotate");
+    // document.getElementById("down").classList.toggle("show");
+  }
+
+  close(){
+    document.getElementById("transform").classList.remove("hover-rotate");
+  }
+
+  openLink(link){
+    window.open(link)
   }
 
   navigateToParent(warnOnDirty: boolean = false) {
