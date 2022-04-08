@@ -308,7 +308,7 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
     this.form = this.fb.group({
       name: [entity.name, [Validators.required, Validators.maxLength(120), forbiddenNameValidator(/[^a-zA-Z0-9 \&.!]/)]],
       upc: [entity?.upc, [Validators.required, ]],
-      price: [entity?.price, [Validators.minLength(0), Validators.max(999999999)]],
+      price: [entity?.price, [Validators.required, Validators.minLength(0), Validators.max(999999999)]],
       marketplaces:this.fb.array([]),
     });
     this.setMarketplace()
@@ -401,32 +401,23 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
         isManagedKgx:[marketplace.isManagedKgx],
         originStock:[marketplace.originStock],
         stocks:this.fb.array([])
-      },{
-        });
+      });
       marketplace.stocks.map(p => {
-        // disini difilter
-        if(this.entity.links.filter(test => test.shop === p.shop && test.marketplace === p.marketplace).length > 0){
-          // console.log('masuk')
-          this.stock = this.fb.group({
-            isActive:[p.isActive],
-            stock: [p.stock,  [Validators.minLength(0), Validators.max(999999999), warehouseStockValidator(this.tempat)]],
-            name: [p.name, [Validators.required, Validators.maxLength(120), forbiddenNameValidator(/[^a-zA-Z0-9 \&.!]/)]],
-            price:[p.price, [Validators.minLength(0), Validators.max(999999999)]],
-            shop:[p.shop],
-            shopId:[p.shopId],
-            marketplace:[p.marketplace],
-            marketplaceProductId:[p.marketplaceProductId]
-          });
-          const control = <FormArray>this.tempat.get('stocks')
-          control.push(this.stock)
-        }
+        this.stock = this.fb.group({
+          isActive:[p.isActive],
+          stock: [p.stock,  [Validators.required, Validators.minLength(0), Validators.max(999999999), warehouseStockValidator(this.tempat)]],
+          name: [p.name, [Validators.required, Validators.maxLength(120), forbiddenNameValidator(/[^a-zA-Z0-9 \&.!]/)]],
+          price:[p.price, [Validators.required, Validators.minLength(0), Validators.max(999999999)]],
+          shop:[p.shop],
+          shopId:[p.shopId],
+          marketplace:[p.marketplace],
+          marketplaceProductId:[p.marketplaceProductId]
+        });
+        const control = <FormArray>this.tempat.get('stocks')
+        control.push(this.stock)
       })
-      if(this.tempat.get('stocks').value.length > 0){
-        // console.log('test')
-        this.marketplace.push(this.tempat)
-      }
+      this.marketplace.push(this.tempat)
     })
-
    return this.marketplace
   }
 
@@ -500,7 +491,7 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
   protected onSaveSuccess(result: IResultResponse<any>) {
     this.form.enable();
     this.toast?.addMessage(`"${this.form.get('name')?.value ?? 'data'}" was saved successfully.`, 'Saved', ToastLevelEnum.success);
-    this.navigateToParent();
+    // this.navigateToParent();
   }
 
   protected onDeleteSuccess() {
