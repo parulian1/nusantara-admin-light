@@ -64,7 +64,7 @@ const log = new Logger('ProductComponent');
             (menuOpened)="open()" i18n
             (menuClosed)="close()">
             <span class="judul">View Product</span>
-            <i id="transform" class="material-icons icon">expand_more</i>
+            <i id="transform" class="material-icons prev-icon">expand_more</i>
           </button>
           <mat-menu #downloadMenu xPosition="before" class="">
             <button mat-menu-item i18n matTooltip="{{link.marketplace}} - {{link.shop}}" matTooltipClass="tooltip" [matTooltipShowDelay]="1500" [matTooltipPosition]="'after'" *ngFor="let link of marketplaceLink" (click)="openLink(link.urlLink)" >{{link.marketplace}} - {{link.shop}}</button>
@@ -388,6 +388,7 @@ const log = new Logger('ProductComponent');
                                 *ngIf="!isNew && isPhysical() && enterpriseLicense()"
                                 [form]="marketplace"
                                 [id]="entity.id"
+                                [lenLinks]="marketplaceLink.length > 0"
                                 [productClass]="selectedProductClass">
           </nus-marketplace-info>
 
@@ -505,7 +506,7 @@ const log = new Logger('ProductComponent');
     'ul { list-style: none; margin: 0; padding: 0; }',
     '.side-nav li { font-size: 14px; line-height: 20px; font-weight: bold; color: var(--tertiary); padding: 10px 32px; cursor: pointer; }',
     '.side-nav li.active { padding: 10px 24px; color: white; background: var(--tertiary-lighten); border-left: solid 8px var(--secondary); border-radius: 4px; }',
-    '.icon{position: absolute; top: 9px; padding-left: 2px; color:#EA730B; transition: transform .5s; transform: rotateZ(0deg)}',
+    '.prev-icon{position: absolute; top: 9px; padding-left: 2px; color:#EA730B; transition: transform .5s; transform: rotateZ(0deg)}',
     '.drpdown{float:right}',
     '.title{float:left}',
     '.judul {color:#EA730B; height: 1rem; line-height: 1rem; padding:7px; margin:6px 0; border-right-style: solid; display:inherit; font-weight:bold}',

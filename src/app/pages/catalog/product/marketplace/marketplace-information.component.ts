@@ -55,7 +55,7 @@ import { IClient } from '@nusantara/models/marketplace';
           <h4 class="subheading-2" i18n>Marketplace Product Detail</h4>
           <p i18n>This information will be used as specific per marketplace. Skip this if you don't want to publish to marketplace.</p>
         </div>
-        <a (click)="edit()">Edit</a>
+        <a *ngIf="lenLinks" (click)="edit()">Edit</a>
       </div>
       <div *ngIf="isClientListAvailable" class="detail-store">
         <nus-tabs (select)="getAttributes($event)" [fluid]="true">
@@ -220,6 +220,7 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
 
   @Input() form: FormGroup;
   @Input() id:number
+  @Input() lenLinks:boolean
   @Input() productClass: products.IProductClass;
 
   @ViewChild(MarketplaceShippingInfoModalComponent) shippingInfo: MarketplaceShippingInfoModalComponent;
