@@ -44,4 +44,15 @@ export class MarketplaceItemService {
       formData
     );
   }
+  getMarketplaceInfoDetail(id:string, detail:boolean = true): Observable<marketplace.IItemMarketplaceInfo> {
+    return this.httpClient.get<any>(
+      `${this.baseUrl}/${id}/links/?detail=${detail}`
+    );
+  }
+
+  putEditProductMarketplace(formData: FormData, id:string, detail:boolean = true): Observable<any> {
+    return this.httpClient.put(
+      `${this.baseUrl}/${id}/links/?detail=${detail}`, formData
+    );
+  }
 }
