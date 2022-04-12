@@ -143,6 +143,8 @@ const log = new Logger('ProductComponent');
                 [productClass]="productClass"
                 [selectedProductClass]="selectedProductClass"
                 [originalAttributeValues]="originalAttributeValues"
+                [enabledAttributes]="enabledAttributes"
+                [parentProduct]="parentProduct"
                 *ngIf="originalAttributeValues">
               </nus-product-attribute-host>
             </div>
@@ -613,6 +615,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     ' it might impact on the “Advance Price" as well.';
 
   productRelatedFormData: FormData[] = [];
+  enabledAttributes: INamedHrefEntity[] = [];
 
   @ViewChild(ProductMediaHostComponent) mediaHost: ProductMediaHostComponent;
   @ViewChild(PriceListHostComponent) priceListHost: PriceListHostComponent;
@@ -883,7 +886,11 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     // listen for any changes to this, so we can disable weight when appropriate
     this.onProductClassChanged(this.productClass.value?.href ?? this.productClass.value);
     this.productClass.valueChanges.subscribe(val => this.onProductClassChanged(val));
-
+    if (!this.parentProduct) {
+      this.enabledAttributes = entity?.enabledAttributes ?? [];
+    } else {
+      this.enabledAttributes = this.parentProduct.enabledAttributes ?? [];
+    }
   }
 
   initializeSubViewForms(entity?: products.IProduct) {
@@ -945,6 +952,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     delete (formValue as products.IProduct).priceLists;
     delete (this.form.value.marketplace);
 
+    formValue['enabledAttributes'] = this.enabledAttributes;
 
     return formValue;
   }
