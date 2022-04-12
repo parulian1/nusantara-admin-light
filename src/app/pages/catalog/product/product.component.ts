@@ -64,7 +64,7 @@ const log = new Logger('ProductComponent');
             (menuOpened)="open()" i18n
             (menuClosed)="close()">
             <span class="judul">View Product</span>
-            <i id="transform" class="material-icons prev-icon">expand_more</i>
+            <i id="transform" class="material-icons preview-icon">expand_more</i>
           </button>
           <mat-menu #downloadMenu xPosition="before" class="">
             <button mat-menu-item i18n matTooltip="{{link.marketplace}} - {{link.shop}}" matTooltipClass="tooltip" [matTooltipShowDelay]="1500" [matTooltipPosition]="'after'" *ngFor="let link of marketplaceLink" (click)="openLink(link.urlLink)" >{{link.marketplace}} - {{link.shop}}</button>
@@ -506,23 +506,23 @@ const log = new Logger('ProductComponent');
     'ul { list-style: none; margin: 0; padding: 0; }',
     '.side-nav li { font-size: 14px; line-height: 20px; font-weight: bold; color: var(--tertiary); padding: 10px 32px; cursor: pointer; }',
     '.side-nav li.active { padding: 10px 24px; color: white; background: var(--tertiary-lighten); border-left: solid 8px var(--secondary); border-radius: 4px; }',
-    '.prev-icon{position: absolute; top: 9px; padding-left: 2px; color:#EA730B; transition: transform .5s; transform: rotateZ(0deg)}',
-    '.drpdown{float:right}',
-    '.title{float:left}',
-    '.judul {color:#EA730B; height: 1rem; line-height: 1rem; padding:7px; margin:6px 0; border-right-style: solid; display:inherit; font-weight:bold}',
-    '.btn { border: 2px solid #EA730B; position:relative; padding-right:30px}',
-    '.hover-rotate{ transition: transform .4s; transform: rotateZ(180deg)}',
-    '.mat-menu-item {width: 300px;}',
-    '::ng-deep .tooltip {font-size: 11pt;}',
+    '.preview-icon { position: absolute; top: 9px; padding-left: 2px; color:#EA730B; transition: transform .5s; transform: rotateZ(0deg) }',
+    '.drpdown { float:right }',
+    '.title { float:left }',
+    '.judul { color:#EA730B; height: 1rem; line-height: 1rem; padding:7px; margin:6px 0; border-right-style: solid; display:inherit; font-weight:bold }',
+    '.btn { border: 2px solid #EA730B; position:relative; padding-right:30px }',
+    '.hover-rotate { transition: transform .4s; transform: rotateZ(180deg) }',
+    '.mat-menu-item { width: 300px; }',
+    '::ng-deep .tooltip { font-size: 11pt; }',
     '.side-nav li a { text-decoration: none; color: inherit; }',
     '.delete { background: none; border: none; outline: none; font-size: 18px; cursor: pointer; opacity: .5; }',
-    '.package-info {line-height: 18px; margin-top: 26px; font-weight: bold; }',
+    '.package-info { line-height: 18px; margin-top: 26px; font-weight: bold; }',
     '.package-info .label { float: left; width: 25%; }',
     'table tr th.product-name { width: 25%; }',
     '.total-price { font-weight: bold; }',
     '.total-price td.price { text-align: right; }',
-    '#barcode-label {display: block; margin-bottom: 4px;}',
-    '#barcode-label > span:first-child {font-size: 14px; line-height: 20px; font-weight: bold; margin-right: 10px;}',
+    '#barcode-label { display: block; margin-bottom: 4px; }',
+    '#barcode-label > span:first-child { font-size: 14px; line-height: 20px; font-weight: bold; margin-right: 10px; }',
   ]
 })
 export class ProductComponent extends AbstractDetailComponent<products.IProduct> implements OnInit, AfterViewInit {
