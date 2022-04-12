@@ -3,7 +3,7 @@ import { FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractEditingComponent } from '@nusantara/core';
-import { products } from '@nusantara/models';
+import { INamedHrefEntity, products } from '@nusantara/models';
 import { IProductClass } from '@nusantara/models/products';
 
 @Component({
@@ -15,7 +15,7 @@ import { IProductClass } from '@nusantara/models/products';
       <thead>
       <tr>
         <th i18n>Name</th>
-        <th class="centered" i18n>Enabled</th>
+        <th class="centered" i18n *ngIf="!parentProduct">Enabled</th>
         <th i18n>Value</th>
       </tr>
       </thead>
@@ -23,7 +23,8 @@ import { IProductClass } from '@nusantara/models/products';
         <nus-product-attribute-value
           *ngFor="let attr of attributeDefinitions; let i=index"
           [attributeDefinition]="attr"
-          [control]="getFormControlForAttribute(attr)">
+          [control]="getFormControlForAttribute(attr)"
+          [enabledAttributes]="enabledAttributes" [showEnabled]="!parentProduct">
         </nus-product-attribute-value>
         <tr>
           <td colspan="3">
@@ -46,6 +47,8 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
   @Input() productClass: FormControl; // href
   @Input() originalAttributeValues: {[key: string]: string|number|boolean};
   @Input() selectedProductClass: IProductClass;
+  @Input() enabledAttributes: INamedHrefEntity[];
+  @Input() parentProduct?: products.IProduct;
 
   constructor(protected route: ActivatedRoute, protected fb: FormBuilder, private router: Router) { super(); }
 
@@ -66,8 +69,6 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
       }
     }
   }
-
-
 
   getFormControlForAttribute(attrDefinition: products.IProductAttribute): FormControl {
     // if the control hasn't yet been created, create it with the values from the original object

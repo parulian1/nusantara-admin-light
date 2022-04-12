@@ -45,4 +45,5 @@ export interface IProduct extends INamedHrefEntity {
   bundle?: Array<IProductBundle>;
   barcode?: string;
   stockAmount?: number;
+  enabledAttributes?: INamedHrefEntity[];
 }
