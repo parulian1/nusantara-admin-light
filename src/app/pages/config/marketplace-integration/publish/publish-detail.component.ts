@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PagedResponse, ToastLevelEnum, ToastService } from '@nusantara/core';
 import { marketplace } from '@nusantara/models';
@@ -91,6 +91,14 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                     'error': product.status === 'Error' }">
                     {{ product.status }}
                   </span>
+                  <div class="cust-tooltip" *ngIf="product.status === 'Error'">
+                    <i id="transform" class="material-icons preview-icon">info</i>
+                    <!-- <mat-icon class="icon" svgIcon="info"></mat-icon> -->
+                    <!-- <mat-icon aria-hidden="false" aria-label="Example info icon">info</mat-icon> -->
+                    <!-- <div class="triangle-border top"> -->
+                      <p class="tooltiptext triangle-border top" id="myDropdown">Error <br/> <span class="err-message">{{product.errorMessage}}</span></p>
+                    <!-- </div> -->
+                  </div>
                 </td>
                 <td>
                   <ng-template [ngIf]="product.errorStatus === 'error_authentication'" i18n>
@@ -142,12 +150,16 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                 <td> {{ shop.name }} </td>
                 <td>{{ shop.marketplace }}</td>
                 <td>
+                <div class="tooltip">
                   <span class="badge" [ngClass]="{
                     'success': shop.status === 'Published',
                     'alert': shop.status === 'Publishing',
                     'error': shop.status === 'Error' }">
                     {{ shop.status }}
                   </span>
+                  <span class="tooltiptext">My text</span>
+                </div>
+
                 </td>
                 <td class="centered">
                   <a [routerLink]="['/config', 'marketplace-integration', 'connect', shop.slug]" i18n>Reconnect</a>
@@ -253,12 +265,22 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                 <td class="numeric">{{ product.quantity }}</td>
                 <td>{{ product.sublocation }}</td>
                 <td>
+                  <!-- <span class="badge" [ngClass]="{
+                    'success': product.status === 'Published',
+                    'alert': product.status === 'Publishing',
+                    'error': product.status === 'Error' }">
+                    {{ product.status }}
+                  </span> -->
+                  <div class="tooltip">
                   <span class="badge" [ngClass]="{
                     'success': product.status === 'Published',
                     'alert': product.status === 'Publishing',
                     'error': product.status === 'Error' }">
                     {{ product.status }}
                   </span>
+                  <span class="tooltiptext">My text</span>
+                </div>
+                </td>
                 <td class="centered">
                   <a [routerLink]="" (click)="refreshTimeoutError($event, product.identifier)" i18n>Refresh</a>
                 </td>
@@ -294,6 +316,16 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
     '.wrapper .warehouse{ color: var(--quinary) }',
     '.progress-info { padding: 16px 24px; margin-bottom: 24px; background: var(--darken-white); border-radius: 4px; }',
     '.progress-info > span { margin-right: 8px; }',
+    '.cust-tooltip { position: relative; display: inline-block; margin-left:5px; vertical-align:middle;}',
+    '.no-button{background:transparent; border:none}',
+    '.err-message{font-weight: normal; font-size: 14px;}',
+    '.cust-tooltip .tooltiptext { visibility:hidden; width: 350px; background: #FFFFFF; color: black; box-shadow: 0px 5px 15px 0px rgb(0 0 0 / 20%); text-align: left; padding: 16px; position: absolute; z-index: 1; right: -47px; top: 25px; font-size:15pt; font-weight:bold}',
+    '.cust-tooltip:hover .tooltiptext { visibility: visible;}',
+    '.preview-icon{color:unset}',
+    '.triangle-border.top:before {top: -20px;bottom: auto;left: auto;right: 45px;border-width: 0px 14px 20px;}',
+    '.triangle-border.top:after { top: -13px; bottom: auto; left: auto; right: 47px; border-width: 0 13px 13px;}',
+    '.triangle-border:after { content: ""; position: absolute; border-style: solid; border-color: #fff transparent; display: block; width: 0;}',
+    '.triangle-border:before { content: ""; position: absolute; border-style: solid; border-color: #dfb7b736 transparent;; display: block; width: 0;}',
     `.error-info {
       display: flex;
       justify-content: space-between;
@@ -363,6 +395,37 @@ export class PublishDetailComponent implements OnInit {
         this.timeoutError = page;
       });
   }
+  click(){
+    document.getElementById("myDropdown").classList.toggle("show")
+  };
+
+  // @HostListener('document:click', ['$event'])
+  // onDocumentClick(event: MouseEvent) {
+  //   if (!(event.target == document.getElementById("test"))) {
+  //     console.log('masuk')
+  //     const dropdowns = document.getElementsByClassName("tooltiptext");
+  //     let i = 0;
+  //     for (i; i < dropdowns.length; i++) {
+  //       var openDropdown = dropdowns[i];
+  //       if (openDropdown.classList.contains('show')) {
+  //         openDropdown.classList.remove('show');
+  //       }
+  //     }
+  //   }
+  // }
+
+  // window.onclick = function(event) {
+  //   if (!event.target.matches('.dropbtn')) {
+  //     var dropdowns = document.getElementsByClassName("dropdown-content");
+  //     var i;
+  //     for (i = 0; i < dropdowns.length; i++) {
+  //       var openDropdown = dropdowns[i];
+  //       if (openDropdown.classList.contains('show')) {
+  //         openDropdown.classList.remove('show');
+  //       }
+  //     }
+  //   }
+  // }
 
   loadAllData() {
     this.fetchDetail();
