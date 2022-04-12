@@ -414,13 +414,11 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
           this.onSaveError(resp);
         } else {
           this.onSaveSuccess(resp);
+          setTimeout(function(){
+            window.location.reload();
+          }, 3000);
         }
-
-        setTimeout(function(){
-          window.location.reload();
-      }, 3000);
-        }
-      );
+      });
     } else {
       window.alert('Please check your input.');
       // this.validatePriceList();
