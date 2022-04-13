@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractEditingComponent } from '@nusantara/core';
@@ -9,7 +9,13 @@ import { IProductClass } from '@nusantara/models/products';
 @Component({
   selector: 'nus-product-attribute-host',
   template: `
-    <h4 class="subheading-2" i18n>Attributes</h4>
+    <h4 class="subheading-2 attr-host" i18n>
+      <label>Attributes</label>
+      <span *ngIf="!!parentProduct">
+        <input type="checkbox" class="toggle" [(ngModel)]="isSameAsParent"
+               (click)="resetAttributeValuesSameAsParent()"/> Data same as parent
+      </span>
+    </h4>
 
     <table>
       <thead>
@@ -37,6 +43,9 @@ import { IProductClass } from '@nusantara/models/products';
   `,
   styles: [
     'h4 { margin-bottom: 4px; }',
+    'h4.attr-host { overflow: hidden; }',
+    'h4.attr-host label { display: inline-table; width: 80%; min-height: 18px; }',
+    'h4.attr-host span { display: inline-table; font-weight: normal; }',
   ]
 })
 export class ProductAttributeHostComponent extends AbstractEditingComponent implements OnInit, OnChanges {
@@ -49,6 +58,9 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
   @Input() selectedProductClass: IProductClass;
   @Input() enabledAttributes: INamedHrefEntity[];
   @Input() parentProduct?: products.IProduct;
+
+  formGroup: FormGroup;
+  isSameAsParent: boolean = false;
 
   constructor(protected route: ActivatedRoute, protected fb: FormBuilder, private router: Router) { super(); }
 
@@ -99,5 +111,14 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
     const slugs = this.productClass.value.split('/').reverse();
     const productClassSlug = slugs[0] ? slugs[0] : slugs[1];
     this.router.navigate(['/catalog/product-classes', productClassSlug]);
+  }
+
+  resetAttributeValuesSameAsParent() {
+    this.isSameAsParent = !this.isSameAsParent;
+    if (!!this.parentProduct && !!this.isSameAsParent) {
+      Object.keys(this.parentProduct.attributes).forEach((key) => {
+        this.form.controls[key].setValue(this.parentProduct.attributes[key]);
+      });
+    }
   }
 }
