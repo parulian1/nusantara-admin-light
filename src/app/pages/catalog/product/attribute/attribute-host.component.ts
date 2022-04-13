@@ -21,7 +21,7 @@ import { IProductClass } from '@nusantara/models/products';
       <thead>
       <tr>
         <th i18n>Name</th>
-        <th class="centered" i18n *ngIf="!parentProduct">Enabled</th>
+        <th class="centered" i18n *ngIf="!parentProduct">Variant</th>
         <th i18n>Value</th>
       </tr>
       </thead>
@@ -30,7 +30,8 @@ import { IProductClass } from '@nusantara/models/products';
           *ngFor="let attr of attributeDefinitions; let i=index"
           [attributeDefinition]="attr"
           [control]="getFormControlForAttribute(attr)"
-          [enabledAttributes]="enabledAttributes" [showEnabled]="!parentProduct">
+          [enabledAttributes]="enabledAttributes" [showEnabled]="!parentProduct"
+          (validateChange)="validateIsValueSameAsParent()">
         </nus-product-attribute-value>
         <tr>
           <td colspan="3">
@@ -85,9 +86,13 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
   getFormControlForAttribute(attrDefinition: products.IProductAttribute): FormControl {
     // if the control hasn't yet been created, create it with the values from the original object
     if (!this.form.contains(attrDefinition.href)) {
+      let defaultValue = this.originalAttributeValues[attrDefinition.href];
+      if (attrDefinition.type === 'color' && !defaultValue) {
+        defaultValue = "#000000";
+      }
       this.form.addControl(
         attrDefinition.href,
-        new FormControl(this.originalAttributeValues[attrDefinition.href])
+        new FormControl(defaultValue)
       );
       this.form.markAsTouched();
     }
@@ -119,6 +124,22 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
       Object.keys(this.parentProduct.attributes).forEach((key) => {
         this.form.controls[key].setValue(this.parentProduct.attributes[key]);
       });
+    }
+  }
+
+  validateIsValueSameAsParent() {
+    const differentAttrValue = !!this.parentProduct ? this.attributeDefinitions.find((attrDef) => {
+      if (['integer', 'decimal'].indexOf(attrDef.type) > -1) {
+        return parseFloat(this.parentProduct.attributes[attrDef.href].toString()) !==
+          parseFloat(this.form.controls[attrDef.href].value.toString());
+      } else {
+        return this.parentProduct.attributes[attrDef.href] !== this.form.controls[attrDef.href].value;
+      }
+    }) : false;
+    if (!!differentAttrValue) {
+      this.isSameAsParent = false;
+    } else {
+      this.isSameAsParent = true;
     }
   }
 }
