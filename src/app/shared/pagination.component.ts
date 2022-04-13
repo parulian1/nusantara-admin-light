@@ -15,9 +15,13 @@ import { PagedResponse } from '@nusantara/core/pagination';
         </p>
       </div>
       <div class="pg-button">
-        <button (click)="goBack()" *ngIf="currentPage > 1"><i class="material-icons">arrow_back_ios</i></button>
+        <button (click)="goBack()" *ngIf="currentPage > 1" type="button">
+          <i class="material-icons">arrow_back_ios</i>
+        </button>
         <span><strong>{{ page?.pageNumber }}</strong> / <strong>{{ page.maximumPageCount }}</strong></span>
-        <button (click)="goNext()" *ngIf="page.maximumPageCount !== currentPage"><i class="material-icons">arrow_forward_ios</i></button>
+        <button (click)="goNext()" *ngIf="page.maximumPageCount !== currentPage" type="button">
+          <i class="material-icons">arrow_forward_ios</i>
+        </button>
       </div>
     </div>
 

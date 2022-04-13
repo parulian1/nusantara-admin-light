@@ -140,6 +140,7 @@ import { RequirePermissionGuard } from '@nusantara/auth/guards/require-permissio
           <a [routerLink]="['/cms/catalogue']" routerLinkActive="active" translate i18n>Catalogue</a>
         </li>
 
+
         <li class="section-header" *ngIf="permissionGuard.canActivate(null, null, 'fulfillment')">
           <i class="material-icons">shopping_cart</i>
           <span i18n>Order Fulfillment</span>
