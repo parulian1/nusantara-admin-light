@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractEditingComponent } from '@nusantara/core';
@@ -9,13 +9,20 @@ import { IProductClass } from '@nusantara/models/products';
 @Component({
   selector: 'nus-product-attribute-host',
   template: `
-    <h4 class="subheading-2" i18n>Attributes</h4>
+    <h4 class="subheading-2 attr-host" i18n>
+      <label>Attributes</label>
+      <span *ngIf="!!parentProduct">
+        <input type="checkbox" class="toggle" [(ngModel)]="isSameAsParent"
+               (click)="resetAttributeValuesSameAsParent()"/> Data same as parent
+      </span>
+    </h4>
+    <nus-field-errors [control]="form"></nus-field-errors>
 
     <table>
       <thead>
       <tr>
         <th i18n>Name</th>
-        <th class="centered" i18n *ngIf="!parentProduct">Enabled</th>
+        <th class="centered" i18n *ngIf="!parentProduct">Variant</th>
         <th i18n>Value</th>
       </tr>
       </thead>
@@ -24,7 +31,9 @@ import { IProductClass } from '@nusantara/models/products';
           *ngFor="let attr of attributeDefinitions; let i=index"
           [attributeDefinition]="attr"
           [control]="getFormControlForAttribute(attr)"
-          [enabledAttributes]="enabledAttributes" [showEnabled]="!parentProduct">
+          [enabledAttributes]="enabledAttributes" [showEnabled]="!parentProduct"
+          (validateChange)="validateIsValueSameAsParent()"
+          (triggerChange)="triggerFormChange()">
         </nus-product-attribute-value>
         <tr>
           <td colspan="3">
@@ -37,6 +46,9 @@ import { IProductClass } from '@nusantara/models/products';
   `,
   styles: [
     'h4 { margin-bottom: 4px; }',
+    'h4.attr-host { overflow: hidden; }',
+    'h4.attr-host label { display: inline-table; width: 80%; min-height: 18px; }',
+    'h4.attr-host span { display: inline-table; font-weight: normal; }',
   ]
 })
 export class ProductAttributeHostComponent extends AbstractEditingComponent implements OnInit, OnChanges {
@@ -49,6 +61,9 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
   @Input() selectedProductClass: IProductClass;
   @Input() enabledAttributes: INamedHrefEntity[];
   @Input() parentProduct?: products.IProduct;
+
+  formGroup: FormGroup;
+  isSameAsParent: boolean = false;
 
   constructor(protected route: ActivatedRoute, protected fb: FormBuilder, private router: Router) { super(); }
 
@@ -73,9 +88,13 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
   getFormControlForAttribute(attrDefinition: products.IProductAttribute): FormControl {
     // if the control hasn't yet been created, create it with the values from the original object
     if (!this.form.contains(attrDefinition.href)) {
+      let defaultValue = this.originalAttributeValues[attrDefinition.href];
+      if (attrDefinition.type === 'color' && !defaultValue) {
+        defaultValue = "#000000";
+      }
       this.form.addControl(
         attrDefinition.href,
-        new FormControl(this.originalAttributeValues[attrDefinition.href])
+        new FormControl(defaultValue)
       );
       this.form.markAsTouched();
     }
@@ -99,5 +118,34 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
     const slugs = this.productClass.value.split('/').reverse();
     const productClassSlug = slugs[0] ? slugs[0] : slugs[1];
     this.router.navigate(['/catalog/product-classes', productClassSlug]);
+  }
+
+  resetAttributeValuesSameAsParent() {
+    this.isSameAsParent = !this.isSameAsParent;
+    if (!!this.parentProduct && !!this.isSameAsParent) {
+      Object.keys(this.parentProduct.attributes).forEach((key) => {
+        this.form.controls[key].setValue(this.parentProduct.attributes[key]);
+      });
+    }
+  }
+
+  validateIsValueSameAsParent() {
+    const differentAttrValue = !!this.parentProduct ? this.attributeDefinitions.find((attrDef) => {
+      if (['integer', 'decimal'].indexOf(attrDef.type) > -1) {
+        return parseFloat(this.parentProduct.attributes[attrDef.href].toString()) !==
+          parseFloat(this.form.controls[attrDef.href].value.toString());
+      } else {
+        return this.parentProduct.attributes[attrDef.href] !== this.form.controls[attrDef.href].value;
+      }
+    }) : false;
+    if (!!differentAttrValue) {
+      this.isSameAsParent = false;
+    } else {
+      this.isSameAsParent = true;
+    }
+  }
+
+  triggerFormChange() {
+    this.form.setErrors(null);
   }
 }

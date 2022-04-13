@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { IProductAttribute } from '@nusantara/models/products';
@@ -19,34 +19,34 @@ import {INamedHrefEntity} from "@nusantara/models";
       <td [ngClass]="{'color-input': attributeDefinition.type === 'color'}">
         <input type="text"
                *ngIf="attributeDefinition.type === 'text'"
-               [formControl]="control">
+               [formControl]="control" (ngModelChange)="validateChange.emit()" maxlength="25">
 
         <textarea *ngIf="attributeDefinition.type === 'markdown'"
-                  [formControl]="control"></textarea>
+                  [formControl]="control" (ngModelChange)="validateChange.emit()"></textarea>
 
         <input type="color" *ngIf="attributeDefinition.type === 'color'"
-               [formControl]="control">
+               [formControl]="control" (ngModelChange)="validateChange.emit()">
 
         <input type="number"
                *ngIf="attributeDefinition.type === 'decimal'"
                [min]="attributeDefinition.minValue"
                [max]="attributeDefinition.maxValue"
-               [formControl]="control">
+               [formControl]="control" (ngModelChange)="validateChange.emit()">
 
         <input type="number"
                *ngIf="attributeDefinition.type === 'integer'"
                [min]="attributeDefinition.minValue"
                [max]="attributeDefinition.maxValue"
                step="1"
-               [formControl]="control">
+               [formControl]="control" (ngModelChange)="validateChange.emit()">
 
         <input type="file"
                *ngIf="attributeDefinition.type === 'image'"
-               [formControl]="control">
+               [formControl]="control" (ngModelChange)="validateChange.emit()">
 
         <input type="checkbox"
                *ngIf="attributeDefinition.type === 'boolean'"
-               [formControl]="control">
+               [formControl]="control" (ngModelChange)="validateChange.emit()">
 
       </td>
     </tr>
@@ -67,6 +67,8 @@ export class AttributeValueComponent implements OnInit, OnChanges {
   @Input() control: FormControl;
   @Input() enabledAttributes: INamedHrefEntity[];
   @Input() showEnabled?: boolean;
+  @Output() validateChange: EventEmitter<void> = new EventEmitter<void>();
+  @Output() triggerChange: EventEmitter<void> = new EventEmitter<void>();
   isEnabled = false;
 
   constructor() {
@@ -78,7 +80,7 @@ export class AttributeValueComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (!!this.control.value) {
-      this.isEnabled = true;
+      this.isEnabled = this.getEnabledValueFromKeyControl();
     }
     // if (!this.isEnabled) {
     //   this.control.disable();
@@ -99,12 +101,14 @@ export class AttributeValueComponent implements OnInit, OnChanges {
       if (controlIndex > -1) {
         this.enabledAttributes.splice(controlIndex, 1);
       }
+      this.triggerChange.emit();
     } else {
       // this.control.enable();
       this.enabledAttributes.push({
         name: this.attributeDefinition.name,
         href: this.attributeDefinition.href
       })
+
     }
   }
 
