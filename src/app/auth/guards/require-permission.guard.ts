@@ -19,7 +19,8 @@ import { Observable } from 'rxjs';
 })
 export class RequirePermissionGuard implements CanActivate, CanActivateChild {
 
-  constructor(public auth: AuthService, public router: Router) { }
+  constructor(public auth: AuthService, public router: Router) {
+  }
 
   groups(): Array<string> {
     return this.auth?.tokenPayload.groups ?? [];
@@ -32,28 +33,28 @@ export class RequirePermissionGuard implements CanActivate, CanActivateChild {
       const otherGroupFound = !!this.groups().find((group) => {
         return group.toLocaleLowerCase().indexOf('fulfillment') === -1;
       });
-      let isFulfillmentSection: boolean;
-      if (!!path) {
-        isFulfillmentSection = path.indexOf('fulfillment') > -1;
+      if (!!otherGroupFound) {
+        return true;
       } else {
-        isFulfillmentSection = this.router.url.indexOf('fulfillment') > -1
-      }
-      if (isFulfillmentSection) {
-        return !!this.groups().find((group) => {
-          return group.toLocaleLowerCase().indexOf('fulfillment') > -1;
-        });
-      } else {
-        if (!otherGroupFound) {
-          return false;
+        let isFulfillmentSection: boolean;
+        if (!!path) {
+          isFulfillmentSection = path.indexOf('fulfillment') > -1;
         } else {
-          return true;
+          isFulfillmentSection = this.router.url.indexOf('fulfillment') > -1
+        }
+        if (!!isFulfillmentSection) {
+          return !!this.groups().find((group) => {
+            return group.toLocaleLowerCase().indexOf('fulfillment') > -1;
+          });
+        } else {
+          return false;
         }
       }
     }
   }
 
   canActivate(route: ActivatedRouteSnapshot,
-              state: RouterStateSnapshot, path?: string): Observable<boolean|UrlTree>|Promise<boolean|UrlTree>|boolean|UrlTree {
+              state: RouterStateSnapshot, path?: string): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const isActive = this.allowToActivate(path);
     return isActive;
   }
