@@ -142,7 +142,7 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let shop of credentialsError?.entities">
+              <tr *ngFor="let shop of credentialsError?.entities; let i = index">
                 <td> {{ shop.name }} </td>
                 <td>{{ shop.marketplace }}</td>
                 <td>
@@ -152,9 +152,9 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                     'error': shop.status === 'Error' }">
                     {{ shop.status }}
                   </span>
-                  <div class="cust-tooltip" *ngIf="shop.status === 'Error'">
+                  <div class="cust-tooltip" *ngIf="shop.status === 'Error' && err_cred[i]?.store === shop.name">
                     <i id="transform" class="material-icons preview-icon">info</i>
-                      <p class="tooltiptext triangle-border top" id="myDropdown">Error <br/> <span class="err-message">{{shop.errorStatus}}</span></p>
+                      <p class="tooltiptext triangle-border top" id="myDropdown" >Error <br/> <span class="err-message">{{err_cred[i]?.errorMessage}}</span></p>
                   </div>
                 </td>
                 <td class="centered">
@@ -341,6 +341,7 @@ export class PublishDetailComponent implements OnInit {
   dataError: PagedResponse<marketplace.IReceivingProduct>;
   timeoutError: PagedResponse<marketplace.IReceivingProduct>;
   isReady = true;
+  err_cred:Array<marketplace.IReceivingProduct> = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -364,6 +365,7 @@ export class PublishDetailComponent implements OnInit {
       .fetchProducts(pageNumber || 1, this.receivingOrderId)
       .subscribe((page) => {
         this.allProducts = page;
+        this.err_cred = this.allProducts.entities.filter(product => product.errorStatus === 'error_authentication' && product.status === 'Error')
       });
   }
 

@@ -16,6 +16,9 @@ export interface IReceivingProduct {
   isError: boolean;
   status: string;
   sublocation: string;
+  errorStatus:string;
+  errorMessage:string;
+  store:string
 }
 
 export interface IReceivingOrderDetail extends IReceivingOrder {
