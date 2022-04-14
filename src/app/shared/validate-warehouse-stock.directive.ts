@@ -8,7 +8,7 @@ export function warehouseStockValidator(form: FormGroup): ValidatorFn {
     const isManagedKgx = form.get('isManagedKgx').value ;
 
     if (!isManagedKgx && control.value > originstocks ) {
-      return  {invalidStock:true}
+      return  {invalidStock:true};
     }
 
     return null;

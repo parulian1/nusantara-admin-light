@@ -6,7 +6,7 @@ import { EMPTY, of } from 'rxjs';
 import { catchError, delay } from 'rxjs/operators';
 import {
   SvgIconService,
-  MarketplaceItemService
+  MarketplaceItemService,
 } from '@nusantara/services';
 import {
   AbstractDetailComponent,
@@ -14,7 +14,7 @@ import {
   IResultResponse,
   Logger,
   ToastLevelEnum,
-  ToastService
+  ToastService,
 } from '@nusantara/core';
 import { INamedHrefEntity, marketplace, products } from '@nusantara/models';
 import { IError } from '@nusantara/models/base/error';
@@ -64,7 +64,7 @@ const log = new Logger('ProductComponent');
             </label>
             <label>
               <div class="test">
-                <button class="control secondary btn" [disabled]="this.loading" mat-button type="button" (click)="doSomething()">
+                <button class="control secondary btn" [disabled]="this.loading" mat-button type="button" (click)="applyAll()">
                   <span class="judul">Apply All</span>
                   <!-- <i id="transform" class="material-icons prev-icon">expand_more</i> -->
                 </button>
@@ -196,7 +196,7 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
 
   currentActive = 'general-info';
   selectedProductClass: products.IProductClass;
-  entity: marketplace.IItemMarketplaceInfo
+  entity: marketplace.IItemMarketplaceInfo;
 
   selectedVendor: INamedHrefEntity = null;
   selectedCategory: INamedHrefEntity = null;
@@ -213,7 +213,7 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
   itemMarketplace = [];
   stock:FormGroup;
   tempat:FormGroup;
-  isDisabled:boolean
+  isDisabled:boolean;
 
   isAdvancePriceAvailable = false;
   confirmAdvancedPriceTitle = 'Update this product?';
@@ -286,7 +286,7 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
       price: [entity?.price, [Validators.required, Validators.minLength(0), Validators.max(999999999)]],
       marketplaces:this.fb.array([]),
     });
-    this.setMarketplace()
+    this.setMarketplace();
   }
 
   /**
@@ -340,8 +340,8 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
           shop_id: x.shopId,
           sublocation_id: v.sublocationId,
         }
-        formValue.data.push(data)
-      })
+        formValue.data.push(data);
+      });
     });
 
     return formValue;
@@ -349,22 +349,22 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
 
 
   get marketplace(): FormArray {
-    return this.form.get('marketplaces') as FormArray
+    return this.form.get('marketplaces') as FormArray;
   }
 
   stocks(index): FormArray  {
-    return this.marketplace.at(index).get('stocks') as FormArray
+    return this.marketplace.at(index).get('stocks') as FormArray;
   }
 
-  doSomething(){
+  applyAll(){
     this.marketplace.controls.forEach((market, i) => {
       market.get('stocks')['controls'].map((stock, index) =>{
         this.stocks(i).at(index).patchValue({
             name: this.name.value,
             price: this.price.value
-          })
-      })
-    })
+          });
+      });
+    });
   }
 
   setMarketplace(){
@@ -388,19 +388,19 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
           marketplace:[p.marketplace],
           marketplaceProductId:[p.marketplaceProductId]
         });
-        const control = <FormArray>this.tempat.get('stocks')
-        control.push(this.stock)
-      })
-      this.marketplace.push(this.tempat)
-    })
-   return this.marketplace
+        const control = <FormArray>this.tempat.get('stocks');
+        control.push(this.stock);
+      });
+      this.marketplace.push(this.tempat);
+    });
+   return this.marketplace;
   }
 
   save() {
     if (this.form.valid) {
-      this.loading = true
+      this.loading = true;
       this.service.putEditProductMarketplace(this.getFormValue(), this.id).pipe(catchError(err => {
-        this.loading = false
+        this.loading = false;
         log.debug('err', err);
         if (err instanceof HttpErrorResponse) {
           return of(new ErrorResult<IError>(err.error, err.status));
@@ -408,8 +408,7 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
           return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, err.status));
         }
       })).subscribe(resp => {
-        this.loading = false
-        console.log('isi',resp)
+        this.loading = false;
         if (resp instanceof ErrorResult) {
           this.onSaveError(resp);
         } else {
@@ -433,7 +432,7 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
         return;
       }
     }
-    this.router.navigate([`/catalog/products/${this.entity.slug}`])
+    this.router.navigate([`/catalog/products/${this.entity.slug}`]);
   }
 
   /**

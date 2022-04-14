@@ -48,7 +48,7 @@ export interface IItemMarketplaceInfo {
   price: number;
   slug:string;
   links: IItemMarketplaceLinks[];
-  marketplaces: IItemMarketplaceDetail[]
+  marketplaces: IItemMarketplaceDetail[];
 }
 
 export interface IItemMarketplaceLinks {
@@ -73,6 +73,6 @@ export interface IItemStock {
   price: string;
   shop: string;
   shopId:number;
-  marketplace:string
+  marketplace:string;
   marketplaceProductId:number;
 }

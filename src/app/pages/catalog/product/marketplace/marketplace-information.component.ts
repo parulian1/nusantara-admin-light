@@ -219,8 +219,8 @@ import { IClient } from '@nusantara/models/marketplace';
 export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormGroup> implements OnInit, OnChanges {
 
   @Input() form: FormGroup;
-  @Input() id:number
-  @Input() lenLinks:boolean
+  @Input() id:number;
+  @Input() lenLinks:boolean;
   @Input() productClass: products.IProductClass;
 
   @ViewChild(MarketplaceShippingInfoModalComponent) shippingInfo: MarketplaceShippingInfoModalComponent;
@@ -395,8 +395,8 @@ export class MarketplaceInfoHostComponent extends AbstractEditingComponent<FormG
   }
 
   edit(){
-    this.id.toString()
-    this.router.navigateByUrl(`/catalog/products/${this.id}/marketplace/edit`, )
+    this.id.toString();
+    this.router.navigateByUrl(`/catalog/products/${this.id}/marketplace/edit`, );
   }
 
   saveAll(): void {

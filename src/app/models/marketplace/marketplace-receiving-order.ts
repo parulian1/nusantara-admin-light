@@ -18,7 +18,7 @@ export interface IReceivingProduct {
   sublocation: string;
   errorStatus:string;
   errorMessage:string;
-  store:string
+  store:string;
 }
 
 export interface IReceivingOrderDetail extends IReceivingOrder {
