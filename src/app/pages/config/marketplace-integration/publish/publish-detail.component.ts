@@ -43,7 +43,7 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
     <div>
       <nus-tabs>
         <nus-tab [title]="'List Product'">
-          <div *ngIf="order?.receivingStatus == 'Error'" class="error-info">
+          <div *ngIf="order?.receivingStatus == err" class="error-info">
             <div>
               <h2 class="heading-2" i18n>There are Errors When Publishing Products</h2>
               <ul>
@@ -88,10 +88,10 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                   <span class="badge" [ngClass]="{
                     'success': product.status === 'Published',
                     'alert': product.status === 'Publishing',
-                    'error': product.status === 'Error' }">
+                    'error': product.status === err }">
                     {{ product.status }}
                   </span>
-                  <div class="cust-tooltip" *ngIf="product.status === 'Error'">
+                  <div class="cust-tooltip" *ngIf="product.status === err">
                     <i id="transform" class="material-icons preview-icon">info</i>
                       <p class="tooltiptext triangle-border top" id="myDropdown">Error <br/> <span class="err-message">{{product.errorMessage}}</span></p>
                   </div>
@@ -149,10 +149,10 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                   <span class="badge" [ngClass]="{
                     'success': shop.status === 'Published',
                     'alert': shop.status === 'Publishing',
-                    'error': shop.status === 'Error' }">
+                    'error': shop.status === err }">
                     {{ shop.status }}
                   </span>
-                  <div class="cust-tooltip" *ngIf="shop.status === 'Error'">
+                  <div class="cust-tooltip" *ngIf="shop.status === err">
                     <i id="transform" class="material-icons preview-icon">info</i>
                       <p class="tooltiptext triangle-border top" id="myDropdown" >Error <br/> <span class="err-message">{{shop.errorStatus}}</span></p>
                   </div>
@@ -207,10 +207,10 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                   <span class="badge" [ngClass]="{
                     'success': product.status === 'Published',
                     'alert': product.status === 'Publishing',
-                    'error': product.status === 'Error' }">
+                    'error': product.status === err }">
                     {{ product.status }}
                   </span>
-                  <div class="cust-tooltip" *ngIf="product.status === 'Error'">
+                  <div class="cust-tooltip" *ngIf="product.status === err">
                     <i id="transform" class="material-icons preview-icon">info</i>
                       <p class="tooltiptext triangle-border top" id="myDropdown">Error <br/> <span class="err-message">{{product.errorMessage}}</span></p>
                   </div>
@@ -268,10 +268,10 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                   <span class="badge" [ngClass]="{
                     'success': product.status === 'Published',
                     'alert': product.status === 'Publishing',
-                    'error': product.status === 'Error' }">
+                    'error': product.status === err}">
                     {{ product.status }}
                   </span>
-                  <div class="cust-tooltip" *ngIf="product.status === 'Error'">
+                  <div class="cust-tooltip" *ngIf="product.status === err">
                     <i id="transform" class="material-icons preview-icon">info</i>
                       <p class="tooltiptext triangle-border top" id="myDropdown">Error <br/> <span class="err-message">{{product.errorMessage}}</span></p>
                   </div>
@@ -341,6 +341,7 @@ export class PublishDetailComponent implements OnInit {
   dataError: PagedResponse<marketplace.IReceivingProduct>;
   timeoutError: PagedResponse<marketplace.IReceivingProduct>;
   isReady = true;
+  err = 'Error';
 
   constructor(
     private route: ActivatedRoute,
