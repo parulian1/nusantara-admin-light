@@ -70,4 +70,11 @@ export class OrderService extends AbstractCrudService<IOrder> {
   fetchOrderFilter(): Observable<IOrderFilter> {
     return this.httpClient.get<IOrderFilter>(`/api/order/order-filtering/`);
   }
+
+  postSelectedOrder(formData): Observable<any> {
+    return this.httpClient.post(
+      `/api/order/order-bulk-update/`, formData
+    );
+  }
+
 }

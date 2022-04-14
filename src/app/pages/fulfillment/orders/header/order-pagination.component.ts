@@ -1,10 +1,12 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ICheckedOrder } from '@nusantara/models';
+import { DialogResult, ToastLevelEnum, ToastService } from '@nusantara/core';
 import { PaginationComponent } from '@nusantara/shared/pagination.component';
-import { OrderDownloadFileService, OrderReportService, SvgIconService } from '@nusantara/services';
+import { OrderDownloadFileService, OrderReportService, OrderService, SvgIconService } from '@nusantara/services';
 import { IOrderFilterValue } from '@nusantara/models/order/filter';
 import * as moment from 'moment';
+import { ConfirmModalComponent } from '@nusantara/shared/confirm-modal.component';
 
 @Component({
   selector: 'nus-order-custom-pagination',
@@ -20,21 +22,35 @@ import * as moment from 'moment';
         </span>
       </div>
       <div class="pg-action">
-        <div>
-          <button
+        <button
+          class="action control secondary"
+          mat-button
+          [matMenuTriggerFor]="actionMenu"
+          (menuOpened)="actionOrder()"
+          [disabled]="checkedlist? this.checkedlist.length > 0 ? null: true : true" i18n>
+            Action
+          <mat-icon class="icon-secondary" svgIcon="arrow-down"></mat-icon>
+        </button>
+        <mat-menu #actionMenu xPosition="before" >
+          <button mat-menu-item (click)="confirmModal.open()" i18n>Accept Selected Order</button>
+          <button mat-menu-item (click)="downloadProductList()" i18n>Product List</button>
+          <button mat-menu-item (click)="downloadOrderList()" i18n>Order List</button>
+        </mat-menu>
+      <!-- <div class="pg-action"> -->
+          <!-- <button
             class="download control secondary"
             mat-button
             [matMenuTriggerFor]="downloadMenu"
-            (menuOpened)="displayDownloadDateRangeInfo()" i18n>
+            (menuOpened)="displayDownloadDateRangeInfo()"
+            [disabled]="checkedlist? this.checkedlist.length > 0 ? null: true : true" i18n>
               Download
             <mat-icon class="icon-secondary" svgIcon="arrow-down"></mat-icon>
           </button>
           <mat-menu #downloadMenu>
             <button mat-menu-item (click)="downloadProductList()" i18n>Product List</button>
-            <!-- <button mat-menu-item>Shipping Label</button> -->
+            <!-- <button mat-menu-item>Shipping Label</button> --
             <button mat-menu-item (click)="downloadOrderList()" i18n>Order List</button>
-          </mat-menu>
-        </div>
+          </mat-menu> -->
         <div class="pg-button">
           <button (click)="goBack()" *ngIf="currentPage > 1"><i class="material-icons">arrow_back_ios</i></button>
           <span><strong>{{ page?.pageNumber }}</strong> / <strong>{{ page.maximumPageCount }}</strong></span>
@@ -42,6 +58,12 @@ import * as moment from 'moment';
         </div>
       </div>
     </div>
+    <nus-confirm-modal
+      [title]="confirmTitle"
+      [content]="confirmText"
+      [okText]="confirmOk"
+      [cancelText]="confirmCancel">
+    </nus-confirm-modal>
   `,
   styles: [
     `.pagination-container {
@@ -53,6 +75,7 @@ import * as moment from 'moment';
     '.pg-action { display: flex; gap: 30px; align-items: center; }',
     '.pg-action > button { height: 40px; }',
     '.download { display: flex; justify-content: space-between; align-items: center}',
+    '.action { display: flex; justify-content: flex-end; align-items: center}',
     '::ng-deep .icon-secondary svg { fill: var(--secondary); }',
     '::ng-deep button:disabled .icon-secondary svg { fill: var(--grey); }',
     '.pg-button button { border: none; background: none; height: 50px; }',
@@ -73,6 +96,14 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
   @Input() appliedFilters: IOrderFilterValue;
   @Output() masterSelectChanged = new EventEmitter<boolean>();
 
+  @ViewChild(ConfirmModalComponent)confirmModal: ConfirmModalComponent;
+
+  confirmTitle = "Accept Selected Order?";
+  confirmText =
+    "No Order Selected";
+  confirmOk = 'Accept Order';
+  confirmCancel = 'Cancel';
+
   masterSelected: boolean;
   q: string = null;
   btnDisabled: boolean;
@@ -80,8 +111,10 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
   constructor(
     router: Router,
     route: ActivatedRoute,
+    private toast: ToastService,
     private orderReportService: OrderReportService,
     private orderDownloadService: OrderDownloadFileService,
+    private orderService: OrderService,
     svgIconService: SvgIconService) {
       super(router, route);
       svgIconService.registerIcons();
@@ -102,6 +135,11 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
       }
     }
   }
+
+  ngAfterViewInit() {
+    this.confirmModal.onClose.subscribe(() => this.onConfirmModalClosed());
+  }
+
 
   isAllSelected() {
     this.masterSelected = this.checklist.every(function(item:any) {
@@ -136,6 +174,62 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
       return filters;
     }
     return filters;
+  }
+
+  actionOrder() {
+    // console.log(this.checkedlist ? this.checkedlist.length:'0')
+    this.confirmText =
+    `${this.checkedlist ? this.checkedlist.length === 1 ? 'Accept '+this.checkedlist.length +' Order' : 'Accept ' + this.checkedlist.length +' Orders at once' : this.confirmText}`;
+    const filters = this.appliedFilters;
+    if (
+      filters.date.type === "allDate" ||
+      filters.date.type === "customRange"
+    ) {
+      var matMenu = document.getElementsByClassName("mat-menu-panel")[0];
+      let footer = document.createElement("div") as HTMLDivElement;
+      footer.setAttribute("class", "download-date-range-info caption-1")
+
+      let text = "";
+      if (filters.date.type === "allDate") {
+        text = "Download is limited to last 14 days.";
+      } else if (filters.date.type === "customRange") {
+        text = "Download is limited to last 14 days since end date.";
+      }
+      footer.appendChild(document.createTextNode(text));
+      matMenu.appendChild(footer);
+    }
+  }
+
+  onConfirmModalClosed(){
+    if (this.confirmModal.result === DialogResult.OK){
+      const formData = {
+        order_numbers: this.checkedlist,
+        order_status: 'ready',
+      }
+
+      this.orderService.postSelectedOrder(formData).subscribe(
+        (resp) => {
+          console.log(resp)
+          this.showInfoWindow(resp.successOrder);
+        },
+        (err) => {
+          this.showErrorToast(err.error);
+        }
+      );
+    }
+  }
+
+  showErrorToast(errMsg: string) {
+    this.toast?.addMessage(errMsg, 'error', ToastLevelEnum.error);
+  }
+
+  showInfoWindow(resp) {
+    // console.log(resp)
+    if(resp === 0){
+      this.toast?.addMessage(resp, `No order has been successfully accepted because the selected order marketplace is not supported by this feature.`, ToastLevelEnum.success);
+    } else {
+      this.toast?.addMessage(resp, `${resp} order has been successfully accepted`, ToastLevelEnum.success);
+    }
   }
 
   displayDownloadDateRangeInfo() {
