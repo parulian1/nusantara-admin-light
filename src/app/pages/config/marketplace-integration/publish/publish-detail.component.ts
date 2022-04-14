@@ -390,37 +390,6 @@ export class PublishDetailComponent implements OnInit {
         this.timeoutError = page;
       });
   }
-  click(){
-    document.getElementById("myDropdown").classList.toggle("show")
-  };
-
-  // @HostListener('document:click', ['$event'])
-  // onDocumentClick(event: MouseEvent) {
-  //   if (!(event.target == document.getElementById("test"))) {
-  //     console.log('masuk')
-  //     const dropdowns = document.getElementsByClassName("tooltiptext");
-  //     let i = 0;
-  //     for (i; i < dropdowns.length; i++) {
-  //       var openDropdown = dropdowns[i];
-  //       if (openDropdown.classList.contains('show')) {
-  //         openDropdown.classList.remove('show');
-  //       }
-  //     }
-  //   }
-  // }
-
-  // window.onclick = function(event) {
-  //   if (!event.target.matches('.dropbtn')) {
-  //     var dropdowns = document.getElementsByClassName("dropdown-content");
-  //     var i;
-  //     for (i = 0; i < dropdowns.length; i++) {
-  //       var openDropdown = dropdowns[i];
-  //       if (openDropdown.classList.contains('show')) {
-  //         openDropdown.classList.remove('show');
-  //       }
-  //     }
-  //   }
-  // }
 
   loadAllData() {
     this.fetchDetail();
