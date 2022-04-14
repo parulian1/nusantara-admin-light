@@ -49,6 +49,9 @@ import {FormControl} from '@angular/forms';
       <div *ngIf="control?.errors?.fileNameLength" i18n>
         Maximum file name length is {{ control.getError('fileNameLength')?.value }} character
       </div>
+      <div *ngIf="control?.errors?.pattern" i18n>
+        Invalid character in value
+      </div>
     </div>
     <div *ngIf="control?.hasError('apiError')" class="error-detail">
       <div *ngIf="control.errors.apiError">{{ control.getError('apiError') }}</div>
