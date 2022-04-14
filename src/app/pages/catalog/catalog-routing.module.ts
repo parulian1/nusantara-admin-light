@@ -117,13 +117,6 @@ const routes: Routes = [
         component: MarketplaceProductEditComponent,
         resolve: {
           entity: ItemMarketplaceResolve,
-          // productClasses: AllProductClassResolver,
-          // vendors: AllVendorResolver,
-          // categories: AllCategoryResolver,
-          // mediaTypes: MediaTypeResolver,
-          // priceListTypes: PriceListTypeResolver,
-          // parent: ParentProductResolver,
-          // warehouses: config.warehouse.AllWarehouseResolver,
         },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },
