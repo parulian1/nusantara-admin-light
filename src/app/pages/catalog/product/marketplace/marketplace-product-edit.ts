@@ -195,18 +195,10 @@ const log = new Logger('ProductComponent');
 export class MarketplaceProductEditComponent extends AbstractDetailComponent<marketplace.IItemMarketplaceInfo> implements OnInit, AfterViewInit {
 
   currentActive = 'general-info';
-  selectedProductClass: products.IProductClass;
   entity: marketplace.IItemMarketplaceInfo;
 
-  selectedVendor: INamedHrefEntity = null;
-  selectedCategory: INamedHrefEntity = null;
-  selectedProductClassValue: INamedHrefEntity = null;
-
-  productRelatedSlug: string;
   marketplaceLink:any;
   id: string;
-  productFormType: string;
-  virtualPackageAmount: number = null;
   totalPrice: number = 0;
   loading:boolean = false;
 
@@ -215,15 +207,6 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
   tempat:FormGroup;
   isDisabled:boolean;
 
-  isAdvancePriceAvailable = false;
-  confirmAdvancedPriceTitle = 'Update this product?';
-  confirmAdvancedPriceText =
-    'This product has an "Advanced Price", if you change the default price,' +
-    ' it might impact on the “Advance Price" as well.';
-
-  productRelatedFormData: FormData[] = [];
-
-
   constructor(
               service: MarketplaceItemService,
               private fb: FormBuilder,
@@ -231,9 +214,9 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
               toast: ToastService,
               router: Router,
               svgIconService: SvgIconService,) {
-    super(route, router, toast, service);
-    svgIconService.registerIcons();
-  }
+                super(route, router, toast, service);
+                svgIconService.registerIcons();
+              }
 
   get name(): FormControl {
     return this.form?.get('name') as FormControl;
@@ -275,11 +258,6 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
    * 2. From a parent, the variants array is READ-ONLY at the API, so we DO NOT set it on this form.
    */
   initializeForm(entity?: marketplace.IItemMarketplaceInfo,) {
-    // console.log('test4', entity)
-    let bundleInitialValue = this.fb.array([]);
-    if (this.productFormType !== 'bundling') {
-      bundleInitialValue = null;
-    }
     this.form = this.fb.group({
       name: [entity.name, [Validators.required, Validators.maxLength(120), forbiddenNameValidator(/[^a-zA-Z0-9 \&.!]/)]],
       upc: [entity?.upc, [Validators.required, ]],
@@ -294,37 +272,6 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
    * be saved separate of the main product:  Because of that, the data
    * must be deleted from the data we pass to the product service.
    */
-
-  //  private generateMarketplaceForm(marketplace: marketplace.IItemMarketplaceDetail) {
-
-  //   const marketplaceForm = this.fb.group({
-  //     warehouse: [marketplace.warehouse],
-  //     sublocation: [marketplace.sublocation],
-  //     sublocationId: [marketplace.sublocationId],
-  //     isManagedKgx:[marketplace.isManagedKgx],
-  //     originStock:[marketplace.originStock],
-  //     stocks:this.fb.array(marketplace.stocks.map(stock => this.generateStockForm(stock)))
-  //   });
-
-  //   return marketplaceForm;
-  // }
-
-  // private generateStockForm(stock: marketplace.IItemStock) {
-
-  //   const stockForm = this.fb.group({
-  //     isActive:[stock.isActive],
-  //     stock: [stock.stock,  [Validators.minLength(0), Validators.max(999999999), warehouseStockValidator(this.tempat)]],
-  //     name: [stock.name, [Validators.required, Validators.maxLength(120), forbiddenNameValidator(/[^a-zA-Z0-9 \&.!]/)]],
-  //     price:[stock.price, [Validators.minLength(0), Validators.max(999999999)]],
-  //     shop:[stock.shop],
-  //     shopId:[stock.shopId],
-  //     marketplace:[stock.marketplace],
-  //     marketplaceProductId:[stock.marketplaceProductId]
-  //   });
-
-  //   return stockForm;
-  // }
-
 
   getFormValue(): any {
     const formValue = {
@@ -420,7 +367,6 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
       });
     } else {
       window.alert('Please check your input.');
-      // this.validatePriceList();
     }
     this.form.enable();
   }
@@ -454,7 +400,6 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
   protected onSaveSuccess(result: IResultResponse<any>) {
     this.form.enable();
     this.toast?.addMessage(`"${this.form.get('name')?.value ?? 'data'}" was saved successfully.`, 'Saved', ToastLevelEnum.success);
-    // this.navigateToParent();
   }
 
   protected onDeleteSuccess() {
