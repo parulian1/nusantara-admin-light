@@ -6,6 +6,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {CatalogueService} from '@nusantara/services/catalogue.service';
 import {HttpClient} from '@angular/common/http';
 import {fileNameLengthValidator, fileTypeValidator} from '@nusantara/core/helpers/validators';
+import {saveAs} from 'file-saver';
 
 const logger = new Logger('CatalogueComponent');
 
@@ -223,6 +224,7 @@ export class CatalogueComponent extends AbstractDetailComponent<ICatalogue> {
     if (!this.formView) {
       throw Error('formView is null');
     }
+    this.form.updateValueAndValidity();
     const formData = new FormData(this.formView.nativeElement);
     if (this.isActive.value === false) {
       formData.append('isActive', 'false');
@@ -252,15 +254,9 @@ export class CatalogueComponent extends AbstractDetailComponent<ICatalogue> {
   }
 
   download(catalogue: ICatalogue) {
-    this.service.getDownloadLink(catalogue)
-      .subscribe(data => {
-        const a = document.createElement('a');
-        a.href = data.url;
-        a.download = data.url.split('/').pop();
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+    this.service.downloadCatalogue(catalogue)
+      .subscribe(blob => {
+        saveAs(blob, catalogue.fileName);
       });
-
   }
 }
