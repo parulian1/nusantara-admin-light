@@ -41,26 +41,31 @@ const logger = new Logger('EmployeeComponent');
         <label class="hidden">
           <span i18n>Name</span>
           <input type="text" [formControl]="name"/>
+          <nus-field-errors [control]="name"></nus-field-errors>
         </label>
         <label>
           <span i18n>Employee ID</span>
           <input type="text" [formControl]="identityNumber"/>
+          <nus-field-errors [control]="identityNumber"></nus-field-errors>
         </label>
 
         <label>
           <span i18n>First Name</span>
           <input type="text" [formControl]="firstName"/>
+          <nus-field-errors [control]="firstName"></nus-field-errors>
         </label>
 
         <label>
           <span i18n>Last Name</span>
           <input type="text" [formControl]="lastName"/>
+          <nus-field-errors [control]="lastName"></nus-field-errors>
         </label>
 
         <label>
           <span i18n>Email Address</span>
           <div *ngIf="!entity; else emailReadOnly">
             <input type="email" [formControl]="email"/>
+            <nus-field-errors [control]="email"></nus-field-errors>
           </div>
           <ng-template #emailReadOnly>
             <div style="font-size: 0.85rem;">{{ email.value }}</div>
@@ -70,6 +75,7 @@ const logger = new Logger('EmployeeComponent');
         <label>
           <span i18n>Phone Number</span>
           <input type="tel" [formControl]="phoneNumber"/>
+          <nus-field-errors [control]="phoneNumber"></nus-field-errors>
         </label>
 
         <label class="toggle">
@@ -342,6 +348,7 @@ export class EmployeeComponent
   save(): void {
     this.name.setValue(this.firstName.value); // Handle name in success massage
     this.email.setValue(this.email.value.toLowerCase());
+    this.form.disable();
     this.service
       .save(this.getFormValue())
       .pipe(
@@ -363,9 +370,10 @@ export class EmployeeComponent
           this.onSaveSuccess(resp);
         } else {
           this.onSaveError(resp);
+          this.form.enable();
         }
       });
-    this.form.disable();
+
   }
 
   delete(): void {
