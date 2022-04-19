@@ -165,7 +165,7 @@ import {
 
     <!-- Modal -->
     <nus-payment-confirm-modal></nus-payment-confirm-modal>
-    <nus-cancel-order-dialog></nus-cancel-order-dialog>
+    <nus-cancel-order-dialog [orderNum]="entity?.orderNumber"></nus-cancel-order-dialog>
     <nus-mark-as-testing-modal></nus-mark-as-testing-modal>
     `,
   styles: [
@@ -271,23 +271,25 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
   }
 
   oncancelOrderModalClosed(){
-    if (this.cancelOrderModal.result === DialogResult.OK) {
-      this.service.updateByOrderNumber(this.orderDetailData.orderNumber, {status: 'cancelled'}).subscribe(() => {
-        this.toast?.addMessage(
-          `Order ${this.orderDetailData.orderNumber} has just been cancelled.`,
-          'Order Cancelled!',
-          ToastLevelEnum.success
-        );
-        this.router.navigate([]);
-      }, error => {
-        this.toast?.addMessage(
-          'Unable to cancel order. Please try again.',
-          'Failed to Cancel Order',
-          ToastLevelEnum.error
-        );
-        console.log(error)
-      });
-    }
+    console.log('test', this.cancelOrderModal.otherReason)
+    console.log('test', this.cancelOrderModal.favoriteSeason)
+    // if (this.cancelOrderModal.result === DialogResult.OK) {
+    //   this.service.updateByOrderNumber(this.orderDetailData.orderNumber, {status: 'cancelled'}).subscribe(() => {
+    //     this.toast?.addMessage(
+    //       `Order ${this.orderDetailData.orderNumber} has just been cancelled.`,
+    //       'Order Cancelled!',
+    //       ToastLevelEnum.success
+    //     );
+    //     this.router.navigate([]);
+    //   }, error => {
+    //     this.toast?.addMessage(
+    //       'Unable to cancel order. Please try again.',
+    //       'Failed to Cancel Order',
+    //       ToastLevelEnum.error
+    //     );
+    //     console.log(error)
+    //   });
+    // }
   }
 
   onMarkAsTestingModalClosed(){
