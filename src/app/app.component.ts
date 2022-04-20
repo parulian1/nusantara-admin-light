@@ -1,8 +1,11 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
 import { AuthService } from '@nusantara/auth';
 import { AppUpdateService } from './core/app-update.service';
+import { environment } from '@env/environment.prod';
+
+declare let gtag: (type: 'config', gtagId: string, option: object) => void;
 
 /**
  * The root component for Nusantara Admin.
@@ -30,7 +33,18 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   private timer;
 
   constructor(private authService: AuthService, private router: Router,
-              private appUpdate: AppUpdateService) { }
+              private appUpdate: AppUpdateService) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd){
+        gtag('config', environment.googleAnalytics,
+          {
+            page_path: event.urlAfterRedirects,
+            send_page_view: false
+          }
+        );
+      }
+    });
+  }
 
   /**
    * Starts a check (every 10 seconds) to determine if the user's auth token needs refreshed.

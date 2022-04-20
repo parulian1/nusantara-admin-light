@@ -59,7 +59,7 @@ jobs:
           appEnv: production
           feedId: $(FEED_ID)
           buildPath: $(BUILD_DEST_PATH)
-          envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=True APM_ENVIRONMENT=production APM_URL=$(APM_URL)'
+          envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=True APM_ENVIRONMENT=production APM_URL=$(APM_URL) GA_MEASUREMENT_ID=$(GA_MEASUREMENT_ID)'
           buildCommand: 'build:prod'
           buildArgs: '--localize'
           postBuildScript: |
@@ -123,7 +123,7 @@ jobs:
         parameters:
           feedId: $(FEED_ID)
           buildPath: $(BUILD_DEST_PATH)
-          envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=False APM_ENVIRONMENT=staging APM_URL=$(APM_URL)'
+          envVars: 'APM_NAME=$(APM_NAME) APM_ACTIVE=False APM_ENVIRONMENT=staging APM_URL=$(APM_URL) GA_MEASUREMENT_ID=$(GA_MEASUREMENT_ID_STG)'
           buildArgs: '--localize'
           postBuildScript: |
             tee $(BUILD_DEST_PATH)/index.html << EOF
