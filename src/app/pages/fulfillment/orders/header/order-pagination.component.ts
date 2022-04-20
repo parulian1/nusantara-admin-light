@@ -223,9 +223,12 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
 
   showInfoWindow(resp) {
     if (resp === 0){
-      this.toast?.addMessage('No order has been successfully accepted because the selected order marketplace is not supported by this feature.', 'Not supported by this feature', ToastLevelEnum.info);
+      this.toast?.addMessage('Only paid order can be accepted', 'Warning', ToastLevelEnum.error);
     } else {
       this.toast?.addMessage(`${resp} order has been successfully accepted`, 'Order accepted', ToastLevelEnum.success);
+      setTimeout(function(){
+        window.location.reload();
+      }, 5000);
     }
   }
 
