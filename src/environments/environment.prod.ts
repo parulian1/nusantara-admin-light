@@ -16,5 +16,6 @@ export const environment = {
     breakdownMetrics: true,
     distributedTracingOrigins: [ ],
     ignoreTransactions: [],
-  }
+  },
+  googleAnalytics: env.GA_MEASUREMENT_ID || 'G-JWQWGC80XR'
 };

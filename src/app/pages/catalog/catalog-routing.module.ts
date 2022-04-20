@@ -31,6 +31,8 @@ import {
   AdvancedPriceListComponent,
   AdvancedPriceListResolver
 } from '@nusantara/pages/catalog/advanced-price';
+import { MarketplaceProductEditComponent } from './product/marketplace/marketplace-product-edit';
+import { ItemMarketplaceResolve } from './product/marketplace/item-marketplace.resolve';
 import { AdvancedPriceResolver } from '@nusantara/pages/catalog/advanced-price/advanced-price.resolver';
 import { RequirePermissionGuard } from '@nusantara/auth/guards/require-permission.guard';
 
@@ -106,6 +108,15 @@ const routes: Routes = [
           subscriptionDuration: DurationListResolver,
           subscriptionLength: LengthListResolver,
           warehouses: config.warehouse.AllWarehouseResolver,
+        },
+        runGuardsAndResolvers: 'always',
+        data: { animation: 'Detail', },
+      },
+      {
+        path: ':id/marketplace/edit',
+        component: MarketplaceProductEditComponent,
+        resolve: {
+          entity: ItemMarketplaceResolve,
         },
         runGuardsAndResolvers: 'always',
         data: { animation: 'Detail', },

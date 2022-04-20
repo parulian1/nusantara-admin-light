@@ -215,6 +215,8 @@ export class CategoryComponent extends AbstractDetailComponent<ICategory> implem
     this.form.controls.isActive.markAsTouched();
     this.form.controls.isInterestedCategory.markAsTouched();
 
+    this.form.markAllAsTouched();
+
     this.setIconImagePreview(entity?.image);
     this.selectedCategory = null;
     if (!!entity?.parent) {

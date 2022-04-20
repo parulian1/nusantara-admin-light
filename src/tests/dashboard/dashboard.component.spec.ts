@@ -58,6 +58,7 @@ describe('DashboardComponent', () => {
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
     authServiceSpy = jasmine.createSpyObj('AuthService', ['logout', 'shouldRefresh'], ['siteDomain', 'tokenPayload']);
+    spyOnProperty(component, 'allowToShow').and.returnValue(false);
     fixture.detectChanges();
   });
 
