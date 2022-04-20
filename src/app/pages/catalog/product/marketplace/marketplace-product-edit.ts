@@ -255,11 +255,11 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
    *
    * Special notes related to the ProductComponent:
    * 1. There is differing logic depending on whether we're initializing a parent or a child (variant)
-   * 2. From a parent, the variants array is READ-ONLY at the API, so we DO NOT set it on this form.
+   * 2. From a parent, the variants array is READ-ONLY at the API, so we DO NOT set it on this form. _ - + / \  [  ]
    */
   initializeForm(entity?: marketplace.IItemMarketplaceInfo,) {
     this.form = this.fb.group({
-      name: [entity.name, [Validators.required, Validators.maxLength(120), forbiddenNameValidator(/[^a-zA-Z0-9 \&.!]/)]],
+      name: [entity.name, [Validators.required, Validators.maxLength(120), forbiddenNameValidator(/[^a-zA-Z0-9 \\\]/_[&.!+-]/)]],
       upc: [entity?.upc, [Validators.required, ]],
       price: [entity?.price, [Validators.required, Validators.minLength(0), Validators.max(999999999)]],
       marketplaces:this.fb.array([]),
@@ -328,7 +328,7 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
         this.stock = this.fb.group({
           isActive:[p.isActive],
           stock: [p.stock,  [Validators.required, Validators.minLength(0), Validators.max(999999999), warehouseStockValidator(this.tempat)]],
-          name: [p.name, [Validators.required, Validators.maxLength(120), forbiddenNameValidator(/[^a-zA-Z0-9 \&.!]/)]],
+          name: [p.name, [Validators.required, Validators.maxLength(120), forbiddenNameValidator(/[^a-zA-Z0-9 \\\]/_[&.!+-]/)]],
           price:[p.price, [Validators.required, Validators.minLength(0), Validators.max(999999999)]],
           shop:[p.shop],
           shopId:[p.shopId],
