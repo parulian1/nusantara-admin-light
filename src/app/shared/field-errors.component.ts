@@ -34,8 +34,17 @@ import {FormControl} from '@angular/forms';
       <div *ngIf="control?.errors?.max" i18n>
         Ensure this value is less than or equal to {{ control.getError('max')?.max }}
       </div>
+      <div *ngIf="control?.errors?.forbiddenName" i18n>
+        Accept only characters (&.!)
+      </div>
+      <div *ngIf="control?.errors?.invalidStock" i18n>
+        Limited stock
+      </div>
       <div *ngIf="control?.errors?.fileType" i18n>
         Ensure this image type is  {{ control.getError('fileType')?.value }}
+      </div>
+      <div *ngIf="control?.errors?.fileSize" i18n>
+        Ensure file size is lower than {{ control.getError('fileSize')?.value }} KB
       </div>
       <div *ngIf="control?.errors?.fileNameLength" i18n>
         Maximum file name length is {{ control.getError('fileNameLength')?.value }} character

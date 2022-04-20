@@ -389,6 +389,8 @@ const log = new Logger('ProductComponent');
           <nus-marketplace-info id="marketplace-information"
                                 *ngIf="!isNew && isPhysical() && enterpriseLicense()"
                                 [form]="marketplace"
+                                [id]="entity?.id"
+                                [lenLinks]="marketplaceLink.length > 0"
                                 [productClass]="selectedProductClass">
           </nus-marketplace-info>
 

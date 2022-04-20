@@ -393,6 +393,7 @@ const dashboardRoutes: Routes = [
   },
   {
     path: 'catalogue',
+    canActivateChild: [RequirePermissionGuard],
     children: [
       {
         path: '',

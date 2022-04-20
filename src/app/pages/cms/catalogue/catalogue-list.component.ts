@@ -59,14 +59,9 @@ export class CatalogueListComponent extends AbstractListComponent<ICatalogue> {
   constructor(route: ActivatedRoute, private service: CatalogueService) { super(route); }
 
   download(catalogue: ICatalogue) {
-    this.service.getDownloadLink(catalogue)
-      .subscribe(data => {
-        const a = document.createElement('a');
-        a.href = data.url;
-        a.download = data.url.split('/').pop();
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+    this.service.downloadCatalogue(catalogue)
+      .subscribe(blob => {
+          saveAs(blob, catalogue.fileName);
       });
 
   }

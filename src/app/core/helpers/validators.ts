@@ -24,6 +24,32 @@ export function fileTypeValidator(imageType: Array<string>, files: FileList) {
   };
 }
 
+/***
+ * Validate file size in KB
+ * @param {number} maxSize
+ * @param {FileList} files
+ * @returns {(control: AbstractControl) => (ValidationErrors | null)}
+ */
+export function fileSizeValidator(maxSize: number, files: FileList) {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+    if (!value) {
+      logger.debug('fileSizeValidator', 'No Value');
+      return null;
+    }
+    if (files.item(0).size <= (maxSize * 1024) ) {
+      return null;
+    }
+    logger.debug('fileSizeValidator', 'image size over ', files.item(0).size);
+    return {
+      fileSize: {
+        value: maxSize,
+        fileSize: files.item(0).size,
+      }
+    };
+  };
+}
+
 
 export function fileNameLengthValidator(maxLength: number, files: FileList) {
   return (control: AbstractControl): ValidationErrors | null => {

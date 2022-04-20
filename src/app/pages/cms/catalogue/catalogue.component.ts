@@ -1,11 +1,20 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {AbstractDetailComponent, Logger, ToastService} from '@nusantara/core';
+import {
+  AbstractDetailComponent,
+  ErrorResult,
+  Logger,
+  SuccessCreatedResult,
+  SuccessResult,
+  ToastService
+} from '@nusantara/core';
 import {ICatalogue} from '@nusantara/models/catalogue/catalogue';
 import {FormBuilder, FormControl, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CatalogueService} from '@nusantara/services/catalogue.service';
-import {HttpClient} from '@angular/common/http';
-import {fileNameLengthValidator, fileTypeValidator} from '@nusantara/core/helpers/validators';
+import {HttpClient, HttpErrorResponse, HttpEvent, HttpEventType} from '@angular/common/http';
+import {fileNameLengthValidator, fileSizeValidator, fileTypeValidator} from '@nusantara/core/helpers/validators';
+import {saveAs} from 'file-saver';
+import {catchError} from 'rxjs/operators';
 
 const logger = new Logger('CatalogueComponent');
 
@@ -88,6 +97,9 @@ const logger = new Logger('CatalogueComponent');
         [hideDelete]="true"
       >
       </nus-detail-actions>
+      <div>
+<!--        <nus-progress-bar [progress]="progress" total="100"></nus-progress-bar>-->
+      </div>
     </form>
   `,
   styles: [
@@ -109,6 +121,8 @@ const logger = new Logger('CatalogueComponent');
 export class CatalogueComponent extends AbstractDetailComponent<ICatalogue> {
   readonly DESCRIPTION_MAX_LENGTH = 120;
   readonly NAME_MAX_LENGTH = 50;
+
+  progress = 0;
 
   @ViewChild('theForm') formView: ElementRef<HTMLFormElement>;
   bannerImagePreviewUrl: string;
@@ -180,6 +194,7 @@ export class CatalogueComponent extends AbstractDetailComponent<ICatalogue> {
       const file = (data.target as HTMLInputElement).files[0];
       this.image.setValidators([
         Validators.required,
+        fileSizeValidator(500, (data?.target as HTMLInputElement)?.files),
         fileTypeValidator(['image/jpg', 'image/jpeg', 'image/png'], (data?.target as HTMLInputElement)?.files),
         fileNameLengthValidator(100, (data?.target as HTMLInputElement)?.files),
       ]);
@@ -195,6 +210,7 @@ export class CatalogueComponent extends AbstractDetailComponent<ICatalogue> {
       const file = ($event.target as HTMLInputElement).files[0];
       this.file.setValidators([
         Validators.required,
+        fileSizeValidator(2000000, ($event?.target as HTMLInputElement)?.files),
         fileTypeValidator(['application/pdf'], ($event?.target as HTMLInputElement)?.files),
         fileNameLengthValidator(100, ($event?.target as HTMLInputElement)?.files)
       ]);
@@ -223,6 +239,7 @@ export class CatalogueComponent extends AbstractDetailComponent<ICatalogue> {
     if (!this.formView) {
       throw Error('formView is null');
     }
+    this.form.updateValueAndValidity();
     const formData = new FormData(this.formView.nativeElement);
     if (this.isActive.value === false) {
       formData.append('isActive', 'false');
@@ -235,15 +252,35 @@ export class CatalogueComponent extends AbstractDetailComponent<ICatalogue> {
       formData.delete('fileName');
     }
     this.form.disable();
-    this.service.save(formData).subscribe(
-      resp => {
-        if (resp.success) {
-          this.onSaveSuccess(resp);
-        } else {
-          this.onSaveError(resp);
-        }
-      });
-
+    this.service.saveWithProgress(formData).subscribe( (event: HttpEvent<ICatalogue>) => {
+      switch (event.type) {
+        case HttpEventType.Sent:
+          logger.debug('Request has been made!');
+          break;
+        case HttpEventType.ResponseHeader:
+          logger.debug('Response header has been received!');
+          break;
+        case HttpEventType.UploadProgress:
+          const eventTotal = event.total ? event.total : 0;
+          this.progress = Math.round(event.loaded / eventTotal * 100);
+          logger.debug(`Uploaded! ${this.progress}%`);
+          break;
+        case HttpEventType.Response:
+          console.log('Image Upload Successfully!', event.body);
+          if (event.status === 201 && !this.entity?.href) {
+            this.onSaveSuccess(new SuccessCreatedResult<ICatalogue>(event.headers.get('Location'), [], event.body));
+          } else if (event.status === 200 && !!this.entity?.href) {
+            this.onSaveSuccess(new SuccessResult<ICatalogue>( [], event.body));
+          }else {
+            this.onSaveError(new ErrorResult(event.body, event.status));
+          }
+      }
+    }, (err: HttpErrorResponse) => {
+      logger.error(err);
+      this.toast?.addError(err.message, 'Failed to Save');
+      // this.onSaveError(new ErrorResult(err.message, err.status));
+      this.form.enable();
+    });
   }
 
   save() {
@@ -252,15 +289,9 @@ export class CatalogueComponent extends AbstractDetailComponent<ICatalogue> {
   }
 
   download(catalogue: ICatalogue) {
-    this.service.getDownloadLink(catalogue)
-      .subscribe(data => {
-        const a = document.createElement('a');
-        a.href = data.url;
-        a.download = data.url.split('/').pop();
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+    this.service.downloadCatalogue(catalogue)
+      .subscribe(blob => {
+        saveAs(blob, catalogue.fileName);
       });
-
   }
 }
