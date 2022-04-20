@@ -36,21 +36,6 @@ import { ConfirmModalComponent } from '@nusantara/shared/confirm-modal.component
           <button mat-menu-item (click)="downloadProductList()" i18n>Product List</button>
           <button mat-menu-item (click)="downloadOrderList()" i18n>Order List</button>
         </mat-menu>
-      <!-- <div class="pg-action"> -->
-          <!-- <button
-            class="download control secondary"
-            mat-button
-            [matMenuTriggerFor]="downloadMenu"
-            (menuOpened)="displayDownloadDateRangeInfo()"
-            [disabled]="checkedlist? this.checkedlist.length > 0 ? null: true : true" i18n>
-              Download
-            <mat-icon class="icon-secondary" svgIcon="arrow-down"></mat-icon>
-          </button>
-          <mat-menu #downloadMenu>
-            <button mat-menu-item (click)="downloadProductList()" i18n>Product List</button>
-            <!-- <button mat-menu-item>Shipping Label</button> --
-            <button mat-menu-item (click)="downloadOrderList()" i18n>Order List</button>
-          </mat-menu> -->
         <div class="pg-button">
           <button (click)="goBack()" *ngIf="currentPage > 1"><i class="material-icons">arrow_back_ios</i></button>
           <span><strong>{{ page?.pageNumber }}</strong> / <strong>{{ page.maximumPageCount }}</strong></span>
@@ -177,7 +162,6 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
   }
 
   actionOrder() {
-    // console.log(this.checkedlist ? this.checkedlist.length:'0')
     this.confirmText =
     `${this.checkedlist ? this.checkedlist.length === 1 ? 'Accept '+this.checkedlist.length +' Order' : 'Accept ' + this.checkedlist.length +' Orders at once' : this.confirmText}`;
     const filters = this.appliedFilters;
@@ -210,6 +194,9 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
       this.orderService.postSelectedOrder(formData).subscribe(
       (resp) => {
         this.showInfoWindow(resp.successOrder);
+        setTimeout(function(){
+          window.location.reload();
+        }, 5000);
       },
       (err) => {
         this.showErrorToast(err.error);
@@ -226,30 +213,6 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
       this.toast?.addMessage('Only paid order can be accepted', 'Warning', ToastLevelEnum.error);
     } else {
       this.toast?.addMessage(`${resp} order has been successfully accepted`, 'Order accepted', ToastLevelEnum.success);
-      setTimeout(function(){
-        window.location.reload();
-      }, 5000);
-    }
-  }
-
-  displayDownloadDateRangeInfo() {
-    const filters = this.appliedFilters;
-    if (
-      filters.date.type === "allDate" ||
-      filters.date.type === "customRange"
-    ) {
-      var matMenu = document.getElementsByClassName("mat-menu-panel")[0];
-      let footer = document.createElement("div") as HTMLDivElement;
-      footer.setAttribute("class", "download-date-range-info caption-1")
-
-      let text = "";
-      if (filters.date.type === "allDate") {
-        text = "Download is limited to last 14 days.";
-      } else if (filters.date.type === "customRange") {
-        text = "Download is limited to last 14 days since end date.";
-      }
-      footer.appendChild(document.createTextNode(text));
-      matMenu.appendChild(footer);
     }
   }
 }
