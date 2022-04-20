@@ -196,7 +196,7 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
         this.showInfoWindow(resp.successOrder);
         setTimeout(function(){
           window.location.reload();
-        }, 5000);
+        }, 4000);
       },
       (err) => {
         this.showErrorToast(err.error);
