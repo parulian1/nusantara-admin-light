@@ -329,6 +329,8 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
 
   cancel() {
     this.modal.close();
+    window.location.reload();
+    // this.ngOnInit();
     // this.cancelDialog.emit();
   }
 
