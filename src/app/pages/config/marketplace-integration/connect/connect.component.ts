@@ -51,9 +51,10 @@ import * as shopActions from '@nusantara/actions';
             </td>
 
             <td *ngIf="entity.isConnected == true">
-              <a [routerLink]="['product-class/', entity.slug]" (click)="setSelectedShop(entity)" i18n>
+              <a *ngIf="entity.marketplace !== 'tiktok'" [routerLink]="['product-class/', entity.slug]" (click)="setSelectedShop(entity)" i18n>
                 Map Class & Attribute
               </a>
+              <a *ngIf="entity.marketplace === 'tiktok'" (click)="downloadOrder(entity)">Download Order List</a>
             </td>
             <td *ngIf="entity.isConnected == false">
               <a [routerLink]="[entity.slug]" i18n>Reconnect</a>
@@ -89,6 +90,9 @@ export class ConnectComponent implements OnInit {
   }
 
   setSelectedShop(shop: marketplace.IShop) {
+    this.store.dispatch(new shopActions.SetCurrentShop(shop));
+  }
+  downloadOrder(shop: marketplace.IShop) {
     this.store.dispatch(new shopActions.SetCurrentShop(shop));
   }
 }
