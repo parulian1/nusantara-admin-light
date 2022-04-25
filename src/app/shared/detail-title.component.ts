@@ -6,7 +6,7 @@ import { Input, Component } from '@angular/core';
 @Component({
   selector: 'nus-detail-title',
   template: `
-    <h1 class="title-1">
+    <h1 class="title-1 elipsis">
       <i *ngIf="!!originalName && originalName!='Object'; then updateTitle else newTitle"></i>
       <ng-template #updateTitle>{{ originalName }}</ng-template>
       <ng-template #newTitle>Add {{ typeName }}</ng-template>
