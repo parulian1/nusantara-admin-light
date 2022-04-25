@@ -512,6 +512,7 @@ const log = new Logger('ProductComponent');
     '.judul { color:#EA730B; height: 1rem; line-height: 1rem; padding:7px; margin:6px 0; border-right-style: solid; display:inherit; font-weight:bold }',
     '.btn { border: 2px solid #EA730B; position:relative; padding-right:30px }',
     '.hover-rotate { transition: transform .4s; transform: rotateZ(180deg) }',
+    '::ng-deep .elipsis { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 900px;}',
     '.mat-menu-item { width: 300px; }',
     '::ng-deep .tooltip { font-size: 11pt; }',
     '.side-nav li a { text-decoration: none; color: inherit; }',
