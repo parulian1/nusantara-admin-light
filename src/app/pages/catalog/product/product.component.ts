@@ -55,7 +55,7 @@ const log = new Logger('ProductComponent');
   template: `
     <div class="container">
       <div>
-        <nus-detail-title [originalName]="originalEntityName" typeName="Product" class="title"></nus-detail-title>
+        <nus-detail-title [originalName]="originalEntityName" [isLink]="this.marketplaceLink.length > 0" typeName="Product" class="title"></nus-detail-title>
         <div class="drpdown" *ngIf="entity && this.marketplaceLink.length > 0">
           <button
             class="control secondary btn"
