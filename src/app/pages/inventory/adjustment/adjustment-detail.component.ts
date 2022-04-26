@@ -101,14 +101,14 @@ import { AuthService } from '@nusantara/auth';
         </tbody>
       </table>
       <div class="detail-actions">
-        <button type="button" (click)="approve()" [disabled]="entity.status !== 'pending'" class="control" id="confirm-button" i18n>
-          Approve
+        <button type="button" (click)="approve()" [disabled]="isApproveDisabled" class="control" id="confirm-button" i18n>
+          {{ approveButtonText }}
         </button>
-        <button type="button" (click)="cancel()" class="control secondary" i18n>
+        <button type="button" (click)="goBack()" class="control secondary" i18n>
           Back
         </button>
-        <button type="button" (click)="reject()" [disabled]="entity.status !== 'pending'" class="control danger ghost" i18n>
-          Reject
+        <button type="button" (click)="reject()" [disabled]="isRejectDisabled" class="control danger ghost" i18n>
+          {{ rejectButtonText}}
         </button>
       </div>
     </form>
@@ -134,6 +134,10 @@ import { AuthService } from '@nusantara/auth';
 })
 export class AdjustmentDetailComponent  extends AbstractDetailComponent<IAdjustmentReadOnly> implements OnInit {
   entity: IAdjustmentReadOnly;
+  approveButtonText: string = 'approve';
+  rejectButtonText: string = 'reject';
+  isApproveDisabled: boolean = false;
+  isRejectDisabled: boolean = false;
 
   constructor(public service: InventoryAdjustmentOrderService,
               public route: ActivatedRoute,
@@ -148,6 +152,10 @@ export class AdjustmentDetailComponent  extends AbstractDetailComponent<IAdjustm
 
   ngOnInit(): void {
     super.ngOnInit();
+    if (this.entity.status !== 'pending' && !!this.entity?.reviewedBy) {
+      this.isApproveDisabled = true;
+      this.isRejectDisabled = true;
+    }
   }
 
   initializeForm(entity: IAdjustmentReadOnly): void {
@@ -162,17 +170,21 @@ export class AdjustmentDetailComponent  extends AbstractDetailComponent<IAdjustm
   showWarehouseDetail(): void {}
 
   approve(): void {
-    this.form.value.status = 'approved';
-    this.save();
+    if (!this.isApproveDisabled) {
+      this.form.value.status = 'approved';
+      this.save();
+    }
   }
 
   reject(): void {
-    this.form.value.status = 'rejected';
-    this.save();
+    if (!this.isRejectDisabled) {
+      this.form.value.status = 'rejected';
+      this.save();
+    }
   }
 
-  cancel(): void {
-    this.location.back();
+  goBack(): void {
+    this.router.navigate(['/inventory/orders-list']);
   }
 
   displayedName(receivingHref: string, productName: string, locationHref: string): string {
@@ -199,14 +211,25 @@ export class AdjustmentDetailComponent  extends AbstractDetailComponent<IAdjustm
       } else {
         return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, err.status));
       }
-    })).subscribe(
-      resp => {
+    })).subscribe((resp) => {
         if (resp instanceof ErrorResult) {
           this.onSaveError(resp.errorDetails);
         } else {
-          this.location.back();
+          this.isApproveDisabled = true;
+          this.isRejectDisabled = true;
+          if (this.form.value.status === 'approved') {
+            this.approveButtonText = 'Please wait....';
+          } else {
+            this.rejectButtonText = 'Please wait....';
+          }
+          this.goBack();
         }
+      }, (error) => {
+        this.onSaveError(error.errorDetails);
+      }, () => {
+        this.goBack();
       }
     );
   }
+
 }
