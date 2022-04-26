@@ -100,6 +100,7 @@ export class AdjustmentLineItemComponent implements OnInit, AfterViewInit {
   @Input() csvData: { page: PagedResponse<IStockRecord>, data: any, key: string, mappedValue: any };
   @Input() index: number;
   @Input() adjustmentMode: string;
+  @Input() href: string;
   @Output() remove = new EventEmitter<void>();
 
   @Output() conflict = new EventEmitter<{
