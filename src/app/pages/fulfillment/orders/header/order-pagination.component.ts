@@ -210,7 +210,7 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
 
   showInfoWindow(resp) {
     if (resp === 0){
-      this.toast?.addMessage('Only paid order can be accepted', 'Warning', ToastLevelEnum.error);
+      this.toast?.addMessage('Only paid order or platform web and marketplace can be accepted', 'Warning', ToastLevelEnum.error);
     } else {
       this.toast?.addMessage(`${resp} order has been successfully accepted`, 'Order accepted', ToastLevelEnum.success);
     }
