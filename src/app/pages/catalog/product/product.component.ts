@@ -1,7 +1,7 @@
 import {StockInputComponent} from './stock-input/stock-input.component';
 import {HttpErrorResponse} from '@angular/common/http';
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import * as ClassicEditor from '@gdnnusantara/ckeditor5-build/build/ckeditor';
 import {NgxSmartModalService} from 'ngx-smart-modal';
@@ -461,7 +461,6 @@ const log = new Logger('ProductComponent');
             [hideDelete]="true"
           >
           </nus-detail-actions>
-          <button type="button" (click)="checkValid()">Validate</button>
         </form>
       </div>
       <div class="side-nav">
@@ -590,6 +589,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   readonly DESCRIPTION_MIN_LENGTH = 30;
   readonly SEO_MAX_LENGTH = 160;
   readonly UPC_MAX_LENGTH = 20;
+  readonly BARCODE_MAX_LENGTH = 20;
 
   productClasses: Array<products.IProductClass>;
   categories: Array<ICategory>;
@@ -904,18 +904,21 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         Validators.maxLength(this.DESCRIPTION_MAX_LENGTH)]],
       weight: [entity?.weight, [Validators.required, Validators.min(0.01),
       Validators.max(9999)]],
-      price: [0, [Validators.minLength(0), Validators.max(999999999), Validators.min(1)]],
+      price: [0, [Validators.minLength(0), Validators.max(999999999), Validators.min(0)]],
       dimensions: this.fb.group({
         currentLength: [entity?.dimensions?.currentLength, [
+          Validators.required,
           Validators.min(1),
           Validators.max(9999),
         ]],
         currentWidth: [entity?.dimensions?.currentWidth, [
+          Validators.required,
           Validators.min(1),
           Validators.max(9999),
         ]],
         currentHeight: [entity?.dimensions?.currentHeight, [
-          Validators.min(0.01),
+          Validators.required,
+          Validators.min(1),
           Validators.max(9999),
         ]]
       }),
@@ -933,7 +936,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       productRelated: this.fb.array([]),
       bundle: bundleInitialValue,
       barcode: [entity?.barcode, [Validators.required,
-        Validators.maxLength(120),
+        Validators.maxLength(this.BARCODE_MAX_LENGTH),
         Validators.pattern('^[A-Z0-9]+$'),
       ]],
     });
@@ -986,6 +989,11 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       this.enabledAttributes = entity?.enabledAttributes ?? [];
     } else {
       this.enabledAttributes = this.parentProduct.enabledAttributes ?? [];
+    }
+    if (!this.enterpriseLicense()) {
+      this.price.clearValidators();
+      this.price.setValidators([Validators.minLength(0), Validators.max(999999999), Validators.min(1)]);
+      this.price.updateValueAndValidity();
     }
     this.form.markAllAsTouched();
   }
@@ -1291,6 +1299,31 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
   checkValid(): void {
     this.isValidForm();
+    log.debug(this.form.valid);
+    log.debug(this.getFormErrors(this.form));
+    log.debug(this.form.errors);
+    log.debug(this.priceListHost.validatePriceListHost());
+  }
+  getFormErrors(form: AbstractControl) {
+    if (form instanceof FormControl) {
+      // Return FormControl errors or null
+      return form.errors ?? null;
+    }
+    if (form instanceof FormGroup) {
+      const groupErrors = form.errors;
+      // Form group can contain errors itself, in that case add'em
+      const formErrors = groupErrors ? {groupErrors} : {};
+      Object.keys(form.controls).forEach(key => {
+        // Recursive call of the FormGroup fields
+        const error = this.getFormErrors(form.get(key));
+        if (error !== null) {
+          // Only add error if not null
+          formErrors[key] = error;
+        }
+      });
+      // Return FormGroup errors or null
+      return Object.keys(formErrors).length > 0 ? formErrors : null;
+    }
   }
   isValidForm(): boolean {
     this.mediaError = [];
