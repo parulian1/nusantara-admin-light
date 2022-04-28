@@ -1,9 +1,9 @@
-import {AfterViewInit, Component, EventEmitter, OnInit, ViewChild} from '@angular/core';
-import {NgxSmartModalComponent} from 'ngx-smart-modal';
-import {DialogResult, Logger} from '@nusantara/core';
+import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { NgxSmartModalComponent } from 'ngx-smart-modal';
+import { DialogResult, Logger } from '@nusantara/core';
 import * as Papa from 'papaparse';
-import {drf} from '@nusantara/models';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import { drf } from '@nusantara/models';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 const CSV_FIELD = ['upc', 'qty', 'reason', 'sku', 'notes'];
 const CSV_FIELD_DESC = {
@@ -148,7 +148,7 @@ const logger = new Logger('CSVDialogComponent');
 
       <div class="csv-dialog-actions">
         <button class="control" (click)="nextStepMap()" [disabled]="disabledCheck()" i18n>Next</button>
-        <button class="control secondary ghost" (click)="prevStepMap()" i18n>Cancel</button>
+        <button class="control secondary ghost" (click)="prevStepMap($event)" i18n>Cancel</button>
       </div>
 
     </ngx-smart-modal>
@@ -329,6 +329,9 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
 
   cancel() {
     this.modal.close();
+    window.location.reload();
+    // this.ngOnInit();
+    // this.cancelDialog.emit();
   }
 
   fileChange($event: any) {
@@ -374,7 +377,7 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
     }
   }
 
-  prevStepMap() {
+  prevStepMap($event: any) {
     if (this.currentStep === 'start') {
       this.fileTarget = null;
       this.csvNoHeader.setValue(false);
@@ -383,19 +386,21 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
     } else {
       this.currentStep = 'start';
       this.fileTarget = null;
+      $event.target = null;
       this.csvNoHeader.setValue(false);
       this.csvNoHeader.disable();
     }
   }
 
   parseCsv() {
-    this.columnChoices = {
-      upc: null,
-      qty: null,
-      reason: null,
-      sku: null,
-      notes: null
-    };
+    /* Commented because it cause can't go next even after column choices set up */
+    // this.columnChoices = {
+    //   upc: null,
+    //   qty: null,
+    //   reason: null,
+    //   sku: null,
+    //   notes: null
+    // };
     this.hasCsvHeader = this.csvNoHeader.value === false;
     const reader: FileReader = new FileReader();
     reader.readAsText(this.fileTarget.files[0]);
