@@ -366,6 +366,15 @@ input.ng-untouched {
   border-color: var(--error) !important;
   background: url('assets/warning-24px.svg') no-repeat scroll right 15px center !important;
 }
+/* Direct error display*/
+.immediate-error-display-input input.ng-invalid {
+  border-color: var(--error) !important;
+  background: url('assets/warning-24px.svg') no-repeat scroll right 5px center !important;
+}
+.immediate-error-display-input select.ng-invalid {
+  border-color: var(--error) !important;
+  background: url('assets/warning-24px.svg') no-repeat scroll right 15px center !important;
+}
 
 input:not([type="checkbox"]) .ng-invalid {
   border-color: var(--error);

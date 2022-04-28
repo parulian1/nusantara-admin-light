@@ -82,7 +82,7 @@ const log = new Logger('ProductComponent');
         <form [formGroup]="form" (ngSubmit)="preSave()" class="fluid">
           <div id="general-info" class="wrapper">
             <h1 class="heading-1" i18n>General Information</h1>
-            <label>
+            <label class="immediate-error-display-input">
               <span i18n>Name</span>
               <input type="text"
                      [formControl]="name"
@@ -107,7 +107,9 @@ const log = new Logger('ProductComponent');
                 <div>
                   <input type="hidden" [formControl]="category" data-qa="category">
                   <div class="input-with-button">
-                  <input type="text" (click)="selectCategory()" readonly [value]="selectedCategory?.name" data-qa="category-pop">
+                  <input type="text" (click)="selectCategory()" readonly
+                         i18n-placeholder placeholder="Select Category"
+                         [value]="selectedCategory?.name" data-qa="category-pop">
                     <button (click)="selectCategory()"  type="button" title="Dropdown Category"  data-qa="category-pop-button"><span class="material-icons">expand_more</span></button>
                 </div>
                   <nus-field-errors [control]="category"></nus-field-errors>
@@ -122,7 +124,9 @@ const log = new Logger('ProductComponent');
                 <div>
                   <input type="hidden" [formControl]="productClass" data-qa="product-class">
                   <div class="input-with-button">
-                  <input type="text" (click)="selectProductClass()" readonly [value]="selectedProductClassValue?.name"
+                  <input type="text" (click)="selectProductClass()" readonly
+                         i18n-placeholder placeholder="Select Class"
+                         [value]="selectedProductClassValue?.name"
                          data-qa="product-class-pop">
                   <button (click)="selectProductClass()"  type="button" title="Dropdown Product Class" data-qa="product-class-pop-button"><span class="material-icons">expand_more</span></button>
                   </div>
@@ -191,7 +195,7 @@ const log = new Logger('ProductComponent');
             <h1 class="heading-1" i18n>Product Information</h1>
 
             <div class="rich-text-container">
-              <label for="content" class="external"><span i18n>Description</span></label>
+              <label for="content" class="external"><span i18n>Product Description (min. 50 character)</span></label>
               <ckeditor [editor]="Editor" [config]="editorConfig"
                         [formControl]="description"
                         id="description"
@@ -211,7 +215,9 @@ const log = new Logger('ProductComponent');
                 <div>
                   <input type="hidden" [formControl]="vendor" data-qa="vendor">
                   <div class="input-with-button">
-                  <input type="text" (click)="selectVendor()" readonly [value]="selectedVendor?.name" [title]="selectedVendor?.name"
+                  <input type="text" (click)="selectVendor()" readonly
+                         i18n-placeholder placeholder="Select Vendor"
+                         [value]="selectedVendor?.name" [title]="selectedVendor?.name"
                          data-qa="vendor-pop">
                     <button (click)="selectVendor()"  type="button" title="Dropdown Vendor" data-qa="vendor-pop-button"><span class="material-icons">expand_more</span></button>
                   </div>
@@ -226,7 +232,7 @@ const log = new Logger('ProductComponent');
             <h1 class="heading-1" i18n>Product Management</h1>
             <ng-template [ngIf]="structure.value === 'parent' && productFormType !== 'bundling'">
               <label>
-                <span i18n>Variant Table</span>
+                <span i18n>Variant Table (Optional)</span>
                 <table>
                   <thead>
                   <tr>
@@ -251,33 +257,37 @@ const log = new Logger('ProductComponent');
               </label>
             </ng-template>
 
-            <label>
+            <label class="immediate-error-display-input">
               <span i18n>UPC</span>
               <input type="text"
                      [formControl]="upc"
                      name="upc"
-                     placeholder="UPC must be unique"
+                     placeholder="UPC must be unique" i18-placeholder
                      data-qa="upc"/>
               <nus-field-errors [control]="upc"></nus-field-errors>
             </label>
 
-            <label>
+            <label class="immediate-error-display-input">
               <div id="barcode-label">
                 <span i18n>Barcode</span>
                 <a (click)="copyUpcToBarcode()" i18n>Copy from UPC</a>
               </div>
               <input type="text"
+                     placeholder="Input Barcode" i18-placeholder
                      [formControl]="barcode"
                      name="barcode"
                      data-qa="barcode"/>
               <nus-field-errors [control]="barcode"></nus-field-errors>
             </label>
 
-            <label class="single-price" *ngIf="!enterpriseLicense()">
+            <label class="single-price immediate-error-display-input" *ngIf="!enterpriseLicense()">
               <span i18n>Price</span>
+              <div class="prepend-label">
+                <span class="prepended-label">Rp.</span>
               <input type="number"
                      [formControl]="price" name="price" min="0" appOnlyNumber decimal="true"
                      (change)="setSinglePrice($event)">
+              </div>
               <nus-field-errors [control]="price"></nus-field-errors>
             </label>
 
@@ -303,45 +313,45 @@ const log = new Logger('ProductComponent');
 
           <div id="product-packaging" class="wrapper">
             <h1 class="heading-1" i18n>Product Packaging</h1>
-            <label>
+            <label class="immediate-error-display-input">
               <span i18n>Package Weight (kg)</span>
               <input type="number" [formControl]="weight"
                      name="weight"
-                     placeholder="Input Weight"
+                     placeholder="Input 1-9999"
                      data-qa="weight"/>
               <nus-field-errors [control]="weight"></nus-field-errors>
             </label>
             <div formGroupName="dimensions" class="product-dimension">
-              <label>
+              <label class="immediate-error-display-input">
                 <span i18n>Length (cm)</span>
                 <input
                   type="number"
                   name="length"
                   class="dimension-input"
                   formControlName="currentLength"
-                  placeholder="Input Length"
+                  placeholder="Input 1-9999"
                   data-qa="length"/>
                 <nus-field-errors [control]="currentLength"></nus-field-errors>
               </label>
-              <label>
+              <label class="immediate-error-display-input">
                 <span i18n>Width (cm)</span>
                 <input
                   type="number"
                   name="width"
                   class="dimension-input"
                   formControlName="currentWidth"
-                  placeholder="Input Width"
+                  placeholder="Input 1-9999"
                   data-qa="width"/>
                 <nus-field-errors [control]="currentWidth"></nus-field-errors>
               </label>
-              <label>
+              <label class="immediate-error-display-input">
                 <span i18n>Height (cm)</span>
                 <input
                   type="number"
                   name="height"
                   class="dimension-input"
                   formControlName="currentHeight"
-                  placeholder="Input Height"
+                  placeholder="Input 1-9999"
                   data-qa="height"/>
                 <nus-field-errors [control]="currentHeight"></nus-field-errors>
               </label>
@@ -351,7 +361,7 @@ const log = new Logger('ProductComponent');
           <div *ngIf="enterpriseLicense()" id="product-tag" class="wrapper">
             <h1 class="heading-1" i18n>Product Tag</h1>
             <div class="tag-manage">
-              <input type="text" name="input_tag" #inputTag/>
+              <input type="text" name="input_tag" #inputTag placeholder="Input Tag" i18n-placeholder/>
               <button (click)="addTag(inputTag.value); inputTag.value = ''" type="button" class="new-add-button wide" i18n>
                 <i class="material-icons">add</i> Select Product Tag
               </button>
@@ -372,8 +382,8 @@ const log = new Logger('ProductComponent');
           <div id="product-other" class="wrapper">
             <h1 class="heading-1" i18n>Other</h1>
             <label>
-              <span i18n>SEO Description</span>
-              <textarea placeholder="Input SEO Description" i18n-placeholder
+              <span i18n>Meta Description</span>
+              <textarea placeholder="Input Description" i18n-placeholder
                 [formControl]="seoDescription"
                 name="seo-description"
                 cols="30" rows="10"
@@ -386,8 +396,8 @@ const log = new Logger('ProductComponent');
               </span>
             </label>
             <label>
-              <span i18n>SEO Keywords</span>
-              <textarea placeholder="Input SEO Keywords" i18n-placeholder
+              <span i18n>Meta Keywords</span>
+              <textarea placeholder="Input Keyword" i18n-placeholder
                      [formControl]="seoMeta"
                      name="seo-meta"
                         cols="30" rows="10"
@@ -580,6 +590,27 @@ const log = new Logger('ProductComponent');
         font-weight: 700;
         font-size: 14px;
         line-height: 20px;
+      }
+    `,
+    `
+      .prepend-label {
+        position: relative;
+      }
+
+      .prepend-label span.prepended-label {
+        margin-left: 0;
+        position: absolute;
+        display: block;
+        transform: translate(0, -50%);
+        top: 50%;
+        pointer-events: none;
+        width: 25px;
+        text-align: center;
+        font-style: normal;
+      }
+
+      .prepend-label > input {
+        padding-left: 30px;
       }
     `
   ]
