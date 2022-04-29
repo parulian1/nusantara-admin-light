@@ -1130,6 +1130,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
             this.dimensions.controls[key].disable();
           });
         }
+        this.enabledAttributes = [];
       } else {
         this.selectedProductClass = null;
         this.weight.disable();
