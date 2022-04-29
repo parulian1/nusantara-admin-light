@@ -6,6 +6,9 @@ import { PagedResponse } from '@nusantara/core';
 import { marketplace } from '@nusantara/models';
 import * as fromMarketplaces from '@nusantara/reducers/marketplace.reducers';
 import * as shopActions from '@nusantara/actions';
+import { MarketplaceOrderService } from '@nusantara/services/marketplace-order.service';
+import { catchError } from 'rxjs/operators';
+import { OrderDownloadFileService } from '@nusantara/services/order-download-file.service';
 
 @Component({
   selector: 'nus-marketplace-setup',
@@ -54,7 +57,7 @@ import * as shopActions from '@nusantara/actions';
               <a *ngIf="entity.marketplace !== 'tiktok'" [routerLink]="['product-class/', entity.slug]" (click)="setSelectedShop(entity)" i18n>
                 Map Class & Attribute
               </a>
-              <a *ngIf="entity.marketplace === 'tiktok'" (click)="downloadOrder(entity)">Download Order List</a>
+              <a *ngIf="entity.marketplace === 'tiktok'" (click)="downloadOrder(entity.slug)">Download Order List</a>
             </td>
             <td *ngIf="entity.isConnected == false">
               <a [routerLink]="[entity.slug]" i18n>Reconnect</a>
@@ -78,7 +81,9 @@ export class ConnectComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private store: Store<fromMarketplaces.State>
+    private store: Store<fromMarketplaces.State>,
+    private service: MarketplaceOrderService,
+    private orderDownloadService: OrderDownloadFileService,
   ) {}
 
   ngOnInit() {
@@ -92,7 +97,12 @@ export class ConnectComponent implements OnInit {
   setSelectedShop(shop: marketplace.IShop) {
     this.store.dispatch(new shopActions.SetCurrentShop(shop));
   }
-  downloadOrder(shop: marketplace.IShop) {
-    this.store.dispatch(new shopActions.SetCurrentShop(shop));
+
+  downloadOrder(slug: string){
+    this.service.getTikTokOrderCSV(slug).subscribe((response: string) => {
+      console.log('test')
+      console.log(response)
+        this.orderDownloadService.downloadAsCsv(response, 'tiktok-order-list');
+    });
   }
 }

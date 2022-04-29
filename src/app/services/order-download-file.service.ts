@@ -6,11 +6,13 @@ import * as moment from 'moment';
 })
 export class OrderDownloadFileService {
   downloadAsCsv(data: string, type: string) {
+    console.log(data)
     let filename: string;
     const today = moment().format('YYYY-MM-DD').toString();
 
     if(type === 'product-list'){ filename = `PL-${today}`; }
     if(type === 'order-list'){ filename = `OL-${today}`; }
+    if(type === 'tiktok-order-list'){ filename = `order-${today}`; }
 
     let blob = new Blob(["\ufeff" + data], {
       type: "text/csv;charset=utf-8;",

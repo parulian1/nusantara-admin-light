@@ -8,6 +8,8 @@ import { Observable } from "rxjs";
 export class MarketplaceOrderService {
   baseUrl = "/api/order/order-marketplace";
   baseMpUrl = "/api/marketplace/";
+  readonly options = { responseType: 'text' as 'json' };
+
 
   constructor(private httpClient: HttpClient) {}
 
@@ -23,5 +25,10 @@ export class MarketplaceOrderService {
     return this.httpClient.get<any>(
       `${this.baseMpUrl}order-logistic/${shopId}/logistic/${orderNumber}/`,
     );
+  }
+  getTikTokOrderCSV(slug:string) {
+    return this.httpClient.get<any>(
+      `${this.baseMpUrl}order-marketplace/${slug}/download/`, this.options
+    )
   }
 }
