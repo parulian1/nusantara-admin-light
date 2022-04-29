@@ -360,13 +360,17 @@ const log = new Logger('ProductComponent');
 
           <div *ngIf="enterpriseLicense()" id="product-tag" class="wrapper">
             <h1 class="heading-1" i18n>Product Tag (max 20)</h1>
-            <div class="tag-manage">
-              <input type="text" name="input_tag" #inputTag placeholder="Input Tag" i18n-placeholder/>
+            <div class="tag-manage immediate-error-display-input">
+              <input type="text" name="input_tag"
+                     [formControl]="tag"
+                     #inputTag placeholder="Input Tag" i18n-placeholder
+              />
               <button (click)="addTag(inputTag.value); inputTag.value = ''"
-                      [disabled]="!inputTag.value ||( tags.controls.length > 20)"
+                      [disabled]="!inputTag.value ||( tags.controls.length > 20) || !tagForm.valid"
                       type="button" class="new-add-button wide" i18n>
                 <i class="material-icons">add</i> Select Product Tag
               </button>
+              <nus-field-errors [control]="tag"></nus-field-errors>
             </div>
             <div class="tag-list">
             <label *ngFor="let t of tags.controls; let i = index" class="tag-item">
@@ -731,6 +735,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   priceListEnabled = false;
 
+  tagForm: FormGroup;
+
 
   constructor(service: ProductService,
               private fb: FormBuilder,
@@ -902,8 +908,14 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     this.getMarketplaceLinks();
     this.getProductFormType();
     this.getAdvancePrice();
-
+    this.tagForm = this.fb.group({
+      tag: ['', [Validators.pattern(/^[A-Za-z0-9]*$/)]]
+    });
     super.ngOnInit();
+  }
+
+  get tag(): FormControl {
+    return this.tagForm.get('tag') as FormControl;
   }
 
 
