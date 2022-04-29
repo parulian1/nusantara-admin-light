@@ -317,7 +317,7 @@ const log = new Logger('ProductComponent');
               <span i18n>Package Weight (kg)</span>
               <input type="number" [formControl]="weight"
                      name="weight"
-                     placeholder="Input 1-9999"
+                     placeholder="Input 0.01-9999"
                      data-qa="weight"/>
               <nus-field-errors [control]="weight"></nus-field-errors>
             </label>
@@ -359,10 +359,12 @@ const log = new Logger('ProductComponent');
           </div>
 
           <div *ngIf="enterpriseLicense()" id="product-tag" class="wrapper">
-            <h1 class="heading-1" i18n>Product Tag</h1>
+            <h1 class="heading-1" i18n>Product Tag (max 20)</h1>
             <div class="tag-manage">
               <input type="text" name="input_tag" #inputTag placeholder="Input Tag" i18n-placeholder/>
-              <button (click)="addTag(inputTag.value); inputTag.value = ''" type="button" class="new-add-button wide" i18n>
+              <button (click)="addTag(inputTag.value); inputTag.value = ''"
+                      [disabled]="!inputTag.value ||( tags.controls.length > 20)"
+                      type="button" class="new-add-button wide" i18n>
                 <i class="material-icons">add</i> Select Product Tag
               </button>
             </div>
@@ -910,7 +912,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
    *
    * Special notes related to the ProductComponent:
    * 1. There is differing logic depending on whether we're initializing a parent or a child (variant)
-   * 2. From a parent, the variants array is READ-ONLY at the API, so we DO NOT set it on this form.
+   * 2. From a parent, the variants array is READ-ONLY at the API, so we DO NOT set it on this form. - + [ ] / \ . & ! _
    */
   initializeForm(entity?: products.IProduct) {
     let bundleInitialValue = this.fb.array([]);
@@ -921,14 +923,14 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       name: [entity?.name, [
         Validators.required,
         Validators.maxLength(120),
-        Validators.pattern('^[A-Za-z0-9 ]+$')]],
+        Validators.pattern(/^[A-Za-z0-9-_ &!+/\\\[\]\.]*$/)]],
       isActive: [entity?.isActive, []],
       parent: [entity?.parent],
       href: [entity?.href],
       upc: [entity?.upc, [Validators.required,
         Validators.maxLength(this.UPC_MAX_LENGTH),
         Validators.pattern('^[A-Z0-9]+$')]],
-      structure: [entity?.structure ?? 'parent', [Validators.required,]],
+      structure: [entity?.structure ?? 'parent', [Validators.required, ]],
       description: [entity?.description, [
         Validators.required,
         Validators.minLength(this.DESCRIPTION_MIN_LENGTH),
@@ -1200,9 +1202,11 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   addTag(value?: string) {
-    this.tags.push(
-      this.fb.control(value, [Validators.required])
-    );
+    if (!!value) {
+      this.tags.push(
+        this.fb.control(value, [Validators.required])
+      );
+    }
   }
 
   addRelatedProduct() {
@@ -1406,7 +1410,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   removeRelated(index: number) {
     const prevRelated = this.productRelated.at(index).value;
-    const postRemove = this.apiPostRelatedProduct(prevRelated, 'remove', this.productRelated, index);
+    this.apiPostRelatedProduct(prevRelated, 'remove', this.productRelated, index);
   }
 
   addProductRelation(product: products.IProductRelation) {

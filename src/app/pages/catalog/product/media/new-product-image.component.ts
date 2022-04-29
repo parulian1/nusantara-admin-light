@@ -72,7 +72,8 @@ export class NewProductImageComponent extends AbstractEditingComponent implement
       sortPriority: [this.priorityValue, [Validators.required, ]],
       identifier: [  this.randomString(10), [Validators.required, ]],
       type: ['image', [Validators.required, ]],
-      youtubeVideoId: [null, []]
+      youtubeVideoId: [null, []],
+      imageName: ['', []]
     });
   }
 
@@ -90,6 +91,7 @@ export class NewProductImageComponent extends AbstractEditingComponent implement
           (data?.target as HTMLInputElement)?.files )
       ]);
       this.image.updateValueAndValidity();
+      this.form.get('imageName').patchValue((data?.target as HTMLInputElement)?.files[0].name);
     }
     this.setImagePreview(data,  (url) => this.imagePreviewUrl = url);
   }

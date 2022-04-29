@@ -11,6 +11,7 @@ import {NewProductImageComponent} from './new-product-image.component';
 import {NewProductYoutubeComponent} from './new-product-youtube.component';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import {IProductMedia} from '@nusantara/models/products';
+import {find} from 'rxjs/operators';
 
 const logger = new Logger('ProductMediaHost');
 
@@ -62,20 +63,23 @@ const logger = new Logger('ProductMediaHost');
         <input type="text" name="input_youtube" [formControl]="videoId"
                placeholder="https://www.youtube.com/watch?v=QMUfjGe11gs"/>
         <button (click)="addVideoAction()" type="button" class="new-add-button wide"
-                [disabled]="videoId?.errors?.length || entitiesVideo.length >= MAXIMUM_VIDEO"
+                [disabled]="(videoId?.errors?.length > 0) || entitiesVideo.length >= MAXIMUM_VIDEO || !videoForm.valid"
                 i18n>
           <i class="material-icons">add</i> Add video
         </button>
+        <div *ngIf="videoId?.hasError('apiError')" class="error-detail">
+          <div *ngIf="videoId.errors.apiError">{{ videoId.getError('apiError') }}</div>
+        </div>
       </div>
 
       <div class="video-media-wrapper product-media-wrapper drag-media-wrapper" cdkDropListOrientation="horizontal"
            cdkDropList (cdkDropListDropped)="dropEventVideo($event)">
-        <div class="media-drag"   *ngFor="let media of entitiesVideo; let i=index" cdkDrag
+        <div class="media-drag" *ngFor="let media of entitiesVideo; let i=index" cdkDrag
              cdkDragBoundary=".video-media-wrapper">
-        <nus-product-media
-          [entity]="media"
-          (remove)="removeVideo(i)">
-        </nus-product-media>
+          <nus-product-media
+            [entity]="media"
+            (remove)="removeVideo(i)">
+          </nus-product-media>
         </div>
       </div>
     </div>
@@ -230,6 +234,7 @@ export class ProductMediaHostComponent
   newVideos: Array<products.IProductMedia> = [];
   deletedMedia: Array<products.IProductMedia> = [];
   imageList: Array<FormData> = [];
+  videoList: Array<FormData> = [];
 
   allowedImage = this.MINIMUM_IMAGE;
 
@@ -248,7 +253,7 @@ export class ProductMediaHostComponent
       this.mediaTypes = data.mediaTypes;
     });
     this.videoForm = this.fb.group({
-      videoId: ['', [Validators.required,]]
+      videoId: ['', [Validators.required, ]]
     });
   }
 
@@ -338,7 +343,7 @@ export class ProductMediaHostComponent
   }
 
   recreateVideoList(): void {
-
+    this.videoList = [];
     this.entitiesVideo.forEach((media, idx, entities) => {
       if (!!media.href) {
         const formData: any = new FormData();
@@ -351,14 +356,14 @@ export class ProductMediaHostComponent
           formData.append('youtubeVideoId', media?.youtubeVideoId);
         }
 
-        this.imageList.push(formData as FormData);
+        this.videoList.push(formData as FormData);
       } else {
         // new image or video
         if (media?.type === 'image') {
           const xMedia = this.newImages.find((val) => {
             if (val.get('identifier') === media?.identifier) {
               val.set('sortPriority', '' + idx);
-              this.imageList.push(val);
+              this.videoList.push(val);
             }
           });
         } else if (media?.type === 'you_tube') {
@@ -370,7 +375,7 @@ export class ProductMediaHostComponent
               formData.append('type', media?.type);
               formData.append('youtubeVideoId', media?.youtubeVideoId);
 
-              this.imageList.push(formData as FormData);
+              this.videoList.push(formData as FormData);
             }
           });
         }
@@ -426,15 +431,22 @@ export class ProductMediaHostComponent
    */
   onImageModalClosed() {
     if (this.newImageModal.result === DialogResult.OK) {
-      // data that will be saved to API
-      this.newImages.push(this.newImageModal.getValue());
+      const imageValue = this.newImageModal.getValue();
+      if (this.validateImage(imageValue)) {
+        // data that will be saved to API
+        this.newImages.push(this.newImageModal.getValue());
 
-      // preview data
-      const viewModel = Object.assign({}, this.newImageModal.form.value);
-      viewModel.image = this.newImageModal.imagePreviewUrl;
-      this.add(viewModel);
+        // preview data
+        const viewModel = Object.assign({}, this.newImageModal.form.value);
+        viewModel.image = this.newImageModal.imagePreviewUrl;
+        this.add(viewModel);
+      } else {
+        alert('Duplicate image');
+      }
+
     }
   }
+
 
   onYoutubeModalClosed() {
     if (this.newYoutubeModal.result === DialogResult.OK) {
@@ -470,32 +482,24 @@ export class ProductMediaHostComponent
 
     // submit all changes to the API and an observable of all responses
     return zip(
-      // ...this.newImages.map((img) => {
-      //   console.log('save image', img.get('sortPriority'));
-      //   return this.service.save(img);
-      // }),
       ...this.imageList.map(vid => {
-        if (vid.get('type') === 'you_tube') {
-          let href = null;
-          if (vid.get('href') !== 'null') {
-            href = vid.get('href').toString();
-          }
-          const dataVideo: IProductMedia = {
-            href,
-            youtubeVideoId: vid.get('youtubeVideoId').toString(),
-            image: null,
-            sortPriority: parseInt(vid.get('sortPriority').toString(), 10),
-            type: 'you_tube',
-            product: product.href
-          };
-          return this.service.save(dataVideo);
-        }
         return this.service.save(vid);
       }),
-      // ...this.newVideos.map(vid => {
-      //
-      //   return this.service.save(vid);
-      // }),
+      ...this.videoList.map(vid => {
+        let href = null;
+        if (vid.get('href') !== 'null') {
+          href = vid.get('href').toString();
+        }
+        const dataVideo: IProductMedia = {
+          href,
+          youtubeVideoId: vid.get('youtubeVideoId').toString(),
+          image: null,
+          sortPriority: parseInt(vid.get('sortPriority').toString(), 10),
+          type: 'you_tube',
+          product: product.href
+        };
+        return this.service.save(dataVideo);
+      }),
       ...this.deletedMedia.map(m => this.service.delete(m))
     );
   }
@@ -523,27 +527,36 @@ export class ProductMediaHostComponent
   }
 
   addVideoAction() {
-
     if (this.videoForm.valid) {
       const videoId = this.parseYoutubeUrl(this.videoId.value);
-      logger.debug('AddVideoAction', videoId);
-      const form = this.fb.group({
-        href: [null, []],
-        image: [null, []],
-        sortPriority: [this.entitiesVideo.length + 1, [Validators.required,]],
-        identifier: [this.randomString(10), [Validators.required,]],
-        type: ['you_tube', [Validators.required,]],
-        youtubeVideoId: [videoId, [Validators.required,]]
+      const findVideo = this.entitiesVideo.filter((val, idx) => {
+        return val.youtubeVideoId === videoId;
       });
-      logger.debug(form.value);
+      if (this.entitiesVideo.find((val, idx) => {
+        return val.href === videoId;
+      })) {
 
-      this.newVideos.push(form.value);
+      } else {
+        logger.debug('AddVideoAction', videoId);
+        const form = this.fb.group({
+          href: [null, []],
+          image: [null, []],
+          sortPriority: [this.entitiesVideo.length + 1, [Validators.required, ]],
+          identifier: [this.randomString(10), [Validators.required, ]],
+          type: ['you_tube', [Validators.required, ]],
+          youtubeVideoId: [videoId, [Validators.required, ]]
+        });
+        logger.debug(form.value);
 
-      const viewModel = Object.assign({}, form.value);
-      viewModel.image = this.imagePreviewUrl;
-      this.add(viewModel);
-      this.videoId.reset();
-      this.imagePreviewUrl = '';
+        this.newVideos.push(form.value);
+
+        const viewModel = Object.assign({}, form.value);
+        viewModel.image = this.imagePreviewUrl;
+        this.add(viewModel);
+        this.videoId.reset();
+        this.imagePreviewUrl = '';
+      }
+
     } else {
       logger.debug(this.videoForm.errors);
       logger.debug(this.videoId.errors);
@@ -564,18 +577,27 @@ export class ProductMediaHostComponent
       logger.debug(value);
       const videoId = this.parseYoutubeUrl(value);
       if (!!videoId) {
-        this.google.getOembedDataByUrl(value).subscribe(resp => {
-          if (resp.status === 200 && resp.body) {
-            logger.debug(resp.body);
-            this.imagePreviewUrl = resp.body.thumbnail_url;
-            // this.title = resp.body.title;
-            // this.clickUrl = `https://youtube.com/watch?v=${(changes['entity'].currentValue as products.IProductMedia).youtubeVideoId}`;
-          } else {
-            this.videoId.setErrors(
-              {apiError: `Video '${value}' not found.`}
-            );
-          }
-        });
+        if (this.entitiesVideo.findIndex((val) => {
+          return val.youtubeVideoId === videoId;
+        }) < 0) {
+          this.google.getOembedDataByUrl(value).subscribe(resp => {
+            if (resp.status === 200 && resp.body) {
+              logger.debug(resp.body);
+              this.imagePreviewUrl = resp.body.thumbnail_url;
+              // this.title = resp.body.title;
+              // this.clickUrl = `https://youtube.com/watch?v=${(changes['entity'].currentValue as products.IProductMedia).youtubeVideoId}`;
+            } else {
+              this.videoId.setErrors(
+                {apiError: `Video '${value}' not found.`}
+              );
+            }
+          });
+        } else {
+          this.videoId.setErrors(
+            {apiError: `Video '${value}' has duplicate.`}
+          );
+        }
+
       } else {
         this.videoId.setErrors(
           {apiError: `Video '${value}' not found.`}
@@ -590,5 +612,14 @@ export class ProductMediaHostComponent
     const tryMatch = url.match(rx);
     return tryMatch[1] ?? null;
 
+  }
+
+  private validateImage(imageValue: FormData): boolean {
+    return this.entitiesImage.findIndex((val, idx) => {
+      if (!!val.href) {
+        return false;
+      }
+      return val.imageName === (imageValue.get('image') as File).name;
+    }) < 0;
   }
 }

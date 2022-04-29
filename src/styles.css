@@ -972,3 +972,8 @@ textarea.input-description {
   top: 50%;
   transform: translateY(-50%);
 }
+
+.ck-editor__editable_inline {
+  word-wrap:break-word;
+  word-break: break-all;
+}
