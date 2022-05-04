@@ -100,8 +100,6 @@ export class ConnectComponent implements OnInit {
 
   downloadOrder(slug: string){
     this.service.getTikTokOrderCSV(slug).subscribe((response: string) => {
-      console.log('test')
-      console.log(response)
         this.orderDownloadService.downloadAsCsv(response, 'tiktok-order-list');
     });
   }

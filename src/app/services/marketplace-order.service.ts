@@ -10,7 +10,6 @@ export class MarketplaceOrderService {
   baseMpUrl = "/api/marketplace/";
   readonly options = { responseType: 'text' as 'json' };
 
-
   constructor(private httpClient: HttpClient) {}
 
 
@@ -29,6 +28,6 @@ export class MarketplaceOrderService {
   getTikTokOrderCSV(slug:string) {
     return this.httpClient.get<any>(
       `${this.baseMpUrl}order-marketplace/${slug}/download/`, this.options
-    )
+    );
   }
 }

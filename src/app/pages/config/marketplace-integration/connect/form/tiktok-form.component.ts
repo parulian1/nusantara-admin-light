@@ -157,7 +157,7 @@ export class TiktokFormComponent implements OnInit {
 
   check_if_is_integer(value){
     if(value==""){
-      return true
+      return true;
     } else {
       return ((parseFloat(value) == parseInt(value)) && !isNaN(value) && (value.toString().length <= 10));
     }

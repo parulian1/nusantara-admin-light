@@ -6,7 +6,6 @@ import * as moment from 'moment';
 })
 export class OrderDownloadFileService {
   downloadAsCsv(data: string, type: string) {
-    console.log(data)
     let filename: string;
     const today = moment().format('YYYY-MM-DD').toString();
 
