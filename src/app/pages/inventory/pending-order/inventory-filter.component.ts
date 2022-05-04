@@ -6,7 +6,6 @@ import * as moment from 'moment';
 // import {Utils} from './utils';
 import {MatSelectChange} from '@angular/material/select';
 import {Logger} from '@nusantara/core';
-import {MatCheckboxChange} from '@angular/material/checkbox';
 
 const logger = new Logger('OrderFilter');
 
@@ -33,13 +32,12 @@ const logger = new Logger('OrderFilter');
               </mat-option>
             </mat-select>
           </mat-form-field> -->
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <mat-select
               [disableOptionCentering]="true"
               panelClass="mat-select-panel"
               formControlName="status"
               (selectionChange)="statusChange($event)">
-              <mat-option value="" i18n>All Status</mat-option>
               <mat-option
               *ngFor="let s of status"
               [value]="s.value">
@@ -47,25 +45,19 @@ const logger = new Logger('OrderFilter');
               </mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <mat-select [disableOptionCentering]="true"
                         panelClass="mat-select-panel"
-                        formControlName="tipe"
-                        (selectionChange)="logisticChange($event)">
-              <mat-option value="" i18n>All Logistics</mat-option>
+                        formControlName="type"
+                        (selectionChange)="typeChange($event)">
               <mat-option
-              *ngFor="let s of tipe"
-              [value]="s.value">
-                {{s.label}}
+              *ngFor="let t of type"
+              [value]="t.value">
+                {{t.label}}
               </mat-option>
             </mat-select>
           </mat-form-field>
         </div>
-      </label>
-      <label>
-        <mat-checkbox formControlName="isTesting" (change)="isTestingChange($event)">
-          Show Testing Order
-        </mat-checkbox>
       </label>
     </form>`,
   styles: [
@@ -104,14 +96,14 @@ export class InventoryFiltersComponent implements OnInit {
   };
 
   status = [
-    // { label: 'All', value: 'All' },
+    { label: 'All Status', value: '' },
     { label: 'Pending', value: 'Pending' },
     { label: 'Rejected', value: 'Rejected' },
     { label: 'Approved', value: 'Approved' },
   ];
 
-  tipe = [
-    // { label: 'All', value: 'All' },
+  type = [
+    { label: 'All Type', value: '' },
     { label: 'Delivery', value: 'Delivery' },
     { label: 'Adjusment', value: 'Adjusment' },
     { label: 'Transfer', value: 'Transfer' },
@@ -119,10 +111,8 @@ export class InventoryFiltersComponent implements OnInit {
 
   readonly START_TIME_PARAM = 'start_time';
   readonly END_TIME_PARAM = 'end_time';
-  readonly PLATFORM_PARAM = 'store_id';
-  readonly STATUS_PARAM = 'order_status_admin';
-  readonly LOGISTIC_PARAM = 'shipping_method';
-  readonly TESTING_PARAM = 'is_testing';
+  readonly STATUS_PARAM = 'status';
+  readonly TYPE_PARAM = 'type';
 
   constructor(public router: Router,
               public route: ActivatedRoute,
@@ -130,23 +120,6 @@ export class InventoryFiltersComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.route.data.subscribe(
-    //   (data: { orderStatus: IOption[]; orderFilter: IOrderFilter }) => {
-    //     this.orderStatuses = data.orderStatus;
-    //     this.orderFilter = data.orderFilter;
-    //     this.orderFilter = {
-    //       platform: [{
-    //         option: '0',
-    //         title: 'Web Order',
-    //       } as IOption].concat(this.orderFilter.platform.map(vl => {
-    //         return {option: `${vl.option}`, title: vl.title};
-    //       })),
-    //       orderStatus: this.orderFilter.orderStatus,
-    //       logistics: this.orderFilter.logistics,
-    //     } as IOrderFilter;
-    //   }
-    // );
-
     this.initializeForm();
 
     this.route.queryParamMap.subscribe((value) => {
@@ -163,77 +136,51 @@ export class InventoryFiltersComponent implements OnInit {
       // const dateType = utils.getDateOption(startTime, endTime);
       // this.updateDate(dateType, startTime, endTime);
 
-
-      // const platform = value.get(this.PLATFORM_PARAM) !== null
-      //   ? this.getValidOption(
-      //     value.get(this.PLATFORM_PARAM),
-      //     this.orderFilter.platform
-      //   )
-      //   : null;
-
       const status = value.get(this.STATUS_PARAM)
         ? this.getValidOption(
           value.get(this.STATUS_PARAM),
-          this.orderFilter.orderStatus
+          this.status
         )
         : null;
 
-      const logistic = value.get(this.LOGISTIC_PARAM)
+      const type = value.get(this.TYPE_PARAM)
         ? this.getValidOption(
-          decodeURI(value.get(this.LOGISTIC_PARAM)),
-          this.orderFilter.logistics
+          decodeURI(value.get(this.TYPE_PARAM)),
+          this.type
         )
         : null;
       const q = value.get('q') ? value.get('q') : null;
 
-      const isTesting = moment(value.get(this.TESTING_PARAM)).isValid
-        ? value.get(this.TESTING_PARAM)
-        : null;
-
-
-      // if (platform) {
-      //   this.updatePlatform(platform);
-      // }
       if (status) {
         this.updateStatus(status);
       }
-      if (logistic) {
-        this.updateLogistic(logistic);
+      if (type) {
+        this.updateType(type);
       }
       if (q) {
         this.updateQuery(q);
       }
-      if (!!isTesting && isTesting.toLowerCase() === 'true') {
-        this.updateTesting(isTesting);
-      }
 
       this.filtersForm.patchValue({
         status: status ? status : '',
-        tipe: logistic ? logistic : '',
-        isTesting: isTesting ? isTesting.toLowerCase() === 'true' : false,
+        type: type ? type : '',
       });
 
-      // this.filtersForm.valueChanges.subscribe((newValue) => {
-      //   this.updateRoute({
-      //     [this.PLATFORM_PARAM]: newValue.platform ? newValue.platform : null,
-      //     [this.STATUS_PARAM]: newValue.status ? newValue.status : null,
-      //     [this.LOGISTIC_PARAM]: newValue.logistic ? newValue.logistic : null,
-      //     [this.TESTING_PARAM]: newValue.isTesting ? newValue.isTesting : null
-      //   });
-      //
-      //   this.updatePlatform(newValue.platform);
-      //   this.updateStatus(newValue.status);
-      //   this.updateLogistic(newValue.logistic);
-      // });
+      this.filtersForm.valueChanges.subscribe((newValue) => {
+        this.updateRoute({
+          [this.STATUS_PARAM]: newValue.status ? newValue.status : null,
+          [this.TYPE_PARAM]: newValue.type ? newValue.type : null,
+        });
+        this.updateStatus(newValue.status);
+        this.updateType(newValue.type);
+      });
     });
   }
 
   initializeForm() {
     this.filtersForm = this.fb.group({
-      platform: new FormControl(''),
       status: this.status[0].value,
-      tipe: this.tipe[0].value,
-      isTesting: new FormControl(),
+      type: this.type[0].value,
     });
   }
 
@@ -270,9 +217,16 @@ export class InventoryFiltersComponent implements OnInit {
     });
   }
 
-  getValidOption(param: any, options: Array<IOption>) {
-    const result = options.find(({option}) => option === param);
-    return result ? param : '';
+  getValidOption(param: any, options: any) {
+    const result = []
+    options.forEach(el => {
+      if(el.value === param){
+        result.push(el)
+      }
+    });
+    console.log(result)
+
+    return result.length > 0 ? param : '';
   }
 
   updateDate(type: string, startDate: string, endDate: string) {
@@ -284,17 +238,12 @@ export class InventoryFiltersComponent implements OnInit {
     }
   }
 
-  updatePlatform(platform: number) {
-    this.filtersValue.platform = platform;
-    this.filterApplied.next(this.filtersValue);
-  }
-
   updateStatus(status: string) {
     this.filtersValue.status = status;
     this.filterApplied.next(this.filtersValue);
   }
 
-  updateLogistic(logistic: string) {
+  updateType(logistic: string) {
     this.filtersValue.logistic = logistic;
     this.filterApplied.next(this.filtersValue);
   }
@@ -302,33 +251,6 @@ export class InventoryFiltersComponent implements OnInit {
   updateQuery(q: string) {
     this.filtersValue.q = q;
     this.filterApplied.next(this.filtersValue);
-  }
-
-  updateTesting(isTesting: string) {
-    if (isTesting) {
-      this.filtersValue.isTesting = isTesting;
-    } else {
-      this.filtersValue.isTesting = null;
-    }
-
-    this.filterApplied.next(this.filtersValue);
-    this.updateRoute({
-      page: '1',
-      is_testing: `${isTesting}`,
-    });
-  }
-
-  selectChange($event: MatSelectChange) {
-    if (!!$event.value && $event.value !== '') {
-      this.filtersValue.platform = $event.value;
-    } else {
-      this.filtersValue.platform = null;
-    }
-    this.filterApplied.next(this.filtersValue);
-    this.updateRoute({
-      page: '1',
-      [this.PLATFORM_PARAM]: $event.value,
-    });
   }
 
   statusChange($event: MatSelectChange) {
@@ -344,7 +266,7 @@ export class InventoryFiltersComponent implements OnInit {
     });
   }
 
-  logisticChange($event: MatSelectChange) {
+  typeChange($event: MatSelectChange) {
     if (!!$event.value && $event.value !== '') {
       this.filtersValue.logistic = $event.value;
     } else {
@@ -353,16 +275,7 @@ export class InventoryFiltersComponent implements OnInit {
     this.filterApplied.next(this.filtersValue);
     this.updateRoute({
       page: '1',
-      [this.LOGISTIC_PARAM]: $event.value,
-    });
-  }
-
-  isTestingChange($event: MatCheckboxChange) {
-    this.filtersValue.isTesting = $event.checked ? 'true' : 'false';
-    this.filterApplied.next(this.filtersValue);
-    this.updateRoute({
-      page: '1',
-      [this.TESTING_PARAM]: this.filtersValue.isTesting,
+      [this.TYPE_PARAM]: $event.value,
     });
   }
 }
