@@ -115,15 +115,14 @@ export class TiktokFormComponent implements OnInit {
       .subscribe((data: marketplace.IMarketplaceWarehouse[]) => {
         this.warehouses = data;
       });
-
     if (this.shopSlug) {
       this.fillFormDetail(this.shopSlug);
     }
   }
 
-  fillFormDetail(sellerEmail: string) {
+  fillFormDetail(shopSlug: string) {
     this.service
-      .getConnection(sellerEmail)
+      .getConnection(shopSlug)
       .subscribe((data: marketplace.ITiktokAuthResponse) => {
         if (data != null) {
           this.form.patchValue({
@@ -154,26 +153,6 @@ export class TiktokFormComponent implements OnInit {
       warehouseId: [entity?.warehouse, [Validators.required]],
     });
   }
-
-  check_if_is_integer(value){
-    if(value==""){
-      return true;
-    } else {
-      return ((parseFloat(value) == parseInt(value)) && !isNaN(value) && (value.toString().length <= 10));
-    }
-  }
-
-
-  isInteger(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } | null =>  {
-      if(control.value!==null){
-          return this.check_if_is_integer(control.value) ? null : {
-                 notNumeric: true
-          }
-      }
-    }
-  }
-
 
   getFormValue(): any {
     const formValue = {
