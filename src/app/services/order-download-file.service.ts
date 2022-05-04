@@ -11,6 +11,7 @@ export class OrderDownloadFileService {
 
     if(type === 'product-list'){ filename = `PL-${today}`; }
     if(type === 'order-list'){ filename = `OL-${today}`; }
+    if(type === 'tiktok-order-list'){ filename = `order-${today}`; }
 
     let blob = new Blob(["\ufeff" + data], {
       type: "text/csv;charset=utf-8;",

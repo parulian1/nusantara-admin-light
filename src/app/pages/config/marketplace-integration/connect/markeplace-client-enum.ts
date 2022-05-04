@@ -6,5 +6,6 @@ export enum MarketplaceClientEnum {
   tokopedia = 'tokopedia',
   tsc = 'tsc',
   lazada = 'lazada',
-  bukalapak = 'bukalapak'
+  bukalapak = 'bukalapak',
+  tiktok = 'tiktok'
 }

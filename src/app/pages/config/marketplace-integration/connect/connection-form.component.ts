@@ -54,6 +54,11 @@ import { MarketplaceClientEnum } from './markeplace-client-enum';
           [shopSlug]="shopSlug"
           [isEdit]="editMode"
         ></nus-bukalapak-client-form>
+        <nus-tiktok-client-form
+          *ngSwitchCase="marketplaceClient.tiktok"
+          [shopSlug]="shopSlug"
+          [isEdit]="editMode"
+        ></nus-tiktok-client-form>
       </div>
     </div>
   `,

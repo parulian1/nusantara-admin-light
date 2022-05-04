@@ -14,7 +14,8 @@ import {
   TokopediaClientFormComponent,
   TscFormComponent,
   LazadaFormComponent,
-  BukalapakFormComponent
+  BukalapakFormComponent,
+  TiktokFormComponent
 } from './connect';
 
 import {
@@ -78,6 +79,7 @@ export function getMarketplacesConfig(
     AttributeSelectionFormComponent,
     AttributeMatchingFormComponent,
     BukalapakFormComponent,
+    TiktokFormComponent,
 
     // setup
     SetupComponent,
@@ -95,7 +97,7 @@ export function getMarketplacesConfig(
     PublishListComponent,
     PublishDetailComponent,
 
-    MarketplaceIntegrationComponent, 
+    MarketplaceIntegrationComponent,
   ],
   imports: [
     CommonModule,
@@ -112,7 +114,7 @@ export function getMarketplacesConfig(
     // Angular Material
     MatIconModule,
     MatSlideToggleModule,
-  
+
     MarketplaceIntegrationRoutingModule,
   ],
   providers: [
