@@ -26,7 +26,7 @@ const logger = new Logger('ProductMediaHost');
   selector: 'nus-product-media-host',
   template: `
     <div class="image-section">
-      <h4 i18n>Product Image (Min. 3)</h4>
+      <h4 i18n>Product Image (Min. {{MINIMUM_IMAGE}})</h4>
       <span>Format .jpg & .png file size min 300x300px</span>
 
       <div class="product-media-wrapper image-media-wrapper drag-media-wrapper"

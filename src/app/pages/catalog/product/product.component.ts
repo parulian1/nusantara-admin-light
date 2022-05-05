@@ -195,7 +195,7 @@ const log = new Logger('ProductComponent');
             <h1 class="heading-1" i18n>Product Information</h1>
 
             <div class="rich-text-container">
-              <label for="content" class="external"><span i18n>Product Description (min. 50 character)</span></label>
+              <label for="content" class="external"><span i18n>Product Description (min. {{DESCRIPTION_MIN_LENGTH}} character)</span></label>
               <ckeditor [editor]="Editor" [config]="editorConfig"
                         [formControl]="description"
                         id="description"
@@ -359,14 +359,14 @@ const log = new Logger('ProductComponent');
           </div>
 
           <div *ngIf="enterpriseLicense()" id="product-tag" class="wrapper">
-            <h1 class="heading-1" i18n>Product Tag (max 20)</h1>
+            <h1 class="heading-1" i18n>Product Tag (max {{MAX_TAG_NUMBER}})</h1>
             <div class="tag-manage immediate-error-display-input">
               <input type="text" name="input_tag"
                      [formControl]="tag"
                      #inputTag placeholder="Input Tag" i18n-placeholder
               />
               <button (click)="addTag(inputTag.value); inputTag.value = ''"
-                      [disabled]="!inputTag.value ||( tags.controls.length > 20) || !tagForm.valid"
+                      [disabled]="!inputTag.value ||( tags.controls.length > MAX_TAG_NUMBER) || !tagForm.valid"
                       type="button" class="new-add-button wide" i18n>
                 <i class="material-icons">add</i> Select Product Tag
               </button>
@@ -622,11 +622,13 @@ const log = new Logger('ProductComponent');
   ]
 })
 export class ProductComponent extends AbstractDetailComponent<products.IProduct> implements OnInit, AfterViewInit {
-  readonly DESCRIPTION_MAX_LENGTH = 5000;
-  readonly DESCRIPTION_MIN_LENGTH = 30;
+  readonly DESCRIPTION_MAX_LENGTH = 3000;
+  readonly DESCRIPTION_MIN_LENGTH = 50;
   readonly SEO_MAX_LENGTH = 160;
   readonly UPC_MAX_LENGTH = 20;
   readonly BARCODE_MAX_LENGTH = 20;
+  readonly MAX_TAG_NUMBER = 20;
+  readonly MAX_TAG_LENGTH = 20;
 
   productClasses: Array<products.IProductClass>;
   categories: Array<ICategory>;
@@ -909,7 +911,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     this.getProductFormType();
     this.getAdvancePrice();
     this.tagForm = this.fb.group({
-      tag: ['', [Validators.pattern(/^[A-Za-z0-9]*$/)]]
+      tag: ['', [Validators.pattern(/^[A-Za-z0-9]*$/),
+        Validators.maxLength(this.MAX_TAG_LENGTH)]]
     });
     super.ngOnInit();
   }
@@ -974,8 +977,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       attributes: this.fb.group({}),
       marketplace: this.fb.group({}),
       priceLists: this.fb.array([]),
-      seoMeta: [entity?.seoMeta, []],
-      seoDescription: [entity?.seoDescription, []],
+      seoMeta: [entity?.seoMeta, [Validators.maxLength(this.SEO_MAX_LENGTH)]],
+      seoDescription: [entity?.seoDescription, [Validators.maxLength(this.SEO_MAX_LENGTH)]],
       tags: this.fb.array([], [NusantaraValidators.preventArrayDuplicates()]),
       subscription: this.fb.group({}),
       productRelated: this.fb.array([]),
