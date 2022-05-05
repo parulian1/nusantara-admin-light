@@ -97,22 +97,22 @@ export class InventoryFiltersComponent implements OnInit {
 
   status = [
     { label: 'All Status', value: '' },
-    { label: 'Pending', value: 'Pending' },
-    { label: 'Rejected', value: 'Rejected' },
-    { label: 'Approved', value: 'Approved' },
+    { label: 'Pending', value: 'pending' },
+    { label: 'Rejected', value: 'rejected' },
+    { label: 'Approved', value: 'approved' },
   ];
 
   type = [
     { label: 'All Type', value: '' },
-    { label: 'Delivery', value: 'Delivery' },
-    { label: 'Adjusment', value: 'Adjusment' },
-    { label: 'Transfer', value: 'Transfer' },
+    { label: 'Delivery', value: 'receiving_order' },
+    { label: 'Adjusment', value: 'adjustment_order' },
+    { label: 'Transfer', value: 'transfer_order' },
   ];
 
   readonly START_TIME_PARAM = 'start_time';
   readonly END_TIME_PARAM = 'end_time';
-  readonly STATUS_PARAM = 'status';
-  readonly TYPE_PARAM = 'type';
+  readonly STATUS_PARAM = 'receiving_status';
+  readonly TYPE_PARAM = 'receiving_type';
 
   constructor(public router: Router,
               public route: ActivatedRoute,
