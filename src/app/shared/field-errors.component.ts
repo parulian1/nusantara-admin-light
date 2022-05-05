@@ -35,7 +35,7 @@ import {FormControl} from '@angular/forms';
         Ensure this value is less than or equal to {{ control.getError('max')?.max }}
       </div>
       <div *ngIf="control?.errors?.forbiddenName" i18n>
-        Accept only characters (&.!)
+        Accept only characters &.!/&#92;[]-+_
       </div>
       <div *ngIf="control?.errors?.invalidStock" i18n>
         Limited stock
