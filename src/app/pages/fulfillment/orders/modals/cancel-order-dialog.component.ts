@@ -1,5 +1,7 @@
+import { ThrowStmt } from '@angular/compiler';
 import { Component, EventEmitter, Input, ViewChild } from '@angular/core';
 import { DialogResult } from '@nusantara/core';
+import { OrderService } from '@nusantara/services';
 import { NgxSmartModalComponent } from 'ngx-smart-modal';
 
 @Component({
@@ -11,12 +13,12 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
           <h2 class="heading-2" i18n>Confirmation Cancellaction Order</h2>
           <p class="body-2" i18n>The order {{orderNum}} will be cancelled</p>
           <div>
-            <label *ngFor="let season of seasons" >
-              <input type="radio" name="cancel_reason" [value]="season" [(ngModel)]="favoriteSeason" i18n>
-              {{season}}
+            <label *ngFor="let reason of reasons;" >
+              <input type="radio" name="cancel_reason" [value]="reason.value" (change)="changeReason($event)" i18n>
+              {{reason.name}}
             </label>
-            <textarea *ngIf="favoriteSeason === 'Test'" id="" cols="30" rows="10" maxlength="500" [(ngModel)]="otherReason"></textarea>
-            <small *ngIf="favoriteSeason === 'Test'" class="pull-right">{{otherReason.length}} / 500</small>
+            <textarea *ngIf="textbox" cols="30" rows="10" maxlength="500" [(ngModel)]="otherReason"></textarea>
+            <small *ngIf="textbox" class="pull-right">{{otherReason.length}} / 500</small>
           </div>
         </div>
         <div class="action">
@@ -43,14 +45,22 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
 export class CancelOrderDialogComponent {
   @ViewChild('modal') modal: NgxSmartModalComponent;
   @Input() orderNum:string;
+  @Input() marketplace:string;
   result: DialogResult = DialogResult.Cancelled;
 
-  favoriteSeason: string;
+  textbox: boolean = false;
   otherReason:string = '';
-  seasons: string[] = ['Winter', 'Spring', 'Summer', 'Autumn', 'Test'];
+  resVal:string;
+  reasons = [];
+
+  constructor(protected service: OrderService) { }
+
 
   open() {
     this.modal.open();
+    this.service.cancelReason(this.marketplace).subscribe((res) => {
+      this.reasons = res
+    });
   }
 
   get onClose(): EventEmitter<any> {
@@ -63,20 +73,32 @@ export class CancelOrderDialogComponent {
     }
   }
 
+  changeReason(data?: Event | string) {
+    if (data instanceof Event) {
+    this.resVal = (data.target as HTMLInputElement).value
+    const index = this.reasons.map(x=>x.value.toString()).indexOf(this.resVal)
+
+      if(this.reasons[index].type === 'text'){
+        this.textbox = true
+      } else {
+        this.textbox = false
+      }
+    }
+  }
+
   close() {
     this.result = DialogResult.OK;
-    if (this.favoriteSeason !== 'Test') {
+    if (!this.textbox) {
       this.otherReason = '';
     }
     this.modal.close();
-    this.favoriteSeason = null;
+    this.textbox = false;
     this.otherReason = '';
   }
 
   cancel() {
-    if (this.favoriteSeason !== 'Test') {
-      this.otherReason = '';
-    }
+    this.otherReason = '';
+    this.textbox = false;
     this.modal.close();
   }
 }
