@@ -1116,6 +1116,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         const productClass = res as IProductClass;
         // const productClass = this.productClasses.filter(e => e.href === newValue)[0];
 
+        if (!!this.selectedProductClass && this.selectedProductClass !== productClass) {
+          this.enabledAttributes = [];
+        }
         this.selectedProductClass = productClass;
         // const productClass = this.selectedProductClass;
 
