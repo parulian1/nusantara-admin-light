@@ -977,3 +977,11 @@ textarea.input-description {
   word-wrap:break-word;
   word-break: break-all;
 }
+
+.inline-option {
+  display: flex;
+}
+
+.inline-option > label {
+  margin-inline-end: 15px;
+}

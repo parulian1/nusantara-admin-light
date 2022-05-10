@@ -36,7 +36,7 @@ import {ProductSubscriptonHostComponent} from './subscription';
 import {MarketplaceInfoHostComponent} from './marketplace';
 
 import {ProductSelectionModalComponent, VendorSelectionModalComponent} from '@nusantara/shared';
-import {IProduct, IProductClass} from '@nusantara/models/products';
+import {IPriceList, IProduct, IProductClass} from '@nusantara/models/products';
 import {CategorySelectionModalComponent} from '@nusantara/shared/modals/category-selection-modal.component';
 import {ProductClassSelectionModalComponent} from '@nusantara/shared/modals/product-class-selection-modal.component';
 import {ProductOnlineSelectionModalComponent} from '@nusantara/shared/product-online-selection-modal.component';
@@ -55,7 +55,8 @@ const log = new Logger('ProductComponent');
   template: `
     <div class="container minmax">
       <div>
-        <nus-detail-title [originalName]="originalEntityName" [isLink]="this.marketplaceLink.length > 0" typeName="Product" class="title"></nus-detail-title>
+        <nus-detail-title [originalName]="originalEntityName" [isLink]="this.marketplaceLink.length > 0"
+                          typeName="Product" class="title"></nus-detail-title>
         <div class="drpdown" *ngIf="entity && this.marketplaceLink.length > 0">
           <button
             class="control secondary btn"
@@ -67,7 +68,9 @@ const log = new Logger('ProductComponent');
             <i id="transform" class="material-icons preview-icon">expand_more</i>
           </button>
           <mat-menu #downloadMenu xPosition="before" class="">
-            <button mat-menu-item i18n matTooltip="{{link.marketplace}} - {{link.shop}}" matTooltipClass="tooltip" [matTooltipShowDelay]="1500" [matTooltipPosition]="'after'" *ngFor="let link of marketplaceLink" (click)="openLink(link.urlLink)" >{{link.marketplace}} - {{link.shop}}</button>
+            <button mat-menu-item i18n matTooltip="{{link.marketplace}} - {{link.shop}}" matTooltipClass="tooltip"
+                    [matTooltipShowDelay]="1500" [matTooltipPosition]="'after'" *ngFor="let link of marketplaceLink"
+                    (click)="openLink(link.urlLink)">{{link.marketplace}} - {{link.shop}}</button>
           </mat-menu>
         </div>
       </div>
@@ -107,11 +110,12 @@ const log = new Logger('ProductComponent');
                 <div>
                   <input type="hidden" [formControl]="category" data-qa="category">
                   <div class="input-with-button">
-                  <input type="text" (click)="selectCategory()" readonly
-                         i18n-placeholder placeholder="Select Category"
-                         [value]="selectedCategory?.name" data-qa="category-pop">
-                    <button (click)="selectCategory()"  type="button" title="Dropdown Category"  data-qa="category-pop-button"><span class="material-icons">expand_more</span></button>
-                </div>
+                    <input type="text" (click)="selectCategory()" readonly
+                           i18n-placeholder placeholder="Select Category"
+                           [value]="selectedCategory?.name" data-qa="category-pop">
+                    <button (click)="selectCategory()" type="button" title="Dropdown Category"
+                            data-qa="category-pop-button"><span class="material-icons">expand_more</span></button>
+                  </div>
                   <nus-field-errors [control]="category"></nus-field-errors>
                 </div>
                 <div><a [routerLink]="['/catalog', 'categories']" i18n> Manage Category</a></div>
@@ -124,11 +128,12 @@ const log = new Logger('ProductComponent');
                 <div>
                   <input type="hidden" [formControl]="productClass" data-qa="product-class">
                   <div class="input-with-button">
-                  <input type="text" (click)="selectProductClass()" readonly
-                         i18n-placeholder placeholder="Select Class"
-                         [value]="selectedProductClassValue?.name"
-                         data-qa="product-class-pop">
-                  <button (click)="selectProductClass()"  type="button" title="Dropdown Product Class" data-qa="product-class-pop-button"><span class="material-icons">expand_more</span></button>
+                    <input type="text" (click)="selectProductClass()" readonly
+                           i18n-placeholder placeholder="Select Class"
+                           [value]="selectedProductClassValue?.name"
+                           data-qa="product-class-pop">
+                    <button (click)="selectProductClass()" type="button" title="Dropdown Product Class"
+                            data-qa="product-class-pop-button"><span class="material-icons">expand_more</span></button>
                   </div>
                   <nus-field-errors [control]="productClass"></nus-field-errors>
                 </div>
@@ -195,7 +200,8 @@ const log = new Logger('ProductComponent');
             <h1 class="heading-1" i18n>Product Information</h1>
 
             <div class="rich-text-container">
-              <label for="content" class="external"><span i18n>Product Description (min. {{DESCRIPTION_MIN_LENGTH}} character)</span></label>
+              <label for="content" class="external"><span i18n>Product Description (min. {{DESCRIPTION_MIN_LENGTH}}
+                character)</span></label>
               <ckeditor [editor]="Editor" [config]="editorConfig"
                         [formControl]="description"
                         id="description"
@@ -215,11 +221,12 @@ const log = new Logger('ProductComponent');
                 <div>
                   <input type="hidden" [formControl]="vendor" data-qa="vendor">
                   <div class="input-with-button">
-                  <input type="text" (click)="selectVendor()" readonly
-                         i18n-placeholder placeholder="Select Vendor"
-                         [value]="selectedVendor?.name" [title]="selectedVendor?.name"
-                         data-qa="vendor-pop">
-                    <button (click)="selectVendor()"  type="button" title="Dropdown Vendor" data-qa="vendor-pop-button"><span class="material-icons">expand_more</span></button>
+                    <input type="text" (click)="selectVendor()" readonly
+                           i18n-placeholder placeholder="Select Vendor"
+                           [value]="selectedVendor?.name" [title]="selectedVendor?.name"
+                           data-qa="vendor-pop">
+                    <button (click)="selectVendor()" type="button" title="Dropdown Vendor" data-qa="vendor-pop-button">
+                      <span class="material-icons">expand_more</span></button>
                   </div>
                   <nus-field-errors [control]="vendor"></nus-field-errors>
                 </div>
@@ -280,23 +287,43 @@ const log = new Logger('ProductComponent');
               <nus-field-errors [control]="barcode"></nus-field-errors>
             </label>
 
-            <label class="single-price immediate-error-display-input" *ngIf="!enterpriseLicense()">
-              <span i18n>Price</span>
+            <label class="single-price immediate-error-display-input">
+              <span i18n>Default Price</span>
               <div class="prepend-label">
                 <span class="prepended-label">Rp.</span>
-              <input type="number"
-                     [formControl]="price" name="price" min="0" appOnlyNumber decimal="true"
-                     (change)="setSinglePrice($event)">
+                <input type="number"
+                       [formControl]="price" name="price" min="0" appOnlyNumber decimal="true">
               </div>
               <nus-field-errors [control]="price"></nus-field-errors>
             </label>
 
-            <div [ngClass]="{'hidden' : !enterpriseLicense()}">
-              <nus-price-list-host [form]="priceLists"></nus-price-list-host>
-            </div>
-            <div [ngClass]="{'hidden' : !enterpriseLicense()}">
-              <nus-advance-price [productHref]="entity?.href"></nus-advance-price>
-            </div>
+            <label class="price-range field-box">
+              <span i18n>Price Range (optional)</span>
+              <div class="inline-option" role="radiogroup" aria-labelledby="radio_label">
+                <label class="toggle">
+                  <input id="pr-radio"  type="checkbox"
+                         class="toggle"
+                         [formControl]="priceSelector"
+                         data-qa="price-range-select"
+                         [checked]="priceSelector.value === true"
+                  />
+                  <span i18n>Enable</span>
+                  <nus-field-errors [control]="priceSelector"></nus-field-errors>
+                </label>
+              </div>
+
+            </label>
+            <label>
+              <div [ngClass]="{'hidden' : !enterpriseLicense()}">
+                <span *ngIf="!priceSelector.value" class="greybox">You have not checked 'enable' for price range</span>
+                <nus-price-list-host [form]="priceLists" [ngClass]="{'hidden' : !priceSelector.value}"></nus-price-list-host>
+              </div>
+            </label>
+            <label class="advance-price">
+              <div [ngClass]="{'hidden' : !enterpriseLicense()}">
+                <nus-advance-price [productHref]="entity?.href"></nus-advance-price>
+              </div>
+            </label>
           </div>
 
           <div id="product-subscription" class="wrapper" *ngIf="isProductOptionDomain">
@@ -318,6 +345,7 @@ const log = new Logger('ProductComponent');
               <input type="number" [formControl]="weight"
                      name="weight"
                      placeholder="Input 0.01-9999"
+                     i18n-placeholder
                      data-qa="weight"/>
               <nus-field-errors [control]="weight"></nus-field-errors>
             </label>
@@ -330,6 +358,7 @@ const log = new Logger('ProductComponent');
                   class="dimension-input"
                   formControlName="currentLength"
                   placeholder="Input 1-9999"
+                  i18n-placeholder
                   data-qa="length"/>
                 <nus-field-errors [control]="currentLength"></nus-field-errors>
               </label>
@@ -341,6 +370,7 @@ const log = new Logger('ProductComponent');
                   class="dimension-input"
                   formControlName="currentWidth"
                   placeholder="Input 1-9999"
+                  i18n-placeholder
                   data-qa="width"/>
                 <nus-field-errors [control]="currentWidth"></nus-field-errors>
               </label>
@@ -352,6 +382,7 @@ const log = new Logger('ProductComponent');
                   class="dimension-input"
                   formControlName="currentHeight"
                   placeholder="Input 1-9999"
+                  i18n-placeholder
                   data-qa="height"/>
                 <nus-field-errors [control]="currentHeight"></nus-field-errors>
               </label>
@@ -373,14 +404,14 @@ const log = new Logger('ProductComponent');
               <nus-field-errors [control]="tag"></nus-field-errors>
             </div>
             <div class="tag-list">
-            <label *ngFor="let t of tags.controls; let i = index" class="tag-item">
-              <input type="hidden" [formControl]="t" name="tag" data-qa="tag"/>
-              <span class="tag-chip">{{t.value}}
-                <button type="button" class="delete" (click)="tags.removeAt(i)">
+              <label *ngFor="let t of tags.controls; let i = index" class="tag-item">
+                <input type="hidden" [formControl]="t" name="tag" data-qa="tag"/>
+                <span class="tag-chip">{{t.value}}
+                  <button type="button" class="delete" (click)="tags.removeAt(i)">
                   <i class="material-icons">highlight_off</i>
                 </button>
               </span>
-            </label>
+              </label>
             </div>
 
           </div>
@@ -390,10 +421,10 @@ const log = new Logger('ProductComponent');
             <label>
               <span i18n>Meta Description</span>
               <textarea placeholder="Input Description" i18n-placeholder
-                [formControl]="seoDescription"
-                name="seo-description"
-                cols="30" rows="10"
-                data-qa="seo-description">
+                        [formControl]="seoDescription"
+                        name="seo-description"
+                        cols="30" rows="10"
+                        data-qa="seo-description">
               </textarea>
               <span class="input-error-info">
               <nus-field-errors [control]="seoDescription"></nus-field-errors>
@@ -404,10 +435,10 @@ const log = new Logger('ProductComponent');
             <label>
               <span i18n>Meta Keywords</span>
               <textarea placeholder="Input Keyword" i18n-placeholder
-                     [formControl]="seoMeta"
-                     name="seo-meta"
+                        [formControl]="seoMeta"
+                        name="seo-meta"
                         cols="30" rows="10"
-                     data-qa="seo-meta">
+                        data-qa="seo-meta">
               </textarea>
               <span class="input-error-info">
               <nus-field-errors [control]="seoMeta"></nus-field-errors>
@@ -563,6 +594,25 @@ const log = new Logger('ProductComponent');
       display: flex;
       justify-content: space-between;
     }
+    `, `
+    .greybox {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      padding: 8px 0px 8px 12px;
+      /* UI / Darken White */
+
+      background: #F4F4F4;
+      border-radius: 4px;
+
+      /* Inside auto layout */
+
+      flex: none;
+      order: 2;
+      align-self: stretch;
+      flex-grow: 0;
+      margin: 4px 0;
+    }
     `,
     '.tag-manage { display: grid; grid-template-columns: 6fr 2fr; grid-gap: 20px; align-items: center; }',
     `
@@ -573,11 +623,13 @@ const log = new Logger('ProductComponent');
         flex-wrap: wrap;
         gap: 8px;
       }
+
       label.tag-item {
         min-height: initial;
         padding: 0;
         gap: 16px;
       }
+
       .tag-chip {
         /* Auto layout */
 
@@ -629,6 +681,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   readonly BARCODE_MAX_LENGTH = 20;
   readonly MAX_TAG_NUMBER = 20;
   readonly MAX_TAG_LENGTH = 20;
+  readonly MAX_PRICE = 999999999;
+  readonly MAX_DIMENSION = 9999;
 
   productClasses: Array<products.IProductClass>;
   categories: Array<ICategory>;
@@ -716,6 +770,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   productRelatedFormData: FormData[] = [];
   enabledAttributes: INamedHrefEntity[] = [];
   mediaError: Array<string> = [];
+  priceRangeEnabled = true;
 
   @ViewChild(ProductMediaHostComponent) mediaHost: ProductMediaHostComponent;
   @ViewChild(PriceListHostComponent) priceListHost: PriceListHostComponent;
@@ -808,6 +863,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   get price(): FormControl {
     return this.form?.get('price') as FormControl;
   }
+  get priceSelector(): FormControl {
+    return this.form?.get('priceSelector') as FormControl;
+  }
 
   get dimensions(): FormGroup {
     return this.form?.get('dimensions') as FormGroup;
@@ -885,6 +943,29 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     this.productClassSelectionModal.onClose.subscribe(() => this.onProductClassSelectionModalClosed());
     this.productBundlingSelectionModal.onClose.subscribe(() => this.onProductBundlingSelectionModalClosed());
     this.confirmModal.onClose.subscribe(() => this.onConfirmModalClosed());
+    this.priceSelector.valueChanges.subscribe(value =>  {
+      log.debug('priceSelectorSubscribe', value);
+      if (value === true) {
+        this.price.disable();
+        this.priceRangeEnabled = false;
+      } else {
+        this.price.enable();
+        this.priceRangeEnabled = true;
+      }
+    });
+    this.priceLists.valueChanges.subscribe((val: Array<IPriceList>) => {
+      log.debug('priceListChange', val);
+      const hasMorePriceList = val.length > 1;
+      const hasMorePriceRange = val.every((cur, idx) => {
+        return cur.ranges.length > 1;
+      });
+      this.priceRangeEnabled = hasMorePriceList || hasMorePriceRange;
+      if (this.priceRangeEnabled) {
+        this.priceSelector.disable();
+      } else {
+        this.priceSelector.enable();
+      }
+    });
   }
 
   getSlugFromHref(href: string): string {
@@ -934,6 +1015,13 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     if (this.productFormType !== 'bundling') {
       bundleInitialValue = null;
     }
+    if (!!entity) {
+      const hasMorePriceList = entity.priceLists.length > 1;
+      const hasMorePriceRange = entity.priceLists.every((cur, idx) => {
+        return cur.ranges.length > 1;
+      });
+      this.priceRangeEnabled = hasMorePriceList || hasMorePriceRange;
+    }
     this.form = this.fb.group({
       name: [entity?.name, [
         Validators.required,
@@ -945,29 +1033,29 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       upc: [entity?.upc, [Validators.required,
         Validators.maxLength(this.UPC_MAX_LENGTH),
         Validators.pattern('^[A-Z0-9]+$')]],
-      structure: [entity?.structure ?? 'parent', [Validators.required, ]],
+      structure: [entity?.structure ?? 'parent', [Validators.required,]],
       description: [entity?.description, [
         Validators.required,
         Validators.minLength(this.DESCRIPTION_MIN_LENGTH),
         Validators.maxLength(this.DESCRIPTION_MAX_LENGTH)]],
-      weight: [entity?.weight, [Validators.required, Validators.min(0.01),
-      Validators.max(9999)]],
-      price: [0, [Validators.minLength(0), Validators.max(999999999), Validators.min(0)]],
+      weight: [entity?.weight, [Validators.required, Validators.min(0.01), Validators.max(this.MAX_DIMENSION)]],
+      price: [0, [Validators.max(this.MAX_PRICE), Validators.min(0)]],
+      priceSelector: [this.priceRangeEnabled, []],
       dimensions: this.fb.group({
         currentLength: [entity?.dimensions?.currentLength, [
           Validators.required,
           Validators.min(1),
-          Validators.max(9999),
+          Validators.max(this.MAX_DIMENSION),
         ]],
         currentWidth: [entity?.dimensions?.currentWidth, [
           Validators.required,
           Validators.min(1),
-          Validators.max(9999),
+          Validators.max(this.MAX_DIMENSION),
         ]],
         currentHeight: [entity?.dimensions?.currentHeight, [
           Validators.required,
           Validators.min(1),
-          Validators.max(9999),
+          Validators.max(this.MAX_DIMENSION),
         ]]
       }),
       productClass: this.fb.group({href: [entity?.productClass.href, [Validators.required]]}),
@@ -993,6 +1081,18 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     this.selectedVendor = entity?.vendor;
     this.selectedCategory = entity?.category;
     this.selectedProductClassValue = entity?.productClass;
+
+    if (this.priceRangeEnabled) {
+      log.debug('IFpriceSelectorSubscribe', this.priceRangeEnabled);
+      this.price.disable();
+      this.priceSelector.setValue(true);
+      this.priceSelector.disable();
+    } else {
+      log.debug('IFpriceSelectorSubscribe', this.priceRangeEnabled);
+      this.price.enable();
+      this.priceSelector.enable()
+      this.priceSelector.setValue(false);
+    }
 
     // new product variant
     if (!entity && !!this.parentProduct) {
@@ -1141,6 +1241,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   save() {
     if (this.isValidForm()) {
+      this.setSinglePrice(null);
       this.service.save(this.getFormValue()).pipe(catchError(err => {
         log.debug('err', err);
         if (err instanceof HttpErrorResponse) {
@@ -1228,24 +1329,24 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     throw Error('Not Implemented');
   }
 
-  getMarketplaceLinks(){
-    if(this.entity){
+  getMarketplaceLinks() {
+    if (this.entity) {
       this.marketplaceItemService.getItemMarketplaceInfo(this.entity.id).subscribe((resp) => {
         this.marketplaceLink = resp.links;
       });
     }
   }
 
-  open(){
+  open() {
     document.getElementById('transform').classList.add('hover-rotate');
     // document.getElementById("down").classList.toggle("show");
   }
 
-  close(){
+  close() {
     document.getElementById('transform').classList.remove('hover-rotate');
   }
 
-  openLink(link){
+  openLink(link) {
     window.open(link);
   }
 
@@ -1309,32 +1410,36 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   setSinglePrice(event) {
-    if (!this.entity?.priceLists.length) {
-      this.priceListHost.updatePriceList({
-        href: null,
-        product: this.href.value,
-        type: 'default',
-        platforms: [],
-        locations: [],
-        isProgressive: false,
-        ranges: [
-          {href: null, priceList: null, price: this.price.value, minQuantity: 1, maxQuantity: null}
-        ]
-      }, 0);
-    } else if (!this.entity?.priceLists[0].ranges.length) {
-      this.entity?.priceLists[0].ranges.push({
-        href: null,
-        priceList: null,
-        price: this.price.value,
-        minQuantity: 1,
-        maxQuantity: null
-      });
-      this.priceListHost.updatePriceList(this.entity?.priceLists[0], 0);
-    } else {
-      for (const priceList of this.entity?.priceLists ?? []) {
-        priceList.ranges[0].price = this.price.value;
-        this.priceListHost.updatePriceList(priceList, 0);
+    if (!this.priceSelector.value || !this.enterpriseLicense()) {
+      if (!this.entity?.priceLists.length) {
+        this.priceListHost.updatePriceList({
+          href: null,
+          product: this.href.value,
+          type: 'default',
+          platforms: [],
+          locations: [],
+          isProgressive: false,
+          ranges: [
+            {href: null, priceList: null, price: this.price.value, minQuantity: 1, maxQuantity: null}
+          ]
+        }, 0);
+      } else if (!this.entity?.priceLists[0].ranges.length) {
+        this.entity?.priceLists[0].ranges.push({
+          href: null,
+          priceList: null,
+          price: this.price.value,
+          minQuantity: 1,
+          maxQuantity: null
+        });
+        this.priceListHost.updatePriceList(this.entity?.priceLists[0], 0);
+      } else {
+        for (const priceList of this.entity?.priceLists ?? []) {
+          priceList.ranges[0].price = this.price.value;
+          this.priceListHost.updatePriceList(priceList, 0);
+        }
       }
+    } else {
+      log.debug('Price range is disabled');
     }
   }
 
@@ -1347,13 +1452,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     });
     this.currentActive = id;
   }
-  checkValid(): void {
-    this.isValidForm();
-    log.debug(this.form.valid);
-    log.debug(this.getFormErrors(this.form));
-    log.debug(this.form.errors);
-    log.debug(this.priceListHost.validatePriceListHost());
-  }
+
   getFormErrors(form: AbstractControl) {
     if (form instanceof FormControl) {
       // Return FormControl errors or null
@@ -1375,12 +1474,13 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       return Object.keys(formErrors).length > 0 ? formErrors : null;
     }
   }
+
   isValidForm(): boolean {
     this.mediaError = [];
     if (!this.mediaHost.validateMedia()) {
       this.mediaError.push('Media requirement not match. Need at least 3 image and max 9 image, max 1 video');
     }
-    return this.form.valid  && this.mediaHost.validateMedia() && this.priceListHost.validatePriceListHost();
+    return this.form.valid && this.mediaHost.validateMedia() && this.priceListHost.validatePriceListHost();
   }
 
   selectProduct() {
@@ -1747,5 +1847,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         this.showErrorToast(err.error.relation);
       }
     );
+  }
+
+  priceRangeChanged($event: Event) {
+    const elem = ($event.currentTarget as HTMLInputElement).value;
+    log.debug(elem);
   }
 }

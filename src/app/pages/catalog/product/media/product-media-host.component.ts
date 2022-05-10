@@ -239,6 +239,8 @@ export class ProductMediaHostComponent
   allowedImage = this.MINIMUM_IMAGE;
 
   videoForm: FormGroup;
+  imageSortChange = false;
+  videoSortChange = false;
   private imagePreviewUrl: string;
 
   constructor(protected service: ProductMediaService,
@@ -346,17 +348,19 @@ export class ProductMediaHostComponent
     this.videoList = [];
     this.entitiesVideo.forEach((media, idx, entities) => {
       if (!!media.href) {
-        const formData: any = new FormData();
-        formData.append('href', media?.href);
-        formData.append('sortPriority', idx);
-        formData.append('type', media?.type);
-        if (media?.type === 'image') {
+        if (media.sortPriority !== idx) {
+          const formData: any = new FormData();
+          formData.append('href', media?.href);
+          formData.append('sortPriority', idx);
+          formData.append('type', media?.type);
+          if (media?.type === 'image') {
 
-        } else if (media?.type === 'you_tube') {
-          formData.append('youtubeVideoId', media?.youtubeVideoId);
+          } else if (media?.type === 'you_tube') {
+            formData.append('youtubeVideoId', media?.youtubeVideoId);
+          }
+
+          this.videoList.push(formData as FormData);
         }
-
-        this.videoList.push(formData as FormData);
       } else {
         // new image or video
         if (media?.type === 'image') {
@@ -387,16 +391,18 @@ export class ProductMediaHostComponent
     this.imageList = [];
     this.entitiesImage.forEach((media, idx, entities) => {
       if (!!media.href) {
-        const formData: any = new FormData();
-        formData.append('href', media?.href);
-        formData.append('sortPriority', idx);
-        formData.append('type', media?.type);
-        if (media?.type === 'image') {
+        if (media.sortPriority !== idx || !media.href) {
+          const formData: any = new FormData();
+          formData.append('href', media?.href);
+          formData.append('sortPriority', idx);
+          formData.append('type', media?.type);
+          if (media?.type === 'image') {
 
-        } else if (media?.type === 'you_tube') {
-          formData.append('youtubeVideoId', media?.youtubeVideoId);
+          } else if (media?.type === 'you_tube') {
+            formData.append('youtubeVideoId', media?.youtubeVideoId);
+          }
+          this.imageList.push(formData as FormData);
         }
-        this.imageList.push(formData as FormData);
       } else {
         // new image or video
         if (media?.type === 'image') {
@@ -473,7 +479,7 @@ export class ProductMediaHostComponent
       value.product = product.href;
     });
 
-    this.imageList.forEach((value) => {
+    this.imageList.forEach((value, idx) => {
       value.set('product', product.href);
       if (!!value.get('href')) {
         value.delete('image');
@@ -504,21 +510,18 @@ export class ProductMediaHostComponent
     );
   }
 
-  dropEvent(event: CdkDragDrop<IProductMedia[]>) {
-    moveItemInArray(this.entities, event.previousIndex, event.currentIndex);
-    this.recreateImageList();
-  }
-
   dropEventImage(event: CdkDragDrop<IProductMedia[]>) {
     logger.debug('EntitiesImage1', this.entitiesImage);
     moveItemInArray(this.entitiesImage, event.previousIndex, event.currentIndex);
     logger.debug('EntitiesImage2', this.entitiesImage);
     this.recreateImageList();
+    this.imageSortChange = true;
   }
 
   dropEventVideo(event: CdkDragDrop<IProductMedia[]>) {
     moveItemInArray(this.entitiesVideo, event.previousIndex, event.currentIndex);
     this.recreateVideoList();
+    this.videoSortChange = true;
   }
 
   validateMedia(): boolean {

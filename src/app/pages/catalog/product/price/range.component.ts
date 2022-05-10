@@ -1,8 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { AbstractEditingComponent } from '@nusantara/core';
+import {AbstractEditingComponent, Logger} from '@nusantara/core';
 import { products } from '@nusantara/models';
+import {debounceTime} from 'rxjs/operators';
+
+const logger = new Logger('RangeComponent');
 
 /**
  * A single price for a given number of products.
@@ -15,43 +18,52 @@ import { products } from '@nusantara/models';
 @Component({
   selector: 'nus-price-list-range',
   template: `
-    <div [formGroup]="form" class="wrapper immediate-error-display">
-      <div i18n>Min</div>
-      <div></div>
-      <div i18n>Max</div>
-      <div i18n>Price</div>
-      <div></div>
-      <div style="text-align: left;">
-        <input type="number"
-               [formControl]="minQuantity"
-               name="min-quantity"
-               [readonly]="isInitialRange"
-               data-qa="min-quantity"/>
+    <div [formGroup]="form" class="immediate-error-display price-range-idx-{{index}}">
+      <div class="header-grid container-grid" *ngIf="hasTitle">
+        <div class="qty-area" i18n>Qty</div>
+        <div class="price-area1" i18n>Price</div>
+        <div class="action-area1" i18n>Action</div>
       </div>
-      <div i18n>To</div>
-      <div>
-        <input type="number"
-               [formControl]="maxQuantity"
-               name="max-quantity"
-               [readonly]="isTerminalRange"
-               data-qa="max-quantity" />
-      </div>
-      <div class="immediate-error-display">
-        <span class="currency">
+      <div class="content-grid container-grid">
+        <div class="qty-min-area">
           <input type="number"
-            min="0"
-            appOnlyNumber
-            [formControl]="price"
-            name="price"
-            data-qa="price"/>
+                 placeholder="Input 1-10000"
+                 i18n-placeholder
+                 [formControl]="minQuantity"
+                 name="min-quantity"
+                 [readonly]="isInitialRange"
+                 data-qa="min-quantity"/>
+        </div>
+        <div class="qty-max-area">
+          <input type="number"
+                 [formControl]="maxQuantity"
+                 name="max-quantity"
+                 [readonly]="isTerminalRange"
+                 placeholder="Input 1-10000"
+                 i18n-placeholder
+                 data-qa="max-quantity" />
+        </div>
+
+        <div class="price-area">
+
+           <span class="currency">
+          <input type="number"
+                 min="0"
+                 appOnlyNumber
+                 [formControl]="price"
+                 name="price"
+                 placeholder="Input 0-{{MAX_PRICE}}"
+                 i18n-placeholder
+                 data-qa="price"/>
         </span>
-      </div>
-      <div>
-        <button type="button"
-                [disabled]="isInitialRange"
-                (click)="remove.emit(this)">
-          <i class="material-icons">delete_outline</i>
-        </button>
+        </div>
+        <div class="action-area">
+          <button type="button"
+                  [disabled]="isInitialRange"
+                  (click)="remove.emit(this)">
+            <i class="material-icons">delete_outline</i>
+          </button>
+        </div>
       </div>
     </div>
   `,
@@ -61,12 +73,51 @@ import { products } from '@nusantara/models';
   '.currency::before { content: "Rp"; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); }',
   '.currency input { padding-left: 35px; }',
   'button { background: transparent; border: none; padding: 0; opacity: .5; }',
+    `
+      .container-grid {  display: grid;
+        grid-template-columns: 2.5fr 2.5fr 9fr 2fr;
+        gap: 8px 8px;
+        grid-auto-flow: row;
+        grid-template-areas:
+        "qty-area qty-area price-area1 action-area1"
+    "qty-min-area qty-max-area price-area action-area";
+        padding: 0 8px 0 8px
+      }
+      .price-area { grid-area: price-area; }
+      .qty-max-area { grid-area: qty-max-area; }
+      .qty-min-area { grid-area: qty-min-area; }
+      .action-area { grid-area: action-area;        justify-self: center;
+        align-self: center; }
+      .qty-area { grid-area: qty-area; }
+      .price-area1 { grid-area: price-area1; }
+      .action-area1 {
+        justify-self: center;
+        align-self: center;
+        grid-area: action-area1;
+      }
+        .header-grid {
+          /* UI / Darken White */
+
+          background: #F4F4F4;
+          font-family: 'Open Sans', sans-serif;
+          font-style: normal;
+          font-weight: 700;
+          font-size: 14px;
+          line-height: 20px;
+          align-items: center;
+
+          padding: 8px 12px 0 12px;
+        }
+
+    `
 ]
 })
 export class RangeComponent extends AbstractEditingComponent implements OnInit {
+  readonly MAX_PRICE = 999999999;
 
   @Input() index: number;
   @Input() allRanges: Array<FormGroup>;
+  @Input() hasTitle = false;
 
   /**
    * Triggered by the host component whenever any changes occur to
@@ -91,13 +142,14 @@ export class RangeComponent extends AbstractEditingComponent implements OnInit {
   suspendQuantityChangedEmitter = false;
 
   ngOnInit() {
-    this.maxQuantity.valueChanges.subscribe(() => this.onQuantityChanged());
-    this.minQuantity.valueChanges.subscribe(() => this.onQuantityChanged());
+    this.maxQuantity.valueChanges.pipe(debounceTime(300)).subscribe(() => this.onQuantityChanged());
+    this.minQuantity.valueChanges.pipe(debounceTime(300)).subscribe(() => this.onQuantityChanged());
     this.siblingQuantityChanged.subscribe((i) => this.onSiblingQuantityChanged(i));
 
     this.priceList.valueChanges.subscribe((val) => {
       console.log(this.index, 'List Value changed', val);
     });
+    this.price.setValidators([Validators.min(0), Validators.max(this.MAX_PRICE)]);
   }
 
   /**
@@ -170,7 +222,6 @@ export class RangeComponent extends AbstractEditingComponent implements OnInit {
 
   updateValidators() {
     this.maxQuantity.clearValidators();
-
     this.minQuantity.clearValidators();
     this.minQuantity.setValidators([
       Validators.required,
@@ -183,6 +234,8 @@ export class RangeComponent extends AbstractEditingComponent implements OnInit {
         Validators.min(this.minQuantity.value),
       ]);
     }
+    this.maxQuantity.updateValueAndValidity({emitEvent: false});
+    this.minQuantity.updateValueAndValidity({emitEvent: false});
   }
 
   /**
@@ -194,12 +247,15 @@ export class RangeComponent extends AbstractEditingComponent implements OnInit {
    *  the notification will be ignored.
    */
   onSiblingQuantityChanged(siblingIndex: number): void {
-
     this.suspendQuantityChangedEmitter = true;
     if (siblingIndex === (this.index - 1)) {
-      this.minQuantity.setValue(this.minQuantityAllowed);
+      logger.debug('onSiblingQuantityChanged-1', siblingIndex, this.index);
+      // this.minQuantity.setValue(this.minQuantityAllowed);
     } else if (siblingIndex === (this.index + 1)) {
-      this.maxQuantity.setValue(this.maxQuantityAllowed);
+      // this.maxQuantity.setValue(this.maxQuantityAllowed);
+      logger.debug('onSiblingQuantityChanged-2', siblingIndex, this.index);
+    } else {
+      logger.debug('onSiblingQuantityChanged-3', siblingIndex, this.index);
     }
     this.suspendQuantityChangedEmitter = false;
   }
@@ -216,4 +272,5 @@ export class RangeComponent extends AbstractEditingComponent implements OnInit {
     }
     return isValid;
   }
+
 }
