@@ -53,9 +53,9 @@ const log = new Logger('ProductComponent');
 @Component({
   selector: 'nus-product',
   template: `
-    <div class="container">
+    <div class="container minmax">
       <div>
-        <nus-detail-title [originalName]="originalEntityName" typeName="Product" class="title"></nus-detail-title>
+        <nus-detail-title [originalName]="originalEntityName" [isLink]="this.marketplaceLink.length > 0" typeName="Product" class="title"></nus-detail-title>
         <div class="drpdown" *ngIf="entity && this.marketplaceLink.length > 0">
           <button
             class="control secondary btn"
@@ -514,6 +514,8 @@ const log = new Logger('ProductComponent');
     '.judul { color:#EA730B; height: 1rem; line-height: 1rem; padding:7px; margin:6px 0; border-right-style: solid; display:inherit; font-weight:bold }',
     '.btn { border: 2px solid #EA730B; position:relative; padding-right:30px }',
     '.hover-rotate { transition: transform .4s; transform: rotateZ(180deg) }',
+    '::ng-deep .elipsis { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 800px;}',
+    '.minmax {grid-template-columns: 1133px minmax(200px, auto);}',
     '.mat-menu-item { width: 300px; }',
     '::ng-deep .tooltip { font-size: 11pt; }',
     '.side-nav li a { text-decoration: none; color: inherit; }',

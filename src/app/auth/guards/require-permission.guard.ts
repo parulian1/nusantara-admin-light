@@ -23,7 +23,7 @@ export class RequirePermissionGuard implements CanActivate, CanActivateChild {
   }
 
   groups(): Array<string> {
-    return this.auth?.tokenPayload.groups ?? [];
+    return this.auth?.tokenPayload?.groups ?? [];
   }
 
   allowToActivate(path?: string) {

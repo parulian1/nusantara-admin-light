@@ -241,7 +241,7 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
         originalQuantity: [1, [Validators.required, Validators.min(1), ]],
         batchNumber: ['', []],
         locator: this.fb.array([], [Validators.minLength(1)]),
-        expiryDate: [null, []]
+        expiryDate: [null, [Validators.required,]]
       });
       this.stockRecords.push(f);
     }
@@ -300,6 +300,14 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
   }
 
   resetForm() {
+    if (warnOnDirty && this.form?.dirty) {
+      const leavePage = confirm('Your changes will be lost.  Do you want to continue?');
+      if (!leavePage) {
+        return;
+      } else {
+        window.location.reload();
+      }
+    }
     this.form.reset();
     this.warehouse.enable();
     this.destinationWarehouse.enable();
