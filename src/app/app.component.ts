@@ -4,6 +4,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { AuthService } from '@nusantara/auth';
 import { AppUpdateService } from './core/app-update.service';
 import { environment } from '@env/environment.prod';
+import { AnalyticService } from '@nusantara/services/analytic.service';
 
 declare let gtag: (type: 'config', gtagId: string, option: object) => void;
 
@@ -33,7 +34,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   private timer;
 
   constructor(private authService: AuthService, private router: Router,
-              private appUpdate: AppUpdateService) {
+              private appUpdate: AppUpdateService, private analyticService: AnalyticService) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd){
         gtag('config', environment.googleAnalytics,
@@ -51,6 +52,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
    * If refreshing the user's token fails, then redirect to the login url.
    */
   ngOnInit() {
+    // console.log('Pre');
+    // this.analyticService.addScriptToDom().catch(error => {
+    //   console.log(error);
+    // });
+    // console.log('GA loaded');
+
     this.timer = setInterval(() => {
       if (this.authService.shouldRefresh) {
         this.authService.refresh().subscribe((result) => {
