@@ -120,7 +120,6 @@ export class InventoryFiltersComponent implements OnInit {
 
       const utils = new Utils();
       const dateType = utils.getDateOption(startTime, endTime);
-      console.log(dateType)
       this.updateDate(dateType, startTime, endTime);
 
       const status = value.get(this.STATUS_PARAM)
@@ -207,7 +206,6 @@ export class InventoryFiltersComponent implements OnInit {
         result.push(el)
       }
     });
-    console.log(result)
 
     return result.length > 0 ? param : '';
   }
