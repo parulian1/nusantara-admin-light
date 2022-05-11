@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { environment } from '@env/environment.prod';
-
-declare let gtag: (...args: (string | {[param: string]: string} | any)[]) => {};
+import { WEB_ANALYTIC_GTAG } from '@nusantara/shared/gtag-token';
+import { Gtag } from '@nusantara/models/gtag';
 
 @Injectable({
   providedIn: 'root',
@@ -10,8 +10,10 @@ export class AnalyticService {
   isLoaded = false;
   id = environment.googleAnalytics;
 
+  constructor(@Inject(WEB_ANALYTIC_GTAG) public gtag: Gtag) {
+  }
+
   addScriptToDom(): Promise<boolean> {
-    console.log('addScriptToDom');
     return new Promise((resolve, reject) => {
       if (this.isLoaded) {
         return resolve(this.isLoaded);
@@ -19,7 +21,6 @@ export class AnalyticService {
 
       const s: HTMLScriptElement = document.createElement('script');
       s.async = true;
-      console.log(this.id);
       // ga
       const initCommands = [
         {command: 'js', value: [new Date()]},
@@ -27,12 +28,13 @@ export class AnalyticService {
       ];
 
       initCommands.forEach(command => {
-        gtag(command.command, ...command.value);
+        this.gtag(command.command, ...command.value);
       });
       s.src = `https://www.googletagmanager.com/gtag/js?id=${this.id}`;
 
       s.addEventListener('load', () => {
-        return resolve(this.isLoaded = true);
+        this.isLoaded = true;
+        return resolve(this.isLoaded);
       });
       s.addEventListener('error', () => {
         return reject(false);

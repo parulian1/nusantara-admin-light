@@ -6,8 +6,6 @@ import { AppUpdateService } from './core/app-update.service';
 import { environment } from '@env/environment.prod';
 import { AnalyticService } from '@nusantara/services/analytic.service';
 
-declare let gtag: (type: 'config', gtagId: string, option: object) => void;
-
 /**
  * The root component for Nusantara Admin.
  *
@@ -35,6 +33,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(private authService: AuthService, private router: Router,
               private appUpdate: AppUpdateService, private analyticService: AnalyticService) {
+
+    function gtag(...args: any){ (window as any).dataLayer.push(arguments); }
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd){
         gtag('config', environment.googleAnalytics,
@@ -45,6 +45,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         );
       }
     });
+
   }
 
   /**
