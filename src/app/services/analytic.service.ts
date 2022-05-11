@@ -21,7 +21,7 @@ export class AnalyticService {
 
       const s: HTMLScriptElement = document.createElement('script');
       s.async = true;
-      // ga
+
       const initCommands = [
         {command: 'js', value: [new Date()]},
         {command: 'config', value: [this.id]},
