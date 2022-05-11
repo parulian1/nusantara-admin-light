@@ -11,7 +11,7 @@ import {
   LineItemComponent,
 } from './receiving';
 import { InventoryRoutingModule } from './inventory-routing.module';
-import { InventoryOrderListComponent, InventoryFiltersComponent } from './pending-order';
+import { InventoryOrderListComponent, InventoryFiltersComponent, InventoryDateFilterComponent } from './pending-order';
 import {
   InventoryTransferOrderComponent,
   InventoryTransferLineItemComponent
@@ -24,6 +24,9 @@ import {
 import { StockRecordDialogComponent } from './adjustment/stock-record-dialog.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -34,6 +37,7 @@ import { MatSelectModule } from '@angular/material/select';
 
     InventoryOrderListComponent,
     InventoryFiltersComponent,
+    InventoryDateFilterComponent,
     InventoryTransferOrderComponent,
     InventoryTransferLineItemComponent,
 
@@ -50,7 +54,10 @@ import { MatSelectModule } from '@angular/material/select';
     ReactiveFormsModule,
     InventoryRoutingModule,
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatInputModule
   ],
 })
 export class InventoryModule { }

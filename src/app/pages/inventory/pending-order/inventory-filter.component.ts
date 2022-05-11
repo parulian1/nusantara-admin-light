@@ -3,7 +3,7 @@ import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {IOption, IOrderFilter, IOrderFilterValue} from '@nusantara/models/order/filter';
 import * as moment from 'moment';
-// import {Utils} from './utils';
+import {Utils} from '../../fulfillment/orders/header/utils';
 import {MatSelectChange} from '@angular/material/select';
 import {Logger} from '@nusantara/core';
 
@@ -16,22 +16,9 @@ const logger = new Logger('OrderFilter');
       <label>
         <span i18n>Filter</span>
         <div class="filters">
-          <!-- <nus-order-date-filter
+          <nus-order-date-filter
             (selectedDate)="onSelectedDateChanged($event)">
-          </nus-order-date-filter> -->
-          <!-- <mat-form-field>
-            <mat-select [disableOptionCentering]="true"
-                        panelClass="mat-select-panel"
-                        formControlName="platform"
-                        (selectionChange)="selectChange($event)">
-              <mat-option value="" i18n>All Platform</mat-option>
-              <mat-option
-              *ngFor="let s of status"
-              [value]="s.value">
-                {{s.label}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field> -->
+          </nus-order-date-filter>
           <mat-form-field appearance="outline">
             <mat-select
               [disableOptionCentering]="true"
@@ -109,8 +96,8 @@ export class InventoryFiltersComponent implements OnInit {
     { label: 'Transfer', value: 'transfer_order' },
   ];
 
-  readonly START_TIME_PARAM = 'start_time';
-  readonly END_TIME_PARAM = 'end_time';
+  readonly START_TIME_PARAM = 'start_date';
+  readonly END_TIME_PARAM = 'end_date';
   readonly STATUS_PARAM = 'receiving_status';
   readonly TYPE_PARAM = 'receiving_type';
 
@@ -123,18 +110,18 @@ export class InventoryFiltersComponent implements OnInit {
     this.initializeForm();
 
     this.route.queryParamMap.subscribe((value) => {
-      // date
-      // const startTime = moment(value.get(this.START_TIME_PARAM)).isValid
-      //   ? value.get(this.START_TIME_PARAM)
-      //   : null;
+      const startTime = moment(value.get(this.START_TIME_PARAM)).isValid
+        ? value.get(this.START_TIME_PARAM)
+        : null;
 
-      // const endTime = moment(value.get(this.END_TIME_PARAM)).isValid
-      //   ? value.get(this.END_TIME_PARAM)
-      //   : null;
+      const endTime = moment(value.get(this.END_TIME_PARAM)).isValid
+        ? value.get(this.END_TIME_PARAM)
+        : null;
 
-      // const utils = new Utils();
-      // const dateType = utils.getDateOption(startTime, endTime);
-      // this.updateDate(dateType, startTime, endTime);
+      const utils = new Utils();
+      const dateType = utils.getDateOption(startTime, endTime);
+      console.log(dateType)
+      this.updateDate(dateType, startTime, endTime);
 
       const status = value.get(this.STATUS_PARAM)
         ? this.getValidOption(
@@ -149,16 +136,12 @@ export class InventoryFiltersComponent implements OnInit {
           this.type
         )
         : null;
-      const q = value.get('q') ? value.get('q') : null;
 
       if (status) {
         this.updateStatus(status);
       }
       if (type) {
         this.updateType(type);
-      }
-      if (q) {
-        this.updateQuery(q);
       }
 
       this.filtersForm.patchValue({
@@ -202,8 +185,8 @@ export class InventoryFiltersComponent implements OnInit {
     this.filterApplied.next(this.filtersValue);
     this.updateRoute({
       page: '1',
-      start_time: selectedDate.startDate,
-      end_time: selectedDate.endDate,
+      start_date: selectedDate.startDate,
+      end_date: selectedDate.endDate,
     });
   }
 

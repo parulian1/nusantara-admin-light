@@ -20,6 +20,8 @@ export class InventoryOrderListResolver extends AbstractListResolver<IInventoryO
     for (const keyParam of Object.keys(theQuery)) {
       if (
         [
+          'start_date',
+          'end_date',
           'receiving_status',
           'receiving_type',
           'page',
