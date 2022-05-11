@@ -19,7 +19,7 @@ import {INamedHrefEntity} from "@nusantara/models";
       <td [ngClass]="{'color-input': attributeDefinition.type === 'color'}">
         <input type="text"
                *ngIf="attributeDefinition.type === 'text'"
-               [formControl]="control" (ngModelChange)="validateChange.emit()">
+               [formControl]="control" (ngModelChange)="validateChange.emit()" maxlength="25">
 
         <textarea *ngIf="attributeDefinition.type === 'markdown'"
                   [formControl]="control" (ngModelChange)="validateChange.emit()"></textarea>
