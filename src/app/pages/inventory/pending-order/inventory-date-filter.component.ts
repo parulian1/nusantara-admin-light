@@ -146,16 +146,12 @@ export class InventoryDateFilterComponent implements OnInit {
 
 
     this.route.queryParamMap.subscribe((value) => {
-      console.log(value)
       this.startTime = value.get("start_date");
       this.endTime = value.get("end_date");
 
       if (this.startTime && this.endTime && moment(this.startTime).isValid && moment(this.endTime).isValid) {
         const selectedStartTime = moment(this.startTime, apiDateFormat).toDate();
-        console.log('start',selectedStartTime)
         const selectedEndTime = moment(this.endTime, apiDateFormat).toDate();
-        console.log('end',selectedEndTime)
-
 
         switch(this.utils.getDateOption(this.startTime, this.endTime)){
           case "today":
