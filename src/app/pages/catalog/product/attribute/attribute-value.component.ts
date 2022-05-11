@@ -67,7 +67,8 @@ export class AttributeValueComponent implements OnInit, OnChanges {
   @Input() control: FormControl;
   @Input() enabledAttributes: INamedHrefEntity[];
   @Input() showEnabled?: boolean;
-  @Output() validateChange: EventEmitter<void> = new EventEmitter<void>()
+  @Output() validateChange: EventEmitter<void> = new EventEmitter<void>();
+  @Output() triggerChange: EventEmitter<void> = new EventEmitter<void>();
   isEnabled = false;
 
   constructor() {
@@ -79,7 +80,7 @@ export class AttributeValueComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (!!this.control.value) {
-      this.isEnabled = true;
+      this.isEnabled = this.getEnabledValueFromKeyControl();
     }
     // if (!this.isEnabled) {
     //   this.control.disable();
@@ -100,12 +101,14 @@ export class AttributeValueComponent implements OnInit, OnChanges {
       if (controlIndex > -1) {
         this.enabledAttributes.splice(controlIndex, 1);
       }
+      this.triggerChange.emit();
     } else {
       // this.control.enable();
       this.enabledAttributes.push({
         name: this.attributeDefinition.name,
         href: this.attributeDefinition.href
       })
+
     }
   }
 

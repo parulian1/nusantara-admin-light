@@ -885,7 +885,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
     // listen for any changes to this, so we can disable weight when appropriate
     this.onProductClassChanged(this.productClass.value?.href ?? this.productClass.value);
-    this.productClass.valueChanges.subscribe(val => this.onProductClassChanged(val));
+    // #NOTE: this causing enabled attributes cannot keep their data since product class keep changed
+    //        onProductClassChanged called even though previous code already set that value
+    // this.productClass.valueChanges.subscribe(val => this.onProductClassChanged(val));
     if (!this.parentProduct) {
       this.enabledAttributes = entity?.enabledAttributes ?? [];
     } else {
@@ -1028,6 +1030,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
                 }
               );
             }
+            console.log('form2', this.form.valid, this.form);
             if (this.productRelatedFormData.length > 0) {
               const savedProductEntity = resp.entity as IProduct;
               this.productRelatedFormData.forEach((productRelatedForm) => {
@@ -1042,8 +1045,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         this.marketplaceHost?.saveAll();
       }
     } else {
-      window.alert('Please check your input.');
       this.validatePriceList();
+    }
+    if(!this.form.errors) {
+      this.form.valid
     }
     this.form.enable();
   }
@@ -1115,7 +1120,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       if (!!res) {
         const productClass = res as IProductClass;
         // const productClass = this.productClasses.filter(e => e.href === newValue)[0];
-
+        console.log('called here');
         if (!!this.selectedProductClass && this.selectedProductClass !== productClass) {
           this.enabledAttributes = [];
         }

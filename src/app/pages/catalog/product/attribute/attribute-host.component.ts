@@ -16,6 +16,7 @@ import { IProductClass } from '@nusantara/models/products';
                (click)="resetAttributeValuesSameAsParent()"/> Data same as parent
       </span>
     </h4>
+    <nus-field-errors [control]="form"></nus-field-errors>
 
     <table>
       <thead>
@@ -31,7 +32,8 @@ import { IProductClass } from '@nusantara/models/products';
           [attributeDefinition]="attr"
           [control]="getFormControlForAttribute(attr)"
           [enabledAttributes]="enabledAttributes" [showEnabled]="!parentProduct"
-          (validateChange)="validateIsValueSameAsParent()">
+          (validateChange)="validateIsValueSameAsParent()"
+          (triggerChange)="triggerFormChange()">
         </nus-product-attribute-value>
         <tr>
           <td colspan="3">
@@ -141,5 +143,9 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
     } else {
       this.isSameAsParent = true;
     }
+  }
+
+  triggerFormChange() {
+    this.form.setErrors(null);
   }
 }
