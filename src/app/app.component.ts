@@ -52,11 +52,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
    * If refreshing the user's token fails, then redirect to the login url.
    */
   ngOnInit() {
-    // console.log('Pre');
-    // this.analyticService.addScriptToDom().catch(error => {
-    //   console.log(error);
-    // });
-    // console.log('GA loaded');
+    this.analyticService.addScriptToDom().catch(error => {
+      console.log(error);
+    });
 
     this.timer = setInterval(() => {
       if (this.authService.shouldRefresh) {
