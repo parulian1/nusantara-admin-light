@@ -490,7 +490,8 @@ const log = new Logger('ProductComponent');
     <nus-product-online-selection-modal #productBundlingModal></nus-product-online-selection-modal>
     <nus-vendor-selection-modal #vendorModal></nus-vendor-selection-modal>
     <nus-category-selection-modal #categoryModal></nus-category-selection-modal>
-    <nus-product-class-selection-modal (productClassChanged)="onProductClassChanged(productClass.value)" #productClassModal></nus-product-class-selection-modal>
+    <nus-product-class-selection-modal (productClassChanged)="onProductClassChanged(productClass.value)"
+                                       #productClassModal></nus-product-class-selection-modal>
     <nus-confirm-modal
       [title]="confirmAdvancedPriceTitle"
       [content]="confirmAdvancedPriceText">
@@ -1030,7 +1031,6 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
                 }
               );
             }
-            console.log('form2', this.form.valid, this.form);
             if (this.productRelatedFormData.length > 0) {
               const savedProductEntity = resp.entity as IProduct;
               this.productRelatedFormData.forEach((productRelatedForm) => {
@@ -1117,11 +1117,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       log.error('Cannot get correct product class');
       return of(EMPTY);
     })).subscribe((res) => {
-      console.log('called', res);
       if (!!res) {
         const productClass = res as IProductClass;
         // const productClass = this.productClasses.filter(e => e.href === newValue)[0];
-        console.log('called here');
         if (!!this.selectedProductClass && this.selectedProductClass !== productClass) {
           this.enabledAttributes = [];
         }

@@ -70,7 +70,7 @@ export class ProductClassSelectionModalComponent implements OnInit, AfterViewIni
   @ViewChild('modalForm') formView: ElementRef<HTMLFormElement>;
   @ViewChild('modal') modal: NgxSmartModalComponent;
 
-  @Output() productClassChanged: EventEmitter<void> = new EventEmitter<void>();
+  @Output() productClassChanged?: EventEmitter<void> = new EventEmitter<void>();
 
   form: FormGroup;
   result: DialogResult = DialogResult.Cancelled;
@@ -166,7 +166,9 @@ export class ProductClassSelectionModalComponent implements OnInit, AfterViewIni
   selectProductClass(productClass: IProductClass) {
     this.productClass.setValue(productClass);
     this.close();
-    this.productClassChanged.emit();
+    if (!!this.productClassChanged) {
+      this.productClassChanged.emit();
+    }
     return false;
   }
 
