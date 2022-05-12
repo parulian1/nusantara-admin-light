@@ -30,7 +30,7 @@ const logger = new Logger('MainWrapperComponent');
 
     <nav class="side-nav">
       <ul>
-        <li class="icon-button dropshow section-header" routerLinkActive="active" >
+        <li class="icon-button dropshow section-header" routerLinkActive="active">
           <a [routerLink]="['/dashboard']" routerLinkActive="active">
             <i class="material-icons">dashboard</i>
             <span translate i18n>Dashboard</span>
@@ -38,8 +38,9 @@ const logger = new Logger('MainWrapperComponent');
         </li>
 
         <li class="section-header" *ngIf="permissionGuard.canActivate(null, null, 'catalog')"
-            routerLinkActive="active dropdown-show" [routerLinkActiveOptions]="{exact: false}">
-          <span (click)="menuToggler($event)">
+            [class.dropdown-show]="activeMenu.indexOf('catalog')>-1 "
+             routerLinkActive="active router-dropdown-show" [routerLinkActiveOptions]="{exact: false}">
+          <span (click)="menuToggler('catalog')">
               <i class="material-icons">store</i>
               <span i18n>Catalog Management</span>
               <i class="material-icons expand-icon"></i>
@@ -69,53 +70,56 @@ const logger = new Logger('MainWrapperComponent');
           </ul>
         </li>
 
-        <li class="section-header" *ngIf="enterpriseGuard.canActivate(null, null) && permissionGuard.canActivate(null, null, 'inventory')"
-            routerLinkActive="active dropdown-show" [routerLinkActiveOptions]="{exact: false}">
-          <span (click)="menuToggler($event)">
+        <li class="section-header"
+            *ngIf="enterpriseGuard.canActivate(null, null) && permissionGuard.canActivate(null, null, 'inventory')"
+            [class.dropdown-show]="activeMenu.indexOf('inventory')>-1 "
+            routerLinkActive="active router-dropdown-show" [routerLinkActiveOptions]="{exact: false}">
+          <span (click)="menuToggler('inventory')">
             <i class="material-icons">assignment</i>
             <span i18n>Inventory Management</span>
             <i class="material-icons expand-icon"></i>
             </span>
           <ul class="section-child">
             <li *ngIf="enterpriseGuard.canActivate(null, null)" routerLinkActive="active"
-                >
+            >
               <a [routerLink]="['/inventory/orders-list']" routerLinkActive="active" translate i18n>Pending Orders</a>
             </li>
             <li *ngIf="enterpriseGuard.canActivate(null, null)"
-                routerLinkActive="active" >
+                routerLinkActive="active">
               <a [routerLink]="['/inventory/receiving']" routerLinkActive="active" translate i18n>Delivery
                 (Receiving)</a>
             </li>
             <li *ngIf="enterpriseGuard.canActivate(null, null)"
-                routerLinkActive="active" >
+                routerLinkActive="active">
               <a [routerLink]="['/inventory/adjustment']" routerLinkActive="active" translate i18n>Stock Adjustment</a>
             </li>
             <li *ngIf="enterpriseGuard.canActivate(null, null)" routerLinkActive="active"
-                >
+            >
               <a [routerLink]="['/inventory/transfer-order']" routerLinkActive="active" translate i18n>Transfer</a>
             </li>
           </ul>
         </li>
         <li class="section-header" *ngIf="permissionGuard.canActivate(null, null, 'promotions')"
-            routerLinkActive="active dropdown-show" [routerLinkActiveOptions]="{exact: false}">
-          <span (click)="menuToggler($event)">
+            [class.dropdown-show]="activeMenu.indexOf('promotions')>-1 "
+             routerLinkActive="active router-dropdown-show" [routerLinkActiveOptions]="{exact: false}">
+          <span (click)="menuToggler('promotions')">
           <i class="material-icons">local_offer</i>
           <span i18n>Promotion Management</span>
           <i class="material-icons expand-icon"></i>
             </span>
           <ul class="section-child">
-            <li routerLinkActive="active" >
+            <li routerLinkActive="active">
               <a [routerLink]="['/promotion/promos']" routerLinkActive="active" translate i18n>Promos</a>
             </li>
-            <li routerLinkActive="active" >
+            <li routerLinkActive="active">
               <a [routerLink]="['/promotion/vouchers']" routerLinkActive="active" translate i18n>Vouchers</a>
             </li>
             <li *ngIf="enterpriseGuard.canActivate(null, null)" routerLinkActive="active"
-                >
+            >
               <a [routerLink]="['/promotion/points']" routerLinkActive="active" translate i18n>Points</a>
             </li>
             <li *ngIf="enterpriseGuard.canActivate(null, null)" routerLinkActive="active"
-                >
+            >
               <a [routerLink]="['/promotion/gift-voucher']" routerLinkActive="active" translate i18n>
                 Gift Vouchers
               </a>
@@ -124,37 +128,38 @@ const logger = new Logger('MainWrapperComponent');
         </li>
 
         <li class="section-header" *ngIf="permissionGuard.canActivate(null, null, 'cms')"
-            routerLinkActive="active dropdown-show" [routerLinkActiveOptions]="{exact: false}">
-          <span (click)="menuToggler($event)">
+            [class.dropdown-show]="activeMenu.indexOf('cms')>-1 "
+             routerLinkActive="active router-dropdown-show" [routerLinkActiveOptions]="{exact: false}">
+          <span (click)="menuToggler('cms')">
           <i class="material-icons">edit</i>
           <span i18n>CMS</span>
           <i class="material-icons expand-icon"></i>
             </span>
           <ul class="section-child">
             <!--        <li><a [routerLink]="['/cms/widgets']" routerLinkActive="active" translate>Widgets</a></li>-->
-            <li routerLinkActive="active" >
+            <li routerLinkActive="active">
               <a [routerLink]="['/cms/banners']" routerLinkActive="active" i18n>Banners</a>
             </li>
-            <li routerLinkActive="active" >
+            <li routerLinkActive="active">
               <a [routerLink]="['/cms/testimonials']" routerLinkActive="active" i18n>Testimonials</a>
             </li>
-            <li routerLinkActive="active" >
+            <li routerLinkActive="active">
               <a [routerLink]="['/cms/flat-pages']" routerLinkActive="active" i18n>Pages</a>
             </li>
-            <li routerLinkActive="active" >
+            <li routerLinkActive="active">
               <a [routerLink]="['/cms/navigation']" routerLinkActive="active" i18n>Header Navigation</a>
             </li>
-            <li routerLinkActive="active" >
+            <li routerLinkActive="active">
               <a [routerLink]="['/cms/content-footers']" routerLinkActive="active" i18n>Content Footers</a>
             </li>
-            <li routerLinkActive="active" >
+            <li routerLinkActive="active">
               <a [routerLink]="['/cms/highlights']" routerLinkActive="active" i18n>Highlights</a>
             </li>
-            <li routerLinkActive="active" >
+            <li routerLinkActive="active">
               <a [routerLink]="['/cms/sla']" routerLinkActive="active" i18n>SLA</a>
             </li>
             <li *ngIf="enterpriseGuard.canActivate(null, null)" routerLinkActive="active"
-                >
+            >
               <a [routerLink]="['/cms/video-integration']" routerLinkActive="active" i18n>Video Integration</a>
             </li>
             <li *ngIf="enterpriseGuard.canActivate(null, null)">
@@ -170,35 +175,37 @@ const logger = new Logger('MainWrapperComponent');
         </li>
 
         <li class="section-header" *ngIf="permissionGuard.canActivate(null, null, 'fulfillment')"
-            routerLinkActive="active dropdown-show" [routerLinkActiveOptions]="{exact: false}">
-          <span (click)="menuToggler($event)">
+            [class.dropdown-show]="activeMenu.indexOf('fulfillment')>-1 "
+             routerLinkActive="active router-dropdown-show" [routerLinkActiveOptions]="{exact: false}">
+          <span (click)="menuToggler('fulfillment')">
           <i class="material-icons">shopping_cart</i>
           <span i18n>Order Fulfillment</span>
           <i class="material-icons expand-icon"></i>
             </span>
           <ul class="section-child">
-            <li routerLinkActive="active" >
+            <li routerLinkActive="active">
               <a [routerLink]="['/fulfillment/orders']" routerLinkActive="active" translate i18n>Orders</a>
             </li>
           </ul>
         </li>
 
         <li class="section-header" *ngIf="permissionGuard.canActivate(null, null, 'users')"
-            routerLinkActive="active dropdown-show" [routerLinkActiveOptions]="{exact: false}">
-          <span (click)="menuToggler($event)">
+            [class.dropdown-show]="activeMenu.indexOf('users')>-1 "
+             routerLinkActive="active router-dropdown-show" [routerLinkActiveOptions]="{exact: false}">
+          <span (click)="menuToggler('users')">
           <i class="material-icons">people</i>
           <span i18n>Customers and Users</span>
           <i class="material-icons expand-icon"></i>
             </span>
           <ul class="section-child">
-            <li routerLinkActive="active" >
+            <li routerLinkActive="active">
               <a [routerLink]="['/users/customer']" routerLinkActive="active" translate i18n>Customers</a>
             </li>
             <li *ngIf="enterpriseGuard.canActivate(null, null)" routerLinkActive="active"
-                >
+            >
               <a [routerLink]="['/users/customer-groups']" routerLinkActive="active" translate i18n>Customer Groups</a>
             </li>
-            <li routerLinkActive="active" >
+            <li routerLinkActive="active">
               <a [routerLink]="['/users/employee']" routerLinkActive="active" translate i18n>Employees</a>
             </li>
           </ul>
@@ -211,30 +218,31 @@ const logger = new Logger('MainWrapperComponent');
         </li>
 
         <li class="section-header" *ngIf="permissionGuard.canActivate(null, null, 'config')"
-            routerLinkActive="active dropdown-show" [routerLinkActiveOptions]="{exact: false}">
-          <span (click)="menuToggler($event)">
+            [class.dropdown-show]="activeMenu.indexOf('config')>-1 "
+             routerLinkActive="active router-dropdown-show" [routerLinkActiveOptions]="{exact: false}">
+          <span (click)="menuToggler('config')">
           <i class="material-icons">settings</i>
           <span i18n>Config</span>
           <i class="material-icons expand-icon"></i>
             </span>
           <ul class="section-child">
-            <li routerLinkActive="active" >
+            <li routerLinkActive="active">
               <a [routerLink]="['/config/website-settings']" routerLinkActive="active" i18n>Website Settings</a>
             </li>
             <li *ngIf="enterpriseGuard.canActivate(null, null)" routerLinkActive="active"
-                >
+            >
               <a [routerLink]="['/config/marketplace-integration']" routerLinkActive="active" i18n>Marketplace
                 Integration</a>
             </li>
             <li *ngIf="enterpriseGuard.canActivate(null, null)" routerLinkActive="active"
-                >
+            >
               <a [routerLink]="['/config/external-integration']" routerLinkActive="active" i18n>External Integration</a>
             </li>
             <li *ngIf="enterpriseGuard.canActivate(null, null)" routerLinkActive="active"
-                >
+            >
               <a [routerLink]="['/config/pos-integration']" routerLinkActive="active" i18n>POS Integration</a>
             </li>
-            <li routerLinkActive="active" >
+            <li routerLinkActive="active">
               <a [routerLink]="['/config/general-settings']" routerLinkActive="active" i18n>General</a>
             </li>
 
@@ -464,12 +472,15 @@ const logger = new Logger('MainWrapperComponent');
         display: initial;
       }
 
-      nav li.section-header.dropdown-show:hover {
+      nav li.section-header.dropdown-show:hover,
+      nav li.section-header.router-dropdown-show:hover
+      {
         cursor: pointer;
         border-left: none;
         /*background-color: #7B869B;*/
       }
 
+      nav > ul li.section-header.router-dropdown-show > span:hover,
       nav > ul li.section-header.dropdown-show > span:hover {
         /*transition: all .3s;*/
         background-color: #7B869B;
@@ -486,7 +497,8 @@ const logger = new Logger('MainWrapperComponent');
         font-weight: normal;
       }
 
-      nav > ul li.dropdown-show ul {
+      nav > ul li.dropdown-show ul,
+      nav > ul li.router-dropdown-show ul {
         display: block;
       }
 
@@ -494,7 +506,8 @@ const logger = new Logger('MainWrapperComponent');
         content: "expand_more";
       }
 
-      nav > ul li.section-header.dropdown-show .expand-icon::before {
+      nav > ul li.section-header.dropdown-show .expand-icon::before,
+      nav > ul li.section-header.router-dropdown-show .expand-icon::before {
         content: "expand_less";
       }
 
@@ -529,11 +542,13 @@ const logger = new Logger('MainWrapperComponent');
         background-color: var(--bhisma-orange);
         width: 6px;
       }
+
       li ul li:hover, li ul li.active {
         border-left: 4px solid var(--bhisma-orange);
       }
+
       nav li ul > li:hover a,
-      nav li ul > li.active a{
+      nav li ul > li.active a {
         padding-left: 42px;
       }
 
@@ -564,6 +579,7 @@ export class MainWrapperComponent implements OnInit, OnDestroy {
 
   private routerEventsSub: SubscriptionLike;
   isBusy = false;
+  activeMenu = [];
 
   constructor(public authService: AuthService,
               public router: Router,
@@ -597,8 +613,15 @@ export class MainWrapperComponent implements OnInit, OnDestroy {
     this.isBusy = false;
   }
 
-  menuToggler($event: Event) {
-    ($event.currentTarget as HTMLElement).parentElement.classList.toggle('dropdown-show');
+  menuToggler($event: string) {
+    // ($event.currentTarget as HTMLElement).parentElement.classList.toggle('dropdown-show');
+    const idx = this.activeMenu.indexOf($event, 0);
+    if (idx > -1) {
+      this.activeMenu.splice(idx, 1);
+    } else {
+      this.activeMenu.push($event);
+    }
+    logger.debug(this.activeMenu);
   }
 
 }
