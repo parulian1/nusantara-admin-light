@@ -16,9 +16,6 @@ const logger = new Logger('OrderFilter');
       <label>
         <span i18n>Filter</span>
         <div class="filters">
-          <nus-order-date-filter
-            (selectedDate)="onSelectedDateChanged($event)">
-          </nus-order-date-filter>
           <mat-form-field appearance="outline">
             <mat-select
               [disableOptionCentering]="true"
@@ -32,6 +29,9 @@ const logger = new Logger('OrderFilter');
               </mat-option>
             </mat-select>
           </mat-form-field>
+          <nus-order-date-filter
+            (selectedDate)="onSelectedDateChanged($event)">
+          </nus-order-date-filter>
           <mat-form-field appearance="outline">
             <mat-select [disableOptionCentering]="true"
                         panelClass="mat-select-panel"
