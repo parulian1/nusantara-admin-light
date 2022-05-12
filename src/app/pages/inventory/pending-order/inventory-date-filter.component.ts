@@ -85,7 +85,6 @@ const apiDateFormat = "YYYY-MM-DDTHH:mm:ss";
               [for]="dateRangePicker">
             </mat-datepicker-toggle>
             <mat-date-range-picker touchUi #dateRangePicker (opened)="displayMaxRangeInfo()">
-              <span i18n><sup>*</sup>Select up to 14 days</span>
             </mat-date-range-picker>
           </mat-form-field>
         </mat-option>
@@ -248,8 +247,6 @@ export class InventoryDateFilterComponent implements OnInit {
     var matCalendar = document.getElementsByClassName("mat-calendar")[0];
     let footer = document.createElement("div") as HTMLDivElement;
     footer.setAttribute("class", "date-range-footer");
-    const text = document.createTextNode("*Select up to 14 days");
-    footer.appendChild(text);
     matCalendar.appendChild(footer);
   }
 
