@@ -1,9 +1,8 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {NgxSmartModalComponent} from 'ngx-smart-modal';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {DialogResult, PagedResponse} from '@nusantara/core';
 import {Subscription} from 'rxjs';
-import {ICategory} from '@nusantara/models';
 import {CategoryService, ProductClassService} from '@nusantara/services';
 import {IProductClass} from '@nusantara/models/products';
 
@@ -70,6 +69,8 @@ export class ProductClassSelectionModalComponent implements OnInit, AfterViewIni
 
   @ViewChild('modalForm') formView: ElementRef<HTMLFormElement>;
   @ViewChild('modal') modal: NgxSmartModalComponent;
+
+  @Output() productClassChanged: EventEmitter<void> = new EventEmitter<void>();
 
   form: FormGroup;
   result: DialogResult = DialogResult.Cancelled;
@@ -165,6 +166,7 @@ export class ProductClassSelectionModalComponent implements OnInit, AfterViewIni
   selectProductClass(productClass: IProductClass) {
     this.productClass.setValue(productClass);
     this.close();
+    this.productClassChanged.emit();
     return false;
   }
 
