@@ -770,7 +770,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   productRelatedFormData: FormData[] = [];
   enabledAttributes: INamedHrefEntity[] = [];
   mediaError: Array<string> = [];
-  priceRangeEnabled = true;
+  priceRangeEnabled = false;
 
   @ViewChild(ProductMediaHostComponent) mediaHost: ProductMediaHostComponent;
   @ViewChild(PriceListHostComponent) priceListHost: PriceListHostComponent;
@@ -1039,7 +1039,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         Validators.minLength(this.DESCRIPTION_MIN_LENGTH),
         Validators.maxLength(this.DESCRIPTION_MAX_LENGTH)]],
       weight: [entity?.weight, [Validators.required, Validators.min(0.01), Validators.max(this.MAX_DIMENSION)]],
-      price: [0, [Validators.max(this.MAX_PRICE), Validators.min(0)]],
+      price: [1, [Validators.max(this.MAX_PRICE), Validators.min(1)]],
       priceSelector: [this.priceRangeEnabled, []],
       dimensions: this.fb.group({
         currentLength: [entity?.dimensions?.currentLength, [

@@ -387,7 +387,7 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
     logger.debug('onRangeQuantityChanged', index, this.ranges.controls.length);
     const currentRange = this.ranges.controls[index];
     if (this.ranges.controls.length > 1) {
-      if (index > 1) {
+      if (index >= 1) {
         const predecessorRange = this.ranges.controls[index - 1];
         predecessorRange.patchValue({
           maxQuantity: currentRange.get('minQuantity').value - 1,

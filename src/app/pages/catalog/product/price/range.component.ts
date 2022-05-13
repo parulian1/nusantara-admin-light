@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 import {AbstractEditingComponent, Logger} from '@nusantara/core';
-import { products } from '@nusantara/models';
+import {products} from '@nusantara/models';
 import {debounceTime} from 'rxjs/operators';
 
 const logger = new Logger('RangeComponent');
@@ -25,8 +25,9 @@ const logger = new Logger('RangeComponent');
         <div class="action-area1" i18n>Action</div>
       </div>
       <div class="content-grid container-grid">
-        <div class="qty-min-area">
+        <div class="qty-min-area immediate-error-display-input">
           <input type="number"
+                 appOnlyNumber
                  placeholder="Input 1-10000"
                  i18n-placeholder
                  [formControl]="minQuantity"
@@ -34,28 +35,27 @@ const logger = new Logger('RangeComponent');
                  [readonly]="isInitialRange"
                  data-qa="min-quantity"/>
         </div>
-        <div class="qty-max-area">
+        <div class="qty-max-area immediate-error-display-input">
           <input type="number"
+                 appOnlyNumber
                  [formControl]="maxQuantity"
                  name="max-quantity"
                  [readonly]="isTerminalRange"
                  placeholder="Input 1-10000"
                  i18n-placeholder
-                 data-qa="max-quantity" />
+                 data-qa="max-quantity"/>
         </div>
 
         <div class="price-area">
-
-           <span class="currency">
-          <input type="number"
-                 min="0"
-                 appOnlyNumber
-                 [formControl]="price"
-                 name="price"
-                 placeholder="Input 0-{{MAX_PRICE}}"
-                 i18n-placeholder
-                 data-qa="price"/>
-        </span>
+          <span class="currency immediate-error-display-input">
+            <input type="number"
+                   appOnlyNumber
+                   [formControl]="price"
+                   name="price"
+                   placeholder="Input 1-{{MAX_PRICE}}"
+                   i18n-placeholder
+                   data-qa="price"/>
+          </span>
         </div>
         <div class="action-area">
           <button type="button"
@@ -68,49 +68,71 @@ const logger = new Logger('RangeComponent');
     </div>
   `,
   styles: [':host { display: contents; }',
-  '.wrapper { margin-bottom: 16px; display: grid; grid-template-columns: 1fr 16px 1fr 1fr 30px; grid-column-gap: 16px; grid-row-gap: 4px; align-items: center; }',
-  '.currency { display: inline-block; position: relative; width: 100%; }',
-  '.currency::before { content: "Rp"; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); }',
-  '.currency input { padding-left: 35px; }',
-  'button { background: transparent; border: none; padding: 0; opacity: .5; }',
+    '.wrapper { margin-bottom: 16px; display: grid; grid-template-columns: 1fr 16px 1fr 1fr 30px; grid-column-gap: 16px; grid-row-gap: 4px; align-items: center; }',
+    '.currency { display: inline-block; position: relative; width: 100%; }',
+    '.currency::before { content: "Rp"; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); }',
+    '.currency input { padding-left: 35px; }',
+    'button { background: transparent; border: none; padding: 0; opacity: .5; }',
     `
-      .container-grid {  display: grid;
+      .container-grid {
+        display: grid;
         grid-template-columns: 2.5fr 2.5fr 9fr 2fr;
         gap: 8px 8px;
         grid-auto-flow: row;
         grid-template-areas:
-        "qty-area qty-area price-area1 action-area1"
-    "qty-min-area qty-max-area price-area action-area";
+            "qty-area qty-area price-area1 action-area1"
+            "qty-min-area qty-max-area price-area action-area";
         padding: 0 8px 0 8px
       }
-      .price-area { grid-area: price-area; }
-      .qty-max-area { grid-area: qty-max-area; }
-      .qty-min-area { grid-area: qty-min-area; }
-      .action-area { grid-area: action-area;        justify-self: center;
-        align-self: center; }
-      .qty-area { grid-area: qty-area; }
-      .price-area1 { grid-area: price-area1; }
+
+      .price-area {
+        grid-area: price-area;
+      }
+
+      .qty-max-area {
+        grid-area: qty-max-area;
+      }
+
+      .qty-min-area {
+        grid-area: qty-min-area;
+      }
+
+      .action-area {
+        grid-area: action-area;
+        justify-self: center;
+        align-self: center;
+      }
+
+      .qty-area {
+        grid-area: qty-area;
+      }
+
+      .price-area1 {
+        grid-area: price-area1;
+      }
+
       .action-area1 {
         justify-self: center;
         align-self: center;
         grid-area: action-area1;
       }
-        .header-grid {
-          /* UI / Darken White */
 
-          background: #F4F4F4;
-          font-family: 'Open Sans', sans-serif;
-          font-style: normal;
-          font-weight: 700;
-          font-size: 14px;
-          line-height: 20px;
-          align-items: center;
+      .header-grid {
+        /* UI / Darken White */
 
-          padding: 8px 12px 0 12px;
-        }
+        background: #F4F4F4;
+        font-family: 'Open Sans', sans-serif;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 20px;
+        align-items: center;
+
+        padding: 8px 12px 0 12px;
+      }
 
     `
-]
+  ]
 })
 export class RangeComponent extends AbstractEditingComponent implements OnInit {
   readonly MAX_PRICE = 999999999;
@@ -149,7 +171,7 @@ export class RangeComponent extends AbstractEditingComponent implements OnInit {
     this.priceList.valueChanges.subscribe((val) => {
       console.log(this.index, 'List Value changed', val);
     });
-    this.price.setValidators([Validators.min(0), Validators.max(this.MAX_PRICE)]);
+    this.price.setValidators([Validators.min(1), Validators.max(this.MAX_PRICE)]);
   }
 
   /**
@@ -160,23 +182,41 @@ export class RangeComponent extends AbstractEditingComponent implements OnInit {
     return this.form.value as products.IPriceListRange;
   }
 
-  get href(): FormControl { return this.form.get('href') as FormControl; }
-  get priceList(): FormControl { return this.form.get('priceList') as FormControl; }
-  get price(): FormControl { return this.form.get('price') as FormControl; }
-  get maxQuantity(): FormControl { return this.form.get('maxQuantity') as FormControl; }
-  get minQuantity(): FormControl { return this.form.get('minQuantity') as FormControl; }
+  get href(): FormControl {
+    return this.form.get('href') as FormControl;
+  }
+
+  get priceList(): FormControl {
+    return this.form.get('priceList') as FormControl;
+  }
+
+  get price(): FormControl {
+    return this.form.get('price') as FormControl;
+  }
+
+  get maxQuantity(): FormControl {
+    return this.form.get('maxQuantity') as FormControl;
+  }
+
+  get minQuantity(): FormControl {
+    return this.form.get('minQuantity') as FormControl;
+  }
 
   /**
    * Indicates if this range is the first within a price list.
    * Initial ranges may not be removed from a price list and must have a minQuantity = 0.
    */
-  get isInitialRange(): boolean { return this.index === 0; }
+  get isInitialRange(): boolean {
+    return this.index === 0;
+  }
 
   /**
    * Indicates if this is the last range within a price list.
    * Terminal ranges must have a maxQuantity = null.
    */
-  get isTerminalRange(): boolean { return this.index + 1 === this.allRanges.length; }
+  get isTerminalRange(): boolean {
+    return this.index + 1 === this.allRanges.length;
+  }
 
   /**
    * Returns the price range immediately prior to this price range.
@@ -233,6 +273,8 @@ export class RangeComponent extends AbstractEditingComponent implements OnInit {
         Validators.required,
         Validators.min(this.minQuantity.value),
       ]);
+    } else {
+
     }
     this.maxQuantity.updateValueAndValidity({emitEvent: false});
     this.minQuantity.updateValueAndValidity({emitEvent: false});
