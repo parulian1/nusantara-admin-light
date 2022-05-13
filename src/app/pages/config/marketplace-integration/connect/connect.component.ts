@@ -54,10 +54,9 @@ import { OrderDownloadFileService } from '@nusantara/services/order-download-fil
             </td>
 
             <td *ngIf="entity.isConnected == true">
-              <a *ngIf="entity.marketplace !== 'tiktok'" [routerLink]="['product-class/', entity.slug]" (click)="setSelectedShop(entity)" i18n>
+              <a [routerLink]="['product-class/', entity.slug]" (click)="setSelectedShop(entity)" i18n>
                 Map Class & Attribute
               </a>
-              <a *ngIf="entity.marketplace === 'tiktok'" (click)="downloadOrder(entity.slug)">Download Order List</a>
             </td>
             <td *ngIf="entity.isConnected == false">
               <a [routerLink]="[entity.slug]" i18n>Reconnect</a>
