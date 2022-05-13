@@ -40,7 +40,7 @@ const log = new Logger('ProductPromotionComponent');
         </select>
       </label>
 
-      <label *ngIf="!isPromoBundling">
+      <label *ngIf="isFormHide('minimumOrderAmount')">
         <span i18n>Minimum Order Value</span>
         <input type="number" [formControl]="minimumOrderAmount"
                placeholder="ex. 1000000">
@@ -61,22 +61,21 @@ const log = new Logger('ProductPromotionComponent');
         </label>
       </div>
 
-
-      <label *ngIf="!isPromoBundling">
+      <label *ngIf="isFormHide('amount')">
         <span i18n>Amount</span>
         <input type="number" [formControl]="amount"
                placeholder="ex. 1000000">
         <nus-field-errors [control]="amount"></nus-field-errors>
       </label>
 
-      <label *ngIf="!isPromoBundling">
+      <label *ngIf="isFormHide('maxAmount')">
         <span i18n>Max Amount</span>
         <input type="number" [formControl]="maxAmount"
                placeholder="ex. 1000000">
         <nus-field-errors [control]="maxAmount"></nus-field-errors>
       </label>
 
-      <div class="promo-bundling-condition" *ngIf="isPromoBundling">
+      <div *ngIf="isFormHide('productBundlingCondition')" class="promo-bundling-condition">
         <span class="subheading-2" i18n>Condition</span>
         <span
           class="subtitle-condition" i18n>Requirements that customers need to meet in order for the promo to be used</span>
@@ -106,7 +105,7 @@ const log = new Logger('ProductPromotionComponent');
         </table>
       </div>
 
-      <div class="promo-bundling-benefit" *ngIf="isPromoBundling">
+      <div *ngIf="isFormHide('productBundlingBenefit')" class="promo-bundling-benefit">
         <span class="subheading-2" i18n>Benefit</span>
         <span
           class="subtitle-condition" i18n>The benefits that customers will get</span>
@@ -136,7 +135,7 @@ const log = new Logger('ProductPromotionComponent');
         </table>
       </div>
 
-      <div class="promo-products" *ngIf="!isPromoBundling">
+      <div class="promo-products" *ngIf="isFormHide('products')">
         <span class="upload-product">
           <h2 class="title-2" i18n>Promotion Products</h2>
           <button type="button" class="control" (click)="uploadProductXLSX()" [disabled]="checkPromoDateValid()">
@@ -178,7 +177,7 @@ const log = new Logger('ProductPromotionComponent');
           List</a>
       </div>
 
-      <label *ngIf="!isPromoBundling" class="checkbox">
+      <label *ngIf="isFormHide('isExclusive')" class="checkbox">
         <input type="checkbox" class="input-checkbox" [formControl]="isExclusive">
         <span i18n>Is Exclusive</span>
         <nus-field-errors [control]="isExclusive"></nus-field-errors>
@@ -190,19 +189,19 @@ const log = new Logger('ProductPromotionComponent');
         <nus-field-errors [control]="isActive"></nus-field-errors>
       </label>
 
-      <label *ngIf="isPromoBundling" class="checkbox">
+      <label *ngIf="isFormHide('multiplyItem')" class="checkbox">
         <input type="checkbox" class="input-checkbox" [formControl]="multiplyItem">
         <span i18n>Multiply Item</span>
         <nus-field-errors [control]="multiplyItem"></nus-field-errors>
       </label>
 
-      <label *ngIf="!isPromoBundling" class="promo-platform">
+      <label *ngIf="isFormHide('appliedOnOnline') || isFormHide('appliedOnOffline')" class="promo-platform">
         <span class="subtitle" i18n>Platform</span>
-        <label class="checkbox">
+        <label *ngIf="isFormHide('appliedOnOnline')" class="checkbox">
           <input type="checkbox" [formControl]="appliedOnOnline" name="appliedOnOnline">
           <span i18n>Online (Website)</span>
         </label>
-        <label class="checkbox" *ngIf="enterpriseLicense()">
+        <label class="checkbox" *ngIf="enterpriseLicense() && isFormHide('appliedOnOffline')">
           <input type="checkbox" [formControl]="appliedOnOffline" name="appliedOnOffline">
           <span i18n>Offline (POS)</span>
         </label>
@@ -374,6 +373,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     super.ngOnInit();
     if (this.configService.isEnterpriseLicense()) {
       this.types.push('promo_bundling');
+      this.types.push('free_gift');
     }
   }
 
@@ -810,6 +810,23 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     if (this.promotionGroupSelectionModal.result === DialogResult.OK) {
       this.selectedPromotionGroup = this.promotionGroupSelectionModal.promotionGroup.value as IPromoGroup;
       this.promotionGroup.setValue(this.selectedPromotionGroup.href);
+    }
+  }
+
+  isFormHide(formName: string): boolean {
+    // Check if form is show or hide based on promo type.
+    // defaultForm is for promo percentage/amount_off/override_price type
+
+    const defaultForm = ['minimumOrderAmount', 'products', 'amount', 'maxAmount', 'isExclusive', 'appliedOnOnline', 'appliedOnOffline', 'banner'];
+    const promoBundlingForm = ['productBundlingBenefit', 'productBundlingCondition', 'multiplyItem'];
+    const promoFreeGiftForm = ['minimumOrderAmount', 'products', 'isExclusive', 'appliedOnOffline', 'banner'];
+
+    if (this.type.value === 'promo_bundling') {
+      return promoBundlingForm.includes(formName);
+    } else if (this.type.value === 'free_gift') {
+      return promoFreeGiftForm.includes(formName);
+    } else {
+      return defaultForm.includes(formName);
     }
   }
 }
