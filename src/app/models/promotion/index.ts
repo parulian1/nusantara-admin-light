@@ -4,3 +4,5 @@ export * from './points';
 export * from './voucher';
 export * from './gift-voucher';
 export * from './product-bundling';
+
+export * from './promotion-group';

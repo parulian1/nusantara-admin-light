@@ -1,10 +1,10 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AuthService, RequireIsEnterpriseGuard} from '@nusantara/auth';
-import {slideInAnimation} from '@nusantara/route-animations';
-import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router} from '@angular/router';
-import {SubscriptionLike} from 'rxjs';
-import {RequirePermissionGuard} from '@nusantara/auth/guards/require-permission.guard';
-import {Logger} from '@nusantara/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AuthService, RequireIsEnterpriseGuard } from '@nusantara/auth';
+import { slideInAnimation } from '@nusantara/route-animations';
+import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
+import { SubscriptionLike } from 'rxjs';
+import { RequirePermissionGuard } from '@nusantara/auth/guards/require-permission.guard';
+import { Logger } from '@nusantara/core';
 
 const logger = new Logger('MainWrapperComponent');
 
