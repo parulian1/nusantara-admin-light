@@ -22,7 +22,7 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
           </div>
         </div>
         <div class="action">
-          <button class="control" (click)="close()" type="button" i18n>Cancel Anyway</button>
+          <button class="control" [disabled]="disabled" (click)="close()" type="button" i18n>Cancel Anyway</button>
           <button class="control secondary ghost" (click)="cancel()" type="button" i18n>
           Go Back
           </button>
@@ -52,6 +52,7 @@ export class CancelOrderDialogComponent {
   otherReason:string = '';
   resVal:string;
   reasons = [];
+  disabled:boolean
 
   constructor(protected service: OrderService) { }
 
@@ -61,6 +62,7 @@ export class CancelOrderDialogComponent {
     this.service.cancelReason(this.marketplace).subscribe((res) => {
       this.reasons = res
     });
+    this.disabled = true
   }
 
   get onClose(): EventEmitter<any> {
@@ -74,6 +76,7 @@ export class CancelOrderDialogComponent {
   }
 
   changeReason(data?: Event | string) {
+    this.disabled = false
     if (data instanceof Event) {
     this.resVal = (data.target as HTMLInputElement).value
     const index = this.reasons.map(x=>x.value.toString()).indexOf(this.resVal)
@@ -94,6 +97,9 @@ export class CancelOrderDialogComponent {
     this.modal.close();
     this.textbox = false;
     this.otherReason = '';
+    setTimeout(function(){
+      window.location.reload();
+    }, 3000);
   }
 
   cancel() {
