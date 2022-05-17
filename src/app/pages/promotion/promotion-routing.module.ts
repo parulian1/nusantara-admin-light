@@ -3,7 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { PointsComponent } from './points/points.component';
 import { PointsResolver } from './points/points.resolver';
-import { ProductPromotionComponent, ProductPromotionListResolver, ProductPromotionResolver, PromotionListComponent } from './promotion';
+import {
+  ProductPromotionComponent,
+  ProductPromotionSingleListResolver,
+  ProductPromotionResolver,
+  PromotionCampaignListComponent,
+  PromotionSingleListComponent
+} from './promotion';
 import { VoucherComponent, VoucherListComponent } from './voucher';
 import { VoucherListResolver } from './voucher/voucher-list.resolver';
 import { VoucherResolver } from './voucher/voucher.resolver';
@@ -12,34 +18,10 @@ import { GiftVoucherListResolver } from './gift-voucher/gift-voucher-list.resolv
 import { GiftVoucherResolver } from './gift-voucher/gift-voucher.resolver';
 import { RequireIsEnterpriseGuard } from '@nusantara/auth';
 import { RequirePermissionGuard } from '@nusantara/auth/guards/require-permission.guard';
+import {PromotionCampaignResolver} from "@nusantara/pages/promotion/promotion/campaign/promotion-campaign.resolver";
+import {PromotionGroupComponent} from "@nusantara/pages/promotion/promotion/campaign/promotion-group.component";
 
 const routes: Routes = [
-  {
-    path: 'promos',
-    canActivateChild: [RequirePermissionGuard],
-    children: [
-      {
-        path: '',
-        component: PromotionListComponent,
-        resolve: { page: ProductPromotionListResolver, },
-        runGuardsAndResolvers: 'always',
-        data: { animation: 'List' },
-      },
-      {
-        path: 'new',
-        component: ProductPromotionComponent,
-        runGuardsAndResolvers: 'always',
-        data: { animation: 'Detail', },
-      },
-      {
-        path: ':slug',
-        component: ProductPromotionComponent,
-        resolve: { entity: ProductPromotionResolver, },
-        runGuardsAndResolvers: 'always',
-        data: { animation: 'Detail', },
-      },
-    ]
-  },
   {
     path: 'vouchers',
     canActivateChild: [RequirePermissionGuard],
@@ -107,6 +89,64 @@ const routes: Routes = [
       },
     ]
   },
+  {
+    path: 'promo',
+    canActivateChild: [RequirePermissionGuard],
+    children: [
+      {
+        path: 'single',
+        children: [
+          {
+            path: '',
+            component: PromotionSingleListComponent,
+            resolve: { page: ProductPromotionSingleListResolver, },
+            runGuardsAndResolvers: 'always',
+            data: { animation: 'List' },
+          },
+          {
+            path: 'new',
+            component: ProductPromotionComponent,
+            runGuardsAndResolvers: 'always',
+            data: { animation: 'Detail', },
+          },
+          {
+            path: ':slug',
+            component: ProductPromotionComponent,
+            resolve: { entity: ProductPromotionResolver, },
+            runGuardsAndResolvers: 'always',
+            data: { animation: 'Detail', },
+          },
+        ]
+      },
+      {
+        path: 'campaign',
+        canActivateChild: [RequirePermissionGuard],
+        children: [
+          {
+            path: '',
+            component: PromotionCampaignListComponent,
+            resolve: { page: PromotionCampaignResolver, },
+            runGuardsAndResolvers: 'always',
+            data: { animation: 'List' },
+          },
+          {
+            path: 'new',
+            component: PromotionGroupComponent,
+            runGuardsAndResolvers: 'always',
+            data: { animation: 'Detail', },
+          },
+          {
+            path: ':slug',
+            component: PromotionGroupComponent,
+            resolve: { entity: PromotionCampaignResolver, },
+            runGuardsAndResolvers: 'always',
+            data: { animation: 'Detail', },
+          },
+        ]
+      },
+    ]
+  },
+
 ];
 
 @NgModule({

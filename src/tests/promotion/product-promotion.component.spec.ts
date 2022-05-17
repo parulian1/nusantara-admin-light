@@ -5,7 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { SharedModule } from '@nusantara/shared';
 import { ProductPromotionComponent } from '@nusantara/pages/promotion/promotion';
-import { ProductPromotionService } from '@nusantara/services';
+import { ProductPromotionSingleService } from '@nusantara/services';
 import { HttpErrorResponse } from '@angular/common/http';
 
 describe('ProductPromotionComponent', () => {
@@ -14,7 +14,7 @@ describe('ProductPromotionComponent', () => {
 
   let httpTestingController: HttpTestingController;
 
-  let service: ProductPromotionService;
+  let service: ProductPromotionSingleService;
 
   const productPromoResponse = {
     href: 'https://staging.bhisma.cloud/api/catalog/product-promotion/test-promo-shabrina-2/',
@@ -81,7 +81,7 @@ describe('ProductPromotionComponent', () => {
 
   beforeEach(() => {
     httpTestingController = TestBed.inject(HttpTestingController);
-    service = TestBed.inject(ProductPromotionService);
+    service = TestBed.inject(ProductPromotionSingleService);
     fixture = TestBed.createComponent(ProductPromotionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

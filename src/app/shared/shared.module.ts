@@ -52,6 +52,7 @@ import { ClickOutsideDirective } from './click-outside.directive';
 import { ProductOnlineSelectionModalComponent } from '@nusantara/shared/product-online-selection-modal.component';
 import { FieldLengthCounterComponent } from './field-length-counter/field-length-counter.component';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
+import {PromoModalComponent} from "@nusantara/shared/modals/promo-modal.component";
 
 
 /**
@@ -106,7 +107,8 @@ import { ProgressBarComponent } from './progress-bar/progress-bar.component';
     ClickOutsideDirective,
     ProductOnlineSelectionModalComponent,
     FieldLengthCounterComponent,
-    ProgressBarComponent
+    ProgressBarComponent,
+    PromoModalComponent,
   ],
   exports: [
     EntityToSlugPipe,
@@ -154,7 +156,8 @@ import { ProgressBarComponent } from './progress-bar/progress-bar.component';
     ClickOutsideDirective,
     ProductOnlineSelectionModalComponent,
     FieldLengthCounterComponent,
-    ProgressBarComponent
+    ProgressBarComponent,
+    PromoModalComponent,
   ],
   imports: [
     CommonModule,
