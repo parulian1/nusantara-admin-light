@@ -169,9 +169,9 @@ export class RangeComponent extends AbstractEditingComponent implements OnInit {
     this.siblingQuantityChanged.subscribe((i) => this.onSiblingQuantityChanged(i));
 
     this.priceList.valueChanges.subscribe((val) => {
-      console.log(this.index, 'List Value changed', val);
+      logger.debug(this.index, 'List Value changed', val);
     });
-    this.price.setValidators([Validators.min(1), Validators.max(this.MAX_PRICE)]);
+    this.price.setValidators([Validators.required, Validators.min(1), Validators.max(this.MAX_PRICE)]);
   }
 
   /**
@@ -276,8 +276,10 @@ export class RangeComponent extends AbstractEditingComponent implements OnInit {
     } else {
 
     }
+    // this.price.setValidators([Validators.required, Validators.min(1), Validators.max(this.MAX_PRICE)]);
     this.maxQuantity.updateValueAndValidity({emitEvent: false});
     this.minQuantity.updateValueAndValidity({emitEvent: false});
+
   }
 
   /**

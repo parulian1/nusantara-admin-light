@@ -314,7 +314,7 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
       f = this.fb.group({
         href: ['', []],
         priceList: [this.href.value, []],
-        price: [price, [Validators.required, Validators.min(0)]],
+        price: [price, [Validators.required, Validators.min(1)]],
         maxQuantity: [null, []],
         minQuantity: [minQuantity, [Validators.required,]]
       });
@@ -323,7 +323,7 @@ export class PriceListComponent extends AbstractEditingComponent implements OnIn
       f = this.fb.group({
         href: [range?.href, []],
         priceList: [range?.priceList, []],
-        price: [range?.price, []],
+        price: [range?.price, [Validators.required, Validators.min(1)]],
         maxQuantity: [range?.maxQuantity, []],
         minQuantity: [range?.minQuantity, []]
       });

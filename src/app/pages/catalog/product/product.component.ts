@@ -947,9 +947,12 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       log.debug('priceSelectorSubscribe', value);
       if (value === true) {
         this.price.disable();
+        this.price.clearValidators();
         this.priceRangeEnabled = false;
       } else {
         this.price.enable();
+        this.price.clearValidators();
+        this.price.setValidators([Validators.required, Validators.min(1), Validators.max(this.MAX_PRICE)])
         this.priceRangeEnabled = true;
       }
     });
