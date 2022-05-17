@@ -60,9 +60,9 @@ export class CancelOrderDialogComponent {
   open() {
     this.modal.open();
     this.service.cancelReason(this.marketplace).subscribe((res) => {
-      this.reasons = res
+      this.reasons = res;
     });
-    this.disabled = true
+    this.disabled = true;
   }
 
   get onClose(): EventEmitter<any> {
@@ -76,15 +76,15 @@ export class CancelOrderDialogComponent {
   }
 
   changeReason(data?: Event | string) {
-    this.disabled = false
+    this.disabled = false;
     if (data instanceof Event) {
-    this.resVal = (data.target as HTMLInputElement).value
-    const index = this.reasons.map(x=>x.value.toString()).indexOf(this.resVal)
+    this.resVal = (data.target as HTMLInputElement).value;
+    const index = this.reasons.map(x=>x.value.toString()).indexOf(this.resVal);
 
       if(this.reasons[index].type === 'text'){
-        this.textbox = true
+        this.textbox = true;
       } else {
-        this.textbox = false
+        this.textbox = false;
       }
     }
   }
