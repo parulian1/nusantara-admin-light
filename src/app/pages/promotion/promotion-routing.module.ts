@@ -8,7 +8,7 @@ import {
   ProductPromotionSingleListResolver,
   ProductPromotionResolver,
   PromotionCampaignListComponent,
-  PromotionSingleListComponent
+  PromotionSingleListComponent, PromotionGroupResolver, PromotionCampaignListResolver
 } from './promotion';
 import { VoucherComponent, VoucherListComponent } from './voucher';
 import { VoucherListResolver } from './voucher/voucher-list.resolver';
@@ -18,8 +18,7 @@ import { GiftVoucherListResolver } from './gift-voucher/gift-voucher-list.resolv
 import { GiftVoucherResolver } from './gift-voucher/gift-voucher.resolver';
 import { RequireIsEnterpriseGuard } from '@nusantara/auth';
 import { RequirePermissionGuard } from '@nusantara/auth/guards/require-permission.guard';
-import {PromotionCampaignResolver} from "@nusantara/pages/promotion/promotion/campaign/promotion-campaign.resolver";
-import {PromotionGroupComponent} from "@nusantara/pages/promotion/promotion/campaign/promotion-group.component";
+import { PromotionGroupComponent } from '@nusantara/pages/promotion/promotion/campaign/promotion-group.component';
 
 const routes: Routes = [
   {
@@ -125,7 +124,7 @@ const routes: Routes = [
           {
             path: '',
             component: PromotionCampaignListComponent,
-            resolve: { page: PromotionCampaignResolver, },
+            resolve: { page: PromotionCampaignListResolver, },
             runGuardsAndResolvers: 'always',
             data: { animation: 'List' },
           },
@@ -138,7 +137,7 @@ const routes: Routes = [
           {
             path: ':slug',
             component: PromotionGroupComponent,
-            resolve: { entity: PromotionCampaignResolver, },
+            resolve: { entity: PromotionGroupResolver, },
             runGuardsAndResolvers: 'always',
             data: { animation: 'Detail', },
           },

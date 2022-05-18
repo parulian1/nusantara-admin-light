@@ -7,6 +7,6 @@ import { PromotionCampaignService } from '@nusantara/services';
 @Injectable({
   providedIn: 'root'
 })
-export class PromotionCampaignResolver extends AbstractListResolver<IPromoGroup> {
+export class PromotionCampaignListResolver extends AbstractListResolver<IPromoGroup> {
   constructor(service: PromotionCampaignService) { super(service); }
 }

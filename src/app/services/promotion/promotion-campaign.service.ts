@@ -20,6 +20,7 @@ export class PromotionCampaignService extends AbstractCrudService<IPromoGroup> {
     let url = `${this.baseUrl}/`;
     let params = new HttpParams();
     params = params.set('is_valid_product', 'false');
+    console.log('slug', slug, !!slug);
     if (!!slug) {
       url += `${slug}/`;
     }

@@ -1,20 +1,16 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as XLSX from 'xlsx';
 
 import {
-  ProductPromotionSingleService,
-  ProductService,
   PromotionCampaignService,
-  SiteConfigService
 } from '@nusantara/services';
 import { AbstractDetailComponent, DialogResult, Logger, ToastService } from '@nusantara/core';
-import { INamedHrefEntity } from '@nusantara/models/base';
-import {IProductBundling, IProductPromotion, IPromoGroup, ProductPromotionType} from '@nusantara/models';
-import { IProduct } from '@nusantara/models/products';
-import {CustomerGroupModalComponent, ProductSelectionModalComponent} from '@nusantara/shared';
-import {PromoModalComponent} from "@nusantara/shared/modals/promo-modal.component";
+import {
+  IPromoGroup,
+  IPromoGroupCombination,
+} from '@nusantara/models';
+import {PromoModalComponent} from '@nusantara/shared/modals/promo-modal.component';
 
 declare var window: any; // Needed on Angular 8+
 
@@ -44,20 +40,17 @@ const log = new Logger('ProductPromotionComponent');
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
-      <!--      <div class="promo-date">-->
-      <!--        <label class="promo-date-label">-->
-      <!--          <span class="subtitle" i18n>Valid From</span>-->
-      <!--          <nus-field-datetime [control]="validFrom" [minDate]="minDateValidFrom" [maxDate]="maxDateValidFrom"></nus-field-datetime>-->
-      <!--          <nus-field-errors [control]="validFrom"></nus-field-errors>-->
-      <!--        </label>-->
+      <div class="promo-date">
+        <label class="promo-date-label">
+          <span class="subtitle" i18n>Valid From</span>
+          <span>{{ !!validFrom ? validFrom : '-' }}</span>
+        </label>
 
-      <!--        <label class="promo-date-label">-->
-      <!--          <span class="subtitle" i18n>Valid To</span>-->
-      <!--          <nus-field-datetime [control]="validTo" [minDate]="minDateValidTo" [maxDate]="maxDateValidTo"></nus-field-datetime>-->
-      <!--          <nus-field-errors [control]="validTo"></nus-field-errors>-->
-      <!--        </label>-->
-      <!--      </div>-->
-
+        <label class="promo-date-label">
+          <span class="subtitle" i18n>Valid To</span>
+          <span>{{ !!validTo ? validTo : '-' }}</span>
+        </label>
+      </div>
 
       <label class="checkbox">
         <input type="checkbox" class="input-checkbox" [formControl]="isActive">
@@ -88,14 +81,16 @@ const log = new Logger('ProductPromotionComponent');
           <thead>
           <tr>
             <th i18n>Name</th>
+            <th i18n>Type</th>
             <th i18n>Action</th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let control of combinations?.controls; let i=index">
             <td>{{ control.get('name').value }}</td>
+            <td>{{ control.get('type').value | promoTypeToLabel }}</td>
             <td>
-              <button (click)="combinations.removeAt(i)" type="button" class="remove-button">
+              <button (click)="removePromoAndUpdateValidDate(i)" type="button" class="remove-button">
                 <i class="material-icons">remove_circle_outline</i>
               </button>
             </td>
@@ -163,6 +158,9 @@ export class PromotionGroupComponent extends AbstractDetailComponent<IPromoGroup
 
   hasProductUrl = false;
 
+  validFrom: string;
+  validTo: string;
+
   @ViewChild('promoCombinationSelectionModal') promoCombinationSelectionModal: PromoModalComponent;
 
   constructor(service: PromotionCampaignService,
@@ -199,11 +197,13 @@ export class PromotionGroupComponent extends AbstractDetailComponent<IPromoGroup
       this.hasProductUrl = true;
     }
 
-    const today = new Date();
 
     for (const combination of entity?.combinations ?? []) {
-      this.addCombination(combination);
+      this.addCombination(combination);0
     }
+
+    this.updateValidDate(entity?.combinations);
+
   }
 
   setImagePromoPreview(data?: Event | string) {
@@ -251,15 +251,18 @@ export class PromotionGroupComponent extends AbstractDetailComponent<IPromoGroup
     super.save();
   }
 
-  addCombination(combination: INamedHrefEntity) {
-    if ((this.combinations.value as Array<INamedHrefEntity>).filter(p => p.href === combination.href).length > 0) {
+  addCombination(combination: IPromoGroupCombination) {
+    if ((this.combinations.value as Array<IPromoGroupCombination>).filter(p => p.href === combination.href).length > 0) {
       log.info('Combination already in list -- skipping');
       return;
     }
 
     const f = this.fb.group({
       name: [combination.name],
-      href: [combination.href]
+      href: [combination.href],
+      type: [combination.type],
+      validFrom: [combination.validFrom],
+      validTo: [combination.validTo]
     });
 
     this.combinations.push(f);
@@ -267,17 +270,21 @@ export class PromotionGroupComponent extends AbstractDetailComponent<IPromoGroup
 
   onPromoCombinationSelectionModalClosed() {
     if (this.promoCombinationSelectionModal.result === DialogResult.OK) {
-      const selectedPromo = this.promoCombinationSelectionModal.combination.value as INamedHrefEntity;
+      const selectedPromo = this.promoCombinationSelectionModal.combination.value as IPromoGroupCombination;
 
-      if ((this.combinations.value as Array<INamedHrefEntity>).filter(p => p.href === selectedPromo.href).length > 0) {
+      if ((this.combinations.value as Array<IPromoGroupCombination>).filter(p => p.href === selectedPromo.href).length > 0) {
         log.info('Combination already in list -- skipping');
         return;
       }
       const f = this.fb.group({
         name: [selectedPromo.name, []],
         href: [selectedPromo.href, []],
+        type: [selectedPromo.type],
+        validFrom: [selectedPromo.validFrom],
+        validTo: [selectedPromo.validTo]
       });
       this.combinations.push(f);
+      this.updateValidDate(this.combinations.value as IPromoGroupCombination[]);
 
     }
   }
@@ -285,5 +292,25 @@ export class PromotionGroupComponent extends AbstractDetailComponent<IPromoGroup
   selectPromo() {
     this.promoCombinationSelectionModal.open();
   }
+
+  removePromoAndUpdateValidDate(index: number): void {
+    this.combinations.removeAt(index);
+    this.updateValidDate(this.combinations.value as IPromoGroupCombination[]);
+  }
+
+  updateValidDate(combinations: IPromoGroupCombination[]): void {
+    if (combinations.length) {
+      this.validFrom = new Date(combinations.sort((oldPromo, newPromo) => {
+        return new Date(oldPromo.validFrom).getTime() - new Date(newPromo.validFrom).getTime();
+      })[0].validFrom).toUTCString();
+      this.validTo = new Date(combinations.sort((oldPromo, newPromo) => {
+        return new Date(newPromo.validTo).getTime() - new Date(oldPromo.validTo).getTime();
+      })[0].validTo).toUTCString();
+    } else {
+      this.validFrom = null;
+      this.validTo = null;
+    }
+  }
+
 }
 

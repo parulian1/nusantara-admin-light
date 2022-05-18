@@ -4,7 +4,7 @@ import { NgxSmartModalComponent } from 'ngx-smart-modal';
 import { Subscription } from 'rxjs';
 
 import { DialogResult, PagedResponse } from '@nusantara/core';
-import { INamedHrefEntity } from '@nusantara/models';
+import {INamedHrefEntity, IProductPromotion, IPromoGroupCombination} from '@nusantara/models';
 import {CustomerGroupService, ProductPromotionSingleService} from '@nusantara/services';
 
 /**
@@ -31,11 +31,19 @@ import {CustomerGroupService, ProductPromotionSingleService} from '@nusantara/se
             <thead>
             <tr>
               <th i18n>Name</th>
+              <th i18n>Type</th>
+              <th i18n>Action</th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let combination of displayedResults?.entities">
-              <td><a href="#" (click)="selectCombination(combination)">{{ combination.name }}</a></td>
+              <td>
+                {{ combination.name }}
+              </td>
+              <td>{{ combination.type | promoTypeToLabel }}</td>
+              <td class="centered">
+                <a href="#" (click)="selectCombination(combination)" i18n>Add</a>
+              </td>
             </tr>
             </tbody>
           </table>
@@ -57,7 +65,7 @@ export class PromoModalComponent implements OnInit, AfterViewInit {
   result: DialogResult = DialogResult.Cancelled;
   searchTextChanged$: Subscription;
 
-  displayedResults: PagedResponse<INamedHrefEntity> = null;
+  displayedResults: PagedResponse<IProductPromotion> = null;
 
   timeoutId: any;
   reloadTimeout = 650;
@@ -142,7 +150,7 @@ export class PromoModalComponent implements OnInit, AfterViewInit {
     this.modal.open();
   }
 
-  selectCombination(combination: INamedHrefEntity) {
+  selectCombination(combination: IPromoGroupCombination) {
     this.combination.setValue(combination);
     this.close();
     return false;
