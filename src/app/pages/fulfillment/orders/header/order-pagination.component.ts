@@ -34,7 +34,7 @@ import { HttpResponse } from '@angular/common/http';
         </button>
         <mat-menu #actionMenu xPosition="before" >
           <button mat-menu-item (click)="confirmModal.open()" i18n>Accept Selected Order</button>
-          <button mat-menu-item (click)="downloadOrderPDF()" i18n>Print Selected Order Label</button>
+          <button mat-menu-item (click)="downloadAWBBulk()" i18n>Print Selected Order Label</button>
           <button mat-menu-item (click)="downloadProductList()" i18n>Product List</button>
           <button mat-menu-item (click)="downloadOrderList()" i18n>Order List</button>
         </mat-menu>
@@ -154,12 +154,12 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
     });
   }
 
-  downloadOrderPDF(){
+  downloadAWBBulk(){
     const formData = {
       order_numbers: this.checkedlist,
     }
-    this.orderService.downloadOrderPDF(formData).subscribe((response) => {
-        this.orderDownloadService.downloadAsZip(response, 'print-order-list');
+    this.orderService.downloadAWBBulk(formData).subscribe((response) => {
+        this.orderDownloadService.downloadAsZip(response, 'download-awb-bulk');
     });
   }
 
@@ -182,7 +182,7 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
     ) {
       var matMenu = document.getElementsByClassName("mat-menu-panel")[0];
       let footer = document.createElement("div") as HTMLDivElement;
-      footer.setAttribute("class", "download-date-range-info caption-1")
+      footer.setAttribute("class", "download-date-range-info caption-1");
 
       let text = "";
       if (filters.date.type === "allDate") {

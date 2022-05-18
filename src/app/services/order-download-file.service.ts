@@ -33,11 +33,12 @@ export class OrderDownloadFileService {
     dwldLink.click();
     document.body.removeChild(dwldLink);
   }
+
   downloadAsZip(data:string, type:string){
     let filename: string;
-    const today = moment().format('YYYY-MM-DD').toString();
+    const today = moment().format('YYYYMMDD').toString();
 
-    if(type === 'print-order-list'){ filename = `AWB-${today}`; }
+    if(type === 'download-awb-bulk'){ filename = `AWB-${today}`; }
 
     let blob = new Blob([data], {
       type: "application/zip",
