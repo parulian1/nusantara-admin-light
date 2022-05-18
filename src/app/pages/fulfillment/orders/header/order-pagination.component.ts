@@ -7,7 +7,6 @@ import { OrderDownloadFileService, OrderReportService, OrderService, SvgIconServ
 import { IOrderFilterValue } from '@nusantara/models/order/filter';
 import * as moment from 'moment';
 import { ConfirmModalComponent } from '@nusantara/shared/confirm-modal.component';
-import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'nus-order-custom-pagination',
