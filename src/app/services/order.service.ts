@@ -77,4 +77,25 @@ export class OrderService extends AbstractCrudService<IOrder> {
     );
   }
 
+  // cancelation reason
+  cancelReason(marketplace:string): Observable<any> {
+    return this.httpClient.get(
+      `/api/marketplace/order-cancellation/${marketplace}/reason/`
+    );
+  }
+
+  cancelOrder(formData, ordernum:string): Observable<any> {
+    return this.httpClient.patch(
+      `${this.baseUrl}/${ordernum}/`, formData
+    )
+  }
+
+  downloadOrderPDF(formData): Observable<any> {
+    const options:any= {
+      responseType:"blob",
+    }
+    return this.httpClient.post(
+      `/api/order/order-bulk-download-awb/`, formData, options
+    );
+  }
 }

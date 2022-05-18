@@ -7,6 +7,7 @@ import { OrderDownloadFileService, OrderReportService, OrderService, SvgIconServ
 import { IOrderFilterValue } from '@nusantara/models/order/filter';
 import * as moment from 'moment';
 import { ConfirmModalComponent } from '@nusantara/shared/confirm-modal.component';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'nus-order-custom-pagination',
@@ -33,6 +34,7 @@ import { ConfirmModalComponent } from '@nusantara/shared/confirm-modal.component
         </button>
         <mat-menu #actionMenu xPosition="before" >
           <button mat-menu-item (click)="confirmModal.open()" i18n>Accept Selected Order</button>
+          <button mat-menu-item (click)="downloadOrderPDF()" i18n>Print Selected Order Label</button>
           <button mat-menu-item (click)="downloadProductList()" i18n>Product List</button>
           <button mat-menu-item (click)="downloadOrderList()" i18n>Order List</button>
         </mat-menu>
@@ -149,6 +151,15 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
       this.dateRangeValidation(this.appliedFilters),
       this.checkedlist).subscribe((response: string) => {
         this.orderDownloadService.downloadAsCsv(response, 'order-list');
+    });
+  }
+
+  downloadOrderPDF(){
+    const formData = {
+      order_numbers: this.checkedlist,
+    }
+    this.orderService.downloadOrderPDF(formData).subscribe((response) => {
+        this.orderDownloadService.downloadAsZip(response, 'print-order-list');
     });
   }
 
