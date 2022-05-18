@@ -181,7 +181,7 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
     ) {
       var matMenu = document.getElementsByClassName("mat-menu-panel")[0];
       let footer = document.createElement("div") as HTMLDivElement;
-      footer.setAttribute("class", "download-date-range-info caption-1")
+      footer.setAttribute("class", "download-date-range-info caption-1");
 
       let text = "";
       if (filters.date.type === "allDate") {

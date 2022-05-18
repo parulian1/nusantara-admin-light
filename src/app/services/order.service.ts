@@ -87,7 +87,7 @@ export class OrderService extends AbstractCrudService<IOrder> {
   cancelOrder(formData, ordernum:string): Observable<any> {
     return this.httpClient.patch(
       `${this.baseUrl}/${ordernum}/`, formData
-    )
+    );
   }
 
   downloadAWBBulk(formData): Observable<any> {
