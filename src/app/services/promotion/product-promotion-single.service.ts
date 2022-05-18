@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class ProductPromotionService extends AbstractCrudService<IProductPromotion> {
+export class ProductPromotionSingleService extends AbstractCrudService<IProductPromotion> {
 
   baseUrl = '/api/catalog/product-promotion';
 

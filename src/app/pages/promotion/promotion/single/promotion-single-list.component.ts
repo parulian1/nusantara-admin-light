@@ -1,14 +1,23 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 import { AbstractListComponent } from '@nusantara/core';
 import { IProductPromotion } from '@nusantara/models';
 
 @Component({
-  selector: 'nus-promotion-list',
+  selector: 'nus-promotion-single-list',
   template: `
+    <h1 class="title-1">Promotion</h1>
+    <div class="tab">
+      <div (click)="goToPromoCampaign()">
+        <strong>Campaign</strong>
+      </div>
+      <div [class.active]="true">
+        <strong>Single</strong>
+      </div>
+    </div>
     <nus-list-header i18n-title
-      title="Promotions">
+      title="Promotion" [showTitle]="false">
     </nus-list-header>
     <div class="filtering">
       <nus-include-deleted></nus-include-deleted>
@@ -44,10 +53,42 @@ import { IProductPromotion } from '@nusantara/models';
       </tbody>
     </table>
     <nus-pagination [page]="page"></nus-pagination>
-
   `,
-  styles: []
+  styles: [
+    `
+    .tab {
+      overflow: hidden;
+      display: flex;
+      justify-content: start;
+      border-bottom: 1px solid var(--grey);
+      margin-bottom: 24px;
+    }
+
+    .tab div {
+      outline: none;
+      cursor: pointer;
+      padding: 12px 50px;
+      transition: 0.3s;
+    }
+
+    .tab div:hover {
+      background: var(--darken-white);
+    }
+
+    .tab div.active {
+      border-bottom: 2px solid var(--secondary);
+    }
+
+    .tab.wide { justify-content: center; }
+
+    .tab.wide div { flex-grow: 1; }
+    `
+  ]
 })
-export class PromotionListComponent extends AbstractListComponent<IProductPromotion> {
-  constructor(route: ActivatedRoute) { super(route); }
+export class PromotionSingleListComponent extends AbstractListComponent<IProductPromotion> {
+  constructor(route: ActivatedRoute, private router: Router) { super(route); }
+
+  goToPromoCampaign() {
+    this.router.navigate(['/promotion/promo/campaign']);
+  }
 }

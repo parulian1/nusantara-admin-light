@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import * as XLSX from 'xlsx';
 
-import { ProductPromotionService, ProductService, SiteConfigService } from '@nusantara/services';
+import { ProductPromotionSingleService, ProductService, SiteConfigService } from '@nusantara/services';
 import { AbstractDetailComponent, DialogResult, Logger, ToastService } from '@nusantara/core';
 import { INamedHrefEntity } from '@nusantara/models/base';
 import { IProductBundling, IProductPromotion, ProductPromotionType } from '@nusantara/models';
@@ -339,19 +339,19 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
   @ViewChild('benefitModal') productBundlingBenefitSelectionModal: ProductSelectionModalComponent;
   @ViewChild('customerGroupModal') customerGroupSelectionModal: CustomerGroupModalComponent;
 
-  constructor(service: ProductPromotionService,
+  constructor(service: ProductPromotionSingleService,
               route: ActivatedRoute,
               router: Router,
               toast: ToastService,
               private fb: FormBuilder,
-              private configSercvice: SiteConfigService,
+              private configService: SiteConfigService,
               private productService: ProductService) {
     super(route, router, toast, service);
   }
 
   ngOnInit() {
     super.ngOnInit();
-    if (this.configSercvice.isEnterpriseLicense()) {
+    if (this.configService.isEnterpriseLicense()) {
       this.types.push('promo_bundling');
     }
   }
@@ -729,7 +729,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
   }
 
   enterpriseLicense() {
-    return this.configSercvice.isEnterpriseLicense();
+    return this.configService.isEnterpriseLicense();
   }
 
   checkPromoDateValid(): boolean {

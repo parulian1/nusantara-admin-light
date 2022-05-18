@@ -87,7 +87,7 @@ import { RequirePermissionGuard } from '@nusantara/auth/guards/require-permissio
           <span i18n>Promotion Management</span>
         </li>
         <li *ngIf="permissionGuard.canActivate(null, null, 'promotions')">
-          <a [routerLink]="['/promotion/promos']" routerLinkActive="active" translate i18n>Promos</a>
+          <a [routerLink]="['/promotion/promo/campaign']" routerLinkActive="active" translate i18n>Promos</a>
         </li>
         <li *ngIf="permissionGuard.canActivate(null, null, 'promotions')">
           <a [routerLink]="['/promotion/vouchers']" routerLinkActive="active" translate i18n>Vouchers</a>
