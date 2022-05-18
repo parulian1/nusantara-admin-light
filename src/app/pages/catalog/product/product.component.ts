@@ -6,7 +6,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import * as ClassicEditor from '@gdnnusantara/ckeditor5-build/build/ckeditor';
 import {NgxSmartModalService} from 'ngx-smart-modal';
 import {EMPTY, of} from 'rxjs';
-import {catchError} from 'rxjs/operators';
+import {catchError, debounceTime} from 'rxjs/operators';
 import {
   ProductRelatedService,
   ProductService,
@@ -45,7 +45,7 @@ import {IProductBundle} from '@nusantara/models/products/product-bundle';
 import {ConfirmModalComponent} from '@nusantara/shared/confirm-modal.component';
 import {IAdvancedPriceList} from '@nusantara/models/products/advanced-price-list';
 
-const log = new Logger('ProductComponent');
+const logger = new Logger('ProductComponent');
 
 /**
  * Allows the user to edit/create a single product.
@@ -291,8 +291,10 @@ const log = new Logger('ProductComponent');
               <span i18n>Default Price</span>
               <div class="prepend-label">
                 <span class="prepended-label">Rp.</span>
-                <input type="number"
-                       [formControl]="price" name="price" min="0" appOnlyNumber decimal="true">
+                <input type="number" [formControl]="price" name="price" min="1" appOnlyNumber decimal="true"
+                       placeholder="Input 1-{{MAX_PRICE}}"
+                       i18n-placeholder
+                >
               </div>
               <nus-field-errors [control]="price"></nus-field-errors>
             </label>
@@ -746,7 +748,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         'tableProperties'
       ]
     },
-    licenseKey: ''
+    licenseKey: '',
+    placeholder: $localize`Input Description`
   };
   selectedProductClass: products.IProductClass;
 
@@ -943,21 +946,27 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     this.productClassSelectionModal.onClose.subscribe(() => this.onProductClassSelectionModalClosed());
     this.productBundlingSelectionModal.onClose.subscribe(() => this.onProductBundlingSelectionModalClosed());
     this.confirmModal.onClose.subscribe(() => this.onConfirmModalClosed());
-    this.priceSelector.valueChanges.subscribe(value =>  {
-      log.debug('priceSelectorSubscribe', value);
+
+    this.price.valueChanges.pipe(debounceTime(150)).subscribe((value) => {
+      logger.debug('priceChange');
+      this.priceChange(value);
+    });
+    this.priceSelector.valueChanges.pipe(debounceTime(150)).subscribe(value =>  {
+      logger.debug('priceSelectorSubscribe', value);
       if (value === true) {
-        this.price.disable();
+        this.price.disable({emitEvent: false});
         this.price.clearValidators();
+        this.price.setValidators([Validators.min(1), Validators.max(this.MAX_PRICE)]);
         this.priceRangeEnabled = false;
       } else {
-        this.price.enable();
+        this.price.enable({emitEvent: false});
         this.price.clearValidators();
-        this.price.setValidators([Validators.required, Validators.min(1), Validators.max(this.MAX_PRICE)])
+        this.price.setValidators([Validators.required, Validators.min(1), Validators.max(this.MAX_PRICE)]);
         this.priceRangeEnabled = true;
       }
     });
     this.priceLists.valueChanges.subscribe((val: Array<IPriceList>) => {
-      log.debug('priceListChange', val);
+      logger.debug('priceListChange', val);
       const hasMorePriceList = val.length > 1;
       const hasMorePriceRange = val.every((cur, idx) => {
         return cur.ranges.length > 1;
@@ -968,6 +977,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       } else {
         this.priceSelector.enable();
       }
+      this.price.setValue(val[0].ranges[0].price, {emitEvent: false});
     });
   }
 
@@ -1042,7 +1052,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         Validators.minLength(this.DESCRIPTION_MIN_LENGTH),
         Validators.maxLength(this.DESCRIPTION_MAX_LENGTH)]],
       weight: [entity?.weight, [Validators.required, Validators.min(0.01), Validators.max(this.MAX_DIMENSION)]],
-      price: [1, [Validators.max(this.MAX_PRICE), Validators.min(1)]],
+      price: [null, [Validators.max(this.MAX_PRICE), Validators.min(1)]],
       priceSelector: [this.priceRangeEnabled, []],
       dimensions: this.fb.group({
         currentLength: [entity?.dimensions?.currentLength, [
@@ -1086,15 +1096,16 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     this.selectedProductClassValue = entity?.productClass;
 
     if (this.priceRangeEnabled) {
-      log.debug('IFpriceSelectorSubscribe', this.priceRangeEnabled);
-      this.price.disable();
+
       this.priceSelector.setValue(true);
       this.priceSelector.disable();
+      // this.price.disable();
+      // this.price.setValidators([Validators.max(this.MAX_PRICE), Validators.min(1)]);
     } else {
-      log.debug('IFpriceSelectorSubscribe', this.priceRangeEnabled);
-      this.price.enable();
-      this.priceSelector.enable()
       this.priceSelector.setValue(false);
+      this.priceSelector.enable();
+      // this.price.enable();
+      // this.price.setValidators([Validators.max(this.MAX_PRICE), Validators.min(1), Validators.required]);
     }
 
     // new product variant
@@ -1222,7 +1233,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   getAdvancePrice() {
     if (!!this.productSlug) {
       this.advancedPriceListService.search_by_product_slug(this.productSlug).pipe(catchError(err => {
-        log.debug('Cannot get advanced price');
+        logger.debug('Cannot get advanced price');
         return of(EMPTY);
       })).subscribe((data: Array<IAdvancedPriceList>) => {
         this.isAdvancePriceAvailable = data.length > 0;
@@ -1246,7 +1257,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     if (this.isValidForm()) {
       this.setSinglePrice(null);
       this.service.save(this.getFormValue()).pipe(catchError(err => {
-        log.debug('err', err);
+        logger.debug('err', err);
         if (err instanceof HttpErrorResponse) {
           return of(new ErrorResult<IError>(err.error, err.status));
         } else {
@@ -1309,9 +1320,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   validatePriceList() {
     this.priceListHost?.priceLists.forEach((priceList) => {
-      log.debug('pricelist', priceList.validatePriceList());
+      logger.debug('pricelist', priceList.validatePriceList());
       priceList.rangeComponents.forEach((component) => {
-        log.debug('validate', component.validatePriceRange(), component.maxQuantity.value);
+        logger.debug('validate', component.validatePriceRange(), component.maxQuantity.value);
       });
     });
   }
@@ -1370,7 +1381,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       return;
     }
     this.productClassService.fetch(getSlugFromHref(newValue)).pipe(catchError((err) => {
-      log.error('Cannot get correct product class');
+      logger.error('Cannot get correct product class');
       return of(EMPTY);
     })).subscribe((res) => {
       if (!!res) {
@@ -1442,7 +1453,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         }
       }
     } else {
-      log.debug('Price range is disabled');
+      logger.debug('Price range is disabled');
     }
   }
 
@@ -1584,10 +1595,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       const isSameProduct = this.getSameProductBundlingIndex(selectedProduct.name);
 
       if (isSameProduct !== -1) {
-        log.debug('productBundling', this.productBundling.value);
+        logger.debug('productBundling', this.productBundling.value);
         const currentQty = this.productBundling.at(isSameProduct).value.quantity;
         this.productBundling.at(isSameProduct).patchValue({quantity: Number(currentQty) + 1});
-        log.debug('productBundling', this.productBundling.value);
+        logger.debug('productBundling', this.productBundling.value);
       } else {
         const defaultQty = 1;
 
@@ -1604,7 +1615,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
           media: [selectedProduct.media, []]
         });
         this.productBundling.push(f);
-        log.debug(this.productBundling);
+        logger.debug(this.productBundling);
         this.setProductBundlingMedia(selectedProduct);
       }
       this.updateVirtualAmountAndPriceListAndWeight();
@@ -1709,7 +1720,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         this.productBundling.push(f);
       });
 
-      log.debug(this.productBundling);
+      logger.debug(this.productBundling);
       this.getVirtualPackageAmount();
     }
   }
@@ -1852,8 +1863,47 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     );
   }
 
-  priceRangeChanged($event: Event) {
-    const elem = ($event.currentTarget as HTMLInputElement).value;
-    log.debug(elem);
+  private priceChange(value: any): void {
+    if (!this.entity) {
+      logger.debug('priceChange19', this.entity);
+      this.priceListHost.updatePriceList({
+        href: null,
+        product: this.href.value,
+        type: 'default',
+        platforms: [],
+        locations: [],
+        isProgressive: false,
+        ranges: [
+          {href: null, priceList: null, price: value, minQuantity: 1, maxQuantity: null}
+        ]
+      }, 0);
+    } else if (!this.entity?.priceLists) {
+      logger.debug('priceChange1', this.entity?.priceLists);
+      this.entity.priceLists.push({
+        href: null,
+        product: this.href.value,
+        type: 'default',
+        platforms: [],
+        locations: [],
+        isProgressive: false,
+        ranges: [
+          {href: null, priceList: null, price: value, minQuantity: 1, maxQuantity: null}
+        ]
+      });
+      logger.debug('priceChange1', this.entity?.priceLists);
+      this.priceListHost.updatePriceList(this.entity?.priceLists[0], 0);
+    } else if (!this.entity?.priceLists[0].ranges.length) {
+      logger.debug('priceChange2', this.entity?.priceLists);
+      this.entity?.priceLists[0].ranges.push({
+        href: null,
+        priceList: null,
+        price: this.price.value,
+        minQuantity: 1,
+        maxQuantity: null
+      });
+      this.priceListHost.updatePriceList(this.entity?.priceLists[0], 0);
+    }else {
+      logger.debug('More than 1 price list', this.entity?.priceLists);
+    }
   }
 }

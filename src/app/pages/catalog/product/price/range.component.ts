@@ -34,6 +34,7 @@ const logger = new Logger('RangeComponent');
                  name="min-quantity"
                  [readonly]="isInitialRange"
                  data-qa="min-quantity"/>
+          <nus-field-errors [control]="minQuantity"></nus-field-errors>
         </div>
         <div class="qty-max-area immediate-error-display-input">
           <input type="number"
@@ -44,6 +45,7 @@ const logger = new Logger('RangeComponent');
                  placeholder="Input 1-10000"
                  i18n-placeholder
                  data-qa="max-quantity"/>
+          <nus-field-errors [control]="maxQuantity"></nus-field-errors>
         </div>
 
         <div class="price-area">
@@ -55,7 +57,9 @@ const logger = new Logger('RangeComponent');
                    placeholder="Input 1-{{MAX_PRICE}}"
                    i18n-placeholder
                    data-qa="price"/>
+
           </span>
+          <nus-field-errors [control]="price"></nus-field-errors>
         </div>
         <div class="action-area">
           <button type="button"
