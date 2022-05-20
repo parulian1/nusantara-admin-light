@@ -1,7 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {IOption, IOrderFilter, IOrderFilterValue} from '@nusantara/models/order/filter';
+import { IInventoryFilterValue } from '@nusantara/models/inventory';
 import * as moment from 'moment';
 import {Utils} from '../../fulfillment/orders/header/utils';
 import {MatSelectChange} from '@angular/material/select';
@@ -64,22 +64,17 @@ const logger = new Logger('OrderFilter');
   ]
 })
 export class InventoryFiltersComponent implements OnInit {
-  @Output() filterApplied = new EventEmitter<IOrderFilterValue>();
-  orderStatuses: Array<IOption>;
-  orderFilter: IOrderFilter;
+  @Output() filterApplied = new EventEmitter<IInventoryFilterValue>();
 
   filtersForm: FormGroup;
-  filtersValue: IOrderFilterValue = {
+  filtersValue: IInventoryFilterValue = {
     date: {
       type: null,
       start: null,
       end: null,
     },
-    platform: null,
     status: null,
-    logistic: null,
-    q: null,
-    isTesting: null
+    type:null
   };
 
   status = [
@@ -200,10 +195,10 @@ export class InventoryFiltersComponent implements OnInit {
   }
 
   getValidOption(param: any, options: any) {
-    const result = []
+    const result = [];
     options.forEach(el => {
       if(el.value === param){
-        result.push(el)
+        result.push(el);
       }
     });
 
@@ -224,13 +219,8 @@ export class InventoryFiltersComponent implements OnInit {
     this.filterApplied.next(this.filtersValue);
   }
 
-  updateType(logistic: string) {
-    this.filtersValue.logistic = logistic;
-    this.filterApplied.next(this.filtersValue);
-  }
-
-  updateQuery(q: string) {
-    this.filtersValue.q = q;
+  updateType(type: string) {
+    this.filtersValue.type = type;
     this.filterApplied.next(this.filtersValue);
   }
 
@@ -249,9 +239,9 @@ export class InventoryFiltersComponent implements OnInit {
 
   typeChange($event: MatSelectChange) {
     if (!!$event.value && $event.value !== '') {
-      this.filtersValue.logistic = $event.value;
+      this.filtersValue.type = $event.value;
     } else {
-      this.filtersValue.logistic = null;
+      this.filtersValue.type = null;
     }
     this.filterApplied.next(this.filtersValue);
     this.updateRoute({

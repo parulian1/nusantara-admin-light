@@ -132,13 +132,13 @@ export class InventoryDateFilterComponent implements OnInit {
   endday:string;
   yesterday: string;
   threeDaysbefore: string;
-  sevenDaysbefore: string
+  sevenDaysbefore: string;
 
   constructor(public route: ActivatedRoute) {}
 
   ngOnInit() {
     this.today = this.utils.today;
-    this.endday = this.utils.endDay
+    this.endday = this.utils.endDay;
     this.yesterday = this.utils.yesterday;
     this.threeDaysbefore = this.utils.threeDaysbefore;
     this.sevenDaysbefore = this.utils.sevenDaysbefore;
