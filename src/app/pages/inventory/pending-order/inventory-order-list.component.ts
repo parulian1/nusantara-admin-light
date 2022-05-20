@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AbstractListComponent, getSlugFromHref } from '@nusantara/core';
 
 import { IInventoryOrderSummary } from '@nusantara/models/inventory';
+import { IOrderFilterValue } from '@nusantara/models/order/filter';
 
 /**
  * A searchable list of all products.
@@ -17,6 +18,8 @@ import { IInventoryOrderSummary } from '@nusantara/models/inventory';
       title="Inventory Orders"
       [canAddNew]="false">
     </nus-list-header>
+
+    <nus-inventory-filters (filterApplied)="onFilterApplied($event)"></nus-inventory-filters>
 
     <nus-pagination [page]="page"></nus-pagination>
 
@@ -57,7 +60,13 @@ import { IInventoryOrderSummary } from '@nusantara/models/inventory';
   styles: []
 })
 export class InventoryOrderListComponent extends AbstractListComponent<IInventoryOrderSummary> {
+  appliedFilter: IOrderFilterValue;
+
   constructor(route: ActivatedRoute) { super(route); }
+
+  onFilterApplied(event: IOrderFilterValue){
+    this.appliedFilter = event;
+  }
 
   getRouterLink(entity: IInventoryOrderSummary) {
     if (entity.type === 'receiving_order') {
