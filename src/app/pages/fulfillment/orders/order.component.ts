@@ -277,7 +277,6 @@ export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> 
         cancel_value: this.cancelOrderModal.resVal,
         cancel_reason:this.cancelOrderModal.textbox ? this.cancelOrderModal.otherReason : ''
       }
-      // console.log(formData)
       this.service.cancelOrder(formData, this.cancelOrderModal.orderNum).subscribe(() => {
         this.toast?.addMessage(
           `Order ${this.orderDetailData.orderNumber} has just been cancelled.`,
