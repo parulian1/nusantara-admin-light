@@ -52,7 +52,7 @@ export class CancelOrderDialogComponent {
   otherReason:string = '';
   resVal:string;
   reasons = [];
-  disabled:boolean
+  disabled:boolean;
 
   constructor(protected service: OrderService) { }
 
