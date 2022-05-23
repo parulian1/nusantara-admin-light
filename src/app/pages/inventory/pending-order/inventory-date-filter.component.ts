@@ -91,6 +91,8 @@ const apiDateFormat = "YYYY-MM-DDTHH:mm:ss";
       </mat-select>
     </mat-form-field>
     <mat-error *ngIf="date.value === 'customRange' && customRange.errors?.empty" i18n>Please select start date and end date.</mat-error>
+    <mat-error *ngIf="date.value === 'customDate' && !customDate.value" i18n>Please select custom date.</mat-error>
+
   </div>
   `,
   styles: [
@@ -169,6 +171,7 @@ export class InventoryDateFilterComponent implements OnInit {
           case "customDate":
             this.customDate.setValue(selectedStartTime);
             this.date.setValue("customDate");
+            console.log('test',this.customDate)
             break;
           case "customRange":
             this.updateDateRangeForm(selectedStartTime, selectedEndTime);
@@ -210,6 +213,7 @@ export class InventoryDateFilterComponent implements OnInit {
       moment(this.customDate.value).format(apiDateFormat),
       this.utils.setTimeEndDay(moment(this.customDate.value))
     );
+    console.log(this.customDate)
   }
 
   onCustomDateRangeEndChange() {
