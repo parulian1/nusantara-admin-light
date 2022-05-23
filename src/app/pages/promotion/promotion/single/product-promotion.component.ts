@@ -800,7 +800,9 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
   }
 
   selectPromotionGroup(): void {
-    this.promotionGroupSelectionModal.open();
+    if (!this.promotionGroup.disabled) {
+      this.promotionGroupSelectionModal.open();
+    }
   }
 
   private onPromoGroupModalClosed(): void {
