@@ -170,7 +170,6 @@ export class InventoryDateFilterComponent implements OnInit {
           case "customDate":
             this.customDate.setValue(selectedStartTime);
             this.date.setValue("customDate");
-            console.log('test',this.customDate)
             break;
           case "customRange":
             this.updateDateRangeForm(selectedStartTime, selectedEndTime);
@@ -212,7 +211,6 @@ export class InventoryDateFilterComponent implements OnInit {
       moment(this.customDate.value).format(apiDateFormat),
       this.utils.setTimeEndDay(moment(this.customDate.value))
     );
-    console.log(this.customDate)
   }
 
   onCustomDateRangeEndChange() {
