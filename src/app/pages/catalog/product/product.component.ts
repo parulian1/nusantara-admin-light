@@ -91,6 +91,7 @@ const logger = new Logger('ProductComponent');
                      [formControl]="name"
                      name="name"
                      placeholder="Input Name"
+                     i18n-placeholder
                      data-qa="name"/>
               <nus-field-errors [control]="name"></nus-field-errors>
             </label>
@@ -269,7 +270,7 @@ const logger = new Logger('ProductComponent');
               <input type="text"
                      [formControl]="upc"
                      name="upc"
-                     placeholder="UPC must be unique" i18-placeholder
+                     placeholder="UPC must be unique" i18n-placeholder
                      data-qa="upc"/>
               <nus-field-errors [control]="upc"></nus-field-errors>
             </label>
@@ -280,7 +281,7 @@ const logger = new Logger('ProductComponent');
                 <a (click)="copyUpcToBarcode()" i18n>Copy from UPC</a>
               </div>
               <input type="text"
-                     placeholder="Input Barcode" i18-placeholder
+                     placeholder="Input Barcode" i18n-placeholder
                      [formControl]="barcode"
                      name="barcode"
                      data-qa="barcode"/>
@@ -293,7 +294,7 @@ const logger = new Logger('ProductComponent');
                 <span class="prepended-label">Rp.</span>
                 <input type="number" [formControl]="price" name="price" min="1" appOnlyNumber decimal="true"
                        placeholder="Input 1-{{MAX_PRICE}}"
-                       i18n-placeholder
+                       i18n-placeholder data-qa="single-price"
                 >
               </div>
               <nus-field-errors [control]="price"></nus-field-errors>
@@ -303,7 +304,7 @@ const logger = new Logger('ProductComponent');
               <span i18n>Price Range (optional)</span>
               <div class="inline-option" role="radiogroup" aria-labelledby="radio_label">
                 <label class="toggle">
-                  <input id="pr-radio"  type="checkbox"
+                  <input id="pr-radio" type="checkbox"
                          class="toggle"
                          [formControl]="priceSelector"
                          data-qa="price-range-select"
@@ -318,7 +319,8 @@ const logger = new Logger('ProductComponent');
             <label>
               <div [ngClass]="{'hidden' : !enterpriseLicense()}">
                 <span *ngIf="!priceSelector.value" class="greybox">You have not checked 'enable' for price range</span>
-                <nus-price-list-host [form]="priceLists" [ngClass]="{'hidden' : !priceSelector.value}"></nus-price-list-host>
+                <nus-price-list-host [form]="priceLists"
+                                     [ngClass]="{'hidden' : !priceSelector.value}"></nus-price-list-host>
               </div>
             </label>
             <label class="advance-price">
@@ -597,24 +599,24 @@ const logger = new Logger('ProductComponent');
       justify-content: space-between;
     }
     `, `
-    .greybox {
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      padding: 8px 0px 8px 12px;
-      /* UI / Darken White */
+      .greybox {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        padding: 8px 0px 8px 12px;
+        /* UI / Darken White */
 
-      background: #F4F4F4;
-      border-radius: 4px;
+        background: #F4F4F4;
+        border-radius: 4px;
 
-      /* Inside auto layout */
+        /* Inside auto layout */
 
-      flex: none;
-      order: 2;
-      align-self: stretch;
-      flex-grow: 0;
-      margin: 4px 0;
-    }
+        flex: none;
+        order: 2;
+        align-self: stretch;
+        flex-grow: 0;
+        margin: 4px 0;
+      }
     `,
     '.tag-manage { display: grid; grid-template-columns: 6fr 2fr; grid-gap: 20px; align-items: center; }',
     `
@@ -774,6 +776,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   enabledAttributes: INamedHrefEntity[] = [];
   mediaError: Array<string> = [];
   priceRangeEnabled = false;
+  allowPriceSelector = false;
 
   @ViewChild(ProductMediaHostComponent) mediaHost: ProductMediaHostComponent;
   @ViewChild(PriceListHostComponent) priceListHost: PriceListHostComponent;
@@ -866,6 +869,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   get price(): FormControl {
     return this.form?.get('price') as FormControl;
   }
+
   get priceSelector(): FormControl {
     return this.form?.get('priceSelector') as FormControl;
   }
@@ -951,7 +955,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       logger.debug('priceChange');
       this.priceChange(value);
     });
-    this.priceSelector.valueChanges.pipe(debounceTime(150)).subscribe(value =>  {
+    this.priceSelector.valueChanges.pipe(debounceTime(150)).subscribe(value => {
       logger.debug('priceSelectorSubscribe', value);
       if (value === true) {
         this.price.disable({emitEvent: false});
@@ -971,13 +975,15 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       const hasMorePriceRange = val.every((cur, idx) => {
         return cur.ranges.length > 1;
       });
-      this.priceRangeEnabled = hasMorePriceList || hasMorePriceRange;
-      if (this.priceRangeEnabled) {
-        this.priceSelector.disable();
-      } else {
+      // this.priceRangeEnabled = hasMorePriceList || hasMorePriceRange;
+      this.allowPriceSelector = !hasMorePriceList;
+      if (this.allowPriceSelector) {
         this.priceSelector.enable();
+      } else {
+        this.priceSelector.disable();
       }
       this.price.setValue(val[0].ranges[0].price, {emitEvent: false});
+
     });
   }
 
@@ -1030,10 +1036,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     }
     if (!!entity) {
       const hasMorePriceList = entity.priceLists.length > 1;
-      const hasMorePriceRange = entity.priceLists.every((cur, idx) => {
+      this.priceRangeEnabled = entity.priceLists.every((cur, idx) => {
         return cur.ranges.length > 1;
       });
-      this.priceRangeEnabled = hasMorePriceList || hasMorePriceRange;
+      this.allowPriceSelector = !hasMorePriceList;
     }
     this.form = this.fb.group({
       name: [entity?.name, [
@@ -1096,16 +1102,14 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     this.selectedProductClassValue = entity?.productClass;
 
     if (this.priceRangeEnabled) {
-
       this.priceSelector.setValue(true);
-      this.priceSelector.disable();
-      // this.price.disable();
-      // this.price.setValidators([Validators.max(this.MAX_PRICE), Validators.min(1)]);
     } else {
       this.priceSelector.setValue(false);
+    }
+    if (this.allowPriceSelector) {
       this.priceSelector.enable();
-      // this.price.enable();
-      // this.price.setValidators([Validators.max(this.MAX_PRICE), Validators.min(1), Validators.required]);
+    } else {
+      this.priceSelector.disable();
     }
 
     // new product variant
@@ -1425,33 +1429,55 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   setSinglePrice(event) {
     if (!this.priceSelector.value || !this.enterpriseLicense()) {
-      if (!this.entity?.priceLists.length) {
-        this.priceListHost.updatePriceList({
-          href: null,
-          product: this.href.value,
-          type: 'default',
-          platforms: [],
-          locations: [],
-          isProgressive: false,
-          ranges: [
-            {href: null, priceList: null, price: this.price.value, minQuantity: 1, maxQuantity: null}
-          ]
-        }, 0);
-      } else if (!this.entity?.priceLists[0].ranges.length) {
-        this.entity?.priceLists[0].ranges.push({
-          href: null,
-          priceList: null,
-          price: this.price.value,
-          minQuantity: 1,
-          maxQuantity: null
-        });
-        this.priceListHost.updatePriceList(this.entity?.priceLists[0], 0);
-      } else {
-        for (const priceList of this.entity?.priceLists ?? []) {
-          priceList.ranges[0].price = this.price.value;
-          this.priceListHost.updatePriceList(priceList, 0);
+      if (this.priceListHost.form.controls.length > 1) {
+        const x = 1;
+        const currentLength = this.priceListHost.form.controls.length;
+        while (this.priceListHost.form.controls.length > 1) {
+          this.priceListHost.removePriceList(1);
         }
       }
+      try {
+        for (let x = this.priceListHost.priceLists.first.rangeComponents.length; x > 1; x--) {
+          this.priceListHost.priceLists.first.rangeComponents.get(x - 1).remove.emit(this.priceListHost.priceLists.first.rangeComponents.get(x - 1));
+        }
+
+      } catch (e) {
+        logger.error(e);
+      }
+      this.priceListHost.priceLists.first.rangeComponents.get(0).price.setValue(this.price.value);
+      // for (const priceList of this.entity?.priceLists ?? []) {
+      //   priceList.ranges[0].price = this.price.value;
+      //   // this.priceListHost.updatePriceList(priceList, 0);
+      // }
+
+      // if (this.priceListHost.form.controls.length > 1) {
+      //   this.priceListHost.updatePriceList({
+      //     href: null,
+      //     product: this.href.value,
+      //     type: 'default',
+      //     platforms: [],
+      //     locations: [],
+      //     isProgressive: false,
+      //     ranges: [
+      //       {href: null, priceList: null, price: this.price.value, minQuantity: 1, maxQuantity: null}
+      //     ]
+      //   }, 0);
+      //
+      // } else if (!this.entity?.priceLists[0].ranges.length) {
+      //   this.entity?.priceLists[0].ranges.push({
+      //     href: null,
+      //     priceList: null,
+      //     price: this.price.value,
+      //     minQuantity: 1,
+      //     maxQuantity: null
+      //   });
+      //   this.priceListHost.updatePriceList(this.entity?.priceLists[0], 0);
+      // } else {
+      //   for (const priceList of this.entity?.priceLists ?? []) {
+      //     priceList.ranges[0].price = this.price.value;
+      //     this.priceListHost.updatePriceList(priceList, 0);
+      //   }
+      // }
     } else {
       logger.debug('Price range is disabled');
     }
@@ -1864,46 +1890,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   }
 
   private priceChange(value: any): void {
-    if (!this.entity) {
-      logger.debug('priceChange19', this.entity);
-      this.priceListHost.updatePriceList({
-        href: null,
-        product: this.href.value,
-        type: 'default',
-        platforms: [],
-        locations: [],
-        isProgressive: false,
-        ranges: [
-          {href: null, priceList: null, price: value, minQuantity: 1, maxQuantity: null}
-        ]
-      }, 0);
-    } else if (!this.entity?.priceLists) {
-      logger.debug('priceChange1', this.entity?.priceLists);
-      this.entity.priceLists.push({
-        href: null,
-        product: this.href.value,
-        type: 'default',
-        platforms: [],
-        locations: [],
-        isProgressive: false,
-        ranges: [
-          {href: null, priceList: null, price: value, minQuantity: 1, maxQuantity: null}
-        ]
-      });
-      logger.debug('priceChange1', this.entity?.priceLists);
-      this.priceListHost.updatePriceList(this.entity?.priceLists[0], 0);
-    } else if (!this.entity?.priceLists[0].ranges.length) {
-      logger.debug('priceChange2', this.entity?.priceLists);
-      this.entity?.priceLists[0].ranges.push({
-        href: null,
-        priceList: null,
-        price: this.price.value,
-        minQuantity: 1,
-        maxQuantity: null
-      });
-      this.priceListHost.updatePriceList(this.entity?.priceLists[0], 0);
-    }else {
-      logger.debug('More than 1 price list', this.entity?.priceLists);
-    }
+    this.priceListHost.priceLists.forEach(
+      (item, idx, arr) => {
+        item.rangeComponents.get(0).price.setValue(this.price.value);
+      }
+      );
   }
 }
