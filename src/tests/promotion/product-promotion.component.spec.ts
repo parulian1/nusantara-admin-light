@@ -38,7 +38,10 @@ describe('ProductPromotionComponent', () => {
     isExclusive: false,
     validFrom: '2020-08-06T23:50:23.213000+07:00',
     validTo: null,
-    customerGroups: []
+    customerGroups: [],
+    promotionGroup: {
+      href: 'https://staging.bhisma.cloud/api/catalog/promotion-group/pac/'
+    }
   };
 
   const productPromoUpdatedResponse = {
@@ -60,7 +63,10 @@ describe('ProductPromotionComponent', () => {
     validFrom: '2020-09-07T23:50:23.213000+07:00',
     validTo: '2020-10-28T23:50:23.213000+07:00',
     priority: 1,
-    customerGroups: []
+    customerGroups: [],
+    promotionGroup: {
+      href: 'https://staging.bhisma.cloud/api/catalog/promotion-group/pac/'
+    }
   };
 
   beforeEach( async() => {
@@ -154,7 +160,10 @@ describe('ProductPromotionComponent', () => {
       productBundlingBenefit: [],
       productBundlingCondition: [],
       multiplyItem: false,
-      customerGroups: []
+      customerGroups: [],
+      promotionGroup: {
+        href: 'https://staging.bhisma.cloud/api/catalog/promotion-group/pac/'
+      }
     });
     // @ts-ignore
     const p1 = component.fb.group({
@@ -207,7 +216,10 @@ describe('ProductPromotionComponent', () => {
       productBundlingBenefit: [],
       productBundlingCondition: [],
       multiplyItem: false,
-      customerGroups: []
+      customerGroups: [],
+      promotionGroup: {
+        href: 'https://staging.bhisma.cloud/api/catalog/promotion-group/pac/'
+      }
     });
 
     component.save();
