@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'nus-external-integration',
   template: `
-    <h1 class="title-1" i18n>External Integration Configuration</h1>
+    <h1 class="title-1" i18n>External Integration</h1>
     <div class="wrapper">
       <div>
         <h1 class="heading-1" i18n>Connect to partner</h1>

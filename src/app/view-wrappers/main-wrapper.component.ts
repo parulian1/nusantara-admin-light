@@ -172,7 +172,7 @@ const logger = new Logger('MainWrapperComponent');
               <a [routerLink]="['/cms/company-story']" routerLinkActive="active" i18n>Company Story</a>
             </li>
             <li *ngIf="enterpriseGuard.canActivate(null, null)">
-              <a [routerLink]="['/cms/catalogue']" routerLinkActive="active" i18n>Catalogue</a>
+              <a [routerLink]="['/cms/catalogue']" routerLinkActive="active" i18n>Reseller Catalogs</a>
             </li>
           </ul>
         </li>
