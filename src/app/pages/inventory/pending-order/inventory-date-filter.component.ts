@@ -91,6 +91,8 @@ const apiDateFormat = "YYYY-MM-DDTHH:mm:ss";
       </mat-select>
     </mat-form-field>
     <mat-error *ngIf="date.value === 'customRange' && customRange.errors?.empty" i18n>Please select start date and end date.</mat-error>
+    <mat-error *ngIf="date.value === 'customDate' && !customDate.value" i18n>Please select custom date.</mat-error>
+
   </div>
   `,
   styles: [
