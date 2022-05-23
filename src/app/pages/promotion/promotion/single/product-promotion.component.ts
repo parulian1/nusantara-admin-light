@@ -6,9 +6,10 @@ import * as XLSX from 'xlsx';
 import { ProductPromotionSingleService, ProductService, SiteConfigService } from '@nusantara/services';
 import { AbstractDetailComponent, DialogResult, Logger, ToastService } from '@nusantara/core';
 import { INamedHrefEntity } from '@nusantara/models/base';
-import { IProductBundling, IProductPromotion, ProductPromotionType } from '@nusantara/models';
+import { IProductBundling, IProductPromotion, IPromoGroup, ProductPromotionType} from '@nusantara/models';
 import { IProduct } from '@nusantara/models/products';
-import {CustomerGroupModalComponent, ProductSelectionModalComponent} from '@nusantara/shared';
+import { CustomerGroupModalComponent, ProductSelectionModalComponent } from '@nusantara/shared';
+import { PromoCampaignModalComponent } from '@nusantara/shared/modals/promo-campaign-modal.component';
 
 declare var window: any; // Needed on Angular 8+
 
@@ -253,6 +254,18 @@ const log = new Logger('ProductPromotionComponent');
         </table>
       </div>
 
+      <label>
+        <span i18n>Promo Campaign</span>
+        <div class="manage">
+          <div>
+            <input type="hidden" [formControl]="promotionGroup" data-qa="campaign">
+            <input type="text" (click)="selectPromotionGroup()" readonly [value]="selectedPromotionGroup?.name"
+                   data-qa="promotion-group-pop">
+            <nus-field-errors [control]="promotionGroup"></nus-field-errors>
+          </div>
+        </div>
+      </label>
+
       <nus-detail-actions
         [component]="this"
         (cancel)="navigateToParent(true)"
@@ -265,6 +278,7 @@ const log = new Logger('ProductPromotionComponent');
       <nus-product-selection-modal #productModal></nus-product-selection-modal>
       <nus-customer-group-selection-modal [selectedGroups]="entity?.customerGroups" #customerGroupModal>
       </nus-customer-group-selection-modal>
+      <nus-promo-campaign-selection-modal #promotionGroupModal></nus-promo-campaign-selection-modal>
     </form>
   `,
   styles: [`
@@ -319,6 +333,10 @@ const log = new Logger('ProductPromotionComponent');
       color: var(--darken-grey);
     }
 
+    .promo-customer-groups {
+      margin-bottom: 24px;
+    }
+
   `]
 })
 export class ProductPromotionComponent extends AbstractDetailComponent<IProductPromotion> implements OnInit, AfterViewInit {
@@ -334,10 +352,13 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
   minDateValidFrom: string | Date = null;
   maxDateValidFrom: string | Date = null;
 
+  selectedPromotionGroup: INamedHrefEntity = null;
+
   @ViewChild('productModal') productSelectionModal: ProductSelectionModalComponent;
   @ViewChild('conditionModal') productBundlingConditionSelectionModal: ProductSelectionModalComponent;
   @ViewChild('benefitModal') productBundlingBenefitSelectionModal: ProductSelectionModalComponent;
   @ViewChild('customerGroupModal') customerGroupSelectionModal: CustomerGroupModalComponent;
+  @ViewChild('promotionGroupModal') promotionGroupSelectionModal: PromoCampaignModalComponent;
 
   constructor(service: ProductPromotionSingleService,
               route: ActivatedRoute,
@@ -377,9 +398,9 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
       productBundlingBenefit: this.fb.array([]),
       productBundlingCondition: this.fb.array([]),
       multiplyItem: [entity?.multiplyItem ?? false, []],
-      customerGroups: this.fb.array([])
+      customerGroups: this.fb.array([]),
+      promotionGroup: this.fb.group({href: [entity?.promotionGroup?.href, [Validators.required]]}),
     });
-
 
     // need to mark as touched to make custom styling works
     this.form.controls.isExclusive.markAsTouched();
@@ -387,7 +408,6 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     this.form.controls.multiplyItem.markAsTouched();
     this.form.controls.appliedOnOnline.markAsTouched();
     this.form.controls.appliedOnOffline.markAsTouched();
-
 
     for (const prodBenefit of entity?.productBundlingBenefit ?? []) {
       this.addProductBenefit(prodBenefit);
@@ -416,6 +436,8 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     this.minDateValidTo = entity?.validTo ? entity.validTo : today;
     this.minDateValidFrom = entity?.validFrom ? entity.validFrom : today;
 
+    this.selectedPromotionGroup = entity?.promotionGroup;
+
     if (today > new Date(entity?.validTo)) {
       // passed/historical promo, admin can not edit anything
       this.form.disable();
@@ -434,6 +456,8 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     for (const customerGroup of entity?.customerGroups ?? []) {
       this.addCustomerGroup(customerGroup);
     }
+
+
   }
 
   setImagePromoPreview(data?: Event | string) {
@@ -445,6 +469,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     this.productBundlingConditionSelectionModal.onClose.subscribe(() => this.onProductBundlingConditionSelectionModalClosed());
     this.productBundlingBenefitSelectionModal.onClose.subscribe(() => this.onProductBundlingBenefitSelectionModalClosed());
     this.customerGroupSelectionModal.onClose.subscribe(() => this.onCustomerGroupSelectionModalClosed());
+    this.promotionGroupSelectionModal.onClose.subscribe(() => this.onPromoGroupModalClosed());
   }
 
   get name(): FormControl {
@@ -517,6 +542,10 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
 
   get customerGroups(): FormArray {
     return this.form.get('customerGroups') as FormArray;
+  }
+
+  get promotionGroup(): FormControl {
+    return this.form.get('promotionGroup').get('href') as FormControl;
   }
 
   addProduct(product: INamedHrefEntity) {
@@ -693,6 +722,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
   // }
 
   save() {
+    console.log('form', this.form.value, this.form.getRawValue());
     this.form.value.validFrom = this.form.value.validFrom + this.getTimeZone();
     this.form.value.validTo = this.form.value.validTo + this.getTimeZone();
 
@@ -767,6 +797,19 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
 
   selectCustomerGroup() {
     this.customerGroupSelectionModal.open();
+  }
+
+  selectPromotionGroup(): void {
+    if (!this.promotionGroup.disabled) {
+      this.promotionGroupSelectionModal.open();
+    }
+  }
+
+  private onPromoGroupModalClosed(): void {
+    if (this.promotionGroupSelectionModal.result === DialogResult.OK) {
+      this.selectedPromotionGroup = this.promotionGroupSelectionModal.promotionGroup.value as IPromoGroup;
+      this.promotionGroup.setValue(this.selectedPromotionGroup.href);
+    }
   }
 }
 

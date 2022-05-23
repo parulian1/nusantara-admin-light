@@ -1,16 +1,15 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import {
   PromotionCampaignService,
 } from '@nusantara/services';
-import { AbstractDetailComponent, DialogResult, Logger, ToastService } from '@nusantara/core';
+import { AbstractDetailComponent, Logger, ToastService } from '@nusantara/core';
 import {
   IPromoGroup,
   IPromoGroupCombination,
 } from '@nusantara/models';
-import {PromoModalComponent} from '@nusantara/shared/modals/promo-modal.component';
 
 declare var window: any; // Needed on Angular 8+
 
@@ -82,25 +81,12 @@ const log = new Logger('ProductPromotionComponent');
           <tr>
             <th i18n>Name</th>
             <th i18n>Type</th>
-            <th i18n>Action</th>
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let control of combinations?.controls; let i=index">
-            <td>{{ control.get('name').value }}</td>
-            <td>{{ control.get('type').value | promoTypeToLabel }}</td>
-            <td>
-              <button (click)="removePromoAndUpdateValidDate(i)" type="button" class="remove-button">
-                <i class="material-icons">remove_circle_outline</i>
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="3">
-              <button type="button" (click)="selectPromo()" class="new-add-button wide" i18n>
-                <i class="material-icons">add</i> Add Combination
-              </button>
-            </td>
+          <tr *ngFor="let promo of entity?.combinations; let i=index">
+            <td>{{ promo.name }}</td>
+            <td>{{ promo.type | promoTypeToLabel }}</td>
           </tr>
           </tbody>
         </table>
@@ -112,9 +98,6 @@ const log = new Logger('ProductPromotionComponent');
         (delete)="delete()">
       </nus-detail-actions>
 
-      <!-- Modals -->
-      <nus-promo-selection-modal [selectedCombination]="entity?.combinations" #promoCombinationSelectionModal>
-      </nus-promo-selection-modal>
     </form>
   `,
   styles: [`
@@ -161,8 +144,6 @@ export class PromotionGroupComponent extends AbstractDetailComponent<IPromoGroup
   validFrom: string;
   validTo: string;
 
-  @ViewChild('promoCombinationSelectionModal') promoCombinationSelectionModal: PromoModalComponent;
-
   constructor(service: PromotionCampaignService,
               route: ActivatedRoute,
               router: Router,
@@ -184,7 +165,6 @@ export class PromotionGroupComponent extends AbstractDetailComponent<IPromoGroup
       isActive: [entity?.isActive ?? true, [Validators.required]],
       priority: [entity?.priority ?? 1, [Validators.required]],
       banner: ['', []],
-      combinations: this.fb.array([])
     });
 
     // need to mark as touched to make custom styling works
@@ -197,11 +177,6 @@ export class PromotionGroupComponent extends AbstractDetailComponent<IPromoGroup
       this.hasProductUrl = true;
     }
 
-
-    for (const combination of entity?.combinations ?? []) {
-      this.addCombination(combination);0
-    }
-
     this.updateValidDate(entity?.combinations);
 
   }
@@ -211,7 +186,6 @@ export class PromotionGroupComponent extends AbstractDetailComponent<IPromoGroup
   }
 
   ngAfterViewInit() {
-    this.promoCombinationSelectionModal.onClose.subscribe(() => this.onPromoCombinationSelectionModalClosed());
   }
 
   get name(): FormControl {
@@ -234,10 +208,6 @@ export class PromotionGroupComponent extends AbstractDetailComponent<IPromoGroup
     return this.form.get('banner') as FormControl;
   }
 
-  get combinations(): FormArray {
-    return this.form.get('combinations') as FormArray;
-  }
-
   save() {
 
     if (!!this.entity?.href && !!this.entity?.banner && !this.banner.value) {
@@ -249,53 +219,6 @@ export class PromotionGroupComponent extends AbstractDetailComponent<IPromoGroup
     }
 
     super.save();
-  }
-
-  addCombination(combination: IPromoGroupCombination) {
-    if ((this.combinations.value as Array<IPromoGroupCombination>).filter(p => p.href === combination.href).length > 0) {
-      log.info('Combination already in list -- skipping');
-      return;
-    }
-
-    const f = this.fb.group({
-      name: [combination.name],
-      href: [combination.href],
-      type: [combination.type],
-      validFrom: [combination.validFrom],
-      validTo: [combination.validTo]
-    });
-
-    this.combinations.push(f);
-  }
-
-  onPromoCombinationSelectionModalClosed() {
-    if (this.promoCombinationSelectionModal.result === DialogResult.OK) {
-      const selectedPromo = this.promoCombinationSelectionModal.combination.value as IPromoGroupCombination;
-
-      if ((this.combinations.value as Array<IPromoGroupCombination>).filter(p => p.href === selectedPromo.href).length > 0) {
-        log.info('Combination already in list -- skipping');
-        return;
-      }
-      const f = this.fb.group({
-        name: [selectedPromo.name, []],
-        href: [selectedPromo.href, []],
-        type: [selectedPromo.type],
-        validFrom: [selectedPromo.validFrom],
-        validTo: [selectedPromo.validTo]
-      });
-      this.combinations.push(f);
-      this.updateValidDate(this.combinations.value as IPromoGroupCombination[]);
-
-    }
-  }
-
-  selectPromo() {
-    this.promoCombinationSelectionModal.open();
-  }
-
-  removePromoAndUpdateValidDate(index: number): void {
-    this.combinations.removeAt(index);
-    this.updateValidDate(this.combinations.value as IPromoGroupCombination[]);
   }
 
   updateValidDate(combinations: IPromoGroupCombination[]): void {

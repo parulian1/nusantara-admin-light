@@ -54,6 +54,7 @@ import { FieldLengthCounterComponent } from './field-length-counter/field-length
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { PromoModalComponent } from '@nusantara/shared/modals/promo-modal.component';
 import { PromoTypeToLabelPipe } from '@nusantara/shared/promo-type-to-label.pipe';
+import { PromoCampaignModalComponent } from '@nusantara/shared/modals/promo-campaign-modal.component';
 
 
 /**
@@ -111,6 +112,7 @@ import { PromoTypeToLabelPipe } from '@nusantara/shared/promo-type-to-label.pipe
     FieldLengthCounterComponent,
     ProgressBarComponent,
     PromoModalComponent,
+    PromoCampaignModalComponent
   ],
   exports: [
     EntityToSlugPipe,
@@ -161,6 +163,7 @@ import { PromoTypeToLabelPipe } from '@nusantara/shared/promo-type-to-label.pipe
     FieldLengthCounterComponent,
     ProgressBarComponent,
     PromoModalComponent,
+    PromoCampaignModalComponent
   ],
   imports: [
     CommonModule,
