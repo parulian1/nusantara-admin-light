@@ -1038,7 +1038,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       const hasMorePriceList = entity.priceLists.length > 1;
       this.priceRangeEnabled = entity.priceLists.every((cur, idx) => {
         return cur.ranges.length > 1;
-      });
+      }) || hasMorePriceList;
       this.allowPriceSelector = !hasMorePriceList;
     }
     this.form = this.fb.group({
@@ -1103,7 +1103,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
     if (this.priceRangeEnabled) {
       this.priceSelector.setValue(true);
+      this.price.disable();
     } else {
+      this.price.enable();
       this.priceSelector.setValue(false);
     }
     if (this.allowPriceSelector) {
