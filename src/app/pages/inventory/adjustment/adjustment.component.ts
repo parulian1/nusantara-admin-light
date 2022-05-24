@@ -24,6 +24,7 @@ import * as Papa from 'papaparse';
 import {StockRecordDialogComponent} from '@nusantara/pages/inventory/adjustment/stock-record-dialog.component';
 import { isNumeric } from 'rxjs/internal/util/isNumeric';
 import { DomSanitizer } from '@angular/platform-browser';
+import {NoteDialogComponent} from "@nusantara/pages/inventory/adjustment/note-dialog.component";
 
 @Component({
   selector: 'nus-adjustment',
@@ -32,91 +33,89 @@ import { DomSanitizer } from '@angular/platform-browser';
 
     <form [formGroup]="form" (ngSubmit)="save()">
       <div class="container">
-        <div class="general-info">
-          <h3 i18n>General Information</h3>
-          <div>
-            <label i18n>Adjusted By</label>
-            <span>{{ userDisplayName }}</span>
-          </div>
-          <div>
-            <label i18n>Approved By</label>
-            <span>-</span>
-          </div>
-          <div>
-            <label i18n>Adjustment Date</label>
-            <span>{{ currentDate|date }}</span>
-          </div>
-          <div>
-            <label i18n>Status</label>
-            <span i18n>Pending</span>
-          </div>
-          <div>
-            <label i18n>Warehouse</label>
-            <div class="confirm-warehouse">
-
-              <div [formGroup]="warehouse">
-                <select formControlName="href" (change)="warehouseSelected($event)">
-                  <option [ngValue]="null" i18n>Select Warehouse</option>
-                  <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
-                    {{ wh.name }}
-                  </option>
-                </select>
-              </div>
-
-              <div [formGroup]="subLocation">
-                <select formControlName="href" (change)="subLocationSelected($event)">
-                  <option [ngValue]="null" i18n>Select Location</option>
-                  <option *ngFor="let subLocation of availableSubLocations" [ngValue]="subLocation.href">
-                    {{ subLocation.name }}
-                  </option>
-                </select>
-              </div>
-
-              <div class="confirm-warehouse-action">
-                <button (click)="confirmWarehouse()" type="button"
-                        [disabled]="subLocation.disabled || !warehouse.valid || !subLocation.valid"
-                        class="control confirm" i18n>Manual Update
-                </button>
-                <div class="dropdown" [class.disabled]="subLocation.disabled || !warehouse.valid || !subLocation.valid">
-                  <button type="button"
-                          [disabled]="subLocation.disabled || !warehouse.valid"
-                          class="dropbtn"><span class="material-icons">keyboard_arrow_down</span>
-                  </button>
-                  <div class="dropdown-content">
-                    <button (click)="manualUpload()" type="button"
-                            [disabled]="subLocation.disabled || !warehouse.valid"
-                            class="control confirm secondary" i18n>
-                      Manual Upload
-                    </button>
-                  </div>
-                </div>
-              </div>
-
+        <div>
+          <div id="general-info" class="wrapper">
+            <div>
+              <label i18n>Created By</label>
+              <span>{{ userDisplayName }}</span>
+            </div>
+            <div>
+              <label i18n>Created Date</label>
+              <span>{{ currentDate|date }}</span>
             </div>
           </div>
+          <div id="warehouse-info" class="wrapper">
+            <div>
+              <label i18n>Warehouse</label>
+              <div class="confirm-warehouse">
+                <div [formGroup]="warehouse">
+                  <select formControlName="href" (change)="warehouseSelected($event)">
+                    <option [ngValue]="null" i18n>Select Warehouse</option>
+                    <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
+                      {{ wh.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div>
+              <label i18n>Location</label>
+              <div class="confirm-warehouse">
+                <div [formGroup]="subLocation">
+                  <select formControlName="href" (change)="subLocationSelected($event)">
+                    <option [ngValue]="null" i18n>Select Location</option>
+                    <option *ngFor="let subLocation of availableSubLocations" [ngValue]="subLocation.href">
+                      {{ subLocation.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="confirm-warehouse-action">
+                  <button (click)="confirmWarehouse()" type="button"
+                          [disabled]="subLocation.disabled || !warehouse.valid || !subLocation.valid"
+                          class="control confirm" i18n>Manual Update
+                  </button>
+                  <div class="dropdown" [class.disabled]="subLocation.disabled || !warehouse.valid || !subLocation.valid">
+                    <button type="button"
+                            [disabled]="subLocation.disabled || !warehouse.valid"
+                            class="dropbtn"><span class="material-icons">keyboard_arrow_down</span>
+                    </button>
+                    <div class="dropdown-content">
+                      <button (click)="manualUpload()" type="button"
+                              [disabled]="subLocation.disabled || !warehouse.valid"
+                              class="control confirm secondary" i18n>
+                        Manual Upload
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <!-- <div class="mp-info">-->
+          <!--  <h3>Marketplace Information</h3>-->
+          <!--  <div>-->
+          <!--    <div>Product</div>-->
+          <!--    <div class="count">-->
+          <!--      0-->
+          <!--    </div>-->
+          <!--  </div>-->
+          <!--  <div>-->
+          <!--    <div>Marketplace</div>-->
+          <!--    <div class="count">-->
+          <!--      0-->
+          <!--    </div>-->
+          <!--  </div>-->
+          <!--  <div>-->
+          <!--    <div>Store</div>-->
+          <!--    <div class="count">-->
+          <!--      0-->
+          <!--    </div>-->
+          <!--  </div>-->
+          <!--  <a >More Detail</a>-->
+          <!-- </div>-->
         </div>
-        <!-- <div class="mp-info">-->
-        <!--  <h3>Marketplace Information</h3>-->
-        <!--  <div>-->
-        <!--    <div>Product</div>-->
-        <!--    <div class="count">-->
-        <!--      0-->
-        <!--    </div>-->
-        <!--  </div>-->
-        <!--  <div>-->
-        <!--    <div>Marketplace</div>-->
-        <!--    <div class="count">-->
-        <!--      0-->
-        <!--    </div>-->
-        <!--  </div>-->
-        <!--  <div>-->
-        <!--    <div>Store</div>-->
-        <!--    <div class="count">-->
-        <!--      0-->
-        <!--    </div>-->
-        <!--  </div>-->
-        <!--  <a >More Detail</a>-->
-        <!-- </div>-->
       </div>
       <div class="product-list" *ngIf="warehouse.disabled && adjustmentMode === 'csv'">
         <div *ngIf="invalidCsv.length > 0">
@@ -131,14 +130,16 @@ import { DomSanitizer } from '@angular/platform-browser';
         <table>
           <thead>
           <tr id="mp-add-product-head">
-            <th i18n>Receiving ID / Product Name / Location</th>
+            <th i18n>Receiving ID / Product Name</th>
             <th i18n>SKU</th>
             <th i18n>Receiving Date</th>
-            <th i18n>Available Stock In Product Record</th>
-            <th i18n>Expected Qty</th>
+            <th i18n>Batch</th>
+            <th i18n>Expiry Date</th>
+            <th i18n>Stock</th>
+            <th i18n>Adjusted Qty*</th>
             <th i18n>Different Qty</th>
             <th i18n>Reason</th>
-            <th i18n>Notes</th>
+            <th></th>
             <th i18n>Remove</th>
           </tr>
           </thead>
@@ -153,6 +154,7 @@ import { DomSanitizer } from '@angular/platform-browser';
             [index]="i"
             (remove)="stockRecords.removeAt(i)"
             (conflict)="resolveConflict($event)"
+            (addNote)="addNote(i)"
           >
           </nus-adjustment-line>
           </tbody>
@@ -168,14 +170,16 @@ import { DomSanitizer } from '@angular/platform-browser';
         <table>
           <thead>
           <tr id="mp-add-product-head">
-            <th i18n>Receiving ID / Product Name / Location</th>
+            <th i18n>Receiving ID / Product Name</th>
             <th i18n>SKU</th>
             <th i18n>Receiving Date</th>
-            <th i18n>Available Stock In Product Record</th>
-            <th i18n>Expected Qty</th>
+            <th i18n>Batch</th>
+            <th i18n>Expiry Date</th>
+            <th i18n>Stock</th>
+            <th i18n>Adjusted Qty*</th>
             <th i18n>Different Qty</th>
             <th i18n>Reason</th>
-            <th i18n>Notes</th>
+            <th></th>
             <th i18n>Remove</th>
           </tr>
           </thead>
@@ -189,11 +193,12 @@ import { DomSanitizer } from '@angular/platform-browser';
             [reasons]="reasonChoices"
             [adjustmentMode]="adjustmentMode"
             (remove)="stockRecords.removeAt(i)"
+            (addNote)="addNote(i)"
           >
           </nus-adjustment-line>
 
           <tr>
-            <td colspan="10">
+            <td colspan="11">
               <button type="button" (click)="addLine()" class="new-add-button wide" i18n>
                 <i class="material-icons">add</i> Add Record
               </button>
@@ -214,6 +219,7 @@ import { DomSanitizer } from '@angular/platform-browser';
     <nus-confirm-receiving-modal [cancelWithoutReload]="true"></nus-confirm-receiving-modal>
     <nus-csv-dialog></nus-csv-dialog>
     <nus-stock-record-dialog></nus-stock-record-dialog>
+    <nus-note-dialog></nus-note-dialog>
   `,
   styles: [
     'h1 { margin-bottom: 0.75rem; }',
@@ -221,17 +227,17 @@ import { DomSanitizer } from '@angular/platform-browser';
     'h3 { font-size: 20px; margin: 0; }',
     'button.confirm { width: auto }',
     '.container { display: grid; grid-template-columns: 4fr 1fr; grid-gap: 24px; }',
-    '.container > div { border: 1px solid var(--grey); border-radius: 4px; padding: 16px 24px; }',
-    '.general-info { width: 100%; }',
-    '.general-info > h3 { margin-bottom: 20px; }',
-    '.general-info > div:not(:last-child) { margin-bottom: 23px; }',
-    '.general-info label { min-height: 0; }',
-    '.general-info span{ font-weight: 700; color: var(--darken-grey); }',
+    '.wrapper { border: 1px solid var(--grey); border-radius: 4px; padding: 16px 24px; }',
+    '.wrapper:not(:last-child) { margin-bottom: 24px; }',
+    '.wrapper label { min-height: 0; }',
+    '.wrapper span{ font-weight: 700; color: var(--darken-grey); }',
+    '#general-info { display: grid; grid-template-columns: 1fr 1fr; grid-gap: 24px; }',
+    '#warehouse-info > div:not(:last-child) { margin-bottom: 23px; }',
     '.mp-info > h3 { margin-bottom: 16px; }',
     '.mp-info > div { text-align: center; border: 1px solid var(--grey); border-radius: 4px; padding: 12px 16px; margin-bottom: 12px; }',
     '.mp-info > a { display: block; margin-top: 16px; }',
     '.mp-info .count { font-size: 28px; font-weight: 700; }',
-    '.confirm-warehouse { display: grid; grid-template-columns: 2fr 2fr 1fr; grid-gap: 24px; }',
+    '.confirm-warehouse { display: grid; grid-template-columns: 3fr 1fr; grid-gap: 24px; }',
     '.product-list { margin-top: 24px; }',
     '.dropdown.disabled:hover .dropdown-content { display: none; }',
     '.dropdown.disabled:hover .dropbtn { background-color: var(--grey); }',
@@ -252,6 +258,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   @ViewChild(ConfirmModalReceivingOrderComponent) confirmModalReceiving: ConfirmModalReceivingOrderComponent;
   @ViewChild(CsvDialogComponent) csvDialog: CsvDialogComponent;
   @ViewChild(StockRecordDialogComponent) stockRecordDialog: StockRecordDialogComponent;
+  @ViewChild(NoteDialogComponent) noteDialog: NoteDialogComponent;
 
   warehouses: IWarehouse[];
   availableSubLocations: ISubLocation[] = [];
@@ -299,6 +306,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     this.confirmModalReceiving.onClose.subscribe(() => this.onConfirmModalClosed());
     this.csvDialog.onClose.subscribe(() => this.manualUploadClose());
     this.stockRecordDialog.onClose.subscribe(() => this.onStockRecordDialogClosed());
+    this.noteDialog.onClose.subscribe(() => this.onNoteDialogClosed());
   }
 
   initializeForm(entity?: IAdjustment): void {
@@ -332,7 +340,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     const fullName = `${this.authService.tokenPayload?.last_name} ${this.authService.tokenPayload?.first_name}`.trim();
 
     if (fullName && email) {
-      return [fullName, `(${email})`,].join(', ').trim();
+      return [fullName, `(${email})`, ].join(', ').trim();
     } else {
       return email;
     }
@@ -378,10 +386,12 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
         location: [selectedStock.location, []],
         product: [selectedStock.product, [Validators.required]],
         sku: [{value: selectedStock.sku, disabled: true}],
+        batch: [{value: selectedStock.batchNumber, disabled: true}],
         originalQuantity: [{value: selectedStock.originalQuantity, disabled: true}],
         differenceQty: [selectedStock.originalQuantity, [Validators.min(0)]],
         adjustmentQuantity: [null, [Validators.required, Validators.min(-32767), Validators.max(32767)]],
         created: [{value: selectedStock.created, disabled: true}],
+        expiryDate: [{value: selectedStock.expiryDate, disabled: true}],
         reason: [this.reasonChoices[0].value, []],
         notes: [null, []],
       });
@@ -445,8 +455,6 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
         this.subLocation.enable();
         // this.warehouse.disable();
       }
-    } else {
-
     }
   }
 
@@ -588,7 +596,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
                     differenceQty: [mappedValue.qty, [Validators.min(0)]],
                     adjustmentQuantity: [null, [Validators.required, Validators.min(-32767), Validators.max(32767)]],
                     created: [{value: selectedStock.created, disabled: true}],
-                    reason: [mappedValue['reason'], []],
+                    reason: [mappedValue.reason, []],
                     notes: [mappedValue.notes || null, []],
                   });
                   this.stockRecords.push(newReceiving);
@@ -648,25 +656,43 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     if (this.invalidCsv.length > 0) {
       if (this.csvDialog.hasCsvHeader) {
         fields = [
-          this.csvDialog.columnChoices['upc'],
-          this.csvDialog.columnChoices['qty'],
-          this.csvDialog.columnChoices['reason'],
-          this.csvDialog.columnChoices['sku'],
-          this.csvDialog.columnChoices['notes'],
+          this.csvDialog.columnChoices.upc,
+          this.csvDialog.columnChoices.qty,
+          this.csvDialog.columnChoices.reason,
+          this.csvDialog.columnChoices.sku,
+          this.csvDialog.columnChoices.notes,
           'import_status'];
       }
       for (const csvData of this.invalidCsv) {
-        const data = csvData['data'];
-        data['import_status'] = csvData['reason'];
+        const data = csvData.data;
+        data.import_status = csvData.reason;
         forExport.push(data);
       }
 
-      let csv = Papa.unparse(forExport);
+      const csv = Papa.unparse(forExport);
       const blob = new Blob([csv], {type: 'text/plain'});
       return this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(blob));
     }
 
     return '';
 
+  }
+
+  addNote(index: number) {
+    const note = this.stockRecords.value[index].notes;
+    if (note !== null) {
+      this.noteDialog.form.get('note').setValue(note);
+    }
+    this.noteDialog.stockRecordIndex = index;
+    this.noteDialog.open();
+  }
+
+  onNoteDialogClosed() {
+    if (this.noteDialog.result === DialogResult.OK) {
+      const stockRecord = this.stockRecords.value[this.noteDialog.stockRecordIndex];
+      stockRecord.notes = this.noteDialog.note.value;
+      this.stockRecords.controls[this.noteDialog.stockRecordIndex].get('notes').setValue(this.noteDialog.note.value);
+    }
+    this.noteDialog.resetNote();
   }
 }

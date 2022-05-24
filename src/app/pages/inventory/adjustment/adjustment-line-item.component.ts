@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -13,17 +13,17 @@ import { IStockRecord } from '@nusantara/models/inventory';
     <tr [formGroup]="form">
       <td title="{{ displayedName }}"><a title="{{ displayedName }}">{{ displayedName }}</a></td>
 
-      <td class="immediate-error-display">
-        <input type="text" [formControl]="sku" data-qa="sku">
-      </td>
+      <td title="{{ sku.value }}">{{ sku.value }}</td>
 
       <td class="immediate-error-display">
         <div>{{ created.value | date }}</div>
       </td>
 
-      <td>
-        <input type="number" [formControl]="originalQuantity" data-qa="original-quantity">
-      </td>
+      <td title="{{ batch.value }}">{{ batch.value }}</td>
+
+      <td>{{ expiryDate.value | date }}</td>
+
+      <td>{{ originalQuantity.value }}</td>
 
       <td>
         <div style="display: flex; justify-items: center; align-items: center;">
@@ -43,7 +43,7 @@ import { IStockRecord } from '@nusantara/models/inventory';
       <td>
         <div style="display: flex; justify-items: center; align-items: center;">
           <div style="position: relative;">
-            <input type="text" [formControl]="adjustmentQuantity" data-qa="difference-qty" readonly><br/>
+            <span data-qa="difference-qty">{{ adjustmentQuantity.value }}</span>
             <div
               *ngIf="adjustmentQuantity.errors"
               style="color: red; position: absolute; bottom: -1.1rem;">
@@ -64,13 +64,15 @@ import { IStockRecord } from '@nusantara/models/inventory';
       </td>
 
 
-      <td>
-        <textarea [formControl]="notes"></textarea>
+      <td class="add-note-action">
+        <button type="button" class="add-note-button" (click)="addNote.emit()" data-qa="add-note-button">
+          <i class="material-icons">sticky_note_2</i>
+        </button>
       </td>
 
       <td>
         <button (click)="remove.emit()" type="button" class="remove-button" data-qa="remove-button">
-          <i class="material-icons">remove_circle_outline</i>
+          <i class="material-icons">delete_outline</i>
         </button>
         <button
           *ngIf="adjustmentMode !== 'manual' && csvData.page.totalResults > 1"
@@ -85,9 +87,22 @@ import { IStockRecord } from '@nusantara/models/inventory';
     'td:nth-child(2) select { min-width: 115px; }', // location
     'td:nth-child(3) input { width: 70px; }', // quantity
     'td:nth-child(8) input { width: 105px; }', // cost
+    'td.add-note-action { padding: 6px 0; }',
     'td>div>input {float: left; width: 80%;}',
     'td>div>button {float: left; width: 20%;}',
-    'resolve-button { border: none;}'
+    'resolve-button { border: none;}',
+    `
+      .add-note-button {
+        background: transparent;
+        border: none;
+        transition: all .5s;
+        padding: 1px 0;
+      }
+      .add-note-button:hover {
+        opacity: 1;
+        color: var(--bhisma-orange);
+      }
+    `
   ]
 })
 export class AdjustmentLineItemComponent implements OnInit {
@@ -102,6 +117,7 @@ export class AdjustmentLineItemComponent implements OnInit {
   @Input() adjustmentMode: string;
   @Input() href: string;
   @Output() remove = new EventEmitter<void>();
+  @Output() addNote = new EventEmitter<void>();
 
   @Output() conflict = new EventEmitter<{
     'index': number,
@@ -116,9 +132,8 @@ export class AdjustmentLineItemComponent implements OnInit {
 
   get displayedName(): string {
     const receivingId = getSlugFromHref(this.receivingOrder.value.href);
-    const locationName = getSlugFromHref(this.location.value.href);
     const p = this.product.value as products.IProduct;
-    return `${receivingId} / ${p.name} / ${locationName}`;
+    return `${receivingId} / ${p.name}`;
   }
 
   get product(): FormControl {
@@ -131,6 +146,10 @@ export class AdjustmentLineItemComponent implements OnInit {
 
   get sku(): FormControl {
     return this.form.get('sku') as FormControl;
+  }
+
+  get batch(): FormGroup {
+    return this.form.get('batch') as FormGroup;
   }
 
   get receivingOrder(): FormControl {
@@ -151,6 +170,10 @@ export class AdjustmentLineItemComponent implements OnInit {
 
   get created(): FormControl {
     return this.form.get('created') as FormControl;
+  }
+
+  get expiryDate(): FormControl {
+    return this.form.get('expiryDate') as FormControl;
   }
 
   get reason(): FormControl {
