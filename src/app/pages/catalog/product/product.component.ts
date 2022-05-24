@@ -82,7 +82,7 @@ const logger = new Logger('ProductComponent');
           [nonFieldErrors]="nonFieldErrors">
         </nus-non-field-errors>
 
-        <form [formGroup]="form" (ngSubmit)="preSave()" class="fluid">
+        <form [formGroup]="form" (ngSubmit)="preSave()" class="fluid" (keydown.enter)="$event.preventDefault()" (keydown.shift.enter)="$event.preventDefault()">
           <div id="general-info" class="wrapper">
             <h1 class="heading-1" i18n>General Information</h1>
             <label class="immediate-error-display-input">
@@ -401,7 +401,7 @@ const logger = new Logger('ProductComponent');
                      #inputTag placeholder="Input Tag" i18n-placeholder
               />
               <button (click)="addTag(inputTag.value); inputTag.value = ''"
-                      [disabled]="!inputTag.value ||( tags.controls.length > MAX_TAG_NUMBER) || !tagForm.valid"
+                      [disabled]="!inputTag.value ||( tags.controls.length >= MAX_TAG_NUMBER) || !tagForm.valid"
                       type="button" class="new-add-button wide" i18n>
                 <i class="material-icons">add</i> Select Product Tag
               </button>
@@ -687,6 +687,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   readonly MAX_TAG_LENGTH = 20;
   readonly MAX_PRICE = 999999999;
   readonly MAX_DIMENSION = 9999;
+  readonly MIN_WEIGHT = 0.001;
 
   productClasses: Array<products.IProductClass>;
   categories: Array<ICategory>;
@@ -1057,7 +1058,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         Validators.required,
         Validators.minLength(this.DESCRIPTION_MIN_LENGTH),
         Validators.maxLength(this.DESCRIPTION_MAX_LENGTH)]],
-      weight: [entity?.weight, [Validators.required, Validators.min(0.01), Validators.max(this.MAX_DIMENSION)]],
+      weight: [entity?.weight, [Validators.required, Validators.min(this.MIN_WEIGHT), Validators.max(this.MAX_DIMENSION)]],
       price: [null, [Validators.max(this.MAX_PRICE), Validators.min(1)]],
       priceSelector: [this.priceRangeEnabled, []],
       dimensions: this.fb.group({
