@@ -31,7 +31,7 @@
     "@angular/service-worker": "^11.2.14",
     "@auth0/angular-jwt": "^5.0.2",
     "@ckeditor/ckeditor5-angular": "^1.2.3",
-    "@elastic/apm-rum-angular": "^1.2.3",
+    "@elastic/apm-rum-angular": "^2.1.4",
     "@gdnnusantara/ckeditor5-build": "0.0.4",
     "@ngrx/store": "^11.1.1",
     "@ngrx/store-devtools": "^11.1.1",
