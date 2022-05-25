@@ -64,13 +64,15 @@ const logger = new Logger('ProductComponent');
             [matMenuTriggerFor]="downloadMenu"
             (menuOpened)="open()" i18n
             (menuClosed)="close()">
-            <span class="judul">View Product</span>
+            <span class="judul" i18n>View Product</span>
             <i id="transform" class="material-icons preview-icon">expand_more</i>
           </button>
           <mat-menu #downloadMenu xPosition="before" class="">
             <button mat-menu-item i18n matTooltip="{{link.marketplace}} - {{link.shop}}" matTooltipClass="tooltip"
                     [matTooltipShowDelay]="1500" [matTooltipPosition]="'after'" *ngFor="let link of marketplaceLink"
-                    (click)="openLink(link.urlLink)">{{link.marketplace}} - {{link.shop}}</button>
+                    (click)="openLink(link.urlLink)"
+                    title="Link to {{link.marketplace}} - {{link.shop}}"
+            >{{link.marketplace}} - {{link.shop}}</button>
           </mat-menu>
         </div>
       </div>
@@ -156,18 +158,18 @@ const logger = new Logger('ProductComponent');
           </div>
 
           <div id="product-bundling" class="wrapper" *ngIf="productFormType === 'bundling' ">
-            <h1 class="heading-1">Product Bundling</h1>
+            <h1 class="heading-1" i18n>Product Bundling</h1>
             <label>
-              <span>Bundling Table (Optional)</span>
+              <span i18n>Bundling Table (Optional)</span>
               <table style="margin-bottom: 16px; table-layout: fixed;">
                 <thead>
                 <tr>
-                  <th class="product-name">Product Name</th>
-                  <th>UPC</th>
-                  <th>Weight</th>
-                  <th>Qty</th>
-                  <th>Price Perunit</th>
-                  <th>Remove</th>
+                  <th class="product-name" i18n>Product Name</th>
+                  <th i18n>UPC</th>
+                  <th i18n>Weight</th>
+                  <th i18n>Qty</th>
+                  <th i18n>Price Perunit</th>
+                  <th i18n>Remove</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -177,7 +179,7 @@ const logger = new Logger('ProductComponent');
                                  (update)="updateVirtualAmountAndPriceListAndWeight()">
                 </nus-bundle-line>
                 <tr class="total-price">
-                  <td colspan="5">
+                  <td colspan="5" i18n>
                     Total
                   </td>
                   <td class="price">
@@ -187,11 +189,11 @@ const logger = new Logger('ProductComponent');
                 </tbody>
               </table>
               <button (click)="addBundling()" type="button" class="new-add-button wide">
-                <i class="material-icons">add</i> Add Product
+                <i class="material-icons">add</i><ng-container i18n>Add Product</ng-container>
               </button>
               <div *ngIf="virtualPackageAmount !== null" class="package-info">
-                <div class="label">Total Potential Virtual Stock</div>
-                <div class="stock-amount">{{ virtualPackageAmount }} package</div>
+                <div class="label" i18n>Total Potential Virtual Stock</div>
+                <div class="stock-amount" i18n>{{ virtualPackageAmount }} package</div>
               </div>
             </label>
 
@@ -255,8 +257,8 @@ const logger = new Logger('ProductComponent');
                   </tr>
                   <tr>
                     <td style="padding: 14px;">
-                      <button [disabled]="isNew" (click)="addVariant()" type="button" class="new-add-button wide" i18n>
-                        <i class="material-icons">add</i> Add Variant
+                      <button [disabled]="isNew" (click)="addVariant()" type="button" class="new-add-button wide">
+                        <i class="material-icons">add</i><ng-container  i18n> Add Variant</ng-container>
                       </button>
                     </td>
                   </tr>
@@ -318,7 +320,7 @@ const logger = new Logger('ProductComponent');
             </label>
             <label>
               <div [ngClass]="{'hidden' : !enterpriseLicense()}">
-                <span *ngIf="!priceSelector.value" class="greybox">You have not checked 'enable' for price range</span>
+                <span *ngIf="!priceSelector.value" class="greybox" i18n>You have not checked 'enable' for price range</span>
                 <nus-price-list-host [form]="priceLists"
                                      [ngClass]="{'hidden' : !priceSelector.value}"></nus-price-list-host>
               </div>
@@ -348,7 +350,7 @@ const logger = new Logger('ProductComponent');
               <span i18n>Package Weight (kg)</span>
               <input type="number" [formControl]="weight"
                      name="weight"
-                     placeholder="Input 0.01-9999"
+                     placeholder="Input {{MIN_WEIGHT}}-{{MAX_DIMENSION}}"
                      i18n-placeholder
                      data-qa="weight"/>
               <nus-field-errors [control]="weight"></nus-field-errors>
@@ -361,7 +363,7 @@ const logger = new Logger('ProductComponent');
                   name="length"
                   class="dimension-input"
                   formControlName="currentLength"
-                  placeholder="Input 1-9999"
+                  placeholder="Input 1-{{MAX_DIMENSION}}"
                   i18n-placeholder
                   data-qa="length"/>
                 <nus-field-errors [control]="currentLength"></nus-field-errors>
@@ -373,7 +375,7 @@ const logger = new Logger('ProductComponent');
                   name="width"
                   class="dimension-input"
                   formControlName="currentWidth"
-                  placeholder="Input 1-9999"
+                  placeholder="Input 1-{{MAX_DIMENSION}}"
                   i18n-placeholder
                   data-qa="width"/>
                 <nus-field-errors [control]="currentWidth"></nus-field-errors>
@@ -385,7 +387,7 @@ const logger = new Logger('ProductComponent');
                   name="height"
                   class="dimension-input"
                   formControlName="currentHeight"
-                  placeholder="Input 1-9999"
+                  placeholder="Input 1-{{MAX_DIMENSION}}"
                   i18n-placeholder
                   data-qa="height"/>
                 <nus-field-errors [control]="currentHeight"></nus-field-errors>
@@ -402,8 +404,8 @@ const logger = new Logger('ProductComponent');
               />
               <button (click)="addTag(inputTag.value); inputTag.value = ''"
                       [disabled]="!inputTag.value ||( tags.controls.length >= MAX_TAG_NUMBER) || !tagForm.valid"
-                      type="button" class="new-add-button wide" i18n>
-                <i class="material-icons">add</i> Select Product Tag
+                      type="button" class="new-add-button wide">
+                <i class="material-icons">add</i><ng-container i18n> Select Product Tag</ng-container>
               </button>
               <nus-field-errors [control]="tag"></nus-field-errors>
             </div>
@@ -411,7 +413,7 @@ const logger = new Logger('ProductComponent');
               <label *ngFor="let t of tags.controls; let i = index" class="tag-item">
                 <input type="hidden" [formControl]="t" name="tag" data-qa="tag"/>
                 <span class="tag-chip">{{t.value}}
-                  <button type="button" class="delete" (click)="tags.removeAt(i)">
+                  <button type="button" class="delete" (click)="tags.removeAt(i)" title="Remove tag {{t.value}}">
                   <i class="material-icons">highlight_off</i>
                 </button>
               </span>
@@ -489,15 +491,15 @@ const logger = new Logger('ProductComponent');
                   </a>
                 </td>
                 <td>
-                  <button type="button" class="delete remove-button" (click)="removeRelated(i)">
+                  <button type="button" class="delete remove-button" (click)="removeRelated(i)" title="Remove related {{ control.get('name').value }}">
                     <i class="material-icons">delete_outline</i>
                   </button>
                 </td>
               </tr>
               <tr>
                 <td colspan="2">
-                  <button type="button" (click)="selectProduct()" class="new-add-button wide" i18n>
-                    <span class="material-icons">add</span> Add Product
+                  <button type="button" (click)="selectProduct()" class="new-add-button wide">
+                    <span class="material-icons">add</span><ng-container i18n> Add Product</ng-container>
                   </button>
                 </td>
               </tr>
