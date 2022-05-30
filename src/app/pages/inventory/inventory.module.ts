@@ -11,18 +11,22 @@ import {
   LineItemComponent,
 } from './receiving';
 import { InventoryRoutingModule } from './inventory-routing.module';
-import { InventoryOrderListComponent } from './pending-order';
-import { InventoryTransferDetailComponent, InventoryTransferOrderComponent } from './transfer-order';
+import { InventoryOrderListComponent, InventoryFiltersComponent, InventoryDateFilterComponent } from './pending-order';
+import {
+  InventoryTransferOrderComponent,
+  InventoryTransferLineItemComponent
+} from './transfer-order';
 import {
   AdjustmentComponent,
   AdjustmentDetailComponent,
   AdjustmentLineItemComponent,
 } from './adjustment';
 import { StockRecordDialogComponent } from './adjustment/stock-record-dialog.component';
-import {TransferOrderLineItemComponent} from '@nusantara/pages/inventory/transfer-order/transfer-order-line-item.component';
-import {
-  InventoryTransferLineItemComponent
-} from '@nusantara/pages/inventory/transfer-order/inventory-transfer-line-item.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -32,15 +36,15 @@ import {
     LineItemComponent,
 
     InventoryOrderListComponent,
+    InventoryFiltersComponent,
+    InventoryDateFilterComponent,
     InventoryTransferOrderComponent,
+    InventoryTransferLineItemComponent,
 
     AdjustmentComponent,
     AdjustmentLineItemComponent,
     AdjustmentDetailComponent,
     StockRecordDialogComponent,
-    TransferOrderLineItemComponent,
-    InventoryTransferDetailComponent,
-    InventoryTransferLineItemComponent
   ],
   imports: [
     CommonModule,
@@ -49,6 +53,11 @@ import {
     FormsModule,
     ReactiveFormsModule,
     InventoryRoutingModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatInputModule
   ],
 })
 export class InventoryModule { }

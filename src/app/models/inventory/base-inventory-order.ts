@@ -8,3 +8,13 @@ export interface IBaseInventoryOrder extends IHrefEntity {
   created: string;
   status: InventoryOrderStatusType;
 }
+
+export interface IInventoryFilterValue {
+  date: {
+    type: string,
+    start: string,
+    end: string,
+  }
+  status: string,
+  type:string,
+}
