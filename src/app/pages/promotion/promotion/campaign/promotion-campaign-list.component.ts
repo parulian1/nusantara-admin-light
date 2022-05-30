@@ -38,8 +38,8 @@ import { IPromoGroup } from '@nusantara/models';
       <tbody>
       <tr *ngFor="let entity of page.entities">
         <td><a [routerLink]="[entity|entityToSlug]">{{ entity.name }}</a></td>
-        <td>{{ entity.validFrom }}</td>
-        <td>{{ entity.validTo }}</td>
+        <td>{{ getValidFrom(entity) }}</td>
+        <td>{{ getValidTo(entity) }}</td>
         <td class="numeric">{{ !!entity?.combinations ? entity?.combinations.length: 0 }}</td>
         <td class="numeric">{{ entity.priority }}</td>
         <td class="centered">
@@ -86,5 +86,23 @@ export class PromotionCampaignListComponent extends AbstractListComponent<IPromo
 
   goToPromoSingle() {
     this.router.navigate(['/promotion/promo/single']);
+  }
+
+  getValidFrom(entity: IPromoGroup): string {
+    if (!entity.combinations || !entity.combinations.length) {
+      return '-';
+    }
+    return new Date(entity.combinations.sort((oldPromo, newPromo) => {
+        return new Date(oldPromo.validFrom).getTime() - new Date(newPromo.validFrom).getTime();
+      })[0].validFrom).toUTCString();
+  }
+
+  getValidTo(entity: IPromoGroup): string {
+    if (!entity.combinations || !entity.combinations.length) {
+      return '-';
+    }
+    return new Date(entity.combinations.sort((oldPromo, newPromo) => {
+      return new Date(newPromo.validTo).getTime() - new Date(oldPromo.validTo).getTime();
+    })[0].validTo).toUTCString();
   }
 }
