@@ -10,7 +10,7 @@ import { InventoryReceivingOrderDetailResolver } from './receiving/inventory-rec
 import { InventoryOrderListComponent } from './pending-order';
 import { InventoryOrderListResolver } from './pending-order/inventory-order-list.resolver';
 
-import {InventoryTransferDetailComponent, InventoryTransferOrderComponent} from './transfer-order';
+import { InventoryTransferOrderComponent } from './transfer-order';
 import { InventoryTransferOrderDetailResolver } from './transfer-order/inventory-transfer-order-detail.resolver';
 
 import { PublishListComponent } from '../config/marketplace-integration';
@@ -62,7 +62,7 @@ const routes: Routes = [
       },
       {
         path: ':slug',
-        component: InventoryTransferDetailComponent,
+        component: InventoryReceivingDetailComponent,
         runGuardsAndResolvers: 'always',
         resolve: {
           entity: InventoryTransferOrderDetailResolver
