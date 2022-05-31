@@ -10,6 +10,7 @@ import {
   IPromoGroup,
   IPromoGroupCombination,
 } from '@nusantara/models';
+import { DatePipe } from "@angular/common";
 
 declare var window: any; // Needed on Angular 8+
 
@@ -148,7 +149,8 @@ export class PromotionGroupComponent extends AbstractDetailComponent<IPromoGroup
               route: ActivatedRoute,
               router: Router,
               toast: ToastService,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              public datePipe: DatePipe) {
     super(route, router, toast, service);
   }
 
@@ -223,12 +225,12 @@ export class PromotionGroupComponent extends AbstractDetailComponent<IPromoGroup
 
   updateValidDate(combinations: IPromoGroupCombination[]): void {
     if (combinations.length) {
-      this.validFrom = new Date(combinations.sort((oldPromo, newPromo) => {
+      this.validFrom = this.datePipe.transform(new Date(combinations.sort((oldPromo, newPromo) => {
         return new Date(oldPromo.validFrom).getTime() - new Date(newPromo.validFrom).getTime();
-      })[0].validFrom).toUTCString();
-      this.validTo = new Date(combinations.sort((oldPromo, newPromo) => {
+      })[0].validFrom), 'dd/MM/yyyy HH:mm:ss').toString();
+      this.validTo = this.datePipe.transform(new Date(combinations.sort((oldPromo, newPromo) => {
         return new Date(newPromo.validTo).getTime() - new Date(oldPromo.validTo).getTime();
-      })[0].validTo).toUTCString();
+      })[0].validTo), 'dd/MM/yyyy HH:mm:ss').toString();
     } else {
       this.validFrom = null;
       this.validTo = null;

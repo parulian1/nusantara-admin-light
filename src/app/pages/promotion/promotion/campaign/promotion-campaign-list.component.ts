@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractListComponent } from '@nusantara/core';
 import { IPromoGroup } from '@nusantara/models';
+import { DatePipe  } from '@angular/common';
 
 @Component({
   selector: 'nus-promotion-campaign-list',
@@ -28,8 +29,8 @@ import { IPromoGroup } from '@nusantara/models';
       <thead>
       <tr>
         <th translate i18n>Name</th>
-        <th class="numeric" i18n>Valid From</th>
-        <th class="numeric" i18n>Valid To</th>
+        <th i18n>Valid From</th>
+        <th i18n>Valid To</th>
         <th class="numeric" i18n>Combination Promo</th>
         <th class="numeric" i18n>Priority</th>
         <th class="centered" i18n>Is Active</th>
@@ -82,7 +83,7 @@ import { IPromoGroup } from '@nusantara/models';
   ]
 })
 export class PromotionCampaignListComponent extends AbstractListComponent<IPromoGroup> {
-  constructor(route: ActivatedRoute, private router: Router) { super(route); }
+  constructor(route: ActivatedRoute, private router: Router, public datePipe: DatePipe) { super(route); }
 
   goToPromoSingle() {
     this.router.navigate(['/promotion/promo/single']);
@@ -92,17 +93,17 @@ export class PromotionCampaignListComponent extends AbstractListComponent<IPromo
     if (!entity.combinations || !entity.combinations.length) {
       return '-';
     }
-    return new Date(entity.combinations.sort((oldPromo, newPromo) => {
+    return this.datePipe.transform(new Date(entity.combinations.sort((oldPromo, newPromo) => {
         return new Date(oldPromo.validFrom).getTime() - new Date(newPromo.validFrom).getTime();
-      })[0].validFrom).toUTCString();
+      })[0].validFrom), 'dd/MM/yyyy HH:mm:ss').toString();
   }
 
   getValidTo(entity: IPromoGroup): string {
     if (!entity.combinations || !entity.combinations.length) {
       return '-';
     }
-    return new Date(entity.combinations.sort((oldPromo, newPromo) => {
+    return this.datePipe.transform(new Date(entity.combinations.sort((oldPromo, newPromo) => {
       return new Date(newPromo.validTo).getTime() - new Date(oldPromo.validTo).getTime();
-    })[0].validTo).toUTCString();
+    })[0].validTo), 'dd/MM/yyyy HH:mm:ss').toString();
   }
 }
