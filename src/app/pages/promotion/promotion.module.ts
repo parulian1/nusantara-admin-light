@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask';
 
@@ -16,6 +16,7 @@ import {PromotionGroupComponent} from "@nusantara/pages/promotion/promotion/camp
 
 
 @NgModule({
+  providers: [DatePipe,],
   declarations: [
     ProductPromotionComponent,
     PromotionSingleListComponent,
