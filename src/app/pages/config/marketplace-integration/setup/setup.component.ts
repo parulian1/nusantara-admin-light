@@ -25,6 +25,7 @@ import { MarketplaceClientEnum } from '../connect/markeplace-client-enum';
           <tr>
             <th i18n>Store Name</th>
             <th i18n>Warehouse</th>
+            <th i18n>Marketplace</th>
             <th i18n>Status</th>
             <th i18n>Action</th>
             <th></th>
@@ -34,6 +35,7 @@ import { MarketplaceClientEnum } from '../connect/markeplace-client-enum';
           <tr *ngFor="let entity of page.entities">
             <td>{{ entity.name }}</td>
             <td>{{ entity.warehouse.name }}</td>
+            <td>{{ entity.marketplace | titlecase }}</td>
 
             <td *ngIf="entity.isConnected == false">
               <span class="badge alert" i18n>Not Connected</span>
@@ -91,6 +93,7 @@ export class SetupComponent implements OnInit {
     return (
       entity.marketplace === this.marketplaceClient.shopee ||
       entity.marketplace === this.marketplaceClient.tsc ||
+      entity.marketplace === this.marketplaceClient.tiktok ||
       !entity.isConnected
     );
   }

@@ -51,14 +51,13 @@ import * as fromReducer from '@nusantara/reducers';
                 <strong>{{ logistics[i].name }}</strong>
               </td>
               <td class="centered">
-                <!-- <input
-                  type="checkbox" class="toggle"
-                  [formControl]="attr"
-                  formArrayName="shipping"/> -->
-
-                <mat-slide-toggle
-                  [formControl]="attr">
-                </mat-slide-toggle>
+                <input id="s2" type="checkbox"
+                      class="toggle"
+                      [ngClass]="{'test': attr.value}"
+                      [formControl]="attr"
+                      name="is-active"
+                      data-qa="is-active"/>
+                <span i18n>Is Active</span>
               </td>
             </tr>
           </tbody>
@@ -85,7 +84,9 @@ import * as fromReducer from '@nusantara/reducers';
     '.store-info { grid-template-columns: 4fr 3fr 3fr; padding: 20px 24px;  margin-bottom: 24px; }',
     '.shipping-option { grid-template-columns: 5fr 1fr; padding: 14px 24px; margin-bottom: 16px }',
     '.shipping-option > div:last-child { align-self: end; }',
-    '.toggle { margin-right: 16px }',
+    '.toggle { margin-right: 16px;}',
+    'input[type="checkbox"].test:disabled { background-color: rgb(247 166 95 / 50%) !important}',
+    'input[type="checkbox"].test:disabled:after {  background-color: #e9ab75eb;}',
     '.action-buttons { margin-top: 30px; }',
     'button:not(:first-of-type) { margin-left: 5px; }',
     '::ng-deep mat-slide-toggle label { min-height: 40px; }'
@@ -105,7 +106,8 @@ export class EditShippingComponent implements OnInit, OnDestroy {
     'tsc',
     'lazada',
     'tokopedia',
-    'bukalapak'
+    'bukalapak',
+    'tiktok'
   ]
 
   constructor(
