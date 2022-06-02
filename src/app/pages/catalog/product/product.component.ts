@@ -1139,6 +1139,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
             this.dimensions.controls[key].disable();
           });
         }
+        this.form.setControl('attributes', this.fb.group({}));
       } else {
         this.selectedProductClass = null;
         this.weight.disable();
