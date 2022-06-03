@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { products, ISubLocation, drf } from '@nusantara/models';
@@ -109,7 +109,7 @@ export class AdjustmentLineItemComponent implements OnInit {
   @Input() warehouse: { href: string };
   @Input() availableSubLocations: ISubLocation[] = [];
   @Input() productClasses: IProductClass[];
-  @Input() form: FormGroup;
+  @Input() form: AbstractControl;
   @Input() reasons: drf.IChoice[] = [];
   @Input() subLocation: ISubLocation;
   @Input() csvData: { page: PagedResponse<IStockRecord>, data: any, key: string, mappedValue: any };

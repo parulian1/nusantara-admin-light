@@ -24,7 +24,7 @@ import * as Papa from 'papaparse';
 import {StockRecordDialogComponent} from '@nusantara/pages/inventory/adjustment/stock-record-dialog.component';
 import { isNumeric } from 'rxjs/internal/util/isNumeric';
 import { DomSanitizer } from '@angular/platform-browser';
-import {NoteDialogComponent} from "@nusantara/pages/inventory/adjustment/note-dialog.component";
+import { NoteDialogComponent } from '@nusantara/pages/inventory/adjustment/note-dialog.component';
 
 @Component({
   selector: 'nus-adjustment',
@@ -75,7 +75,8 @@ import {NoteDialogComponent} from "@nusantara/pages/inventory/adjustment/note-di
                           [disabled]="subLocation.disabled || !warehouse.valid || !subLocation.valid"
                           class="control confirm" i18n>Manual Update
                   </button>
-                  <div class="dropdown" [class.disabled]="subLocation.disabled || !warehouse.valid || !subLocation.valid">
+                  <div class="dropdown"
+                       [class.disabled]="subLocation.disabled || !warehouse.valid || !subLocation.valid">
                     <button type="button"
                             [disabled]="subLocation.disabled || !warehouse.valid"
                             class="dropbtn"><span class="material-icons">keyboard_arrow_down</span>
@@ -84,7 +85,7 @@ import {NoteDialogComponent} from "@nusantara/pages/inventory/adjustment/note-di
                       <button (click)="manualUpload()" type="button"
                               [disabled]="subLocation.disabled || !warehouse.valid"
                               class="control confirm secondary" i18n>
-                        Manual Upload
+                        CSV Upload
                       </button>
                     </div>
                   </div>
@@ -277,6 +278,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   adjustmentMode = 'manual';
   invalidCsv = [];
   upcList = [];
+  selectedSubLocationId = 0;
 
   constructor(private fb: FormBuilder,
               public toast: ToastService,
@@ -350,7 +352,8 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     this.stockRecordSelectionModal.filters = {
       warehouse: getSlugFromHref(this.warehouse.value?.href),
       receiving_order_status: ReceivingOrderStatusChoices.APPROVED,
-      product_type: 'single'
+      product_type: 'single',
+      sub_location: this.selectedSubLocationId
     };
 
     this.stockRecordSelectionModal.displayedResults = null;
@@ -460,7 +463,9 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
 
   subLocationSelected($event: Event) {
     if (($event.target as HTMLSelectElement).value !== '') {
+      const loc = this.availableSubLocations.filter(e => e.href === this.subLocation.get('href').value)[0];
       // this.subLocation.disable();
+      this.selectedSubLocationId = loc.id;
     }
   }
 

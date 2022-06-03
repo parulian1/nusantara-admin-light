@@ -11,6 +11,7 @@ import { DialogResult } from '@nusantara/core';
       <p class="body-2">Write other reasons in notes</p>
       <form #modalForm>
         <textarea class="note-input" [formControl]="note" placeholder="Input Note"></textarea>
+        <nus-field-errors [control]="note"></nus-field-errors>
       </form>
       <div class="action">
         <button class="control" [disabled]="!form.valid" (click)="submit()" type="button" i18n>Save</button>
@@ -43,7 +44,7 @@ export class NoteDialogComponent implements OnInit {
 
   private initializeForm(): void {
     this.form = this.fb.group({
-      note: ['', [Validators.required]],
+      note: ['', [Validators.required, Validators.maxLength(160)]],
     });
   }
 
