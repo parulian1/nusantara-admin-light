@@ -10,20 +10,10 @@ import { IStockRecord } from '@nusantara/models/inventory';
 @Component({
   selector: 'nus-adjustment-line',
   template: `
-    <tr [formGroup]="form">
+    <tr class="tid-data-row">
       <td title="{{ displayedName }}"><a title="{{ displayedName }}">{{ displayedName }}</a></td>
 
-      <td title="{{ sku.value }}">{{ sku.value }}</td>
-
-      <td class="immediate-error-display">
-        <div>{{ created.value | date }}</div>
-      </td>
-
-      <td title="{{ batch.value }}">{{ batch.value }}</td>
-
-      <td>{{ expiryDate.value | date }}</td>
-
-      <td>{{ originalQuantity.value }}</td>
+      <td class="numeric">{{ originalQuantity.value }}</td>
 
       <td>
         <div style="display: flex; justify-items: center; align-items: center;">
@@ -40,13 +30,13 @@ import { IStockRecord } from '@nusantara/models/inventory';
         </div>
       </td>
 
-      <td>
+      <td class="numeric">
         <div style="display: flex; justify-items: center; align-items: center;">
-          <div style="position: relative;">
+          <div style="position: relative;width: 100%">
             <span data-qa="difference-qty">{{ adjustmentQuantity.value }}</span>
             <div
               *ngIf="adjustmentQuantity.errors"
-              style="color: red; position: absolute; bottom: -1.1rem;">
+              style="color: red; position: absolute; bottom: -1.1rem;width: 100%;">
               <span *ngIf="adjustmentQuantity.hasError('min')">min -32767</span>
               <span *ngIf="adjustmentQuantity.hasError('max')">max 32767</span>
             </div>
@@ -63,11 +53,8 @@ import { IStockRecord } from '@nusantara/models/inventory';
         </select>
       </td>
 
-
-      <td class="add-note-action">
-        <button type="button" class="add-note-button" (click)="addNote.emit()" data-qa="add-note-button">
-          <i class="material-icons">sticky_note_2</i>
-        </button>
+      <td>
+        <input type="text" [formControl]="notes">
       </td>
 
       <td>
@@ -80,27 +67,80 @@ import { IStockRecord } from '@nusantara/models/inventory';
           <span class="material-icons">warning</span>Update
         </button>
       </td>
+      <td>
+        <button class="open-detail-button" [ngClass]="{'show': showDetail.value}" (click)="openDetail.emit()" type="button">
+          <i class="material-icons">expand_more</i>
+        </button>
+      </td>
+    </tr>
+    <tr class="tid-detail-row" [ngClass]="{'show': showDetail.value}">
+      <td colspan="8">
+        <div class="stock-record-detail-info">
+          <span><b>SKU</b> {{ sku.value }}</span>
+          <span><b>Receiving Date</b> {{ created.value | date }}</span>
+          <span><b>Batch</b> {{ (batch.value) || "-" }}</span>
+          <span><b>Expiry Date</b> {{ (expiryDate.value | date) || "-" }}</span>
+        </div>
+      </td>
     </tr>
   `,
   styles: [
     ':host { display: contents; }',
-    'td:nth-child(2) select { min-width: 115px; }', // location
-    'td:nth-child(3) input { width: 70px; }', // quantity
-    'td:nth-child(8) input { width: 105px; }', // cost
+    'td:nth-child(1) { min-width: 115px; }',
+    'td:nth-child(2) { width: 80px; }',
+    'td:nth-child(3) { width: 108px; }',
+    'td:nth-child(4) { width: 108px; }',
+    'td:nth-child(7) { width: 5%; }',
+    'td:last-child { width: 2%; }',
     'td.add-note-action { padding: 6px 0; }',
     'td>div>input {float: left; width: 80%;}',
     'td>div>button {float: left; width: 20%;}',
     'resolve-button { border: none;}',
     `
-      .add-note-button {
+      .tid-detail-row {
+        height: 0;
+        transition: height 0.5s cubic-bezier(0, 1, 0, 1);
+        overflow: hidden;
+      }
+      .tid-detail-row td {
+        padding: 0;
+        transition: padding 0.5s ease-in-out;
+      }
+      .tid-detail-row td div {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        width: 100%;
+        box-sizing: border-box;
+        max-height: 0;
+        transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
+        overflow: hidden;
+      }
+      .tid-detail-row.show {
+        height: 48px;
+        transition: height 1s ease-in-out;
+      }
+      .tid-detail-row.show > td {
+        padding: 6px 14px;
+        border-bottom: 1px solid var(--grey);
+        transition: padding 1s ease-in-out;
+      }
+      .tid-detail-row.show > td > div {
+        max-height: 48px;
+        transition: max-height 1s ease-in-out;
+      }
+    `,
+    `
+      .open-detail-button {
         background: transparent;
         border: none;
         transition: all .5s;
-        padding: 1px 0;
+        color: var(--darken-grey);
       }
-      .add-note-button:hover {
-        opacity: 1;
-        color: var(--bhisma-orange);
+      .open-detail-button i{
+        transition: transform 0.2s ease-out;
+      }
+      .open-detail-button.show i{
+        transform: rotate(180deg);
       }
     `
   ]
@@ -117,7 +157,7 @@ export class AdjustmentLineItemComponent implements OnInit {
   @Input() adjustmentMode: string;
   @Input() href: string;
   @Output() remove = new EventEmitter<void>();
-  @Output() addNote = new EventEmitter<void>();
+  @Output() openDetail = new EventEmitter<void>();
 
   @Output() conflict = new EventEmitter<{
     'index': number,
@@ -182,6 +222,10 @@ export class AdjustmentLineItemComponent implements OnInit {
 
   get notes(): FormControl {
     return this.form.get('notes') as FormControl;
+  }
+
+  get showDetail(): FormControl {
+    return this.form.get('showDetail') as FormControl;
   }
 
   ngOnInit(): void {

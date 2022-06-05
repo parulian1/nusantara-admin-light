@@ -19,7 +19,7 @@ import {
 import {
   AdjustmentComponent,
   AdjustmentDetailComponent,
-  AdjustmentLineItemComponent, NoteDialogComponent,
+  AdjustmentLineItemComponent,
 } from './adjustment';
 import { StockRecordDialogComponent } from './adjustment/stock-record-dialog.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -44,8 +44,7 @@ import { MatInputModule } from '@angular/material/input';
     AdjustmentComponent,
     AdjustmentLineItemComponent,
     AdjustmentDetailComponent,
-    StockRecordDialogComponent,
-    NoteDialogComponent,
+    StockRecordDialogComponent
   ],
   imports: [
     CommonModule,

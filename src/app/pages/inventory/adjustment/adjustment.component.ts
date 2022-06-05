@@ -24,7 +24,6 @@ import * as Papa from 'papaparse';
 import {StockRecordDialogComponent} from '@nusantara/pages/inventory/adjustment/stock-record-dialog.component';
 import { isNumeric } from 'rxjs/internal/util/isNumeric';
 import { DomSanitizer } from '@angular/platform-browser';
-import { NoteDialogComponent } from '@nusantara/pages/inventory/adjustment/note-dialog.component';
 
 @Component({
   selector: 'nus-adjustment',
@@ -132,16 +131,13 @@ import { NoteDialogComponent } from '@nusantara/pages/inventory/adjustment/note-
           <thead>
           <tr id="mp-add-product-head">
             <th i18n>Receiving ID / Product Name</th>
-            <th i18n>SKU</th>
-            <th i18n>Receiving Date</th>
-            <th i18n>Batch</th>
-            <th i18n>Expiry Date</th>
-            <th i18n>Stock</th>
+            <th i18n class="numeric">Stock</th>
             <th i18n>Adjusted Qty*</th>
-            <th i18n>Different Qty</th>
+            <th i18n class="numeric">Different Qty</th>
             <th i18n>Reason</th>
-            <th></th>
+            <th i18n>Note</th>
             <th i18n>Remove</th>
+            <th><i class="material-icons">more_vert</i></th>
           </tr>
           </thead>
           <tbody>
@@ -155,7 +151,7 @@ import { NoteDialogComponent } from '@nusantara/pages/inventory/adjustment/note-
             [index]="i"
             (remove)="stockRecords.removeAt(i)"
             (conflict)="resolveConflict($event)"
-            (addNote)="addNote(i)"
+            (openDetail)="openDetail(i)"
           >
           </nus-adjustment-line>
           </tbody>
@@ -172,16 +168,13 @@ import { NoteDialogComponent } from '@nusantara/pages/inventory/adjustment/note-
           <thead>
           <tr id="mp-add-product-head">
             <th i18n>Receiving ID / Product Name</th>
-            <th i18n>SKU</th>
-            <th i18n>Receiving Date</th>
-            <th i18n>Batch</th>
-            <th i18n>Expiry Date</th>
-            <th i18n>Stock</th>
+            <th i18n class="numeric">Stock</th>
             <th i18n>Adjusted Qty*</th>
-            <th i18n>Different Qty</th>
+            <th i18n class="numeric">Different Qty</th>
             <th i18n>Reason</th>
-            <th></th>
+            <th i18n>Note</th>
             <th i18n>Remove</th>
+            <th><i class="material-icons">more_vert</i></th>
           </tr>
           </thead>
           <tbody>
@@ -194,7 +187,7 @@ import { NoteDialogComponent } from '@nusantara/pages/inventory/adjustment/note-
             [reasons]="reasonChoices"
             [adjustmentMode]="adjustmentMode"
             (remove)="stockRecords.removeAt(i)"
-            (addNote)="addNote(i)"
+            (openDetail)="openDetail(i)"
           >
           </nus-adjustment-line>
 
@@ -220,7 +213,6 @@ import { NoteDialogComponent } from '@nusantara/pages/inventory/adjustment/note-
     <nus-confirm-receiving-modal [cancelWithoutReload]="true"></nus-confirm-receiving-modal>
     <nus-csv-dialog></nus-csv-dialog>
     <nus-stock-record-dialog></nus-stock-record-dialog>
-    <nus-note-dialog></nus-note-dialog>
   `,
   styles: [
     'h1 { margin-bottom: 0.75rem; }',
@@ -240,6 +232,7 @@ import { NoteDialogComponent } from '@nusantara/pages/inventory/adjustment/note-
     '.mp-info .count { font-size: 28px; font-weight: 700; }',
     '.confirm-warehouse { display: grid; grid-template-columns: 3fr 1fr; grid-gap: 24px; }',
     '.product-list { margin-top: 24px; }',
+    '.product-list > table > thead th {vertical-align: middle;}',
     '.dropdown.disabled:hover .dropdown-content { display: none; }',
     '.dropdown.disabled:hover .dropbtn { background-color: var(--grey); }',
     '.dropdown.disabled .dropbtn { background-color: var(--grey); }',
@@ -249,7 +242,7 @@ import { NoteDialogComponent } from '@nusantara/pages/inventory/adjustment/note-
     '.dropdown button.dropbtn { display: flex; align-items: center;  border-radius: 0 4px 4px 0; }',
     '.confirm-warehouse-action  > button { flex: 1; }',
     '.confirm-warehouse-action .dropdown-content { right: 0; }',
-    '.dropdown-content button.confirm { width: 100%; }'
+    '.dropdown-content button.confirm { width: 100%; }',
   ]
 })
 export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdjustment> implements OnInit, AfterViewInit {
@@ -259,7 +252,6 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   @ViewChild(ConfirmModalReceivingOrderComponent) confirmModalReceiving: ConfirmModalReceivingOrderComponent;
   @ViewChild(CsvDialogComponent) csvDialog: CsvDialogComponent;
   @ViewChild(StockRecordDialogComponent) stockRecordDialog: StockRecordDialogComponent;
-  @ViewChild(NoteDialogComponent) noteDialog: NoteDialogComponent;
 
   warehouses: IWarehouse[];
   availableSubLocations: ISubLocation[] = [];
@@ -308,7 +300,6 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     this.confirmModalReceiving.onClose.subscribe(() => this.onConfirmModalClosed());
     this.csvDialog.onClose.subscribe(() => this.manualUploadClose());
     this.stockRecordDialog.onClose.subscribe(() => this.onStockRecordDialogClosed());
-    this.noteDialog.onClose.subscribe(() => this.onNoteDialogClosed());
   }
 
   initializeForm(entity?: IAdjustment): void {
@@ -391,12 +382,13 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
         sku: [{value: selectedStock.sku, disabled: true}],
         batch: [{value: selectedStock.batchNumber, disabled: true}],
         originalQuantity: [{value: selectedStock.originalQuantity, disabled: true}],
-        differenceQty: [selectedStock.originalQuantity, [Validators.min(0)]],
+        differenceQty: [selectedStock.originalQuantity, [Validators.min(0), Validators.max(10000)]],
         adjustmentQuantity: [null, [Validators.required, Validators.min(-32767), Validators.max(32767)]],
         created: [{value: selectedStock.created, disabled: true}],
         expiryDate: [{value: selectedStock.expiryDate, disabled: true}],
         reason: [this.reasonChoices[0].value, []],
-        notes: [null, []],
+        notes: [null, [Validators.maxLength(160)]],
+        showDetail: [false, []], // Only for show hide detail row
       });
 
       this.stockRecords.push(newReceiving);
@@ -643,6 +635,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
         created: [{value: selectedStock.created, disabled: true}],
         reason: [this.reasonChoices[0].value, []],
         notes: [null, []],
+        showDetail: [false, []], // Only for show hide detail row
       });
       this.stockRecords.controls[this.stockRecordDialog.stockRecordIndex] = newReceiving;
       this.ref.detectChanges();
@@ -683,21 +676,8 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
 
   }
 
-  addNote(index: number) {
-    const note = this.stockRecords.value[index].notes;
-    if (note !== null) {
-      this.noteDialog.form.get('note').setValue(note);
-    }
-    this.noteDialog.stockRecordIndex = index;
-    this.noteDialog.open();
-  }
-
-  onNoteDialogClosed() {
-    if (this.noteDialog.result === DialogResult.OK) {
-      const stockRecord = this.stockRecords.value[this.noteDialog.stockRecordIndex];
-      stockRecord.notes = this.noteDialog.note.value;
-      this.stockRecords.controls[this.noteDialog.stockRecordIndex].get('notes').setValue(this.noteDialog.note.value);
-    }
-    this.noteDialog.resetNote();
+  openDetail(index: number) {
+    const stockRecord = this.stockRecords.controls[index];
+    stockRecord.get('showDetail').setValue(!stockRecord.get('showDetail').value);
   }
 }
