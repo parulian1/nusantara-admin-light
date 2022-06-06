@@ -137,7 +137,19 @@ import { DomSanitizer } from '@angular/platform-browser';
             <th i18n>Reason</th>
             <th i18n>Note</th>
             <th i18n>Remove</th>
-            <th><i class="material-icons">more_vert</i></th>
+            <th>
+              <div class="dropdown">
+                <i class="material-icons">more_vert</i>
+                <div class="dropdown-content">
+                  <button (click)="toggleAllDetail(true)" class="toggle-all-detail-button" type="button">
+                    <span class="body-2">Expand all</span>
+                  </button>
+                  <button (click)="toggleAllDetail(false)" class="toggle-all-detail-button" type="button">
+                    <span class="body-2">Hide all</span>
+                  </button>
+                </div>
+              </div>
+            </th>
           </tr>
           </thead>
           <tbody>
@@ -174,7 +186,19 @@ import { DomSanitizer } from '@angular/platform-browser';
             <th i18n>Reason</th>
             <th i18n>Note</th>
             <th i18n>Remove</th>
-            <th><i class="material-icons">more_vert</i></th>
+            <th>
+              <div class="dropdown" [class.disabled]="stockRecords.controls.length == 0">
+                <i class="material-icons">more_vert</i>
+                <div class="dropdown-content">
+                  <button (click)="toggleAllDetail(true)" class="toggle-all-detail-button" type="button">
+                    <span class="body-2">Expand all</span>
+                  </button>
+                  <button (click)="toggleAllDetail(false)" class="toggle-all-detail-button" type="button">
+                    <span class="body-2">Hide all</span>
+                  </button>
+                </div>
+              </div>
+            </th>
           </tr>
           </thead>
           <tbody>
@@ -233,6 +257,12 @@ import { DomSanitizer } from '@angular/platform-browser';
     '.confirm-warehouse { display: grid; grid-template-columns: 3fr 1fr; grid-gap: 24px; }',
     '.product-list { margin-top: 24px; }',
     '.product-list > table > thead th {vertical-align: middle;}',
+    'th:nth-child(1) { min-width: 115px; }',
+    'th:nth-child(2) { width: 80px; }',
+    'th:nth-child(3) { width: 108px; }',
+    'th:nth-child(4) { width: 108px; }',
+    'th:nth-child(7) { width: 5%; }',
+    'th:last-child { width: 2%; }',
     '.dropdown.disabled:hover .dropdown-content { display: none; }',
     '.dropdown.disabled:hover .dropbtn { background-color: var(--grey); }',
     '.dropdown.disabled .dropbtn { background-color: var(--grey); }',
@@ -243,6 +273,25 @@ import { DomSanitizer } from '@angular/platform-browser';
     '.confirm-warehouse-action  > button { flex: 1; }',
     '.confirm-warehouse-action .dropdown-content { right: 0; }',
     '.dropdown-content button.confirm { width: 100%; }',
+    '.dropdown-content { right: 0; }',
+    `
+      .toggle-all-detail-button {
+        width: 100%;
+        height: 36px;
+        padding: 6px 16px;
+        display: block;
+        background: transparent;
+        border: none;
+        transition: all .5s;
+        color: var(--darken-grey);
+        text-align: left;
+      }
+
+      .toggle-all-detail-button:hover:not([disabled]) {
+        background: var(--bhisma-orange);
+        color: var(--white);
+      }
+    `
   ]
 })
 export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdjustment> implements OnInit, AfterViewInit {
@@ -679,5 +728,11 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   openDetail(index: number) {
     const stockRecord = this.stockRecords.controls[index];
     stockRecord.get('showDetail').setValue(!stockRecord.get('showDetail').value);
+  }
+  toggleAllDetail(status: boolean) {
+    // Open/close all detail row
+    this.stockRecords.controls.forEach(stock => {
+      stock.get('showDetail').setValue(status);
+    });
   }
 }

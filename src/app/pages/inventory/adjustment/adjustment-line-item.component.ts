@@ -68,12 +68,13 @@ import { IStockRecord } from '@nusantara/models/inventory';
         </button>
       </td>
       <td>
-        <button class="open-detail-button" [ngClass]="{'show': showDetail.value}" (click)="openDetail.emit()" type="button">
+        <button class="open-detail-button" [ngClass]="{'show': showDetail.value}" (click)="openDetail.emit()"
+                type="button">
           <i class="material-icons">expand_more</i>
         </button>
       </td>
     </tr>
-    <tr class="tid-detail-row" [ngClass]="{'show': showDetail.value}">
+    <tr class="td-detail-row" [ngClass]="{'show': showDetail.value}">
       <td colspan="8">
         <div class="stock-record-detail-info">
           <span><b>SKU</b> {{ sku.value }}</span>
@@ -92,41 +93,42 @@ import { IStockRecord } from '@nusantara/models/inventory';
     'td:nth-child(4) { width: 108px; }',
     'td:nth-child(7) { width: 5%; }',
     'td:last-child { width: 2%; }',
-    'td.add-note-action { padding: 6px 0; }',
     'td>div>input {float: left; width: 80%;}',
     'td>div>button {float: left; width: 20%;}',
     'resolve-button { border: none;}',
     `
-      .tid-detail-row {
+      .td-detail-row {
         height: 0;
-        transition: height 0.5s cubic-bezier(0, 1, 0, 1);
+        transition: height 0.8s ease-in-out;
         overflow: hidden;
       }
-      .tid-detail-row td {
-        padding: 0;
-        transition: padding 0.5s ease-in-out;
+
+      .td-detail-row td {
+        padding: 0 14px;
       }
-      .tid-detail-row td div {
+
+      .td-detail-row td div {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         width: 100%;
         box-sizing: border-box;
         max-height: 0;
-        transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
+        transition: max-height 0.8s ease-in-out;
         overflow: hidden;
       }
-      .tid-detail-row.show {
+
+      .td-detail-row.show {
         height: 48px;
-        transition: height 1s ease-in-out;
+        transition: height 0.8s ease-in-out;
       }
-      .tid-detail-row.show > td {
-        padding: 6px 14px;
+
+      .td-detail-row.show > td {
         border-bottom: 1px solid var(--grey);
-        transition: padding 1s ease-in-out;
       }
-      .tid-detail-row.show > td > div {
+
+      .td-detail-row.show > td > div {
         max-height: 48px;
-        transition: max-height 1s ease-in-out;
+        transition: max-height 0.8s ease-in-out;
       }
     `,
     `
