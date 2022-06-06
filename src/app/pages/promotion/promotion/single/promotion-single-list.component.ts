@@ -82,6 +82,11 @@ import { IProductPromotion } from '@nusantara/models';
     .tab.wide { justify-content: center; }
 
     .tab.wide div { flex-grow: 1; }
+
+    ::ng-deep li.promotions a#promotions {
+      background-color: #7B869B;
+      border-left: 6px solid var(--secondary);
+    }
     `
   ]
 })

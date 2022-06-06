@@ -449,6 +449,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
       this.form.controls.href.enable();
       this.form.controls.validTo.enable();
       this.form.controls.isActive.enable();
+      this.form.controls.promotionGroup.enable();
       this.minDateValidFrom = entity.validFrom;
       this.maxDateValidFrom = entity.validFrom;
     }
