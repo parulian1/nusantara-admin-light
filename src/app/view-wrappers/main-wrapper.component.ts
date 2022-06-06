@@ -109,7 +109,10 @@ const logger = new Logger('MainWrapperComponent');
             </span>
           <ul class="section-child">
             <li routerLinkActive="active" class="promotions">
-              <a id="promotions" [routerLink]="['/promotion/promo/campaign']" routerLinkActive="active" translate i18n>Promos</a>
+              <a id="promotions" [routerLink]="['/promotion/promo/campaign']"
+                 routerLinkActive="active" translate i18n>
+                Promos
+              </a>
             </li>
             <li routerLinkActive="active">
               <a [routerLink]="['/promotion/vouchers']" routerLinkActive="active" translate i18n>Vouchers</a>
