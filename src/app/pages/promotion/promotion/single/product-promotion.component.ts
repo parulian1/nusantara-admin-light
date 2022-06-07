@@ -214,13 +214,13 @@ const log = new Logger('ProductPromotionComponent');
         <nus-field-errors [control]="priority"></nus-field-errors>
       </label>
 
-      <label *ngIf="!isPromoBundling">
-        <span class="subtitle" i18n>Image</span>
-        <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Banner Image" class="preview">
-        <input type="file" [formControl]="banner" (change)="setImagePromoPreview($event)"
-               name="bannerImage" accept="image/*">
-        <nus-field-errors [control]="banner"></nus-field-errors>
-      </label>
+<!--      <label *ngIf="!isPromoBundling">-->
+<!--        <span class="subtitle" i18n>Image</span>-->
+<!--        <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Banner Image" class="preview">-->
+<!--        <input type="file" [formControl]="banner" (change)="setImagePromoPreview($event)"-->
+<!--               name="bannerImage" accept="image/*">-->
+<!--        <nus-field-errors [control]="banner"></nus-field-errors>-->
+<!--      </label>-->
 
       <div class="promo-customer-groups" >
         <span class="upload-product">
