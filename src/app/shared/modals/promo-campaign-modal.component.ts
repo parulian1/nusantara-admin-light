@@ -134,7 +134,7 @@ export class PromoCampaignModalComponent implements OnInit, AfterViewInit {
 
     // wait to see if the user is still typing, before we reload
     this.timeoutId = setTimeout(() => {
-      this.service.fetchList(this.searchText.value, 1, 10).subscribe((page) => {
+      this.service.fetchListWithInactive(this.searchText.value, 1, 10).subscribe((page) => {
         this.displayedResults = page;
       });
     }, this.reloadTimeout);
