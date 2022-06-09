@@ -62,7 +62,7 @@ const logger = new Logger('ProductComponent');
             class="control secondary btn"
             mat-button
             [matMenuTriggerFor]="downloadMenu"
-            (menuOpened)="open()" i18n
+            (menuOpened)="open()"
             (menuClosed)="close()">
             <span class="judul" i18n>View Product</span>
             <i id="transform" class="material-icons preview-icon">expand_more</i>
@@ -605,7 +605,7 @@ const logger = new Logger('ProductComponent');
         display: flex;
         flex-direction: row;
         align-items: flex-start;
-        padding: 8px 0px 8px 12px;
+        padding: 8px 0 8px 12px;
         /* UI / Darken White */
 
         background: #F4F4F4;
@@ -766,7 +766,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   productSlug: string;
   productFormType: string;
   virtualPackageAmount: number = null;
-  totalPrice: number = 0;
+  totalPrice = 0;
   marketplaceLink = [];
 
   isAdvancePriceAvailable = false;
@@ -914,8 +914,8 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     return this.form?.get('seoDescription') as FormControl;
   }
 
-  get subscription(): FormControl {
-    return this.form?.get('subscription') as FormControl;
+  get subscription(): FormGroup {
+    return this.form?.get('subscription') as FormGroup;
   }
 
   get marketplace(): FormGroup {
