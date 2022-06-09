@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { drf, products } from '@nusantara/models';
-import { AbstractListComponent } from '@nusantara/core';
+import {AbstractListComponent, getSlugFromHref} from '@nusantara/core';
 import { FormControl } from '@angular/forms';
 import { WarehouseService } from '@nusantara/services';
 
@@ -76,7 +76,9 @@ import { WarehouseService } from '@nusantara/services';
       </thead>
       <tbody>
       <tr *ngFor="let entity of page.entities">
-        <td><a [routerLink]="[entity|entityToSlug]">{{ entity.name }}</a></td>
+        <td>
+          <a [routerLink]="getFullSlug(entity)">{{ entity.name }}</a>
+        </td>
         <td>{{ entity.upc }}</td>
         <td class="numeric"><span *ngIf="entity.variants.length">{{ entity.variants.length }}</span></td>
         <td class="centered">
@@ -305,5 +307,13 @@ export class ProductListComponent extends AbstractListComponent<products.IProduc
           });
         }
     });
+  }
+
+  getFullSlug(entity: products.IProduct): string {
+    if (!entity?.parent) {
+      return getSlugFromHref(entity.href);
+    } else {
+      return `${getSlugFromHref(entity.parent)}/variants/${getSlugFromHref(entity.href)}`;
+    }
   }
 }

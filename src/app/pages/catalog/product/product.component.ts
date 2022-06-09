@@ -143,6 +143,8 @@ const log = new Logger('ProductComponent');
                 [productClass]="productClass"
                 [selectedProductClass]="selectedProductClass"
                 [originalAttributeValues]="originalAttributeValues"
+                [enabledAttributes]="enabledAttributes"
+                [parentProduct]="parentProduct"
                 *ngIf="originalAttributeValues">
               </nus-product-attribute-host>
             </div>
@@ -488,7 +490,8 @@ const log = new Logger('ProductComponent');
     <nus-product-online-selection-modal #productBundlingModal></nus-product-online-selection-modal>
     <nus-vendor-selection-modal #vendorModal></nus-vendor-selection-modal>
     <nus-category-selection-modal #categoryModal></nus-category-selection-modal>
-    <nus-product-class-selection-modal #productClassModal></nus-product-class-selection-modal>
+    <nus-product-class-selection-modal (productClassChanged)="onProductClassChanged(productClass.value)"
+                                       #productClassModal></nus-product-class-selection-modal>
     <nus-confirm-modal
       [title]="confirmAdvancedPriceTitle"
       [content]="confirmAdvancedPriceText">
@@ -613,6 +616,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     ' it might impact on the “Advance Price" as well.';
 
   productRelatedFormData: FormData[] = [];
+  enabledAttributes: INamedHrefEntity[] = [];
 
   @ViewChild(ProductMediaHostComponent) mediaHost: ProductMediaHostComponent;
   @ViewChild(PriceListHostComponent) priceListHost: PriceListHostComponent;
@@ -882,8 +886,14 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
     // listen for any changes to this, so we can disable weight when appropriate
     this.onProductClassChanged(this.productClass.value?.href ?? this.productClass.value);
-    this.productClass.valueChanges.subscribe(val => this.onProductClassChanged(val));
-
+    // #NOTE: this causing enabled attributes cannot keep their data since product class keep changed
+    //        onProductClassChanged called even though previous code already set that value
+    // this.productClass.valueChanges.subscribe(val => this.onProductClassChanged(val));
+    if (!this.parentProduct) {
+      this.enabledAttributes = entity?.enabledAttributes ?? [];
+    } else {
+      this.enabledAttributes = this.parentProduct.enabledAttributes ?? [];
+    }
   }
 
   initializeSubViewForms(entity?: products.IProduct) {
@@ -945,6 +955,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     delete (formValue as products.IProduct).priceLists;
     delete (this.form.value.marketplace);
 
+    formValue['enabledAttributes'] = this.enabledAttributes;
 
     return formValue;
   }
@@ -1034,8 +1045,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         this.marketplaceHost?.saveAll();
       }
     } else {
-      window.alert('Please check your input.');
       this.validatePriceList();
+    }
+    if(!this.form.errors) {
+      this.form.valid
     }
     this.form.enable();
   }
@@ -1107,7 +1120,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       if (!!res) {
         const productClass = res as IProductClass;
         // const productClass = this.productClasses.filter(e => e.href === newValue)[0];
-
+        if (!!this.selectedProductClass && this.selectedProductClass !== productClass) {
+          this.enabledAttributes = [];
+        }
         this.selectedProductClass = productClass;
         // const productClass = this.selectedProductClass;
 
@@ -1122,6 +1137,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
             this.dimensions.controls[key].disable();
           });
         }
+        this.form.setControl('attributes', this.fb.group({}));
       } else {
         this.selectedProductClass = null;
         this.weight.disable();
