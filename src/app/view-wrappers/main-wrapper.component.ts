@@ -1,10 +1,10 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AuthService, RequireIsEnterpriseGuard} from '@nusantara/auth';
-import {slideInAnimation} from '@nusantara/route-animations';
-import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router} from '@angular/router';
-import {SubscriptionLike} from 'rxjs';
-import {RequirePermissionGuard} from '@nusantara/auth/guards/require-permission.guard';
-import {Logger} from '@nusantara/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AuthService, RequireIsEnterpriseGuard } from '@nusantara/auth';
+import { slideInAnimation } from '@nusantara/route-animations';
+import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
+import { SubscriptionLike } from 'rxjs';
+import { RequirePermissionGuard } from '@nusantara/auth/guards/require-permission.guard';
+import { Logger } from '@nusantara/core';
 
 const logger = new Logger('MainWrapperComponent');
 
@@ -108,8 +108,11 @@ const logger = new Logger('MainWrapperComponent');
           <i class="material-icons expand-icon"></i>
             </span>
           <ul class="section-child">
-            <li routerLinkActive="active">
-              <a [routerLink]="['/promotion/promos']" routerLinkActive="active" translate i18n>Promos</a>
+            <li routerLinkActive="active" class="promotions">
+              <a id="promotions" [routerLink]="['/promotion/promo/campaign']"
+                 routerLinkActive="active" translate i18n>
+                Promos
+              </a>
             </li>
             <li routerLinkActive="active">
               <a [routerLink]="['/promotion/vouchers']" routerLinkActive="active" translate i18n>Vouchers</a>
