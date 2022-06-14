@@ -11,7 +11,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'nus-product-option-list',
   template: `
-    <nus-list-header title="Product Option"></nus-list-header>
+    <nus-list-header i18n-title title="Product Options"></nus-list-header>
 
     <nus-pagination [page]="page"></nus-pagination>
 

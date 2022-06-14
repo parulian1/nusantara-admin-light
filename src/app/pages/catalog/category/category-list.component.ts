@@ -8,6 +8,7 @@ import { ICategory } from '@nusantara/models';
   selector: 'nus-category-list',
   template: `
     <nus-list-header
+      i18n-title
       title="Categories"
       description="Groups related products together, so customers
                    can discover something-something">

@@ -28,7 +28,7 @@ import { of } from 'rxjs';
 @Component({
   selector: 'nus-inventory-receiving',
   template: `
-    <h1 i18n>Delivery Order</h1>
+    <h1 i18n>Delivery (Receiving)</h1>
 
     <form [formGroup]="form" (ngSubmit)="saveForm()">
       <div class="container">

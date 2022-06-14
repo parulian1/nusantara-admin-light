@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
   selector: 'nus-content-footer',
   template: `
     <nus-list-header i18n-title
-      title="Content Footer"
+      title="Content Footers"
       description="The Content Footer">
     </nus-list-header>
     <div class="filtering">
