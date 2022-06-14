@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'nus-advanced-price-product',
@@ -66,7 +66,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 export class AdvancedPriceProductComponent implements OnInit {
 
-  @Input() form: FormGroup;
+  @Input() form: AbstractControl;
   // @Input() type: string;
   @Input() defaultAmountSign: string;
   @Input() defaultAmountNumber: number;
@@ -177,6 +177,5 @@ export class AdvancedPriceProductComponent implements OnInit {
     this.amountSign.setErrors(errorObject);
     this.amount.setErrors(errorObject);
     this.errorInput = errorObject != null;
-    return;
   }
 }
