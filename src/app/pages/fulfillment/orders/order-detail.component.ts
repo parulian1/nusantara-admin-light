@@ -170,7 +170,9 @@ function isTSCOrder(orderData: order.IOrderDetail) {
                       [ngClass]="{
                         'shopee': this.orderDetailData.sourceName === 'shopee',
                         'tokopedia': this.orderDetailData.sourceName === 'tokopedia',
-                        'bukalapak': this.orderDetailData.sourceName === 'bukalapak'}"
+                        'bukalapak': this.orderDetailData.sourceName === 'bukalapak',
+                        'tiktok': this.orderDetailData.sourceName === 'tiktok'
+                      }"
                       href="{{ children.data[0].marketplaceRedirectHref }}"
                       target="_blank" i18n
                     >
@@ -383,10 +385,10 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   isRequestShipment = false;
 
   // marketplace list for custom handling download shipping label
-  customHandlingAWB = ['tokopedia', 'shopee', 'bukalapak', 'lazada'];
+  customHandlingAWB = ['tokopedia', 'shopee', 'bukalapak', 'lazada', 'tiktok'];
 
   // enable refresh AWB for following source name
-  enableRefreshAwb = ['tokopedia', 'shopee', 'bukalapak', 'lazada'];
+  enableRefreshAwb = ['tokopedia', 'shopee', 'bukalapak', 'lazada', 'tiktok'];
 
   constructor(
     public route: ActivatedRoute,
