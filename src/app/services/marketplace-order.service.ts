@@ -25,6 +25,7 @@ export class MarketplaceOrderService {
       `${this.baseMpUrl}order-logistic/${shopId}/logistic/${orderNumber}/`,
     );
   }
+  // download order tiktok
   getTikTokOrderCSV(slug:string) {
     return this.httpClient.get<any>(
       `${this.baseMpUrl}order-marketplace/${slug}/download/`, this.options

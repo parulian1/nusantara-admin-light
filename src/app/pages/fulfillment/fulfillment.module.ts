@@ -38,6 +38,7 @@ import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/mat
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import {MatRadioModule} from '@angular/material/radio';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
@@ -80,6 +81,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
+    MatRadioModule,
     MatCheckboxModule
   ],
   providers: [
