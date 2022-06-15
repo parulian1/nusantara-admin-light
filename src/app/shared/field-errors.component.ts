@@ -1,6 +1,6 @@
 import {SimpleChanges} from '@angular/core';
 import {Input, Component, OnInit, OnChanges} from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {FormControl, FormGroup} from '@angular/forms';
 
 /**
  * Shows error messages for a given angular form control, of the following types:
@@ -59,6 +59,6 @@ import {FormControl} from '@angular/forms';
   `
 })
 export class FieldErrorsComponent {
-  @Input() control?: FormControl;
+  @Input() control?: FormControl | FormGroup;
   @Input() alwaysShowError = true;
 }
