@@ -1,6 +1,6 @@
 import {SimpleChanges} from '@angular/core';
 import {Input, Component, OnInit, OnChanges} from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {FormControl, FormGroup} from '@angular/forms';
 
 /**
  * Shows error messages for a given angular form control, of the following types:
@@ -43,6 +43,9 @@ import {FormControl} from '@angular/forms';
       <div *ngIf="control?.errors?.fileType" i18n>
         Ensure this image type is  {{ control.getError('fileType')?.value }}
       </div>
+      <div *ngIf="control?.errors?.pattern" i18n>
+        Invalid char
+      </div>
       <div *ngIf="control?.errors?.fileSize" i18n>
         Ensure file size is lower than {{ control.getError('fileSize')?.value }} KB
       </div>
@@ -59,6 +62,6 @@ import {FormControl} from '@angular/forms';
   `
 })
 export class FieldErrorsComponent {
-  @Input() control?: FormControl;
+  @Input() control?: FormControl | FormGroup;
   @Input() alwaysShowError = true;
 }

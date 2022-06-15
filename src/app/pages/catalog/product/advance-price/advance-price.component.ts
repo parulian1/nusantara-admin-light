@@ -8,14 +8,15 @@ import {getSlugFromHref} from '@nusantara/shared/helpers';
   selector: 'nus-advance-price',
   template: `
     <h4 class="subheading-2" i18n>Advance Price</h4>
-    <ng-container *ngIf="entity$ | async as entity">
-      <table *ngIf="!!entity" class="product-advance-price">
-        <thead>
-        <tr>
-          <th i18n>Price List Name</th>
-        </tr>
-        </thead>
-        <tbody>
+
+    <table class="product-advance-price">
+      <thead>
+      <tr>
+        <th i18n>Price List Name</th>
+      </tr>
+      </thead>
+      <ng-container *ngIf="entity$ | async as entity">
+        <tbody *ngIf="!!entity">
         <ng-container *ngFor="let ent of entity; let i = index">
           <tr>
             <td>
@@ -25,9 +26,9 @@ import {getSlugFromHref} from '@nusantara/shared/helpers';
           </tr>
         </ng-container>
         </tbody>
-      </table>
-    </ng-container>
 
+      </ng-container>
+    </table>
   `,
   styles: []
 })

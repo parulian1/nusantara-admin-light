@@ -30,6 +30,7 @@ import {
   AdvancedPriceProductComponent, AdvancedPriceWarehouseModalComponent
 } from '@nusantara/pages/catalog/advanced-price';
 import { AdvancePriceComponent } from './product/advance-price/advance-price.component';
+import {MatButtonModule} from '@angular/material/button';
 
 
 @NgModule({
@@ -87,6 +88,7 @@ import { AdvancePriceComponent } from './product/advance-price/advance-price.com
     CatalogRoutingModule,
     DragDropModule,
     // Angular Material
+    MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
     MatSlideToggleModule,

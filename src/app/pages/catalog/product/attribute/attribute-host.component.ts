@@ -2,9 +2,11 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { FormGroup, FormBuilder, FormControl} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { AbstractEditingComponent } from '@nusantara/core';
+import {AbstractEditingComponent, Logger} from '@nusantara/core';
 import { INamedHrefEntity, products } from '@nusantara/models';
 import { IProductClass } from '@nusantara/models/products';
+
+const log = new Logger('ProductAttributeHostComponent');
 
 @Component({
   selector: 'nus-product-attribute-host',
@@ -63,7 +65,7 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
   @Input() parentProduct?: products.IProduct;
 
   formGroup: FormGroup;
-  isSameAsParent: boolean = false;
+  isSameAsParent = false;
 
   constructor(protected route: ActivatedRoute, protected fb: FormBuilder, private router: Router) { super(); }
 
@@ -90,7 +92,7 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
     if (!this.form.contains(attrDefinition.href)) {
       let defaultValue = this.originalAttributeValues[attrDefinition.href];
       if (attrDefinition.type === 'color' && !defaultValue) {
-        defaultValue = "#000000";
+        defaultValue = '#000000';
       }
       this.form.addControl(
         attrDefinition.href,
@@ -117,7 +119,9 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
   goToClass(): void {
     const slugs = this.productClass.value.split('/').reverse();
     const productClassSlug = slugs[0] ? slugs[0] : slugs[1];
-    this.router.navigate(['/catalog/product-classes', productClassSlug]);
+    this.router.navigate(['/catalog/product-classes', productClassSlug]).catch((reason) => {
+      log.error('goToClass-Error', reason);
+    });
   }
 
   resetAttributeValuesSameAsParent() {
