@@ -17,5 +17,5 @@ export const environment = {
     distributedTracingOrigins: [ ],
     ignoreTransactions: [],
   },
-  googleAnalytics: env.GA_MEASUREMENT_ID || 'G-JWQWGC80XR'
+  googleAnalytics: env.GA_MEASUREMENT_ID || 'G-SRHQS6T7J9'
 };

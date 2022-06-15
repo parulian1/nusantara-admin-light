@@ -9,7 +9,7 @@ import {saveAs} from 'file-saver';
   selector: 'nus-catalogue-list',
   template: `
     <nus-list-header
-      title="Catalogue File List"
+      title="Reseller Catalogs"
       [canSearch]="true"
       description="Uploaded catalog file" i18n-title>
     </nus-list-header>
