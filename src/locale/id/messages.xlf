@@ -6393,6 +6393,9 @@
       <trans-unit id="d4e0307e8468d06fc955e8a992d62f4463720217" datatype="html">
         <source>Promos</source>
         <target state="translated">Promo</target><context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/promotion/promotion/campaign/promotion-campaign-list.component.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/promotion/single/promotion-single-list.component.ts</context>
           <context context-type="linenumber">10</context>
         </context-group><context-group purpose="location">
@@ -6984,58 +6987,49 @@
         <source><x id="START_TAG_LABEL" ctype="x-label" equiv-text="&lt;label&gt;"/>Attributes<x id="CLOSE_TAG_LABEL" ctype="x-label" equiv-text="&lt;/label&gt;"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span *ngIf=&quot;!!parentProduct&quot;&gt;"/><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;checkbox&quot; class=&quot;toggle&quot; [(ngModel)]=&quot;isSameAsParent&quot;
                (click)=&quot;resetAttributeValuesSameAsParent()&quot;/&gt;"/> Data same as parent <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source><target state="new"><x id="START_TAG_LABEL" ctype="x-label" equiv-text="&lt;label&gt;"/>Attributes<x id="CLOSE_TAG_LABEL" ctype="x-label" equiv-text="&lt;/label&gt;"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span *ngIf=&quot;!!parentProduct&quot;&gt;"/><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;checkbox&quot; class=&quot;toggle&quot; [(ngModel)]=&quot;isSameAsParent&quot;
                (click)=&quot;resetAttributeValuesSameAsParent()&quot;/&gt;"/> Data same as parent <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
-        <context-group purpose="location">
+      <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/attribute/attribute-host.component.ts</context>
           <context context-type="linenumber">13,17</context>
-        </context-group>
-      </trans-unit><trans-unit id="09b149519f603c385f0be88d250a5db182424ee3" datatype="html">
+        </context-group></trans-unit><trans-unit id="09b149519f603c385f0be88d250a5db182424ee3" datatype="html">
         <source>Variant</source><target state="new">Variant</target>
-        <context-group purpose="location">
+      <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/attribute/attribute-host.component.ts</context>
           <context context-type="linenumber">25</context>
-        </context-group>
-      </trans-unit><trans-unit id="9de518d02c19a714ffe545b6809201bd5fb4ba85" datatype="html">
+        </context-group></trans-unit><trans-unit id="9de518d02c19a714ffe545b6809201bd5fb4ba85" datatype="html">
         <source>Search Product Name dan UPC</source><target state="new">Search Product Name dan UPC</target>
-        <context-group purpose="location">
+      <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/config/low-stock-config/low-stock-product-list.component.ts</context>
           <context context-type="linenumber">18</context>
-        </context-group>
-      </trans-unit><trans-unit id="35d096a1601168135d0c2e4ce38cfb071e65e5a9" datatype="html">
+        </context-group></trans-unit><trans-unit id="35d096a1601168135d0c2e4ce38cfb071e65e5a9" datatype="html">
         <source>Promotion</source><target state="new">Promo</target>
-        <context-group purpose="location">
+      <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/promotion/campaign/promotion-campaign-list.component.ts</context>
           <context context-type="linenumber">21</context>
-        </context-group>
-      </trans-unit><trans-unit id="573561e167068adf0528959f30427e37905025b8" datatype="html">
+        </context-group></trans-unit><trans-unit id="573561e167068adf0528959f30427e37905025b8" datatype="html">
         <source>Combination Promo</source><target state="new">Combination Promo</target>
-        <context-group purpose="location">
+      <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/promotion/campaign/promotion-campaign-list.component.ts</context>
           <context context-type="linenumber">34</context>
-        </context-group>
-      </trans-unit><trans-unit id="d89ce98e4a2b32ca76d76c3b6243ef5839306142" datatype="html">
+        </context-group></trans-unit><trans-unit id="d89ce98e4a2b32ca76d76c3b6243ef5839306142" datatype="html">
         <source>Combination</source><target state="new">Combination</target>
-        <context-group purpose="location">
+      <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/promotion/campaign/promotion-group.component.ts</context>
           <context context-type="linenumber">77</context>
-        </context-group>
-      </trans-unit><trans-unit id="1d9bb412c7f7e6f12a19b098b2fdab99e50e8b34" datatype="html">
+        </context-group></trans-unit><trans-unit id="1d9bb412c7f7e6f12a19b098b2fdab99e50e8b34" datatype="html">
         <source>Promo Campaign</source><target state="new">Promo Campaign</target>
-        <context-group purpose="location">
+      <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/promotion/single/product-promotion.component.ts</context>
           <context context-type="linenumber">258</context>
-        </context-group>
-      </trans-unit><trans-unit id="0638eb541b1e51efffced7756e98a9e90bfa3139" datatype="html">
+        </context-group></trans-unit><trans-unit id="0638eb541b1e51efffced7756e98a9e90bfa3139" datatype="html">
         <source>select</source><target state="new">select</target>
-        <context-group purpose="location">
+      <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/modals/promo-campaign-modal.component.ts</context>
           <context context-type="linenumber">43</context>
-        </context-group>
-      </trans-unit><trans-unit id="e897fb7df4e75ec4c85fd53728615bdc8a4c12d5" datatype="html">
+        </context-group></trans-unit><trans-unit id="e897fb7df4e75ec4c85fd53728615bdc8a4c12d5" datatype="html">
         <source> Promos </source><target state="new"> Promo </target>
-        <context-group purpose="location">
+      <context-group purpose="location">
           <context context-type="sourcefile">src/app/view-wrappers/main-wrapper.component.ts</context>
           <context context-type="linenumber">114,115</context>
-        </context-group>
-      </trans-unit></body>
+        </context-group></trans-unit></body>
   </file>
 </xliff>
