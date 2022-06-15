@@ -1445,11 +1445,11 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         for (let x = this.priceListHost.priceLists.first.rangeComponents.length; x > 1; x--) {
           this.priceListHost.priceLists.first.rangeComponents.get(x - 1).remove.emit(this.priceListHost.priceLists.first.rangeComponents.get(x - 1));
         }
-
+        this.priceListHost.priceLists.first.rangeComponents.get(0).price.setValue(this.price.value);
       } catch (e) {
         logger.error(e);
       }
-      this.priceListHost.priceLists.first.rangeComponents.get(0).price.setValue(this.price.value);
+
       // for (const priceList of this.entity?.priceLists ?? []) {
       //   priceList.ranges[0].price = this.price.value;
       //   // this.priceListHost.updatePriceList(priceList, 0);

@@ -52,7 +52,7 @@ describe('ProductComponent', () => {
       locations: [],
       isProgressive: false,
       ranges: [
-        {href: null, priceList: null, price: null, minQuantity: 1, maxQuantity: null}
+        {href: null, priceList: null, price: 10000, minQuantity: 1, maxQuantity: null}
       ]
     }],
     productClass: {
@@ -301,7 +301,11 @@ describe('ProductComponent', () => {
       },
       priceLists: [{
         href: 'https://superbearzz.dev.bisma.systems/api/catalog/price-list/685/',
-        ranges: [],
+        ranges: [
+          { href: 'https://superbearzz.dev.bisma.systems/api/catalog/price-list-range/685/',
+            priceList:  'https://superbearzz.dev.bisma.systems/api/catalog/price-list/685/',
+            price: 100, minQuantity: 1, maxQuantity: null}
+        ],
         type: 'default',
         isProgressive: false,
         product: 'https://superbearzz.dev.bisma.systems/api/catalog/product/pedang-edit/',
