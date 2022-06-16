@@ -127,7 +127,7 @@ function isTSCOrder(orderData: order.IOrderDetail) {
                       Ready
                     </button>
                     <button
-                      *ngIf="!isShipButtonHidden(children.data[0]) && orderDetailData.sourceName!='shopee' "
+                      *ngIf="!isShipButtonHidden(children.data[0]) && (orderDetailData.sourceName=='shopee' || orderDetailData.sourceName=='tiktok') "
                       type="button"
                       class="control"
                       (click)="requestShipmentAndUpdateOrder(children.data[0])"
@@ -136,7 +136,7 @@ function isTSCOrder(orderData: order.IOrderDetail) {
                       Ship
                     </button>
                     <button
-                      *ngIf="!isShipButtonHidden(children.data[0]) && orderDetailData.sourceName=='shopee' "
+                      *ngIf="!isShipButtonHidden(children.data[0]) && (orderDetailData.sourceName=='shopee' || orderDetailData.sourceName=='tiktok') "
                       type="button"
                       class="control"
                       (click)="openTransferModal()"
