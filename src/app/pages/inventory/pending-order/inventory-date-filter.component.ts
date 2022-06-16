@@ -133,6 +133,7 @@ export class InventoryDateFilterComponent implements OnInit {
   today: string;
   endday:string;
   yesterday: string;
+  yesterdayend:string;
   threeDaysbefore: string;
   sevenDaysbefore: string;
 
@@ -142,6 +143,7 @@ export class InventoryDateFilterComponent implements OnInit {
     this.today = this.utils.today;
     this.endday = this.utils.endDay;
     this.yesterday = this.utils.yesterday;
+    this.yesterdayend = this.utils.yesterdayend;
     this.threeDaysbefore = this.utils.threeDaysbefore;
     this.sevenDaysbefore = this.utils.sevenDaysbefore;
 
@@ -192,7 +194,7 @@ export class InventoryDateFilterComponent implements OnInit {
         this.updateSelectedDate("today", this.today, this.endday);
         break;
       case "yesterday":
-        this.updateSelectedDate("yesterday", this.yesterday, this.endday);
+        this.updateSelectedDate("yesterday", this.yesterday, this.yesterdayend);
         break;
       case "last3Days":
         this.updateSelectedDate("last3Days", this.threeDaysbefore, this.endday);

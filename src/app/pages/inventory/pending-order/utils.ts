@@ -6,6 +6,7 @@ export class Utils {
   get today() { return this.setTimeToZero(moment()); }
   get endDay() { return this.setTimeEndDay(moment()); }
   get yesterday() { return this.setTimeToZero(moment(moment().subtract(1, "days"))); }
+  get yesterdayend() { return this.setTimeEndDay(moment(moment().subtract(1, "days"))); }
   get threeDaysbefore() { return this.setTimeToZero(moment(moment().subtract(3, "days"))); }
   get sevenDaysbefore() { return this.setTimeToZero(moment(moment().subtract(7, "days"))); }
 
