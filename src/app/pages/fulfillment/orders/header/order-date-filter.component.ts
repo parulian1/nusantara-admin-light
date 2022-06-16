@@ -191,7 +191,7 @@ export class OrderDateFilterComponent implements OnInit {
         this.updateSelectedDate("today", this.today, this.today);
         break;
       case "yesterday":
-        this.updateSelectedDate("yesterday", this.yesterday, this.today);
+        this.updateSelectedDate("yesterday", this.yesterday, this.yesterday);
         break;
       case "last3Days":
         this.updateSelectedDate("last3Days", this.threeDaysbefore, this.today);
