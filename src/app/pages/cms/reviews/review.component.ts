@@ -31,7 +31,7 @@ import { ReviewService } from '@nusantara/services';
       </nus-detail-actions>
     </form>
   `,
-  styles: [``]
+
 })
 export class ReviewComponent extends AbstractDetailComponent<IReview> implements OnInit {
 

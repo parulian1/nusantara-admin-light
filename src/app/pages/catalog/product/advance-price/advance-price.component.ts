@@ -29,8 +29,7 @@ import {getSlugFromHref} from '@nusantara/shared/helpers';
 
       </ng-container>
     </table>
-  `,
-  styles: []
+  `
 })
 export class AdvancePriceComponent implements OnInit, OnChanges {
   @Input()

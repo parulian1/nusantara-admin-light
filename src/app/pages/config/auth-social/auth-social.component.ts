@@ -54,7 +54,7 @@ import { drf } from '../../../models';
       </nus-detail-actions>
     </form>
   `,
-  styles: []
+
 })
 export class AuthSocialComponent extends AbstractDetailComponent<IAuthSocial> implements OnInit{
 

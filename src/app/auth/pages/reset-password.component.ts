@@ -10,8 +10,7 @@ import {Component, OnInit} from '@angular/core';
     <form>
 
     </form>
-  `,
-  styles: []
+  `
 })
 export class ResetPasswordComponent implements OnInit {
 

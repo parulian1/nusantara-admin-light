@@ -12,8 +12,7 @@ import {Component, OnInit} from '@angular/core';
     <div>
       <a [routerLink]="['/auth/login']" i18n>Return to Login</a>
     </div>
-  `,
-  styles: []
+  `
 })
 export class ForgotPasswordSentComponent implements OnInit {
 

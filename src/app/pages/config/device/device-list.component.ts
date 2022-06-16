@@ -35,7 +35,7 @@ import { device } from '@nusantara/models';
       </tbody>
     </table>
   `,
-  styles: [],
+
 })
 export class DeviceListComponent extends AbstractListComponent<device.IDevice> {
   constructor(route: ActivatedRoute) { super(route); }

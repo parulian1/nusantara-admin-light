@@ -45,7 +45,7 @@ import { CustomerService } from '@nusantara/services';
       </form>
     </ngx-smart-modal>
   `,
-  styles: [ ]
+
 })
 export class UserSelectionModalComponent implements OnInit, AfterViewInit {
 

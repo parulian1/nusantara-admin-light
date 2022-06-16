@@ -57,7 +57,7 @@ import {IShopifyCarrier} from '@nusantara/models/shopify/shopify-carrier';
 
 <!--    <a (click)="registerWebhook()" class="control" ><i class="material-icons">add</i> Register Order Webhook</a>-->
   `,
-  styles: []
+
 })
 export class ShopifyWebhookComponent implements OnInit{
   entities: IShopifyWebhook[];

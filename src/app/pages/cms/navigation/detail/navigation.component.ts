@@ -77,8 +77,7 @@ import {ActivatedRoute, Router} from '@angular/router';
     <nus-navigation-children *ngIf="entity"
                              [children]="children">
     </nus-navigation-children>
-  `,
-  styles: []
+  `
 })
 export class NavigationComponent extends AbstractDetailComponent<INavigation> implements OnInit {
   flatPages: IFlatPage[] = [];

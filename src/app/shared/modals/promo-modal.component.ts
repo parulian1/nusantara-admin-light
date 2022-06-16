@@ -51,7 +51,7 @@ import {CustomerGroupService, ProductPromotionSingleService} from '@nusantara/se
       </form>
     </ngx-smart-modal>
   `,
-  styles: [ ]
+
 })
 export class PromoModalComponent implements OnInit, AfterViewInit {
 

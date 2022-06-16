@@ -37,7 +37,7 @@ import { AbstractListComponent } from '@nusantara/core';
 
     <nus-pagination [page]="page"></nus-pagination>
   `,
-  styles: [``]
+
 })
 export class ThemeListComponent extends AbstractListComponent<themes.ITheme> {
   constructor(route: ActivatedRoute) { super(route); }

@@ -74,7 +74,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
       </label>
 
       <label class="checkbox">
-        <input type="checkbox" formControlName="isManagedKgx" name="isManagedKgx" 
+        <input type="checkbox" formControlName="isManagedKgx" name="isManagedKgx"
         (change)="onIsManagedKgxChange( )" i18n> Is Managed by KGX
         <nus-field-errors [control]="form.get('isManagedKgx')"></nus-field-errors>
       </label>
@@ -126,7 +126,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
       </nus-detail-actions>
     </form>
   `,
-  styles: [``]
+
 })
 export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> implements OnInit {
 
@@ -159,7 +159,7 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
       subLocationTypes: drf.IChoice[],
       allWarehouses: IWarehouse[]
     }) => {
-      this.entity = data.entity; 
+      this.entity = data.entity;
       this.types = data.types;
       this.subLocationTypes = data.subLocationTypes;
 
@@ -186,7 +186,7 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
     });
     return this.form.value;
   }
-  
+
   initializeForm(entity?: IWarehouse) {
     this.form = this.fb.group({
       name: [entity?.name, [Validators.required, Validators.maxLength(50), ]],

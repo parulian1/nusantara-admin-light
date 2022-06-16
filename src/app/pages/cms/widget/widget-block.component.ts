@@ -71,7 +71,7 @@ import { IChoice } from '../../../models/drf';
 
     </form>
   `,
-  styles: [ ]
+
 })
 export class WidgetBlockComponent extends AbstractDetailComponent<IWidgetBlock> implements OnInit {
 

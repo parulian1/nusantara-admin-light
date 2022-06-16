@@ -38,7 +38,7 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
       <span class="subheading-1" i18n>
         Publishing Your Product ({{ order?.totalRecord?.published }}/{{order?.totalProduct}})
       </span>
-      <a [routerLink]="" (click)="loadAllData()" i18n>Refresh All</a>
+      <a [routerLink]="[]" (click)="loadAllData()" i18n>Refresh All</a>
     </div>
     <div>
       <nus-tabs>
@@ -124,7 +124,7 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
               <p i18n>Click "Reconnect" on each stores to fix this.</p>
             </div>
             <div>
-              <a [routerLink]="" (click)="fetchCredentialsError()" i18n>Refresh</a>
+              <a [routerLink]="[]" (click)="fetchCredentialsError()" i18n>Refresh</a>
             </div>
           </div>
           <nus-pagination-child
@@ -234,7 +234,7 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
               <p i18n>Click "Refresh" on each product or click "Refresh All" to reupload all products.</p>
             </div>
             <div>
-              <a [routerLink]="" (click)="refreshAllTimeoutError($event, receivingOrderId)" i18n>Refresh All</a>
+              <a [routerLink]="[]" (click)="refreshAllTimeoutError($event, receivingOrderId)" i18n>Refresh All</a>
             </div>
           </div>
           <nus-pagination-child
@@ -277,7 +277,7 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                   </div>
                 </td>
                 <td class="centered">
-                  <a [routerLink]="" (click)="refreshTimeoutError($event, product.identifier)" i18n>Refresh</a>
+                  <a [routerLink]="[]" (click)="refreshTimeoutError($event, product.identifier)" i18n>Refresh</a>
                 </td>
               </tr>
             </tbody>

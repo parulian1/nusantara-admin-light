@@ -1,7 +1,9 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
-import { version } from '../../package.json';
+import * as infoPackage from '../../package.json';
+const packageInfo = infoPackage;
+const version = packageInfo.version;
 import { env } from '@env/.env';
 
 export const environment = {

@@ -35,8 +35,7 @@ import { ActivatedRoute } from '@angular/router';
     </table>
 
     <nus-pagination [page]="page"></nus-pagination>
-  `,
-  styles: [``],
+  `
 })
 export class ContentFooterListComponent extends AbstractListComponent<IContentFooter>{
   constructor(route: ActivatedRoute) { super(route); }

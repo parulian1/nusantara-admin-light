@@ -31,8 +31,7 @@ import { getSlugFromHref } from '@nusantara/shared/helpers';
       </tr>
       </tbody>
     </table>
-  `,
-  styles: [``],
+  `
 })
 export class EmployeeAccessGroupHostComponent implements OnInit {
   @Input() entity?: IEmployee;

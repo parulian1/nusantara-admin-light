@@ -37,7 +37,7 @@ import { AbstractListComponent } from '@nusantara/core/components/abstract-list.
 
     <nus-pagination [page]="page"></nus-pagination>
   `,
-  styles: [ ]
+
 })
 export class ProductClassListComponent extends AbstractListComponent<products.IProductClass> {
   constructor(route: ActivatedRoute) { super(route); }

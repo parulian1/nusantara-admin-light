@@ -29,7 +29,7 @@ import { ActivatedRoute, Router } from '@angular/router';
       </nus-detail-actions>
     </form>
   `,
-  styles: [``]
+
 })
 export class ConfigCartDiscountComponent extends AbstractDetailComponent<IConfigCartDiscount> implements OnInit {
   entity?: IConfigCartDiscount;

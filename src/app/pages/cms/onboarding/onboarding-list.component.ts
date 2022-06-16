@@ -32,8 +32,7 @@ import {ActivatedRoute} from '@angular/router';
     </table>
 
     <nus-pagination [page]="page"></nus-pagination>
-  `,
-  styles: []
+  `
 })
 export class OnboardingListComponent extends AbstractListComponent<IOnBoarding> {
 

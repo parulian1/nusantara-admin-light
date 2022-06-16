@@ -40,7 +40,7 @@ import { AbstractListComponent } from '@nusantara/core';
 
     <nus-pagination [page]="page"></nus-pagination>
   `,
-  styles: [``]
+
 })
 export class CustomerListComponent extends AbstractListComponent<ICustomer> {
   constructor(route: ActivatedRoute) { super(route); }

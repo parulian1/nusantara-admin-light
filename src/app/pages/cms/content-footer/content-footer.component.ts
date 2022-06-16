@@ -84,8 +84,7 @@ import { ToastLevelEnum, ToastService } from '@nusantara/core/toast';
       *ngIf="entity"
       [children]="children">
     </nus-content-footer-children>
-  `,
-  styles: [``],
+  `
 })
 export class ContentFooterComponent extends AbstractDetailComponent<IContentFooter> implements OnInit {
   flatPages: IFlatPage[] = [];

@@ -41,8 +41,7 @@ import { Observable, of } from 'rxjs';
         </form>
       </div>
     </ng-container>
-  `,
-  styles: [``],
+  `
 })
 export class ConfigChatServiceComponent implements OnInit {
   isLoaded = false;

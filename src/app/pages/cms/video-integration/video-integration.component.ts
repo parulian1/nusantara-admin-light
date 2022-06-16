@@ -93,7 +93,7 @@ import { getYoutubeIdFromUrl, youtubeUrl, youtubeUrlValidator } from './utils';
       </nus-detail-actions>
     </form>
   `,
-  styles: [``]
+
 })
 export class VideoIntegrationComponent extends AbstractDetailComponent<IVideoIntegrationItem> implements OnInit {
   typeChoices: { value: string, displayName: string }[] = [

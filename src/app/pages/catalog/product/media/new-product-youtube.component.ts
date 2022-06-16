@@ -33,7 +33,7 @@ import { GoogleService } from '@nusantara/services';
       </form>
     </ngx-smart-modal>
   `,
-  styles: [ ]
+
 })
 export class NewProductYoutubeComponent extends AbstractEditingComponent implements OnInit, AfterViewInit {
 
