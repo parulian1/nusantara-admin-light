@@ -689,7 +689,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   readonly MAX_TAG_LENGTH = 20;
   readonly MAX_PRICE = 999999999;
   readonly MAX_DIMENSION = 9999;
-  readonly MIN_WEIGHT = 0.001;
+  readonly MIN_WEIGHT = 0.01;
 
   productClasses: Array<products.IProductClass>;
   categories: Array<ICategory>;
