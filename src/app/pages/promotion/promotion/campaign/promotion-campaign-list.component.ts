@@ -8,7 +8,7 @@ import { DatePipe  } from '@angular/common';
 @Component({
   selector: 'nus-promotion-campaign-list',
   template: `
-    <h1 class="title-1">Promotion</h1>
+    <h1 class="title-1" i18n>Promos</h1>
     <div class="tab">
       <div [class.active]="true">
         <strong>Campaign</strong>

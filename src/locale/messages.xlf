@@ -7687,6 +7687,21 @@
           <context context-type="linenumber">147,148</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="d4e0307e8468d06fc955e8a992d62f4463720217" datatype="html">
+        <source>Promos</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/promotion/promotion/campaign/promotion-campaign-list.component.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/promotion/promotion/single/promotion-single-list.component.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/promotion/promotion/single/promotion-single-list.component.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="35d096a1601168135d0c2e4ce38cfb071e65e5a9" datatype="html">
         <source>Promotion</source>
         <context-group purpose="location">
@@ -7835,17 +7850,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/promotion/single/product-promotion.component.ts</context>
           <context context-type="linenumber">258</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="d4e0307e8468d06fc955e8a992d62f4463720217" datatype="html">
-        <source>Promos</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/promotion/promotion/single/promotion-single-list.component.ts</context>
-          <context context-type="linenumber">10</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/promotion/promotion/single/promotion-single-list.component.ts</context>
-          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d84dce0c01da3e8aae98d2960cccbe4dfc098013" datatype="html">
