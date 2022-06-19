@@ -20,7 +20,7 @@ export class MarketplaceOrderService {
   }
 
   // to fetch logistic info from shopee ONLY
-  fetchLogisticInfo(orderNumber: string, shopId: number): Observable<any> {
+  fetchLogisticInfo(orderNumber: string, shopId: string): Observable<any> {
     return this.httpClient.get<any>(
       `${this.baseMpUrl}order-logistic/${shopId}/logistic/${orderNumber}/`,
     );
