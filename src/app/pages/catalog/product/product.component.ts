@@ -1054,7 +1054,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       href: [entity?.href],
       upc: [entity?.upc, [Validators.required,
         Validators.maxLength(this.UPC_MAX_LENGTH),
-        Validators.pattern('^[A-Z0-9]+$')]],
+        Validators.pattern('^[A-Z0-9a-z-]+$')]],
       structure: [entity?.structure ?? 'parent', [Validators.required,]],
       description: [entity?.description, [
         Validators.required,
