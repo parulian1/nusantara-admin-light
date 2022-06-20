@@ -3,8 +3,8 @@ trigger:
   - hotfix/*
   - master
 
-pool:
-  vmImage: ubuntu-20.04
+pool: docker-agent
+#  vmImage: ubuntu-20.04
 
 variables:
   - group: nusantara-web-pipeline-build
