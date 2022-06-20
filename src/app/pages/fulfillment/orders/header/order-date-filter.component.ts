@@ -132,6 +132,7 @@ export class OrderDateFilterComponent implements OnInit {
 
   today: string;
   yesterday: string;
+  yesterdayend:string
   threeDaysbefore: string;
   sevenDaysbefore: string
 
@@ -141,6 +142,7 @@ export class OrderDateFilterComponent implements OnInit {
     var utils = new Utils();
     this.today = utils.today;
     this.yesterday = utils.yesterday;
+    this.yesterdayend = utils.yesterdayend;
     this.threeDaysbefore = utils.threeDaysbefore;
     this.sevenDaysbefore = utils.sevenDaysbefore;
 
@@ -191,7 +193,7 @@ export class OrderDateFilterComponent implements OnInit {
         this.updateSelectedDate("today", this.today, this.today);
         break;
       case "yesterday":
-        this.updateSelectedDate("yesterday", this.yesterday, this.yesterday);
+        this.updateSelectedDate("yesterday", this.yesterday, this.yesterdayend);
         break;
       case "last3Days":
         this.updateSelectedDate("last3Days", this.threeDaysbefore, this.today);

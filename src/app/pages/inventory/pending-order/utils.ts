@@ -1,3 +1,4 @@
+import { end } from "iso8601-duration";
 import * as moment from "moment";
 
 const apiDateFormat = "YYYY-MM-DDTHH:mm:ss";
@@ -24,7 +25,7 @@ export class Utils {
 
   getDateOption(startTime: string, endTime: string): string {
     if (startTime && endTime) {
-      if (endTime === this.endDay) {
+      if (endTime === this.endDay || endTime === this.today) {
         if (startTime === this.today) {
           return "today";
         } else if (startTime === this.yesterday) {

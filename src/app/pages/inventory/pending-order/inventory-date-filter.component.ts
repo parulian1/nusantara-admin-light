@@ -194,7 +194,7 @@ export class InventoryDateFilterComponent implements OnInit {
         this.updateSelectedDate("today", this.today, this.endday);
         break;
       case "yesterday":
-        this.updateSelectedDate("yesterday", this.yesterday, this.yesterdayend);
+        this.updateSelectedDate("yesterday", this.yesterday, this.today);
         break;
       case "last3Days":
         this.updateSelectedDate("last3Days", this.threeDaysbefore, this.endday);

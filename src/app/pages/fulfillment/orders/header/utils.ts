@@ -5,6 +5,7 @@ const apiDateFormat = "YYYY-MM-DDTHH:mm:ss";
 export class Utils {
   get today() { return this.setTimeToZero(moment()); }
   get yesterday() { return this.setTimeToZero(moment(moment().subtract(1, "days"))); }
+  get yesterdayend() { return this.setTimeEndDay(moment(moment().subtract(1, "days"))); }
   get threeDaysbefore() { return this.setTimeToZero(moment(moment().subtract(3, "days"))); }
   get sevenDaysbefore() { return this.setTimeToZero(moment(moment().subtract(7, "days"))); }
 
@@ -14,9 +15,15 @@ export class Utils {
       .format(apiDateFormat);
   }
 
+  setTimeEndDay(date: moment.Moment): string {
+    return date
+      .set({ hour: 23, minute: 59, second: 59, millisecond: 999 })
+      .format(apiDateFormat);
+  }
+
   getDateOption(startTime: string, endTime: string): string {
     if (startTime && endTime) {
-      if (endTime === this.today) {
+      if (endTime === this.today || endTime === this.yesterdayend) {
         if (startTime === this.today) {
           return "today";
         } else if (startTime === this.yesterday) {
