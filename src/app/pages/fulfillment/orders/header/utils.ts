@@ -21,13 +21,11 @@ export class Utils {
       .format(apiDateFormat);
   }
 
-  getDateOption(startTime: string, endTime: string): string {
+  getDateOption(startTime: string, endTime: string, isCustomDate?:boolean, isDateRange?:boolean): string {
     if (startTime && endTime) {
-      if (endTime === this.today || endTime === this.yesterdayend) {
+      if (endTime === this.today && !isDateRange && !isCustomDate) {
         if (startTime === this.today) {
           return "today";
-        } else if (startTime === this.yesterday) {
-          return "yesterday";
         } else if (startTime === this.threeDaysbefore) {
           return "last3Days";
         } else if (startTime === this.sevenDaysbefore) {
@@ -35,7 +33,10 @@ export class Utils {
         } else {
           return "customRange";
         }
-      } else if (moment(endTime).diff(moment(startTime), "days") === 0) {
+      } else if (startTime === this.yesterday && endTime === this.yesterday && !isCustomDate && !isDateRange){
+        return "yesterday";
+      } else if (moment(endTime).diff(moment(startTime), "days") === 0 && !isDateRange) {
+        console.log(!isDateRange)
         return "customDate";
       } else {
         return "customRange";
