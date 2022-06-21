@@ -6,7 +6,7 @@ import { FormControl } from '@angular/forms';
   selector: 'nus-list-header',
   template: `
     <header>
-      <h1 class="title-1">{{ title }}</h1>
+      <h1 class="title-1" *ngIf="!!showTitle">{{ title }}</h1>
       <p *ngIf="!!description">{{ description }}</p>
       <div>
         <div class="search control" *ngIf="canSearch">
@@ -54,6 +54,7 @@ export class ListHeaderComponent implements OnInit {
   @Input() description: string;
   @Input() canAddNew = true;
   @Input() canSearch = true;
+  @Input() showTitle = true;
 
   timeoutId: any;
   reloadTimeout = 650;

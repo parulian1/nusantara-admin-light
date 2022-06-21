@@ -44,14 +44,18 @@ import { GetUserDisplayNamePipe } from './get-user-display-name.pipe';
 import { StockRecordSelectionModalComponent } from '@nusantara/shared/stock-record-selection-modal.component';
 import { ConfirmModalResetPinComponent } from '@nusantara/shared/confirm-modal-reset-pin.component';
 import { CsvDialogComponent } from './csv-dialog/csv-dialog.component';
-import {VendorSelectionModalComponent} from '@nusantara/shared/vendor-selection-modal/vendor-selection-modal.component';
+import { VendorSelectionModalComponent } from '@nusantara/shared/vendor-selection-modal/vendor-selection-modal.component';
 import { CategorySelectionModalComponent } from './modals/category-selection-modal.component';
 import { ProductClassSelectionModalComponent } from './modals/product-class-selection-modal.component';
 import { WarehouseLocationModalComponent } from './modals/warehouse-location-modal.component';
 import { ClickOutsideDirective } from './click-outside.directive';
 import { ProductOnlineSelectionModalComponent } from '@nusantara/shared/product-online-selection-modal.component';
 import { FieldLengthCounterComponent } from './field-length-counter/field-length-counter.component';
+import { DynamicFilterPipe } from './dynamic-filter.pipe';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
+import { PromoModalComponent } from '@nusantara/shared/modals/promo-modal.component';
+import { PromoTypeToLabelPipe } from '@nusantara/shared/promo-type-to-label.pipe';
+import { PromoCampaignModalComponent } from '@nusantara/shared/modals/promo-campaign-modal.component';
 
 
 /**
@@ -63,6 +67,7 @@ import { ProgressBarComponent } from './progress-bar/progress-bar.component';
     EntityToSlugPipe,
     CamelToHumanizedPipe,
     GetUserDisplayNamePipe,
+    PromoTypeToLabelPipe,
     PaginationComponent,
     DetailTitleComponent,
     DetailActionsComponent,
@@ -106,12 +111,16 @@ import { ProgressBarComponent } from './progress-bar/progress-bar.component';
     ClickOutsideDirective,
     ProductOnlineSelectionModalComponent,
     FieldLengthCounterComponent,
-    ProgressBarComponent
+    DynamicFilterPipe,
+    ProgressBarComponent,
+    PromoModalComponent,
+    PromoCampaignModalComponent
   ],
   exports: [
     EntityToSlugPipe,
     CamelToHumanizedPipe,
     GetUserDisplayNamePipe,
+    PromoTypeToLabelPipe,
     PaginationComponent,
     DetailTitleComponent,
     ListHeaderComponent,
@@ -154,7 +163,10 @@ import { ProgressBarComponent } from './progress-bar/progress-bar.component';
     ClickOutsideDirective,
     ProductOnlineSelectionModalComponent,
     FieldLengthCounterComponent,
-    ProgressBarComponent
+    DynamicFilterPipe,
+    ProgressBarComponent,
+    PromoModalComponent,
+    PromoCampaignModalComponent
   ],
   imports: [
     CommonModule,

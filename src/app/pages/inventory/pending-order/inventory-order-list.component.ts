@@ -15,7 +15,7 @@ import { IOrderFilterValue } from '@nusantara/models/order/filter';
   selector: 'nus-pending-order-list',
   template: `
     <nus-list-header i18n-title
-      title="Inventory Orders"
+      title="Pending Orders"
       [canAddNew]="false">
     </nus-list-header>
 

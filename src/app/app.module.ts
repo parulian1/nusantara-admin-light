@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { JwtModule } from '@auth0/angular-jwt';
-import { ApmService, ApmErrorHandler } from '@elastic/apm-rum-angular';
+import {ApmService, ApmErrorHandler, ApmModule} from '@elastic/apm-rum-angular';
 import { environment } from '@env/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
@@ -24,6 +24,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     MainWrapperComponent,
   ],
   imports: [
+    ApmModule,
     BrowserModule,
     BrowserAnimationsModule,
     CoreModule,
@@ -62,11 +63,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
       useClass: ApiPrefixInterceptor,
       multi: true
     },
-    {
-      provide: ApmService,
-      useClass: ApmService,
-      deps: [Router]
-    },
+    ApmService,
     {
       provide: ErrorHandler,
       useClass: ApmErrorHandler
@@ -80,7 +77,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor(@Inject(ApmService) apm: ApmService) {
-    apm.init(environment.elasticAPM);
+  constructor(apmService: ApmService) {
+    const apm = apmService.init(environment.elasticAPM);
   }
 }

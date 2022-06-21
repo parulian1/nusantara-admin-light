@@ -15,7 +15,7 @@ import { IProductClass } from '@nusantara/models/products';
 @Component({
   selector: 'nus-inventory-transfer',
   template: `
-    <h1 class="title-1" i18n>Transfer Inventory Order</h1>
+    <h1 class="title-1" i18n>Transfer</h1>
 
     <form [formGroup]="form" (ngSubmit)="save()">
 

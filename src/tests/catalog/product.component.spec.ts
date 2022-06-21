@@ -12,7 +12,7 @@ import {AdvancedPriceListService, ProductRelatedService, SiteConfigService} from
 import {PriceListHostComponent} from '@nusantara/pages/catalog/product/price';
 import {IPriceList, IProductClass} from '@nusantara/models/products';
 import {StockInputComponent} from '@nusantara/pages/catalog/product/stock-input/stock-input.component';
-import {MockComponent, MockComponents} from 'ng-mocks';
+import {MockComponent, MockComponents, ngMocks} from 'ng-mocks';
 // import {StockInputComponent} from '@nusantara/pages/catalog/product/stock-input/stock-input.component';
 // import {MarketplaceInfoHostComponent} from '@nusantara/pages/catalog/product/marketplace';
 import {ProductMediaHostComponent} from '@nusantara/pages/catalog/product/media';
@@ -52,7 +52,7 @@ describe('ProductComponent', () => {
       locations: [],
       isProgressive: false,
       ranges: [
-        {href: null, priceList: null, price: null, minQuantity: 1, maxQuantity: null}
+        {href: null, priceList: null, price: 10000, minQuantity: 1, maxQuantity: null}
       ]
     }],
     productClass: {
@@ -238,7 +238,8 @@ describe('ProductComponent', () => {
       type: 'physical',
     }, {status: 200, statusText: 'OK'}));
     fixture.detectChanges();
-
+    const isValidFormSpy = spyOn(component, 'isValidForm');
+    isValidFormSpy.and.returnValue(true);
     component.save();
 
     const mock = httpTestingController.expectOne('/api/catalog/product/');
@@ -300,7 +301,11 @@ describe('ProductComponent', () => {
       },
       priceLists: [{
         href: 'https://superbearzz.dev.bisma.systems/api/catalog/price-list/685/',
-        ranges: [],
+        ranges: [
+          { href: 'https://superbearzz.dev.bisma.systems/api/catalog/price-list-range/685/',
+            priceList:  'https://superbearzz.dev.bisma.systems/api/catalog/price-list/685/',
+            price: 100, minQuantity: 1, maxQuantity: null}
+        ],
         type: 'default',
         isProgressive: false,
         product: 'https://superbearzz.dev.bisma.systems/api/catalog/product/pedang-edit/',
@@ -376,6 +381,9 @@ describe('ProductComponent', () => {
     }, {status: 200, statusText: 'OK'}));
     fixture.detectChanges();
     httpTestingController.verify();
+
+    const isValidFormSpy = spyOn(component, 'isValidForm');
+    isValidFormSpy.and.returnValue(true);
     component.save();
 
     const mock = httpTestingController.expectOne(editProductResp.href);

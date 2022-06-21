@@ -231,33 +231,37 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
             this.form.controls[prop].setErrors({apiError: errorMessage[prop]});
             errorMessage[prop].forEach((_error, index) => {
               Object.keys(errorMessage[prop][index]).forEach((key) => {
-                let formArray = this.form.controls[prop] as FormArray;
-                Object.keys(errorMessage[prop][index][key]).forEach((bottomError) => {
-                  formArray?.controls?.map((control, arrayIndex) => {
-                    if (arrayIndex === index) {
-                      let childError = errorMessage[prop][index][key][bottomError];
-                      const childFormControl = (control as FormGroup).controls;
-                      let _control;
-                      if (childFormControl[key] instanceof FormArray) {
-                        _control = (childFormControl[key] as FormArray).controls[bottomError];
-                      } else if (childFormControl[key] instanceof FormGroup) {
-                         _control = ((control as FormGroup).controls[key] as FormGroup);
-                      } else {
-                        _control = childFormControl[key];
-                      }
-                      if (!!_control) {
-                        let apiError = childError;
-                        if (childError instanceof Array) {
-                          apiError = childError[0];
+                const formControl = this.form.controls[prop];
+                if (formControl instanceof FormArray) {
+                  let formArray = this.form.controls[prop] as FormArray;
+                  Object.keys(errorMessage[prop][index][key]).forEach((bottomError) => {
+                    formArray?.controls?.map((control, arrayIndex) => {
+                      if (arrayIndex === index) {
+                        let childError = errorMessage[prop][index][key][bottomError];
+                        const childFormControl = (control as FormGroup).controls;
+                        let _control;
+                        if (childFormControl[key] instanceof FormArray) {
+                          _control = (childFormControl[key] as FormArray).controls[bottomError];
+                        } else if (childFormControl[key] instanceof FormGroup) {
+                           _control = ((control as FormGroup).controls[key] as FormGroup);
+                        } else {
+                          _control = childFormControl[key];
                         }
-                        _control.setErrors({
-                          apiError: apiError
-                        });
+                        if (!!_control) {
+                          let apiError = childError;
+                          if (childError instanceof Array) {
+                            apiError = childError[0];
+                          }
+                          _control.setErrors({
+                            apiError: apiError
+                          });
+                        }
+                        control = _control;
                       }
-                      control = _control;
-                    }
+                    });
                   });
-                });
+                }
+
               });
             });
         }

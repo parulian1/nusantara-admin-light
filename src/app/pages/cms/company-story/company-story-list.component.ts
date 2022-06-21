@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
   selector: 'nus-company-story-list',
   template: `
     <nus-list-header
-      title="Company Story List"
+      title="Company Story"
       [canSearch]="false"
       description="Static content for pages such as 'About-Us'" i18n-title>
     </nus-list-header>

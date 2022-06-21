@@ -8,7 +8,7 @@ import { AbstractListComponent } from '@nusantara/core';
   selector: 'nus-voucher-list',
   template: `
     <nus-list-header i18n-title
-      title="Voucher">
+      title="Vouchers">
     </nus-list-header>
     <div class="filtering">
       <nus-include-deleted></nus-include-deleted>

@@ -15,7 +15,8 @@ import {MatSelectChange} from '@angular/material/select';
       <div class="list-page-header">
         <div class="search control">
           <i class="material-icons" i18n>search</i>
-          <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Product Name or SKU">
+          <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Product Name dan UPC"
+                 i18n-placeholder>
         </div>
         <div class="filter">
           <mat-form-field>
