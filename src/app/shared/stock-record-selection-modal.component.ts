@@ -24,7 +24,7 @@ import { map } from 'rxjs/operators';
       <form #modalForm class="fluid">
         <div class="search">
           <i class="material-icons">search</i>
-          <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Product Name or SKU">
+          <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Product Name, SKU, or Batch">
         </div>
         <input type="hidden" [formControl]="stockRecord">
         <p i18n>Showing 10 recently added product records. Search product name or SKU to find more products.</p>
