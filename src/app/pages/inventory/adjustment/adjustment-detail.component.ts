@@ -53,10 +53,10 @@ import { AuthService } from '@nusantara/auth';
       <table id="general-table-product">
         <thead>
         <tr>
-          <th i18n>
+          <th class="product-name" i18n>
             Receiving ID / Product Name / Location
           </th>
-          <th i18n>sku</th>
+          <th class="product-sku" i18n>sku</th>
           <th i18n>Receiving Date</th>
           <th i18n>Available Stock When Transaction Request occured</th>
           <th i18n>Actual Stock from receiving order</th>
@@ -129,7 +129,9 @@ import { AuthService } from '@nusantara/auth';
     '#general-table-product thead{background-color: #F4F4F4;}',
     'table#general-table-product{}',
     'div.detail-actions { display: flex }',
-    'button.danger { margin-left: auto }'
+    'button.danger { margin-left: auto }',
+    '.product-name { width: 20%; }',
+    '.product-sku { width: 10%; }',
   ]
 })
 export class AdjustmentDetailComponent  extends AbstractDetailComponent<IAdjustmentReadOnly> implements OnInit {
