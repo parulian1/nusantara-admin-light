@@ -47,6 +47,7 @@ import {MatSelectChange} from '@angular/material/select';
         <thead>
         <tr>
           <th i18n>Name</th>
+          <th i18n>UPC</th>
           <th i18n>Warehouse</th>
           <th i18n>Location</th>
           <th i18n>Qty</th>
@@ -55,6 +56,7 @@ import {MatSelectChange} from '@angular/material/select';
         <tbody *ngIf="displayedResults?.totalResults > 0">
         <tr *ngFor="let entity of displayedResults.entities">
           <td>{{entity.name}}</td>
+          <td>{{entity.upc}}</td>
           <td>{{entity.warehouseName}}</td>
           <td>{{entity.sublocationName}} ({{entity.sublocationType}})</td>
           <td>{{entity.latestStock}}</td>
