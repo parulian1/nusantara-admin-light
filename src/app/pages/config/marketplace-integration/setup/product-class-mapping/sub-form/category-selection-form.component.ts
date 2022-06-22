@@ -34,6 +34,18 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
             <span>{{ productClassName }}</span>
           </label>
 
+          <div class="wrapper-sync">
+            <div class="container">
+              <div>
+                <p class="latest">Latest Update</p>
+                <span><b>Date</b></span>
+              </div>
+              <div class="button-sync">
+                <button class="control secondary ghost">Sync Category</button>
+              </div>
+            </div>
+          </div>
+
           <ng-container formArrayName="categories">
             <nus-category-group-control
               [categories]="categories"
@@ -56,6 +68,10 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
   `,
   styles: [
     `.wrapper { padding: 16px 24px; border: solid 1px var(--grey); border-radius: 4px; width: 60vw; margin-bottom: 20px; }`,
+    `.wrapper-sync { padding: 12px 22px; border: solid 1px var(--grey); border-radius: 4px; width: 57.5vw; margin-bottom: 20px; }`,
+    '.latest {padding-top: 6px; margin: 0;}',
+    '.button-sync{padding-top: 3px; padding-left: 20px;}',
+    '.container{display: grid; grid-template-columns: 1fr .15fr; grid-column-gap: 16px;}',
     'p {color: var(--darken-grey); }',
     '.form { margin-top: 20px; }',
     'label { margin-bottom: 12px; min-height: 0; }',
