@@ -54,9 +54,8 @@ const log = new Logger('ProductComponent');
                 <input type="number"
                     [formControl]="price"
                     name="price"
-                    min="0"
+                    min="1"
                     appOnlyNumber
-                    decimal="true"
                     placeholder="Price"
                     data-qa="price"/>
                 <nus-field-errors [control]="price"></nus-field-errors>
@@ -120,9 +119,8 @@ const log = new Logger('ProductComponent');
                       <input type="number"
                       formControlName="price"
                       name="price"
-                      min="0"
+                      min="1"
                       appOnlyNumber
-                      decimal="true"
                       placeholder="Price"
                       data-qa="price"
                       >
@@ -261,7 +259,7 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
     this.form = this.fb.group({
       name: [entity.name, [Validators.required, Validators.maxLength(120), forbiddenNameValidator(/[^a-zA-Z0-9 \\\]/_[&.!+-]/)]],
       upc: [entity?.upc, [Validators.required, ]],
-      price: [entity?.price, [Validators.required, Validators.minLength(0), Validators.max(999999999)]],
+      price: [entity?.price, [Validators.required, Validators.min(1000), Validators.max(100000000)]],
       marketplaces:this.fb.array([]),
     });
     this.setMarketplace();
@@ -329,7 +327,7 @@ export class MarketplaceProductEditComponent extends AbstractDetailComponent<mar
           isActive:[p.isActive],
           stock: [p.stock,  [Validators.required, Validators.minLength(0), Validators.max(999999999), warehouseStockValidator(this.tempat)]],
           name: [p.name, [Validators.required, Validators.maxLength(120), forbiddenNameValidator(/[^a-zA-Z0-9 \\\]/_[&.!+-]/)]],
-          price:[p.price, [Validators.required, Validators.minLength(0), Validators.max(999999999)]],
+          price:[p.price, [Validators.required, Validators.min(1000), Validators.max(100000000)]],
           shop:[p.shop],
           shopId:[p.shopId],
           marketplace:[p.marketplace],
