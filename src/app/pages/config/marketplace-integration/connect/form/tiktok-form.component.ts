@@ -166,7 +166,7 @@ export class TiktokFormComponent implements OnInit {
 
   onConnect() {
     this.service.connect(this.getFormValue()).subscribe(
-      (resp: marketplace.IShopeeAuthResponse) => {
+      (resp: marketplace.ITiktokAuthResponse) => {
         this.showSignInWindow(resp);
       },
       (err) => {
@@ -177,7 +177,7 @@ export class TiktokFormComponent implements OnInit {
 
   onUpdate() {
     this.service.updateConnection(this.getFormValue(), this.shopSlug).subscribe(
-      (resp: marketplace.IShopeeAuthResponse) => {
+      (resp: marketplace.ITiktokAuthResponse) => {
         this.showSignInWindow(resp);
       },
       (err: HttpErrorResponse) => {
@@ -194,7 +194,7 @@ export class TiktokFormComponent implements OnInit {
     this.toast?.addMessage(resp.error.message, 'error', ToastLevelEnum.error);
   }
 
-  showSignInWindow(resp: marketplace.IShopeeAuthResponse) {
+  showSignInWindow(resp: marketplace.ITiktokAuthResponse) {
     if (!resp.isConnected) {
       this.toast?.addMessage(
         `Confirm Tiktok Authorization Page to grant access. Click refresh when you're done.`,

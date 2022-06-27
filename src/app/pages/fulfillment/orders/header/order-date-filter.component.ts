@@ -150,10 +150,12 @@ export class OrderDateFilterComponent implements OnInit {
       this.endTime = value.get("end_time");
 
       if (this.startTime && this.endTime && moment(this.startTime).isValid && moment(this.endTime).isValid) {
+        const isCustomDate = this.customDate.value ? true:false
+        const isDateRange = this.customRange.get('end').value ? true:false
         const selectedStartTime = moment(this.startTime, apiDateFormat).toDate();
         const selectedEndTime = moment(this.endTime, apiDateFormat).toDate();
 
-        switch(utils.getDateOption(this.startTime, this.endTime)){
+        switch(utils.getDateOption(this.startTime, this.endTime, isCustomDate, isDateRange)){
           case "today":
             this.date.setValue("today");
             break;
@@ -191,7 +193,7 @@ export class OrderDateFilterComponent implements OnInit {
         this.updateSelectedDate("today", this.today, this.today);
         break;
       case "yesterday":
-        this.updateSelectedDate("yesterday", this.yesterday, this.today);
+        this.updateSelectedDate("yesterday", this.yesterday, this.yesterday);
         break;
       case "last3Days":
         this.updateSelectedDate("last3Days", this.threeDaysbefore, this.today);

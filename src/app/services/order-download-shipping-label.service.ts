@@ -51,7 +51,7 @@ export class OrderDownloadShippingLabel {
     binaryData.push(response.body);
     let downloadLink = document.createElement("a");
     downloadLink.href = window.URL.createObjectURL(
-      new Blob(binaryData, { type: "blob" })
+      new Blob(binaryData, { type: "application/pdf" })
     );
     downloadLink.setAttribute("download", filename);
     document.body.appendChild(downloadLink);
