@@ -12,4 +12,5 @@ export interface IProductMedia {
   image?: string;
   sortPriority?: number;
   identifier?: string;
+  imageName?: string;
 }

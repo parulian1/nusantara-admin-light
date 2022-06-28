@@ -7,7 +7,7 @@ import { IProductPromotion } from '@nusantara/models';
 @Component({
   selector: 'nus-promotion-single-list',
   template: `
-    <h1 class="title-1">Promotion</h1>
+    <h1 class="title-1" i18n>Promos</h1>
     <div class="tab">
       <div (click)="goToPromoCampaign()">
         <strong>Campaign</strong>
@@ -17,7 +17,7 @@ import { IProductPromotion } from '@nusantara/models';
       </div>
     </div>
     <nus-list-header i18n-title
-      title="Promotion" [showTitle]="false">
+      title="Promos" [showTitle]="false">
     </nus-list-header>
     <div class="filtering">
       <nus-include-deleted></nus-include-deleted>

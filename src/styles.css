@@ -366,6 +366,15 @@ input.ng-untouched {
   border-color: var(--error) !important;
   background: url('assets/warning-24px.svg') no-repeat scroll right 15px center !important;
 }
+/* Direct error display*/
+.immediate-error-display-input input.ng-invalid {
+  border-color: var(--error) !important;
+  background: url('assets/warning-24px.svg') no-repeat scroll right 5px center !important;
+}
+.immediate-error-display-input select.ng-invalid {
+  border-color: var(--error) !important;
+  background: url('assets/warning-24px.svg') no-repeat scroll right 15px center !important;
+}
 
 input:not([type="checkbox"]) .ng-invalid {
   border-color: var(--error);
@@ -946,4 +955,33 @@ input:not([type=checkbox]):not([type=radio]).has-input-icon {
 
 textarea.input-description {
   height: auto;
+}
+
+.input-with-button {
+  position: relative;
+}
+.input-with-button button {
+  position: absolute;
+  right: 0;
+  z-index: 2;
+  border: none;
+  height: 30px;
+  cursor: pointer;
+  background-color: transparent;
+  color: var(--grey);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.ck-editor__editable_inline {
+  word-wrap:break-word;
+  word-break: break-all;
+}
+
+.inline-option {
+  display: flex;
+}
+
+.inline-option > label {
+  margin-inline-end: 15px;
 }

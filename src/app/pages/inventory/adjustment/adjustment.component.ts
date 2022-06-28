@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {AfterViewInit, Component, OnInit, ViewChild, ChangeDetectorRef} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {
   AbstractDetailComponent,
   DialogResult,
@@ -8,9 +8,9 @@ import {
   ToastLevelEnum,
   ToastService,
 } from '@nusantara/core';
-import { drf, inventory, ISubLocation, IWarehouse } from '@nusantara/models';
-import { IAdjustment, IStockRecord, ReceivingOrderStatusChoices } from '@nusantara/models/inventory';
-import { AuthService } from '@nusantara/auth';
+import {drf, inventory, ISubLocation, IWarehouse} from '@nusantara/models';
+import {IAdjustment, IStockRecord, ReceivingOrderStatusChoices} from '@nusantara/models/inventory';
+import {AuthService} from '@nusantara/auth';
 import {
   InventoryAdjustmentOrderService,
   InventoryStockRecordService,
@@ -21,15 +21,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmModalInvetoryOrderComponent, StockRecordSelectionModalComponent } from '@nusantara/shared';
 import { CsvDialogComponent } from '@nusantara/shared/csv-dialog/csv-dialog.component';
 import * as Papa from 'papaparse';
-import { StockRecordDialogComponent } from '@nusantara/pages/inventory/adjustment/stock-record-dialog.component';
-import { ChangeDetectorRef } from '@angular/core';
+import {StockRecordDialogComponent} from '@nusantara/pages/inventory/adjustment/stock-record-dialog.component';
 import { isNumeric } from 'rxjs/internal/util/isNumeric';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'nus-adjustment',
   template: `
-    <h1 i18n>Adjustment Order</h1>
+    <h1 i18n>Stock Adjustment</h1>
 
     <form [formGroup]="form" (ngSubmit)="save()">
       <div class="container">

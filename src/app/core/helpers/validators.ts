@@ -37,7 +37,7 @@ export function fileSizeValidator(maxSize: number, files: FileList) {
       logger.debug('fileSizeValidator', 'No Value');
       return null;
     }
-    if (files.item(0).size <= (maxSize * 1024) ) {
+    if (files.item(0).size <= (maxSize * 1024)) {
       return null;
     }
     logger.debug('fileSizeValidator', 'image size over ', files.item(0).size);
@@ -66,5 +66,40 @@ export function fileNameLengthValidator(maxLength: number, files: FileList) {
         value: maxLength,
       }
     };
+  };
+}
+
+
+export function minDateValidator(minDate: Date) {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const date = new Date(control.value);
+    if (minDate.getTime() < date.getTime()) {
+      return null;
+    } else {
+      return {
+        min: {
+          value: control.value,
+          expected: minDate.toDateString(),
+          min: minDate.toDateString(),
+        }
+      };
+    }
+  };
+}
+
+export function maxDateValidator(maxDate: Date) {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const date = new Date(control.value);
+    if (maxDate.getTime() > date.getTime()) {
+      return null;
+    } else {
+      return {
+        max: {
+          value: control.value,
+          expected: maxDate.toDateString(),
+          max: maxDate.toDateString(),
+        }
+      };
+    }
   };
 }

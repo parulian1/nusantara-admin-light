@@ -28,7 +28,7 @@ import { of } from 'rxjs';
 @Component({
   selector: 'nus-inventory-receiving',
   template: `
-    <h1 i18n>Delivery Order</h1>
+    <h1 i18n>Delivery (Receiving)</h1>
 
     <form [formGroup]="form" (ngSubmit)="saveForm()">
       <div class="container">
@@ -45,13 +45,15 @@ import { of } from 'rxjs';
           </div>
           <div class="general-info--detail box-container">
             <h3 i18n>General Information</h3>
-            <div>
+            <div class="immediate-error-display">
               <label for="do-number" i18n>DO Number (Optional)</label>
               <input id="do-number" type="text" [formControl]="doNumber" placeholder="Input DO Number">
+              <nus-field-errors [control]="doNumber"></nus-field-errors>
             </div>
-            <div>
+            <div class="immediate-error-display">
               <label for="pic-sender">PIC Sender (Optional)</label>
               <input id="pic-sender" type="text" [formControl]="dcPic" placeholder="Input PIC Sender">
+              <nus-field-errors [control]="dcPic"></nus-field-errors>
             </div>
             <div [formGroup]="warehouse">
               <label for="warehouse" i18n>Warehouse</label>
@@ -160,7 +162,12 @@ import { of } from 'rxjs';
     '.mp-info .count { font-size: 28px; font-weight: 700; }',
     '.confirm-warehouse { display: grid; grid-template-columns: 5fr 1fr; grid-gap: 24px; }',
     '.product-list { margin-top: 24px; }',
-    '.product-list > p { color: var(--darken-grey); }'
+    '.product-list > p { color: var(--darken-grey); }',
+    `.immediate-error-display input.ng-invalid {
+      border-color: var(--error) !important;
+      background: url('assets/warning-24px.svg') no-repeat scroll right 5px center !important;
+      padding-right: 40px;
+    }`
   ]
 })
 export class InventoryReceivingComponent extends AbstractDetailComponent<inventory.IReceivingOrder> implements OnInit, AfterViewInit {
@@ -237,8 +244,8 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
       }),
       reviewedBy: [null, ],
       stockRecords: this.fb.array([], [Validators.required, Validators.minLength(1)]),
-      doNumber: ['', []],
-      dcPic: ['', []],
+      doNumber: ['', [Validators.maxLength(30),]],
+      dcPic: ['', [Validators.maxLength(30),]],
     });
   }
 

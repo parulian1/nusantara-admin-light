@@ -9,7 +9,7 @@ import { SvgIconService } from '@nusantara/services';
 @Component({
   selector: 'nus-order-list',
   template: `
-    <nus-order-list-header title="Order" i18n-title></nus-order-list-header>
+    <nus-order-list-header title="Orders" i18n-title></nus-order-list-header>
     <nus-order-filters
       (filterApplied)="onFilterApplied($event)">
     </nus-order-filters>

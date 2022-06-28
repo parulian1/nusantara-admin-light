@@ -4,8 +4,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { AuthService } from '@nusantara/auth';
 import { AppUpdateService } from './core/app-update.service';
 import { environment } from '@env/environment.prod';
-
-declare let gtag: (type: 'config', gtagId: string, option: object) => void;
+import { AnalyticService } from '@nusantara/services/analytic.service';
 
 /**
  * The root component for Nusantara Admin.
@@ -33,7 +32,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   private timer;
 
   constructor(private authService: AuthService, private router: Router,
-              private appUpdate: AppUpdateService) {
+              private appUpdate: AppUpdateService, private analyticService: AnalyticService) {
+
+    function gtag(...args: any){ (window as any).dataLayer.push(arguments); }
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd){
         gtag('config', environment.googleAnalytics,
@@ -44,6 +45,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         );
       }
     });
+
   }
 
   /**
@@ -51,6 +53,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
    * If refreshing the user's token fails, then redirect to the login url.
    */
   ngOnInit() {
+    this.analyticService.addScriptToDom().catch(error => {
+      console.log(error);
+    });
+
     this.timer = setInterval(() => {
       if (this.authService.shouldRefresh) {
         this.authService.refresh().subscribe((result) => {

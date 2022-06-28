@@ -2,13 +2,15 @@ import {AbstractDetailComponent, DialogResult, ToastService} from '@nusantara/co
 import {IAdvancedPriceList, IAdvancedPriceListProduct} from '@nusantara/models/products/advanced-price-list';
 import {AdvancedPriceListService} from '@nusantara/services';
 import {ActivatedRoute, Router} from '@angular/router';
-import {FormArray, FormBuilder, FormControl, Validators} from '@angular/forms';
+import {AbstractControl, FormArray, FormBuilder, FormControl, Validators} from '@angular/forms';
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {INamedHrefEntity, IWarehouse} from '@nusantara/models';
 import {IProduct} from '@nusantara/models/products';
 import {ProductSelectionModalComponent} from '@nusantara/shared';
 import {AdvancedPriceWarehouseModalComponent} from '@nusantara/pages/catalog/advanced-price/advanced-price-warehouse-modal.component';
 import {getProductBasePrice} from '@nusantara/shared/helpers';
+import {of} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'nus-advanced-price-detail',
@@ -120,6 +122,10 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
             <div *ngIf="products.length > 0 && products.invalid" class="non-field-errors">
               <span class="heading-2" i18n>There was an error setting the price to the product.</span>
             </div>
+            <div class="product-table__search control">
+              <i class="material-icons">search</i>
+              <input type="search" placeholder="Search Product Name or SKU" [formControl]="queryText">
+            </div>
             <table>
               <thead>
               <tr>
@@ -133,7 +139,7 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
               </thead>
               <tbody>
               <nus-advanced-price-product
-                *ngFor="let productControl of products.controls; let i=index"
+                *ngFor="let productControl of filteredProducts$; let i=index"
                 [form]="productControl"
                 [type]="this.type"
                 [defaultAmountSign]="this.defaultAmountSign.value"
@@ -254,6 +260,24 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
       font-size: 10px;
       margin-top: 2px;
     }
+
+    .product-table__search {
+      display: flex;
+      border: solid 1px var(--grey);
+      background-color: transparent;
+      align-items: center;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    .product-table__search > i {
+      background-color: white;
+      color: var(--nav-background);
+      line-height: 31px;
+      padding-left: 13px;
+    }
+    .product-table__search > input[type=search] {
+      border: none !important;
+    }
   `]
 })
 
@@ -267,6 +291,7 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
   timeoutId: any;
   reloadTimeout = 650;
   queryText = new FormControl('');
+  filteredProducts$: AbstractControl[];
 
   isDisabled = false;
 
@@ -305,6 +330,10 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
       () => {
         this.checkDefaultAmount();
       }
+    );
+
+    this.queryText.valueChanges.subscribe(
+      (newValue) => { this.onQueryTextChanged(newValue); }
     );
   }
 
@@ -399,6 +428,8 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
       this.defaultAmountNumber.disable();
       this.defaultAmountSign.disable();
     }
+
+    this.filteredProducts$ = this.products.controls;
   }
   /* WAREHOUSE SELECTION */
   selectWarehouse() {
@@ -554,5 +585,32 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
     }
 
     super.save();
+  }
+
+  onQueryTextChanged(newValue: string) {
+
+    if (!!this.timeoutId) {
+      clearTimeout(this.timeoutId);
+    }
+    // don't run if the value hasn't actually changed from the original.
+    if (newValue === '') {
+      this.filteredProducts$ = this.products.controls;
+    } else {
+      this.timeoutId = setTimeout(() => {
+        // wait to see if the user is still typing more before searching
+        of(this.products.controls).pipe(
+          map((products: AbstractControl[]) =>
+            products.filter((group: AbstractControl) => {
+              const product = group.get('product');
+              return product.get('name').value
+                .toLowerCase()
+                .includes(this.queryText.value.toLowerCase()) || product.get('upc').value
+                .toLowerCase()
+                .includes(this.queryText.value.toLowerCase());
+            })
+          )
+        ).subscribe(val => this.filteredProducts$ = val);
+      }, this.reloadTimeout);
+    }
   }
 }
