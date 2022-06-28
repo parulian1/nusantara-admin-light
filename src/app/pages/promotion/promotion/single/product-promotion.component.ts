@@ -376,6 +376,20 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     super(route, router, toast, service);
   }
 
+  setMultiplierValidator() {
+    const multiplier = this.form.get('multiplier');
+
+    // Update warehouse form. set to required if user can use pos
+    this.form.get('type').valueChanges.subscribe(type => {
+      if (type === 'multiply_point') {
+        multiplier.setValidators([Validators.min(2), Validators.max(10)]);
+      } else {
+        multiplier.setValidators([]);
+      }
+      multiplier.updateValueAndValidity();
+    });
+  }
+
   ngOnInit() {
     super.ngOnInit();
     if (this.configService.isEnterpriseLicense()) {
@@ -383,6 +397,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
       this.types.push('free_gift');
       this.types.push('multiply_point');
     }
+    this.setMultiplierValidator();
   }
 
   initializeForm(entity?: IProductPromotion) {
@@ -408,7 +423,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
       multiplyItem: [entity?.multiplyItem ?? false, []],
       customerGroups: this.fb.array([]),
       promotionGroup: this.fb.group({href: [entity?.promotionGroup?.href, [Validators.required]]}),
-      multiplier: [entity?.multiplier ?? 0, [Validators.min(2), Validators.max(10)]]
+      multiplier: [entity?.multiplier ?? 0, []]
     });
 
     // need to mark as touched to make custom styling works
@@ -753,6 +768,10 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
       this.form.removeControl('productBundlingCondition');
     }
 
+    if (this.type.value !== 'multiply_point') {
+      this.form.removeControl('multiplier');
+    }
+
     if (!!this.banner && this.imagePreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
       this.form.value.banner = this.imagePreviewUrl;
     }
@@ -833,14 +852,14 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     const defaultForm = ['minimumOrderAmount', 'products', 'amount', 'maxAmount', 'isExclusive', 'appliedOnOnline', 'appliedOnOffline', 'banner'];
     const promoBundlingForm = ['productBundlingBenefit', 'productBundlingCondition', 'multiplyItem'];
     const promoFreeGiftForm = ['minimumOrderAmount', 'products', 'isExclusive', 'appliedOnOffline', 'banner'];
-    const promoMultiplierPoint = ['isExclusive', 'appliedOnOffline', 'banner', 'multiplier'];
+    const promoMultiplierPointForm = ['isExclusive', 'appliedOnOffline', 'banner', 'multiplier'];
 
     if (this.type.value === 'promo_bundling') {
       return promoBundlingForm.includes(formName);
     } else if (this.type.value === 'free_gift') {
       return promoFreeGiftForm.includes(formName);
     } else if (this.type.value === 'multiply_point') {
-      return promoMultiplierPoint.includes(formName);
+      return promoMultiplierPointForm.includes(formName);
     } else {
       return defaultForm.includes(formName);
     }
