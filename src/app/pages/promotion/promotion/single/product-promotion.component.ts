@@ -68,6 +68,13 @@ const log = new Logger('ProductPromotionComponent');
         <nus-field-errors [control]="amount"></nus-field-errors>
       </label>
 
+      <label *ngIf="isFormHide('multiplier')">
+        <span i18n>Multiplier</span>
+        <input type="number" [formControl]="multiplier"
+               placeholder="Input Number 2-10">
+        <nus-field-errors [control]="multiplier"></nus-field-errors>
+      </label>
+
       <label *ngIf="isFormHide('maxAmount')">
         <span i18n>Max Amount</span>
         <input type="number" [formControl]="maxAmount"
@@ -374,6 +381,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     if (this.configService.isEnterpriseLicense()) {
       this.types.push('promo_bundling');
       this.types.push('free_gift');
+      this.types.push('multiply_point');
     }
   }
 
@@ -400,6 +408,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
       multiplyItem: [entity?.multiplyItem ?? false, []],
       customerGroups: this.fb.array([]),
       promotionGroup: this.fb.group({href: [entity?.promotionGroup?.href, [Validators.required]]}),
+      multiplier: [entity?.multiplier ?? 0, [Validators.min(2), Validators.max(10)]]
     });
 
     // need to mark as touched to make custom styling works
@@ -547,6 +556,10 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
 
   get promotionGroup(): FormControl {
     return this.form.get('promotionGroup').get('href') as FormControl;
+  }
+
+  get multiplier(): FormControl {
+    return this.form.get('multiplier') as FormControl;
   }
 
   addProduct(product: INamedHrefEntity) {
@@ -820,11 +833,14 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     const defaultForm = ['minimumOrderAmount', 'products', 'amount', 'maxAmount', 'isExclusive', 'appliedOnOnline', 'appliedOnOffline', 'banner'];
     const promoBundlingForm = ['productBundlingBenefit', 'productBundlingCondition', 'multiplyItem'];
     const promoFreeGiftForm = ['minimumOrderAmount', 'products', 'isExclusive', 'appliedOnOffline', 'banner'];
+    const promoMultiplierPoint = ['isExclusive', 'appliedOnOffline', 'banner', 'multiplier'];
 
     if (this.type.value === 'promo_bundling') {
       return promoBundlingForm.includes(formName);
     } else if (this.type.value === 'free_gift') {
       return promoFreeGiftForm.includes(formName);
+    } else if (this.type.value === 'multiply_point') {
+      return promoMultiplierPoint.includes(formName);
     } else {
       return defaultForm.includes(formName);
     }
