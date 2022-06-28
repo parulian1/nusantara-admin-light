@@ -94,4 +94,16 @@ export class MarketplaceShopService {
       formData
     );
   }
+
+  getSyncCategory(shopSlug: string): Observable<any> {
+    return this.httpClient.get<any>(
+      `${this.baseUrl}/${shopSlug}/log-category`
+    );
+  }
+
+  syncCategory(shopSlug: string, formData): Observable<any> {
+    return this.httpClient.post(
+      `${this.baseUrl}/${shopSlug}/log-category`, formData
+    );
+  }
 }

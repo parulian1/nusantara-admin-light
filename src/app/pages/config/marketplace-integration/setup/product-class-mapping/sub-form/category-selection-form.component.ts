@@ -19,6 +19,8 @@ import {
 } from '@angular/forms';
 import { SubFormComponent } from './sub-form.component';
 import { NgxSmartModalService } from 'ngx-smart-modal';
+import { end } from 'iso8601-duration';
+import { ErrorResult, IResultResponse, ToastLevelEnum, ToastService } from '@nusantara/core';
 
 @Component({
   selector: 'nus-category-selection-form',
@@ -34,14 +36,14 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
             <span>{{ productClassName }}</span>
           </label>
 
-          <div class="wrapper-sync">
+          <div class="wrapper-sync" *ngIf="this.state.productClass.isMapped">
             <div class="container">
               <div>
                 <p class="latest">Latest Update</p>
-                <span><b>Date</b></span>
+                <span><b>{{catSync.endSync}}</b></span>
               </div>
               <div class="button-sync">
-                <button class="control secondary ghost">Sync Category</button>
+                <button class="control secondary ghost" (click)="syncCategory()">Sync Category</button>
               </div>
             </div>
           </div>
@@ -69,7 +71,7 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
   styles: [
     `.wrapper { padding: 16px 24px; border: solid 1px var(--grey); border-radius: 4px; width: 60vw; margin-bottom: 20px; }`,
     `.wrapper-sync { padding: 12px 22px; border: solid 1px var(--grey); border-radius: 4px; width: 57.5vw; margin-bottom: 20px; }`,
-    '.latest {padding-top: 6px; margin: 0;}',
+    '.latest {padding-top: 3px; margin: 0;}',
     '.button-sync{padding-top: 3px; padding-left: 20px;}',
     '.container{display: grid; grid-template-columns: 1fr .15fr; grid-column-gap: 16px;}',
     'p {color: var(--darken-grey); }',
@@ -103,6 +105,12 @@ export class CategorySelectionFormComponent
   shopSlug: string;
   productClassName: string;
   form: FormGroup;
+  catSync:{
+    endSync: '',
+    shop: '',
+    shopSlug: ''
+  };
+
 
 
   constructor(
@@ -110,7 +118,8 @@ export class CategorySelectionFormComponent
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
-    private modal: NgxSmartModalService
+    private modal: NgxSmartModalService,
+    public toast: ToastService
   ) {
     super();
     this.initializeForm();
@@ -126,6 +135,10 @@ export class CategorySelectionFormComponent
       .subscribe((data: marketplace.IProductCategory[]) => {
         this.categories = data;
       });
+
+    this.service.getSyncCategory(this.shopSlug).subscribe((data) => {
+      this.catSync = data
+    })
 
     this.changeDetectorRef.detectChanges();
   }
@@ -165,6 +178,28 @@ export class CategorySelectionFormComponent
     } else {
       return names;
     }
+  }
+
+  syncCategory(){
+    this.service.syncCategory(this.shopSlug, this.catSync).subscribe(resp => {
+
+      if (resp instanceof ErrorResult) {
+        this.onSaveError(resp);
+      } else {
+        this.onSaveSuccess(resp);
+        setTimeout(function(){
+          window.location.reload();
+        }, 3000);
+      }
+    });
+  }
+
+  onSaveError(resp) {
+    this.toast?.addMessage(resp, 'Process syncing error', ToastLevelEnum.error)
+  }
+
+  onSaveSuccess(resp) {
+    this.toast?.addMessage(resp, 'Successfully Sync', ToastLevelEnum.success);
   }
 
   onNext() {
