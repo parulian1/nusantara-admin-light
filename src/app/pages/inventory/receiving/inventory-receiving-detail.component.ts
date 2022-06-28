@@ -73,19 +73,19 @@ import { IProduct, IProductClass } from '@nusantara/models/products';
     <form [formGroup]="form" (ngSubmit)="save()">
       <table *ngIf="entity.status !== 'pending'" class="general-table-product">
         <thead>
-        <tr>
-          <th i18n>
-              Product
-          </th>
-          <th i18n>SKU</th>
-          <th i18n>Original Quantity</th>
-          <th i18n>Stock Requested</th>
-          <th i18n>Batch Number</th>
-          <th i18n>Expiry Date</th>
-          <th i18n>Cost</th>
-          <th i18n>Location</th>
-          <th i18n>Locator</th>
-        </tr>
+          <tr>
+            <th class="product-name" i18n>
+                Product
+            </th>
+            <th class="product-sku" i18n>SKU</th>
+            <th i18n>Original Quantity</th>
+            <th i18n>Stock Requested</th>
+            <th i18n>Batch Number</th>
+            <th i18n>Expiry Date</th>
+            <th i18n>Cost</th>
+            <th i18n>Location</th>
+            <th i18n>Locator</th>
+          </tr>
         </thead>
         <tbody>
           <tr *ngFor="let stockRecord of entity.stockRecords">
@@ -127,8 +127,8 @@ import { IProduct, IProductClass } from '@nusantara/models/products';
       <table *ngIf="entity.status === 'pending'" class="general-table-product">
         <thead>
           <tr>
-            <th i18n>Product (UPC)</th>
-            <th i18n>SKU</th>
+            <th class="product-name" i18n>Product (UPC)</th>
+            <th class="product-sku" i18n>SKU</th>
             <th i18n>Quantity</th>
             <th i18n>Batch</th>
             <th i18n>Expiry Date</th>
@@ -188,6 +188,8 @@ import { IProduct, IProductClass } from '@nusantara/models/products';
     'table.general-table-product{table-layout: auto;}',
     'div.detail-actions { display: flex }',
     'button.danger { margin-left: auto }',
+    '.product-name { width: 20%; }',
+    '.product-sku { width: 10%; }',
   ]
 })
 export class InventoryReceivingDetailComponent extends AbstractDetailComponent<IReceivingOrder> implements OnInit {
