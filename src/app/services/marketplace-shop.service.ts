@@ -95,15 +95,15 @@ export class MarketplaceShopService {
     );
   }
 
-  getSyncCategory(shopSlug: string): Observable<any> {
+  getSyncType(shopSlug: string, typeSync: string): Observable<any> {
     return this.httpClient.get<any>(
-      `${this.baseUrl}/${shopSlug}/log-category`
+      `${this.baseUrl}/${shopSlug}/${typeSync}`
     );
   }
 
-  syncCategory(shopSlug: string, formData): Observable<any> {
+  synchronizeSyncType(shopSlug: string, typeSync: string, formData): Observable<any> {
     return this.httpClient.post(
-      `${this.baseUrl}/${shopSlug}/log-category`, formData
+      `${this.baseUrl}/${shopSlug}/${typeSync}`, formData
     );
   }
 }

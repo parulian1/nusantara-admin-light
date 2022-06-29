@@ -105,10 +105,11 @@ export class CategorySelectionFormComponent
   shopSlug: string;
   productClassName: string;
   form: FormGroup;
+  typeSync: string;
   catSync:{
     endSync: '',
     shop: '',
-    shopSlug: ''
+    marketplace: ''
   };
 
 
@@ -129,6 +130,7 @@ export class CategorySelectionFormComponent
   ngOnInit() {
     this.shopSlug = this.route.snapshot.paramMap.get('shop-slug');
     this.productClassName = this.state.productClass.name;
+    this.typeSync = 'category'
 
     this.service
       .fetchCategory(this.shopSlug)
@@ -136,7 +138,7 @@ export class CategorySelectionFormComponent
         this.categories = data;
       });
 
-    this.service.getSyncCategory(this.shopSlug).subscribe((data) => {
+    this.service.getSyncType(this.shopSlug, this.typeSync).subscribe((data) => {
       this.catSync = data
     })
 
@@ -181,7 +183,7 @@ export class CategorySelectionFormComponent
   }
 
   syncCategory(){
-    this.service.syncCategory(this.shopSlug, this.catSync).subscribe(resp => {
+    this.service.synchronizeSyncType(this.shopSlug, this.typeSync, this.catSync).subscribe(resp => {
 
       if (resp instanceof ErrorResult) {
         this.onSaveError(resp);
