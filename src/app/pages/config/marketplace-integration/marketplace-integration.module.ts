@@ -15,7 +15,8 @@ import {
   TscFormComponent,
   LazadaFormComponent,
   BukalapakFormComponent,
-  TiktokFormComponent
+  TiktokFormComponent,
+  BlibliFormComponent,
 } from './connect';
 
 import {
@@ -80,6 +81,7 @@ export function getMarketplacesConfig(
     AttributeMatchingFormComponent,
     BukalapakFormComponent,
     TiktokFormComponent,
+    BlibliFormComponent,
 
     // setup
     SetupComponent,

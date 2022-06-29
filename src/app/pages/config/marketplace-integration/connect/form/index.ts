@@ -5,3 +5,4 @@ export * from './tsc-form.component';
 export * from './lazada-form.component';
 export * from './bukalapak-form.component';
 export * from './tiktok-form.component';
+export * from './blibli-form.component';
