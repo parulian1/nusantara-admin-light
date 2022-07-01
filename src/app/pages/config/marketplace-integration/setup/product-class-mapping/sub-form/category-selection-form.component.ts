@@ -40,7 +40,7 @@ import { ErrorResult, IResultResponse, ToastLevelEnum, ToastService } from '@nus
             <div class="container">
               <div>
                 <p class="latest">Latest Update</p>
-                <span><b>{{catSync.endSync}}</b></span>
+                <span><b>{{catSync.lastSync}}</b></span>
               </div>
               <div class="button-sync">
                 <button class="control secondary ghost" (click)="syncCategory()">Sync Category</button>
@@ -106,13 +106,11 @@ export class CategorySelectionFormComponent
   productClassName: string;
   form: FormGroup;
   typeSync: string;
-  catSync:{
-    endSync: '',
+  catSync = {
+    lastSync: '',
     shop: '',
-    marketplace: ''
+    marketplace:''
   };
-
-
 
   constructor(
     private service: MarketplaceShopService,
@@ -141,7 +139,6 @@ export class CategorySelectionFormComponent
     this.service.getSyncType(this.shopSlug, this.typeSync).subscribe((data) => {
       this.catSync = data
     })
-
     this.changeDetectorRef.detectChanges();
   }
 
@@ -184,7 +181,6 @@ export class CategorySelectionFormComponent
 
   syncCategory(){
     this.service.synchronizeSyncType(this.shopSlug, this.typeSync, this.catSync).subscribe(resp => {
-
       if (resp instanceof ErrorResult) {
         this.onSaveError(resp);
       } else {
@@ -197,11 +193,11 @@ export class CategorySelectionFormComponent
   }
 
   onSaveError(resp) {
-    this.toast?.addMessage(resp, 'Process syncing error', ToastLevelEnum.error)
+    this.toast?.addMessage(resp.message, 'Process syncing error', ToastLevelEnum.error)
   }
 
   onSaveSuccess(resp) {
-    this.toast?.addMessage(resp, 'Successfully Sync', ToastLevelEnum.success);
+    this.toast?.addMessage(resp.message, 'Successfully Sync', ToastLevelEnum.success);
   }
 
   onNext() {
