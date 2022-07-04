@@ -69,7 +69,7 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
    */
   setOriginalEntityName(entity?: T) {
     if (!!entity && entity.hasOwnProperty('name')) {
-      // tslint:disable:no-string-literal
+      /* eslint-disable @typescript-eslint/dot-notation */
       this.originalEntityName = entity['name'];
     }
   }

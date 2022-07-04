@@ -10,11 +10,8 @@ import { Component, OnInit } from '@angular/core';
   styles: [
   ]
 })
-export class ShopifyComponent implements OnInit {
+export class ShopifyComponent {
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }

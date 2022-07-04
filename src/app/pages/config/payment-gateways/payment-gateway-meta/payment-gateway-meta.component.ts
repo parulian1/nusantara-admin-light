@@ -16,7 +16,7 @@ import {FormControl, FormGroup} from '@angular/forms';
   `,
   styles: [':host { display: contents; }']
 })
-export class PaymentGatewayMetaComponent implements OnInit {
+export class PaymentGatewayMetaComponent {
 
   @Input() form: FormGroup;
   @Input() index: number;
@@ -25,10 +25,6 @@ export class PaymentGatewayMetaComponent implements OnInit {
   get item(): FormControl { return this.form.get('item') as FormControl; }
 
   constructor() {
-  }
-
-  ngOnInit(): void {
-
   }
 
 }

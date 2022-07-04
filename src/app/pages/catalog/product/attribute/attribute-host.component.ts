@@ -53,7 +53,7 @@ const log = new Logger('ProductAttributeHostComponent');
     'h4.attr-host span { display: inline-table; font-weight: normal; }',
   ]
 })
-export class ProductAttributeHostComponent extends AbstractEditingComponent implements OnInit, OnChanges {
+export class ProductAttributeHostComponent extends AbstractEditingComponent implements OnChanges {
 
   productClasses: Array<products.IProductClass> = [];
   productAttributeTypesHide: string[] = ['image', 'markdown'];
@@ -68,12 +68,6 @@ export class ProductAttributeHostComponent extends AbstractEditingComponent impl
   isSameAsParent = false;
 
   constructor(protected route: ActivatedRoute, protected fb: FormBuilder, private router: Router) { super(); }
-
-  ngOnInit() {
-    // this.route.data.subscribe((data: {productClasses: products.IProductClass[]}) => {
-    //   this.productClasses = data.productClasses;
-    // });
-  }
 
   ngOnChanges(changes: SimpleChanges): void {
     for (const propName in changes) {

@@ -27,7 +27,7 @@ import {GoogleService} from '@nusantara/services';
   template: `
     <div [class.media-image]="entity?.type === 'image'" [class.media-video]="entity?.type === 'you_tube'">
       <div *ngIf="entity?.type === 'image'">
-        <span class="video-title" i18n *ngIf="index==0">Main Picture**</span>
+        <span class="video-title" i18n *ngIf="index===0">Main Picture**</span>
         <span class="video-title" i18n *ngIf="index>0">Picture {{index}}{{ index < 3 ? '**':''}}</span>
       </div>
       <div *ngIf="entity?.type === 'you_tube'">

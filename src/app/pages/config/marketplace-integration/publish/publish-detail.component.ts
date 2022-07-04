@@ -43,7 +43,7 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
     <div>
       <nus-tabs>
         <nus-tab [title]="'List Product'">
-          <div *ngIf="order?.receivingStatus == err" class="error-info">
+          <div *ngIf="order?.receivingStatus === err" class="error-info">
             <div>
               <h2 class="heading-2" i18n>There are Errors When Publishing Products</h2>
               <ul>

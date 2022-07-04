@@ -17,11 +17,11 @@ import { ActivatedRoute, Router } from '@angular/router';
           </option>
         </select>
       </td>
-      <td *ngIf="!isShipingKgx()"><input type="checkbox" [formControl]="isActive"></td>
-      <td *ngIf="!isShipingKgx()"><input type="number" [formControl]="minimumWeight"></td>
-      <td *ngIf="!isShipingKgx()"><input type="number" [formControl]="handlingFee"></td>
-      <td *ngIf="!isShipingKgx()"><input type="number" [formControl]="graceAmount"></td>
-      <td *ngIf="!isShipingKgx()">
+      <td *ngIf="!isShippingKgx"><input type="checkbox" [formControl]="isActive"></td>
+      <td *ngIf="!isShippingKgx"><input type="number" [formControl]="minimumWeight"></td>
+      <td *ngIf="!isShippingKgx"><input type="number" [formControl]="handlingFee"></td>
+      <td *ngIf="!isShippingKgx"><input type="number" [formControl]="graceAmount"></td>
+      <td *ngIf="!isShippingKgx">
         <input type="text" [formControl]="description" data-qa="description" placeholder="lorem ipsum ..">
       </td>
       <td>
@@ -36,7 +36,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   ]
 })
 
-export class ShippingServiceHostComponent implements OnInit, AfterViewInit {
+export class ShippingServiceHostComponent {
   @Input() shippingServiceTypes: drf.IChoice[];
   @Input() form: FormGroup;
   @Input() shippingType: string;
@@ -81,13 +81,7 @@ export class ShippingServiceHostComponent implements OnInit, AfterViewInit {
     return this.form.get('description') as FormControl;
   }
 
-  ngOnInit() {
-  }
-
-  ngAfterViewInit() {
-  }
-
-  isShipingKgx() {
+  get isShippingKgx(): boolean {
     return this.shippingType === 'kgx';
   }
 

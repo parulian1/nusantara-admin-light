@@ -39,11 +39,8 @@ import { Component, OnInit } from '@angular/core';
     'p { line-height: 20px }',
   ],
 })
-export class ShopifyHubComponent implements OnInit {
+export class ShopifyHubComponent {
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }

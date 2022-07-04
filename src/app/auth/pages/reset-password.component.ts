@@ -12,11 +12,9 @@ import {Component, OnInit} from '@angular/core';
     </form>
   `
 })
-export class ResetPasswordComponent implements OnInit {
+export class ResetPasswordComponent {
 
   constructor() {
   }
 
-  ngOnInit(): void {
-  }
 }

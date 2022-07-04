@@ -29,7 +29,7 @@ import {ICustomer} from '@nusantara/models';
               <td class="point-date">{{ p.date|date }}</td>
               <td class="point-amount">{{ p.pointValue|number }}</td>
             </tr>
-            <tr *ngIf="pointHistory?.length == 0">
+            <tr *ngIf="pointHistory?.length === 0">
               <td colspan="3" style="text-align: center;" i18n>No point history</td>
             </tr>
           </tbody>
@@ -76,7 +76,7 @@ import {ICustomer} from '@nusantara/models';
     `
   ]
 })
-export class CustomerPointModalComponent implements OnInit, AfterViewInit {
+export class CustomerPointModalComponent implements AfterViewInit {
   @Input() entity?: ICustomer;
   @ViewChild('modal') modal: NgxSmartModalComponent;
 
@@ -84,8 +84,6 @@ export class CustomerPointModalComponent implements OnInit, AfterViewInit {
 
   pointTotal: number;
   pointHistory: Array<any>;
-
-  ngOnInit() {}
 
   ngAfterViewInit(): void {
     this.modal.onOpen.subscribe(() => {

@@ -111,7 +111,7 @@ export class NavigationComponent extends AbstractDetailComponent<INavigation> im
 
   setOriginalEntityName(entity?: INavigation) {
     if (!!entity && entity.hasOwnProperty('title')) {
-      // tslint:disable:no-string-literal
+      /* eslint-disable @typescript-eslint/dot-notation */
       this.originalEntityName = entity.title;
     }
   }

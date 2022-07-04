@@ -46,7 +46,7 @@ const logger = new Logger('ProductMediaHost');
           <div class="empty-image">
             <span class="video-title" *ngIf="entitiesImage.length + i > 0"
                   i18n>Picture {{entitiesImage.length + i }}{{ entitiesImage.length < 3 ? '**' : ''}}</span>
-            <span class="video-title" *ngIf="entitiesImage.length + i == 0" i18n>Main Picture**</span>
+            <span class="video-title" *ngIf="entitiesImage.length + i === 0" i18n>Main Picture**</span>
             <button class="button-add-image" type="button" (click)="openImageModal()">
               <div class="top-overlay"><span class="material-icons">add</span></div>
               <div class="action-overlay"><span class="video-title" i18n>Add Image</span></div>

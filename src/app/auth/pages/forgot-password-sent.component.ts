@@ -14,12 +14,8 @@ import {Component, OnInit} from '@angular/core';
     </div>
   `
 })
-export class ForgotPasswordSentComponent implements OnInit {
+export class ForgotPasswordSentComponent {
 
   constructor() {
   }
-
-  ngOnInit(): void {
-  }
-
 }

@@ -31,17 +31,13 @@ import {getSlugFromHref} from '@nusantara/shared/helpers';
     </table>
   `
 })
-export class AdvancePriceComponent implements OnInit, OnChanges {
+export class AdvancePriceComponent implements OnChanges {
   @Input()
   public productHref: string;
 
   public entity$: Observable<IAdvancedPriceList[]>;
 
   constructor(private service: AdvancedPriceListService) {
-  }
-
-  ngOnInit(): void {
-
   }
 
   ngOnChanges(changes: SimpleChanges): void {

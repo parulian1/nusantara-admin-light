@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import { DialogResult, ToastLevelEnum, ToastService } from '@nusantara/core';
 import { IPaymentGateway, order, PaymentTypeChoices } from '@nusantara/models';
 import {
@@ -31,7 +31,7 @@ import { DeleteConfirmDialogComponent } from './modals';
           </tr>
         </thead>
         <tbody>
-          <tr *ngIf="paymentConfirms?.length == 0">
+          <tr *ngIf="paymentConfirms?.length === 0">
             <td colspan="7" class="empty-table">
               <div class="heading-1" i18n>No Payment Confirmation Yet</div>
               <div class="body-2" i18n>Payment confirmation information will appear here once the customer confirm the order.</div>
@@ -104,7 +104,7 @@ import { DeleteConfirmDialogComponent } from './modals';
     '.delete-button { background: none; border: none; }'
   ],
 })
-export class OrderPaymentConfirmComponent implements OnInit, OnDestroy {
+export class OrderPaymentConfirmComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() order: order.IOrderDetail;
   @Output() updatePaymentConfirm = new EventEmitter();
 

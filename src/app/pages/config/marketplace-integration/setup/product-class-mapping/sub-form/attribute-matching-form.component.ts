@@ -122,13 +122,13 @@ import { SubFormComponent } from './sub-form.component';
     '.form { margin-top: 20px; }',
     'label { margin-bottom: 12px; min-height: 0; }',
     'button:not(:first-of-type) { margin-left: 5px; }',
-    '.attribute-group{ display: grid; grid-template-columns: repeat(4, 1fr); grid-gap: 10px; margin-bottom: 4px; };',
+    '.attribute-group{ display: grid; grid-template-columns: repeat(4, 1fr); grid-gap: 10px; margin-bottom: 4px; }',
     `.attributes > div {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         grid-gap: 10px;
         margin-bottom: 8px;
-    };`,
+    }`,
     '.new-attr-input { margin-top: 4px; }',
     '.add-new-attr { font-weight: 600; font-size: 16px; }',
     '.error-detail { text-align: left; }',

@@ -119,7 +119,7 @@ export class ContentFooterComponent extends AbstractDetailComponent<IContentFoot
 
   setOriginalEntityName(entity?: IContentFooter) {
     if (!!entity && entity.hasOwnProperty('title')) {
-      // tslint:disable:no-string-literal
+      /* eslint-disable @typescript-eslint/dot-notation */
       this.originalEntityName = entity.title;
     }
   }

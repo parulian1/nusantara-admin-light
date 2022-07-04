@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractDetailComponent, DialogResult, ToastLevelEnum, ToastService } from '@nusantara/core';
@@ -189,7 +189,7 @@ import {
     '.other-action { text-align: right; }'
   ]
 })
-export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> implements OnInit {
+export class OrderComponent extends AbstractDetailComponent<order.IOrderDetail> implements OnInit, AfterViewInit {
   @ViewChild(PaymentConfirmModalComponent) paymentConfirmModal: PaymentConfirmModalComponent;
   @ViewChild(CancelOrderDialogComponent) cancelOrderModal: CancelOrderDialogComponent;
   @ViewChild(MarkAsTestingDialogComponent) markAsTestingModal: MarkAsTestingDialogComponent;

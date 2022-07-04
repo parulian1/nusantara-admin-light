@@ -13,7 +13,7 @@ export class MockActivatedRoute {
   private subjectParamMap = new BehaviorSubject(convertToParamMap(this.testParamMap));
   paramMap = this.subjectParamMap.asObservable();
 
-  // tslint:disable-next-line:variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention,no-underscore-dangle,id-blacklist,id-match
   private _testParamMap: ParamMap;
   get testParamMap() {
     return this._testParamMap;
@@ -27,7 +27,7 @@ export class MockActivatedRoute {
   private subjectQueryParamMap = new BehaviorSubject(convertToParamMap(this.testParamMap));
   queryParamMap = this.subjectQueryParamMap.asObservable();
 
-  // tslint:disable-next-line:variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _testQueryParamMap: ParamMap;
   get testQueryParamMap() {
     return this._testQueryParamMap;
