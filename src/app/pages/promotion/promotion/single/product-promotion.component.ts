@@ -24,8 +24,8 @@ import { PromoCampaignModalComponent } from '@nusantara/shared/modals/promo-camp
 import {catchError} from 'rxjs/operators';
 import {HttpErrorResponse} from '@angular/common/http';
 import {of} from 'rxjs';
-import {ConfirmModalComponent} from "@nusantara/shared/confirm-modal.component";
-import {getSlugFromHref} from "@nusantara/shared/helpers";
+import {ConfirmModalComponent} from '@nusantara/shared/confirm-modal.component';
+import {getSlugFromHref} from '@nusantara/shared/helpers';
 
 declare var window: any; // Needed on Angular 8+
 
@@ -240,11 +240,13 @@ const log = new Logger('ProductPromotionComponent');
       <label *ngIf="isFormHide('appliedOnOnline') || isFormHide('appliedOnOffline')" class="promo-platform">
         <span class="subtitle" i18n>Platform</span>
         <label *ngIf="isFormHide('appliedOnOnline')" class="checkbox">
-          <input type="checkbox" [formControl]="appliedOnOnline" name="appliedOnOnline">
+          <input type="checkbox" [formControl]="appliedOnOnline" (change)="validFromAndToValidation()"
+                 name="appliedOnOnline">
           <span i18n>Online (Website)</span>
         </label>
         <label class="checkbox" *ngIf="enterpriseLicense() && isFormHide('appliedOnOffline')">
-          <input type="checkbox" [formControl]="appliedOnOffline" name="appliedOnOffline">
+          <input type="checkbox" [formControl]="appliedOnOffline" (change)="validFromAndToValidation()"
+                 name="appliedOnOffline">
           <span i18n>Offline (POS)</span>
         </label>
       </label>
