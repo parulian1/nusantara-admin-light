@@ -104,9 +104,21 @@ const routes: Routes = [
           },
           {
             path: 'new',
-            component: ProductPromotionComponent,
-            runGuardsAndResolvers: 'always',
-            data: { animation: 'Detail', },
+            children: [
+              {
+                path: '',
+                component: ProductPromotionComponent,
+                runGuardsAndResolvers: 'always',
+                data: { animation: 'Detail', },
+              },
+              {
+                path: ':type',
+                component: ProductPromotionComponent,
+                runGuardsAndResolvers: 'always',
+                data: { animation: 'Detail', },
+              }
+            ]
+
           },
           {
             path: ':slug',

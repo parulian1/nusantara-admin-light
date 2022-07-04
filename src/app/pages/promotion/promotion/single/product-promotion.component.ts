@@ -26,6 +26,21 @@ const log = new Logger('ProductPromotionComponent');
     <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
 
     <form [formGroup]="form" (ngSubmit)="save()">
+      <div *ngIf="!isOldForm" class="promo-type">
+        <label>
+          <span i18n>Type Promotion</span>
+          <span i18n>Tag</span>
+        </label>
+        <label class="value">
+          <span> {{ typesWithLabelInfo[type.value] }}</span>
+          <span [ngClass]="{
+                    'tag-up': promotionTag === 'Upcoming',
+                    'tag-on': promotionTag === 'Ongoing',
+                    'tag-exp': promotionTag === 'Past' || promotionTag === 'Inactive' }">
+            {{ promotionTag }}
+          </span>
+        </label>
+      </div>
 
       <label>
         <span i18n>Name</span>
@@ -33,14 +48,14 @@ const log = new Logger('ProductPromotionComponent');
         <nus-field-errors [control]="name"></nus-field-errors>
       </label>
 
-      <label>
+      <label *ngIf="isOldForm">
         <span i18n>Type</span>
         <select [formControl]="type" (ngModelChange)="onPromoTypeChange($event)">
           <option *ngFor="let t of types" [ngValue]="t">{{ t }}</option>
         </select>
       </label>
 
-      <label *ngIf="!isPromoBundling">
+      <label *ngIf="!isPromoBundling && !!isOldForm">
         <span i18n>Minimum Order Value</span>
         <input type="number" [formControl]="minimumOrderAmount"
                placeholder="ex. 1000000">
@@ -337,6 +352,46 @@ const log = new Logger('ProductPromotionComponent');
       margin-bottom: 24px;
     }
 
+    .promo-type {
+      border: 1px solid #B4B4B4;
+      border-radius: 4px;
+      width: 100%;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .promo-type label {
+      display: grid;
+      grid-template-columns: 2fr 2fr 3fr;
+      padding-bottom: 0px;
+      min-height: 20px;
+    }
+
+    .promo-type label span {
+      font-weight: normal;
+    }
+
+    .promo-type label.value span {
+      font-weight: bold;
+    }
+
+    .tag-up {
+      background: #F0BE00;
+      border-radius: 4px;
+      text-align: center;
+      width: 100px;
+    }
+    .tag-on {
+      background: #21A656;
+      border-radius: 4px;
+      text-align: center;
+      width: 100px;
+    }
+    .tag-exp {
+      background: #C83228;
+      border-radius: 4px;
+      text-align: center;
+      width: 100px;
+    }
   `]
 })
 export class ProductPromotionComponent extends AbstractDetailComponent<IProductPromotion> implements OnInit, AfterViewInit {
@@ -353,12 +408,19 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
   maxDateValidFrom: string | Date = null;
 
   selectedPromotionGroup: INamedHrefEntity = null;
+  promoType: string;
 
   @ViewChild('productModal') productSelectionModal: ProductSelectionModalComponent;
   @ViewChild('conditionModal') productBundlingConditionSelectionModal: ProductSelectionModalComponent;
   @ViewChild('benefitModal') productBundlingBenefitSelectionModal: ProductSelectionModalComponent;
   @ViewChild('customerGroupModal') customerGroupSelectionModal: CustomerGroupModalComponent;
   @ViewChild('promotionGroupModal') promotionGroupSelectionModal: PromoCampaignModalComponent;
+
+  typesWithLabelInfo: Object = {
+    percentage: 'Cut by Percentage',
+    amount_off: 'Cut by Amount',
+    override_price: 'Flush Price'
+  }
 
   constructor(service: ProductPromotionSingleService,
               route: ActivatedRoute,
@@ -375,6 +437,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     if (this.configService.isEnterpriseLicense()) {
       this.types.push('promo_bundling');
     }
+    this.getPromotionFormType();
   }
 
   initializeForm(entity?: IProductPromotion) {
@@ -811,6 +874,51 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
       this.selectedPromotionGroup = this.promotionGroupSelectionModal.promotionGroup.value as IPromoGroup;
       this.promotionGroup.setValue(this.selectedPromotionGroup.href);
     }
+  }
+
+  private getPromotionFormType(): void {
+    const promotionTypeOption = ['percentage', 'amount_off', 'override_price', 'promo_bundling'];
+    this.route.params?.subscribe((param) => {
+      if (!this.entity && promotionTypeOption.indexOf(param.type) > -1) {
+        this.promoType = param.type;
+        this.type.setValue(param.type);
+      }
+    });
+    if (!!this.entity) {
+      this.promoType = this.entity.type;
+    }
+  }
+
+  get isOldForm(): boolean {
+    if (!this.promoType) {
+      return true;
+    }
+    return false;
+  }
+
+  get promotionTag(): string {
+    const currentDate = new Date();
+    if (!!this.entity) {
+      const entityValidFrom = new Date(this.entity.validFrom);
+      const entityValidTo = new Date(this.entity.validTo);
+      if (!this.entity.isActive) {
+        return 'Inactive';
+      } else {
+        if (entityValidTo < currentDate) {
+          return 'past';
+        } else if (entityValidFrom < currentDate && currentDate < entityValidTo) {
+          return 'Ongoing';
+        } else {
+          return 'Upcoming';
+        }
+      }
+    } else {
+      if (this.validFrom.value > currentDate && !!this.isActive) {
+        return 'Upcoming';
+      }
+    }
+    console.log('validfrom', this.validFrom.value, currentDate, this.validFrom.value > currentDate);
+    return '-';
   }
 }
 
