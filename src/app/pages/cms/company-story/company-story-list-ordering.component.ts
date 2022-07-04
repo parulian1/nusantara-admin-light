@@ -55,7 +55,7 @@ import { CompanyStoryService } from '@nusantara/services';
       </button>
     </div>
   `,
-  styles: [``]
+
 })
 export class CompanyStoryListOrderingComponent implements OnInit {
   entities: ICompanyStory[] = [];

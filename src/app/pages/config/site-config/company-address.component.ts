@@ -47,7 +47,7 @@ import { InternalAddressValue } from '@nusantara/shared/address/internal-address
       </label>
     </div>
   `,
-  styles: [ ]
+
 })
 export class CompanyAddressComponent implements OnInit {
 

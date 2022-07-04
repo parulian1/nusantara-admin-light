@@ -12,7 +12,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 
 class SiteConfigServiceStub extends SiteConfigService {
-  // tslint:disable-next-line:variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _licenseType = 'enterprise';
 
   public get licenseType() {

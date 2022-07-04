@@ -37,7 +37,7 @@ import { widgets } from '@nusantara/models';
 
     <nus-pagination [page]="page"></nus-pagination>
   `,
-  styles: [],
+
 })
 export class TestimonialListComponent extends AbstractListComponent<widgets.ITestimonial> {
   constructor(route: ActivatedRoute) { super(route); }

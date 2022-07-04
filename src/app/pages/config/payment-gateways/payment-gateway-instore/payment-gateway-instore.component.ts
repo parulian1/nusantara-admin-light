@@ -6,16 +6,11 @@ import {drf} from '@nusantara/models';
   template: `
 
 
-  `,
-  styles: ['']
+  `
 })
-export class PaymentGatewayInstoreComponent implements OnInit {
-
-
+export class PaymentGatewayInstoreComponent {
 
   constructor() {
   }
 
-  ngOnInit(): void {
-  }
 }

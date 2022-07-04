@@ -57,7 +57,7 @@ import { IOrderFilterValue } from '@nusantara/models/order/filter';
 
     <nus-pagination [page]="page"></nus-pagination>
   `,
-  styles: []
+
 })
 export class InventoryOrderListComponent extends AbstractListComponent<IInventoryOrderSummary> {
   appliedFilter: IOrderFilterValue;

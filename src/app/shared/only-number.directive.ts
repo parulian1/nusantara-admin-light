@@ -1,7 +1,8 @@
-/* tslint:disable:no-string-literal */
+/* eslint-disable @typescript-eslint/dot-notation */
 import { Directive, ElementRef, HostListener, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 @Directive({
+  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[appOnlyNumber]'
 })
 export class OnlyNumberDirective implements OnChanges {

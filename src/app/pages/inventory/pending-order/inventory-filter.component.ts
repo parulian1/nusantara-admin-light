@@ -58,7 +58,7 @@ const logger = new Logger('OrderFilter');
       position: absolute;
       height: 10px;
       width: 10%;
-    / / background-image: url("assets/arrow-down.svg");
+      /*background-image: url("/assets/arrow-down.svg");*/
       background-size: 12px;
     }`,
   ]

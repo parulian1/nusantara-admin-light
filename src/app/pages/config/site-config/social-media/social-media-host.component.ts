@@ -31,7 +31,7 @@ import { drf } from '@nusantara/models';
     'td > select { width: 100%; }'
   ]
 })
-export class SocialMediaHostComponent implements OnInit, AfterViewInit {
+export class SocialMediaHostComponent {
 
   @Input() socialMediaTypes: drf.IChoice[];
   @Input() form: FormGroup;
@@ -43,11 +43,5 @@ export class SocialMediaHostComponent implements OnInit, AfterViewInit {
 
   get type(): FormControl { return this.form.get('type') as FormControl; }
   get url(): FormControl { return this.form.get('url') as FormControl; }
-
-  ngOnInit() {
-  }
-
-  ngAfterViewInit() {
-  }
 
 }

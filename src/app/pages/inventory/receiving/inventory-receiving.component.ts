@@ -165,7 +165,7 @@ import { of } from 'rxjs';
     '.product-list > p { color: var(--darken-grey); }',
     `.immediate-error-display input.ng-invalid {
       border-color: var(--error) !important;
-      background: url('assets/warning-24px.svg') no-repeat scroll right 5px center !important;
+      background: url('/assets/warning-24px.svg') no-repeat scroll right 5px center !important;
       padding-right: 40px;
     }`
   ]

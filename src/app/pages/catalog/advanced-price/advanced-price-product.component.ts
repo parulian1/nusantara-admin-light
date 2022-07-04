@@ -15,7 +15,7 @@ import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/form
             <option class="material-icons" value="positive" aria-label="positive">add</option>
           </select>
           <input type="number" [formControl]="amountInput" min="1" appOnlyNumber/>
-          <span *ngIf="type == 'percentage'" class="input-group-text">%</span>
+          <span *ngIf="type === 'percentage'" class="input-group-text">%</span>
         </div>
         <nus-field-errors [control]="amountInput"></nus-field-errors>
       </td>
@@ -72,7 +72,7 @@ export class AdvancedPriceProductComponent implements OnInit {
   @Input() defaultAmountNumber: number;
   @Output() remove: EventEmitter<void> = new EventEmitter();
 
-  // tslint:disable-next-line:variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _type: string;
 
   @Input() set type(value: string) {

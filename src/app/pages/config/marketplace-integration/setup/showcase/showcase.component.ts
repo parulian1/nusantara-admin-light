@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import { DialogResult, ToastLevelEnum, ToastService } from '@nusantara/core';
 import { ConfirmModalComponent } from '@nusantara/shared/confirm-modal.component';
 import { SvgIconService } from '@nusantara/services';
@@ -150,7 +150,7 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
     'form {max-width: initial !important;}'
   ],
 })
-export class ShowcaseComponent implements OnInit {
+export class ShowcaseComponent implements OnInit, AfterViewInit {
   dataProduct: Array<IshowcaseProduct> = []
   shopSlug: string;
   showcaseId: number;

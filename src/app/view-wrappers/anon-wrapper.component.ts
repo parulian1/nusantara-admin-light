@@ -44,7 +44,7 @@ import { Component, OnInit } from '@angular/core';
     }
   `]
 })
-export class AnonWrapperComponent implements OnInit {
+export class AnonWrapperComponent {
   constructor() { }
-  ngOnInit(): void { }
+
 }

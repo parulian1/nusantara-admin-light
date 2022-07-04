@@ -84,7 +84,7 @@ import { ProductOptionService } from '@nusantara/services';
       </nus-detail-actions>
     </form>
   `,
-  styles: [``]
+
 })
 export class ProductOptionComponent extends AbstractDetailComponent<products.IProductOption> implements OnInit {
 

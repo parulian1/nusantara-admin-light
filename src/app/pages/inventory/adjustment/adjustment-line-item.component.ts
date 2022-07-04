@@ -90,7 +90,7 @@ import { IStockRecord } from '@nusantara/models/inventory';
     'resolve-button { border: none;}'
   ]
 })
-export class AdjustmentLineItemComponent implements OnInit, AfterViewInit {
+export class AdjustmentLineItemComponent implements OnInit {
   @Input() warehouse: { href: string };
   @Input() availableSubLocations: ISubLocation[] = [];
   @Input() productClasses: IProductClass[];
@@ -163,9 +163,6 @@ export class AdjustmentLineItemComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.calculateDifferentQty();
-  }
-
-  ngAfterViewInit(): void {
   }
 
   onKeyUpDifferentQty(): void {

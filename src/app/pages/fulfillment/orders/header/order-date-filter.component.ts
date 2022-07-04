@@ -10,7 +10,6 @@ import { DateAdapter, MAT_DATE_FORMATS } from "@angular/material/core";
 import * as moment from "moment";
 import { ActivatedRoute } from '@angular/router';
 import { Utils } from './utils';
-import { until } from 'selenium-webdriver';
 
 const apiDateFormat = "YYYY-MM-DDTHH:mm:ss";
 
@@ -103,7 +102,7 @@ const apiDateFormat = "YYYY-MM-DDTHH:mm:ss";
         position: absolute;
         height: 10px;
         width: 10%;
-        background-image: url("assets/arrow-down.svg");
+        background-image: url("/assets/arrow-down.svg");
         background-size: 12px;
       }`,
     '.custom-date-filter { display: none; }',

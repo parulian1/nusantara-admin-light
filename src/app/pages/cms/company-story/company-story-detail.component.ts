@@ -52,7 +52,7 @@ import { ActivatedRoute, Router } from '@angular/router';
       </nus-detail-actions>
     </form>
   `,
-  styles: [``]
+
 })
 export class CompanyStoryDetailComponent extends AbstractDetailComponent<ICompanyStory> implements OnInit {
   constructor(

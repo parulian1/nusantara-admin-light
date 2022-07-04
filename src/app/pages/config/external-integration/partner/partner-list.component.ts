@@ -46,7 +46,7 @@ import { SiteConfigService } from "@nusantara/services";
       </tbody>
     </table>
   `,
-  styles: [],
+
 })
 export class PartnerListComponent extends AbstractListComponent<IPartner> {
   constructor(route: ActivatedRoute, public configService: SiteConfigService) {

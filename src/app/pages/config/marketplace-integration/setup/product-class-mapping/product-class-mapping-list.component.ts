@@ -40,10 +40,10 @@ import * as fromReducer from '@nusantara/reducers';
             <div *ngIf="entity.categoryAttribute">({{ entity.categoryAttribute }})</div>
           </td>
           <td *ngIf="!entity.category">-</td>
-          <td *ngIf="entity.isMapped == false">
+          <td *ngIf="entity.isMapped === false">
             <span class="badge alert" i18n>Not Matched</span>
           </td>
-          <td *ngIf="entity.isMapped == true">
+          <td *ngIf="entity.isMapped === true">
             <span class="badge success" i18n>Done</span>
           </td>
           <!--Action to Match-->

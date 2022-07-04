@@ -676,14 +676,14 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
         const sheetAsJson = XLSX.utils.sheet_to_json(ws, {header: 1});
         // start @ 1 to skip header?
         for (let i = 1; i < sheetAsJson.length; i++) {
-          console.log(sheetAsJson[i][1]);
+          log.debug(sheetAsJson[i][1]);
 
           const slug = sheetAsJson[i][1];
           this.productService.fetch(slug).subscribe(
             (product) => {
               this.addProduct(product);
             }, error => {
-              console.log(`Failed to add product: ${sheetAsJson[i][0]}`);
+              log.error(`Failed to add product: ${sheetAsJson[i][0]}`);
             }
           );
 
@@ -695,7 +695,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
       //
       //   const wb: XLSX.WorkBook = XLSX.read(data);
       //   // type?: 'base64' | 'binary' | 'buffer' | 'file' | 'array' | 'string';
-      //   console.log('Workbook!', wb);
+      //   log.debug('Workbook!', wb);
       //
       // });
     };
@@ -723,7 +723,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
   // }
 
   save() {
-    console.log('form', this.form.value, this.form.getRawValue());
+    log.debug('form', this.form.value, this.form.getRawValue());
     this.form.value.validFrom = this.form.value.validFrom + this.getTimeZone();
     this.form.value.validTo = this.form.value.validTo + this.getTimeZone();
 

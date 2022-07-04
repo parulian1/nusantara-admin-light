@@ -19,12 +19,12 @@ import { Component, Input, OnInit } from '@angular/core';
     `ul {
       list-style: none;
       padding-inline-start: unset;
-      padding-top: 12px; 
-      width: 100%; 
-      display: flex; 
-      justify-content: space-between; 
-      flex-wrap: nowrap; 
-      overflow: auto; 
+      padding-top: 12px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: nowrap;
+      overflow: auto;
     }`,
     'li { padding-top: 10px; width: 100%; position: relative; text-align: center; min-width: 20px; }',
     'li:last-child::after, li:first-child::before { display: none; }',
@@ -47,13 +47,13 @@ import { Component, Input, OnInit } from '@angular/core';
         top: -12px;
         left: 50%;
         transform: translateX(-50%);
-        z-index: 2; 
+        z-index: 2;
       }`,
     'li span.current, li span.achieved { color: var(--lighten-black); }',
     'li span.current::after{ background: var(--secondary); }',
     `li span.achieved::after{
         background: var(--tertiary);
-        background-image: url(assets/white-checkmark.svg);
+        background-image: url(/assets/white-checkmark.svg);
         background-repeat: no-repeat;
         background-position: center center;
         background-size: 16px;

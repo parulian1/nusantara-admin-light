@@ -37,10 +37,10 @@ import { MarketplaceClientEnum } from '../connect/markeplace-client-enum';
             <td>{{ entity.warehouse.name }}</td>
             <td>{{ entity.marketplace | titlecase }}</td>
 
-            <td *ngIf="entity.isConnected == false">
+            <td *ngIf="entity.isConnected === false">
               <span class="badge alert" i18n>Not Connected</span>
             </td>
-            <td *ngIf="entity.isConnected == true">
+            <td *ngIf="entity.isConnected === true">
               <span class="badge success" i18n>Connected</span>
             </td>
 
