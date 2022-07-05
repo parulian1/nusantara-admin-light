@@ -19,7 +19,7 @@ import {
 } from '@angular/forms';
 import { SubFormComponent } from './sub-form.component';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { end } from 'iso8601-duration';
+import * as moment from "moment";
 import { ErrorResult, IResultResponse, ToastLevelEnum, ToastService } from '@nusantara/core';
 
 @Component({
@@ -180,20 +180,44 @@ export class CategorySelectionFormComponent
   }
 
   syncCategory(){
-    this.service.synchronizeSyncType(this.shopSlug, this.typeSync, this.catSync).subscribe(resp => {
-      if (resp instanceof ErrorResult) {
-        this.onSaveError(resp);
-      } else {
-        this.onSaveSuccess(resp);
-        setTimeout(function(){
-          window.location.reload();
-        }, 3000);
+    if (this.catSync.lastSync) {
+      const syncValidator = moment(new Date(this.catSync.lastSync)).add(3, 'h').toDate().getTime();
+      const now = new Date().getTime()
+
+      if(now < syncValidator){
+        this.onSaveError('Error use another sync after 3 hour from the last sync')
+      } else{
+        this.service.synchronizeSyncType(this.shopSlug, this.typeSync, this.catSync).subscribe(resp => {
+          if (resp instanceof ErrorResult) {
+            this.onSaveError(resp);
+          } else {
+            this.onSaveSuccess(resp);
+            setTimeout(function(){
+              window.location.reload();
+            }, 3000);
+          }
+        });
       }
-    });
+    } else {
+      this.service.synchronizeSyncType(this.shopSlug, this.typeSync, this.catSync).subscribe(resp => {
+        if (resp instanceof ErrorResult) {
+          this.onSaveError(resp);
+        } else {
+          this.onSaveSuccess(resp);
+          setTimeout(function(){
+            window.location.reload();
+          }, 3000);
+        }
+      });
+    }
   }
 
   onSaveError(resp) {
-    this.toast?.addMessage(resp.message, 'Process syncing error', ToastLevelEnum.error)
+    if (resp.message) {
+      this.toast?.addMessage(resp.message, 'Process syncing error', ToastLevelEnum.error)
+    } else {
+      this.toast?.addMessage(resp, 'Process syncing error', ToastLevelEnum.error)
+    }
   }
 
   onSaveSuccess(resp) {
