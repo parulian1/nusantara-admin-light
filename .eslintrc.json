@@ -3,6 +3,9 @@
   "ignorePatterns": [
     "projects/**/*"
   ],
+  "env": {
+    "browser": true
+  },
   "overrides": [
     {
       "files": [

@@ -35,13 +35,14 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
     this.route.data.subscribe((data: { entity: T }) => {
       this.initializeForm(data.entity);
       this.setOriginalEntityName(data.entity);
-      this.form.markAllAsTouched();
+
     });
   }
 
   ngAfterViewInit(): void {
     this.route.data.subscribe((data: { entity: T }) => {
       this.initializeSubViewForms(data.entity);
+      this.form?.markAllAsTouched();
     });
   }
 
