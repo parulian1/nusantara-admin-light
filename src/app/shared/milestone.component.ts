@@ -53,7 +53,7 @@ import { Component, Input, OnInit } from '@angular/core';
     'li span.current::after{ background: var(--secondary); }',
     `li span.achieved::after{
         background: var(--tertiary);
-        background-image: url(/assets/white-checkmark.svg);
+        background-image: url('~src/assets/white-checkmark.svg');
         background-repeat: no-repeat;
         background-position: center center;
         background-size: 16px;

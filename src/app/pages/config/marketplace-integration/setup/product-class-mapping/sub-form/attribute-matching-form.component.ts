@@ -134,7 +134,7 @@ import { SubFormComponent } from './sub-form.component';
     '.error-detail { text-align: left; }',
     '.match { border-color: var(--success) !important; }',
     '.mismatch { border-color: var(--error) !important; }',
-    `.warning { background: url('/assets/warning-24px.svg') no-repeat scroll right 15px center !important;}`
+    `.warning { background: url('~src/assets/warning-24px.svg') no-repeat scroll right 15px center !important;}`
   ],
   providers: [
     {
