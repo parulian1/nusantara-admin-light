@@ -60,7 +60,7 @@ import { MarketplaceClientEnum } from './markeplace-client-enum';
           [isEdit]="editMode"
         ></nus-tiktok-client-form>
         <nus-blibli-client-form
-          *ngSwitchCase="marketplaceClient.tiktok"
+          *ngSwitchCase="marketplaceClient.blibli"
           [shopSlug]="shopSlug"
           [isEdit]="editMode"
         ></nus-blibli-client-form>
