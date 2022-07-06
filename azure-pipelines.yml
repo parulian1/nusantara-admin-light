@@ -24,6 +24,10 @@ variables:
   - name: IS_NON_MASTER_BRANCH
     value: $[ne(variables['Build.SourceBranch'], 'refs/heads/master')]
 
+  - name: IS_RELEASE_BRANCH
+    value: $[or(startsWith(variables['Build.SourceBranch'], 'refs/heads/hotfix/'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'))]
+
+
 resources:
   repositories:
     - repository: templates
@@ -50,6 +54,7 @@ jobs:
       and(
         succeeded(),
         eq('True', variables.IS_NON_MASTER_BRANCH),
+        eq('True', variables.IS_RELEASE_BRANCH),
         ne(variables['Build.Reason'], 'PullRequest')
       )
     steps:
