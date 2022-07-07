@@ -22,10 +22,11 @@ export class InventoryOrderListResolver extends AbstractListResolver<IInventoryO
         [
           'start_date',
           'end_date',
-          'receiving_status',
-          'receiving_type',
+          'status',
+          'type',
           'page',
           'per_page',
+          'q',
         ].indexOf(keyParam) >= 0
       ) {
         if ('page' === keyParam || keyParam === 'per_page') {
@@ -36,7 +37,10 @@ export class InventoryOrderListResolver extends AbstractListResolver<IInventoryO
           }
         }
         if (!!theQuery[keyParam]) {
-          params = params.set(keyParam, theQuery[keyParam]);
+          theQuery[keyParam].split(',').forEach((value) => {
+            params = params.append(keyParam, value.trim());
+          });
+          // params = params.set(keyParam, theQuery[keyParam]);
         }
         continue;
       }

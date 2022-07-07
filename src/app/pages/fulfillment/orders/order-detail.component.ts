@@ -127,7 +127,7 @@ function isTSCOrder(orderData: order.IOrderDetail) {
                       Ready
                     </button>
                     <button
-                      *ngIf="!isShipButtonHidden(children.data[0]) && orderDetailData.sourceName!='shopee' "
+                      *ngIf="!isShipButtonHidden(children.data[0]) && !customshipping.includes(orderDetailData.sourceName) "
                       type="button"
                       class="control"
                       (click)="requestShipmentAndUpdateOrder(children.data[0])"
@@ -136,7 +136,7 @@ function isTSCOrder(orderData: order.IOrderDetail) {
                       Ship
                     </button>
                     <button
-                      *ngIf="!isShipButtonHidden(children.data[0]) && orderDetailData.sourceName=='shopee' "
+                      *ngIf="!isShipButtonHidden(children.data[0]) && customshipping.includes(orderDetailData.sourceName) "
                       type="button"
                       class="control"
                       (click)="openTransferModal()"
@@ -158,7 +158,7 @@ function isTSCOrder(orderData: order.IOrderDetail) {
                       type="button"
                       class="control"
                       (click)="updateOrder(children.data[0], 'complete')"
-                      [disabled]="isCompleteButtonDisabled(children.data[0])"
+                      [disabled]="isCompleteButtonDisabled(children.data[0]) || NoAWBCompleteButtonDisabled(children.data[0])"
                       i18n
                     >
                       Complete
@@ -170,7 +170,9 @@ function isTSCOrder(orderData: order.IOrderDetail) {
                       [ngClass]="{
                         'shopee': this.orderDetailData.sourceName === 'shopee',
                         'tokopedia': this.orderDetailData.sourceName === 'tokopedia',
-                        'bukalapak': this.orderDetailData.sourceName === 'bukalapak'}"
+                        'bukalapak': this.orderDetailData.sourceName === 'bukalapak',
+                        'tiktok': this.orderDetailData.sourceName === 'tiktok'
+                      }"
                       href="{{ children.data[0].marketplaceRedirectHref }}"
                       target="_blank" i18n
                     >
@@ -193,12 +195,11 @@ function isTSCOrder(orderData: order.IOrderDetail) {
                       Orders can only be processed on the
                       {{ orderDetailData.sourceName | titlecase }} Dashboard.
                     </div>
-                    <div *ngIf="isCompleteButtonDisabled(children.data[0])" i18n>
+                    <div *ngIf="isCompleteButtonDisabled(children.data[0]) || NoAWBCompleteButtonDisabled(children.data[0])" i18n>
                       Order will automatically complete when customer receives
                       the package
                     </div>
                   </ng-container>
-
                   <button
                     class="download-button control secondary"
                     [disabled]="!isDownloadable(children.data[0])"
@@ -382,11 +383,14 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   isDetailShowed = false;
   isRequestShipment = false;
 
+  // custom shipping
+  customshipping = ['shopee', 'tiktok']
+
   // marketplace list for custom handling download shipping label
-  customHandlingAWB = ['tokopedia', 'shopee', 'bukalapak', 'lazada'];
+  customHandlingAWB = ['tokopedia', 'shopee', 'bukalapak', 'lazada', 'tiktok'];
 
   // enable refresh AWB for following source name
-  enableRefreshAwb = ['tokopedia', 'shopee', 'bukalapak', 'lazada'];
+  enableRefreshAwb = ['tokopedia', 'shopee', 'bukalapak', 'lazada', 'tiktok'];
 
   constructor(
     public route: ActivatedRoute,
@@ -712,6 +716,11 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
 
   isCompleteButtonDisabled(childrenData: IOrderChildrenData) {
     return this.isfulfillmentException && !!this.getAwbNumber(childrenData);
+  }
+
+  NoAWBCompleteButtonDisabled(childrenData: IOrderChildrenData) {
+    return this.isfulfillmentException && this.orderDetailData.source === 'marketplace'
+            && this.orderDetailData.status === 'shipped' && this.getAwbNumber(childrenData) === '';
   }
 
   refreshAwb() {

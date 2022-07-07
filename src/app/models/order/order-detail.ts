@@ -38,7 +38,7 @@ export interface IOrderDetail extends ICoreOrder {
   source: string;
   sourceName: string;
 
-  storeId: number;
+  storeId: string;
   storeName: string;
 
   subtotalCost: number;

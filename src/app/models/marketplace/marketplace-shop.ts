@@ -13,6 +13,7 @@ export interface IShopAttribute {
   isMandatory: boolean;
   options: string[];
   type: string;
+  isVariant:boolean;
 }
 
 export interface IShopAttributeMapping {

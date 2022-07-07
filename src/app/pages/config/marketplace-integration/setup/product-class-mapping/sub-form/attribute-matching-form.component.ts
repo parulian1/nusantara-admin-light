@@ -261,6 +261,7 @@ export class AttributeMatchingFormComponent
           bhismaObj: ['', Validators.required],
           bhismaType: ['', Validators.required],
           newAttrName: null,
+          isVariant:obj.isVariant,
         });
         this.attributes.push(attrGroup);
       });
@@ -351,6 +352,7 @@ export class AttributeMatchingFormComponent
           : null,
         product_class_attribute_type: attr.bhismaType,
         new_attribute_name: attr.newAttrName,
+        isVariant:attr.isVariant
       };
     });
   }

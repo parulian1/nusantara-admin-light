@@ -49,7 +49,7 @@ import { map } from 'rxjs/operators';
               {{ displayReceivingID(p?.receivingOrder?.href) }} / {{ p?.product?.name }} / {{ p?.location?.name }}
             </td>
             <td class="product-sku" title="{{ p.sku }}">{{ p.sku }}</td>
-            <td class="stock-date" title="{{ p.expiryDate | date }}">{{ p.expiryDate | date }}</td>
+            <td class="stock-date" title="{{ p.created | date }}">{{ p.created | date }}</td>
             <td class="product-original-qty" title="{{ p.originalQuantity }}">{{ p.originalQuantity }}</td>
             <td class="centered"><a href="#" (click)="selectStockRecord(p)" i18n>Add</a></td>
           </tr>
