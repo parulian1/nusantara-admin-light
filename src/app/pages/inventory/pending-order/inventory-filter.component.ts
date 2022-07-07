@@ -93,8 +93,8 @@ export class InventoryFiltersComponent implements OnInit {
 
   readonly START_TIME_PARAM = 'start_date';
   readonly END_TIME_PARAM = 'end_date';
-  readonly STATUS_PARAM = 'receiving_status';
-  readonly TYPE_PARAM = 'receiving_type';
+  readonly STATUS_PARAM = 'status';
+  readonly TYPE_PARAM = 'type';
 
   constructor(public router: Router,
               public route: ActivatedRoute,
