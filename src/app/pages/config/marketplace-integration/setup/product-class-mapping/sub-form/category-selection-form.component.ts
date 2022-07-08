@@ -36,7 +36,7 @@ import { ErrorResult, IResultResponse, ToastLevelEnum, ToastService } from '@nus
             <span>{{ productClassName }}</span>
           </label>
 
-          <div class="wrapper-sync" *ngIf="this.state.productClass.isMapped">
+          <div class="wrapper-sync" *ngIf="!this.state.productClass.isMapped">
             <div class="container">
               <div>
                 <p class="latest">Latest Update</p>
