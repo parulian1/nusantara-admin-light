@@ -77,10 +77,10 @@ import { IStockRecord } from '@nusantara/models/inventory';
     <tr class="td-detail-row" [ngClass]="{'show': showDetail.value}">
       <td colspan="8">
         <div class="stock-record-detail-info">
-          <span><b>SKU</b> {{ sku.value }}</span>
-          <span><b>Receiving Date</b> {{ created.value | date }}</span>
-          <span><b>Batch</b> {{ (batch.value) || "-" }}</span>
-          <span><b>Expiry Date</b> {{ (expiryDate.value | date) || "-" }}</span>
+          <span i18n><b>SKU</b> {{ sku.value }}</span>
+          <span i18n><b>Receiving Date</b> {{ created.value | date }}</span>
+          <span i18n><b>Batch</b> {{ (batch.value) || "-" }}</span>
+          <span i18n><b>Expiry Date</b> {{ (expiryDate.value | date) || "-" }}</span>
         </div>
       </td>
     </tr>

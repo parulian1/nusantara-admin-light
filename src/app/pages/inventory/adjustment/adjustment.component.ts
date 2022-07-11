@@ -190,10 +190,10 @@ import { DomSanitizer } from '@angular/platform-browser';
               <div class="dropdown" [class.disabled]="stockRecords.controls.length == 0">
                 <i class="material-icons">more_vert</i>
                 <div class="dropdown-content">
-                  <button (click)="toggleAllDetail(true)" class="toggle-all-detail-button" type="button">
+                  <button (click)="toggleAllDetail(true)" class="toggle-all-detail-button" type="button" i18n>
                     <span class="body-2">Expand all</span>
                   </button>
-                  <button (click)="toggleAllDetail(false)" class="toggle-all-detail-button" type="button">
+                  <button (click)="toggleAllDetail(false)" class="toggle-all-detail-button" type="button" i18n>
                     <span class="body-2">Hide all</span>
                   </button>
                 </div>

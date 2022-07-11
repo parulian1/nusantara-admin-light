@@ -120,7 +120,7 @@ export class StockInputComponent extends AbstractEditingComponent implements OnI
       }),
       status: ['approved', [Validators.required, ]],
       createdBy: this.fb.group({
-        href: `https://bhisma.cloud/api/iam/${this.authService.tokenPayload.user_id}/`
+        href: `https://${this.authService.tokenPayload?.site}/api/iam/${this.authService.tokenPayload.user_id}/`
       }),
       reviewedBy: [null, ],
       stockRecords: this.fb.array([], [Validators.required, Validators.minLength(1)]),
