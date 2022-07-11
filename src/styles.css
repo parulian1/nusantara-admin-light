@@ -985,3 +985,8 @@ textarea.input-description {
 .inline-option > label {
   margin-inline-end: 15px;
 }
+
+
+.wider-modal.nsm-dialog {
+  max-width: 850px;
+}

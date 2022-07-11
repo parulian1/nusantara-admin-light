@@ -21,3 +21,5 @@ export * from './product-subscription';
 export * from './product-relation';
 
 export * from './low-stock';
+
+export * from './product-with-promotion';

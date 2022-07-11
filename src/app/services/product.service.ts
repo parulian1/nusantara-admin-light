@@ -5,6 +5,7 @@ import {AbstractCrudService, PagedResponse} from '@nusantara/core';
 import {products} from '@nusantara/models';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {IProductWithPromotion} from "@nusantara/models/products/product-with-promotion";
 
 /**
  * Service for product CRUD.
@@ -73,6 +74,23 @@ export class ProductService extends AbstractCrudService<products.IProduct> {
 
     return this.httpClient
       .get<products.IProduct[]>(`${this.baseUrl}/`, {observe: 'response', responseType: 'json', params})
+      .pipe(map(resp => new PagedResponse(resp)));
+  }
+
+  fetchWithPromotionList(query?: string, page: number = 1, perPage?: number): Observable<PagedResponse<products.IProductWithPromotion>> {
+    // create query params --> ?q=maybe&page=1
+    let params = new HttpParams().set('page', page.toFixed(0).toString());
+
+    if (perPage) {
+      params = params.set('per_page', perPage.toFixed(0).toString());
+    }
+
+    if (query) {
+      params = params.set('q', query);
+    }
+
+    return this.httpClient
+      .get<products.IProductWithPromotion[]>(`${this.baseUrl}/promotion-info/`, {observe: 'response', responseType: 'json', params})
       .pipe(map(resp => new PagedResponse(resp)));
   }
 }

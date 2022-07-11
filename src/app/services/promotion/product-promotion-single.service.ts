@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { AbstractCrudService } from '@nusantara/core/http';
-import { IProductPromotion } from '@nusantara/models';
+import {IProductPromotion, IProductPromotionValidate} from '@nusantara/models';
 import { Observable } from 'rxjs';
+import {ErrorResult, IResultResponse, SuccessResult} from '@nusantara/core';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -32,4 +34,10 @@ export class ProductPromotionSingleService extends AbstractCrudService<IProductP
     return this.httpClient
       .get<IProductPromotion>(`${url}`, {observe: 'body', responseType: 'json', params});
   }
+
+  validate(entity: IProductPromotionValidate | FormData, headers?: any): Observable<any> {
+    return this.httpClient
+      .post<IProductPromotionValidate>(`${this.baseUrl}/validate/`, entity, {observe: 'response', responseType: 'json', headers});
+  }
+
 }

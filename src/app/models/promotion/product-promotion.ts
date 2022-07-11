@@ -1,5 +1,5 @@
 import { INamedHrefEntity } from '../base';
-import { ProductPromotionType, IProductBundling } from '@nusantara/models';
+import { ProductPromotionType, IProductBundling, ProductPromotionStatusType } from '@nusantara/models';
 
 export interface IProductPromotion extends INamedHrefEntity {
   products: Array<INamedHrefEntity>;
@@ -20,4 +20,5 @@ export interface IProductPromotion extends INamedHrefEntity {
   appliedOnOffline: boolean;
   customerGroups?: INamedHrefEntity[];
   promotionGroup?: INamedHrefEntity;
+  status?: ProductPromotionStatusType;
 }

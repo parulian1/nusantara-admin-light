@@ -18,3 +18,6 @@ export * from './marketplace-stock-info-modal.component';
 export * from './animation';
 export * from './confirm-modal-reset-pin.component';
 export * from './vendor-selection-modal/vendor-selection-modal.component';
+
+
+export * from './product-with-promotion-tag-selection-modal.component';

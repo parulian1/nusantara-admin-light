@@ -4,12 +4,28 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as XLSX from 'xlsx';
 
 import { ProductPromotionSingleService, ProductService, SiteConfigService } from '@nusantara/services';
-import { AbstractDetailComponent, DialogResult, Logger, ToastService } from '@nusantara/core';
+import {AbstractDetailComponent, DialogResult, ErrorResult, Logger, ToastService} from '@nusantara/core';
 import { INamedHrefEntity } from '@nusantara/models/base';
-import { IProductBundling, IProductPromotion, IPromoGroup, ProductPromotionType} from '@nusantara/models';
-import { IProduct } from '@nusantara/models/products';
-import { CustomerGroupModalComponent, ProductSelectionModalComponent } from '@nusantara/shared';
+import {
+  IHttpFailure,
+  IProductBundling,
+  IProductPromotion,
+  IProductPromotionValidate,
+  IPromoGroup,
+  ProductPromotionType
+} from '@nusantara/models';
+import {IProduct, IProductWithPromotion} from '@nusantara/models/products';
+import {
+  CustomerGroupModalComponent,
+  ProductSelectionModalComponent,
+  ProductWithPromotionTagSelectionModalComponent
+} from '@nusantara/shared';
 import { PromoCampaignModalComponent } from '@nusantara/shared/modals/promo-campaign-modal.component';
+import {catchError} from 'rxjs/operators';
+import {HttpErrorResponse} from '@angular/common/http';
+import {of} from 'rxjs';
+import {ConfirmModalComponent} from "@nusantara/shared/confirm-modal.component";
+import {getSlugFromHref} from "@nusantara/shared/helpers";
 
 declare var window: any; // Needed on Angular 8+
 
@@ -65,19 +81,23 @@ const log = new Logger('ProductPromotionComponent');
       <div class="promo-date">
         <label class="promo-date-label">
           <span class="subtitle" i18n>Valid From</span>
-          <nus-field-datetime [control]="validFrom" [minDate]="minDateValidFrom" [maxDate]="maxDateValidFrom"></nus-field-datetime>
+          <nus-field-datetime [control]="validFrom" [minDate]="minDateValidFrom"
+                              [maxDate]="maxDateValidFrom"
+                              (change)="validFromAndToValidation()"></nus-field-datetime>
           <nus-field-errors [control]="validFrom"></nus-field-errors>
         </label>
 
         <label class="promo-date-label">
           <span class="subtitle" i18n>Valid To</span>
-          <nus-field-datetime [control]="validTo" [minDate]="minDateValidTo" [maxDate]="maxDateValidTo"></nus-field-datetime>
+          <nus-field-datetime [control]="validTo" [minDate]="minDateValidTo"
+                              [maxDate]="maxDateValidTo"
+                              (change)="validFromAndToValidation()"></nus-field-datetime>
           <nus-field-errors [control]="validTo"></nus-field-errors>
         </label>
       </div>
 
 
-      <label *ngIf="!isPromoBundling">
+      <label *ngIf="!isPromoBundling || isOldForm">
         <span i18n>Amount</span>
         <input type="number" [formControl]="amount"
                placeholder="ex. 1000000">
@@ -154,10 +174,10 @@ const log = new Logger('ProductPromotionComponent');
       <div class="promo-products" *ngIf="!isPromoBundling">
         <span class="upload-product">
           <h2 class="title-2" i18n>Promotion Products</h2>
-          <button type="button" class="control" (click)="uploadProductXLSX()" [disabled]="checkPromoDateValid()">
-            <i class="material-icons">publish</i>
-            <span i18n>Upload from XLSX</span>
-          </button>
+<!--          <button type="button" class="control" (click)="uploadProductXLSX()" [disabled]="checkPromoDateValid()">-->
+<!--            <i class="material-icons">publish</i>-->
+<!--            <span i18n>Upload from XLSX</span>-->
+<!--          </button>-->
         </span>
 
         <table>
@@ -173,7 +193,7 @@ const log = new Logger('ProductPromotionComponent');
             <td class="numeric">{{ i + 1 }}</td>
             <td>{{ control.get('name').value }}</td>
             <td>
-              <button (click)="products.removeAt(i)" [disabled]="checkPromoDateValid()" type="button" class="remove-button">
+              <button (click)="removeProduct(i)" [disabled]="checkPromoDateValid()" type="button" class="remove-button">
                 <i class="material-icons">remove_circle_outline</i>
               </button>
             </td>
@@ -214,11 +234,11 @@ const log = new Logger('ProductPromotionComponent');
       <label *ngIf="!isPromoBundling" class="promo-platform">
         <span class="subtitle" i18n>Platform</span>
         <label class="checkbox">
-          <input type="checkbox" [formControl]="appliedOnOnline" name="appliedOnOnline">
+          <input type="checkbox" [formControl]="appliedOnOnline" (change)="validFromAndToValidation()" name="appliedOnOnline">
           <span i18n>Online (Website)</span>
         </label>
         <label class="checkbox" *ngIf="enterpriseLicense()">
-          <input type="checkbox" [formControl]="appliedOnOffline" name="appliedOnOffline">
+          <input type="checkbox" [formControl]="appliedOnOffline" (change)="validFromAndToValidation()" name="appliedOnOffline">
           <span i18n>Offline (POS)</span>
         </label>
       </label>
@@ -294,7 +314,23 @@ const log = new Logger('ProductPromotionComponent');
       <nus-customer-group-selection-modal [selectedGroups]="entity?.customerGroups" #customerGroupModal>
       </nus-customer-group-selection-modal>
       <nus-promo-campaign-selection-modal #promotionGroupModal></nus-promo-campaign-selection-modal>
+      <nus-product-with-promotion-selection-modal [productSelected]="productSelected"
+                                                  [typesWithLabelInfo]="typesWithLabelInfo"
+                                                  [promoClassificationType]="promoClassificationType"
+                                                  [pricePromoType]="pricePromoType"
+                                                  [bundlingPromoType]="bundlingPromoType"
+                                                  (removeProduct)="removeProductFromModal($event)"
+
+                                                  #productWithPromotionTagModal>
+      </nus-product-with-promotion-selection-modal>
     </form>
+    <nus-confirm-modal
+      [title]="'Confirmation'"
+      [content]="confirmContent"
+      [okText]="'Yes'"
+      [cancelText]="'Cancel'"
+    >
+    </nus-confirm-modal>
   `,
   styles: [`
     .promo-date {
@@ -355,10 +391,11 @@ const log = new Logger('ProductPromotionComponent');
     .promo-type {
       border: 1px solid #B4B4B4;
       border-radius: 4px;
-      width: 100%;
+      width: auto;
       padding: 20px;
       margin-bottom: 24px;
     }
+
     .promo-type label {
       display: grid;
       grid-template-columns: 2fr 2fr 3fr;
@@ -378,19 +415,24 @@ const log = new Logger('ProductPromotionComponent');
       background: #F0BE00;
       border-radius: 4px;
       text-align: center;
-      width: 100px;
+      width: fit-content;
+      padding: 0px 5px;
     }
+
     .tag-on {
       background: #21A656;
       border-radius: 4px;
       text-align: center;
-      width: 100px;
+      width: fit-content;
+      padding: 0px 5px;
     }
+
     .tag-exp {
       background: #C83228;
       border-radius: 4px;
       text-align: center;
-      width: 100px;
+      width: fit-content;
+      padding: 0px 5px;
     }
   `]
 })
@@ -415,12 +457,26 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
   @ViewChild('benefitModal') productBundlingBenefitSelectionModal: ProductSelectionModalComponent;
   @ViewChild('customerGroupModal') customerGroupSelectionModal: CustomerGroupModalComponent;
   @ViewChild('promotionGroupModal') promotionGroupSelectionModal: PromoCampaignModalComponent;
+  @ViewChild('productWithPromotionTagModal') productWithPromotionTagModal: ProductWithPromotionTagSelectionModalComponent;
+  @ViewChild(ConfirmModalComponent) confirmModal: ConfirmModalComponent;
 
   typesWithLabelInfo: Object = {
     percentage: 'Cut by Percentage',
     amount_off: 'Cut by Amount',
     override_price: 'Flush Price'
   }
+
+  productSelected: IProductWithPromotion[];
+
+  pricePromoType: Array<string> = ['percentage', 'amount_off', 'override_price'];
+  bundlingPromoType: Array<string> = ['bundling_promo'];
+  promoClassificationType: string;
+
+  confirmContent: string = "If some products are included in the other Price Promo during the " +
+    "same or overlapping period, they will be removed from the list. Are you sure to continue?";
+
+  validateStatus: boolean = true;
+  invalidProduct: Array<string> = [];
 
   constructor(service: ProductPromotionSingleService,
               route: ActivatedRoute,
@@ -441,6 +497,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
   }
 
   initializeForm(entity?: IProductPromotion) {
+    this.productSelected = [];
     this.entity = entity;
     this.form = this.fb.group({
       name: [entity?.name, [Validators.required]],
@@ -478,10 +535,12 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
 
     for (const prodCondition of entity?.productBundlingCondition ?? []) {
       this.addProductCondition(prodCondition);
+      this.productSelected.push(prodCondition);
     }
 
     for (const prod of entity?.products ?? []) {
       this.addProduct(prod);
+      this.productSelected.push(prod);
     }
 
     if (this.type.value === 'promo_bundling') {
@@ -534,6 +593,8 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     this.productBundlingBenefitSelectionModal.onClose.subscribe(() => this.onProductBundlingBenefitSelectionModalClosed());
     this.customerGroupSelectionModal.onClose.subscribe(() => this.onCustomerGroupSelectionModalClosed());
     this.promotionGroupSelectionModal.onClose.subscribe(() => this.onPromoGroupModalClosed());
+    this.productWithPromotionTagModal.onClose.subscribe(() => this.onProductWithPromotionTagModalClosed());
+    this.confirmModal.onClose.subscribe(() => this.onConfirmModalClosed());
   }
 
   get name(): FormControl {
@@ -624,6 +685,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     });
 
     this.products.push(f);
+    this.productSelected.push(product);
   }
 
   addProductCondition(prodCondition?: IProductBundling) {
@@ -644,10 +706,15 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     });
 
     this.productBundlingBenefit.push(f);
+    this.productSelected.push(prodBenefit as IProductWithPromotion);
   }
 
   selectProduct() {
-    this.productSelectionModal.open();
+    if (!!this.isOldForm) {
+      this.productSelectionModal.open();
+    } else {
+      this.productWithPromotionTagModal.open();
+    }
   }
 
   selectProductBundlingCondition() {
@@ -816,6 +883,7 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
 
   removeProductBenefit(i: number): void {
     this.productBundlingBenefit.removeAt(i);
+    this.productSelected.splice(i, 1);
   }
 
   onPromoTypeChange($event: any) {
@@ -881,11 +949,25 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     this.route.params?.subscribe((param) => {
       if (!this.entity && promotionTypeOption.indexOf(param.type) > -1) {
         this.promoType = param.type;
+        if (this.pricePromoType.indexOf(this.promoType) > -1) {
+          this.promoClassificationType = 'price_promo';
+        } else if (this.bundlingPromoType.indexOf(this.promoType) > -1) {
+          this.promoClassificationType = 'bundling_promo';
+        } else {
+          this.promoClassificationType = 'unknown';
+        }
         this.type.setValue(param.type);
       }
     });
     if (!!this.entity) {
       this.promoType = this.entity.type;
+      if (this.pricePromoType.indexOf(this.promoType) > -1) {
+        this.promoClassificationType = 'price_promo';
+      } else if (this.bundlingPromoType.indexOf(this.promoType) > -1) {
+        this.promoClassificationType = 'bundling_promo';
+      } else {
+        this.promoClassificationType = 'unknown';
+      }
     }
   }
 
@@ -901,24 +983,136 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     if (!!this.entity) {
       const entityValidFrom = new Date(this.entity.validFrom);
       const entityValidTo = new Date(this.entity.validTo);
-      if (!this.entity.isActive) {
-        return 'Inactive';
+      if (!!this.entity.status) {
+        return this.entity.status;
       } else {
-        if (entityValidTo < currentDate) {
-          return 'past';
-        } else if (entityValidFrom < currentDate && currentDate < entityValidTo) {
-          return 'Ongoing';
+        if (!this.entity.isActive) {
+          return 'Inactive';
         } else {
-          return 'Upcoming';
+          if (entityValidTo < currentDate) {
+            return 'Past';
+          } else if (entityValidFrom <= currentDate && currentDate < entityValidTo) {
+            return 'Ongoing';
+          } else {
+            return 'Upcoming';
+          }
         }
       }
     } else {
-      if (this.validFrom.value > currentDate && !!this.isActive) {
-        return 'Upcoming';
+      if (this.validFrom.value) {
+        const validFrom = new Date(this.validFrom.value.toString());
+        const validTo = new Date(this.validTo.value.toString());
+        if (validFrom > currentDate && currentDate < validTo && !!this.isActive) {
+          return 'Upcoming';
+        } else if (validFrom <= currentDate && currentDate < validTo && !!this.isActive) {
+          return 'Ongoing';
+        }
       }
     }
-    console.log('validfrom', this.validFrom.value, currentDate, this.validFrom.value > currentDate);
     return '-';
+  }
+
+  onProductWithPromotionTagModalClosed() {
+    if (this.productWithPromotionTagModal.result === DialogResult.OK) {
+      const selectedProduct = this.productWithPromotionTagModal.product.value as IProduct;
+
+      const f = this.fb.group({
+        name: [selectedProduct.name, []],
+        href: [selectedProduct.href, []],
+      });
+      this.products.push(f);
+      this.validFromAndToValidation();
+    }
+  }
+
+  removeProduct(i: number): void {
+    this.products.removeAt(i);
+    this.productSelected.splice(i, 1);
+  }
+
+  removeProductFromModal($event: any) {
+    console.log('product removed', $event);
+    // const index = this.products.value.findIndex((_product) => {
+    //   return _product.href === product.href;
+    // })
+    // this.products.removeAt(index);
+    // this.productSelected.splice(index, 1);
+  }
+
+  validFromAndToValidation() {
+    this.form.value.validFrom = this.form.value.validFrom + this.getTimeZone();
+    this.form.value.validTo = this.form.value.validTo + this.getTimeZone();
+
+    if (!!this.entity?.href && !!this.entity?.banner && !this.banner.value) {
+      this.form.removeControl('banner');
+    }
+
+    if (this.type.value === 'promo_bundling') {
+      this.form.removeControl('products');
+    }
+
+    if (this.type.value !== 'promo_bundling') {
+      this.form.removeControl('productBundlingBenefit');
+      this.form.removeControl('productBundlingCondition');
+    }
+
+    if (!!this.banner && this.imagePreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
+      this.form.value.banner = this.imagePreviewUrl;
+    }
+
+    let payload: IProductPromotionValidate = this.getFormValue() as IProductPromotionValidate;
+
+    if (!payload.validFrom) {
+      delete payload.validFrom;
+    }
+    if (!payload.validTo) {
+      delete payload.validTo;
+    }
+    if (!payload.products) {
+      delete payload.products;
+    }
+
+    this.service.validate(payload).pipe(catchError(err => {
+        if (err instanceof HttpErrorResponse) {
+          return of(new ErrorResult<IHttpFailure>(err.error, err.status));
+        } else {
+          return of(new ErrorResult<IHttpFailure>({detail: 'Network error.. probably?'}, err.status));
+        }
+      })).subscribe(
+      resp => {
+        if (resp.status === 200) {
+          this.validateStatus = true;
+          this.invalidProduct = [];
+        } else {
+          this.validateStatus = false;
+          console.log('error', resp);
+          this.invalidProduct = resp.errorDetails.nonFieldErrors;
+        }
+      }, error => {}, () => {
+        if (!this.validateStatus) {
+          this.confirmModal.open();
+        }
+      }
+    );
+
+  }
+
+  onConfirmModalClosed() {
+    if (this.confirmModal.result === DialogResult.OK) {
+      this.productSelected.forEach((product, index) => {
+        if (this.invalidProduct.indexOf(getSlugFromHref(product.href)) > -1) {
+          this.productSelected.splice(index, 1);
+        }
+      });
+      this.products.clear();
+      this.productSelected.forEach((product) => {
+        const f = this.fb.group({
+          name: [product.name, []],
+          href: [product.href, []],
+        });
+        this.products.push(f);
+      });
+    }
   }
 }
 
