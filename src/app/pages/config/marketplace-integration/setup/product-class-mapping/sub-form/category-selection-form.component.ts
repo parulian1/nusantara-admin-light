@@ -182,7 +182,7 @@ export class CategorySelectionFormComponent
 
   syncCategory(){
     if (this.catSync.lastSync) {
-      const syncValidator = moment(new Date(this.catSync.created)).add(3, 'h').toDate().getTime();
+      const syncValidator = moment(new Date(this.catSync.lastSync)).add(3, 'h').toDate().getTime();
       const now = new Date().getTime()
 
       if(now < syncValidator){
