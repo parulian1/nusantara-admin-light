@@ -24,7 +24,7 @@ import { map } from 'rxjs/operators';
       <form #modalForm class="fluid">
         <div class="search">
           <i class="material-icons">search</i>
-          <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Product Name or SKU">
+          <input type="search" id="search_box" [formControl]="searchText" placeholder="Search Product Name, SKU, or Batch">
         </div>
         <input type="hidden" [formControl]="stockRecord">
         <p i18n>Showing 10 recently added product records. Search product name or SKU to find more products.</p>
@@ -36,20 +36,24 @@ import { map } from 'rxjs/operators';
           </colgroup>
           <thead>
           <tr style="background-color: #F4F4F4;">
-            <th class="product-name" i18n>Receiving ID / Product Name / Location</th>
+            <th class="product-name" i18n>Receiving ID / Product Name</th>
             <th class="product-sku" i18n>SKU</th>
-            <th class="stock-date" i18n>Receiving Date</th>
-            <th class="product-original-qty" i18n>Original Qty</th>
+            <th class="stock-receiving-date" i18n>Receiving Date</th>
+            <th class="stock-batch" i18n>Batch</th>
+            <th class="stock-expiry-date" i18n>Expiry Date</th>
+            <th class="product-original-qty" i18n>Stock</th>
             <th class="centered" i18n>Action</th>
           </tr>
           </thead>
           <tbody *ngIf="displayedResults; else loading">
           <tr *ngFor="let p of displayedResults?.entities">
-            <td class="product-name" title="{{ displayReceivingID(p?.receivingOrder?.href) }} / {{ p?.product?.name }} / {{ p?.location?.name }}">
-              {{ displayReceivingID(p?.receivingOrder?.href) }} / {{ p?.product?.name }} / {{ p?.location?.name }}
+            <td class="product-name" title="{{ displayReceivingID(p?.receivingOrder?.href) }} / {{ p?.product?.name }}">
+              {{ displayReceivingID(p?.receivingOrder?.href) }} / {{ p?.product?.name }}
             </td>
             <td class="product-sku" title="{{ p.sku }}">{{ p.sku }}</td>
-            <td class="stock-date" title="{{ p.created | date }}">{{ p.created | date }}</td>
+            <td class="stock-receiving-date" title="{{ p.created | date }}">{{ p.created | date }}</td>
+            <td class="stock-batch" title="{{ p.batchNumber }}">{{ p.batchNumber }}</td>
+            <td class="stock-expiry-date" title="{{ p.expiryDate | date }}">{{ p.expiryDate | date }}</td>
             <td class="product-original-qty" title="{{ p.originalQuantity }}">{{ p.originalQuantity }}</td>
             <td class="centered"><a href="#" (click)="selectStockRecord(p)" i18n>Add</a></td>
           </tr>

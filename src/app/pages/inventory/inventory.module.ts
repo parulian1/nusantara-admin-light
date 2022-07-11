@@ -44,7 +44,7 @@ import { MatInputModule } from '@angular/material/input';
     AdjustmentComponent,
     AdjustmentLineItemComponent,
     AdjustmentDetailComponent,
-    StockRecordDialogComponent,
+    StockRecordDialogComponent
   ],
   imports: [
     CommonModule,
