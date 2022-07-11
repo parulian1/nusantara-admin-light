@@ -10,7 +10,12 @@ export function fileTypeValidator(imageType: Array<string>, files: FileList) {
       logger.debug('fileTypeValidator', 'No Value');
       return null;
     }
-    if (imageType.includes(files.item(0).type)) {
+    let xFileError = false;
+    for (let x = 0; x < files.length; x++) {
+      logger.debug('fileTypeValidator', 'check image in ', x, ' is type ', imageType);
+      xFileError = xFileError || !imageType.includes(files.item(x).type);
+    }
+    if (!xFileError) {
       logger.debug('fileTypeValidator', 'image in ', imageType);
       return null;
     }
@@ -26,7 +31,7 @@ export function fileTypeValidator(imageType: Array<string>, files: FileList) {
 
 /***
  * Validate file size in KB
- * @param {number} maxSize
+ * @param {number} maxSize KB
  * @param {FileList} files
  * @returns {(control: AbstractControl) => (ValidationErrors | null)}
  */
@@ -37,10 +42,16 @@ export function fileSizeValidator(maxSize: number, files: FileList) {
       logger.debug('fileSizeValidator', 'No Value');
       return null;
     }
-    if (files.item(0).size <= (maxSize * 1024)) {
+    let xFileError = false;
+    for (let x = 0; x < files.length; x++) {
+      logger.debug('fileSizeValidator', 'check image in ', x, ' is sized ', maxSize, files.item(x).size);
+      xFileError = xFileError || !(files.item(0).size <= (maxSize * 1024));
+    }
+    if (!xFileError) {
+      logger.debug('fileSizeValidator', 'image size ', xFileError);
       return null;
     }
-    logger.debug('fileSizeValidator', 'image size over ', files.item(0).size);
+
     return {
       fileSize: {
         value: maxSize,
@@ -50,6 +61,31 @@ export function fileSizeValidator(maxSize: number, files: FileList) {
   };
 }
 
+/**
+ * Validate the number of uploaded files input
+ *
+ * @param {number} maxFile
+ * @param {FileList} files
+ * @returns {(control: AbstractControl) => (ValidationErrors | null)}
+ */
+export function maxFileValidator(maxFile: number, files: FileList) {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+    if (!value) {
+      logger.debug('maxFileValidator', 'No Value');
+      return null;
+    }
+    if (files.length <= maxFile) {
+      return null;
+    }
+
+    return {
+      maxFile: {
+        value: maxFile,
+      }
+    };
+  };
+}
 
 export function fileNameLengthValidator(maxLength: number, files: FileList) {
   return (control: AbstractControl): ValidationErrors | null => {
