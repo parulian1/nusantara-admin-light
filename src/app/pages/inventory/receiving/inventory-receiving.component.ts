@@ -329,19 +329,16 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
       const selectedProduct = this.productSelectionModal.product.value as IProduct;
 
       // Get product class
-      if (!!this.productClasses) {
-        console.log('tes', selectedProduct.productClass.href);
-        const currentPc = this.productClasses.filter(pc => pc.href === selectedProduct.productClass.href);
-        if (currentPc.length == 0) {
-          this.productClassService.fetch(getSlugFromHref(selectedProduct.productClass.href)).pipe(catchError((err) => {
-            logger.error('Cannot get correct product class');
-            logger.error(err);
-            return of(EMPTY);
-          })).subscribe(res => {
-            const productClass = res as IProductClass;
-            this.productClasses.push(productClass);
-          });
-        }
+      const currentPc = this.productClasses.filter(pc => pc.href === selectedProduct.productClass.href);
+      if (currentPc.length == 0) {
+        this.productClassService.fetch(getSlugFromHref(selectedProduct.productClass.href)).pipe(catchError((err) => {
+          logger.error('Cannot get correct product class');
+          logger.error(err);
+          return of(EMPTY);
+        })).subscribe(res => {
+          const productClass = res as IProductClass;
+          this.productClasses.push(productClass);
+        });
       }
 
       const oneProduct = this.fb.group({
