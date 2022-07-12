@@ -97,14 +97,14 @@ const log = new Logger('ProductPromotionComponent');
       </div>
 
 
-      <label *ngIf="!isPromoBundling || isOldForm">
+      <label *ngIf="!isPromoBundling">
         <span i18n>Amount</span>
         <input type="number" [formControl]="amount"
                placeholder="ex. 1000000">
         <nus-field-errors [control]="amount"></nus-field-errors>
       </label>
 
-      <label *ngIf="!isPromoBundling">
+      <label *ngIf="!isPromoBundling && isOldForm">
         <span i18n>Max Amount</span>
         <input type="number" [formControl]="maxAmount"
                placeholder="ex. 1000000">
