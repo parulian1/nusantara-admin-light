@@ -27,7 +27,7 @@ import { IAccessGroup } from '@nusantara/models';
       </tbody>
     </table>
   `,
-  styles: [],
+
 })
 export class GroupListComponent extends AbstractListComponent<IAccessGroup> {
   constructor(route: ActivatedRoute) { super(route); }

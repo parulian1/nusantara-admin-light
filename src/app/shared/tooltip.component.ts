@@ -64,7 +64,7 @@ import { Component, Input } from '@angular/core';
 
       .material-icons {
         font-size: 13px
-      },
+      }
     `
   ],
 })

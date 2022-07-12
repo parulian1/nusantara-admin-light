@@ -4,7 +4,7 @@ trigger:
   - master
 
 pool:
-  vmImage: ubuntu-20.04
+ vmImage: ubuntu-20.04
 
 variables:
   - group: nusantara-web-pipeline-build
@@ -23,6 +23,10 @@ variables:
   # runtime variables, automatically defined by agent when pipeline running
   - name: IS_NON_MASTER_BRANCH
     value: $[ne(variables['Build.SourceBranch'], 'refs/heads/master')]
+
+  - name: IS_RELEASE_BRANCH
+    value: $[or(startsWith(variables['Build.SourceBranch'], 'refs/heads/hotfix/'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'))]
+
 
 resources:
   repositories:
@@ -50,6 +54,7 @@ jobs:
       and(
         succeeded(),
         eq('True', variables.IS_NON_MASTER_BRANCH),
+        eq('True', variables.IS_RELEASE_BRANCH),
         ne(variables['Build.Reason'], 'PullRequest')
       )
     steps:

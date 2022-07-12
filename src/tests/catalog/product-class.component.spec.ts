@@ -11,7 +11,7 @@ import {of, ReplaySubject} from 'rxjs';
 import {SiteConfigService} from '@nusantara/services';
 
 class ActivatedRouteStub implements Partial<ActivatedRoute> {
-  // tslint:disable-next-line:variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _paramMap: ParamMap;
   private subject = new ReplaySubject<ParamMap>();
 

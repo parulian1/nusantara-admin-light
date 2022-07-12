@@ -160,7 +160,7 @@ import { IOnboardingContent } from '@nusantara/models';
     }
   `]
 })
-export class OnboardingPreviewHostDialogComponent extends AbstractEditingComponent<FormArray> implements OnInit,
+export class OnboardingPreviewHostDialogComponent extends AbstractEditingComponent<FormArray> implements
   AfterViewInit {
   @Input() form: FormArray;
   @ViewChild('modal') modal: NgxSmartModalComponent;
@@ -173,9 +173,6 @@ export class OnboardingPreviewHostDialogComponent extends AbstractEditingCompone
 
   constructor(public fb: FormBuilder) {
     super();
-  }
-
-  ngOnInit() {
   }
 
   ngAfterViewInit(): void {

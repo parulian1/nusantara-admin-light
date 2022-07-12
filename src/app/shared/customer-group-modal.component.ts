@@ -43,7 +43,7 @@ import { CustomerGroupService } from '@nusantara/services';
       </form>
     </ngx-smart-modal>
   `,
-  styles: [ ]
+
 })
 export class CustomerGroupModalComponent implements OnInit, AfterViewInit {
 

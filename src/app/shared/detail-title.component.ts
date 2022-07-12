@@ -7,7 +7,7 @@ import { Input, Component } from '@angular/core';
   selector: 'nus-detail-title',
   template: `
     <h1 class="title-1" [ngClass]="{'elipsis' : isLink}">
-      <i *ngIf="!!originalName && originalName!='Object'; then updateTitle else newTitle"></i>
+      <i *ngIf="!!originalName && originalName!=='Object'; then updateTitle else newTitle"></i>
       <ng-template #updateTitle>{{ originalName }}</ng-template>
       <ng-template #newTitle>Add {{ typeName }}</ng-template>
     </h1>

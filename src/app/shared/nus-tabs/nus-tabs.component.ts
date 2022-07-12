@@ -39,7 +39,7 @@ import { NusTabComponent } from '@nusantara/shared/nus-tabs/nus-tab.component';
 })
 export class NusTabsComponent implements AfterContentInit {
   @ContentChildren(NusTabComponent) tabs: QueryList<NusTabComponent>;
-  @Output() select = new EventEmitter<any>();
+  @Output() selected = new EventEmitter<any>();
   @Input() fluid = false;
 
   // contentChildren are set
@@ -61,6 +61,6 @@ export class NusTabsComponent implements AfterContentInit {
 
     // activate the tab the user has clicked on.
     tab.active = true;
-    this.select.next(tab.value);
+    this.selected.next(tab.value);
   }
 }

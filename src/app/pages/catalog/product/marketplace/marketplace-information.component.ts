@@ -58,7 +58,7 @@ import { IClient } from '@nusantara/models/marketplace';
         <a *ngIf="lenLinks" (click)="edit()">Edit</a>
       </div>
       <div *ngIf="isClientListAvailable" class="detail-store">
-        <nus-tabs (select)="getAttributes($event)" [fluid]="true">
+        <nus-tabs (selected)="getAttributes($event)" [fluid]="true">
           <nus-tab *ngFor="let client of clientList; let marketplaceIndex = index"
             [title]="client.marketplaceName"
             [value]="client.option">

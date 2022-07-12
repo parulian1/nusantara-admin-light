@@ -97,7 +97,7 @@ import {map} from 'rxjs/operators';
                   <option class="material-icons" value="positive" aria-label="positive">add</option>
                 </select>
                 <input type="number" [formControl]="defaultAmountNumber" min="1" appOnlyNumber/>
-                <span *ngIf="type == 'percentage'" class="input-group-text">%</span>
+                <span *ngIf="type === 'percentage'" class="input-group-text">%</span>
               </div>
               <p class="error-message" *ngIf="defaultAmountNumber.errors?.invalidMinimumAmount" i18n>
                 Minimum amount 1

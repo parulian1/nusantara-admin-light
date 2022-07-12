@@ -36,8 +36,7 @@ import { ISla } from '@nusantara/models';
     </table>
 
     <nus-pagination [page]="page"></nus-pagination>
-  `,
-  styles: [],
+  `
 })
 export class SlaListComponent extends AbstractListComponent<ISla> {
   constructor(route: ActivatedRoute) { super(route); }

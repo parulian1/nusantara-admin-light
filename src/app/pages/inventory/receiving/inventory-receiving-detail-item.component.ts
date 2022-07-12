@@ -63,7 +63,7 @@ import { IProductClass } from '@nusantara/models/products';
     `,
   ]
 })
-export class InventoryReceivingDetailItemComponent implements OnInit, AfterViewInit {
+export class InventoryReceivingDetailItemComponent {
 
   @Input() availableSubLocations: ISubLocation[] = [];
   @Input() productClasses: IProductClass[];
@@ -86,10 +86,6 @@ export class InventoryReceivingDetailItemComponent implements OnInit, AfterViewI
   get expiryDate(): FormControl { return this.form.get('expiryDate') as FormControl; }
   get batchNumber(): FormControl { return this.form.get('batchNumber') as FormControl; }
   get cost(): FormControl { return this.form.get('cost') as FormControl; }
-
-  ngOnInit() {}
-
-  ngAfterViewInit() {}
 
   addLocator() {
     this.locator.push(new FormControl(''));

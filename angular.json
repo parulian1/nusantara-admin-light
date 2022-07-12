@@ -18,7 +18,6 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": true,
             "assets": [
               "src/favicon.png",
               "src/assets",
@@ -35,7 +34,13 @@
             "ngswConfigPath": "src/ngsw-config.json",
             "allowedCommonJsDependencies": [
               "@elastic/apm-rum-angular"
-            ]
+            ],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -66,14 +71,19 @@
               ]
             },
             "en": {
-              "localize": ["en"],
+              "localize": [
+                "en"
+              ],
               "baseHref": "/en"
             },
             "id": {
-              "localize": ["id"],
+              "localize": [
+                "id"
+              ],
               "baseHref": "/id"
             }
-          }
+          },
+          "defaultConfiguration": ""
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -117,28 +127,12 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
             ]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "nusantara-admin:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "nusantara-admin:serve:production"
-            }
           }
         }
       },
@@ -152,6 +146,7 @@
   },
   "defaultProject": "nusantara-admin",
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "defaultCollection": "@angular-eslint/schematics"
   }
 }

@@ -43,7 +43,7 @@ import { IChoice } from '../../../models/drf';
       </div>
     </form>
   `,
-  styles: [ ]
+
 })
 export class BannerGroupComponent extends AbstractDetailComponent<IWidget> implements OnInit {
 

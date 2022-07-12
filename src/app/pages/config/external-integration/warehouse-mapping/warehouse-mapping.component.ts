@@ -51,7 +51,7 @@ import {WarehouseLocationModalComponent} from '@nusantara/shared/modals/warehous
     </form>
     <nus-warehouse-location-modal #subLocationModal></nus-warehouse-location-modal>
   `,
-  styles: []
+
 })
 export class WarehouseMappingComponent extends AbstractDetailComponent<IWarehouseMapping>
   implements OnInit, AfterViewInit {

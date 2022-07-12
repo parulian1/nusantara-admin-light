@@ -1,3 +1,4 @@
+import { end } from "iso8601-duration";
 import * as moment from "moment";
 
 const apiDateFormat = "YYYY-MM-DDTHH:mm:ss";
@@ -6,6 +7,7 @@ export class Utils {
   get today() { return this.setTimeToZero(moment()); }
   get endDay() { return this.setTimeEndDay(moment()); }
   get yesterday() { return this.setTimeToZero(moment(moment().subtract(1, "days"))); }
+  get yesterdayend() { return this.setTimeEndDay(moment(moment().subtract(1, "days"))); }
   get threeDaysbefore() { return this.setTimeToZero(moment(moment().subtract(3, "days"))); }
   get sevenDaysbefore() { return this.setTimeToZero(moment(moment().subtract(7, "days"))); }
 
@@ -23,7 +25,7 @@ export class Utils {
 
   getDateOption(startTime: string, endTime: string): string {
     if (startTime && endTime) {
-      if (endTime === this.endDay) {
+      if (endTime === this.endDay || endTime === this.today) {
         if (startTime === this.today) {
           return "today";
         } else if (startTime === this.yesterday) {

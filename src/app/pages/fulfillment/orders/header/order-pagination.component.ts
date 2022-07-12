@@ -1,4 +1,14 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ICheckedOrder } from '@nusantara/models';
 import { DialogResult, ToastLevelEnum, ToastService } from '@nusantara/core';
@@ -76,7 +86,7 @@ import { ConfirmModalComponent } from '@nusantara/shared/confirm-modal.component
     '::ng-deep .mat-menu-panel{min-width: 248px !important; }'
   ]
 })
-export class OrderCustomPaginationComponent extends PaginationComponent implements OnInit, OnChanges {
+export class OrderCustomPaginationComponent extends PaginationComponent implements OnInit, OnChanges, AfterViewInit{
   @Input() checklist: Array<ICheckedOrder>;
   @Input() checkedlist: Array<string>;
   @Input() appliedFilters: IOrderFilterValue;
@@ -107,7 +117,6 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
   }
 
   ngOnInit() {
-    super.ngOnInit();
     this.masterSelected = false;
   }
 
@@ -179,7 +188,7 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
       filters.date.type === "allDate" ||
       filters.date.type === "customRange"
     ) {
-      var matMenu = document.getElementsByClassName("mat-menu-panel")[0];
+      const matMenu = document.getElementsByClassName("mat-menu-panel")[0];
       let footer = document.createElement("div") as HTMLDivElement;
       footer.setAttribute("class", "download-date-range-info caption-1");
 

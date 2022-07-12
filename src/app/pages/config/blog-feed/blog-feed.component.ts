@@ -44,7 +44,7 @@ import { FormBuilder, FormControl } from '@angular/forms';
       </nus-detail-actions>
     </form>
   `,
-  styles: [``]
+
 })
 export class BlogFeedComponent extends AbstractDetailComponent<IBlogFeedSetting> implements OnInit {
 

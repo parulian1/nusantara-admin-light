@@ -59,7 +59,7 @@ import { InternalAddressValue } from './internal-address-value';
       </label>
     </div>
   `,
-  styles: [ ]
+
 })
 export class AddressComponent implements OnInit {
 

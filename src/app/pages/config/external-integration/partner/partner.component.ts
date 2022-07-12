@@ -97,8 +97,7 @@ import { PartnerService } from "@nusantara/services/integrations/partner.service
         (cancel)="navigateToParent(true)"
       >
       </nus-detail-actions>
-    </form>`,
-  styles: [""],
+    </form>`
 })
 export class PartnerComponent
   extends AbstractDetailComponent<IPartner>

@@ -43,15 +43,11 @@ import { ProductReportService } from '@nusantara/services/product-report.service
     '.pg-button i { font-size: 1em; }',
   ]
 })
-export class ProductPaginationComponent extends PaginationComponent implements OnInit {
+export class ProductPaginationComponent extends PaginationComponent {
   constructor(router: Router,
               route: ActivatedRoute,
               private productReportService: ProductReportService) {
     super(router, route);
-  }
-
-  ngOnInit() {
-    super.ngOnInit();
   }
 
   downloadProductList(){

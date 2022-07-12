@@ -39,8 +39,7 @@ import { ActivatedRoute } from '@angular/router';
     </table>
 
     <nus-pagination [page]="page"></nus-pagination>
-  `,
-  styles: []
+  `
 })
 export class VendorListComponent extends AbstractListComponent<IVendor> {
   constructor(route: ActivatedRoute) { super(route); }

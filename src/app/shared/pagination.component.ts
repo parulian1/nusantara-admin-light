@@ -35,27 +35,13 @@ import { PagedResponse } from '@nusantara/core/pagination';
     '.pg-button i { font-size: 1em; }'
   ]
 })
-export class PaginationComponent implements OnInit {
+export class PaginationComponent {
 
   @Input() showLabels = true;
   @Input() page: PagedResponse<any>;
 
-  // currentPage = 1;
-  // startingIndex = 0;
-  // endingIndex = 0;
-  // canGoBack = false;
-  // canGoNext = false;
-
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute) { }
-
-  ngOnInit() {
-    // this.currentPage = this.page?.pageNumber || 1;
-    // this.startingIndex = ((this.page.pageNumber - 1) * this.page.pageSize) + 1;
-    // this.endingIndex = this.startingIndex + this.page.entities.length - 1;
-    // this.canGoBack = !!this.page.linkHeaders?.filter(lh => lh.rel === 'prev' || lh.rel === 'previous').length;
-    // this.canGoNext = !!this.page.linkHeaders?.filter(lh => lh.rel === 'next').length;
-  }
 
   get currentPage(): number {
     return this.page?.pageNumber || 1;

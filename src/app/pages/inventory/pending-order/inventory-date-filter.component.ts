@@ -10,7 +10,6 @@ import { DateAdapter, MAT_DATE_FORMATS } from "@angular/material/core";
 import * as moment from "moment";
 import { ActivatedRoute } from '@angular/router';
 import { Utils } from './utils';
-import { until } from 'selenium-webdriver';
 
 const apiDateFormat = "YYYY-MM-DDTHH:mm:ss";
 
@@ -102,7 +101,7 @@ const apiDateFormat = "YYYY-MM-DDTHH:mm:ss";
         position: absolute;
         height: 10px;
         width: 10%;
-        background-image: url("assets/arrow-down.svg");
+        background-image: url("/assets/arrow-down.svg");
         background-size: 12px;
       }`,
     '.custom-date-filter { display: none; }',
@@ -133,6 +132,7 @@ export class InventoryDateFilterComponent implements OnInit {
   today: string;
   endday:string;
   yesterday: string;
+  yesterdayend:string;
   threeDaysbefore: string;
   sevenDaysbefore: string;
 
@@ -142,6 +142,7 @@ export class InventoryDateFilterComponent implements OnInit {
     this.today = this.utils.today;
     this.endday = this.utils.endDay;
     this.yesterday = this.utils.yesterday;
+    this.yesterdayend = this.utils.yesterdayend;
     this.threeDaysbefore = this.utils.threeDaysbefore;
     this.sevenDaysbefore = this.utils.sevenDaysbefore;
 
@@ -192,7 +193,7 @@ export class InventoryDateFilterComponent implements OnInit {
         this.updateSelectedDate("today", this.today, this.endday);
         break;
       case "yesterday":
-        this.updateSelectedDate("yesterday", this.yesterday, this.endday);
+        this.updateSelectedDate("yesterday", this.yesterday, this.today);
         break;
       case "last3Days":
         this.updateSelectedDate("last3Days", this.threeDaysbefore, this.endday);

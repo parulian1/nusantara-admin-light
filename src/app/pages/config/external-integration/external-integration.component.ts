@@ -31,11 +31,8 @@ import { Component, OnInit } from '@angular/core';
     'p { line-height: 20px }',
   ]
 })
-export class ExternalIntegrationComponent implements OnInit {
+export class ExternalIntegrationComponent {
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }
