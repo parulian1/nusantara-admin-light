@@ -31,8 +31,7 @@ const routes: Routes = [
         path: '',
         component: InventoryReceivingComponent,
         resolve: {
-          warehouses: config.warehouse.AllWarehouseResolver,
-          productClasses: AllProductClassResolver,
+          warehouses: config.warehouse.AllWarehouseResolver
         },
         runGuardsAndResolvers: 'always'
       },
