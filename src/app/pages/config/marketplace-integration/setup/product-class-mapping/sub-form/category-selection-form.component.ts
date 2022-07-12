@@ -43,7 +43,11 @@ import { ErrorResult, IResultResponse, ToastLevelEnum, ToastService } from '@nus
                 <span><b>{{catSync.lastSync}}</b></span>
               </div>
               <div class="button-sync">
-                <button class="control secondary ghost" (click)="syncCategory()">Sync Category</button>
+                <button class="control secondary ghost control spin-tha-wheel" [disabled]="this.loading" (click)="syncCategory()">
+                  <mat-spinner *ngIf="this.loading" class="track" mode="determinate" value="100" [diameter]="30"></mat-spinner>
+                  <mat-spinner *ngIf="this.loading" [diameter]="30"></mat-spinner>
+                  <span *ngIf="!this.loading">Sync Category</span>
+                </button>
               </div>
             </div>
           </div>
@@ -78,6 +82,9 @@ import { ErrorResult, IResultResponse, ToastLevelEnum, ToastService } from '@nus
     '.form { margin-top: 20px; }',
     'label { margin-bottom: 12px; min-height: 0; }',
     'button:not(:first-of-type) { margin-left: 5px; }',
+    '.spin-tha-wheel{float:left; position:relative; margin-right:20px}',
+    '.spin-tha-wheel .mat-progress-spinner{display: inline; left: 43px; position: absolute; top: 6px;}',
+    ':host ::ng-deep .track circle{stroke-opacity: 0.3 !important;}',
   ],
   providers: [
     {
@@ -108,10 +115,10 @@ export class CategorySelectionFormComponent
   typeSync: string;
   catSync = {
     lastSync: '',
-    created:'',
     shop: '',
     marketplace:''
   };
+  loading:boolean;
 
   constructor(
     private service: MarketplaceShopService,
@@ -183,12 +190,14 @@ export class CategorySelectionFormComponent
   syncCategory(){
     if (this.catSync.lastSync) {
       const syncValidator = moment(new Date(this.catSync.lastSync)).add(3, 'h').toDate().getTime();
-      const now = new Date().getTime()
+      const now = new Date().getTime();
 
       if(now < syncValidator){
-        this.onSaveError('Error use another sync after 3 hour from the last sync')
+        this.onSaveError('Error use another sync after 3 hour from the last sync');
       } else{
+        this.loading = true;
         this.service.synchronizeSyncType(this.shopSlug, this.typeSync, this.catSync).subscribe(resp => {
+          this.loading = false;
           if (resp instanceof ErrorResult) {
             this.onSaveError(resp);
           } else {
