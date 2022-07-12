@@ -70,7 +70,7 @@ import {IProductWithPromotion} from "@nusantara/models/products";
                        [class.disabled]="!!isDisabled(p.promotionTag)" (keydown.enter)="!isDisabled(p.promotionTag)"  i18n>Add</a>
                   </ng-container>
                   <ng-template #removeProduct>
-  <!--                  <a href="#" (click)="remove(p)"  i18n>remove</a>-->
+                    <a href="#" (click)="remove(p)"  class="remove" i18n>Remove</a>
                   </ng-template>
                 </span>
                 <div class="tooltip-tag" *ngIf="!!p.promotionTag.length">
@@ -228,6 +228,10 @@ import {IProductWithPromotion} from "@nusantara/models/products";
     .left {
       text-align: left;
     }
+
+    a.remove {
+      color: #C83228;
+    }
     `
   ]
 })
@@ -334,7 +338,6 @@ export class ProductWithPromotionTagSelectionModalComponent implements OnInit, A
 
   open() {
     this.modal.open();
-    console.log('productSelected', this.productSelected);
   }
 
   selectProduct(product: products.IProductWithPromotion) {
@@ -359,6 +362,7 @@ export class ProductWithPromotionTagSelectionModalComponent implements OnInit, A
 
   remove(product: INamedHrefEntity) {
     this.removeProduct.emit(product);
+    return false;
   }
 
   isProductExists(product: INamedHrefEntity): boolean {

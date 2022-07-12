@@ -1031,12 +1031,12 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
   }
 
   removeProductFromModal($event: any) {
-    console.log('product removed', $event);
-    // const index = this.products.value.findIndex((_product) => {
-    //   return _product.href === product.href;
-    // })
-    // this.products.removeAt(index);
-    // this.productSelected.splice(index, 1);
+    const product = $event as INamedHrefEntity;
+    const index = this.products.value.findIndex((_product) => {
+      return _product.href === product.href;
+    })
+    this.products.removeAt(index);
+    this.productSelected.splice(index, 1);
   }
 
   validFromAndToValidation() {
