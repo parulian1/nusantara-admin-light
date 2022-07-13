@@ -533,8 +533,6 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
 
   manualUploadClose() {
     if (this.csvDialog.result === DialogResult.OK) {
-      console.log(this.csvDialog.columnChoices);
-      console.log(this.csvDialog.fileTarget);
       this.warehouse.disable();
       this.subLocation.disable();
       this.adjustmentMode = 'csv';
@@ -663,9 +661,6 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   }
 
   resolveConflict($event: { index: number; data: any }) {
-    console.log('Need resolve ', this.stockRecords[$event.index]);
-    console.log('Data ', $event.data);
-    // this.stockRecordDialog.stockRecord = this.stockRecords[$event.index];
     this.stockRecordDialog.displayedResults = $event.data.page;
     this.stockRecordDialog.stockRecordIndex = $event.index;
     this.stockRecordDialog.stockRecordData = $event.data;
@@ -743,6 +738,6 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
 
   removeLineItem(i: number): void {
     this.stockRecords.removeAt(i);
-    this.csvData.splice(i);
+    this.csvData.splice(i,1)
   }
 }
