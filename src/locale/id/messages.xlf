@@ -1392,7 +1392,7 @@
           <context context-type="linenumber">82</context>
         </context-group><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">132</context>
+          <context context-type="linenumber">135</context>
         </context-group><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/promotion/single/product-promotion.component.ts</context>
           <context context-type="linenumber">87</context>
@@ -5276,7 +5276,7 @@
           <context context-type="linenumber">17</context>
         </context-group><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">134</context>
+          <context context-type="linenumber">137</context>
         </context-group><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/users/customer/customer-point-modal.component.ts</context>
           <context context-type="linenumber">23</context>
@@ -5326,29 +5326,11 @@
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
           <context context-type="linenumber">55,57</context>
         </context-group></trans-unit>
-      <trans-unit id="7e8b3f04e015488a168c93d062411055911b1169" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Pembulatan ke atas (Rounding Up): Jika nilainya Rp 1,6x, maka pelanggan mendapatkan 2y point </source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Pembulatan ke atas: Jika nilainya Rp 1,6x, maka pelanggan mendapatkan 2y point </target><context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">63,65</context>
-        </context-group></trans-unit>
-      <trans-unit id="7c4e2e08c1338a592d14228ea55ed7d874b247bd" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Pembulatan ke bawah (Rounding Down): Jika nilainya Rp 1,6x, maka pelanggan mendapatkan 1y point </source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Pembulatan ke bawah: Jika nilainya Rp 1,6x, maka pelanggan mendapatkan 1y </target><context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">66,68</context>
-        </context-group></trans-unit>
-      <trans-unit id="bd467ff5f73f4a6e4bcac1367d8f8d5e5929c5a8" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Pembulatan terdekat (Nearest): Jika nilainya Rp 1,6x, maka pelanggan mendapatkan 2y point dan Jika nilainya Rp 1,4x, maka pelanggan mendapatkan 1y point </source>
-        <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Pembulatan terdekat: Jika nilainya Rp 1,6x, maka pelanggan mendapatkan 2y point dan Jika nilainya Rp 1,4x, maka pelanggan mendapatkan 1y point </target><context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">69,71</context>
-        </context-group></trans-unit>
       <trans-unit id="970f3a86481ecf749a412e366a77c6b2f88f79a7" datatype="html">
         <source>Earning Points Platform</source>
         <target state="translated">Platform</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">76</context>
+          <context context-type="linenumber">79</context>
         </context-group></trans-unit>
       <trans-unit id="594040a3dfe5790f4a2fa05c6989f20cf47a67c2" datatype="html">
         <source>Online (Website)</source>
@@ -5357,7 +5339,7 @@
           <context context-type="linenumber">74</context>
         </context-group><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="linenumber">82</context>
         </context-group><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/promotion/single/product-promotion.component.ts</context>
           <context context-type="linenumber">203</context>
@@ -5369,7 +5351,7 @@
           <context context-type="linenumber">78</context>
         </context-group><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">86</context>
         </context-group><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/promotion/single/product-promotion.component.ts</context>
           <context context-type="linenumber">207</context>
@@ -5378,40 +5360,40 @@
         <source>Points Expire</source>
         <target state="translated">Poin Hangus</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">88</context>
+          <context context-type="linenumber">91</context>
         </context-group></trans-unit>
       <trans-unit id="5645ea4da38cd69bbc27cf6e463a80078f00f781" datatype="html">
         <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;radio&quot; id=&quot;tab_never&quot; value=&quot;never&quot; formControlName=&quot;expireType&quot;&gt;"/> Never </source>
         <target state="translated"><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;radio&quot; id=&quot;tab_never&quot; value=&quot;never&quot; formControlName=&quot;expireType&quot;&gt;"/>Tidak Pernah </target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">90,92</context>
+          <context context-type="linenumber">93,95</context>
         </context-group></trans-unit>
       <trans-unit id="a5c3d9d2296f7886e8289b9f623323803deacfc6" datatype="html">
         <source>Days</source>
         <target state="translated">Hari</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">99</context>
+          <context context-type="linenumber">102</context>
         </context-group><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">109</context>
+          <context context-type="linenumber">112</context>
         </context-group></trans-unit>
       <trans-unit id="b149115f436864a070828aa7afd8632d8dbbb2c4" datatype="html">
         <source>Products that can be exchanged for points</source>
         <target state="translated">Produk yang bisa ditukarkan poin</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">127</context>
         </context-group></trans-unit>
       <trans-unit id="563324e74be3476197c931760ed7341b2ee988fc" datatype="html">
         <source>Product Price</source>
         <target state="translated">Harga Produk</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">133</context>
+          <context context-type="linenumber">136</context>
         </context-group></trans-unit>
       <trans-unit id="987cf0473f0b548f9d2e1b553baffe477681a1b2" datatype="html">
         <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Add Product </source>
         <target state="translated"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Tambah Produk </target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">147,148</context>
+          <context context-type="linenumber">150,151</context>
         </context-group></trans-unit>
       <trans-unit id="946d9e5cb79b9327eea8880dbcdecc06632998ae" datatype="html">
         <source>Minimum Order Value</source>
@@ -6925,61 +6907,50 @@
           <context context-type="sourcefile">src/app/view-wrappers/main-wrapper.component.ts</context>
           <context context-type="linenumber">113,115</context>
         </context-group></trans-unit><trans-unit id="5724b0095b0db85839ef5444277e1b300dd2d703" datatype="html">
-        <source>Product Image (Min. <x id="INTERPOLATION" equiv-text="{{MINIMUM_IMAGE}}"/>)</source><target state="new">Product Image (Min. <x id="INTERPOLATION" equiv-text="{{MINIMUM_IMAGE}}"/>)</target>
-      <context-group purpose="location">
+        <source>Product Image (Min. <x id="INTERPOLATION" equiv-text="{{MINIMUM_IMAGE}}"/>)</source><target state="new">Product Image (Min. <x id="INTERPOLATION" equiv-text="{{MINIMUM_IMAGE}}"/>)</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/media/product-media-host.component.ts</context>
           <context context-type="linenumber">29</context>
         </context-group></trans-unit><trans-unit id="691f7416974803b282fddc58603dd6a561615942" datatype="html">
-        <source>Picture <x id="INTERPOLATION" equiv-text="{{entitiesImage.length + i }}"/><x id="INTERPOLATION_1" equiv-text="{{ entitiesImage.length &lt; 3 ? &apos;**&apos; : &apos;&apos;}}"/></source><target state="new">Picture <x id="INTERPOLATION" equiv-text="{{entitiesImage.length + i }}"/><x id="INTERPOLATION_1" equiv-text="{{ entitiesImage.length &lt; 3 ? &apos;**&apos; : &apos;&apos;}}"/></target>
-      <context-group purpose="location">
+        <source>Picture <x id="INTERPOLATION" equiv-text="{{entitiesImage.length + i }}"/><x id="INTERPOLATION_1" equiv-text="{{ entitiesImage.length &lt; 3 ? &apos;**&apos; : &apos;&apos;}}"/></source><target state="new">Picture <x id="INTERPOLATION" equiv-text="{{entitiesImage.length + i }}"/><x id="INTERPOLATION_1" equiv-text="{{ entitiesImage.length &lt; 3 ? &apos;**&apos; : &apos;&apos;}}"/></target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/media/product-media-host.component.ts</context>
           <context context-type="linenumber">48</context>
         </context-group></trans-unit><trans-unit id="9aced8eb49d7739682b3450f2841bda7ec5ec51b" datatype="html">
-        <source>Main Picture**</source><target state="new">Main Picture**</target>
-      <context-group purpose="location">
+        <source>Main Picture**</source><target state="new">Main Picture**</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/media/product-media-host.component.ts</context>
           <context context-type="linenumber">49</context>
         </context-group><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/media/product-media.component.ts</context>
           <context context-type="linenumber">30</context>
         </context-group></trans-unit><trans-unit id="08f2169dc024e1eb9bcf6c9a7e4290f235f35830" datatype="html">
-        <source>Add Image</source><target state="new">Add Image</target>
-      <context-group purpose="location">
+        <source>Add Image</source><target state="new">Add Image</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/media/product-media-host.component.ts</context>
           <context context-type="linenumber">52</context>
         </context-group></trans-unit><trans-unit id="af8b07e4884d3a4d831b0c0cd34781d97dc8a876" datatype="html">
-        <source>Product Video</source><target state="new">Product Video</target>
-      <context-group purpose="location">
+        <source>Product Video</source><target state="new">Product Video</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/media/product-media-host.component.ts</context>
           <context context-type="linenumber">60</context>
         </context-group></trans-unit><trans-unit id="8f6b2fdfb975abc78e024e087119747f1e18e87c" datatype="html">
-        <source>Picture <x id="INTERPOLATION" equiv-text="{{index}}"/><x id="INTERPOLATION_1" equiv-text="{{ index &lt; 3 ? &apos;**&apos;:&apos;&apos;}}"/></source><target state="new">Picture <x id="INTERPOLATION" equiv-text="{{index}}"/><x id="INTERPOLATION_1" equiv-text="{{ index &lt; 3 ? &apos;**&apos;:&apos;&apos;}}"/></target>
-      <context-group purpose="location">
+        <source>Picture <x id="INTERPOLATION" equiv-text="{{index}}"/><x id="INTERPOLATION_1" equiv-text="{{ index &lt; 3 ? &apos;**&apos;:&apos;&apos;}}"/></source><target state="new">Picture <x id="INTERPOLATION" equiv-text="{{index}}"/><x id="INTERPOLATION_1" equiv-text="{{ index &lt; 3 ? &apos;**&apos;:&apos;&apos;}}"/></target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/media/product-media.component.ts</context>
           <context context-type="linenumber">31</context>
         </context-group></trans-unit><trans-unit id="ea5fdd628489e582670008bea867cd4fd385843c" datatype="html">
-        <source>Geser gambar untuk mengurutkan</source><target state="new">Geser gambar untuk mengurutkan</target>
-      <context-group purpose="location">
+        <source>Geser gambar untuk mengurutkan</source><target state="new">Geser gambar untuk mengurutkan</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/media/product-media.component.ts</context>
           <context context-type="linenumber">44</context>
         </context-group></trans-unit><trans-unit id="9170d54d7a1fd4b552750d3e8f750af71eb3e980" datatype="html">
-        <source>Progressive</source><target state="new">Progressive</target>
-      <context-group purpose="location">
+        <source>Progressive</source><target state="new">Progressive</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/price/price-list.component.ts</context>
           <context context-type="linenumber">77</context>
         </context-group></trans-unit><trans-unit id="a48836cbd56da9668c65c1f75de634982a5e006a" datatype="html">
-        <source>Non Progressive</source><target state="new">Non Progressive</target>
-      <context-group purpose="location">
+        <source>Non Progressive</source><target state="new">Non Progressive</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/price/price-list.component.ts</context>
           <context context-type="linenumber">97</context>
         </context-group></trans-unit><trans-unit id="595f98804b51e2d00b1df40c8c45b3de0a267f17" datatype="html">
-        <source>Add Range</source><target state="new">Add Range</target>
-      <context-group purpose="location">
+        <source>Add Range</source><target state="new">Add Range</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/price/price-list.component.ts</context>
           <context context-type="linenumber">128</context>
         </context-group></trans-unit><trans-unit id="1ead8e0fe8973a54264f36f2aba47cd102d9e68e" datatype="html">
-        <source>Input 1-10000</source><target state="new">Input 1-10000</target>
-      <context-group purpose="location">
+        <source>Input 1-10000</source><target state="new">Input 1-10000</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/price/range.component.ts</context>
           <context context-type="linenumber">31</context>
         </context-group><context-group purpose="location">
@@ -6989,111 +6960,90 @@
           <context context-type="sourcefile">src/app/pages/inventory/receiving/line-item.component.ts</context>
           <context context-type="linenumber">22</context>
         </context-group></trans-unit><trans-unit id="10011abe0284940137071ea9897262ef0f0554b9" datatype="html">
-        <source>Input 1-<x id="INTERPOLATION" equiv-text="{{MAX_PRICE}}"/></source><target state="new">Input 1-<x id="INTERPOLATION" equiv-text="{{MAX_PRICE}}"/></target>
-      <context-group purpose="location">
+        <source>Input 1-<x id="INTERPOLATION" equiv-text="{{MAX_PRICE}}"/></source><target state="new">Input 1-<x id="INTERPOLATION" equiv-text="{{MAX_PRICE}}"/></target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/price/range.component.ts</context>
           <context context-type="linenumber">57</context>
         </context-group><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">298</context>
         </context-group></trans-unit><trans-unit id="e56e8d79e07c4df00eddd5d1729512ff4b5d4483" datatype="html">
-        <source>Input Name</source><target state="new">Input Name</target>
-      <context-group purpose="location">
+        <source>Input Name</source><target state="new">Input Name</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">95</context>
         </context-group></trans-unit><trans-unit id="f75e5001dbdc2379b01ae23caa4587e62e4b4b80" datatype="html">
-        <source>Select Class</source><target state="new">Select Class</target>
-      <context-group purpose="location">
+        <source>Select Class</source><target state="new">Select Class</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">135</context>
         </context-group></trans-unit><trans-unit id="9c2e651d609c34bfbab9ad5a9b05bfe7e74f7c87" datatype="html">
-        <source>Product Bundling</source><target state="new">Product Bundling</target>
-      <context-group purpose="location">
+        <source>Product Bundling</source><target state="new">Product Bundling</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">161</context>
         </context-group></trans-unit><trans-unit id="97deb846f8f4b5227c3721f496a6dd52cfb17184" datatype="html">
-        <source>Bundling Table (Optional)</source><target state="new">Bundling Table (Optional)</target>
-      <context-group purpose="location">
+        <source>Bundling Table (Optional)</source><target state="new">Bundling Table (Optional)</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">163</context>
         </context-group></trans-unit><trans-unit id="919f2fd60a898850c24b1584362bbf18a4628bcb" datatype="html">
-        <source>Weight</source><target state="new">Weight</target>
-      <context-group purpose="location">
+        <source>Weight</source><target state="new">Weight</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">169</context>
         </context-group></trans-unit><trans-unit id="adde3ff13171e16259299e8cbb6574a072ca0a8d" datatype="html">
-        <source>Price Perunit</source><target state="new">Price Perunit</target>
-      <context-group purpose="location">
+        <source>Price Perunit</source><target state="new">Price Perunit</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">171</context>
         </context-group></trans-unit><trans-unit id="f875fe9a4cb092e3cb667187855c5efb246ac0c3" datatype="html">
-        <source> Total </source><target state="new"> Total </target>
-      <context-group purpose="location">
+        <source> Total </source><target state="new"> Total </target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">182,184</context>
         </context-group></trans-unit><trans-unit id="01dfcf53351358cba69392c838b73e2d318202bf" datatype="html">
-        <source>Total Potential Virtual Stock</source><target state="new">Total Potential Virtual Stock</target>
-      <context-group purpose="location">
+        <source>Total Potential Virtual Stock</source><target state="new">Total Potential Virtual Stock</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">195</context>
         </context-group></trans-unit><trans-unit id="4cc0dc7f42c8d186a1e6afabf7f462a7f3be8b71" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ virtualPackageAmount }}"/> package</source><target state="new"><x id="INTERPOLATION" equiv-text="{{ virtualPackageAmount }}"/> package</target>
-      <context-group purpose="location">
+        <source><x id="INTERPOLATION" equiv-text="{{ virtualPackageAmount }}"/> package</source><target state="new"><x id="INTERPOLATION" equiv-text="{{ virtualPackageAmount }}"/> package</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">196</context>
         </context-group></trans-unit><trans-unit id="c54aec03c7e72ec9b5475d569014b97c0de9c4ae" datatype="html">
-        <source>Product Description (min. <x id="INTERPOLATION" equiv-text="{{DESCRIPTION_MIN_LENGTH}}"/> character)</source><target state="new">Product Description (min. <x id="INTERPOLATION" equiv-text="{{DESCRIPTION_MIN_LENGTH}}"/> character)</target>
-      <context-group purpose="location">
+        <source>Product Description (min. <x id="INTERPOLATION" equiv-text="{{DESCRIPTION_MIN_LENGTH}}"/> character)</source><target state="new">Product Description (min. <x id="INTERPOLATION" equiv-text="{{DESCRIPTION_MIN_LENGTH}}"/> character)</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">206,207</context>
         </context-group></trans-unit><trans-unit id="4e4a6715ea6f5dade55822b9fe0d63124dcecd5f" datatype="html">
-        <source>Variant Table (Optional)</source><target state="new">Variant Table (Optional)</target>
-      <context-group purpose="location">
+        <source>Variant Table (Optional)</source><target state="new">Variant Table (Optional)</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">245</context>
         </context-group></trans-unit><trans-unit id="0f02aa67c67c403563e994e5aa8c224260ebee73" datatype="html">
-        <source> Add Variant</source><target state="new"> Add Variant</target>
-      <context-group purpose="location">
+        <source> Add Variant</source><target state="new"> Add Variant</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">261</context>
         </context-group></trans-unit><trans-unit id="550e4827eb493e0446cca1fc2381202b230b148d" datatype="html">
-        <source>UPC must be unique</source><target state="new">UPC must be unique</target>
-      <context-group purpose="location">
+        <source>UPC must be unique</source><target state="new">UPC must be unique</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">275</context>
         </context-group></trans-unit><trans-unit id="d2e02a3d21ca9aeb5c32e1cc5f6a2f3646e14664" datatype="html">
-        <source>Input Barcode</source><target state="new">Input Barcode</target>
-      <context-group purpose="location">
+        <source>Input Barcode</source><target state="new">Input Barcode</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">286</context>
         </context-group></trans-unit><trans-unit id="6da3ef285ea5d8906f7d39f5a359dd3954993c86" datatype="html">
-        <source>Default Price</source><target state="new">Default Price</target>
-      <context-group purpose="location">
+        <source>Default Price</source><target state="new">Default Price</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">294</context>
         </context-group></trans-unit><trans-unit id="3316f457ad1355db97c6c632bcdb7325c180804d" datatype="html">
-        <source>Price Range (optional)</source><target state="new">Price Range (optional)</target>
-      <context-group purpose="location">
+        <source>Price Range (optional)</source><target state="new">Price Range (optional)</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">307</context>
         </context-group></trans-unit><trans-unit id="ac6c9212896d39b23811ed2dadab7d07336ec559" datatype="html">
-        <source>Enable</source><target state="new">Enable</target>
-      <context-group purpose="location">
+        <source>Enable</source><target state="new">Enable</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">316</context>
         </context-group></trans-unit><trans-unit id="ac224382673c41c9dba2b38276602adb1cf7f833" datatype="html">
-        <source>You have not checked &apos;enable&apos; for price range</source><target state="new">You have not checked &apos;enable&apos; for price range</target>
-      <context-group purpose="location">
+        <source>You have not checked &apos;enable&apos; for price range</source><target state="new">You have not checked &apos;enable&apos; for price range</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">323</context>
         </context-group></trans-unit><trans-unit id="3e8b6cd34fc2e570c064ec6d6e4257e395a156a1" datatype="html">
-        <source>Input <x id="INTERPOLATION" equiv-text="{{MIN_WEIGHT}}"/>-<x id="INTERPOLATION_1" equiv-text="{{MAX_DIMENSION}}"/></source><target state="new">Input <x id="INTERPOLATION" equiv-text="{{MIN_WEIGHT}}"/>-<x id="INTERPOLATION_1" equiv-text="{{MAX_DIMENSION}}"/></target>
-      <context-group purpose="location">
+        <source>Input <x id="INTERPOLATION" equiv-text="{{MIN_WEIGHT}}"/>-<x id="INTERPOLATION_1" equiv-text="{{MAX_DIMENSION}}"/></source><target state="new">Input <x id="INTERPOLATION" equiv-text="{{MIN_WEIGHT}}"/>-<x id="INTERPOLATION_1" equiv-text="{{MAX_DIMENSION}}"/></target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">353</context>
         </context-group></trans-unit><trans-unit id="2324f5e9d944be201b75d5ad35205d9e60b06990" datatype="html">
-        <source>Input 1-<x id="INTERPOLATION" equiv-text="{{MAX_DIMENSION}}"/></source><target state="new">Input 1-<x id="INTERPOLATION" equiv-text="{{MAX_DIMENSION}}"/></target>
-      <context-group purpose="location">
+        <source>Input 1-<x id="INTERPOLATION" equiv-text="{{MAX_DIMENSION}}"/></source><target state="new">Input 1-<x id="INTERPOLATION" equiv-text="{{MAX_DIMENSION}}"/></target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">366</context>
         </context-group><context-group purpose="location">
@@ -7103,38 +7053,31 @@
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">390</context>
         </context-group></trans-unit><trans-unit id="3f560aaeae13f838d7da26785069daed88986818" datatype="html">
-        <source>Product Tag (max <x id="INTERPOLATION" equiv-text="{{MAX_TAG_NUMBER}}"/>)</source><target state="new">Product Tag (max <x id="INTERPOLATION" equiv-text="{{MAX_TAG_NUMBER}}"/>)</target>
-      <context-group purpose="location">
+        <source>Product Tag (max <x id="INTERPOLATION" equiv-text="{{MAX_TAG_NUMBER}}"/>)</source><target state="new">Product Tag (max <x id="INTERPOLATION" equiv-text="{{MAX_TAG_NUMBER}}"/>)</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">399</context>
         </context-group></trans-unit><trans-unit id="b6e312e766b4e64ad6aad7d8c9cd8d1dc6c14189" datatype="html">
-        <source>Input Tag</source><target state="new">Input Tag</target>
-      <context-group purpose="location">
+        <source>Input Tag</source><target state="new">Input Tag</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">403</context>
         </context-group></trans-unit><trans-unit id="5acc9a92195b7c12b9981aea19f4c8867e3fe19a" datatype="html">
-        <source> Select Product Tag</source><target state="new"> Select Product Tag</target>
-      <context-group purpose="location">
+        <source> Select Product Tag</source><target state="new"> Select Product Tag</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">408</context>
         </context-group></trans-unit><trans-unit id="35ed4c05ba697364b5dacd8c2c26e49ce2d341db" datatype="html">
-        <source>Input Description</source><target state="new">Input Description</target>
-      <context-group purpose="location">
+        <source>Input Description</source><target state="new">Input Description</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">429</context>
         </context-group></trans-unit><trans-unit id="a0834f585e0446b386c5c08af4442b1ef2792cbb" datatype="html">
-        <source>Input Keyword</source><target state="new">Input Keyword</target>
-      <context-group purpose="location">
+        <source>Input Keyword</source><target state="new">Input Keyword</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">443</context>
         </context-group></trans-unit><trans-unit id="1670165346610786391" datatype="html">
-        <source>Input Description</source><target state="new">Input Description</target>
-      <context-group purpose="location">
+        <source>Input Description</source><target state="new">Input Description</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">762</context>
         </context-group></trans-unit><trans-unit id="7ced3aff06bdf3b19b91ae920856fffdabc42eca" datatype="html">
-        <source>Receiving ID / Product Name</source><target state="new">Receiving ID / Product Name</target>
-      <context-group purpose="location">
+        <source>Receiving ID / Product Name</source><target state="new">Receiving ID / Product Name</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/adjustment/adjustment-detail.component.ts</context>
           <context context-type="linenumber">55</context>
         </context-group><context-group purpose="location">
@@ -7147,93 +7090,94 @@
           <context context-type="sourcefile">src/app/shared/stock-record-selection-modal.component.ts</context>
           <context context-type="linenumber">39</context>
         </context-group></trans-unit><trans-unit id="48c46a94c31b3e0bda7d1d6a74801d4cef80ca84" datatype="html">
-        <source><x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>SKU<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> <x id="INTERPOLATION" equiv-text="{{ sku.value }}"/></source><target state="new"><x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>SKU<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> <x id="INTERPOLATION" equiv-text="{{ sku.value }}"/></target>
-      <context-group purpose="location">
+        <source><x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>SKU<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> <x id="INTERPOLATION" equiv-text="{{ sku.value }}"/></source><target state="new"><x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>SKU<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> <x id="INTERPOLATION" equiv-text="{{ sku.value }}"/></target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/adjustment/adjustment-line-item.component.ts</context>
           <context context-type="linenumber">80</context>
         </context-group></trans-unit><trans-unit id="5145f5f19464cc04fab3e82bdeb4af3e6df7f378" datatype="html">
-        <source><x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Receiving Date<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> <x id="INTERPOLATION" equiv-text="{{ created.value | date }}"/></source><target state="new"><x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Tanggal Penerimaan<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> <x id="INTERPOLATION" equiv-text="{{ created.value | date }}"/></target>
-      <context-group purpose="location">
+        <source><x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Receiving Date<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> <x id="INTERPOLATION" equiv-text="{{ created.value | date }}"/></source><target state="new"><x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Tanggal Penerimaan<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> <x id="INTERPOLATION" equiv-text="{{ created.value | date }}"/></target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/adjustment/adjustment-line-item.component.ts</context>
           <context context-type="linenumber">81</context>
         </context-group></trans-unit><trans-unit id="301acf9822df3e87ed4e7e87a21c86e1aeccdd7d" datatype="html">
-        <source><x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Batch<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> <x id="INTERPOLATION" equiv-text="{{ (batch.value) || &quot;-&quot; }}"/></source><target state="new"><x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Batch<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> <x id="INTERPOLATION" equiv-text="{{ (batch.value) || &quot;-&quot; }}"/></target>
-      <context-group purpose="location">
+        <source><x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Batch<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> <x id="INTERPOLATION" equiv-text="{{ (batch.value) || &quot;-&quot; }}"/></source><target state="new"><x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Batch<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> <x id="INTERPOLATION" equiv-text="{{ (batch.value) || &quot;-&quot; }}"/></target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/adjustment/adjustment-line-item.component.ts</context>
           <context context-type="linenumber">82</context>
         </context-group></trans-unit><trans-unit id="c50f974555401696c247793558888da01fc736d9" datatype="html">
-        <source><x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Expiry Date<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> <x id="INTERPOLATION" equiv-text="{{ (expiryDate.value | date) || &quot;-&quot; }}"/></source><target state="new"><x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Tanggal Kadaluarsa<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> <x id="INTERPOLATION" equiv-text="{{ (expiryDate.value | date) || &quot;-&quot; }}"/></target>
-      <context-group purpose="location">
+        <source><x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Expiry Date<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> <x id="INTERPOLATION" equiv-text="{{ (expiryDate.value | date) || &quot;-&quot; }}"/></source><target state="new"><x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Tanggal Kadaluarsa<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> <x id="INTERPOLATION" equiv-text="{{ (expiryDate.value | date) || &quot;-&quot; }}"/></target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/adjustment/adjustment-line-item.component.ts</context>
           <context context-type="linenumber">83</context>
         </context-group></trans-unit><trans-unit id="32595ab850bf41c3df1df791303901d1b5b2651f" datatype="html">
-        <source> CSV Upload </source><target state="new"> CSV Upload </target>
-      <context-group purpose="location">
+        <source> CSV Upload </source><target state="new"> CSV Upload </target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/adjustment/adjustment.component.ts</context>
           <context context-type="linenumber">86,88</context>
         </context-group></trans-unit><trans-unit id="50b3aba1489e8fd041438c8d59b77d19004a68c0" datatype="html">
-        <source><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;body-2&quot;&gt;"/>Expand all<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source><target state="new"><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;body-2&quot;&gt;"/>Expand all<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
-      <context-group purpose="location">
+        <source><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;body-2&quot;&gt;"/>Expand all<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source><target state="new"><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;body-2&quot;&gt;"/>Expand all<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/adjustment/adjustment.component.ts</context>
           <context context-type="linenumber">194</context>
         </context-group></trans-unit><trans-unit id="1ea8110619489ee80850b4758e643dcdb8af84b7" datatype="html">
-        <source><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;body-2&quot;&gt;"/>Hide all<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source><target state="new"><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;body-2&quot;&gt;"/>Hide all<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
-      <context-group purpose="location">
+        <source><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;body-2&quot;&gt;"/>Hide all<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source><target state="new"><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;body-2&quot;&gt;"/>Hide all<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/adjustment/adjustment.component.ts</context>
           <context context-type="linenumber">197</context>
         </context-group></trans-unit><trans-unit id="9aa4dddbcfe3a2555dcbf7315021c4053936adeb" datatype="html">
-        <source>Non Perishable</source><target state="new">Non Perishable</target>
-      <context-group purpose="location">
+        <source>Non Perishable</source><target state="new">Non Perishable</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/line-item.component.ts</context>
           <context context-type="linenumber">32</context>
         </context-group></trans-unit><trans-unit id="eee83fef264bd6702312ad44961a71e9b1037847" datatype="html">
-        <source>Input 0-999.999.999</source><target state="new">Input 0-999.999.999</target>
-      <context-group purpose="location">
+        <source>Input 0-999.999.999</source><target state="new">Input 0-999.999.999</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/line-item.component.ts</context>
           <context context-type="linenumber">38</context>
         </context-group></trans-unit><trans-unit id="a25b7a1a5cb568e0bdef4e0a448dade8b2d13070" datatype="html">
-        <source> Invalid char </source><target state="new"> Invalid char </target>
-      <context-group purpose="location">
+        <source> Invalid char </source><target state="new"> Invalid char </target><context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/field-errors.component.ts</context>
           <context context-type="linenumber">46,48</context>
         </context-group></trans-unit><trans-unit id="f7cd9495b6a7fb0110bc1df11d21906763943e7f" datatype="html">
-        <source> Invalid character in value </source><target state="new"> Invalid character in value </target>
-      <context-group purpose="location">
+        <source> Invalid character in value </source><target state="new"> Invalid character in value </target><context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/field-errors.component.ts</context>
           <context context-type="linenumber">58,60</context>
         </context-group></trans-unit><trans-unit id="ce9797a900a5a27ab4fe4c40ce96d410f8223e36" datatype="html">
-        <source>View Product</source><target state="new">View Product</target>
-      <context-group purpose="location">
+        <source>View Product</source><target state="new">View Product</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">67</context>
         </context-group></trans-unit><trans-unit id="5cb0ff1e683982f8e81eca4075bd585a44439d4d" datatype="html">
-        <source>Add Product</source><target state="new">Add Product</target>
-      <context-group purpose="location">
+        <source>Add Product</source><target state="new">Add Product</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">192</context>
         </context-group></trans-unit><trans-unit id="d255294a198ef28eef46860aa3f54292556b836d" datatype="html">
         <source>Maximum of <x id="INTERPOLATION" equiv-text="{{(maxNumber - priorityValue) + 1}}"/> file allowed, with <x id="INTERPOLATION_1" equiv-text="{{MAX_FILE_SIZE}}"/> KB file size</source><target state="new">Maximum of <x id="INTERPOLATION" equiv-text="{{(maxNumber - priorityValue) + 1}}"/> file allowed, with <x id="INTERPOLATION_1" equiv-text="{{MAX_FILE_SIZE}}"/> KB file size</target>
-        <context-group purpose="location">
+      <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/media/new-product-image.component.ts</context>
           <context context-type="linenumber">21</context>
-        </context-group>
-      </trans-unit><trans-unit id="5b21f6f0c85817d31e112e1cae5540a9cb179bcb" datatype="html">
+        </context-group></trans-unit><trans-unit id="5b21f6f0c85817d31e112e1cae5540a9cb179bcb" datatype="html">
         <source>Image Preview</source><target state="new">Image Preview</target>
-        <context-group purpose="location">
+      <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/media/new-product-image.component.ts</context>
           <context context-type="linenumber">25</context>
-        </context-group>
-      </trans-unit><trans-unit id="5e6d10d89bb0f71f767abbc7c50d962db04936de" datatype="html">
+        </context-group></trans-unit><trans-unit id="5e6d10d89bb0f71f767abbc7c50d962db04936de" datatype="html">
         <source>Please exclude the product from the Advanced Price to edit this column.</source><target state="new">Silakan hapus produk dari Advanced Price untuk merubah harga produk.</target>
-        <context-group purpose="location">
+      <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
           <context context-type="linenumber">302</context>
-        </context-group>
-      </trans-unit><trans-unit id="3219d6de8d70177ca5384a9e81317a6cc1d4a196" datatype="html">
+        </context-group></trans-unit><trans-unit id="3219d6de8d70177ca5384a9e81317a6cc1d4a196" datatype="html">
         <source> Maximum selected file is <x id="INTERPOLATION" equiv-text="{{ control.getError(&apos;maxFile&apos;)?.value }}"/> </source><target state="new"> Maximum selected file is <x id="INTERPOLATION" equiv-text="{{ control.getError(&apos;maxFile&apos;)?.value }}"/> </target>
-        <context-group purpose="location">
+      <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/field-errors.component.ts</context>
           <context context-type="linenumber">55,57</context>
+        </context-group></trans-unit><trans-unit id="a593d4b8026d4ae396c1450dcd090a519919d4a9" datatype="html">
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Rounding up: If the decimal number is 1.x, then the customer gets 2 points </source><target state="new"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Pembulatan ke atas: Jika nilainya angka desimal 1.x, maka pelanggan mendapatkan 2 poin </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
+          <context context-type="linenumber">64,66</context>
+        </context-group>
+      </trans-unit><trans-unit id="8ecc1febf6d4f5d65865199530232c7d1872eaa7" datatype="html">
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Rounding down: If the decimal number is 1.x, then the customer gets 1 point </source><target state="new"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Pembulatan ke bawah: Jika nilainya angka desimal 1.x, maka pelanggan mendapatkan 1 poin </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
+          <context context-type="linenumber">68,70</context>
+        </context-group>
+      </trans-unit><trans-unit id="960806f46f5ad9e6cb41f2aea04d0dded4e4ac27" datatype="html">
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Rounding to the nearest: If the value is a decimal number 1.1 - 1.4, then the customer gets 1 point and if the value is a decimal number 1.5 - 1.9, then the customer gets 2 points. </source><target state="new"><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Pembulatan ke angka terdekat: Jika nilainya angka desimal 1.1 - 1.4, maka pelanggan mendapatkan 1 poin dan jika nilainya angka desimal 1.5 - 1.9, maka pelanggan mendapatkan 2 poin. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
+          <context context-type="linenumber">72,74</context>
         </context-group>
       </trans-unit></body>
   </file>

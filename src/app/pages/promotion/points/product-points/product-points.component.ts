@@ -1,10 +1,10 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {AbstractControl, FormControl} from '@angular/forms';
 
 @Component({
   selector: 'nus-product-points',
   template: `
-    <tr [formGroup]="form">
+    <tr>
       <td>{{ form.get('product').get('name').value }}</td>
       <td>{{ form.get('product').get('price').value | currency:'IDR':'symbol-narrow':'1.0' }}</td>
       <td class="numeric">
@@ -22,7 +22,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 })
 export class ProductPointsComponent {
 
-  @Input() form: FormGroup;
+  @Input() form: AbstractControl;
   @Output() remove: EventEmitter<void> = new EventEmitter();
 
   get amount(): FormControl {

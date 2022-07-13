@@ -298,7 +298,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="linenumber">82</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/promotion/single/product-promotion.component.ts</context>
@@ -313,7 +313,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">86</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/promotion/single/product-promotion.component.ts</context>
@@ -3413,7 +3413,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">132</context>
+          <context context-type="linenumber">135</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/promotion/single/product-promotion.component.ts</context>
@@ -7863,7 +7863,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">134</context>
+          <context context-type="linenumber">137</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/users/customer/customer-point-modal.component.ts</context>
@@ -7923,78 +7923,78 @@
           <context context-type="linenumber">55,57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7e8b3f04e015488a168c93d062411055911b1169" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Pembulatan ke atas (Rounding Up): Jika nilainya Rp 1,6x, maka pelanggan mendapatkan 2y point </source>
+      <trans-unit id="a593d4b8026d4ae396c1450dcd090a519919d4a9" datatype="html">
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Rounding up: If the decimal number is 1.x, then the customer gets 2 points </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">63,65</context>
+          <context context-type="linenumber">64,66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7c4e2e08c1338a592d14228ea55ed7d874b247bd" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Pembulatan ke bawah (Rounding Down): Jika nilainya Rp 1,6x, maka pelanggan mendapatkan 1y point </source>
+      <trans-unit id="8ecc1febf6d4f5d65865199530232c7d1872eaa7" datatype="html">
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Rounding down: If the decimal number is 1.x, then the customer gets 1 point </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">66,68</context>
+          <context context-type="linenumber">68,70</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="bd467ff5f73f4a6e4bcac1367d8f8d5e5929c5a8" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Pembulatan terdekat (Nearest): Jika nilainya Rp 1,6x, maka pelanggan mendapatkan 2y point dan Jika nilainya Rp 1,4x, maka pelanggan mendapatkan 1y point </source>
+      <trans-unit id="960806f46f5ad9e6cb41f2aea04d0dded4e4ac27" datatype="html">
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>info_outline<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Rounding to the nearest: If the value is a decimal number 1.1 - 1.4, then the customer gets 1 point and if the value is a decimal number 1.5 - 1.9, then the customer gets 2 points. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">69,71</context>
+          <context context-type="linenumber">72,74</context>
         </context-group>
       </trans-unit>
       <trans-unit id="970f3a86481ecf749a412e366a77c6b2f88f79a7" datatype="html">
         <source>Earning Points Platform</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">76</context>
+          <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
       <trans-unit id="160df04ce99711ecf834a3ea90c4924e7a0a5214" datatype="html">
         <source>Points Expire</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">88</context>
+          <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5645ea4da38cd69bbc27cf6e463a80078f00f781" datatype="html">
         <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;radio&quot; id=&quot;tab_never&quot; value=&quot;never&quot; formControlName=&quot;expireType&quot;&gt;"/> Never </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">90,92</context>
+          <context context-type="linenumber">93,95</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a5c3d9d2296f7886e8289b9f623323803deacfc6" datatype="html">
         <source>Days</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">99</context>
+          <context context-type="linenumber">102</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">109</context>
+          <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b149115f436864a070828aa7afd8632d8dbbb2c4" datatype="html">
         <source>Products that can be exchanged for points</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
       <trans-unit id="563324e74be3476197c931760ed7341b2ee988fc" datatype="html">
         <source>Product Price</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">133</context>
+          <context context-type="linenumber">136</context>
         </context-group>
       </trans-unit>
       <trans-unit id="987cf0473f0b548f9d2e1b553baffe477681a1b2" datatype="html">
         <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Add Product </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
-          <context context-type="linenumber">147,148</context>
+          <context context-type="linenumber">150,151</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d4e0307e8468d06fc955e8a992d62f4463720217" datatype="html">
