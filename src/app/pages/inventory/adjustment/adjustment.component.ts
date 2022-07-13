@@ -161,7 +161,7 @@ import { DomSanitizer } from '@angular/platform-browser';
             [reasons]="reasonChoices"
             [csvData]="csvData[i]"
             [index]="i"
-            (remove)="stockRecords.removeAt(i)"
+            (remove)="removeLineItem(i)"
             (conflict)="resolveConflict($event)"
             (openDetail)="openDetail(i)"
           >
@@ -638,12 +638,15 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
                     location: [selectedStock.location, []],
                     product: [selectedStock.product, [Validators.required]],
                     sku: [{value: sku, disabled: true}],
+                    batch: [{value: selectedStock.batchNumber, disabled: true}],
                     originalQuantity: [{value: selectedStock.originalQuantity, disabled: true}],
                     differenceQty: [mappedValue.qty, [Validators.min(0)]],
                     adjustmentQuantity: [null, [Validators.required, Validators.min(-32767), Validators.max(32767)]],
                     created: [{value: selectedStock.created, disabled: true}],
+                    expiryDate: [{value: selectedStock.expiryDate, disabled: true}],
                     reason: [mappedValue.reason, []],
                     notes: [mappedValue.notes || null, []],
+                    showDetail: [false, []],
                   });
                   this.stockRecords.push(newReceiving);
                 } else {
@@ -678,10 +681,12 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
         location: [selectedStock.location, []],
         product: [selectedStock.product, [Validators.required]],
         sku: [{value: selectedStock.sku, disabled: true}],
+        batch: [{value: selectedStock.batchNumber, disabled: true}],
         originalQuantity: [{value: selectedStock.originalQuantity, disabled: true}],
         differenceQty: [this.stockRecordDialog.stockRecordData.mappedValue.qty, [Validators.min(0)]],
         adjustmentQuantity: [null, [Validators.required, Validators.min(-32767), Validators.max(32767)]],
         created: [{value: selectedStock.created, disabled: true}],
+        expiryDate: [{value: selectedStock.expiryDate, disabled: true}],
         reason: [this.reasonChoices[0].value, []],
         notes: [null, []],
         showDetail: [false, []], // Only for show hide detail row
@@ -734,5 +739,10 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     this.stockRecords.controls.forEach(stock => {
       stock.get('showDetail').setValue(status);
     });
+  }
+
+  removeLineItem(i: number): void {
+    this.stockRecords.removeAt(i);
+    this.csvData.splice(i);
   }
 }
