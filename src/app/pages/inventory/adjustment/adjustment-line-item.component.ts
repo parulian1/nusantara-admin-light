@@ -91,7 +91,7 @@ import { IStockRecord } from '@nusantara/models/inventory';
     'td:nth-child(2) { width: 80px; }',
     'td:nth-child(3) { width: 108px; }',
     'td:nth-child(4) { width: 108px; }',
-    'td:nth-child(7) { width: 5%; }',
+    'td:nth-child(7) { width: 5%; text-align: center; }',
     'td:last-child { width: 2%; }',
     'td>div>input {float: left; width: 80%;}',
     'td>div>button {float: left; width: 20%;}',
