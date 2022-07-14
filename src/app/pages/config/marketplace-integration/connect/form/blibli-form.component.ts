@@ -243,7 +243,7 @@ export class BlibliFormComponent implements OnInit {
   showSignInWindow(resp: marketplace.IBlibliauthResponse) {
     if (!resp.isConnected) {
       this.toast?.addMessage(
-        `Confirm Tiktok Authorization Page to grant access. Click refresh when you're done.`,
+        `Confirm Blibli Authorization Page to grant access. Click refresh when you're done.`,
         'Log in to your marketplace',
         ToastLevelEnum.info
       );
