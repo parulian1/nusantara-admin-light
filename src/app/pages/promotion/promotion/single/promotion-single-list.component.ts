@@ -16,12 +16,10 @@ import { IProductPromotion } from '@nusantara/models';
         <strong>Single</strong>
       </div>
     </div>
-    <nus-list-header i18n-title
-      title="Promos" [showTitle]="false">
-    </nus-list-header>
+    <nus-promotion-single-list-header i18n-title title="Promos" [showTitle]="false"></nus-promotion-single-list-header>
     <div class="filtering">
       <nus-include-deleted></nus-include-deleted>
-      <nus-include-inactive></nus-include-inactive>
+      <nus-include-inactive [text]="inActiveCheckboxText"></nus-include-inactive>
     </div>
     <nus-pagination [page]="page"></nus-pagination>
     <table>
@@ -33,7 +31,7 @@ import { IProductPromotion } from '@nusantara/models';
         <th class="numeric" i18n>Valid From</th>
         <th class="numeric" i18n>Valid To</th>
         <th class="numeric" i18n>Priority</th>
-        <th class="centered" i18n>Is Active</th>
+        <th i18n>Tag</th>
       </tr>
       </thead>
       <tbody>
@@ -48,7 +46,12 @@ import { IProductPromotion } from '@nusantara/models';
         <td class="numeric">{{ entity.validFrom|date: 'dd/MM/yyyy HH:mm:ss' }}</td>
         <td class="numeric"><span *ngIf="!!entity.validTo">{{ entity.validTo|date: 'dd/MM/yyyy HH:mm:ss' }}</span></td>
         <td class="numeric">{{ entity.priority }}</td>
-        <td class="centered"><nus-true-false [value]="entity.isActive"></nus-true-false></td>
+        <td>
+          <span class="badge success" *ngIf="entity.status === 'Ongoing'" i18n>{{ entity.status }}</span>
+          <span class="badge alert" *ngIf="entity.status === 'Upcoming'" i18n>{{ entity.status }}</span>
+          <span class="badge error" *ngIf="entity.status === 'Past'" i18n>{{ entity.status }}</span>
+          <span class="badge inactive" *ngIf="entity.status === 'Inactive'" i18n>{{ entity.status }}</span>
+        </td>
       </tr>
       </tbody>
     </table>
@@ -87,6 +90,8 @@ import { IProductPromotion } from '@nusantara/models';
 })
 export class PromotionSingleListComponent extends AbstractListComponent<IProductPromotion> {
   constructor(route: ActivatedRoute, private router: Router) { super(route); }
+
+  inActiveCheckboxText = 'Show All Promotions'
 
   goToPromoCampaign() {
     this.router.navigate(['/promotion/promo/campaign']);

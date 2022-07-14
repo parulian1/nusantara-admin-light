@@ -891,6 +891,10 @@ span.badge {
   color: var(--lighten-black);
   background: var(--alert);
 }
+.badge.inactive {
+  color: var(--white);
+  background: var(--darken-grey);
+}
 
 /** Tooltips **/
 [tooltip]{

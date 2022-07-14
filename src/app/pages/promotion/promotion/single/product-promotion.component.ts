@@ -49,10 +49,11 @@ const log = new Logger('ProductPromotionComponent');
         </label>
         <label class="value">
           <span> {{ typesWithLabelInfo[type.value] }}</span>
-          <span [ngClass]="{
-                    'tag-up': promotionTag === 'Upcoming',
-                    'tag-on': promotionTag === 'Ongoing',
-                    'tag-exp': promotionTag === 'Past' || promotionTag === 'Inactive' }">
+          <span class="tag" [ngClass]="{
+                    'upcoming': promotionTag === 'Upcoming',
+                    'ongoing': promotionTag === 'Ongoing',
+                    'expired': promotionTag === 'Past',
+                    'inactive': promotionTag === 'Inactive' }">
             {{ promotionTag }}
           </span>
         </label>
@@ -407,7 +408,7 @@ const log = new Logger('ProductPromotionComponent');
     .promo-type label {
       display: grid;
       grid-template-columns: 2fr 2fr 3fr;
-      padding-bottom: 0px;
+      padding-bottom: 0;
       min-height: 20px;
     }
 
@@ -419,28 +420,29 @@ const log = new Logger('ProductPromotionComponent');
       font-weight: bold;
     }
 
-    .tag-up {
-      background: #F0BE00;
+    .tag {
       border-radius: 4px;
       text-align: center;
       width: fit-content;
-      padding: 0px 5px;
+      padding: 0 5px;
+      color: var(--white);
     }
 
-    .tag-on {
-      background: #21A656;
-      border-radius: 4px;
-      text-align: center;
-      width: fit-content;
-      padding: 0px 5px;
+    .upcoming {
+      background: var(--alert);
     }
 
-    .tag-exp {
-      background: #C83228;
-      border-radius: 4px;
-      text-align: center;
-      width: fit-content;
-      padding: 0px 5px;
+    .ongoing {
+      background: var(--success);
+    }
+
+    .expired {
+      background: var(--error);
+    }
+
+    .inactive {
+      background: var(--grey);
+      color: var(--lighten-black);
     }
   `]
 })
@@ -471,7 +473,10 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
   typesWithLabelInfo: Object = {
     percentage: 'Cut by Percentage',
     amount_off: 'Cut by Amount',
-    override_price: 'Flush Price'
+    override_price: 'Flush Price',
+    bundling_promo: 'Buy X Get Y',
+    free_gift: 'Promotion gift',
+    multiply_point: 'Multiply loyalty point'
   }
 
   productSelected: IProductWithPromotion[];
@@ -605,7 +610,6 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
     for (const customerGroup of entity?.customerGroups ?? []) {
       this.addCustomerGroup(customerGroup);
     }
-
 
   }
 
@@ -1026,10 +1030,8 @@ export class ProductPromotionComponent extends AbstractDetailComponent<IProductP
   }
 
   get isOldForm(): boolean {
-    if (!this.promoType) {
-      return true;
-    }
-    return false;
+    return !this.promoType;
+
   }
 
   get promotionTag(): string {
