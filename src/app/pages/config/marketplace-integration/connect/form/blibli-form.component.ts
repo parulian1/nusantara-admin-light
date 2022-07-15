@@ -125,8 +125,8 @@ export class BlibliFormComponent implements OnInit {
   form: FormGroup;
   warehouses: marketplace.IMarketplaceWarehouse[] = [];
   shopIdValue: any;
-  shopCodeInfo = "Registered Shop Code in Tiktok";
-  shopNameInfo = "Registered Shop Name in Tiktok";
+  shopCodeInfo = "Registered Shop Code in Blibli";
+  shopNameInfo = "Registered Shop Name in Blibli";
 
   constructor(
     private service: MarketplaceClientService,
