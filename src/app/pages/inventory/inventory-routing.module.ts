@@ -20,6 +20,9 @@ import {
   AdjustmentDetailResolver
 } from '@nusantara/pages/inventory/adjustment';
 import { RequirePermissionGuard } from '@nusantara/auth/guards/require-permission.guard';
+import {
+  InventoryTransferDetailComponent
+} from '@nusantara/pages/inventory/transfer-order/inventory-transfer-detail.component';
 
 
 const routes: Routes = [
@@ -61,10 +64,11 @@ const routes: Routes = [
       },
       {
         path: ':slug',
-        component: InventoryReceivingDetailComponent,
+        component: InventoryTransferDetailComponent,
         runGuardsAndResolvers: 'always',
         resolve: {
-          entity: InventoryTransferOrderDetailResolver
+          entity: InventoryTransferOrderDetailResolver,
+          warehouses: config.warehouse.AllWarehouseResolver,
         }
       }
     ]

@@ -14,6 +14,7 @@ export interface IStockRecord extends IHrefEntity {
   created?: string;
   receivingOrder?: INamedHrefEntity; // hmm
   cost: number;
+  receivingLocation?: INamedHrefEntity;
 }
 
 export interface IStockRecordSearch {

@@ -1,13 +1,19 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthService } from '../../../auth';
-import { DialogResult, ToastService, AbstractDetailComponent } from '@nusantara/core';
-import { inventory, ISubLocation, IWarehouse, products } from '@nusantara/models';
+import {
+  DialogResult,
+  ToastService,
+  AbstractDetailComponent,
+  getSlugFromHref
+} from '@nusantara/core';
+import { inventory, ISubLocation, IWarehouse } from '@nusantara/models';
 import { InventoryTransferService } from '@nusantara/services';
-import { ProductSelectionModalComponent } from '@nusantara/shared/product-selection-modal.component';
 import { IProductClass } from '@nusantara/models/products';
+import { IStockRecord, ReceivingOrderStatusChoices } from '@nusantara/models/inventory';
+import { StockRecordSelectionModalComponent } from '@nusantara/shared';
 
 /**
  * Allows a user to receive a new batch of inventory.
@@ -15,27 +21,30 @@ import { IProductClass } from '@nusantara/models/products';
 @Component({
   selector: 'nus-inventory-transfer',
   template: `
-    <h1 class="title-1" i18n>Transfer</h1>
+    <h1 class="title-1" i18n>Inventory Transfer</h1>
 
     <form [formGroup]="form" (ngSubmit)="save()">
-
+      <table class="header">
+        <tbody>
+          <tr>
+           <td colspan="1" class="">
+             Created By
+           </td>
+           <td colspan="1">
+             Created Date
+           </td>
+          </tr>
+          <tr>
+            <td colspan="1" class="bold">{{ userDisplayName }}</td>
+            <td colspan="1" class="bold">{{ currentDate|date }}</td>
+          </tr>
+        </tbody>
+      </table>
       <table class="inventory-order-meta">
         <tbody>
         <tr>
-          <th i18n>Received By</th><td colspan="2">{{ userDisplayName }}</td>
-        </tr>
-        <tr>
-          <th i18n>Approved By</th><td colspan="2">---</td>
-        </tr>
-        <tr>
-          <th i18n>Receiving Date</th><td colspan="2">{{ currentDate|date }}</td>
-        </tr>
-        <tr>
-          <th i18n>Status</th><td colspan="2" i18n>Pending</td>
-        </tr>
-        <tr>
-          <th i18n>From Warehouse</th>
-          <td [formGroup]="warehouse">
+          <td [formGroup]="warehouse" class="bold">
+            Source Warehouse
             <select formControlName="href" (change)="updateDestinationWarehouses($event)" data-qa="from-warehouse">
               <option [ngValue]="null">---</option>
               <option *ngFor="let wh of warehouses" [value]="wh.href">
@@ -46,8 +55,8 @@ import { IProductClass } from '@nusantara/models/products';
           <td>
         </tr>
         <tr>
-          <th i18n>Destination Warehouse</th>
-          <td [formGroup]="destinationWarehouse">
+          <td [formGroup]="destinationWarehouse" class="bold">
+            Destination Warehouse
             <select formControlName="href" data-qa="destination-warehouse">
               <option [ngValue]="null">---</option>
               <option *ngFor="let wh of destinationWarehouses" [value]="wh.href">
@@ -55,7 +64,7 @@ import { IProductClass } from '@nusantara/models/products';
               </option>
             </select>
           </td>
-          <td>
+          <td class="confirm-wh">
             <button (click)="confirmWarehouse()"
                     type="button"
                     [disabled]="warehouse.disabled || !warehouse.valid"
@@ -69,15 +78,13 @@ import { IProductClass } from '@nusantara/models/products';
         <table class="line-items">
           <thead>
           <tr>
-            <th i18n>Product (UPC)</th>
-            <th i18n>Location</th>
-            <th i18n>Quantity</th>
+            <th i18n>Product Name / Sender Location</th>
             <th i18n>SKU</th>
             <th i18n>Batch</th>
-            <th i18n>Locator</th>
             <th i18n>Expiry Date</th>
-            <th i18n>Cost</th>
-            <th></th>
+            <th class="stock" i18n>Stock Available</th>
+            <th class="stock" i18n>Transfer Quantity</th>
+            <th class="action" i18n>Remove</th>
           </tr>
           </thead>
           <tbody>
@@ -85,9 +92,9 @@ import { IProductClass } from '@nusantara/models/products';
           <nus-inventory-transfer-line
             *ngFor="let rec of stockRecords.controls; let i=index"
             [productClasses]="productClasses"
-            [availableSubLocations]="availableSubLocations"
-            (remove)="stockRecords.removeAt(i)"
+            (remove)="removeLine(i)"
             [formGroup]="rec"
+            [availableStockList]="availableStockList"
           >
           </nus-inventory-transfer-line>
 
@@ -110,12 +117,15 @@ import { IProductClass } from '@nusantara/models/products';
     </form>
 
     <!-- Modals -->
-    <nus-product-selection-modal [productType]="productType"></nus-product-selection-modal>
+    <nus-stock-record-selection-modal [isInStock]="true"
+                                      [isTransferDisplay]="true">
+    </nus-stock-record-selection-modal>
   `,
   styles: [`
-    form { width: 58vw; max-width: 100%; }
+    form { max-width: 100%; }
     .inventory-order-meta {
       width: 100%;
+      padding: 16px 0px;
     }
     .inventory-order-meta th {
       text-align: left;
@@ -123,18 +133,50 @@ import { IProductClass } from '@nusantara/models/products';
     .line-items {
       margin-top: 25px;
     }
+    .bold {
+      font-weight: bold;
+    }
+    form table.header, form table.inventory-order-meta {
+      width: 58vw;
+    }
+    table.header tbody tr td, table.inventory-order-meta tbody tr td {
+      border: none;
+      padding: 0px 0px 0px 24px;
+    }
+    table.header {
+      padding: 20px 0px 20px 24px;
+      margin-bottom: 16px;
+    }
+    table.header tbody tr {
+      height: 24px;
+    }
+    table.header tbody tr td {
+      width: 50%;
+    }
+    table.inventory-order-meta tbody tr {
+      height: 72px;
+    }
+    table.inventory-order-meta tbody tr td.confirm-wh {
+      padding-top: 20px;
+    }
+    th.stock, th.action {
+      width: 10%;
+    }
   `
   ]
 })
 export class InventoryTransferOrderComponent extends AbstractDetailComponent<inventory.ITransferOrder> implements OnInit, AfterViewInit {
 
   warehouses: IWarehouse[];
-  availableSubLocations: ISubLocation[] = [];
   productClasses: IProductClass[] = [];
-  @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
   currentDate: Date;
   destinationWarehouses: IWarehouse[];
   productType: string = 'single';
+  @ViewChild(StockRecordSelectionModalComponent) stockRecordSelectionModal: StockRecordSelectionModalComponent;
+  availableStockList: Array<{
+    href: string,
+    amount: number
+  }> = [];
 
   constructor(private fb: FormBuilder,
               toast: ToastService,
@@ -148,6 +190,7 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
   get warehouse(): FormGroup { return this.form.get('warehouse') as FormGroup; }
   get destinationWarehouse(): FormGroup { return this.form.get('destinationWarehouse') as FormGroup; }
   get stockRecords(): FormArray { return this.form.get('stockRecords') as FormArray; }
+  get notes(): FormControl { return this.form.get('notes') as FormControl; }
 
   ngOnInit() {
     super.ngOnInit();
@@ -160,7 +203,7 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
 
   ngAfterViewInit() {
     // wire-up modal closed callback
-    this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
+    this.stockRecordSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
   }
 
   initializeForm(entity?: inventory.ITransferOrder) {
@@ -185,7 +228,15 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
   }
 
   addLine() {
-    this.productSelectionModal.open();
+    // this.productSelectionModal.open();
+    this.stockRecordSelectionModal.filters = {
+      warehouse: getSlugFromHref(this.warehouse.value?.href),
+      receiving_order_status: ReceivingOrderStatusChoices.APPROVED,
+      product_type: 'single',
+    };
+    this.stockRecordSelectionModal.displayedResults = null;
+    this.stockRecordSelectionModal.onSearchTextChanged('');
+    this.stockRecordSelectionModal.open();
   }
 
   confirmWarehouse(): void {
@@ -201,17 +252,15 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
 
     const wh = this.warehouses.filter(e => e.href === this.warehouse.get('href').value)[0];
     if (wh) {
-      this.availableSubLocations = wh.subLocations;
       this.warehouse.disable();
     }
   }
 
   onProductSelectionModalClosed() {
-    if (this.productSelectionModal.result === DialogResult.OK) {
+    if (this.stockRecordSelectionModal.result === DialogResult.OK) {
       // add a new child to the form group based on the modal
 
-      const selectedProduct = this.productSelectionModal.product.value as products.IProduct;
-
+      const selectedStock = this.stockRecordSelectionModal.stockRecord.value as IStockRecord;
       // todo: see if the product class has an expiry date associated with it?
       // if so, we need to add a required validator to that field.
       // const expiryValidators = [];
@@ -219,20 +268,21 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
       // disable digital products/subscription receiving.
 
       const f = this.fb.group({
-        inventoryReceiving: [null, []],
-        product: [selectedProduct, [Validators.required]],
-        href: [null, []],
-        location:  this.fb.group({
-          href: [null, Validators.required],
-          // name: ['', ],
-        }),
-        sku: ['', [Validators.required, ]],
+        inventoryReceiving: [selectedStock.receivingOrder, []],
+        product: [selectedStock.product, [Validators.required]],
+        href: [selectedStock.href, []],
+        location:  [selectedStock.location, [Validators.required]],
+        sku: [selectedStock.sku, [Validators.required, ]],
         originalQuantity: [1, [Validators.required, Validators.min(1), ]],
-        batchNumber: ['', []],
-        locator: this.fb.array([], [Validators.minLength(1)]),
-        expiryDate: [null, [Validators.required,]]
+        batchNumber: [selectedStock.batchNumber, []],
+        locator: this.fb.array(selectedStock.locator, [Validators.minLength(1)]),
+        expiryDate: [selectedStock.expiryDate, [Validators.required,]]
       });
       this.stockRecords.push(f);
+      this.availableStockList.push({
+        href: selectedStock.href,
+        amount: selectedStock.originalQuantity
+      });
     }
   }
 
@@ -271,5 +321,10 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
     this.form.reset();
     this.warehouse.enable();
     this.stockRecords.clear();
+  }
+
+  removeLine(index: number) {
+    this.stockRecords.removeAt(index);
+    this.availableStockList.splice(index, 1);
   }
 }
