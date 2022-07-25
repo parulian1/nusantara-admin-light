@@ -54,7 +54,7 @@ import { IProduct, IProductClass } from '@nusantara/models/products';
         <td>{{ entity.type }}</td>
         <td>{{ entity.status }}</td>
         <td>
-          <a (click)="showWarehouseDetail()">{{ entity.warehouse.name }}</a>
+          {{ entity.warehouse.name }}
         </td>
 
         <td *ngIf="!entity.createdBy?.name">-</td>
