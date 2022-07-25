@@ -11,6 +11,7 @@ import { map } from 'rxjs/operators';
 })
 export class MarketplaceShopService {
   baseUrl = '/api/marketplace/shop';
+  syncUrl = '/api/marketplace/shop-sync'
 
   constructor(private httpClient: HttpClient) {}
 
@@ -92,6 +93,18 @@ export class MarketplaceShopService {
     return this.httpClient.post(
       `https://${baseurl}/api/marketplace/shop-callback/`,
       formData
+    );
+  }
+
+  getSyncType(shopSlug: string, typeSync: string): Observable<any> {
+    return this.httpClient.get<any>(
+      `${this.syncUrl}/${shopSlug}/${typeSync}/`
+    );
+  }
+
+  synchronizeSyncType(shopSlug: string, typeSync: string, formData): Observable<any> {
+    return this.httpClient.post(
+      `${this.syncUrl}/${shopSlug}/${typeSync}/`, formData
     );
   }
 }
