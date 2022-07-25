@@ -5,5 +5,6 @@ export interface IGiftVoucher extends INamedHrefEntity {
   amount: number;
   validFrom: string;
   validTo?: string;
+  redeemDate?: string;
   isActive: boolean;
 }
