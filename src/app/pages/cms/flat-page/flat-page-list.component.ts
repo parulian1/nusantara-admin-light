@@ -30,8 +30,7 @@ import { IFlatPage } from '@nusantara/models';
     </table>
 
     <nus-pagination [page]="page"></nus-pagination>
-  `,
-  styles: [],
+  `
 })
 export class FlatPageListComponent extends AbstractListComponent<IFlatPage> {
   constructor(route: ActivatedRoute) { super(route); }

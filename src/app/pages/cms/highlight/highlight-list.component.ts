@@ -40,8 +40,7 @@ import { IHighlight } from '@nusantara/models';
     </table>
 
     <nus-pagination [page]="page"></nus-pagination>
-  `,
-  styles: [],
+  `
 })
 export class HighlightListComponent extends AbstractListComponent<IHighlight> {
   constructor(route: ActivatedRoute) {

@@ -33,7 +33,7 @@ import { AbstractListComponent } from '@nusantara/core';
 
     <nus-pagination [page]="page"></nus-pagination>
   `,
-  styles: [],
+
 })
 export class ShippingMethodListComponent extends AbstractListComponent<any> {
   constructor(route: ActivatedRoute) { super(route); }

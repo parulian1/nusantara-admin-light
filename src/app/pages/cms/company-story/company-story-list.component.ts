@@ -39,7 +39,7 @@ import { ActivatedRoute } from '@angular/router';
       </tbody>
     </table>
   `,
-  styles: [``]
+
 })
 export class CompanyStoryListComponent extends AbstractListComponent<ICompanyStory> {
   constructor(route: ActivatedRoute) { super(route); }

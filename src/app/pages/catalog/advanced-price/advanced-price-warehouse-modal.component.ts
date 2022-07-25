@@ -141,7 +141,7 @@ export class AdvancedPriceWarehouseModalComponent implements OnInit, AfterViewIn
 
   submit() {
     const v = this.formView.nativeElement.getElementsByTagName('input');
-    // tslint:disable-next-line:prefer-for-of
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < v.length; i++) {
       if (v[i].type === 'checkbox') {
         if (v[i].checked) {
@@ -173,7 +173,7 @@ export class AdvancedPriceWarehouseModalComponent implements OnInit, AfterViewIn
     if (this.selectedWarehouses.length === 0) {
       this.warehouses.clear();
       const v = this.formView.nativeElement.getElementsByTagName('input');
-      // tslint:disable-next-line:prefer-for-of
+      // eslint-disable-next-line @typescript-eslint/prefer-for-of
       for (let i = 0; i < v.length; i++) {
         if (v[i].type === 'checkbox') {
           v[i].checked = false;
@@ -190,7 +190,7 @@ export class AdvancedPriceWarehouseModalComponent implements OnInit, AfterViewIn
 
   checkUncheckAll() {
     const v = this.formView.nativeElement.getElementsByTagName('input');
-    // tslint:disable-next-line:prefer-for-of
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < v.length; i++) {
       if (v[i].type === 'checkbox' && v[i].name !== 'checkUncheckAll') {
         v[i].checked = this.isMasterSel;

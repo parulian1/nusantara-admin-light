@@ -1,4 +1,6 @@
-import { version } from '../../package.json';
+import * as infoPackage from '../../package.json';
+const packageInfo = infoPackage;
+const version = packageInfo.version;
 import { env } from '@env/.env';
 
 export const environment = {

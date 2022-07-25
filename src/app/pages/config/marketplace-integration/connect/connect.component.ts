@@ -46,19 +46,19 @@ import { OrderDownloadFileService } from '@nusantara/services/order-download-fil
             <td>{{ entity.marketplace }}</td>
             <td>{{ entity.warehouse.name }}</td>
 
-            <td *ngIf="entity.isConnected == false">
+            <td *ngIf="entity.isConnected === false">
               <span class="badge alert" i18n>Not Connected</span>
             </td>
-            <td *ngIf="entity.isConnected == true">
+            <td *ngIf="entity.isConnected === true">
               <span class="badge success" i18n>Connected</span>
             </td>
 
-            <td *ngIf="entity.isConnected == true">
+            <td *ngIf="entity.isConnected === true">
               <a [routerLink]="['product-class/', entity.slug]" (click)="setSelectedShop(entity)" i18n>
                 Map Class & Attribute
               </a>
             </td>
-            <td *ngIf="entity.isConnected == false">
+            <td *ngIf="entity.isConnected === false">
               <a [routerLink]="[entity.slug]" i18n>Reconnect</a>
             </td>
           </tr>

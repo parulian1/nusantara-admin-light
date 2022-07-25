@@ -70,7 +70,7 @@ import {ActivatedRoute, Router} from '@angular/router';
     <nus-product-selection-modal></nus-product-selection-modal>
 
   `,
-  styles: []
+
 })
 export class GiftVoucherComponent extends AbstractDetailComponent<IGiftVoucher> implements OnInit, AfterViewInit {
   public entity: IGiftVoucher;

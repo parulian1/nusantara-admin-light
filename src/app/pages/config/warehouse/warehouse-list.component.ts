@@ -44,7 +44,7 @@ import { SiteConfigService } from '@nusantara/services';
       </tbody>
     </table>
   `,
-  styles: []
+
 })
 export class WarehouseListComponent extends AbstractListComponent<IWarehouse> {
   enterprise = true;

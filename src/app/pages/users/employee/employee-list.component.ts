@@ -39,7 +39,7 @@ import { IEmployee } from '@nusantara/models/user';
 
     <nus-pagination [page]="page"></nus-pagination>
   `,
-  styles: [],
+
 })
 export class EmployeeListComponent extends AbstractListComponent<IEmployee> {
   constructor(route: ActivatedRoute) {

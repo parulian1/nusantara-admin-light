@@ -37,9 +37,9 @@ import { IContentFooter } from '@nusantara/models';
   styles: [`
   `]
 })
-export class ContentFooterChildrenComponent implements OnInit {
+export class ContentFooterChildrenComponent {
   @Input() children: IContentFooter[];
 
   constructor() {}
-  ngOnInit(): void {}
+
 }

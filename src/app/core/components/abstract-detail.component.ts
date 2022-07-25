@@ -35,13 +35,14 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
     this.route.data.subscribe((data: { entity: T }) => {
       this.initializeForm(data.entity);
       this.setOriginalEntityName(data.entity);
-      this.form.markAllAsTouched();
+      this.form?.markAllAsTouched();
     });
   }
 
   ngAfterViewInit(): void {
     this.route.data.subscribe((data: { entity: T }) => {
       this.initializeSubViewForms(data.entity);
+
     });
   }
 
@@ -69,7 +70,7 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
    */
   setOriginalEntityName(entity?: T) {
     if (!!entity && entity.hasOwnProperty('name')) {
-      // tslint:disable:no-string-literal
+      /* eslint-disable @typescript-eslint/dot-notation */
       this.originalEntityName = entity['name'];
     }
   }

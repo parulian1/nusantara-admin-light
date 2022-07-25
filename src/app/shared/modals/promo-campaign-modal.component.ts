@@ -49,7 +49,7 @@ import { PromotionCampaignService } from '@nusantara/services';
       </form>
     </ngx-smart-modal>
   `,
-  styles: [ ]
+
 })
 export class PromoCampaignModalComponent implements OnInit, AfterViewInit {
 

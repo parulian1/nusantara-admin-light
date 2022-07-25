@@ -31,7 +31,7 @@ import { IPaymentGateway } from '@nusantara/models';
 
     <nus-pagination [page]="page"></nus-pagination>
   `,
-  styles: [],
+
 })
 export class PaymentGatewayListComponent extends AbstractListComponent<IPaymentGateway> {
   constructor(route: ActivatedRoute) { super(route); }

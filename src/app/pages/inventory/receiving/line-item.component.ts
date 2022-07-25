@@ -74,7 +74,7 @@ const logger = new Logger('InventoryReceivingLine');
     `
   ]
 })
-export class LineItemComponent implements OnInit, AfterViewInit {
+export class LineItemComponent implements OnInit {
 
   @Input() availableSubLocations: ISubLocation[] = [];
   @Input() productClasses: IProductClass[];
@@ -160,8 +160,4 @@ export class LineItemComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngAfterViewInit() {
-
-
-  }
 }

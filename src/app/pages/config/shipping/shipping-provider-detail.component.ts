@@ -125,7 +125,7 @@ import { Kgx, ShippingServicesTypes } from './shipping-service/constants';
       </nus-detail-actions>
     </form>
   `,
-  styles: []
+
 })
 export class ShippingProviderDetailComponent extends AbstractDetailComponent<IShippingProvider> implements OnInit {
 

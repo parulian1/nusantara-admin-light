@@ -135,7 +135,7 @@ const log = new Logger('ProductPromotionComponent');
 
   `]
 })
-export class PromotionGroupComponent extends AbstractDetailComponent<IPromoGroup> implements OnInit, AfterViewInit {
+export class PromotionGroupComponent extends AbstractDetailComponent<IPromoGroup> implements OnInit {
 
   entity: IPromoGroup;
   imagePreviewUrl: string;
@@ -185,9 +185,6 @@ export class PromotionGroupComponent extends AbstractDetailComponent<IPromoGroup
 
   setImagePromoPreview(data?: Event | string) {
     this.setImagePreview(data, (dataAsUrl) => this.imagePreviewUrl = dataAsUrl);
-  }
-
-  ngAfterViewInit() {
   }
 
   get name(): FormControl {

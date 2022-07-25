@@ -21,7 +21,7 @@ const logger = new Logger('CSVDialogComponent');
   template: `
     <ngx-smart-modal [identifier]="'csvDialog'" #modal [customClass]="'wide-modal'">
       <form [formGroup]="form" class="csv-dialog-form">
-        <div *ngIf="currentStep == 'start'">
+        <div *ngIf="currentStep === 'start'">
           <h2 class="heading-2" i18n>Choose CSV File (Step 1/2) </h2>
 
           <p i18n>Upload a CSV file to bulk upload your products. Don't have a file? <a
@@ -230,15 +230,15 @@ export class CsvDialogComponent implements OnInit, AfterViewInit {
   currentStep = 'start';
   hasCsvHeader: any = false;
   availableOptions: drf.IChoice[] = [];
-  // tslint:disable-next-line:variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention,no-underscore-dangle,id-blacklist,id-match
   column_upc: string;
-  // tslint:disable-next-line:variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention,no-underscore-dangle,id-blacklist,id-match
   column_qty: string;
-  // tslint:disable-next-line:variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention,no-underscore-dangle,id-blacklist,id-match
   column_reason: string;
-  // tslint:disable-next-line:variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention,no-underscore-dangle,id-blacklist,id-match
   column_sku: string;
-  // tslint:disable-next-line:variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   column_notes: string;
 
   columnChoices = {

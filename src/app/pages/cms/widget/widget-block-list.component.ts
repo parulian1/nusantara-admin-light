@@ -28,7 +28,7 @@ import { AbstractListComponent } from '@nusantara/core';
       </tbody>
     </table>
   `,
-  styles: [ ]
+
 })
 export class WidgetBlockListComponent extends AbstractListComponent<widgets.IWidgetBlock> {
   constructor(route: ActivatedRoute) { super(route); }

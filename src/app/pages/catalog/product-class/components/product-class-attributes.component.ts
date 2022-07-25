@@ -60,8 +60,7 @@ import { FormArray, FormBuilder, Validators } from '@angular/forms';
         </tbody>
       </table>
     </div>
-  `,
-  styles: [``],
+  `
 })
 export class ProductClassAttributesComponent implements OnInit {
   @Input() attributes: IProductAttribute[] = [];

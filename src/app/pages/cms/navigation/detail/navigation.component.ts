@@ -77,8 +77,7 @@ import {ActivatedRoute, Router} from '@angular/router';
     <nus-navigation-children *ngIf="entity"
                              [children]="children">
     </nus-navigation-children>
-  `,
-  styles: []
+  `
 })
 export class NavigationComponent extends AbstractDetailComponent<INavigation> implements OnInit {
   flatPages: IFlatPage[] = [];
@@ -112,7 +111,7 @@ export class NavigationComponent extends AbstractDetailComponent<INavigation> im
 
   setOriginalEntityName(entity?: INavigation) {
     if (!!entity && entity.hasOwnProperty('title')) {
-      // tslint:disable:no-string-literal
+      /* eslint-disable @typescript-eslint/dot-notation */
       this.originalEntityName = entity.title;
     }
   }

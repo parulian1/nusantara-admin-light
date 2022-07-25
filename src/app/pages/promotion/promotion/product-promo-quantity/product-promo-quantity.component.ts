@@ -17,7 +17,7 @@ import { FormControl, FormGroup } from '@angular/forms';
   `,
   styles: [':host { display: contents; }']
 })
-export class ProductPromoQuantityComponent implements OnInit{
+export class ProductPromoQuantityComponent {
 
   @Input() form: FormGroup;
   @Input() index: number;
@@ -25,9 +25,6 @@ export class ProductPromoQuantityComponent implements OnInit{
 
   get quantity(): FormControl {
     return this.form.get('quantity') as FormControl;
-  }
-
-  ngOnInit(): void {
   }
 
 }

@@ -82,12 +82,11 @@ import { enumToArray } from '@nusantara/shared/helpers';
         (delete)="delete()">
       </nus-detail-actions>
     </form>
-  `,
-  styles: [ ]
+  `
 })
 export class ProductClassComponent extends AbstractDetailComponent<products.IProductClass> implements OnInit {
   entity: products.IProductClass;
-  productCount:number = 0
+  productCount:number = 0;
   typeChoices: drf.IChoice[];
   attributeTypeChoices: drf.IChoice[];
   optionChoices: Array<products.IProductOption>;

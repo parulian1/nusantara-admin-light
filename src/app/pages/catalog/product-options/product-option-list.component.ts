@@ -35,8 +35,7 @@ import { Component } from '@angular/core';
     </table>
 
     <nus-pagination [page]="page"></nus-pagination>
-  `,
-  styles: []
+  `
 })
 export class ProductOptionListComponent extends AbstractListComponent<products.IProductOption> {
   constructor(route: ActivatedRoute) {

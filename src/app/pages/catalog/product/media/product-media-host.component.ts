@@ -46,7 +46,7 @@ const logger = new Logger('ProductMediaHost');
           <div class="empty-image">
             <span class="video-title" *ngIf="entitiesImage.length + i > 0"
                   i18n>Picture {{entitiesImage.length + i }}{{ entitiesImage.length < 3 ? '**' : ''}}</span>
-            <span class="video-title" *ngIf="entitiesImage.length + i == 0" i18n>Main Picture**</span>
+            <span class="video-title" *ngIf="entitiesImage.length + i === 0" i18n>Main Picture**</span>
             <button class="button-add-image" type="button" (click)="openImageModal()">
               <div class="top-overlay"><span class="material-icons">add</span></div>
               <div class="action-overlay"><span class="video-title" i18n>Add Image</span></div>
@@ -270,7 +270,7 @@ export class ProductMediaHostComponent
   }
 
   openImageModal() {
-    this.newImageModal.open(this.entitiesImage.length + 1);
+    this.newImageModal.open(this.entitiesImage.length + 1, this.MAXIMUM_IMAGE);
   }
 
   openVideoModal() {
@@ -404,9 +404,11 @@ export class ProductMediaHostComponent
           this.imageList.push(formData as FormData);
         }
       } else {
+        logger.debug('recreat4eImaageList', media);
         // new image or video
         if (media?.type === 'image') {
           const xMedia = this.newImages.find((val) => {
+            logger.debug('finddata', val.get('identifier'), media?.identifier);
             if (val.get('identifier') === media?.identifier) {
               val.set('sortPriority', '' + idx);
               this.imageList.push(val);
@@ -437,19 +439,30 @@ export class ProductMediaHostComponent
    */
   onImageModalClosed() {
     if (this.newImageModal.result === DialogResult.OK) {
-      const imageValue = this.newImageModal.getValue();
-      if (this.validateImage(imageValue)) {
-        // data that will be saved to API
-        this.newImages.push(this.newImageModal.getValue());
+      let hasDuplicate = false;
+      for (let idx = 0; idx < this.newImageModal.imageUploadForm.length; idx++) {
+        if (this.entitiesImage.length  < this.MAXIMUM_IMAGE) {
+          logger.debug('onImageModalClosed, current image', this.entitiesImage.length, idx);
+          const imageValue = this.newImageModal.imageUploadForm[idx].fd;
+          if (this.validateImage(imageValue)) {
+            logger.debug('image is valid');
+            // data that will be saved to API
+            this.newImages.push(imageValue);
 
-        // preview data
-        const viewModel = Object.assign({}, this.newImageModal.form.value);
-        viewModel.image = this.newImageModal.imagePreviewUrl;
-        this.add(viewModel);
-      } else {
-        alert('Duplicate image');
+            // preview data
+            const viewModel = Object.assign({}, this.newImageModal.imageUploadForm[idx].fg.value);
+            viewModel.image = this.newImageModal.imagePreviewUrls[idx];
+            this.add(viewModel);
+          } else {
+            hasDuplicate = true;
+          }
+        } else {
+          logger.debug('onImageModalClosed', 'maximum image ', this.entitiesImage.length, idx);
+        }
       }
-
+      if (hasDuplicate) {
+        alert('Duplicate image detected');
+      }
     }
   }
 
@@ -480,6 +493,7 @@ export class ProductMediaHostComponent
     });
 
     this.imageList.forEach((value, idx) => {
+      logger.debug('save ImageList6', value.get('image'));
       value.set('product', product.href);
       if (!!value.get('href')) {
         value.delete('image');
@@ -620,8 +634,10 @@ export class ProductMediaHostComponent
   private validateImage(imageValue: FormData): boolean {
     return this.entitiesImage.findIndex((val, idx) => {
       if (!!val.href) {
+        logger.debug('validateImage-matching', 'no-href', );
         return false;
       }
+      logger.debug('validateImage-matching', val.imageName, (imageValue.get('image') as File).name);
       return val.imageName === (imageValue.get('image') as File).name;
     }) < 0;
   }

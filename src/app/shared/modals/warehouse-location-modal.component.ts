@@ -45,8 +45,7 @@ import {ProductClassService, SubLocationService, WarehouseService} from '@nusant
             </tbody>
           </table>
         </form>
-      </ngx-smart-modal>`,
-  styles: [],
+      </ngx-smart-modal>`
 })
 
 export class WarehouseLocationModalComponent implements OnInit, AfterViewInit {

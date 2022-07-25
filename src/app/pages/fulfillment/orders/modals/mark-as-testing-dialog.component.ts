@@ -1,4 +1,4 @@
-import {Component, EventEmitter, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, ViewChild} from '@angular/core';
 import {NgxSmartModalComponent} from 'ngx-smart-modal';
 import {DialogResult} from '@nusantara/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
@@ -35,7 +35,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
     '.error-detail {}'
   ]
 })
-export class MarkAsTestingDialogComponent {
+export class MarkAsTestingDialogComponent implements AfterViewInit {
   @ViewChild('modal') modal: NgxSmartModalComponent;
   form: FormGroup;
   result: DialogResult = DialogResult.Cancelled;
