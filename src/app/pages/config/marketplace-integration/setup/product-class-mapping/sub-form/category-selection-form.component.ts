@@ -36,7 +36,7 @@ import { ErrorResult, IResultResponse, ToastLevelEnum, ToastService } from '@nus
             <span>{{ productClassName }}</span>
           </label>
 
-          <div class="wrapper-sync" *ngIf="!this.state.productClass.isMapped">
+          <!-- <div class="wrapper-sync" *ngIf="!this.state.productClass.isMapped">
             <div class="container">
               <div>
                 <p class="latest">Latest Update</p>
@@ -50,7 +50,7 @@ import { ErrorResult, IResultResponse, ToastLevelEnum, ToastService } from '@nus
                 </button>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <ng-container formArrayName="categories">
             <nus-category-group-control
@@ -144,9 +144,9 @@ export class CategorySelectionFormComponent
         this.categories = data;
       });
 
-    this.service.getSyncType(this.shopSlug, this.typeSync).subscribe((data) => {
-      this.catSync = data
-    })
+    // this.service.getSyncType(this.shopSlug, this.typeSync).subscribe((data) => {
+    //   this.catSync = data
+    // })
     this.changeDetectorRef.detectChanges();
   }
 
@@ -177,6 +177,14 @@ export class CategorySelectionFormComponent
     }
   }
 
+  getChildCatgoryCode(data): string {
+    if (data[0].childs.length > 0) {
+      return this.getChildCatgoryCode(data[0].childs);
+    } else {
+      return data[0].category.categoryCode;
+    }
+  }
+
   getSelectedCategoryNames(data: any, names?: string[]): string[] {
     names = names || [];
     names.push(data[0].category.name);
@@ -187,40 +195,40 @@ export class CategorySelectionFormComponent
     }
   }
 
-  syncCategory(){
-    if (this.catSync.lastSync) {
-      const syncValidator = moment(new Date(this.catSync.lastSync)).add(3, 'h').toDate().getTime();
-      const now = new Date().getTime();
+  // syncCategory(){
+  //   if (this.catSync.lastSync) {
+  //     const syncValidator = moment(new Date(this.catSync.lastSync)).add(3, 'h').toDate().getTime();
+  //     const now = new Date().getTime();
 
-      if(now < syncValidator){
-        this.onSaveError('Error use another sync after 3 hour from the last sync');
-      } else{
-        this.loading = true;
-        this.service.synchronizeSyncType(this.shopSlug, this.typeSync, this.catSync).subscribe(resp => {
-          this.loading = false;
-          if (resp instanceof ErrorResult) {
-            this.onSaveError(resp);
-          } else {
-            this.onSaveSuccess(resp);
-            setTimeout(function(){
-              window.location.reload();
-            }, 3000);
-          }
-        });
-      }
-    } else {
-      this.service.synchronizeSyncType(this.shopSlug, this.typeSync, this.catSync).subscribe(resp => {
-        if (resp instanceof ErrorResult) {
-          this.onSaveError(resp);
-        } else {
-          this.onSaveSuccess(resp);
-          setTimeout(function(){
-            window.location.reload();
-          }, 3000);
-        }
-      });
-    }
-  }
+  //     if(now < syncValidator){
+  //       this.onSaveError('Error use another sync after 3 hour from the last sync');
+  //     } else{
+  //       this.loading = true;
+  //       this.service.synchronizeSyncType(this.shopSlug, this.typeSync, this.catSync).subscribe(resp => {
+  //         this.loading = false;
+  //         if (resp instanceof ErrorResult) {
+  //           this.onSaveError(resp);
+  //         } else {
+  //           this.onSaveSuccess(resp);
+  //           setTimeout(function(){
+  //             window.location.reload();
+  //           }, 3000);
+  //         }
+  //       });
+  //     }
+  //   } else {
+  //     this.service.synchronizeSyncType(this.shopSlug, this.typeSync, this.catSync).subscribe(resp => {
+  //       if (resp instanceof ErrorResult) {
+  //         this.onSaveError(resp);
+  //       } else {
+  //         this.onSaveSuccess(resp);
+  //         setTimeout(function(){
+  //           window.location.reload();
+  //         }, 3000);
+  //       }
+  //     });
+  //   }
+  // }
 
   onSaveError(resp) {
     if (resp.message) {
@@ -239,6 +247,7 @@ export class CategorySelectionFormComponent
     const selectedCat: marketplace.ISelectedCategory = {
       categoryNames: this.getSelectedCategoryNames(this.form.value.categories),
       deepestChildId: this.getChildCatgoryId(this.form.value.categories),
+      deepestChildCode: this.getChildCatgoryCode(this.form.value.categories)
     };
     this.selectedCategory.next(selectedCat);
   }

@@ -167,6 +167,7 @@ export class AttributeMatchingFormComponent
   productClassSlug: string;
   form: FormGroup;
   categoryId: number;
+  categoryCode:string;
   categoryNames: string;
   attributeNames: string;
   selectedCategory: marketplace.ISelectedCategory = null;
@@ -216,6 +217,7 @@ export class AttributeMatchingFormComponent
 
         if (catCurrValue) {
           this.categoryId = this.category.deepestChildId;
+          this.categoryCode = this.category.deepestChildCode;
           this.categoryNames = this.category.categoryNames.join(' > ');
         }
         if (attrCurrValue) {
@@ -262,6 +264,7 @@ export class AttributeMatchingFormComponent
           bhismaType: ['', Validators.required],
           newAttrName: null,
           isVariant:obj.isVariant,
+          isSpecialAttribute:obj.isSpecialAttribute
         });
         this.attributes.push(attrGroup);
       });
@@ -293,6 +296,7 @@ export class AttributeMatchingFormComponent
   onSubmit() {
     const formValue = {
       category_id: this.categoryId,
+      category_code: this.categoryCode,
       attributes: this.formValueMapping,
     };
 
@@ -345,6 +349,7 @@ export class AttributeMatchingFormComponent
       return {
         marketplace_attribute_name: attr.marketplaceName,
         marketplace_attribute_id: this.marketplaceAttributes[i].attributeId,
+        marketplace_attribute_code: this.marketplaceAttributes[i].attributeCode,
         marketplace_attribute_type: attr.marketplaceType,
         marketplace_attribute_option: this.marketplaceAttributes[i].options,
         product_class_attribute_id: attr.bhismaObj.attributeId
@@ -352,7 +357,8 @@ export class AttributeMatchingFormComponent
           : null,
         product_class_attribute_type: attr.bhismaType,
         new_attribute_name: attr.newAttrName,
-        isVariant:attr.isVariant
+        isVariant:attr.isVariant,
+        isSpecialAttribute: attr.isSpecialAttribute
       };
     });
   }

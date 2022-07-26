@@ -182,6 +182,11 @@ export class CategoryGroupControlComponent
   }
 
   getchildCategories(): Observable<marketplace.IProductCategory[]> {
+    if (this.selectedCategory.categoryCode) {
+      return this.service.fetchCategory(
+        this.shopSlug, null, this.selectedCategory.categoryCode
+      );
+    }
     return this.service.fetchCategory(
       this.shopSlug,
       this.selectedCategory.categoryId

@@ -148,7 +148,7 @@ export class AttributeSelectionFormComponent
     if (currValue && (JSON.stringify(currValue) !== JSON.stringify(prevValue))) {
       this.isBusy = true;
       this.service
-        .fetchAttribute(this.shopSlug, currValue.deepestChildId)
+        .fetchAttribute(this.shopSlug, currValue.deepestChildId, currValue.deepestChildCode)
         .subscribe(
           (attributes: marketplace.IShopAttribute[]) => {
 
