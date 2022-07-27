@@ -1,4 +1,4 @@
-import {INamedHrefEntity} from '@nusantara/models';
+import {INamedHrefEntity, INamedHrefEntityWarehouse} from '@nusantara/models';
 
 export interface IGiftVoucher extends INamedHrefEntity {
   code: string;
@@ -7,4 +7,6 @@ export interface IGiftVoucher extends INamedHrefEntity {
   validTo?: string;
   redeemDate?: string;
   isActive: boolean;
+  allWarehouse: boolean;
+  warehouses?: INamedHrefEntityWarehouse;
 }
