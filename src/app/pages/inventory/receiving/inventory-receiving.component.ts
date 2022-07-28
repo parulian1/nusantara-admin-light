@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthService } from '../../../auth';
-import { AbstractDetailComponent, DialogResult, ErrorResult, ToastService } from '../../../core';
+import {AbstractDetailComponent, DialogResult, ErrorResult, Logger, ToastService} from '../../../core';
 import {
   inventory,
   ISubLocation,
@@ -11,7 +11,7 @@ import {
   marketplace,
   IError
 } from '@nusantara/models';
-import { InventoryReceivingService, MarketplaceClientService } from '../../../services';
+import {InventoryReceivingService, MarketplaceClientService, ProductClassService} from '../../../services';
 import { IProduct, IProductClass } from '../../../models/products';
 import {
   ConfirmModalInvetoryOrderComponent,
@@ -20,7 +20,10 @@ import {
 } from '../../../shared';
 import { catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
-import { of } from 'rxjs';
+import {EMPTY, of} from 'rxjs';
+import {getSlugFromHref} from "@nusantara/shared/helpers";
+
+const logger = new Logger('InventoryReceivingComponent');
 
 /**
  * Allows a user to receive a new batch of inventory.
@@ -194,7 +197,8 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
               public service: InventoryReceivingService,
               public clientService: MarketplaceClientService,
               public route: ActivatedRoute,
-              public router: Router) {
+              public router: Router,
+              public productClassService: ProductClassService,) {
     super(route, router, toast, service);
   }
 
@@ -208,9 +212,8 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
 
   ngOnInit() {
     super.ngOnInit();
-    this.route.data.subscribe((data: { warehouses: IWarehouse[], productClasses: IProductClass[] }) => {
+    this.route.data.subscribe((data: { warehouses: IWarehouse[] }) => {
       this.warehouses = data.warehouses;
-      this.productClasses = data.productClasses;
     });
     this.currentDate = new Date();
   }
@@ -324,6 +327,19 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
       }
 
       const selectedProduct = this.productSelectionModal.product.value as IProduct;
+
+      // Get product class
+      const currentPc = this.productClasses.filter(pc => pc.href === selectedProduct.productClass.href);
+      if (currentPc.length == 0) {
+        this.productClassService.fetch(getSlugFromHref(selectedProduct.productClass.href)).pipe(catchError((err) => {
+          logger.error('Cannot get correct product class');
+          logger.error(err);
+          return of(EMPTY);
+        })).subscribe(res => {
+          const productClass = res as IProductClass;
+          this.productClasses.push(productClass);
+        });
+      }
 
       const oneProduct = this.fb.group({
         inventoryReceiving: [null, []],

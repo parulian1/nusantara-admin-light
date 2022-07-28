@@ -32,91 +32,90 @@ import { DomSanitizer } from '@angular/platform-browser';
 
     <form [formGroup]="form" (ngSubmit)="save()">
       <div class="container">
-        <div class="general-info">
-          <h3 i18n>General Information</h3>
-          <div>
-            <label i18n>Adjusted By</label>
-            <span>{{ userDisplayName }}</span>
-          </div>
-          <div>
-            <label i18n>Approved By</label>
-            <span>-</span>
-          </div>
-          <div>
-            <label i18n>Adjustment Date</label>
-            <span>{{ currentDate|date }}</span>
-          </div>
-          <div>
-            <label i18n>Status</label>
-            <span i18n>Pending</span>
-          </div>
-          <div>
-            <label i18n>Warehouse</label>
-            <div class="confirm-warehouse">
-
-              <div [formGroup]="warehouse">
-                <select formControlName="href" (change)="warehouseSelected($event)">
-                  <option [ngValue]="null" i18n>Select Warehouse</option>
-                  <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
-                    {{ wh.name }}
-                  </option>
-                </select>
-              </div>
-
-              <div [formGroup]="subLocation">
-                <select formControlName="href" (change)="subLocationSelected($event)">
-                  <option [ngValue]="null" i18n>Select Location</option>
-                  <option *ngFor="let subLocation of availableSubLocations" [ngValue]="subLocation.href">
-                    {{ subLocation.name }}
-                  </option>
-                </select>
-              </div>
-
-              <div class="confirm-warehouse-action">
-                <button (click)="confirmWarehouse()" type="button"
-                        [disabled]="subLocation.disabled || !warehouse.valid || !subLocation.valid"
-                        class="control confirm" i18n>Manual Update
-                </button>
-                <div class="dropdown" [class.disabled]="subLocation.disabled || !warehouse.valid || !subLocation.valid">
-                  <button type="button"
-                          [disabled]="subLocation.disabled || !warehouse.valid"
-                          class="dropbtn"><span class="material-icons">keyboard_arrow_down</span>
-                  </button>
-                  <div class="dropdown-content">
-                    <button (click)="manualUpload()" type="button"
-                            [disabled]="subLocation.disabled || !warehouse.valid"
-                            class="control confirm secondary" i18n>
-                      Manual Upload
-                    </button>
-                  </div>
-                </div>
-              </div>
-
+        <div>
+          <div id="general-info" class="wrapper">
+            <div>
+              <label i18n>Created By</label>
+              <span>{{ userDisplayName }}</span>
+            </div>
+            <div>
+              <label i18n>Created Date</label>
+              <span>{{ currentDate|date }}</span>
             </div>
           </div>
+          <div id="warehouse-info" class="wrapper">
+            <div>
+              <label i18n>Warehouse</label>
+              <div class="confirm-warehouse">
+                <div [formGroup]="warehouse">
+                  <select formControlName="href" (change)="warehouseSelected($event)">
+                    <option [ngValue]="null" i18n>Select Warehouse</option>
+                    <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
+                      {{ wh.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div>
+              <label i18n>Location</label>
+              <div class="confirm-warehouse">
+                <div [formGroup]="subLocation">
+                  <select formControlName="href" (change)="subLocationSelected($event)">
+                    <option [ngValue]="null" i18n>Select Location</option>
+                    <option *ngFor="let subLocation of availableSubLocations" [ngValue]="subLocation.href">
+                      {{ subLocation.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="confirm-warehouse-action">
+                  <button (click)="confirmWarehouse()" type="button"
+                          [disabled]="subLocation.disabled || !warehouse.valid || !subLocation.valid"
+                          class="control confirm" i18n>Manual Update
+                  </button>
+                  <div class="dropdown"
+                       [class.disabled]="subLocation.disabled || !warehouse.valid || !subLocation.valid">
+                    <button type="button"
+                            [disabled]="subLocation.disabled || !warehouse.valid"
+                            class="dropbtn"><span class="material-icons">keyboard_arrow_down</span>
+                    </button>
+                    <div class="dropdown-content">
+                      <button (click)="manualUpload()" type="button"
+                              [disabled]="subLocation.disabled || !warehouse.valid"
+                              class="control confirm secondary" i18n>
+                        CSV Upload
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <!-- <div class="mp-info">-->
+          <!--  <h3>Marketplace Information</h3>-->
+          <!--  <div>-->
+          <!--    <div>Product</div>-->
+          <!--    <div class="count">-->
+          <!--      0-->
+          <!--    </div>-->
+          <!--  </div>-->
+          <!--  <div>-->
+          <!--    <div>Marketplace</div>-->
+          <!--    <div class="count">-->
+          <!--      0-->
+          <!--    </div>-->
+          <!--  </div>-->
+          <!--  <div>-->
+          <!--    <div>Store</div>-->
+          <!--    <div class="count">-->
+          <!--      0-->
+          <!--    </div>-->
+          <!--  </div>-->
+          <!--  <a >More Detail</a>-->
+          <!-- </div>-->
         </div>
-        <!-- <div class="mp-info">-->
-        <!--  <h3>Marketplace Information</h3>-->
-        <!--  <div>-->
-        <!--    <div>Product</div>-->
-        <!--    <div class="count">-->
-        <!--      0-->
-        <!--    </div>-->
-        <!--  </div>-->
-        <!--  <div>-->
-        <!--    <div>Marketplace</div>-->
-        <!--    <div class="count">-->
-        <!--      0-->
-        <!--    </div>-->
-        <!--  </div>-->
-        <!--  <div>-->
-        <!--    <div>Store</div>-->
-        <!--    <div class="count">-->
-        <!--      0-->
-        <!--    </div>-->
-        <!--  </div>-->
-        <!--  <a >More Detail</a>-->
-        <!-- </div>-->
       </div>
       <div class="product-list" *ngIf="warehouse.disabled && adjustmentMode === 'csv'">
         <div *ngIf="invalidCsv.length > 0">
@@ -131,15 +130,26 @@ import { DomSanitizer } from '@angular/platform-browser';
         <table>
           <thead>
           <tr id="mp-add-product-head">
-            <th i18n>Receiving ID / Product Name / Location</th>
-            <th i18n>SKU</th>
-            <th i18n>Receiving Date</th>
-            <th i18n>Available Stock In Product Record</th>
-            <th i18n>Expected Qty</th>
-            <th i18n>Different Qty</th>
+            <th i18n>Receiving ID / Product Name</th>
+            <th i18n class="numeric">Stock</th>
+            <th i18n>Adjusted Qty*</th>
+            <th i18n class="numeric">Different Qty</th>
             <th i18n>Reason</th>
-            <th i18n>Notes</th>
+            <th i18n>Note</th>
             <th i18n>Remove</th>
+            <th>
+              <div class="dropdown">
+                <i class="material-icons">more_vert</i>
+                <div class="dropdown-content">
+                  <button (click)="toggleAllDetail(true)" class="toggle-all-detail-button" type="button">
+                    <span class="body-2">Expand all</span>
+                  </button>
+                  <button (click)="toggleAllDetail(false)" class="toggle-all-detail-button" type="button">
+                    <span class="body-2">Hide all</span>
+                  </button>
+                </div>
+              </div>
+            </th>
           </tr>
           </thead>
           <tbody>
@@ -151,8 +161,9 @@ import { DomSanitizer } from '@angular/platform-browser';
             [reasons]="reasonChoices"
             [csvData]="csvData[i]"
             [index]="i"
-            (remove)="stockRecords.removeAt(i)"
+            (remove)="removeLineItem(i)"
             (conflict)="resolveConflict($event)"
+            (openDetail)="openDetail(i)"
           >
           </nus-adjustment-line>
           </tbody>
@@ -168,15 +179,26 @@ import { DomSanitizer } from '@angular/platform-browser';
         <table>
           <thead>
           <tr id="mp-add-product-head">
-            <th i18n>Receiving ID / Product Name / Location</th>
-            <th i18n>SKU</th>
-            <th i18n>Receiving Date</th>
-            <th i18n>Available Stock In Product Record</th>
-            <th i18n>Expected Qty</th>
-            <th i18n>Different Qty</th>
+            <th i18n>Receiving ID / Product Name</th>
+            <th i18n class="numeric">Stock</th>
+            <th i18n>Adjusted Qty*</th>
+            <th i18n class="numeric">Different Qty</th>
             <th i18n>Reason</th>
-            <th i18n>Notes</th>
+            <th i18n>Note</th>
             <th i18n>Remove</th>
+            <th>
+              <div class="dropdown" [class.disabled]="stockRecords.controls.length == 0">
+                <i class="material-icons">more_vert</i>
+                <div class="dropdown-content">
+                  <button (click)="toggleAllDetail(true)" class="toggle-all-detail-button" type="button" i18n>
+                    <span class="body-2">Expand all</span>
+                  </button>
+                  <button (click)="toggleAllDetail(false)" class="toggle-all-detail-button" type="button" i18n>
+                    <span class="body-2">Hide all</span>
+                  </button>
+                </div>
+              </div>
+            </th>
           </tr>
           </thead>
           <tbody>
@@ -189,11 +211,12 @@ import { DomSanitizer } from '@angular/platform-browser';
             [reasons]="reasonChoices"
             [adjustmentMode]="adjustmentMode"
             (remove)="stockRecords.removeAt(i)"
+            (openDetail)="openDetail(i)"
           >
           </nus-adjustment-line>
 
           <tr>
-            <td colspan="10">
+            <td colspan="11">
               <button type="button" (click)="addLine()" class="new-add-button wide" i18n>
                 <i class="material-icons">add</i> Add Record
               </button>
@@ -221,18 +244,25 @@ import { DomSanitizer } from '@angular/platform-browser';
     'h3 { font-size: 20px; margin: 0; }',
     'button.confirm { width: auto }',
     '.container { display: grid; grid-template-columns: 4fr 1fr; grid-gap: 24px; }',
-    '.container > div { border: 1px solid var(--grey); border-radius: 4px; padding: 16px 24px; }',
-    '.general-info { width: 100%; }',
-    '.general-info > h3 { margin-bottom: 20px; }',
-    '.general-info > div:not(:last-child) { margin-bottom: 23px; }',
-    '.general-info label { min-height: 0; }',
-    '.general-info span{ font-weight: 700; color: var(--darken-grey); }',
+    '.wrapper { border: 1px solid var(--grey); border-radius: 4px; padding: 16px 24px; }',
+    '.wrapper:not(:last-child) { margin-bottom: 24px; }',
+    '.wrapper label { min-height: 0; }',
+    '.wrapper span{ font-weight: 700; color: var(--darken-grey); }',
+    '#general-info { display: grid; grid-template-columns: 1fr 1fr; grid-gap: 24px; }',
+    '#warehouse-info > div:not(:last-child) { margin-bottom: 23px; }',
     '.mp-info > h3 { margin-bottom: 16px; }',
     '.mp-info > div { text-align: center; border: 1px solid var(--grey); border-radius: 4px; padding: 12px 16px; margin-bottom: 12px; }',
     '.mp-info > a { display: block; margin-top: 16px; }',
     '.mp-info .count { font-size: 28px; font-weight: 700; }',
-    '.confirm-warehouse { display: grid; grid-template-columns: 2fr 2fr 1fr; grid-gap: 24px; }',
+    '.confirm-warehouse { display: grid; grid-template-columns: 3fr 1fr; grid-gap: 24px; }',
     '.product-list { margin-top: 24px; }',
+    '.product-list > table > thead th {vertical-align: middle;}',
+    'th:nth-child(1) { min-width: 115px; }',
+    'th:nth-child(2) { width: 80px; }',
+    'th:nth-child(3) { width: 108px; }',
+    'th:nth-child(4) { width: 108px; }',
+    'th:nth-child(7) { width: 5%; }',
+    'th:last-child { width: 2%; }',
     '.dropdown.disabled:hover .dropdown-content { display: none; }',
     '.dropdown.disabled:hover .dropbtn { background-color: var(--grey); }',
     '.dropdown.disabled .dropbtn { background-color: var(--grey); }',
@@ -242,7 +272,26 @@ import { DomSanitizer } from '@angular/platform-browser';
     '.dropdown button.dropbtn { display: flex; align-items: center;  border-radius: 0 4px 4px 0; }',
     '.confirm-warehouse-action  > button { flex: 1; }',
     '.confirm-warehouse-action .dropdown-content { right: 0; }',
-    '.dropdown-content button.confirm { width: 100%; }'
+    '.dropdown-content button.confirm { width: 100%; }',
+    '.dropdown-content { right: 0; }',
+    `
+      .toggle-all-detail-button {
+        width: 100%;
+        height: 36px;
+        padding: 6px 16px;
+        display: block;
+        background: transparent;
+        border: none;
+        transition: all .5s;
+        color: var(--darken-grey);
+        text-align: left;
+      }
+
+      .toggle-all-detail-button:hover:not([disabled]) {
+        background: var(--bhisma-orange);
+        color: var(--white);
+      }
+    `
   ]
 })
 export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdjustment> implements OnInit, AfterViewInit {
@@ -270,6 +319,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   adjustmentMode = 'manual';
   invalidCsv = [];
   upcList = [];
+  selectedSubLocationId = 0;
 
   constructor(private fb: FormBuilder,
               public toast: ToastService,
@@ -332,7 +382,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     const fullName = `${this.authService.tokenPayload?.last_name} ${this.authService.tokenPayload?.first_name}`.trim();
 
     if (fullName && email) {
-      return [fullName, `(${email})`,].join(', ').trim();
+      return [fullName, `(${email})`, ].join(', ').trim();
     } else {
       return email;
     }
@@ -342,7 +392,8 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     this.stockRecordSelectionModal.filters = {
       warehouse: getSlugFromHref(this.warehouse.value?.href),
       receiving_order_status: ReceivingOrderStatusChoices.APPROVED,
-      product_type: 'single'
+      product_type: 'single',
+      sub_location: this.selectedSubLocationId
     };
 
     this.stockRecordSelectionModal.displayedResults = null;
@@ -378,12 +429,15 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
         location: [selectedStock.location, []],
         product: [selectedStock.product, [Validators.required]],
         sku: [{value: selectedStock.sku, disabled: true}],
+        batch: [{value: selectedStock.batchNumber, disabled: true}],
         originalQuantity: [{value: selectedStock.originalQuantity, disabled: true}],
-        differenceQty: [selectedStock.originalQuantity, [Validators.min(0)]],
+        differenceQty: [selectedStock.originalQuantity, [Validators.min(0), Validators.max(10000)]],
         adjustmentQuantity: [null, [Validators.required, Validators.min(-32767), Validators.max(32767)]],
         created: [{value: selectedStock.created, disabled: true}],
+        expiryDate: [{value: selectedStock.expiryDate, disabled: true}],
         reason: [this.reasonChoices[0].value, []],
-        notes: [null, []],
+        notes: [null, [Validators.maxLength(160)]],
+        showDetail: [false, []], // Only for show hide detail row
       });
 
       this.stockRecords.push(newReceiving);
@@ -445,14 +499,14 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
         this.subLocation.enable();
         // this.warehouse.disable();
       }
-    } else {
-
     }
   }
 
   subLocationSelected($event: Event) {
     if (($event.target as HTMLSelectElement).value !== '') {
+      const loc = this.availableSubLocations.filter(e => e.href === this.subLocation.get('href').value)[0];
       // this.subLocation.disable();
+      this.selectedSubLocationId = loc.id;
     }
   }
 
@@ -479,8 +533,6 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
 
   manualUploadClose() {
     if (this.csvDialog.result === DialogResult.OK) {
-      console.log(this.csvDialog.columnChoices);
-      console.log(this.csvDialog.fileTarget);
       this.warehouse.disable();
       this.subLocation.disable();
       this.adjustmentMode = 'csv';
@@ -584,12 +636,15 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
                     location: [selectedStock.location, []],
                     product: [selectedStock.product, [Validators.required]],
                     sku: [{value: sku, disabled: true}],
+                    batch: [{value: selectedStock.batchNumber, disabled: true}],
                     originalQuantity: [{value: selectedStock.originalQuantity, disabled: true}],
                     differenceQty: [mappedValue.qty, [Validators.min(0)]],
                     adjustmentQuantity: [null, [Validators.required, Validators.min(-32767), Validators.max(32767)]],
                     created: [{value: selectedStock.created, disabled: true}],
-                    reason: [mappedValue['reason'], []],
+                    expiryDate: [{value: selectedStock.expiryDate, disabled: true}],
+                    reason: [mappedValue.reason, []],
                     notes: [mappedValue.notes || null, []],
+                    showDetail: [false, []],
                   });
                   this.stockRecords.push(newReceiving);
                 } else {
@@ -606,9 +661,6 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   }
 
   resolveConflict($event: { index: number; data: any }) {
-    console.log('Need resolve ', this.stockRecords[$event.index]);
-    console.log('Data ', $event.data);
-    // this.stockRecordDialog.stockRecord = this.stockRecords[$event.index];
     this.stockRecordDialog.displayedResults = $event.data.page;
     this.stockRecordDialog.stockRecordIndex = $event.index;
     this.stockRecordDialog.stockRecordData = $event.data;
@@ -624,12 +676,15 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
         location: [selectedStock.location, []],
         product: [selectedStock.product, [Validators.required]],
         sku: [{value: selectedStock.sku, disabled: true}],
+        batch: [{value: selectedStock.batchNumber, disabled: true}],
         originalQuantity: [{value: selectedStock.originalQuantity, disabled: true}],
         differenceQty: [this.stockRecordDialog.stockRecordData.mappedValue.qty, [Validators.min(0)]],
         adjustmentQuantity: [null, [Validators.required, Validators.min(-32767), Validators.max(32767)]],
         created: [{value: selectedStock.created, disabled: true}],
+        expiryDate: [{value: selectedStock.expiryDate, disabled: true}],
         reason: [this.reasonChoices[0].value, []],
         notes: [null, []],
+        showDetail: [false, []], // Only for show hide detail row
       });
       this.stockRecords.controls[this.stockRecordDialog.stockRecordIndex] = newReceiving;
       this.ref.detectChanges();
@@ -648,25 +703,41 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     if (this.invalidCsv.length > 0) {
       if (this.csvDialog.hasCsvHeader) {
         fields = [
-          this.csvDialog.columnChoices['upc'],
-          this.csvDialog.columnChoices['qty'],
-          this.csvDialog.columnChoices['reason'],
-          this.csvDialog.columnChoices['sku'],
-          this.csvDialog.columnChoices['notes'],
+          this.csvDialog.columnChoices.upc,
+          this.csvDialog.columnChoices.qty,
+          this.csvDialog.columnChoices.reason,
+          this.csvDialog.columnChoices.sku,
+          this.csvDialog.columnChoices.notes,
           'import_status'];
       }
       for (const csvData of this.invalidCsv) {
-        const data = csvData['data'];
-        data['import_status'] = csvData['reason'];
+        const data = csvData.data;
+        data.import_status = csvData.reason;
         forExport.push(data);
       }
 
-      let csv = Papa.unparse(forExport);
+      const csv = Papa.unparse(forExport);
       const blob = new Blob([csv], {type: 'text/plain'});
       return this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(blob));
     }
 
     return '';
 
+  }
+
+  openDetail(index: number) {
+    const stockRecord = this.stockRecords.controls[index];
+    stockRecord.get('showDetail').setValue(!stockRecord.get('showDetail').value);
+  }
+  toggleAllDetail(status: boolean) {
+    // Open/close all detail row
+    this.stockRecords.controls.forEach(stock => {
+      stock.get('showDetail').setValue(status);
+    });
+  }
+
+  removeLineItem(i: number): void {
+    this.stockRecords.removeAt(i);
+    this.csvData.splice(i,1)
   }
 }

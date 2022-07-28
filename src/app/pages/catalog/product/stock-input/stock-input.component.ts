@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { InventoryReceivingService, WarehouseService } from '@nusantara/services';
 import { IStockSearch } from '@nusantara/models/products/stock-search';
 import { AbstractEditingComponent, IResultResponse } from '@nusantara/core';
-import { inventory, ISubLocation, IWarehouse, products } from '@nusantara/models';
+import { inventory, ISubLocation, IWarehouse } from '@nusantara/models';
 import { AuthService } from '@nusantara/auth';
 import { IProduct } from '@nusantara/models/products';
 import { Observable, zip } from 'rxjs';
@@ -39,7 +39,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   `,
   styles: [
     'h3 { font-size: 20px; margin: 0 0 20px 0; }',
-    '.min-quantity { margin: 10px 0px; }'
+    '.min-quantity { margin: 10px 0; }'
   ]
 })
 export class StockInputComponent extends AbstractEditingComponent implements OnInit {
@@ -120,7 +120,7 @@ export class StockInputComponent extends AbstractEditingComponent implements OnI
       }),
       status: ['approved', [Validators.required, ]],
       createdBy: this.fb.group({
-        href: `https://bhisma.cloud/api/iam/${this.authService.tokenPayload.user_id}/`
+        href: `https://${this.authService.tokenPayload?.site}/api/iam/${this.authService.tokenPayload.user_id}/`
       }),
       reviewedBy: [null, ],
       stockRecords: this.fb.array([], [Validators.required, Validators.minLength(1)]),

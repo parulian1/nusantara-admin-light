@@ -22,27 +22,26 @@ import { AuthService } from '@nusantara/auth';
 
     <table id="general-table-info">
       <thead>
-      <th i18n>Type</th>
-      <th i18n>Status</th>
-      <th i18n>Warehouse</th>
-      <th i18n>Created By</th>
-      <th i18n>Reviewed By</th>
-      <th i18n>Date</th>
+        <th i18n>Type</th>
+        <th i18n>Status</th>
+        <th i18n>Warehouse</th>
+        <th i18n>Location</th>
+        <th i18n>Created By</th>
+        <th i18n>Reviewed By</th>
+        <th i18n>Date</th>
       </thead>
       <tbody>
-      <td>{{entity.type}}</td>
-      <td>{{entity.status}}</td>
-      <td>
-        <a (click)="showWarehouseDetail()">{{entity.warehouse.name}}</a>
-      </td>
-
-      <td *ngIf="!entity.createdBy?.name">-</td>
-      <td *ngIf="entity.createdBy?.name">{{entity.createdBy?.name}}</td>
-
-      <td *ngIf="!entity.reviewedBy?.name">-</td>
-      <td *ngIf="entity.reviewedBy?.name">{{entity.reviewedBy?.name}}</td>
-
-      <td>{{entity.created | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+        <td>{{entity.type}}</td>
+        <td>{{entity.status}}</td>
+        <td>
+          <a (click)="showWarehouseDetail()">{{entity.warehouse.name}}</a>
+        </td>
+        <td>{{ adjustmentLocationName }}</td>
+        <td *ngIf="!entity.createdBy?.name">-</td>
+        <td *ngIf="entity.createdBy?.name">{{entity.createdBy?.name}}</td>
+        <td *ngIf="!entity.reviewedBy?.name">-</td>
+        <td *ngIf="entity.reviewedBy?.name">{{entity.reviewedBy?.name}}</td>
+        <td>{{entity.created | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
       </tbody>
     </table>
     <ul class="non-field-errors" *ngIf="!!nonFieldErrors.length">
@@ -52,23 +51,23 @@ import { AuthService } from '@nusantara/auth';
     <form [formGroup]="form" (ngSubmit)="save()">
       <table id="general-table-product">
         <thead>
-        <tr>
-          <th class="product-name" i18n>
-            Receiving ID / Product Name / Location
-          </th>
-          <th class="product-sku" i18n>sku</th>
-          <th i18n>Receiving Date</th>
-          <th i18n>Available Stock When Transaction Request occured</th>
-          <th i18n>Actual Stock from receiving order</th>
-          <th i18n>Adjusted Qty</th>
-          <th i18n>Expected Qty</th>
-          <th i18n>Reason</th>
-          <th i18n>Notes</th>
-        </tr>
+          <tr>
+            <th i18n>Receiving ID / Product Name</th>
+            <th i18n>SKU</th>
+            <th i18n>Receiving Date</th>
+            <th i18n>Batch</th>
+            <th i18n>Expiry Date</th>
+            <th i18n>Stock</th>
+            <th i18n>Different Qty</th>
+            <th i18n>Adjusted Qty</th>
+            <th i18n>Reason</th>
+            <th i18n>Notes</th>
+          </tr>
         </thead>
         <tbody>
         <tr *ngFor="let stock_record of entity.stockRecords">
-          <td data-qa="product" class="product-name" title="{{ displayedName(stock_record.receivingOrder.href, stock_record.product.name, stock_record.location.href) }}">
+          <td data-qa="product" class="product-name"
+              title="{{ displayedName(stock_record.receivingOrder.href, stock_record.product.name, stock_record.location.href) }}">
             <div>
               {{ displayedName(stock_record.receivingOrder.href, stock_record.product.name, stock_record.location.href) }}
             </div>
@@ -79,8 +78,11 @@ import { AuthService } from '@nusantara/auth';
           <td data-qa="created">
             {{ stock_record.created|date: 'dd MMM yyyy HH:mm' }}
           </td>
-          <td data-qa="available-quantity">
-            {{ stock_record.originalQuantity }}
+          <td data-qa="batch">
+            {{ stock_record.batchNumber }}
+          </td>
+          <td data-qa="expiry">
+            {{ stock_record.expiryDate|date: 'dd MMM yyyy HH:mm' }}
           </td>
           <td data-qa="actual-quantity">
             {{ stock_record.actualQuantity }}
@@ -123,15 +125,13 @@ import { AuthService } from '@nusantara/auth';
     '#general-table-info td{text-align: left;font-weight: 700;color: #5A5A5A;}',
     '#general-table-product th{font-weight: 700;color: #5A5A5A;}',
     '#general-table-product td{height: 56px;width:8%;}',
-    '#general-table-product td.product-name{width:35%;overflow: hidden;text-overflow: ellipsis;}',
+    '#general-table-product td.product-name{width:15%;overflow: hidden;text-overflow: ellipsis;}',
     '#general-table-product td.product-sku{overflow: hidden;text-overflow: ellipsis;}',
     '#general-table-product td div{overflow: hidden;text-overflow: ellipsis;}',
     '#general-table-product thead{background-color: #F4F4F4;}',
     'table#general-table-product{}',
     'div.detail-actions { display: flex }',
-    'button.danger { margin-left: auto }',
-    '.product-name { width: 20%; }',
-    '.product-sku { width: 10%; }',
+    'button.danger { margin-left: auto }'
   ]
 })
 export class AdjustmentDetailComponent  extends AbstractDetailComponent<IAdjustmentReadOnly> implements OnInit {
@@ -140,6 +140,7 @@ export class AdjustmentDetailComponent  extends AbstractDetailComponent<IAdjustm
   rejectButtonText: string = 'reject';
   isApproveDisabled: boolean = false;
   isRejectDisabled: boolean = false;
+  adjustmentLocationName = '-';
 
   constructor(public service: InventoryAdjustmentOrderService,
               public route: ActivatedRoute,
@@ -167,6 +168,7 @@ export class AdjustmentDetailComponent  extends AbstractDetailComponent<IAdjustm
       status: [entity?.status, []],
       reviewedBy: [entity?.reviewedBy, []],
     });
+    this.getLocation();
   }
 
   showWarehouseDetail(): void {}
@@ -234,4 +236,10 @@ export class AdjustmentDetailComponent  extends AbstractDetailComponent<IAdjustm
     );
   }
 
+  getLocation() {
+    const stockRecords = this.entity.stockRecords;
+    // Now, each stock adjustment can only be for 1 location and 1 warehouse.
+    // So we can take the location from the first stock record
+    this.adjustmentLocationName = stockRecords[0].location.name;
+  }
 }

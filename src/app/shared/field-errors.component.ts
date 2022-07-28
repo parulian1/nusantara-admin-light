@@ -52,6 +52,9 @@ import {FormControl, FormGroup} from '@angular/forms';
       <div *ngIf="control?.errors?.fileNameLength" i18n>
         Maximum file name length is {{ control.getError('fileNameLength')?.value }} character
       </div>
+      <div *ngIf="control?.errors?.maxFile" i18n>
+        Maximum selected file is {{ control.getError('maxFile')?.value }}
+      </div>
       <div *ngIf="control?.errors?.pattern" i18n>
         Invalid character in value
       </div>
