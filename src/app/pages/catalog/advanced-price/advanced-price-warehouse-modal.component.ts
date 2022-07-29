@@ -9,7 +9,7 @@ import {DialogResult} from '@nusantara/core';
 @Component({
   selector: 'nus-advanced-price-warehouse-modal',
   template: `
-    <ngx-smart-modal [identifier]="'selectProduct'" #modal [formGroup]="form" [customClass]="'wide-modal'">
+    <ngx-smart-modal [identifier]="'selectWarehouse'" #modal [formGroup]="form" [customClass]="'wide-modal'">
       <h2 class="title-2">Select Warehouse</h2>
       <form #modalForm class="fluid" (ngSubmit)="submit()">
         <div class="tableFixHead">

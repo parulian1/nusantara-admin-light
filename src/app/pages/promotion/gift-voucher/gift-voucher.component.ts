@@ -99,7 +99,7 @@ import {WarehouseSelectionModalComponent} from "@nusantara/shared/modals/warehou
               </tr>
               <tr>
                 <td colspan="2">
-                  <button type="button" class="new-add-button wide" i18n>
+                  <button type="button" class="new-add-button wide" (click)="selectWarehouse()" i18n>
                     <i class="material-icons">add</i> Add Warehouse
                   </button>
                 </td>
@@ -120,7 +120,7 @@ import {WarehouseSelectionModalComponent} from "@nusantara/shared/modals/warehou
     </form>
 
     <!-- Modals -->
-    <nus-product-selection-modal></nus-product-selection-modal>
+    <nus-warehouse-selection-modal></nus-warehouse-selection-modal>
 
   `,
   styles: [
@@ -136,7 +136,7 @@ import {WarehouseSelectionModalComponent} from "@nusantara/shared/modals/warehou
   ]
 })
 export class GiftVoucherComponent extends AbstractDetailComponent<IGiftVoucher> implements OnInit, AfterViewInit {
-  @ViewChild('warehouseSelectionModal') warehouseSelectionModal: WarehouseSelectionModalComponent;
+  @ViewChild(WarehouseSelectionModalComponent) warehouseSelectionModal: WarehouseSelectionModalComponent;
 
   public entity: IGiftVoucher;
   minDateValidTo: string | Date = null;

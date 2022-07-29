@@ -3,18 +3,18 @@ import {DialogResult, PagedResponse} from "@nusantara/core";
 import {Subscription} from "rxjs";
 import {IWarehouse} from "@nusantara/models";
 import {WarehouseService} from "@nusantara/services";
-import {Component, ElementRef, EventEmitter, OnInit, ViewChild} from "@angular/core";
+import {AfterViewInit, Component, ElementRef, EventEmitter, OnInit, ViewChild} from "@angular/core";
 import {NgxSmartModalComponent} from "ngx-smart-modal";
 
 @Component({
-  selector: 'nus-promo-campaign-selection-modal',
+  selector: 'nus-warehouse-selection-modal',
   template: `
     <ngx-smart-modal [identifier]="'selectWarehouse'" #modal [formGroup]="form">
-      <h2 class="heading-2" i18n>Select Group</h2>
+      <h2 class="title-2">Select Warehouse</h2>
       <form #modalForm>
         <label>
           <span i18n>Search</span>
-          <input type="text" [formControl]="searchText" placeholder="ex, cari or 'new promo group'">
+          <input type="text" [formControl]="searchText" placeholder="ex, Warehouse Name">
         </label>
         <input type="hidden" [formControl]="warehouse">
 
@@ -41,9 +41,8 @@ import {NgxSmartModalComponent} from "ngx-smart-modal";
       </form>
     </ngx-smart-modal>
   `,
-
 })
-export class WarehouseSelectionModalComponent implements OnInit{
+export class WarehouseSelectionModalComponent implements OnInit, AfterViewInit {
   @ViewChild('modalForm') formView: ElementRef<HTMLFormElement>;
   @ViewChild('modal') modal: NgxSmartModalComponent;
 
