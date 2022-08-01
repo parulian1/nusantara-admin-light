@@ -52,12 +52,14 @@ export class CallbackComponent implements OnInit {
   afterLoginUrl: string;
   isBusy = false;
   codeCallback: any;
+  // for shopee only for now
+  shopId: any;
   redirectOnFail = '/auth/login';
   siteDomain = this.auth.siteDomain;
   marketplace: string;
 
   // add new marketplace that need code
-  marketplaceArray = ['lazada', 'bukalapak']
+  marketplaceArray = ['lazada', 'bukalapak', 'shopee']
 
   constructor(private fb: FormBuilder,
               private service: MarketplaceShopService,
@@ -72,12 +74,19 @@ export class CallbackComponent implements OnInit {
 
     this.activatedRoute.queryParams.subscribe(params => {
         this.codeCallback = params['code'];
+        this.shopId = params['shop_id']
+
     });
 
     this.form = this.fb.group({
       code: [this.codeCallback, [Validators.required]],
       marketplace: [this.marketplace, []],
+
     });
+
+    if(this.shopId){
+      this.form.addControl('shopId', this.shopId)
+    }
 
     this.activatedRoute.queryParamMap.subscribe(paramMap => {
       this.afterLoginUrl = paramMap.get('next') ?? '/config/marketplace-integration/connect';
@@ -94,7 +103,14 @@ export class CallbackComponent implements OnInit {
       code: this.form.value.code,
       marketplace: this.form.value.marketplace,
     };
-    return formValue;
+
+    if(this.form.value.shopId){
+      const formValues = {...formValue, shopId: this.form.value.shopId}
+      console.log(formValues)
+      return formValues
+    } else {
+      return formValue;
+    }
   }
   get code(): FormControl { return this.form?.get('code') as FormControl; }
 
