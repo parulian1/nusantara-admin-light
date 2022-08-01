@@ -53,7 +53,7 @@ export class CallbackComponent implements OnInit {
   isBusy = false;
   codeCallback: any;
   // for shopee only for now
-  shopId: any;
+  shopID: any;
   redirectOnFail = '/auth/login';
   siteDomain = this.auth.siteDomain;
   marketplace: string;
@@ -74,7 +74,7 @@ export class CallbackComponent implements OnInit {
 
     this.activatedRoute.queryParams.subscribe(params => {
         this.codeCallback = params['code'];
-        this.shopId = params['shop_id']
+        this.shopID = params['shop_id']
 
     });
 
@@ -84,8 +84,8 @@ export class CallbackComponent implements OnInit {
 
     });
 
-    if(this.shopId){
-      this.form.addControl('shopId', this.shopId)
+    if(this.shopID){
+      this.form.addControl('shopID',  new FormControl(this.shopID, Validators.required))
     }
 
     this.activatedRoute.queryParamMap.subscribe(paramMap => {
@@ -104,9 +104,8 @@ export class CallbackComponent implements OnInit {
       marketplace: this.form.value.marketplace,
     };
 
-    if(this.form.value.shopId){
-      const formValues = {...formValue, shopId: this.form.value.shopId}
-      console.log(formValues)
+    if(this.form.value.shopID){
+      const formValues = {...formValue,  shop_id: this.form.value.shopID}
       return formValues
     } else {
       return formValue;
