@@ -1,10 +1,11 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {AbstractDetailComponent, DialogResult, ToastService} from '@nusantara/core';
+import {AbstractDetailComponent, DialogResult, NusantaraValidators, ToastService} from '@nusantara/core';
 import {IGiftVoucher, INamedHrefEntity, IWarehouse} from '@nusantara/models';
 import {GiftVoucherService} from '@nusantara/services';
 import {FormArray, FormBuilder, FormControl, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {WarehouseSelectionModalComponent} from "@nusantara/shared/modals/warehouse-selection-modal.component";
+import {convertDateTime} from "@nusantara/shared/helpers";
 
 @Component({
   selector: 'nus-gift-voucher',
@@ -45,6 +46,9 @@ import {WarehouseSelectionModalComponent} from "@nusantara/shared/modals/warehou
               <nus-field-datetime [control]="validFrom" [minDate]="minDateValidFrom"
                                   [maxDate]="maxDateValidFrom"></nus-field-datetime>
               <nus-field-errors [control]="validFrom"></nus-field-errors>
+              <div *ngIf="validFrom.errors?.maxDateTime" class="error-detail" i18n>
+                Input must be less than Valid To
+              </div>
             </label>
 
             <label>
@@ -52,6 +56,9 @@ import {WarehouseSelectionModalComponent} from "@nusantara/shared/modals/warehou
               <nus-field-datetime [control]="validTo" [minDate]="minDateValidTo"
                                   [maxDate]="maxDateValidTo"></nus-field-datetime>
               <nus-field-errors [control]="validTo"></nus-field-errors>
+              <div *ngIf="validTo.errors?.minDateTime" class="error-detail" i18n>
+                Input must be larger than Valid From
+              </div>
             </label>
           </div>
 
@@ -110,7 +117,6 @@ import {WarehouseSelectionModalComponent} from "@nusantara/shared/modals/warehou
           </div>
         </div>
       </div>
-
 
       <nus-detail-actions
         [component]="this"
@@ -180,6 +186,15 @@ export class GiftVoucherComponent extends AbstractDetailComponent<IGiftVoucher> 
   ngAfterViewInit() {
     super.ngAfterViewInit();
     this.warehouseSelectionModal.onClose.subscribe(() => this.onWarehouseSelectionModalClosed());
+
+    // Update date validation every time validFrom and validTo change
+    this.form.get('validFrom').valueChanges.subscribe(value => {
+      this.form.get('validTo').setValidators(NusantaraValidators.minDateTime(value))
+    });
+
+    this.form.get('validTo').valueChanges.subscribe(value => {
+      this.form.get('validFrom').setValidators(NusantaraValidators.maxDateTime(value))
+    });
   }
 
   get name(): FormControl {
@@ -221,8 +236,8 @@ export class GiftVoucherComponent extends AbstractDetailComponent<IGiftVoucher> 
       href: [entity?.href],
       code: [entity?.code, [Validators.required, Validators.maxLength(10)]],
       amount: [entity?.amount, [Validators.required, Validators.min(1)]],
-      validFrom: [this.convertDateTime(entity?.validFrom), [Validators.required]],
-      validTo: [this.convertDateTime(entity?.validTo), [Validators.required]],
+      validFrom: [convertDateTime(entity?.validFrom), [Validators.required]],
+      validTo: [convertDateTime(entity?.validTo), [Validators.required]],
       isActive: [entity?.isActive, []],
       allWarehouse: [entity?.allWarehouse || true, [Validators.required]],
       warehouses: this.fb.array([]),
@@ -256,27 +271,6 @@ export class GiftVoucherComponent extends AbstractDetailComponent<IGiftVoucher> 
     entity?.warehouses.forEach((value) => {
       this.addWarehouse(value);
     });
-  }
-
-  convertDateTime(timestamp: string) {
-    if (timestamp) {
-      const date = new Date(timestamp);
-
-      const year = date.getFullYear();
-      let month: string | number = date.getMonth() + 1; // getMonth() is zero-indexed, so we'll increment to get the correct month number
-      let day: string | number = date.getDate();
-      let hours: string | number = date.getHours();
-      let minutes: string | number = date.getMinutes();
-      let seconds: string | number = date.getSeconds();
-
-      month = (month < 10) ? '0' + month : month;
-      day = (day < 10) ? '0' + day : day;
-      hours = (hours < 10) ? '0' + hours : hours;
-      minutes = (minutes < 10) ? '0' + minutes : minutes;
-      seconds = (seconds < 10) ? '0' + seconds : seconds;
-      return (`${year}-${month}-${day}T${hours}:${minutes}:${seconds}`);
-    }
-    return '';
   }
 
   /* WAREHOUSE SELECTION */
