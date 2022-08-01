@@ -8,5 +8,5 @@ export interface IGiftVoucher extends INamedHrefEntity {
   redeemDate?: string;
   isActive: boolean;
   allWarehouse: boolean;
-  warehouses?: INamedHrefEntityWarehouse;
+  warehouses?: INamedHrefEntityWarehouse[];
 }

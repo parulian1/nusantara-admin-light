@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {AbstractDetailComponent, DialogResult, ToastService} from '@nusantara/core';
-import {IGiftVoucher, IWarehouse} from '@nusantara/models';
+import {IGiftVoucher, INamedHrefEntity, IWarehouse} from '@nusantara/models';
 import {GiftVoucherService} from '@nusantara/services';
 import {FormArray, FormBuilder, FormControl, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -92,14 +92,15 @@ import {WarehouseSelectionModalComponent} from "@nusantara/shared/modals/warehou
               <tr *ngFor="let control of warehouses?.controls; let i=index">
                 <td>{{ control.get('name').value }}</td>
                 <td>
-                  <button (click)="warehouses.removeAt(i)" type="button" class="remove-button">
+                  <button (click)="warehouses.removeAt(i)" type="button" class="remove-button" [disabled]="checkVoucherDateValid()">
                     <i class="material-icons">delete_outline</i>
                   </button>
                 </td>
               </tr>
               <tr>
                 <td colspan="2">
-                  <button type="button" class="new-add-button wide" (click)="selectWarehouse()" i18n>
+                  <button type="button" class="new-add-button wide" (click)="selectWarehouse()"
+                          [disabled]="checkVoucherDateValid()" i18n>
                     <i class="material-icons">add</i> Add Warehouse
                   </button>
                 </td>
@@ -248,6 +249,13 @@ export class GiftVoucherComponent extends AbstractDetailComponent<IGiftVoucher> 
       this.minDateValidFrom = entity.validFrom;
       this.maxDateValidFrom = entity.validFrom;
     }
+
+    if (entity?.warehouses.length > 0){
+      this.form.get('allWarehouse').setValue(false);
+    }
+    entity?.warehouses.forEach((value) => {
+      this.addWarehouse(value);
+    });
   }
 
   convertDateTime(timestamp: string) {
@@ -271,8 +279,18 @@ export class GiftVoucherComponent extends AbstractDetailComponent<IGiftVoucher> 
     return '';
   }
 
+  /* WAREHOUSE SELECTION */
   selectWarehouse() {
     this.warehouseSelectionModal.open();
+  }
+
+  addWarehouse(warehouse: INamedHrefEntity) {
+    const w = this.fb.group({
+      href: [warehouse.href, []],
+      name: [warehouse.name, []]
+    });
+
+    this.warehouses.push(w);
   }
 
   onWarehouseSelectionModalClosed() {
@@ -285,5 +303,12 @@ export class GiftVoucherComponent extends AbstractDetailComponent<IGiftVoucher> 
 
       this.warehouses.push(w);
     }
+  }
+  /* WAREHOUSE SELECTION */
+
+  checkVoucherDateValid() {
+    // Disable button if it's not new form or ongoing and voucher is passed/historical
+    const today = new Date();
+    return this.entity && today > new Date(this.validTo.value);
   }
 }
