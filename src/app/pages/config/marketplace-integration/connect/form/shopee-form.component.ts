@@ -31,7 +31,7 @@ import { MarketplaceClientEnum } from '../markeplace-client-enum';
         </div>
       </label>
 
-      <label>
+      <!-- <label>
         <span i18n>Partner ID
           <nus-tooltip [text]="partnerIdInfo"></nus-tooltip>
         </span>
@@ -51,7 +51,7 @@ import { MarketplaceClientEnum } from '../markeplace-client-enum';
           [control]="partnerKey"
           variable="Partner Key"
         ></nus-field-errors-marketplace>
-      </label>
+      </label> -->
 
       <!-- <label>
         <span i18n>Shop URL</span>
@@ -153,8 +153,8 @@ export class ShopeeeClientFormComponent implements OnInit {
       .subscribe((data: marketplace.IShopeeAuthResponse) => {
         if (data != null) {
           this.form.patchValue({
-            partnerId: data.partnerId,
-            partnerKey: data.partnerKey,
+            // partnerId: data.partnerId,
+            // partnerKey: data.partnerKey,
             // redirectUrl: data.redirectUrl,
             shopId: data.shopId,
             warehouseId: data.warehouseId,
@@ -164,12 +164,12 @@ export class ShopeeeClientFormComponent implements OnInit {
       });
   }
 
-  get partnerId(): FormControl {
-    return this.form.get('partnerId') as FormControl;
-  }
-  get partnerKey(): FormControl {
-    return this.form.get('partnerKey') as FormControl;
-  }
+  // get partnerId(): FormControl {
+  //   return this.form.get('partnerId') as FormControl;
+  // }
+  // get partnerKey(): FormControl {
+  //   return this.form.get('partnerKey') as FormControl;
+  // }
   // get redirectUrl(): FormControl {
   //   return this.form.get('redirectUrl') as FormControl;
   // }
@@ -182,8 +182,8 @@ export class ShopeeeClientFormComponent implements OnInit {
 
   initializeForm(entity?: marketplace.IShopeeCredential) {
     this.form = this.fb.group({
-      partnerId: [entity?.partnerId, [Validators.required, Validators.maxLength(100)]],
-      partnerKey: [entity?.partnerKey, [Validators.required, Validators.maxLength(100)]],
+      // partnerId: [entity?.partnerId, [Validators.required, Validators.maxLength(100)]],
+      // partnerKey: [entity?.partnerKey, [Validators.required, Validators.maxLength(100)]],
       // redirectUrl: [entity?.redirectUrl, [Validators.required, Validators.maxLength(100)]],
       shopId: [entity?.shopId, [Validators.required, this.isInteger()]],
       warehouseId: [entity?.warehouse, [Validators.required]],
@@ -217,8 +217,8 @@ export class ShopeeeClientFormComponent implements OnInit {
   getFormValue(): any {
     const formValue = {
       marketplace: MarketplaceClientEnum.shopee,
-      partner_id: this.form.value.partnerId,
-      partner_key: this.form.value.partnerKey,
+      // partner_id: this.form.value.partnerId,
+      // partner_key: this.form.value.partnerKey,
       // redirect_url: this.form.value.redirectUrl,
       shop_id:  this.form.value.shopId,
       warehouse_id: this.form.value.warehouseId,
