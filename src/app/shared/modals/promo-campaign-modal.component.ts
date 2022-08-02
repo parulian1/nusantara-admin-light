@@ -30,13 +30,13 @@ import { PromotionCampaignService } from '@nusantara/services';
           <table>
             <thead>
             <tr>
-              <th i18n>Promo Campaign Name</th>
+              <th  i18n>Promo Campaign Name</th>
               <th class="centered" i18n>Action</th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let promoGroup of displayedResults?.entities">
-              <td>
+              <td class="campaign-name">
                 {{ promoGroup.name }}
               </td>
               <td class="centered">
@@ -60,6 +60,9 @@ import { PromotionCampaignService } from '@nusantara/services';
       }
       .search-content {
         margin-top: 16px;
+      }
+      .campaign-name {
+        word-break: break-word;
       }
     `
   ]
