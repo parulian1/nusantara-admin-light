@@ -18,20 +18,20 @@ import { PromotionCampaignService } from '@nusantara/services';
   selector: 'nus-promo-campaign-selection-modal',
   template: `
     <ngx-smart-modal [identifier]="'selectCombination'" #modal [formGroup]="form">
-      <h2 class="heading-2" i18n>Select Group</h2>
+      <h2 class="heading-2" i18n>Select Promo Campaign</h2>
       <form #modalForm>
-        <label>
-          <span i18n>Search</span>
-          <input type="text" [formControl]="searchText" placeholder="ex, cari or 'new promo group'">
+        <label class="header">
+          <input type="text" [formControl]="searchText" placeholder="Search Promo Campaign">
         </label>
         <input type="hidden" [formControl]="promotionGroup">
+        <span i18n>Search promo campaign name to find more</span>
 
-        <div>
+        <div class="search-content">
           <table>
             <thead>
             <tr>
-              <th i18n>Name</th>
-              <th i18n>Action</th>
+              <th i18n>Promo Campaign Name</th>
+              <th class="centered" i18n>Action</th>
             </tr>
             </thead>
             <tbody>
@@ -40,7 +40,7 @@ import { PromotionCampaignService } from '@nusantara/services';
                 {{ promoGroup.name }}
               </td>
               <td class="centered">
-                <a href="#" (click)="selectCampaign(promoGroup)" i18n>select</a>
+                <a href="#" (click)="selectCampaign(promoGroup)" i18n>Select</a>
               </td>
             </tr>
             </tbody>
@@ -49,6 +49,20 @@ import { PromotionCampaignService } from '@nusantara/services';
       </form>
     </ngx-smart-modal>
   `,
+  styles: [
+    `
+      .heading-2 {
+        padding-bottom: 16px;
+      }
+      .header {
+        min-height: 0px;
+        padding-bottom: 10px;
+      }
+      .search-content {
+        margin-top: 16px;
+      }
+    `
+  ]
 
 })
 export class PromoCampaignModalComponent implements OnInit, AfterViewInit {

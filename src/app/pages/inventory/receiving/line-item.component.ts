@@ -141,7 +141,7 @@ export class LineItemComponent implements OnInit {
 
   ngOnInit() {
     this.form = (this.controlContainer.control as FormGroup);
-    this.sku.setValidators([Validators.pattern('^[A-Z0-9]+$'), Validators.maxLength(20), Validators.required]);
+    this.sku.setValidators([Validators.pattern('^[A-Z0-9a-z-/&_]+$'), Validators.maxLength(20), Validators.required]);
     this.batchNumber.setValidators([Validators.maxLength(30), Validators.pattern('^[A-Z0-9]+$')]);
     this.cost.setValidators([Validators.max(999999999), Validators.min(0), Validators.required, Validators.pattern('^[0-9]+$')]);
     this.originalQuantity.setValidators([Validators.min(1), Validators.max(10000), Validators.required, Validators.pattern('^[0-9]+$')]);
