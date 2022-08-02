@@ -35,7 +35,7 @@ import { CustomerGroupService } from '@nusantara/services';
             </thead>
             <tbody>
             <tr *ngFor="let group of displayedResults?.entities">
-              <td><a href="#" (click)="selectGroup(group)">{{ group.name }}</a></td>
+              <td class="break-word"><a href="#" (click)="selectGroup(group)" i18n>{{ group.name }}</a></td>
             </tr>
             </tbody>
           </table>

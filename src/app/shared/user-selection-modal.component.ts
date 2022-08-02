@@ -36,8 +36,8 @@ import { CustomerService } from '@nusantara/services';
             </thead>
             <tbody>
             <tr *ngFor="let user of displayedResults?.entities">
-              <td><a href="#" (click)="selectUser(user)">{{ user.email }}</a></td>
-              <td>{{ user.username | entityToSlug }}</td>
+              <td class="break-word"><a href="#" (click)="selectUser(user)">{{ user.email }}</a></td>
+              <td class="break-word">{{ user.username | entityToSlug }}</td>
             </tr>
             </tbody>
           </table>

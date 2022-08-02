@@ -36,7 +36,7 @@ import { PromotionCampaignService } from '@nusantara/services';
             </thead>
             <tbody>
             <tr *ngFor="let promoGroup of displayedResults?.entities">
-              <td class="campaign-name">
+              <td class="break-word">
                 {{ promoGroup.name }}
               </td>
               <td class="centered">
@@ -60,9 +60,6 @@ import { PromotionCampaignService } from '@nusantara/services';
       }
       .search-content {
         margin-top: 16px;
-      }
-      .campaign-name {
-        word-break: break-word;
       }
     `
   ]

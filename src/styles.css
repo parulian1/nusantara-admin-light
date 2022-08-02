@@ -1000,3 +1000,7 @@ textarea.input-description {
 .wider-modal.nsm-dialog {
   max-width: 850px;
 }
+
+.break-word {
+  word-break: break-word;
+}
