@@ -166,9 +166,9 @@ export class GiftVoucherComponent extends AbstractDetailComponent<IGiftVoucher> 
     // Set warehouse form to required, if gift voucher on selected warehouse only
     this.form.get('allWarehouse').valueChanges.subscribe(value => {
       if (value === true) {
-        warehouses.setValidators([Validators.required]);
-      } else {
         warehouses.setValidators([]);
+      } else {
+        warehouses.setValidators([Validators.required]);
       }
       warehouses.updateValueAndValidity();
     });
