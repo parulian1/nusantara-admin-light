@@ -1,16 +1,18 @@
 import {PagedResponse} from '@nusantara/core';
-import {ILowStockProduct} from '@nusantara/models/products';
-import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
+import {ILowStock, ILowStockProduct} from '@nusantara/models/products';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {LowStockProductService} from '@nusantara/services/low-stock-product.service';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {drf} from '@nusantara/models';
+import {drf, IWarehouse} from '@nusantara/models';
 import {MatSelectChange} from '@angular/material/select';
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'nus-low-stock-product-list',
   template: `
+    <h1 class="title-1" i18n>Low Stock</h1>
     <form [formGroup]="form" class="fluid">
       <div class="list-page-header">
         <div class="search control">
@@ -39,7 +41,7 @@ import {MatSelectChange} from '@angular/material/select';
         </div>
       </div>
       <nus-low-stock-product-pagination
-        *ngIf="displayedResults"
+        *ngIf="displayedResults?.totalResults > 0"
         [page]="displayedResults"
         (updatePage)="updatePage($event)">
       </nus-low-stock-product-pagination>
@@ -71,7 +73,7 @@ import {MatSelectChange} from '@angular/material/select';
         </tbody>
       </table>
       <nus-low-stock-product-pagination
-        *ngIf="displayedResults"
+        *ngIf="displayedResults?.totalResults > 0"
         [page]="displayedResults"
         (updatePage)="updatePage($event)">
       </nus-low-stock-product-pagination>
@@ -118,8 +120,8 @@ import {MatSelectChange} from '@angular/material/select';
 })
 
 export class LowStockProductListComponent implements OnInit, AfterViewInit {
-  @Input() warehouses: Array<{ href: string, name: string, code: string }>;
-  @Input() subLocationTypes: Array<drf.IChoice>;
+  warehouses: Array<{ href: string, name: string, code: string }>;
+  subLocationTypes: Array<drf.IChoice>;
 
   entity: ILowStockProduct;
 
@@ -134,8 +136,7 @@ export class LowStockProductListComponent implements OnInit, AfterViewInit {
 
   currentPage = 1;
 
-  constructor(protected service: LowStockProductService, protected fb: FormBuilder) {
-  }
+  constructor(protected service: LowStockProductService, protected fb: FormBuilder, protected route: ActivatedRoute) {}
 
   get searchText(): FormControl {
     return this.form.get('searchText') as FormControl;
@@ -146,6 +147,15 @@ export class LowStockProductListComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.route.data.subscribe((data: {
+      entity: ILowStock,
+      subLocationTypes: drf.IChoice[],
+      allWarehouses: IWarehouse[]
+    }) => {
+      this.subLocationTypes = data.subLocationTypes;
+      this.warehouses = data.allWarehouses;
+    });
+
     this.initializeForm();
     this.fetchProduct();
   }

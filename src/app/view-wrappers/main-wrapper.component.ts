@@ -99,6 +99,7 @@ const logger = new Logger('MainWrapperComponent');
             </li>
           </ul>
         </li>
+
         <li class="section-header" *ngIf="permissionGuard.canActivate(null, null, 'promotions')"
             [class.dropdown-show]="activeMenu.indexOf('promotions')>-1 "
              routerLinkActive="active router-dropdown-show" [routerLinkActiveOptions]="{exact: false}">
@@ -214,10 +215,22 @@ const logger = new Logger('MainWrapperComponent');
           </ul>
         </li>
 
-        <li *ngIf="enterpriseGuard.canActivate(null, null)" class="icon-button section-header" translate>
-          <a href="https://reports.bhisma.cloud" target="_blank">
-            <i class="material-icons">assessment</i><span i18n>Reports</span>
-          </a>
+        <li class="section-header" *ngIf="enterpriseGuard.canActivate(null, null)"  [class.dropdown-show]="activeMenu.indexOf('report')>-1 " routerLinkActive="active router-dropdown-show" [routerLinkActiveOptions]="{exact: false}">
+          <span (click)="menuToggler('report')">
+            <i class="material-icons">assessment</i>
+            <span i18n>Reports</span>
+            <i class="material-icons expand-icon"></i>
+          </span>
+          <ul class="section-child">
+            <li routerLinkActive="active">
+              <a [routerLink]="['/reports/low-stock-products']" routerLinkActive="active" i18n>Low Stock</a>
+            </li>
+            <li>
+              <a class="icon-link" href="https://reports.bhisma.cloud" target="_blank">
+                <span i18n>Other</span><i class="material-icons">open_in_new</i>
+              </a>
+            </li>
+          </ul>
         </li>
 
         <li class="section-header" *ngIf="permissionGuard.canActivate(null, null, 'config')"
@@ -441,6 +454,8 @@ const logger = new Logger('MainWrapperComponent');
         text-decoration: none;
         padding-left: 46px;
       }
+
+      nav > ul a.icon-link { display: flex; }
 
       /*nav > ul > li.active > span,*/
       nav > ul a.active {
