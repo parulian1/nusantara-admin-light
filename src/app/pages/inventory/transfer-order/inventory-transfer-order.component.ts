@@ -77,31 +77,31 @@ import { StockRecordSelectionModalComponent } from '@nusantara/shared';
       <div *ngIf="warehouse.disabled">
         <table class="line-items">
           <thead>
-          <tr>
-            <th i18n>Product Name / Sender Location</th>
-            <th i18n>SKU</th>
-            <th i18n>Batch</th>
-            <th i18n>Expiry Date</th>
-            <th class="stock" i18n>Stock Available</th>
-            <th class="stock" i18n>Transfer Quantity</th>
-            <th class="action" i18n>Remove</th>
-          </tr>
+            <tr>
+              <th class="product-name" i18n>Product Name / Sender Location</th>
+              <th class="product-sku" i18n>SKU</th>
+              <th i18n>Batch</th>
+              <th i18n>Expiry Date</th>
+              <th class="stock" i18n>Stock Available</th>
+              <th class="stock" i18n>Transfer Quantity</th>
+              <th class="action" i18n>Remove</th>
+            </tr>
           </thead>
           <tbody>
 
-          <nus-inventory-transfer-line
-            *ngFor="let rec of stockRecords.controls; let i=index"
-            [productClasses]="productClasses"
-            (remove)="removeLine(i)"
-            [formGroup]="rec"
-            [availableStockList]="availableStockList"
-          >
-          </nus-inventory-transfer-line>
+            <nus-inventory-transfer-line
+              *ngFor="let rec of stockRecords.controls; let i=index"
+              [productClasses]="productClasses"
+              (remove)="removeLine(i)"
+              [formGroup]="rec"
+              [availableStockList]="availableStockList"
+            >
+            </nus-inventory-transfer-line>
 
           <tr>
             <td colspan="9">
-              <button type="button" (click)="addLine()" class="add-button" i18n>
-                Add Record
+              <button type="button" (click)="addLine()" class="new-add-button wide" i18n>
+                <i class="material-icons">add</i> Add Record
               </button>
             </td>
           </tr>
@@ -159,8 +159,14 @@ import { StockRecordSelectionModalComponent } from '@nusantara/shared';
     table.inventory-order-meta tbody tr td.confirm-wh {
       padding-top: 20px;
     }
-    th.stock, th.action {
+    th.stock {
       width: 10%;
+    }
+    th.product-name {
+      width: 35%;
+    }
+    th.product-sku {
+      width: 15%;
     }
   `
   ]
