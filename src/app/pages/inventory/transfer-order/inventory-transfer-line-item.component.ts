@@ -7,7 +7,7 @@ import { IProductClass } from '../../../models/products';
 @Component({
   selector: 'nus-inventory-transfer-line',
   template: `
-    <tr [formGroup]="form">
+    <tr [formGroup]="form" class="row">
       <td><a>{{ displayedProductName }} / {{ displayedLocationName }} </a></td>
       <td class="immediate-error-display">
         {{ sku.value }}
@@ -35,14 +35,21 @@ import { IProductClass } from '../../../models/products';
   `,
   styles: [
     ':host { display: contents; }',
-    'td:nth-child(2) select { min-width: 115px; }', // location
-    'td:nth-child(3) input { width: 70px; }', // quantity
-    'td:nth-child(8) input { width: 105px; }', // cost
+    'td:nth-child(1) { min-width: 115px; }',
+    'td:nth-child(2) { width: 80px; }',
+    'td:nth-child(3) { width: 108px; }',
+    'td:nth-child(4) { width: 108px; }',
+    'td:nth-child(7) { width: 5%; text-align: center; }',
+    'td:last-child { width: 2%; }',
     'td>div>input {float: left; width: 80%;}',
     'td>div>button {float: left; width: 20%;}',
+    'resolve-button { border: none;}',
     `
       .locator-item-container { margin-bottom: 15px; }
       .locator-item-container__input { display: flex; }
+      tr.row:not(last-child) td {
+        border-bottom: solid 1px var(--grey);
+      }
     `,
   ]
 })
