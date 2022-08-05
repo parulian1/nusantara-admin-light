@@ -9,26 +9,26 @@ import { IProductClass } from '@nusantara/models/products';
   selector: 'nus-inventory-receiving-detail-item',
   template: `
     <tr [formGroup]="form">
-      <td title="{{ displayedProductName }}">{{ displayedProductName }}</td>
-      <td class="immediate-error-display" title="{{ sku.value }}">
+      <td class="label" title="{{ displayedProductName }}">{{ displayedProductName }}</td>
+      <td class="immediate-error-display label" title="{{ sku.value }}">
         {{ sku.value }}
       </td>
-      <td>
+      <td class="label">
         {{ originalQuantity.value }}
       </td>
-      <td>
+      <td class="label">
         <span *ngIf="batchNumber.value">{{ batchNumber.value }}</span>
         <span *ngIf="!batchNumber.value"> - </span>
       </td>
-      <td>
+      <td class="label">
         <span *ngIf="!expiryDate.value"> - </span>
         <span *ngIf="expiryDate.value">{{ expiryDate.value|date: 'dd MMM yyyy HH:mm' }}</span>
       </td>
-      <td>
+      <td class="label">
         <span *ngIf="!cost.value"> - </span>
         <span *ngIf="cost.value">{{ cost.value | currency:'IDR':'symbol-narrow':'1.0' }}</span>
       </td>
-      <td [formGroup]="location">
+      <td [formGroup]="location" class="label">
         <select formControlName="href" data-qa="location">
           <option [ngValue]="null">---</option>
           <option *ngFor="let loc of availableSubLocations" [ngValue]="loc.href">
@@ -57,6 +57,9 @@ import { IProductClass } from '@nusantara/models/products';
       .locator-item-container__input { display: flex; }
       tr {border: solid 1px #B4B4B4}
       tr td { vertical-align: top;}
+      .label {
+        word-break: break-word;
+      }
     `,
   ]
 })

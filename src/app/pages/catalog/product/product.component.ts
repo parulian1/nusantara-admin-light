@@ -1048,13 +1048,13 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       name: [entity?.name, [
         Validators.required,
         Validators.maxLength(120),
-        Validators.pattern(/^[A-Za-z0-9-_ &!+/\\\[\]\.]*$/)]],
+        Validators.pattern(/^[A-Za-z0-9-_ &!+/\\\[\].()]*$/)]],
       isActive: [entity?.isActive, []],
       parent: [entity?.parent],
       href: [entity?.href],
       upc: [entity?.upc, [Validators.required,
         Validators.maxLength(this.UPC_MAX_LENGTH),
-        Validators.pattern('^[A-Z0-9a-z-]+$')]],
+        Validators.pattern('^[A-Z0-9a-z-/&_]+$')]],
       structure: [entity?.structure ?? 'parent', [Validators.required,]],
       description: [entity?.description, [
         Validators.required,
