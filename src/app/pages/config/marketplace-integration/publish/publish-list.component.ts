@@ -61,6 +61,7 @@ import {
                   <span class="badge" [ngClass]="{
                     'success': entity.receivingStatus === 'Published',
                     'alert': entity.receivingStatus === 'Publishing',
+                    'warn': entity.receivingStatus === 'In QC',
                     'error': entity.receivingStatus === 'Error' }">
                     {{ entity.receivingStatus }}
                   </span>
@@ -105,7 +106,8 @@ import {
                 <td>
                   <span class="badge" [ngClass]="{
                     'success': entity.receivingStatus === 'Published',
-                    'alert': entity.receivingStatus === 'Publishing',
+                    'alert': entity.receivingStatus === 'Publishing' ,
+                    'warn': entity.receivingStatus === 'In QC',
                     'error': entity.receivingStatus === 'Error' }">
                     {{ entity.receivingStatus }}
                   </span>
@@ -128,7 +130,8 @@ import {
     styles: [
       'table { table-layout: fixed }',
       'td { width: 12.5%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }',
-      ':host ::ng-deep nus-empty-list div { height: 100vh }'
+      ':host ::ng-deep nus-empty-list div { height: 100vh }',
+       '.badge.warn { color: var(--lighten-black); background: var(--alert);}'
     ]
 })
 export class PublishListComponent implements OnInit {
