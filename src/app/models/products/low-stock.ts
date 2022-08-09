@@ -22,8 +22,10 @@ export interface ILowStockProduct {
 }
 
 export interface ICustomThresholdProduct {
-  href: string;
-  name: string;
-  upc: string;
+  product: ICustomThresholdProductDetail;
   amount: number;
+}
+
+export interface ICustomThresholdProductDetail extends INamedHrefEntity{
+  upc: string;
 }

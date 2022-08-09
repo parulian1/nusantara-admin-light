@@ -293,9 +293,11 @@ export class LowStockConfigComponent extends AbstractDetailComponent<ILowStock> 
 
   addProduct(product?: ICustomThresholdProduct): void {
     const f = this.fb.group({
-      href: [product?.href, []],
-      name: [product?.name, []],
-      upc: [product?.upc, []],
+      product: this.fb.group({
+        href: [product?.product.href, []],
+        name: [product?.product.name, []],
+        upc: [product?.product.upc, []]
+      }),
       amount: [product?.amount, [Validators.required, Validators.min(1)]]
     });
 
@@ -314,9 +316,11 @@ export class LowStockConfigComponent extends AbstractDetailComponent<ILowStock> 
       }
 
       const f = this.fb.group({
-        href: [selectedProduct.href, []],
-        name: [selectedProduct.name, []],
-        upc: [selectedProduct.upc, []],
+        product: this.fb.group({
+          name: [selectedProduct.name, []],
+          href: [selectedProduct.href, []],
+          upc: [selectedProduct.upc, []]
+        }),
         amount: [1, [Validators.required, Validators.min(1)]]
       });
 

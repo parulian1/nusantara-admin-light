@@ -5,8 +5,8 @@ import {AbstractControl, FormControl} from "@angular/forms";
   selector:'nus-custom-threshold-product',
   template:`
     <tr>
-      <td>{{ form.get('name').value }}</td>
-      <td>{{ form.get('upc').value }}</td>
+      <td>{{ form.get('product').get('name').value }}</td>
+      <td>{{ form.get('product').get('upc').value }}</td>
       <td class="numeric">
         <input type="number" [formControl]="amount" placeholder="Input Qty" min="1" />
         <nus-field-errors [control]="amount"></nus-field-errors>
