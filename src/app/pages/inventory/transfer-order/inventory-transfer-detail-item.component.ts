@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import {products, ISubLocation, INamedHrefEntity} from '@nusantara/models';
+import { products, ISubLocation, INamedHrefEntity } from '@nusantara/models';
 import { IProductClass } from '@nusantara/models/products';
 
 @Component({
@@ -25,24 +25,36 @@ import { IProductClass } from '@nusantara/models/products';
         {{ requestingStock.value }}
       </td>
       <td [formGroup]="receivingLocation">
-        <select formControlName="href" data-qa="receivinglocation">
-          <option [ngValue]="null">---</option>
-          <option *ngFor="let loc of availableSubLocations" [ngValue]="loc.href">
-            {{ loc.name }} ({{ loc.type }})
-          </option>
-        </select>
+        <ng-container *ngIf="status === 'pending'; else nonPendingLocation;">
+          <select formControlName="href" data-qa="receivinglocation">
+            <option [ngValue]="null">---</option>
+            <option *ngFor="let loc of availableSubLocations" [ngValue]="loc.href">
+              {{ loc.name }} ({{ loc.type }})
+            </option>
+          </select>
+        </ng-container>
+        <ng-template #nonPendingLocation>
+          {{receivingLocation.value.name}}
+        </ng-template>
       </td>
       <td>
-        <div class="locator-item-container" *ngFor="let control of locator.controls; index as ctr">
-          <div class="locator-item-container__input">
-            <input [formControl]="control" name="locator" data-qa="locator" maxlength="5">
-            <button (click)="locator.removeAt(ctr)" type="button" class="remove-button" data-qa="remove-locator-button">
-              <i class="material-icons">delete_outline</i>
-            </button>
+        <ng-container *ngIf="status === 'pending'; else nonPendingLocator;">
+          <div class="locator-item-container" *ngFor="let control of locator.controls; index as ctr">
+            <div class="locator-item-container__input">
+              <input [formControl]="control" name="locator" data-qa="locator" maxlength="5">
+              <button (click)="locator.removeAt(ctr)" type="button" class="remove-button" data-qa="remove-locator-button">
+                <i class="material-icons">delete_outline</i>
+              </button>
+            </div>
+            <nus-field-errors [control]="control"></nus-field-errors>
           </div>
-          <nus-field-errors [control]="control"></nus-field-errors>
-        </div>
-        <button (click)="addLocator()" type="button" class="new-add-button wide" data-qa="add-locator-button" i18n>Add</button>
+          <button (click)="addLocator()" type="button" class="new-add-button wide" data-qa="add-locator-button" i18n>Add</button>
+        </ng-container>
+        <ng-template #nonPendingLocator>
+          <label>
+            {{getLocatorValues()}}
+          </label>
+        </ng-template>
       </td>
     </tr>
   `,
@@ -61,7 +73,7 @@ export class InventoryTransferDetailItemComponent {
   @Input() availableSubLocations: ISubLocation[] = [];
   @Input() productClasses: IProductClass[];
   @Input() form: FormGroup;
-
+  @Input() status: string;
   constructor(public route: ActivatedRoute,
               public router: Router) {
   }
@@ -93,5 +105,13 @@ export class InventoryTransferDetailItemComponent {
 
   addLocator() {
     this.locator.push(new FormControl(''));
+  }
+
+  getLocatorValues(): string {
+    let values = [];
+    this.locator.controls.forEach((control) => {
+      values.push(control.value);
+    });
+    return values.join(',');
   }
 }

@@ -76,7 +76,8 @@ import { IProduct, IProductClass } from '@nusantara/models/products';
           <nus-inventory-transfer-detail-item
             *ngFor="let rec of stockRecords.controls; let i=index"
             [form]="rec"
-            [availableSubLocations]="availableSubLocations">
+            [availableSubLocations]="availableSubLocations"
+            [status]="entity.status">
           </nus-inventory-transfer-detail-item>
         </tbody>
       </table>
