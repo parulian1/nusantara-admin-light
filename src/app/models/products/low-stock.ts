@@ -7,6 +7,7 @@ export interface ILowStock extends INamedHrefEntity {
   emails: Array<string>;
   customThreshold: boolean;
   customThresholdProducts: Array<ICustomThresholdProduct>;
+  productListUpdatedAt: string;
 }
 
 export interface ILowStockProduct {
@@ -19,6 +20,7 @@ export interface ILowStockProduct {
   sublocationType: string;
   warehouseName: string;
   siteId: number ;
+  isCustomThreshold: boolean;
 }
 
 export interface ICustomThresholdProduct {

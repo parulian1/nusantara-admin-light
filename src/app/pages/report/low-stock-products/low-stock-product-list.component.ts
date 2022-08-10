@@ -48,6 +48,7 @@ import {ActivatedRoute} from "@angular/router";
       <table>
         <thead>
         <tr>
+          <th class="custom-threshold-star"></th>
           <th i18n>Name</th>
           <th i18n>UPC</th>
           <th i18n>Warehouse</th>
@@ -57,6 +58,9 @@ import {ActivatedRoute} from "@angular/router";
         </thead>
         <tbody *ngIf="displayedResults?.totalResults > 0">
         <tr *ngFor="let entity of displayedResults.entities">
+          <td class="custom-threshold-star">
+            <i *ngIf="entity.isCustomThreshold" class="material-icons">star</i>
+          </td>
           <td>{{entity.name}}</td>
           <td>{{entity.upc}}</td>
           <td>{{entity.warehouseName}}</td>
@@ -116,6 +120,12 @@ import {ActivatedRoute} from "@angular/router";
       display: flex; justify-content: center; align-items: center; margin-left: auto;
     }
     .action > a {text-align: center;}
+
+    th.custom-threshold-star, td.custom-threshold-star {
+      width: 1%;
+      font-size: 18px;
+      color: var(--alert);
+    }
   `]
 })
 
