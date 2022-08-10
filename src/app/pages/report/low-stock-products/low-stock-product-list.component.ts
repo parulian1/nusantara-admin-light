@@ -8,7 +8,6 @@ import {map} from 'rxjs/operators';
 import {drf, IWarehouse} from '@nusantara/models';
 import {MatSelectChange} from '@angular/material/select';
 import {ActivatedRoute} from "@angular/router";
-import {LowStockService} from "@nusantara/services/low-stock.service";
 
 @Component({
   selector: 'nus-low-stock-product-list',
