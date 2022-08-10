@@ -14,7 +14,7 @@ const routes: Routes = [
         path: '',
         component: LowStockProductListComponent,
         resolve: {
-          page: LowStockConfigResolver,
+          lowStockConfig: LowStockConfigResolver,
           subLocationTypes: wh.SubLocationTypeResolver,
           allWarehouses: wh.WarehouseFullListResolver,
         },

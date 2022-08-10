@@ -8,6 +8,7 @@ import {map} from 'rxjs/operators';
 import {drf, IWarehouse} from '@nusantara/models';
 import {MatSelectChange} from '@angular/material/select';
 import {ActivatedRoute} from "@angular/router";
+import {LowStockService} from "@nusantara/services/low-stock.service";
 
 @Component({
   selector: 'nus-low-stock-product-list',
@@ -43,6 +44,7 @@ import {ActivatedRoute} from "@angular/router";
       <nus-low-stock-product-pagination
         *ngIf="displayedResults?.totalResults > 0"
         [page]="displayedResults"
+        [updatedDate]="updatedDate"
         (updatePage)="updatePage($event)">
       </nus-low-stock-product-pagination>
       <table>
@@ -132,6 +134,7 @@ import {ActivatedRoute} from "@angular/router";
 export class LowStockProductListComponent implements OnInit, AfterViewInit {
   warehouses: Array<{ href: string, name: string, code: string }>;
   subLocationTypes: Array<drf.IChoice>;
+  updatedDate: string;
 
   entity: ILowStockProduct;
 
@@ -146,7 +149,9 @@ export class LowStockProductListComponent implements OnInit, AfterViewInit {
 
   currentPage = 1;
 
-  constructor(protected service: LowStockProductService, protected fb: FormBuilder, protected route: ActivatedRoute) {}
+  constructor(protected service: LowStockProductService,
+              protected fb: FormBuilder,
+              protected route: ActivatedRoute) {}
 
   get searchText(): FormControl {
     return this.form.get('searchText') as FormControl;
@@ -158,12 +163,13 @@ export class LowStockProductListComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.route.data.subscribe((data: {
-      entity: ILowStock,
+      lowStockConfig: ILowStock,
       subLocationTypes: drf.IChoice[],
       allWarehouses: IWarehouse[]
     }) => {
       this.subLocationTypes = data.subLocationTypes;
       this.warehouses = data.allWarehouses;
+      this.updatedDate = data.lowStockConfig.productListUpdatedAt;
     });
 
     this.initializeForm();
