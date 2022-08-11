@@ -21,6 +21,7 @@ import {ActivatedRoute} from "@angular/router";
                  i18n-placeholder>
         </div>
         <div class="filter">
+          <span class="subheading-2">Filter</span>
           <mat-form-field>
             <mat-select [disableOptionCentering]="true"
                         panelClass="mat-select-panel"
@@ -60,12 +61,15 @@ import {ActivatedRoute} from "@angular/router";
         <tbody *ngIf="displayedResults?.totalResults > 0">
         <tr *ngFor="let entity of displayedResults.entities">
           <td class="custom-threshold-star">
-            <i *ngIf="entity.isCustomThreshold" class="material-icons">star</i>
+            <span *ngIf="entity.isCustomThreshold"  class="tooltip">
+               <i class="material-icons">star</i>
+              <span class="text body-2">Custom threshold</span>
+            </span>
           </td>
           <td>{{entity.name}}</td>
           <td>{{entity.upc}}</td>
           <td>{{entity.warehouseName}}</td>
-          <td>{{entity.sublocationName}} ({{entity.sublocationType}})</td>
+          <td>{{entity.sublocationName}} ({{entity.sublocationType | sublocationTypeToLabel }})</td>
           <td>{{entity.latestStock}}</td>
         </tr>
         </tbody>
@@ -115,6 +119,9 @@ import {ActivatedRoute} from "@angular/router";
     }
     .filter {
         grid-area: filter;
+        display: flex;
+        align-items: center;
+        gap: 16px;
     }
     .action {
       grid-area: action;
@@ -122,10 +129,59 @@ import {ActivatedRoute} from "@angular/router";
     }
     .action > a {text-align: center;}
 
-    th.custom-threshold-star, td.custom-threshold-star {
-      width: 1%;
+    th:first-child, td:first-child { width: 1%; }
+
+    .custom-threshold-star .material-icons {
       font-size: 18px;
       color: var(--alert);
+    }
+
+    /* Tooltip container */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    /* Tooltip text */
+    .tooltip .text {
+      visibility: hidden;
+      min-width: 120px;
+      font-weight: 400;
+      text-align: left;
+      padding: 16px;
+      border-radius: 4px;
+      background-color: white;
+
+      /* Position the tooltip text */
+      position: absolute;
+      z-index: 1;
+      top: 130%;
+      left: -30%;
+
+      /* Fade in tooltip */
+      opacity: 0;
+      transition: opacity 1s;
+      box-shadow: 0 0 8px -1px var(--shadow-color);
+    }
+
+    /* Tooltip arrow */
+    .tooltip .text::before {
+      content: "";
+      position: absolute;
+      bottom: 100%;
+      left: 6%;
+
+      width: 0;
+      height: 0;
+      border: 10px solid transparent;
+      border-bottom-color: white;
+      filter: drop-shadow(0 -2px 2px var(--shadow-color));
+    }
+
+    /* Show the tooltip text when you mouse over the tooltip container */
+    .tooltip:hover .text {
+      visibility: visible;
+      opacity: 1;
     }
   `]
 })
