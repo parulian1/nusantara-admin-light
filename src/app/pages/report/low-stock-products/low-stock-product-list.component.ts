@@ -75,7 +75,7 @@ import {ActivatedRoute} from "@angular/router";
         </tbody>
         <tbody *ngIf="displayedResults?.totalResults === 0">
         <tr>
-          <td colspan="4" class="centered">
+          <td colspan="6" class="centered">
             <p class="body-1" i18n>No low stock product found</p>
           </td>
         </tr>
