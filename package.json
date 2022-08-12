@@ -1,6 +1,6 @@
 {
   "name": "nusantara-admin",
-  "version": "2.71.2",
+  "version": "2.72.1",
   "scripts": {
     "ng": "ng",
     "start": "npm run env && ng serve --port=4201",
@@ -12,7 +12,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "env": "ngx-scripts env APM_URL APM_ACTIVE APM_NAME APM_ENVIRONMENT YOUTUBE_KEY",
+    "env": "ngx-scripts env APM_URL APM_ACTIVE APM_NAME APM_ENVIRONMENT YOUTUBE_KEY GA_MEASUREMENT_ID",
     "extract:i18n": "ng extract-i18n --output-path src/locale"
   },
   "private": true,
@@ -36,7 +36,7 @@
     "@ngrx/store": "^13.2.0",
     "@ngrx/store-devtools": "^13.2.0",
     "@ngx-rocket/scripts": "^5.2.1",
-    "core-js": "^3.23.4",
+    "core-js": "^3.24.1",
     "file-saver": "^2.0.5",
     "flatpickr": "^4.6.13",
     "g": "^2.0.1",
@@ -66,10 +66,10 @@
     "@types/file-saver": "^2.0.5",
     "@types/jasmine": "^3.10.6",
     "@types/jasminewd2": "^2.0.10",
-    "@types/node": "^14.18.21",
+    "@types/node": "^14.18.23",
     "@typescript-eslint/eslint-plugin": "5.27.1",
     "@typescript-eslint/parser": "5.27.1",
-    "eslint": "^8.17.0",
+    "eslint": "^8.21.0",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "^6.4.0",
