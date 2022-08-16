@@ -60,14 +60,17 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
 
             <div class="rounding-description">
               <ul>
-                <li i18n><i class="material-icons">info_outline</i>Pembulatan ke atas (Rounding Up): Jika nilainya Rp 1,6x,
-                  maka pelanggan mendapatkan 2y point
+                <li class="body-2" [ngClass]="{'active': rounding === 'up'}" i18n>
+                  <i class="material-icons">info_outline</i>
+                  Rounding up: If the decimal number is 1.x, then the customer gets 2 points
                 </li>
-                <li i18n><i class="material-icons">info_outline</i>Pembulatan ke bawah (Rounding Down): Jika nilainya Rp
-                  1,6x, maka pelanggan mendapatkan 1y point
+                <li [ngClass]="{'active': rounding === 'down'}" i18n>
+                  <i class="material-icons">info_outline</i>
+                  Rounding down: If the decimal number is 1.x, then the customer gets 1 point
                 </li>
-                <li i18n><i class="material-icons">info_outline</i>Pembulatan terdekat (Nearest): Jika nilainya Rp 1,6x,
-                  maka pelanggan mendapatkan 2y point dan Jika nilainya Rp 1,4x, maka pelanggan mendapatkan 1y point
+                <li [ngClass]="{'active': rounding === 'nearest'}" i18n>
+                  <i class="material-icons">info_outline</i>
+                  Rounding to the nearest: If the value is a decimal number 1.1 - 1.4, then the customer gets 1 point and if the value is a decimal number 1.5 - 1.9, then the customer gets 2 points.
                 </li>
               </ul>
             </div>
@@ -167,6 +170,7 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
     .points-config, .product-table {
       margin-top: 20px;
     }
+
     .checkbox, .radio {
       padding: 10px 0;
       min-height: auto;
@@ -188,6 +192,10 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
     .transaction-rounding, .transaction-rounding > label {
       align-items: center;
       display: flex;
+    }
+
+    .transaction-rounding > label {
+      padding-bottom: 0;
     }
 
     .transaction-points > label > input {
@@ -224,9 +232,6 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
     }
 
     .rounding-description {
-      font-size: 12px;
-      font-weight: 300;
-      line-height: 20px;
       margin-bottom: 20px;
     }
 
@@ -236,9 +241,13 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
     }
 
     .rounding-description > ul > li {
-      display: flex;
+      display: none;
       align-items: center;
       margin: 8px 0;
+    }
+
+    .rounding-description > ul > li.active {
+      display: flex;
     }
 
     .rounding-description > ul > li > i {
