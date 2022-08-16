@@ -1,6 +1,6 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {AdvancedPriceListService} from '@nusantara/services';
-import {Observable, pipe} from 'rxjs';
+import {Observable} from 'rxjs';
 import {IAdvancedPriceList} from '@nusantara/models/products/advanced-price-list';
 import {getSlugFromHref} from '@nusantara/shared/helpers';
 
@@ -26,7 +26,6 @@ import {getSlugFromHref} from '@nusantara/shared/helpers';
           </tr>
         </ng-container>
         </tbody>
-
       </ng-container>
     </table>
   `

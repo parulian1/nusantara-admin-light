@@ -221,7 +221,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">62</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/users/employee/warehouse/employee-warehouse-host.component.ts</context>
@@ -268,7 +268,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f53dff66901984e217d461bf10fde4e26612c3d3" datatype="html">
@@ -819,7 +819,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e194e7c29221a5a6065a5777ea8177de678d91cf" datatype="html">
@@ -1243,7 +1243,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="975d7a14bb4b923caf6fff68273730235ebeaf2d" datatype="html">
@@ -1282,7 +1282,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">86</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/marketplace-shipping-info-modal.component.ts</context>
@@ -1321,7 +1321,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">87</context>
+          <context context-type="linenumber">90</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/marketplace-channel-info-modal.component.ts</context>
@@ -1550,7 +1550,7 @@
         <source>Upload Image</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/media/new-product-image.component.ts</context>
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">20</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/cms/onboarding/onboarding-content-image.component.ts</context>
@@ -1561,11 +1561,25 @@
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="d255294a198ef28eef46860aa3f54292556b836d" datatype="html">
+        <source>Maximum of <x id="INTERPOLATION" equiv-text="{{(maxNumber - priorityValue) + 1}}"/> file allowed, with <x id="INTERPOLATION_1" equiv-text="{{MAX_FILE_SIZE}}"/> KB file size</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/catalog/product/media/new-product-image.component.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5b21f6f0c85817d31e112e1cae5540a9cb179bcb" datatype="html">
+        <source>Image Preview</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/catalog/product/media/new-product-image.component.ts</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="52c9a103b812f258bcddc3d90a6e3f46871d25fe" datatype="html">
         <source>Save</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/media/new-product-image.component.ts</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">40</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/media/new-product-youtube.component.ts</context>
@@ -1596,7 +1610,7 @@
         <source>Cancel</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/media/new-product-image.component.ts</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">41</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/media/new-product-youtube.component.ts</context>
@@ -1744,7 +1758,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">107</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/line-item.component.ts</context>
@@ -2297,18 +2311,25 @@
           <context context-type="linenumber">294</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="5e6d10d89bb0f71f767abbc7c50d962db04936de" datatype="html">
+        <source>Please exclude the product from the Advanced Price to edit this column.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
+          <context context-type="linenumber">302</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3316f457ad1355db97c6c632bcdb7325c180804d" datatype="html">
         <source>Price Range (optional)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
-          <context context-type="linenumber">306</context>
+          <context context-type="linenumber">307</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ac6c9212896d39b23811ed2dadab7d07336ec559" datatype="html">
         <source>Enable</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
-          <context context-type="linenumber">315</context>
+          <context context-type="linenumber">316</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ac224382673c41c9dba2b38276602adb1cf7f833" datatype="html">
@@ -2497,7 +2518,7 @@
         <source>Input Description</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/catalog/product/product.component.ts</context>
-          <context context-type="linenumber">757</context>
+          <context context-type="linenumber">762</context>
         </context-group>
       </trans-unit>
       <trans-unit id="stockInputTitle" datatype="html">
@@ -3388,7 +3409,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="linenumber">82</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/promotion/points/points.component.ts</context>
@@ -4880,7 +4901,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
       <trans-unit id="089c05a47daee64f6867a2ed9d0adf1f6423c746" datatype="html">
@@ -7331,7 +7352,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">101</context>
+          <context context-type="linenumber">104</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/transfer-order/inventory-transfer-order.component.ts</context>
@@ -7358,7 +7379,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">102</context>
+          <context context-type="linenumber">105</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/transfer-order/inventory-transfer-order.component.ts</context>
@@ -7489,7 +7510,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="612c2b9b2b4ce6931ee0b53f29aba2694050a1e8" datatype="html">
@@ -7671,7 +7692,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">103</context>
+          <context context-type="linenumber">106</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/transfer-order/inventory-transfer-order.component.ts</context>
@@ -7722,49 +7743,49 @@
         <source>Delivery (Receiving)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6fb68b8ca05d72766e3c70f85572ba2e4976bc83" datatype="html">
         <source>DO Number (Optional)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">49</context>
+          <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8e06cffadfb5222970681a11379cee253b7ef150" datatype="html">
         <source>*) Required fields</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">94</context>
+          <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5c892fecd999003ead13bf825101ee8f6fc319cf" datatype="html">
         <source>Product Name (UPC)*</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2cd5e2f09b70013eb42df61473287786b8120177" datatype="html">
         <source>SKU*</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">99</context>
+          <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a46aef2b264c46f6c2589b8645d2d4e5b893a85f" datatype="html">
         <source>Quantity*</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">100</context>
+          <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9ce75d386d35e322e7794c6f98cc54b0720275f0" datatype="html">
         <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;material-icons&quot;&gt;"/>add<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Add Record </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inventory/receiving/inventory-receiving.component.ts</context>
-          <context context-type="linenumber">120,121</context>
+          <context context-type="linenumber">123,124</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c81b254007317d38080e67ba00f3b83298778d8c" datatype="html">
@@ -8883,11 +8904,18 @@
           <context context-type="linenumber">52,54</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="3219d6de8d70177ca5384a9e81317a6cc1d4a196" datatype="html">
+        <source> Maximum selected file is <x id="INTERPOLATION" equiv-text="{{ control.getError(&apos;maxFile&apos;)?.value }}"/> </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/field-errors.component.ts</context>
+          <context context-type="linenumber">55,57</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="f7cd9495b6a7fb0110bc1df11d21906763943e7f" datatype="html">
         <source> Invalid character in value </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/field-errors.component.ts</context>
-          <context context-type="linenumber">55,57</context>
+          <context context-type="linenumber">58,60</context>
         </context-group>
       </trans-unit>
       <trans-unit id="361f2d674ddb86aac36c425da3de974b6a8797fd" datatype="html">
