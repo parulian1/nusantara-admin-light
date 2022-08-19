@@ -215,8 +215,8 @@ const logger = new Logger('MainWrapperComponent');
           </ul>
         </li>
 
-        <li class="section-header" *ngIf="enterpriseGuard.canActivate(null, null)"  [class.dropdown-show]="activeMenu.indexOf('report')>-1 " routerLinkActive="active router-dropdown-show" [routerLinkActiveOptions]="{exact: false}">
-          <span (click)="menuToggler('report')">
+        <li class="section-header" *ngIf="permissionGuard.canActivate(null, null, 'reports')"  [class.dropdown-show]="activeMenu.indexOf('reports')>-1 " routerLinkActive="active router-dropdown-show" [routerLinkActiveOptions]="{exact: false}">
+          <span (click)="menuToggler('reports')">
             <i class="material-icons">assessment</i>
             <span i18n>Reports</span>
             <i class="material-icons expand-icon"></i>
@@ -225,8 +225,8 @@ const logger = new Logger('MainWrapperComponent');
             <li routerLinkActive="active">
               <a [routerLink]="['/reports/low-stock-products']" routerLinkActive="active" i18n>Low Stock</a>
             </li>
-            <li>
-              <a class="icon-link" href="https://reports.bhisma.cloud" target="_blank">
+            <li *ngIf="enterpriseGuard.canActivate(null, null)" routerLinkActive="active">
+              <a routerLinkActive="active" class="icon-link" href="https://reports.bhisma.cloud" target="_blank">
                 <span i18n>Other</span><i class="material-icons">open_in_new</i>
               </a>
             </li>
@@ -555,11 +555,11 @@ const logger = new Logger('MainWrapperComponent');
         padding-left: 8px;
       }
 
-      nav li ul > li:hover a::before {
-        content: " ";
-        background-color: var(--bhisma-orange);
-        width: 6px;
-      }
+      /*nav li ul > li:hover a::before {*/
+      /*  content: " ";*/
+      /*  background-color: var(--bhisma-orange);*/
+      /*  width: 6px;*/
+      /*}*/
 
       li ul li:hover, li ul li.active {
         border-left: 4px solid var(--bhisma-orange);
