@@ -58,6 +58,9 @@ import {FormControl, FormGroup} from '@angular/forms';
       <div *ngIf="control?.errors?.pattern" i18n>
         Invalid character in value
       </div>
+      <div *ngIf="control?.errors?.email" i18n>
+        Invalid email address
+      </div>
     </div>
     <div *ngIf="control?.hasError('apiError')" class="error-detail">
       <div *ngIf="control.errors.apiError">{{ control.getError('apiError') }}</div>

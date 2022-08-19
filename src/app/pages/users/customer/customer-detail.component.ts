@@ -3,10 +3,12 @@ import {FormBuilder, FormControl, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {CustomerService, OrderService, UserService} from '@nusantara/services';
-import {AbstractDetailComponent, PagedResponse, ToastService} from '@nusantara/core';
+import {AbstractDetailComponent, IResultResponse, Logger, PagedResponse, ToastService} from '@nusantara/core';
 import {ICustomer, ICustomerGroup, IOrder} from '@nusantara/models';
 import {RequireIsEnterpriseGuard} from '@nusantara/auth';
 import {CustomerPointModalComponent} from '@nusantara/pages/users/customer/customer-point-modal.component';
+
+const logger = new Logger('CustomerDetailComponent');
 
 /**
  * Displays basic information about a customer, their profile, purchase history,
@@ -450,4 +452,21 @@ export class CustomerDetailComponent extends AbstractDetailComponent<ICustomer> 
     this.pointHistoryModal.open();
   }
 
+
+  getFormValue(): any {
+    const formValue = super.getFormValue();
+    delete formValue?.title;
+    if (!this.entity) {
+      return {...formValue, email: this.email.value.toLowerCase()};
+    } else {
+      delete formValue?.email;
+      return formValue;
+    }
+  }
+
+
+  protected onSaveSuccess(result: IResultResponse<ICustomer>) {
+    logger.debug(result);
+    super.onSaveSuccess(result);
+  }
 }
