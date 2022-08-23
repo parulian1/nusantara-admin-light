@@ -94,6 +94,7 @@ export class SetupComponent implements OnInit {
       entity.marketplace === this.marketplaceClient.shopee ||
       entity.marketplace === this.marketplaceClient.tsc ||
       entity.marketplace === this.marketplaceClient.tiktok ||
+      entity.marketplace === this.marketplaceClient.blibli ||
       !entity.isConnected
     );
   }

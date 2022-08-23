@@ -107,7 +107,8 @@ export class EditShippingComponent implements OnInit, OnDestroy {
     'lazada',
     'tokopedia',
     'bukalapak',
-    'tiktok'
+    'tiktok',
+    'blibli'
   ]
 
   constructor(
