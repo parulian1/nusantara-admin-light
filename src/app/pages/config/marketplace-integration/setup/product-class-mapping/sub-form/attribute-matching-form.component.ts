@@ -217,7 +217,7 @@ export class AttributeMatchingFormComponent
 
         if (catCurrValue) {
           this.categoryId = this.category.deepestChildId;
-          this.categoryCode = this.category.deepestChildCode;
+          this.categoryCode = this.category.deepestChildCode ? this.category.deepestChildCode : null;
           this.categoryNames = this.category.categoryNames.join(' > ');
         }
         if (attrCurrValue) {
@@ -257,6 +257,10 @@ export class AttributeMatchingFormComponent
   addAttributeInputs(attrs: marketplace.IShopAttribute[]) {
     if (attrs) {
       attrs.forEach((obj) => {
+        if (!obj.isSpecialAttribute){
+          obj.isSpecialAttribute = false
+        }
+
         const attrGroup = this.fb.group({
           marketplaceName: obj.name,
           marketplaceType: obj.type,
