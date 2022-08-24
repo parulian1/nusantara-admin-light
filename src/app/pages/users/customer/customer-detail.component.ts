@@ -420,7 +420,7 @@ export class CustomerDetailComponent extends AbstractDetailComponent<ICustomer> 
       email: [entity?.email, [
         Validators.required,
         Validators.email,
-        Validators.maxLength(120),
+        Validators.maxLength(74),
       ]],
       href: [entity?.href, []],
       phoneNumber: [entity?.phoneNumber,
