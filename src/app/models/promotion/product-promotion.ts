@@ -20,5 +20,6 @@ export interface IProductPromotion extends INamedHrefEntity {
   appliedOnOffline: boolean;
   customerGroups?: INamedHrefEntity[];
   promotionGroup?: INamedHrefEntity;
+  multiplier: number;
   status?: ProductPromotionStatusType;
 }

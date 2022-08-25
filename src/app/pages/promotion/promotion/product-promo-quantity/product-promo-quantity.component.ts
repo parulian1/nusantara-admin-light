@@ -1,10 +1,10 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {AbstractControl, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'nus-product-promo-quantity',
   template: `
-    <tr [formGroup]="form">
+    <tr>
       <th>{{ index + 1 }}</th>
       <td>{{ form.get('name').value }}</td>
       <td><input type="number" [formControl]="quantity" placeholder="Quantity"/></td>
@@ -19,7 +19,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 })
 export class ProductPromoQuantityComponent {
 
-  @Input() form: FormGroup;
+  @Input() form: AbstractControl;
   @Input() index: number;
   @Output() remove: EventEmitter<void> = new EventEmitter();
 
