@@ -21,6 +21,7 @@ import { AbstractListComponent } from '@nusantara/core';
           <th translate i18n>Name</th>
           <th class="numeric" i18n>Valid From</th>
           <th class="numeric" i18n>Valid To</th>
+          <th class="numeric" i18n>Redeem Date</th>
           <th i18n>Is Active</th>
         </tr>
       </thead>
@@ -29,6 +30,10 @@ import { AbstractListComponent } from '@nusantara/core';
           <td><a [routerLink]="[entity|entityToSlug]">{{ entity.name }}</a></td>
           <td class="numeric">{{ entity.validFrom|date: 'dd/MM/yyyy HH:mm:ss' }}</td>
           <td class="numeric"><span *ngIf="!!entity.validTo">{{ entity.validTo|date: 'dd/MM/yyyy HH:mm:ss' }}</span></td>
+          <td class="numeric">
+            <span *ngIf="!!entity.redeemDate">{{ entity.redeemDate|date: 'dd/MM/yyyy HH:mm:ss' }}</span>
+            <span *ngIf="!entity.redeemDate">-</span>
+          </td>
           <td><nus-true-false [value]="entity.isActive"></nus-true-false></td>
         </tr>
       </tbody>

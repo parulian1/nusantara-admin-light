@@ -57,6 +57,7 @@ import { PromoModalComponent } from '@nusantara/shared/modals/promo-modal.compon
 import { PromoTypeToLabelPipe } from '@nusantara/shared/promo-type-to-label.pipe';
 import { PromoCampaignModalComponent } from '@nusantara/shared/modals/promo-campaign-modal.component';
 import {SublocationTypeToLabelPipe} from "@nusantara/shared/sublocation-type-to-label.pipe";
+import {WarehouseSelectionModalComponent} from "@nusantara/shared/modals/warehouse-selection-modal.component";
 
 
 /**
@@ -116,7 +117,8 @@ import {SublocationTypeToLabelPipe} from "@nusantara/shared/sublocation-type-to-
     ProgressBarComponent,
     PromoModalComponent,
     PromoCampaignModalComponent,
-    SublocationTypeToLabelPipe
+    SublocationTypeToLabelPipe,
+    WarehouseSelectionModalComponent
   ],
   exports: [
     EntityToSlugPipe,
@@ -169,7 +171,8 @@ import {SublocationTypeToLabelPipe} from "@nusantara/shared/sublocation-type-to-
     ProgressBarComponent,
     PromoModalComponent,
     PromoCampaignModalComponent,
-    SublocationTypeToLabelPipe
+    SublocationTypeToLabelPipe,
+    WarehouseSelectionModalComponent
   ],
   imports: [
     CommonModule,
