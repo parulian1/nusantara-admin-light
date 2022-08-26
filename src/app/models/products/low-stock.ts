@@ -5,10 +5,9 @@ export interface ILowStock extends INamedHrefEntity {
   quantity: number;
   email: string;
   emails: Array<string>;
-}
-
-export interface IEmailAlert {
-  email: string;
+  customThreshold: boolean;
+  customThresholdProducts: Array<ICustomThresholdProduct>;
+  productListUpdatedAt: string;
 }
 
 export interface ILowStockProduct {
@@ -21,4 +20,14 @@ export interface ILowStockProduct {
   sublocationType: string;
   warehouseName: string;
   siteId: number ;
+  isCustomThreshold: boolean;
+}
+
+export interface ICustomThresholdProduct {
+  product: ICustomThresholdProductDetail;
+  amount: number;
+}
+
+export interface ICustomThresholdProductDetail extends INamedHrefEntity{
+  upc: string;
 }
