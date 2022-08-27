@@ -8,7 +8,7 @@ import {
   marketplace,
   IError, ISubLocation
 } from '@nusantara/models';
-import { IReceivingOrder, IStockRecord } from '@nusantara/models/inventory';
+import {IReceivingOrder, IStockRecord, ITransferOrder} from '@nusantara/models/inventory';
 import { AbstractDetailComponent } from '@nusantara/core/components';
 import {
   InventoryReceivingOrderService,
@@ -25,45 +25,34 @@ import { IProduct, IProductClass } from '@nusantara/models/products';
 
 
 @Component({
-  selector: 'nus-receiving-order-detail',
+  selector: 'nus-transfer-order-detail',
   template: `
     <h1 class="title-1" i18n>
-      Pending Order {{entity.href|entityToSlug}}
+      Inventory Order #{{entity.href|entityToSlug}}
     </h1>
     <p style="margin-bottom: 24px;" i18n>Edit shipping method for each product. Skip this step if you don't want to change anything.</p>
     <table id="general-table-info">
       <thead>
-        <th i18n>DO Number</th>
-        <th i18n>PIC Sender</th>
-        <th i18n>Type</th>
-        <th i18n>Status</th>
-        <th i18n>Warehouse</th>
+        <th i18n>Created Date</th>
+        <th i18n>Source Warehouse</th>
         <th i18n>Created By</th>
-        <th i18n>Reviewed By</th>
-        <th i18n>Date</th>
+        <th i18n>Destination Warehouse</th>
+        <th i18n>Received By</th>
+        <th i18n>Status</th>
       </thead>
       <tbody>
         <td>
-          <span *ngIf="!entity.doNumber">-</span>
-          <span>{{ entity.doNumber }}</span>
+          <span>{{ entity.created | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
         </td>
         <td>
-          <span *ngIf="!entity.dcPic">-</span>
-          <span>{{ entity.dcPic }}</span>
+          <span>{{ entity.warehouse.name }}</span>
         </td>
-        <td>{{ entity.type }}</td>
+        <td>{{ entity.createdBy?.name ?? '-' }}</td>
+        <td>{{ entity.destinationWarehouse.name }} </td>
+        <td>
+          {{ entity.reviewedBy?.name }}
+        </td>
         <td>{{ entity.status }}</td>
-        <td>
-          {{ entity.warehouse.name }}
-        </td>
-
-        <td *ngIf="!entity.createdBy?.name">-</td>
-        <td *ngIf="entity.createdBy?.name">{{ entity.createdBy?.name }}</td>
-
-        <td *ngIf="!entity.reviewedBy?.name">-</td>
-        <td *ngIf="entity.reviewedBy?.name">{{ entity.reviewedBy?.name }}</td>
-
-        <td>{{ entity.created | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
       </tbody>
     </table>
     <ul class="non-field-errors" *ngIf="!!nonFieldErrors.length">
@@ -71,78 +60,25 @@ import { IProduct, IProductClass } from '@nusantara/models/products';
     </ul>
 
     <form [formGroup]="form" (ngSubmit)="save()">
-      <table *ngIf="entity.status !== 'pending'" class="general-table-product">
+      <table class="general-table-product">
         <thead>
           <tr>
-            <th class="product-name" i18n>
-                Product
-            </th>
-            <th class="product-sku" i18n>SKU</th>
-            <th i18n>Original Quantity</th>
-            <th i18n>Stock Requested</th>
-            <th i18n>Batch Number</th>
-            <th i18n>Expiry Date</th>
-            <th i18n>Cost</th>
-            <th i18n>Location</th>
-            <th i18n>Locator</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let stockRecord of entity.stockRecords">
-            <td data-qa="product" title="{{ stockRecord.product.name }}" class="product-name">
-              <div>{{ stockRecord.product.name }}</div>
-            </td>
-            <td title="{{ stockRecord.sku }}" class="product-sku">
-              <div>{{ stockRecord.sku }}</div>
-            </td>
-            <td data-qa="original-quantity">
-              {{ stockRecord.originalQuantity }}
-            </td>
-            <td data-qa="stock-requested">
-              {{ stockRecord.requestingStock }}
-            </td>
-            <td>
-              <ng-container *ngIf="!stockRecord.batchNumber"> - </ng-container>
-              <ng-container *ngIf="stockRecord.batchNumber">{{ stockRecord.batchNumber }}</ng-container>
-            </td>
-            <td>
-              <ng-container *ngIf="!stockRecord.expiryDate"> - </ng-container>
-              <ng-container *ngIf="stockRecord.expiryDate">{{ stockRecord.expiryDate|date: 'dd MMM yyyy HH:mm' }}</ng-container>
-            </td>
-            <td>
-              <ng-container *ngIf="!stockRecord.cost"> - </ng-container>
-              <ng-container *ngIf="stockRecord.cost">{{ stockRecord.cost | currency:'IDR':'symbol-narrow':'1.0' }}</ng-container>
-            </td>
-            <td>
-              <ng-container *ngIf="!stockRecord.location"> - </ng-container>
-              <ng-container *ngIf="!!stockRecord.location">{{ stockRecord.location?.name }}</ng-container>
-            </td>
-            <td>
-              <ng-container *ngIf="!stockRecord.locator"> - </ng-container>
-              <ng-container *ngIf="stockRecord.locator">{{ stockRecord.locator }}</ng-container>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <table *ngIf="entity.status === 'pending'" class="general-table-product">
-        <thead>
-          <tr>
-            <th class="product-name" i18n>Product (UPC)</th>
-            <th class="product-sku" i18n>SKU</th>
-            <th i18n>Quantity</th>
+            <th i18n>Product (UPC) / Sender Location</th>
+            <th i18n>SKU</th>
             <th i18n>Batch</th>
             <th i18n>Expiry Date</th>
-            <th i18n>Cost</th>
-            <th i18n>Location</th>
-            <th i18n>Locator</th>
+            <th i18n>Transfer Quantity</th>
+            <th i18n>Destination Location</th>
+            <th i18n>Destination Locator(Optional)</th>
           </tr>
         </thead>
         <tbody>
-          <nus-inventory-receiving-detail-item
+          <nus-inventory-transfer-detail-item
             *ngFor="let rec of stockRecords.controls; let i=index"
             [form]="rec"
-            [availableSubLocations]="availableSubLocations">
-          </nus-inventory-receiving-detail-item>
+            [availableSubLocations]="availableSubLocations"
+            [status]="entity.status">
+          </nus-inventory-transfer-detail-item>
         </tbody>
       </table>
       <div>
@@ -170,8 +106,6 @@ import { IProduct, IProductClass } from '@nusantara/models/products';
         </button>
       </div>
     </form>
-    <nus-marketplace-channel-info-modal [warehouseInfoDetail]="warehouseDetail"></nus-marketplace-channel-info-modal>
-    <nus-confirm-pending-modal></nus-confirm-pending-modal>
   `,
   styles: [
     'button:not(:first-child) { margin-left: 5px; }',
@@ -188,12 +122,10 @@ import { IProduct, IProductClass } from '@nusantara/models/products';
     'table.general-table-product{table-layout: auto;}',
     'div.detail-actions { display: flex }',
     'button.danger { margin-left: auto }',
-    '.product-name { width: 20%; }',
-    '.product-sku { width: 10%; }',
   ]
 })
-export class InventoryReceivingDetailComponent extends AbstractDetailComponent<IReceivingOrder> implements OnInit {
-  entity: IReceivingOrder;
+export class InventoryTransferDetailComponent extends AbstractDetailComponent<IReceivingOrder> implements OnInit {
+  entity: ITransferOrder;
   warehouses: IWarehouse[];
   warehouseDetail: marketplace.IWarehouseDetail[];
   marketplaceValue = 0;
@@ -215,18 +147,10 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
 
   ngOnInit() {
     super.ngOnInit();
-    if (!!this.entity.warehouse.code) {
-      this.clientService.getWarehouseInformation(this.entity.warehouse.code).subscribe(
-        (data: marketplace.IWarehouseInfo) => {
-          this.warehouseDetail = data.details;
-          this.marketplaceValue = data.totalMarketplace;
-        }
-      );
-    }
     this.route.data.subscribe((data: { warehouses: IWarehouse[], productClasses: IProductClass[] }) => {
       this.warehouses = data.warehouses;
       this.productClasses = data.productClasses;
-      const wh = this.warehouses?.find(e => e.href === this.entity.warehouse.href);
+      const wh = this.warehouses?.find(e => e.href === this.entity.destinationWarehouse.href);
       if (wh) {
         this.availableSubLocations = wh.subLocations;
       }
@@ -244,7 +168,7 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
     return this.form.get('notes') as FormControl;
   }
 
-  initializeForm(entity: IReceivingOrder) {
+  initializeForm(entity: ITransferOrder) {
     this.entity = entity;
     this.form = this.fb.group({
       href: [entity.href, []],
@@ -319,6 +243,7 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
   showMarketplaceProgressModal() {
     this.marketplaceProgressModal.open();
   }
+
   cancel() {
     this.location.back();
   }
@@ -329,7 +254,7 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
 
     let selectedSubLocations;
     if (item.location !== null) {
-      selectedSubLocations = item.location.href;
+      selectedSubLocations = item.location;
     } else {
       selectedSubLocations = null;
     }
@@ -340,13 +265,19 @@ export class InventoryReceivingDetailComponent extends AbstractDetailComponent<I
       href: [item.href, []],
       location: this.fb.group({
         href: [selectedSubLocations, [Validators.required]],
+        name: [selectedSubLocations?.name, []]
       }),
       sku: [item.sku, []],
       originalQuantity: [item.originalQuantity, [Validators.required, Validators.min(1)]],
       batchNumber: [item.batchNumber, []],
       locator: this.fb.array([]),
       expiryDate: [item.expiryDate, []],
-      cost: [item.cost, []]
+      cost: [item.cost, []],
+      requestingStock: [item.requestingStock, []],
+      receivingLocation: this.fb.group({
+        href: [item.receivingLocation?.href, []],
+        name: [item.receivingLocation?.name, []]
+      })
     });
     item.locator.forEach( (data) => {
       const locator = stockRecord.get('locator') as FormArray;
