@@ -443,9 +443,6 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     if (!!this.entity?.href && !!this.entity?.logo && !this.form.get('logo').value) {
       this.form.removeControl('logo');
     }
-    if (!!this.logo && this.logoPreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
-      this.form.value.logo = this.logoPreviewUrl;
-    }
     if (!!this.entity?.meta?.type && this.entity?.meta?.type === 'edc') {
       (this.form.get('meta') as FormGroup).removeControl('meta.eWallets');
       delete (this.form.value.meta.eWallet);
@@ -454,6 +451,10 @@ export class PaymentGatewayDetailComponent extends AbstractDetailComponent<IPaym
     if (!!this.entity?.meta?.type && this.entity?.meta?.type === 'e_wallet') {
       (this.form.get('meta') as FormGroup).removeControl('meta.eWallets');
       delete (this.form.value.meta.banks);
+    }
+
+    if (!!this.logo && this.logoPreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
+      this.form.value.logo = this.logoPreviewUrl;
     }
     super.save();
   }
