@@ -12,7 +12,7 @@ import { IEmployee } from '@nusantara/models/user';
 
     <nus-pagination [page]="page"></nus-pagination>
 
-    <table>
+    <table class="employee-list">
       <thead>
         <tr>
           <th i18n>Email</th>
@@ -25,20 +25,40 @@ import { IEmployee } from '@nusantara/models/user';
       </thead>
       <tbody>
         <tr *ngFor="let entity of page.entities">
-          <td>
+          <td class="col-email">
             <a [routerLink]="[entity | entityToSlug]">{{ entity.email }}</a>
           </td>
-          <td>{{ entity.identityNumber | emptyData }}</td>
-          <td>{{ entity.firstName | emptyData }}</td>
-          <td>{{ entity.lastName | emptyData }}</td>
-          <td class="numeric">{{ entity.dateJoined | date: 'dd/MM/yyyy HH:mm:ss' | emptyData }}</td>
-          <td class="numeric">{{ entity.lastLogin | date: 'dd/MM/yyyy HH:mm:ss' | emptyData }}</td>
+          <td class="col-name">{{ entity.identityNumber | emptyData }}</td>
+          <td class="col-name">{{ entity.firstName | emptyData }}</td>
+          <td class="col-name">{{ entity.lastName | emptyData }}</td>
+          <td class="numeric col-date">{{ entity.dateJoined | date: 'dd/MM/yyyy HH:mm:ss' | emptyData }}</td>
+          <td class="numeric col-date">{{ entity.lastLogin | date: 'dd/MM/yyyy HH:mm:ss' | emptyData }}</td>
         </tr>
       </tbody>
     </table>
 
     <nus-pagination [page]="page"></nus-pagination>
   `,
+  styles: [
+    `
+
+      .col-name {
+        width: 15%
+      }
+      .col-email {
+        width: 25%;
+      }
+      .col-date, .col-ltv {
+        min-width: 5%;
+        max-width: 10%;
+      }
+      .employee-list tbody td {
+        word-break: break-all;
+        word-wrap: anywhere;
+        white-space: break-spaces;
+      }
+    `
+  ]
 
 })
 export class EmployeeListComponent extends AbstractListComponent<IEmployee> {
