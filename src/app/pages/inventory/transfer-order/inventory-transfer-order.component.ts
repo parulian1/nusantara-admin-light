@@ -253,6 +253,7 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
     const wh = this.warehouses.filter(e => e.href === this.warehouse.get('href').value)[0];
     if (wh) {
       this.warehouse.disable();
+      this.destinationWarehouse.disable();
     }
   }
 
