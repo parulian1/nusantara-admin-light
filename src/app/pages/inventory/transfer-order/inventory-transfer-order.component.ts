@@ -117,9 +117,7 @@ import { StockRecordSelectionModalComponent } from '@nusantara/shared';
     </form>
 
     <!-- Modals -->
-    <nus-stock-record-selection-modal [isInStock]="true"
-                                      [isTransferDisplay]="true">
-    </nus-stock-record-selection-modal>
+    <nus-stock-record-selection-modal [isTransferDisplay]="true"></nus-stock-record-selection-modal>
   `,
   styles: [`
     form { max-width: 100%; }
@@ -239,6 +237,7 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
       warehouse: getSlugFromHref(this.warehouse.value?.href),
       receiving_order_status: ReceivingOrderStatusChoices.APPROVED,
       product_type: 'single',
+      min_amount: '1'
     };
     this.stockRecordSelectionModal.displayedResults = null;
     this.stockRecordSelectionModal.onSearchTextChanged('');
