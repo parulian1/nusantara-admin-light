@@ -40,8 +40,13 @@ const logger = new Logger('CustomerDetailComponent');
 
       <label>
         <span i18n>Email Address</span>
+        <ng-container *ngIf="!entity; else emailReadOnly">
         <input type="email" formControlName="email">
         <nus-field-errors [control]="email"></nus-field-errors>
+        </ng-container>
+        <ng-template #emailReadOnly>
+          <div class="input-read-only">{{ email.value }}</div>
+        </ng-template>
       </label>
 
       <label>
