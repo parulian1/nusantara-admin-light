@@ -17,6 +17,7 @@ import {
   BukalapakFormComponent,
   TiktokFormComponent,
   BlibliFormComponent,
+  JdidiFormComponent
 } from './connect';
 
 import {
@@ -83,6 +84,7 @@ export function getMarketplacesConfig(
     BukalapakFormComponent,
     TiktokFormComponent,
     BlibliFormComponent,
+    JdidiFormComponent,
 
     // setup
     SetupComponent,

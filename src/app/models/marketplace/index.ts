@@ -13,3 +13,4 @@ export * from './tokopedia';
 export * from './bukalapak';
 export * from './tiktok';
 export * from './blibli';
+export * from './jdid';
