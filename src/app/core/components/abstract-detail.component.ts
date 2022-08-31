@@ -179,7 +179,7 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
       errorMessage = 'Please check your input again.';
     }
 
-    this.toast?.addError(errorMessage, 'Failed to Save');
+    this.toast?.addError(this.convertErrorMessage(errorMessage), 'Failed to Save');
   }
 
   delete() {
@@ -283,6 +283,25 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
         errorMessages.push(`${field}: ${errorDetail[field][0]}`);
       }
     });
+  }
+
+  convertErrorMessage(errorMsg: string): string {
+    const regex = new RegExp(/\#(?<id>\w+)/g);
+    let convertedErrMsg = errorMsg.replace(regex, '').trim();
+    let matched;
+    let targetPage = '';
+    if (errorMsg.includes('pending adjustment')) {
+      targetPage = '../../inventory/adjustment';
+    } else if (errorMsg.includes('pending transfer')) {
+      targetPage = '../../inventory/transfer-order';
+    }
+    if (targetPage.length) {
+      while (regex.global && (matched = regex.exec(errorMsg))){
+        const id = matched['groups']['id'];
+        convertedErrMsg += ` <a href="${targetPage}/${id}">#${id}</a>`;
+      }
+    }
+    return convertedErrMsg;
   }
 
 }
