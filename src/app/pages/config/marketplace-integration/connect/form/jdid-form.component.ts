@@ -79,17 +79,17 @@ import { MarketplaceClientEnum } from '../markeplace-client-enum';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => JdidiFormComponent),
+      useExisting: forwardRef(() => JdidFormComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => JdidiFormComponent),
+      useExisting: forwardRef(() => JdidFormComponent),
       multi: true,
     },
   ],
 })
-export class JdidiFormComponent implements OnInit {
+export class JdidFormComponent implements OnInit {
   @Input() shopSlug?: string;
   @Input() isEdit: boolean;
   form: FormGroup;
