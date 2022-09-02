@@ -289,11 +289,16 @@ export abstract class AbstractDetailComponent<T> extends AbstractEditingComponen
     const regex = new RegExp(/\#(?<id>\w+)/g);
     let convertedErrMsg = errorMsg.replace(regex, '').trim();
     let matched;
-    let targetPage = '';
+    let targetPage = window.location.origin;
+    if (window.location.pathname.includes('en')) {
+      targetPage += '/en/';
+    } else {
+      targetPage += '/id/';
+    }
     if (errorMsg.includes('pending adjustment')) {
-      targetPage = '../../inventory/adjustment';
+      targetPage += 'inventory/adjustment';
     } else if (errorMsg.includes('pending transfer')) {
-      targetPage = '../../inventory/transfer-order';
+      targetPage += 'inventory/transfer-order';
     }
     if (targetPage.length) {
       while (regex.global && (matched = regex.exec(errorMsg))){
