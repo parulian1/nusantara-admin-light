@@ -239,6 +239,7 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
       warehouse: getSlugFromHref(this.warehouse.value?.href),
       receiving_order_status: ReceivingOrderStatusChoices.APPROVED,
       product_type: 'single',
+      min_amount: '1'
     };
     this.stockRecordSelectionModal.displayedResults = null;
     this.stockRecordSelectionModal.onSearchTextChanged('');

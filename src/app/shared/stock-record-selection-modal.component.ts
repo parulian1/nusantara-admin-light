@@ -238,11 +238,6 @@ export class StockRecordSelectionModalComponent implements OnInit, AfterViewInit
       this.service.fetchListWithFilter(this.searchText.value, 1, 10, this.filters)
         .pipe(map(stockRecords => {
           // show only stock record with original quantity more than 0
-          if (this.isInStock) {
-            stockRecords.entities = stockRecords.entities.filter(
-              entity => entity.originalQuantity > 0
-            );
-          }
           return stockRecords;
         })).subscribe((page) => {
         this.displayedResults = page;
