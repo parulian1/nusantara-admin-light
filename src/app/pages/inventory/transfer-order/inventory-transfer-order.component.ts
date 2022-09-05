@@ -7,7 +7,8 @@ import {
   DialogResult,
   ToastService,
   AbstractDetailComponent,
-  getSlugFromHref
+  getSlugFromHref,
+  IResultResponse
 } from '@nusantara/core';
 import { inventory, ISubLocation, IWarehouse } from '@nusantara/models';
 import { InventoryTransferService } from '@nusantara/services';
@@ -312,8 +313,9 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
   }
 
   save(): void {
-    super.save();
-    this.stockRecords.clear();
+    if (this.form.valid) {
+      super.save();
+    }
   }
 
   resetForm(warnOnDirty = false) {
@@ -333,5 +335,10 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
   removeLine(index: number) {
     this.stockRecords.removeAt(index);
     this.availableStockList.splice(index, 1);
+  }
+
+  protected onSaveSuccess(result: IResultResponse<inventory.ITransferOrder>) {
+    this.resetForm();
+    super.onSaveSuccess(result);
   }
 }
