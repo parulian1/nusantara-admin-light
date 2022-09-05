@@ -338,7 +338,6 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
   }
 
   protected onSaveSuccess(result: IResultResponse<inventory.ITransferOrder>) {
-    this.resetForm();
     super.onSaveSuccess(result);
   }
 }
