@@ -277,7 +277,7 @@ export class InventoryTransferDetailComponent extends AbstractDetailComponent<IR
       cost: [item.cost, []],
       requestingStock: [item.requestingStock, []],
       receivingLocation: this.fb.group({
-        href: [item.receivingLocation?.href, []],
+        href: [item.receivingLocation?.href, [Validators.required]],
         name: [item.receivingLocation?.name, []]
       })
     });
