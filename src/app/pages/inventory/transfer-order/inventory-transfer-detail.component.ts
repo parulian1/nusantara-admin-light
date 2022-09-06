@@ -174,7 +174,7 @@ export class InventoryTransferDetailComponent extends AbstractDetailComponent<IR
       href: [entity.href, []],
       stockRecords: this.fb.array([], []),
       status: [entity?.status, []],
-      notes: [entity?.notes, []]
+      notes: [entity?.notes, [Validators.maxLength(160)]]
     });
   }
 
