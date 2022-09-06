@@ -95,13 +95,13 @@ import { IProduct, IProductClass } from '@nusantara/models/products';
         </label>
       </div>
       <div class="detail-actions">
-        <button type="button" (click)="approve()" [disabled]="entity.status !== 'pending'" class="control" id="confirm-button"  i18n>
+        <button type="button" (click)="approve()" [disabled]="!!isDisabled" class="control" id="confirm-button"  i18n>
           Approve
         </button>
         <button type="button" (click)="cancel()" class="control secondary"  i18n>
           Back
         </button>
-        <button type="button" (click)="reject()" [disabled]="entity.status !== 'pending'" class="control danger ghost"  i18n>
+        <button type="button" (click)="reject()" [disabled]="!!isDisabled" class="control danger ghost"  i18n>
           Reject
         </button>
       </div>
@@ -211,29 +211,31 @@ export class InventoryTransferDetailComponent extends AbstractDetailComponent<IR
   }
 
   save() {
-    this.service.save(this.getFormValue()).pipe(catchError(err => {
+    if (!!this.form.valid) {
+      this.service.save(this.getFormValue()).pipe(catchError(err => {
       if (err instanceof HttpErrorResponse) {
         return of(new ErrorResult<IError>(err.error, err.status));
       } else {
         return of(new ErrorResult<IError>({message: 'Network error.. probably?'}, err.status));
       }
     })).subscribe(
-      resp => {
-        if (resp instanceof ErrorResult) {
-          this.onSaveError(resp.errorDetails);
-        } else {
-          if (this.getFormValue().status !== 'rejected'){
-            if (this.marketplaceValue !== 0){
-                this.marketplaceProgressModal.open();
+        resp => {
+          if (resp instanceof ErrorResult) {
+            this.onSaveError(resp.errorDetails);
+          } else {
+            if (this.getFormValue().status !== 'rejected'){
+              if (this.marketplaceValue !== 0){
+                  this.marketplaceProgressModal.open();
+              } else {
+                this.location.back();
+              }
             } else {
               this.location.back();
             }
-          } else {
-            this.location.back();
           }
         }
-      }
-    );
+      );
+    }
   }
 
   showWarehouseDetail() {
@@ -284,5 +286,15 @@ export class InventoryTransferDetailComponent extends AbstractDetailComponent<IR
       locator.push(new FormControl(data, []));
     });
     this.stockRecords.push(stockRecord);
+  }
+
+  isDisabled(): boolean {
+    if (this.entity.status !== 'pending') {
+      return true;
+    }
+    if (!this.form.valid) {
+      return true;
+    }
+    return false
   }
 }
