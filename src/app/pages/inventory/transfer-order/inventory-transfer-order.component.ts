@@ -326,6 +326,7 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
     }
     this.form.reset();
     this.warehouse.enable();
+    this.destinationWarehouse.enable();
     this.stockRecords.clear();
   }
 

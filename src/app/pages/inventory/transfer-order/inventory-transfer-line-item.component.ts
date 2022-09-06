@@ -23,7 +23,7 @@ import { IProductClass } from '../../../models/products';
       </td>
       <td class="immediate-error-display-input">
         <input type="number" min="1" [formControl]="originalQuantity" data-qa="original-quantity"
-               [max]="availableStock" >
+               [max]="availableStock" [placeholder]="'Input 1-10000'">
         <div class="error-detail" *ngIf="originalQuantity.value > availableStock">Quantity over stock</div>
       </td>
       <td>
