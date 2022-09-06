@@ -288,7 +288,7 @@ export class InventoryTransferDetailComponent extends AbstractDetailComponent<IR
     this.stockRecords.push(stockRecord);
   }
 
-  isDisabled(): boolean {
+  get isDisabled(): boolean {
     if (this.entity.status !== 'pending') {
       return true;
     }
