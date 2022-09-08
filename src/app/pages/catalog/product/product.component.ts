@@ -596,11 +596,8 @@ const logger = new Logger('ProductComponent');
     '.total-price td.price { text-align: right; }',
     '#barcode-label { display: block; margin-bottom: 4px; }',
     '#barcode-label > span:first-child { font-size: 14px; line-height: 20px; font-weight: bold; margin-right: 10px; }',
-    `.input-error-info {
-      display: flex;
-      justify-content: space-between;
-    }
-    `, `
+    '.input-error-info { display: flex; justify-content: space-between; }',
+    `
       .greybox {
         display: flex;
         flex-direction: row;
