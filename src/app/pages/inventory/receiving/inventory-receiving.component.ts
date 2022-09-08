@@ -31,8 +31,7 @@ const logger = new Logger('InventoryReceivingComponent');
 @Component({
   selector: 'nus-inventory-receiving',
   template: `
-    <h1 i18n>Delivery (Receiving)</h1>
-
+    <nus-page-title i18n-title title="Delivery (Receiving)"></nus-page-title>
     <form [formGroup]="form" (ngSubmit)="saveForm()">
       <div class="container">
         <div class="general-info">

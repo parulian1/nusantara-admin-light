@@ -19,7 +19,7 @@ import {
 @Component({
   selector: 'nus-order',
   template: `
-    <h1 class="title-1" i18n>Order Detail</h1>
+    <nus-page-title i18n-title title="Order Detail"></nus-page-title>
     <table class="detail">
       <tbody>
         <tr class="no-border-bottom">

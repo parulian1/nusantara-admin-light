@@ -28,8 +28,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'nus-adjustment',
   template: `
-    <h1 i18n>Stock Adjustment</h1>
-
+    <nus-page-title i18n-title title="Stock Adjustment"></nus-page-title>
     <form [formGroup]="form" (ngSubmit)="save()">
       <div class="container">
         <div>

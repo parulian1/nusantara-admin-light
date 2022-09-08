@@ -21,8 +21,7 @@ import {ConfirmModalReceivingOrderComponent, StockRecordSelectionModalComponent}
 @Component({
   selector: 'nus-inventory-transfer',
   template: `
-    <h1 class="title-1" i18n>Inventory Transfer</h1>
-
+    <nus-page-title i18n-title title="Inventory Transfer"></nus-page-title>
     <form [formGroup]="form" (ngSubmit)="save()">
       <table class="header">
         <tbody>
