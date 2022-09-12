@@ -10,13 +10,14 @@ import {
   getSlugFromHref,
   IResultResponse
 } from '@nusantara/core';
-import { inventory, ISubLocation, IWarehouse, products } from '@nusantara/models';
+import { inventory, IWarehouse } from '@nusantara/models';
 import { InventoryTransferService } from '@nusantara/services';
 import { IProductClass } from '@nusantara/models/products';
 import { IStockRecord, ReceivingOrderStatusChoices } from '@nusantara/models/inventory';
 import {ConfirmModalReceivingOrderComponent, StockRecordSelectionModalComponent} from '@nusantara/shared';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {userDisplayName} from "@nusantara/shared/helpers";
 
 /**
  * Allows a user to receive a new batch of inventory.
@@ -26,55 +27,54 @@ import {takeUntil} from 'rxjs/operators';
   template: `
     <nus-page-title i18n-title title="Inventory Transfer"></nus-page-title>
     <form [formGroup]="form" (ngSubmit)="save()">
-      <table class="header">
-        <tbody>
-          <tr>
-           <td colspan="1" class="">
-             Created By
-           </td>
-           <td colspan="1">
-             Created Date
-           </td>
-          </tr>
-          <tr>
-            <td colspan="1" class="bold">{{ userDisplayName }}</td>
-            <td colspan="1" class="bold">{{ currentDate|date }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <table class="inventory-order-meta">
-        <tbody>
-        <tr>
-          <td [formGroup]="warehouse" class="bold">
-            Source Warehouse
-            <select formControlName="href" (change)="updateDestinationWarehouses($event)" data-qa="from-warehouse">
-              <option [ngValue]="null">---</option>
-              <option *ngFor="let wh of warehouses" [value]="wh.href">
-                {{ wh.name }}
-              </option>
-            </select>
-          </td>
-          <td>
-        </tr>
-        <tr>
-          <td [formGroup]="destinationWarehouse" class="bold">
-            Destination Warehouse
-            <select formControlName="href" data-qa="destination-warehouse">
-              <option [ngValue]="null">---</option>
-              <option *ngFor="let wh of destinationWarehouses" [value]="wh.href">
-                {{ wh.name }}
-              </option>
-            </select>
-          </td>
-          <td class="confirm-wh">
-            <button (click)="confirmWarehouse()"
-                    type="button"
-                    [disabled]="warehouse.disabled || !warehouse.valid"
-                    class="control" i18n>Confirm</button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <div class="container">
+        <div class="general-info">
+          <div class="general-info--header box-container">
+            <div>
+              <label class="body-2" i18n>Created By</label>
+              <span class="subheading-2">{{ userDisplayName }}</span>
+            </div>
+            <div>
+              <label class="body-2" i18n>Created Date</label>
+              <span class="subheading-2">{{ currentDate|date }}</span>
+            </div>
+          </div>
+          <div class="general-info--warehouse box-container">
+            <div>
+              <label for="source-warehouse" class="subheading-2" i18n>Source Warehouse</label>
+              <div class="source-warehouse confirm-warehouse">
+                <div [formGroup]="warehouse">
+                  <select id="source-warehouse" formControlName="href" (change)="updateDestinationWarehouses($event)" data-qa="from-warehouse">
+                    <option [ngValue]="null">---</option>
+                    <option *ngFor="let wh of warehouses" [value]="wh.href">
+                      {{ wh.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div>
+              <label for="destination-warehouse" class="subheading-2" i18n>Destination Warehouse</label>
+              <div class="destination-warehouse confirm-warehouse">
+                <div [formGroup]="destinationWarehouse">
+                  <select id="destination-warehouse" formControlName="href" data-qa="destination-warehouse">
+                    <option [ngValue]="null">---</option>
+                    <option *ngFor="let wh of destinationWarehouses" [value]="wh.href">
+                      {{ wh.name }}
+                    </option>
+                  </select>
+                </div>
+                <div class="confirm-warehouse-action">
+                  <button (click)="confirmWarehouse()"
+                          type="button"
+                          [disabled]="destinationWarehouse.disabled || !warehouse.valid || !destinationWarehouse.valid"
+                          class="control confirm" i18n>Confirm</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div *ngIf="warehouse.disabled">
         <table class="line-items">
@@ -122,54 +122,29 @@ import {takeUntil} from 'rxjs/operators';
     <nus-stock-record-selection-modal [isTransferDisplay]="true"></nus-stock-record-selection-modal>
     <nus-confirm-receiving-modal></nus-confirm-receiving-modal>
   `,
-  styles: [`
-    form { max-width: 100%; }
-    .inventory-order-meta {
-      width: 100%;
-      padding: 16px 0px;
-    }
-    .inventory-order-meta th {
-      text-align: left;
-    }
-    .line-items {
-      margin-top: 25px;
-    }
-    .bold {
-      font-weight: bold;
-    }
-    form table.header, form table.inventory-order-meta {
-      width: 58vw;
-    }
-    table.header tbody tr td, table.inventory-order-meta tbody tr td {
-      border: none;
-      padding: 0px 0px 0px 24px;
-    }
-    table.header {
-      padding: 20px 0px 20px 24px;
-      margin-bottom: 16px;
-    }
-    table.header tbody tr {
-      height: 24px;
-    }
-    table.header tbody tr td {
-      width: 50%;
-    }
-    table.inventory-order-meta tbody tr {
-      height: 72px;
-    }
-    table.inventory-order-meta tbody tr td.confirm-wh {
-      padding-top: 20px;
-    }
-    th.stock, th.action {
-      width: 10%;
-    }
-    th.product-name {
-      width: 35%;
-    }
-    th.product-sku {
-      width: 15%;
-    }
-  `
+  styles: [
+    'form{ max-width: none;}',
+    'button.confirm { width: 100%; border-radius: 4px 0 0 4px; }',
+    '.container { display: grid; grid-template-columns: 4fr 1fr; grid-gap: 24px; }',
+    '.box-container { border: 1px solid var(--grey); border-radius: 4px; padding: 16px 24px; }',
+    '.box-container:not(:last-child), .general-info--warehouse > div:not(:last-child) { margin-bottom: 24px; }',
+    '.box-container label { min-height: 0; color: var(--darken-grey); padding-bottom: 0; }',
+    '.box-container span, .general-info--warehouse label{ color: var(--lighten-black); }',
+    '.general-info--header { display: grid; grid-template-columns: 1fr 1fr; grid-gap: 24px; }',
+    `
+      @media (max-width: 768px) {
+        .general-info--header { display: grid; grid-template-columns: 1fr; }
+        .general-info--header > div:not(:last-child) { margin-bottom: 23px; }
+      }
+    `,
+    '.confirm-warehouse { display: grid; grid-template-columns: 5fr 1fr; grid-gap: 24px; }',
+    '.line-items { margin-top: 24px; }',
+    'th:nth-child(1) { min-width: 115px; }',
+    'th:nth-child(2) { width: 80px; }',
+    'th:nth-child(3) { width: 108px; }',
+    'th:nth-child(5) { width: 10%; }',
+    'th:nth-child(6) { width: 10%; }',
+    'th:nth-child(7) { width: 5%; }',
   ]
 })
 export class InventoryTransferOrderComponent extends AbstractDetailComponent<inventory.ITransferOrder>
@@ -188,6 +163,7 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
   }> = [];
   private destroy$: Subject<boolean> = new Subject<boolean>();
 
+  userDisplayName = userDisplayName(this.authService)
 
   constructor(private fb: FormBuilder,
               toast: ToastService,
@@ -251,7 +227,6 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
   }
 
   addLine() {
-    // this.productSelectionModal.open();
     this.stockRecordSelectionModal.filters = {
       warehouse: getSlugFromHref(this.warehouse.value?.href),
       receiving_order_status: ReceivingOrderStatusChoices.APPROVED,
@@ -315,14 +290,6 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
     this.destinationWarehouses = this.warehouses.filter((warehouse) => {
       return warehouse.href.indexOf(event.target.value) === -1;
     });
-  }
-
-  get userDisplayName(): string {
-    return [
-      this.authService.tokenPayload?.last_name ?? '',
-      this.authService.tokenPayload?.first_name ?? '',
-      `(${this.authService.tokenPayload?.email ?? ''})`,
-    ].join(', ').trim();
   }
 
   getFormValue() {
