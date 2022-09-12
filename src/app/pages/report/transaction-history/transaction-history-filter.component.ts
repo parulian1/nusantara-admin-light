@@ -34,7 +34,7 @@ const logger = new Logger('TransactionHistoryReportFilter');
       </div>
     </label>
     <div class="action-column">
-      <button class="control" (click)="downloadOrderList()" i18n>
+      <button type="button" class="control" (click)="downloadOrderList()" i18n>
         <i class="material-icons">file_download</i>
         Export to .csv
       </button>
