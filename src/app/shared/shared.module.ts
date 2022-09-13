@@ -56,6 +56,8 @@ import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { PromoModalComponent } from '@nusantara/shared/modals/promo-modal.component';
 import { PromoTypeToLabelPipe } from '@nusantara/shared/promo-type-to-label.pipe';
 import { PromoCampaignModalComponent } from '@nusantara/shared/modals/promo-campaign-modal.component';
+import {SublocationTypeToLabelPipe} from "@nusantara/shared/sublocation-type-to-label.pipe";
+import {WarehouseSelectionModalComponent} from "@nusantara/shared/modals/warehouse-selection-modal.component";
 import {
   ProductWithPromotionTagSelectionModalComponent
 } from '@nusantara/shared/product-with-promotion-tag-selection-modal.component';
@@ -118,6 +120,9 @@ import {
     ProgressBarComponent,
     PromoModalComponent,
     PromoCampaignModalComponent,
+    SublocationTypeToLabelPipe,
+    WarehouseSelectionModalComponent,
+    PromoCampaignModalComponent,
     ProductWithPromotionTagSelectionModalComponent,
   ],
   exports: [
@@ -170,6 +175,9 @@ import {
     DynamicFilterPipe,
     ProgressBarComponent,
     PromoModalComponent,
+    PromoCampaignModalComponent,
+    SublocationTypeToLabelPipe,
+    WarehouseSelectionModalComponent,
     PromoCampaignModalComponent,
     ProductWithPromotionTagSelectionModalComponent
   ],

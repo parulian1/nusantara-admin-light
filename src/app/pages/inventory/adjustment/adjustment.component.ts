@@ -233,8 +233,8 @@ import { DomSanitizer } from '@angular/platform-browser';
     </form>
 
     <!-- Modals -->
-    <nus-stock-record-selection-modal [isInStock]="false"></nus-stock-record-selection-modal>
-    <nus-confirm-inventory-modal [cancelWithoutReload]="true"></nus-confirm-inventory-modal>
+    <nus-stock-record-selection-modal></nus-stock-record-selection-modal>
+    <nus-confirm-receiving-modal [cancelWithoutReload]="true"></nus-confirm-receiving-modal>
     <nus-csv-dialog></nus-csv-dialog>
     <nus-stock-record-dialog></nus-stock-record-dialog>
   `,

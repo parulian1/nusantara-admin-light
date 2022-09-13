@@ -156,7 +156,6 @@ export class StockRecordSelectionModalComponent implements OnInit, AfterViewInit
   originalValue: string = null;
   filters = {};
 
-  @Input() isInStock = true;
   @Input() isTransferDisplay?: boolean = false;
 
   //

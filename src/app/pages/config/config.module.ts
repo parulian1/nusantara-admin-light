@@ -24,11 +24,7 @@ import { ReindexingComponent } from './reindexing/reindexing.component';
 import { ShopifyWebhookComponent } from './shopify/shopify-webhook.component';
 import { ShopifyHubComponent } from './shopify/shopify-hub.component';
 import { DefaultPinConfigComponent } from '@nusantara/pages/config/default-pin-config';
-import {
-  LowStockConfigComponent,
-  LowStockProductListComponent,
-  LowStockProductPaginationComponent
-} from './low-stock-config';
+import { CustomThresholdProductComponent, LowStockConfigComponent } from './low-stock-config';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MAT_RIPPLE_GLOBAL_OPTIONS } from '@angular/material/core';
@@ -67,8 +63,7 @@ import { MAT_RIPPLE_GLOBAL_OPTIONS } from '@angular/material/core';
     ShopifyHubComponent,
     DefaultPinConfigComponent,
     LowStockConfigComponent,
-    LowStockProductListComponent,
-    LowStockProductPaginationComponent
+    CustomThresholdProductComponent,
   ],
   imports: [
     CommonModule,
@@ -77,7 +72,6 @@ import { MAT_RIPPLE_GLOBAL_OPTIONS } from '@angular/material/core';
     ReactiveFormsModule,
     ConfigRoutingModule,
     CKEditorModule,
-    FormsModule,
     MatFormFieldModule,
     MatSelectModule,
   ],
