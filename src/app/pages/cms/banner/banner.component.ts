@@ -27,6 +27,7 @@ import { enumToArray } from '@nusantara/shared/helpers';
       <label>
         <span i18n>Type</span>
         <select formControlName="type">
+          <option disabled selected [ngValue]="null"> --Select-- </option>
           <option *ngFor="let choice of typeChoices" [ngValue]="choice.value">{{ choice.displayName }}</option>
         </select>
         <nus-field-errors [control]="type"></nus-field-errors>

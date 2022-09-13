@@ -21,6 +21,7 @@ import { MarketplaceClientEnum } from './markeplace-client-enum';
             [(ngModel)]="selectedClient"
             name="client"
           >
+            <option disabled selected [ngValue]="null"> --Select-- </option>
             <option *ngFor="let opt of marketplaces" value="{{ opt.option }}">
               {{ opt.marketplaceName }}
             </option>

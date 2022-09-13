@@ -36,6 +36,7 @@ const log = new Logger('ProductPromotionComponent');
       <label>
         <span i18n>Type</span>
         <select [formControl]="type" (ngModelChange)="onPromoTypeChange($event)">
+          <option disabled selected [ngValue]="null"> --Select-- </option>
           <option *ngFor="let t of types" [ngValue]="t">{{ t | promoTypeToLabel }}</option>
         </select>
       </label>

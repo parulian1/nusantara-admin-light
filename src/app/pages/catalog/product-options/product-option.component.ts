@@ -29,6 +29,7 @@ import { ProductOptionService } from '@nusantara/services';
       <label>
         <span i18n>Type</span>
         <select [formControl]="type" name="type">
+          <option disabled selected [ngValue]="null"> --Select-- </option>
           <option *ngFor="let opt of typeChoices" [ngValue]="opt.value">
             {{ opt.displayName }}
           </option>

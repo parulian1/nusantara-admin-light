@@ -35,6 +35,7 @@ import { IChoice } from '../../../models/drf';
       <label>
         <span i18n>Shell Section</span>
         <select [formControl]="shellSection">
+          <option disabled selected [ngValue]="null"> --Select-- </option>
           <option *ngFor="let c of shellSections" [ngValue]="c.value">{{c.displayName}}</option>
         </select>
       </label>

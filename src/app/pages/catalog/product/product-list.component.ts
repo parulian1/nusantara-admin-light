@@ -26,6 +26,7 @@ import {Title} from "@angular/platform-browser";
 
           <div class="filter-control" *ngIf="!!showBundling">
             <select [formControl]="productType">
+              <option disabled selected [ngValue]="null"> --Select-- </option>
               <option *ngFor="let opt of productTypeChoices" [ngValue]="opt.value">
                 {{opt.displayName}}
               </option>

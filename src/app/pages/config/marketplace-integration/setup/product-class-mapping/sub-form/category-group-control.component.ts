@@ -46,6 +46,7 @@ export interface IGroupControlComponentData {
             <span i18n>{{ currentShop }} Category</span>
           </ng-template>
           <select formControlName="category" (ngModelChange)="onSelect($event)">
+            <option disabled selected [ngValue]="null"> --Select-- </option>
             <option *ngFor="let c of categories" [ngValue]="c">
               {{ c.name }}
             </option>
