@@ -1,7 +1,9 @@
-import {Component, Input, OnInit, ViewChild} from "@angular/core";
-import {FormControl} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {PromotionSingleTypeSelectionModalComponent} from "@nusantara/pages/promotion/promotion";
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {
+  PromotionSingleTypeSelectionModalComponent
+} from './promotion-single-type-selection-modal.component';
 
 @Component({
   selector: 'nus-promotion-single-list-header',
@@ -18,8 +20,7 @@ import {PromotionSingleTypeSelectionModalComponent} from "@nusantara/pages/promo
         </button>
       </div>
     </header>
-
-    <nus-promotion-single-type-selection-modal #promoTypeSelection></nus-promotion-single-type-selection-modal>
+    <nus-promotion-single-type-selection-modal></nus-promotion-single-type-selection-modal>
   `,
   styles: [
     'header { margin-bottom: 23px; }',

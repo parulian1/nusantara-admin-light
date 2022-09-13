@@ -1,8 +1,8 @@
-import {Component, ElementRef, EventEmitter, OnInit, ViewChild} from "@angular/core";
-import {NgxSmartModalComponent} from "ngx-smart-modal";
-import {DialogResult} from "@nusantara/core";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {Router} from "@angular/router";
+import {Component, ElementRef, EventEmitter, OnInit, ViewChild} from '@angular/core';
+import {NgxSmartModalComponent} from 'ngx-smart-modal';
+import {DialogResult} from '@nusantara/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'nus-promotion-single-type-selection-modal',
@@ -166,7 +166,6 @@ import {Router} from "@angular/router";
     `
   ]
 })
-
 export class PromotionSingleTypeSelectionModalComponent implements OnInit {
   @ViewChild('modalForm') formView: ElementRef<HTMLFormElement>;
   @ViewChild('modal') modal: NgxSmartModalComponent;
@@ -176,7 +175,7 @@ export class PromotionSingleTypeSelectionModalComponent implements OnInit {
 
   openAccordion = 'pricePromo';
 
-  constructor(private router: Router, protected fb: FormBuilder) { }
+  constructor(private router: Router, private fb: FormBuilder) { }
 
   ngOnInit() {
     this.initializeForm();
