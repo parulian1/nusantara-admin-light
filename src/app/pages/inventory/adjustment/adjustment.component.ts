@@ -18,7 +18,7 @@ import {
   WarehouseService
 } from '@nusantara/services';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ConfirmModalInvetoryOrderComponent, StockRecordSelectionModalComponent } from '@nusantara/shared';
+import { ConfirmModalInventoryOrderComponent, StockRecordSelectionModalComponent } from '@nusantara/shared';
 import { CsvDialogComponent } from '@nusantara/shared/csv-dialog/csv-dialog.component';
 import * as Papa from 'papaparse';
 import {StockRecordDialogComponent} from '@nusantara/pages/inventory/adjustment/stock-record-dialog.component';
@@ -234,7 +234,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 
     <!-- Modals -->
     <nus-stock-record-selection-modal></nus-stock-record-selection-modal>
-    <nus-confirm-receiving-modal [cancelWithoutReload]="true"></nus-confirm-receiving-modal>
+    <nus-confirm-inventory-modal [cancelWithoutReload]="true"></nus-confirm-inventory-modal>
     <nus-csv-dialog></nus-csv-dialog>
     <nus-stock-record-dialog></nus-stock-record-dialog>
   `,
@@ -298,7 +298,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   form: FormGroup;
 
   @ViewChild(StockRecordSelectionModalComponent) stockRecordSelectionModal: StockRecordSelectionModalComponent;
-  @ViewChild(ConfirmModalInvetoryOrderComponent) confirmModalReceiving: ConfirmModalInvetoryOrderComponent;
+  @ViewChild(ConfirmModalInventoryOrderComponent) confirmModalReceiving: ConfirmModalInventoryOrderComponent;
   @ViewChild(CsvDialogComponent) csvDialog: CsvDialogComponent;
   @ViewChild(StockRecordDialogComponent) stockRecordDialog: StockRecordDialogComponent;
 

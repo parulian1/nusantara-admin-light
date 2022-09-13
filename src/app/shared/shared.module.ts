@@ -34,7 +34,7 @@ import { EmptyListComponent} from './empty-list.component';
 import { MarketplaceStockInfoModalComponent } from './marketplace-stock-info-modal.component';
 import { MarketplaceShippingInfoModalComponent } from './marketplace-shipping-info-modal.component';
 import { MarketplaceChannelInfoModalComponent } from './marketplace-channel-info-modal.component';
-import { ConfirmModalInvetoryOrderComponent } from './confirm-modal-invetory-order.component';
+import { ConfirmModalInventoryOrderComponent } from './confirm-modal-inventory-order.component';
 import { ConfirmModalPendingOrderComponent } from './confirm-modal-pending-order.component';
 import { OrderType } from './order-type.pipe';
 import { OnlyNumberDirective } from './only-number.directive';
@@ -100,7 +100,7 @@ import {
     TooltipComponent,
     EmptyListComponent,
     MarketplaceShippingInfoModalComponent,
-    ConfirmModalInvetoryOrderComponent,
+    ConfirmModalInventoryOrderComponent,
     ConfirmModalPendingOrderComponent,
     MarketplaceChannelInfoModalComponent,
     MarketplaceStockInfoModalComponent,
@@ -157,7 +157,7 @@ import {
     TooltipComponent,
     EmptyListComponent,
     MarketplaceShippingInfoModalComponent,
-    ConfirmModalInvetoryOrderComponent,
+    ConfirmModalInventoryOrderComponent,
     ConfirmModalPendingOrderComponent,
     MarketplaceChannelInfoModalComponent,
     MarketplaceStockInfoModalComponent,

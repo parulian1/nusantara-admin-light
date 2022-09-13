@@ -10,7 +10,7 @@ export * from './user-selection-modal.component';
 export * from './customer-group-modal.component';
 
 export * from './marketplace-channel-info-modal.component';
-export * from './confirm-modal-invetory-order.component';
+export * from './confirm-modal-inventory-order.component';
 export * from './confirm-modal-pending-order.component';
 export * from './marketplace-channel-info-modal.component';
 export * from './marketplace-shipping-info-modal.component';

@@ -34,7 +34,7 @@ import {NgxSmartModalComponent} from 'ngx-smart-modal';
     'button:not(:first-of-type) { margin-left: 5px; }',
   ],
 })
-export class ConfirmModalInvetoryOrderComponent {
+export class ConfirmModalInventoryOrderComponent {
   @ViewChild('modal') modal: NgxSmartModalComponent;
   result: DialogResult = DialogResult.Cancelled;
   @Input() title = 'Are You Sure?';

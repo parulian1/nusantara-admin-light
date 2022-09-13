@@ -14,7 +14,7 @@ import {
 import {InventoryReceivingService, MarketplaceClientService, ProductClassService} from '../../../services';
 import { IProduct, IProductClass } from '../../../models/products';
 import {
-  ConfirmModalInvetoryOrderComponent,
+  ConfirmModalInventoryOrderComponent,
   MarketplaceChannelInfoModalComponent,
   ProductSelectionModalComponent
 } from '../../../shared';
@@ -182,7 +182,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
 
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
   @ViewChild(MarketplaceChannelInfoModalComponent) marketplaceChannelInfo: MarketplaceChannelInfoModalComponent;
-  @ViewChild(ConfirmModalInvetoryOrderComponent) confirmModalReceiving: ConfirmModalInvetoryOrderComponent;
+  @ViewChild(ConfirmModalInventoryOrderComponent) confirmModalReceiving: ConfirmModalInventoryOrderComponent;
 
   currentDate: Date;
   productValue = 0;

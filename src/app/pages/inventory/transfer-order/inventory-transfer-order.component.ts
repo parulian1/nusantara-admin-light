@@ -13,7 +13,7 @@ import { inventory, ISubLocation, IWarehouse } from '@nusantara/models';
 import { InventoryTransferService } from '@nusantara/services';
 import { IProductClass } from '@nusantara/models/products';
 import { IStockRecord, ReceivingOrderStatusChoices } from '@nusantara/models/inventory';
-import {ConfirmModalReceivingOrderComponent, StockRecordSelectionModalComponent} from '@nusantara/shared';
+import {ConfirmModalInventoryOrderComponent, StockRecordSelectionModalComponent} from '@nusantara/shared';
 
 /**
  * Allows a user to receive a new batch of inventory.
@@ -118,7 +118,7 @@ import {ConfirmModalReceivingOrderComponent, StockRecordSelectionModalComponent}
 
     <!-- Modals -->
     <nus-stock-record-selection-modal [isTransferDisplay]="true"></nus-stock-record-selection-modal>
-    <nus-confirm-receiving-modal></nus-confirm-receiving-modal>
+    <nus-confirm-inventory-modal></nus-confirm-inventory-modal>
   `,
   styles: [`
     form { max-width: 100%; }
@@ -178,7 +178,7 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
   destinationWarehouses: IWarehouse[];
   productType: string = 'single';
   @ViewChild(StockRecordSelectionModalComponent) stockRecordSelectionModal: StockRecordSelectionModalComponent;
-  @ViewChild(ConfirmModalReceivingOrderComponent) confirmModalReceiving: ConfirmModalReceivingOrderComponent;
+  @ViewChild(ConfirmModalInventoryOrderComponent) confirmModalReceiving: ConfirmModalInventoryOrderComponent;
   availableStockList: Array<{
     href: string,
     amount: number
