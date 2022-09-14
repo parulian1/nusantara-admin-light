@@ -8,7 +8,7 @@ import {IOrderFilterValue} from "@nusantara/models/order/filter";
 @Component({
   selector: 'nus-transaction-history-report',
   template: `
-    <h1 class="title-1" i18n>Report Transaction</h1>
+    <nus-page-title i18n-title title="Report Transaction"></nus-page-title>
     <nus-transaction-history-report-filter
       (filterApplied)="onFilterApplied($event)">
     </nus-transaction-history-report-filter>

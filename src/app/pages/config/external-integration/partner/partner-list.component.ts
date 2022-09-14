@@ -8,7 +8,7 @@ import { SiteConfigService } from "@nusantara/services";
 @Component({
   selector: "nus-partner-list",
   template: `
-    <nus-list-header i18n-title title="External Integration" description="">
+    <nus-list-header i18n-title title="External Integration List" description="">
     </nus-list-header>
 
     <nus-pagination [page]="page"></nus-pagination>

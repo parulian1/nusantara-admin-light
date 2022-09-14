@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { FormControl } from "@angular/forms";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: "nus-order-list-header",
@@ -49,7 +50,7 @@ export class OrderListHeaderComponent implements OnInit {
   originalValue: string = null;
   queryText = new FormControl("");
 
-  constructor(public route: ActivatedRoute, public router: Router) {}
+  constructor(public route: ActivatedRoute, public router: Router, private titleService: Title) {}
 
   ngOnInit() {
     this.route.queryParamMap.subscribe((value) => {
@@ -59,6 +60,8 @@ export class OrderListHeaderComponent implements OnInit {
         this.onQueryTextChanged(value, newValue);
       });
     });
+
+    this.titleService.setTitle('Bhisma Admin - '+this.title);
   }
 
   onQueryTextChanged(params: ParamMap, newValue: string) {

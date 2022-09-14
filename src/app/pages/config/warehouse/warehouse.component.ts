@@ -12,7 +12,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
   template: `
     <nus-detail-title
       [originalName]="originalEntityName"
-      [typeName]="entityTypeName">
+      typeName="Warehouse">
     </nus-detail-title>
 
     <ul class="non-field-errors" *ngIf="!!nonFieldErrors.length">

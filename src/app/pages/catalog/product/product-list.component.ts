@@ -5,6 +5,7 @@ import { drf, products } from '@nusantara/models';
 import {AbstractListComponent, getSlugFromHref} from '@nusantara/core';
 import { FormControl } from '@angular/forms';
 import { WarehouseService } from '@nusantara/services';
+import {Title} from "@angular/platform-browser";
 
 /**
  * A searchable list of all products.
@@ -14,12 +15,8 @@ import { WarehouseService } from '@nusantara/services';
 @Component({
   selector: 'nus-product-list',
   template: `
-    <!--    <nus-list-header-->
-    <!--      title="Products">-->
-    <!--    </nus-list-header>-->
-
     <header>
-      <h1 class="title-1" i18n>Products</h1>
+      <h1 class="title-1" i18n>{{ title }}</h1>
       <div class="top-action">
         <div class="left-menu">
           <div class="search control">
@@ -58,7 +55,6 @@ import { WarehouseService } from '@nusantara/services';
       <!-- Soft deleted product but change the wording into InActive -->
       <nus-include-deleted text="Show Inactive Product" i18n-text></nus-include-deleted>
     </div>
-<!--    <nus-pagination [page]="page"></nus-pagination>-->
     <nus-product-custom-pagination  [page]="page"></nus-product-custom-pagination>
 
     <table>
@@ -211,7 +207,7 @@ import { WarehouseService } from '@nusantara/services';
     `]
 })
 export class ProductListComponent extends AbstractListComponent<products.IProduct> implements OnInit{
-
+  title = 'Products'
   isBundling = false;
   timeoutId: any;
   reloadTimeout = 650;
@@ -225,12 +221,13 @@ export class ProductListComponent extends AbstractListComponent<products.IProduc
     {displayName: 'Bundle Product', value: 'bundling'}
   ];
 
-  constructor(route: ActivatedRoute, public router: Router, private warehouseService: WarehouseService) {
+  constructor(route: ActivatedRoute, public router: Router, private warehouseService: WarehouseService, private titleService: Title) {
     super(route);
   }
 
   ngOnInit() {
     super.ngOnInit();
+    this.titleService.setTitle('Bhisma Admin - '+this.title);
     this.route.queryParamMap.subscribe(
       (value) => {
         this.queryText.setValue(value.get('q'));
