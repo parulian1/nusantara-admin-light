@@ -225,6 +225,9 @@ const logger = new Logger('MainWrapperComponent');
             <li routerLinkActive="active">
               <a [routerLink]="['/reports/low-stock-products']" routerLinkActive="active" i18n>Low Stock</a>
             </li>
+            <li routerLinkActive="active">
+              <a [routerLink]="['/reports/transaction']" routerLinkActive="active" i18n>Transaction</a>
+            </li>
             <li *ngIf="enterpriseGuard.canActivate(null, null)" routerLinkActive="active">
               <a routerLinkActive="active" class="icon-link" href="https://reports.bhisma.cloud" target="_blank">
                 <span i18n>Other</span><i class="material-icons">open_in_new</i>

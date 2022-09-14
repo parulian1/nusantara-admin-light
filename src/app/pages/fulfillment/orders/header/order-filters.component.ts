@@ -199,19 +199,6 @@ export class OrderFiltersComponent implements OnInit {
         logistic: logistic ? logistic : '',
         isTesting: isTesting ? isTesting.toLowerCase() === 'true' : false,
       });
-
-      // this.filtersForm.valueChanges.subscribe((newValue) => {
-      //   this.updateRoute({
-      //     [this.PLATFORM_PARAM]: newValue.platform ? newValue.platform : null,
-      //     [this.STATUS_PARAM]: newValue.status ? newValue.status : null,
-      //     [this.LOGISTIC_PARAM]: newValue.logistic ? newValue.logistic : null,
-      //     [this.TESTING_PARAM]: newValue.isTesting ? newValue.isTesting : null
-      //   });
-      //
-      //   this.updatePlatform(newValue.platform);
-      //   this.updateStatus(newValue.status);
-      //   this.updateLogistic(newValue.logistic);
-      // });
     });
   }
 
