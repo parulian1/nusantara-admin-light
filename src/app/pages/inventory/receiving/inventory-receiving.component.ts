@@ -110,7 +110,7 @@ const logger = new Logger('InventoryReceivingComponent');
 
           <nus-inventory-receiving-line
             *ngFor="let rec of stockRecords.controls; let i=index"
-            [formGroup]="rec"
+            [form]="rec"
             [availableSubLocations]="availableSubLocations"
             [productClasses]="productClasses"
             (remove)="stockRecords.removeAt(i)">
@@ -337,6 +337,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
         })).subscribe(res => {
           const productClass = res as IProductClass;
           this.productClasses.push(productClass);
+          this.productClasses = Array.from(this.productClasses);
         });
       }
 
