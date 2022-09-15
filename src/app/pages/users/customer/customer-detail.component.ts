@@ -18,8 +18,7 @@ const logger = new Logger('CustomerDetailComponent');
 @Component({
   selector: 'nus-customer-detail',
   template: `
-    <h1 class="title-1" i18n>Customer Details</h1>
-
+    <nus-page-title i18n-title title="Customer Details"></nus-page-title>
     <ul class="non-field-errors">
       <li *ngFor="let err of nonFieldErrors">{{ err }}</li>
     </ul>

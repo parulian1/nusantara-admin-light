@@ -5,6 +5,7 @@ import { AuthService } from '@nusantara/auth';
 import { AppUpdateService } from './core/app-update.service';
 import { environment } from '@env/environment.prod';
 import { AnalyticService } from '@nusantara/services/analytic.service';
+import {Title} from "@angular/platform-browser";
 
 /**
  * The root component for Nusantara Admin.
@@ -32,15 +33,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   private timer;
 
   constructor(private authService: AuthService, private router: Router,
-              private appUpdate: AppUpdateService, private analyticService: AnalyticService) {
+              private appUpdate: AppUpdateService, private analyticService: AnalyticService,
+              private titleService: Title) {
 
     function gtag(...args: any){ (window as any).dataLayer.push(arguments); }
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd){
         gtag('config', environment.googleAnalytics,
           {
+            page_title: this.titleService.getTitle(),
             page_path: event.urlAfterRedirects,
-            send_page_view: false
+            send_page_view: true
           }
         );
       }

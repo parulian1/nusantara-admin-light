@@ -1,6 +1,6 @@
 import {ErrorHandler, Inject, LOCALE_ID, NgModule} from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { BrowserModule } from '@angular/platform-browser';
+import {BrowserModule, Title} from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { JwtModule } from '@auth0/angular-jwt';
@@ -73,6 +73,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
       useFactory: (locale: string) => `/${locale}`,
       deps: [LOCALE_ID]
     },
+    Title,
   ],
   bootstrap: [AppComponent]
 })

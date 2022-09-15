@@ -15,11 +15,8 @@ import { AuthService } from '@nusantara/auth';
 @Component({
   selector: 'nus-adjustment-detail',
   template: `
-    <h1 class="title-1" i18n>
-      Stock Adjustment {{entity.href|entityToSlug}}
-    </h1>
+    <nus-page-title i18n-title title="Stock Adjustment {{entity.href|entityToSlug}}"></nus-page-title>
     <p style="margin-bottom: 24px;" i18n>Edit shipping method for each product. Skip this step if you don't want to change anything.</p>
-
     <table id="general-table-info">
       <thead>
         <th i18n>Type</th>

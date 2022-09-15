@@ -12,7 +12,7 @@ import {ActivatedRoute} from "@angular/router";
 @Component({
   selector: 'nus-low-stock-product-list',
   template: `
-    <h1 class="title-1" i18n>Low Stock</h1>
+    <nus-page-title i18n-title title="Low Stock Product"></nus-page-title>
     <form [formGroup]="form" class="fluid">
       <div class="list-page-header">
         <div class="search control">

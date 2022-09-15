@@ -4,7 +4,7 @@ import {RequireIsEnterpriseGuard} from '@nusantara/auth';
 @Component({
   selector: 'nus-general-settings',
   template: `
-    <h1 class="title-1" i18n>General</h1>
+    <nus-page-title i18n-title title="General"></nus-page-title>
     <div class="wrapper">
       <div>
         <h1 class="heading-1" i18n>Corporate Information</h1>
