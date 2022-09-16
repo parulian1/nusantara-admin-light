@@ -121,12 +121,7 @@ export class OrderFiltersComponent implements OnInit {
         this.orderStatuses = data.orderStatus;
         this.orderFilter = data.orderFilter;
         this.orderFilter = {
-          platform: [{
-            option: '0',
-            title: 'Web Order',
-          } as IOption].concat(this.orderFilter.platform.map(vl => {
-            return {option: `${vl.option}`, title: vl.title};
-          })),
+          platform: this.orderFilter.platform,
           orderStatus: this.orderFilter.orderStatus,
           logistics: this.orderFilter.logistics,
         } as IOrderFilter;

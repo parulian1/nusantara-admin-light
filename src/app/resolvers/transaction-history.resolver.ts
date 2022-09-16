@@ -41,7 +41,9 @@ export class TransactionHistoryResolver extends AbstractListResolver<ITransactio
         }
       }
     }
-
+    if (!params.get('per_page')) {
+      params = params.set('per_page', '25');
+    }
     return this.service.fetchParams(params);
   }
 }
