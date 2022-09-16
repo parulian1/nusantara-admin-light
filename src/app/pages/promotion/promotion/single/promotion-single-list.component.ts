@@ -17,7 +17,7 @@ import { IProductPromotion } from '@nusantara/models';
       </div>
     </div>
     <nus-list-header i18n-title
-      title="Promos" [showTitle]="false">
+      title="Promos Single" [showTitle]="false">
     </nus-list-header>
     <div class="filtering">
       <nus-include-deleted></nus-include-deleted>

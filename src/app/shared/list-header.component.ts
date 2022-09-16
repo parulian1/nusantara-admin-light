@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'nus-list-header',
@@ -62,7 +63,8 @@ export class ListHeaderComponent implements OnInit {
   queryText = new FormControl('');
 
   constructor(public route: ActivatedRoute,
-              public router: Router) { }
+              public router: Router,
+              private titleService: Title) { }
 
   ngOnInit() {
     this.route.queryParamMap.subscribe(
@@ -74,6 +76,7 @@ export class ListHeaderComponent implements OnInit {
         );
       }
     );
+    this.titleService.setTitle('Bhisma Admin - '+this.title);
   }
 
   onQueryTextChanged(newValue: string) {

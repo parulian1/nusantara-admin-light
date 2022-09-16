@@ -12,7 +12,7 @@ import { Kgx, ShippingServicesTypes } from './shipping-service/constants';
   template: `
     <nus-detail-title
       [originalName]="originalEntityName"
-      [typeName]="entityTypeName">
+      typeName="Shipping Method">
     </nus-detail-title>
 
     <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
@@ -149,7 +149,6 @@ export class ShippingProviderDetailComponent extends AbstractDetailComponent<ISh
       this.types = data.types;
       this.shippingServiceTypes = ShippingServicesTypes;
     });
-    this.originalEntityName = 'Shipping Method';
   }
 
   get name(): FormControl { return this.form.get('name') as FormControl; }
