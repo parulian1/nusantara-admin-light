@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -14,6 +14,8 @@ import { InventoryTransferService } from '@nusantara/services';
 import { IProductClass } from '@nusantara/models/products';
 import { IStockRecord, ReceivingOrderStatusChoices } from '@nusantara/models/inventory';
 import {ConfirmModalReceivingOrderComponent, StockRecordSelectionModalComponent} from '@nusantara/shared';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 /**
  * Allows a user to receive a new batch of inventory.
@@ -170,7 +172,8 @@ import {ConfirmModalReceivingOrderComponent, StockRecordSelectionModalComponent}
   `
   ]
 })
-export class InventoryTransferOrderComponent extends AbstractDetailComponent<inventory.ITransferOrder> implements OnInit, AfterViewInit {
+export class InventoryTransferOrderComponent extends AbstractDetailComponent<inventory.ITransferOrder>
+  implements OnInit, AfterViewInit, OnDestroy {
 
   warehouses: IWarehouse[];
   productClasses: IProductClass[] = [];
@@ -183,13 +186,16 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
     href: string,
     amount: number
   }> = [];
+  private destroy$: Subject<boolean> = new Subject<boolean>();
+
 
   constructor(private fb: FormBuilder,
               toast: ToastService,
               public authService: AuthService,
               service: InventoryTransferService,
               route: ActivatedRoute,
-              router: Router) {
+              router: Router,
+              private cdr: ChangeDetectorRef) {
     super(route, router, toast, service);
   }
 
@@ -200,17 +206,27 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
 
   ngOnInit() {
     super.ngOnInit();
-    this.route.data.subscribe((data: { warehouses: IWarehouse[], productClasses: IProductClass[]}) => {
+    this.route.data.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe((data: { warehouses: IWarehouse[], productClasses: IProductClass[]}) => {
       this.productClasses = data.productClasses;
       this.warehouses = data.warehouses;
+      this.resetForm();
     });
     this.currentDate = new Date();
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
   }
 
   ngAfterViewInit() {
     // wire-up modal closed callback
-    this.stockRecordSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
-    this.confirmModalReceiving.onClose.subscribe(() => this.onConfirmModalClosed());
+    this.stockRecordSelectionModal.onClose.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => this.onProductSelectionModalClosed());
+    this.confirmModalReceiving.onClose.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => this.onConfirmModalClosed());
   }
 
   initializeForm(entity?: inventory.ITransferOrder) {
@@ -327,6 +343,7 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
         window.location.reload();
       }
     }
+    this.cdr.detectChanges();
     this.form.reset();
     this.warehouse.enable();
     this.destinationWarehouse.enable();
