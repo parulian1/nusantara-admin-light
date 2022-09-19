@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild, ChangeDetectorRef} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild, ChangeDetectorRef, OnDestroy} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {
   AbstractDetailComponent,
@@ -24,6 +24,8 @@ import * as Papa from 'papaparse';
 import {StockRecordDialogComponent} from '@nusantara/pages/inventory/adjustment/stock-record-dialog.component';
 import { isNumeric } from 'rxjs/internal/util/isNumeric';
 import { DomSanitizer } from '@angular/platform-browser';
+import {takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'nus-adjustment',
@@ -293,7 +295,8 @@ import { DomSanitizer } from '@angular/platform-browser';
     `
   ]
 })
-export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdjustment> implements OnInit, AfterViewInit {
+export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdjustment>
+  implements OnInit, AfterViewInit, OnDestroy {
   form: FormGroup;
 
   @ViewChild(StockRecordSelectionModalComponent) stockRecordSelectionModal: StockRecordSelectionModalComponent;
@@ -319,6 +322,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   invalidCsv = [];
   upcList = [];
   selectedSubLocationId = 0;
+  private destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private fb: FormBuilder,
               public toast: ToastService,
@@ -336,18 +340,34 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.route.data.subscribe((data: { warehouses: IWarehouse[] }) => {
+    this.route.data.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe((data: { warehouses: IWarehouse[] }) => {
       this.warehouses = data.warehouses;
+      this.resetForm();
     });
     this.currentDate = new Date();
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+  }
+
+
   ngAfterViewInit() {
     super.ngAfterViewInit();
-    this.stockRecordSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
-    this.confirmModalReceiving.onClose.subscribe(() => this.onConfirmModalClosed());
-    this.csvDialog.onClose.subscribe(() => this.manualUploadClose());
-    this.stockRecordDialog.onClose.subscribe(() => this.onStockRecordDialogClosed());
+    this.stockRecordSelectionModal.onClose.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => this.onProductSelectionModalClosed());
+    this.confirmModalReceiving.onClose.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => this.onConfirmModalClosed());
+    this.csvDialog.onClose.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => this.manualUploadClose());
+    this.stockRecordDialog.onClose.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => this.onStockRecordDialogClosed());
   }
 
   initializeForm(entity?: IAdjustment): void {
@@ -450,7 +470,11 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   }
 
   resetForm() {
+    this.ref.detectChanges();
     this.form.reset();
+    this.warehouse.reset();
+    this.subLocation.reset();
+    this.subLocation.disable();
     this.warehouse.enable();
     this.stockRecords.clear();
     this.csvDialog.form.reset();
@@ -459,6 +483,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     this.csvDialog.hasCsvHeader = false;
     this.invalidCsv = [];
     this.upcList = [];
+    this.availableSubLocations = [];
     this.resetStockRecordDialog();
   }
 

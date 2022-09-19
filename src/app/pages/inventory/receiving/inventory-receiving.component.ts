@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, NavigationEnd, Router, RouterEvent} from '@angular/router';
 
-import { AuthService } from '../../../auth';
+import {AuthService} from '../../../auth';
 import {AbstractDetailComponent, DialogResult, ErrorResult, Logger, ToastService} from '../../../core';
 import {
   inventory,
@@ -12,16 +12,16 @@ import {
   IError
 } from '@nusantara/models';
 import {InventoryReceivingService, MarketplaceClientService, ProductClassService} from '../../../services';
-import { IProduct, IProductClass } from '../../../models/products';
+import {IProduct, IProductClass} from '../../../models/products';
 import {
   ConfirmModalReceivingOrderComponent,
   MarketplaceChannelInfoModalComponent,
   ProductSelectionModalComponent
 } from '../../../shared';
-import { catchError } from 'rxjs/operators';
-import { HttpErrorResponse } from '@angular/common/http';
-import {EMPTY, of} from 'rxjs';
-import {getSlugFromHref} from "@nusantara/shared/helpers";
+import {catchError, filter, takeUntil} from 'rxjs/operators';
+import {HttpErrorResponse} from '@angular/common/http';
+import {EMPTY, Observable, of, Subject, Subscription} from 'rxjs';
+import {getSlugFromHref} from '@nusantara/shared/helpers';
 
 const logger = new Logger('InventoryReceivingComponent');
 
@@ -60,7 +60,7 @@ const logger = new Logger('InventoryReceivingComponent');
             <div [formGroup]="warehouse">
               <label for="warehouse" i18n>Warehouse</label>
               <div class="confirm-warehouse">
-                <select id="warehouse" formControlName="href">
+                <select formControlName="href">
                   <option [ngValue]="null" i18n>Select Warehouse</option>
                   <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
                     {{ wh.name }}
@@ -116,13 +116,13 @@ const logger = new Logger('InventoryReceivingComponent');
             (remove)="stockRecords.removeAt(i)">
           </nus-inventory-receiving-line>
 
-            <tr>
-              <td colspan="9">
-                <button type="button" (click)="addLine()" class="new-add-button wide" i18n>
-                  <i class="material-icons">add</i> Add Record
-                </button>
-              </td>
-            </tr>
+          <tr>
+            <td colspan="9">
+              <button type="button" (click)="addLine()" class="new-add-button wide" i18n>
+                <i class="material-icons">add</i> Add Record
+              </button>
+            </td>
+          </tr>
           </tbody>
         </table>
 
@@ -154,8 +154,14 @@ const logger = new Logger('InventoryReceivingComponent');
     '.general-info--header { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); }',
     `
       @media (max-width: 768px) {
-        .general-info--header { display: grid; grid-template-columns: 1fr; }
-        .general-info--header > div:not(:last-child) { margin-bottom: 23px; }
+        .general-info--header {
+          display: grid;
+          grid-template-columns: 1fr;
+        }
+
+        .general-info--header > div:not(:last-child) {
+          margin-bottom: 23px;
+        }
       }
     `,
     '.mp-info > h3 { margin-bottom: 16px; }',
@@ -172,7 +178,7 @@ const logger = new Logger('InventoryReceivingComponent');
     }`
   ]
 })
-export class InventoryReceivingComponent extends AbstractDetailComponent<inventory.IReceivingOrder> implements OnInit, AfterViewInit {
+export class InventoryReceivingComponent extends AbstractDetailComponent<inventory.IReceivingOrder> implements OnInit, AfterViewInit, OnDestroy {
 
   warehouses: IWarehouse[];
   availableSubLocations: ISubLocation[] = [];
@@ -190,6 +196,9 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
   showDetail = false;
   productType: string = 'single';
 
+  pipeEvent: Subscription;
+  private destroy$: Subject<boolean> = new Subject<boolean>();
+
   constructor(private fb: FormBuilder,
               public toast: ToastService,
               public authService: AuthService,
@@ -197,7 +206,8 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
               public clientService: MarketplaceClientService,
               public route: ActivatedRoute,
               public router: Router,
-              public productClassService: ProductClassService,) {
+              public productClassService: ProductClassService,
+              private cdr: ChangeDetectorRef) {
     super(route, router, toast, service);
   }
 
@@ -211,18 +221,34 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
 
   ngOnInit() {
     super.ngOnInit();
-    this.route.data.subscribe((data: { warehouses: IWarehouse[] }) => {
+    this.route.data.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe((data: { warehouses: IWarehouse[] }) => {
       this.warehouses = data.warehouses;
+      this.availableSubLocations = [];
+      this.resetForm();
+      logger.debug('Route data subcribe end');
     });
     this.currentDate = new Date();
   }
 
   ngAfterViewInit() {
     // wire-up modal closed callback
-    this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
-    this.marketplaceChannelInfo.onClose.subscribe(() => this.onMarketplaceModalClosed());
-    this.confirmModalReceiving.onClose.subscribe(() => this.onConfirmModalClosed());
+    this.productSelectionModal.onClose.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => this.onProductSelectionModalClosed());
+    this.marketplaceChannelInfo.onClose.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => this.onMarketplaceModalClosed());
+    this.confirmModalReceiving.onClose.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => this.onConfirmModalClosed());
   }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+  }
+
 
   get doNumber(): FormControl {
     return this.form.get('doNumber') as FormControl;
@@ -240,11 +266,11 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
         href: [null, Validators.required],
         // name: ['', ],
       }),
-      status: ['pending', [Validators.required, ]],
+      status: ['pending', [Validators.required,]],
       createdBy: this.fb.group({
         href: `https://bhisma.cloud/api/iam/${this.authService.tokenPayload.user_id}/`
       }),
-      reviewedBy: [null, ],
+      reviewedBy: [null,],
       stockRecords: this.fb.array([], [Validators.required, Validators.minLength(1)]),
       doNumber: ['', [Validators.maxLength(30),]],
       dcPic: ['', [Validators.maxLength(30),]],
@@ -366,7 +392,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     const fullname = firstName.concat(' ', lastName);
 
     if (lastName && firstName && email) {
-      return [fullname, `(${email})`, ].join(' ').trim();
+      return [fullname, `(${email})`,].join(' ').trim();
     } else {
       return email;
     }
@@ -377,6 +403,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
   }
 
   resetForm(warnOnDirty = false) {
+    this.cdr.detectChanges();
     this.form.reset();
     this.warehouse.enable();
     this.stockRecords.clear();
