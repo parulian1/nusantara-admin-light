@@ -471,7 +471,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
 
   resetForm() {
     this.ref.detectChanges();
-    this.form.reset();
+    // this.form.reset();
     this.warehouse.reset();
     this.subLocation.reset();
     this.subLocation.disable();

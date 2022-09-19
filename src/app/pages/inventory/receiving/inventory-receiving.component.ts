@@ -404,12 +404,11 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
 
   resetForm(warnOnDirty = false) {
     this.cdr.detectChanges();
-    this.form.reset();
+    // this.form.reset()  // this caused form to be fully disabled
     this.warehouse.enable();
     this.stockRecords.clear();
   }
 
   onMarketplaceModalClosed() {
   }
-
 }

@@ -343,7 +343,7 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
       }
     }
     this.cdr.detectChanges();
-    this.form.reset();
+    // this.form.reset();
     this.warehouse.enable();
     this.destinationWarehouse.enable();
     this.stockRecords.clear();
