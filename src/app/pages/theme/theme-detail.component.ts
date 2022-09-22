@@ -35,6 +35,7 @@ import { of } from 'rxjs';
       <label>
         <span i18n>Subscription Type*</span>
         <select formControlName="subscriptionType">
+          <option disabled selected [ngValue]="null"> --Select-- </option>
           <option *ngFor="let opt of typeChoices" [ngValue]="opt.value">
             {{opt.displayName}}
           </option>

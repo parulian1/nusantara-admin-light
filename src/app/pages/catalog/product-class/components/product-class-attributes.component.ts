@@ -28,6 +28,7 @@ import { FormArray, FormBuilder, Validators } from '@angular/forms';
               </td>
               <td class="immediate-error-display">
                 <select formControlName="type">
+                  <option disabled selected [ngValue]="null"> --Select-- </option>
                   <option *ngFor="let opt of choices" [ngValue]="opt.value">
                     {{ opt.displayName }}
                   </option>

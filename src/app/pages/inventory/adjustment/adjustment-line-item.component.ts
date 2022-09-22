@@ -47,6 +47,7 @@ import { IStockRecord } from '@nusantara/models/inventory';
 
       <td>
         <select [formControl]="reason" data-qa="reason">
+          <option disabled selected [ngValue]="null"> --Select-- </option>
           <option *ngFor="let r of reasons" [ngValue]="r.value">
             {{ r.displayName }}
           </option>

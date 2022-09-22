@@ -27,6 +27,7 @@ import { Kgx, ShippingServicesTypes } from './shipping-service/constants';
       <label>
         <span i18n>Type</span>
         <select formControlName="type">
+          <option disabled selected [ngValue]="null"> --Select-- </option>
           <option *ngFor="let choice of types" [ngValue]="choice.value">{{ choice.displayName }}</option>
         </select>
         <nus-field-errors [control]="type"></nus-field-errors>

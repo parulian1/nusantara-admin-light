@@ -42,6 +42,7 @@ import { CustomerGroupModalComponent } from '@nusantara/shared';
       <label>
         <span i18n>Type</span>
         <select formControlName="type" name="type">
+          <option disabled selected [ngValue]="null"> --Select-- </option>
           <option *ngFor="let opt of typeChoices" [value]="opt.value">
             {{ opt.displayName }}
           </option>
@@ -90,6 +91,7 @@ import { CustomerGroupModalComponent } from '@nusantara/shared';
         <label>
           <span i18n>In Store Type</span>
           <select [formControl]="metaType" (ngModelChange)="onInStoreChange($event)">
+            <option disabled selected [ngValue]="null"> --Select-- </option>
             <option *ngFor="let opt of inStoreTypeChoices" [ngValue]="opt.value">
               {{ opt.displayName }}
             </option>
@@ -172,12 +174,13 @@ import { CustomerGroupModalComponent } from '@nusantara/shared';
       <label>
           <span i18n>Notification for Order Near Expired</span>
           <select [formControl]="expiryReminder" name="expiryReminder">
-          <option *ngFor="let opt of expiryReminderChoices" [value]="opt.value">
-            {{ opt.displayName }}
-          </option>
-        </select>
+            <option disabled selected [ngValue]="null"> --Select-- </option>
+            <option *ngFor="let opt of expiryReminderChoices" [value]="opt.value">
+              {{ opt.displayName }}
+            </option>
+          </select>
           <nus-field-errors [control]="expiryReminder"></nus-field-errors>
-        </label>
+      </label>
 
       <div>
         <label for="description" class="external"><span i18n>Description</span></label>
