@@ -21,7 +21,7 @@ import {
 import {catchError, filter, takeUntil} from 'rxjs/operators';
 import {HttpErrorResponse} from '@angular/common/http';
 import {EMPTY, Observable, of, Subject, Subscription} from 'rxjs';
-import {getSlugFromHref} from '@nusantara/shared/helpers';
+import {getSlugFromHref, userDisplayName} from '@nusantara/shared/helpers';
 
 const logger = new Logger('InventoryReceivingComponent');
 
@@ -37,28 +37,28 @@ const logger = new Logger('InventoryReceivingComponent');
         <div class="general-info">
           <div class="general-info--header box-container">
             <div>
-              <label i18n>Created By</label>
-              <span>{{ userDisplayName }}</span>
+              <label class="body-2" i18n>Created By</label>
+              <span class="subheading-2">{{ userDisplayName }}</span>
             </div>
             <div>
-              <label i18n>Created Date</label>
-              <span>{{ currentDate|date }}</span>
+              <label class="body-2" i18n>Created Date</label>
+              <span class="subheading-2">{{ currentDate|date }}</span>
             </div>
           </div>
           <div class="general-info--detail box-container">
             <h3 i18n>General Information</h3>
             <div class="immediate-error-display">
-              <label for="do-number" i18n>DO Number (Optional)</label>
+              <label for="do-number" class="subheading-2" i18n>DO Number (Optional)</label>
               <input id="do-number" type="text" [formControl]="doNumber" placeholder="Input DO Number">
               <nus-field-errors [control]="doNumber"></nus-field-errors>
             </div>
             <div class="immediate-error-display">
-              <label for="pic-sender">PIC Sender (Optional)</label>
+              <label for="pic-sender" class="subheading-2" i18n>PIC Sender (Optional)</label>
               <input id="pic-sender" type="text" [formControl]="dcPic" placeholder="Input PIC Sender">
               <nus-field-errors [control]="dcPic"></nus-field-errors>
             </div>
             <div [formGroup]="warehouse">
-              <label for="warehouse" i18n>Warehouse</label>
+              <label for="warehouse" class="subheading-2" i18n>Warehouse</label>
               <div class="confirm-warehouse">
                 <select formControlName="href">
                   <option [ngValue]="null" i18n>Select Warehouse</option>
@@ -146,11 +146,10 @@ const logger = new Logger('InventoryReceivingComponent');
     'button.confirm { width: auto }',
     '.container { display: grid; grid-template-columns: 4fr 1fr; grid-gap: 24px; }',
     '.box-container { border: 1px solid var(--grey); border-radius: 4px; padding: 16px 24px; }',
-    '.general-info h3 { margin-bottom: 20px; }',
-    '.general-info > div:not(:last-child), .general-info--detail > div:not(:last-child) { margin-bottom: 23px; }',
-    '.general-info label { min-height: 0; line-height: 20px; color: var(--darken-grey); padding-bottom: 0;}',
-    '.general-info--detail label { color: var(--lighten-black); font-weight: bold; }',
-    '.general-info span{ font-weight: 700; color: var(--lighten-black); }',
+    '.box-container h3 { margin-bottom: 20px; }',
+    '.box-container:not(:last-child), .general-info--detail > div:not(:last-child) { margin-bottom: 24px; }',
+    '.box-container label { min-height: 0; color: var(--darken-grey); padding-bottom: 0;}',
+    '.box-container span, .general-info--detail label{ color: var(--lighten-black); }',
     '.general-info--header { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); }',
     `
       @media (max-width: 768px) {
@@ -184,6 +183,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
   availableSubLocations: ISubLocation[] = [];
   warehouseDetail: marketplace.IWarehouseDetail[];
   productClasses: IProductClass[] = [];
+  userDisplayName = userDisplayName(this.authService)
 
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
   @ViewChild(MarketplaceChannelInfoModalComponent) marketplaceChannelInfo: MarketplaceChannelInfoModalComponent;
@@ -382,19 +382,6 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
         cost: [0, [Validators.max(9999999999999998), Validators.min(0)]]
       });
       this.stockRecords.push(oneProduct);
-    }
-  }
-
-  get userDisplayName(): string {
-    const lastName = this.authService.tokenPayload?.last_name ?? '';
-    const firstName = this.authService.tokenPayload?.first_name ?? '';
-    const email = this.authService.tokenPayload?.email ?? '';
-    const fullname = firstName.concat(' ', lastName);
-
-    if (lastName && firstName && email) {
-      return [fullname, `(${email})`,].join(' ').trim();
-    } else {
-      return email;
     }
   }
 

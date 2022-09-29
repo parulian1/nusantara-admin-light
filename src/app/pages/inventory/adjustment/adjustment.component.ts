@@ -26,6 +26,7 @@ import { isNumeric } from 'rxjs/internal/util/isNumeric';
 import { DomSanitizer } from '@angular/platform-browser';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
+import {userDisplayName} from "@nusantara/shared/helpers";
 
 @Component({
   selector: 'nus-adjustment',
@@ -33,23 +34,23 @@ import {Subject} from 'rxjs';
     <nus-page-title i18n-title title="Stock Adjustment"></nus-page-title>
     <form [formGroup]="form" (ngSubmit)="save()">
       <div class="container">
-        <div>
-          <div id="general-info" class="wrapper">
+        <div class="general-info">
+          <div class="general-info--header box-container">
             <div>
-              <label i18n>Created By</label>
-              <span>{{ userDisplayName }}</span>
+              <label class="body-2" i18n>Created By</label>
+              <span class="subheading-2">{{ userDisplayName }}</span>
             </div>
             <div>
-              <label i18n>Created Date</label>
-              <span>{{ currentDate|date }}</span>
+              <label class="body-2" i18n>Created Date</label>
+              <span class="subheading-2">{{ currentDate|date }}</span>
             </div>
           </div>
-          <div id="warehouse-info" class="wrapper">
+          <div class="general-info--warehouse box-container">
             <div>
-              <label i18n>Warehouse</label>
+              <label for="warehouse" class="subheading-2" i18n>Warehouse</label>
               <div class="confirm-warehouse">
                 <div [formGroup]="warehouse">
-                  <select formControlName="href" (change)="warehouseSelected($event)">
+                  <select id="warehouse" formControlName="href" (change)="warehouseSelected($event)">
                     <option [ngValue]="null" i18n>Select Warehouse</option>
                     <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
                       {{ wh.name }}
@@ -59,10 +60,10 @@ import {Subject} from 'rxjs';
               </div>
             </div>
             <div>
-              <label i18n>Location</label>
+              <label for="location" class="subheading-2" i18n>Location</label>
               <div class="confirm-warehouse">
                 <div [formGroup]="subLocation">
-                  <select formControlName="href" (change)="subLocationSelected($event)">
+                  <select id="location" formControlName="href" (change)="subLocationSelected($event)">
                     <option [ngValue]="null" i18n>Select Location</option>
                     <option *ngFor="let subLocation of availableSubLocations" [ngValue]="subLocation.href">
                       {{ subLocation.name }}
@@ -245,12 +246,17 @@ import {Subject} from 'rxjs';
     'h3 { font-size: 20px; margin: 0; }',
     'button.confirm { width: auto }',
     '.container { display: grid; grid-template-columns: 4fr 1fr; grid-gap: 24px; }',
-    '.wrapper { border: 1px solid var(--grey); border-radius: 4px; padding: 16px 24px; }',
-    '.wrapper:not(:last-child) { margin-bottom: 24px; }',
-    '.wrapper label { min-height: 0; }',
-    '.wrapper span{ font-weight: 700; color: var(--darken-grey); }',
-    '#general-info { display: grid; grid-template-columns: 1fr 1fr; grid-gap: 24px; }',
-    '#warehouse-info > div:not(:last-child) { margin-bottom: 23px; }',
+    '.box-container { border: 1px solid var(--grey); border-radius: 4px; padding: 16px 24px; }',
+    '.box-container:not(:last-child), .general-info--warehouse > div:not(:last-child) { margin-bottom: 24px; }',
+    '.box-container label { min-height: 0; color: var(--darken-grey); padding-bottom: 0; }',
+    '.box-container span, .general-info--warehouse label{ color: var(--lighten-black); }',
+    '.general-info--header { display: grid; grid-template-columns: 1fr 1fr; grid-gap: 24px; }',
+    `
+      @media (max-width: 768px) {
+        .general-info--header { display: grid; grid-template-columns: 1fr; }
+        .general-info--header > div:not(:last-child) { margin-bottom: 23px; }
+      }
+    `,
     '.mp-info > h3 { margin-bottom: 16px; }',
     '.mp-info > div { text-align: center; border: 1px solid var(--grey); border-radius: 4px; padding: 12px 16px; margin-bottom: 12px; }',
     '.mp-info > a { display: block; margin-top: 16px; }',
@@ -312,6 +318,7 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
     {value: 'missed', displayName: 'Missing'},
     {value: 'misplace', displayName: 'Found/Misplace'},
   ];
+  userDisplayName = userDisplayName(this.authService)
 
   currentDate: Date;
   productValue = 0;
@@ -394,17 +401,6 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
 
   get subLocation(): FormGroup {
     return this.form.get('subLocation') as FormGroup;
-  }
-
-  get userDisplayName(): string {
-    const email = this.authService.tokenPayload?.email ?? '';
-    const fullName = `${this.authService.tokenPayload?.last_name} ${this.authService.tokenPayload?.first_name}`.trim();
-
-    if (fullName && email) {
-      return [fullName, `(${email})`, ].join(', ').trim();
-    } else {
-      return email;
-    }
   }
 
   addLine() {
@@ -521,7 +517,6 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
       if (wh) {
         this.availableSubLocations = wh.subLocations || [];
         this.subLocation.enable();
-        // this.warehouse.disable();
       }
     }
   }
@@ -529,7 +524,6 @@ export class AdjustmentComponent extends AbstractDetailComponent<inventory.IAdju
   subLocationSelected($event: Event) {
     if (($event.target as HTMLSelectElement).value !== '') {
       const loc = this.availableSubLocations.filter(e => e.href === this.subLocation.get('href').value)[0];
-      // this.subLocation.disable();
       this.selectedSubLocationId = loc.id;
     }
   }

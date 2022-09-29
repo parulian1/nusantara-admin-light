@@ -256,3 +256,15 @@ export function convertDateTime(timestamp: string) {
   }
   return '';
 }
+
+// Get display name of login user
+export function userDisplayName(authService): string {
+  const email = authService.tokenPayload?.email ?? '';
+  const fullName = `${authService.tokenPayload?.last_name} ${authService.tokenPayload?.first_name}`.trim();
+
+  if (fullName && email) {
+    return [fullName, `(${email})`, ].join(' ').trim();
+  } else {
+    return email;
+  }
+}
