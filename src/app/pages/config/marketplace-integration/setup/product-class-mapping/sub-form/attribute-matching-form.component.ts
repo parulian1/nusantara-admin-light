@@ -201,7 +201,7 @@ export class AttributeMatchingFormComponent
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    const catCurrValue = changes.category?.currentValue;
+
     const attrCurrValue = changes.attribute?.currentValue;
 
     if (
@@ -214,8 +214,7 @@ export class AttributeMatchingFormComponent
             this.bhismaAttributes = data.attributes;
             this.bhismaAttributeTypes = data.attributeType;
           });
-
-        if (catCurrValue) {
+        if (this.category) {
           this.categoryId = this.category.deepestChildId;
           this.categoryCode = this.category.deepestChildCode ? this.category.deepestChildCode : null;
           this.categoryNames = this.category.categoryNames.join(' > ');
