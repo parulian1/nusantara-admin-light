@@ -57,6 +57,7 @@ import { ToastLevelEnum, ToastService } from '@nusantara/core/toast';
       <label>
         <span i18n>Relative to</span>
         <select [formControl]="relativeTo" name="relativeTo">
+          <option disabled selected [ngValue]="null"> --Select-- </option>
           <option *ngFor="let relTo of relativeToChoices"
                   [ngValue]="relTo.href"
                   [innerHTML]="relTo.displayName">

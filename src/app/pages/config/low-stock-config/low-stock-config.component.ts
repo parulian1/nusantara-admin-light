@@ -11,7 +11,7 @@ import {ProductSelectionModalComponent} from "@nusantara/shared";
 @Component({
   selector: 'nus-low-stock-config',
   template: `
-    <h1 class="title-1" i18n>Low Stock Config</h1>
+    <nus-page-title i18n-title title="Low Stock Config"></nus-page-title>
     <form [formGroup]="form" (ngSubmit)="save()" class="fluid">
       <div class="container">
         <div class="low-stock-config">

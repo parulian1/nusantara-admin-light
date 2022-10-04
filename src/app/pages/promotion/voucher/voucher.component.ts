@@ -56,7 +56,7 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
       <label>
         <span i18n>Type</span>
         <select [formControl]="type">
-          <option selected value> -- select an option -- </option>
+          <option disabled selected [ngValue]="null"> --Select-- </option>
           <option *ngFor="let t of typeChoices" [ngValue]="t.value">{{ t.displayName }}</option>
         </select>
       </label>
@@ -76,7 +76,7 @@ const DiscAmountValidator: ValidatorFn = (fg: FormGroup) => {
       <label>
         <span i18n>Discount Based On</span>
         <select [formControl]="discountBase">
-          <option selected value> -- select an option -- </option>
+          <option disabled selected [ngValue]="null"> --Select-- </option>
           <option *ngFor="let t of discountBaseChoices" [ngValue]="t.value">{{ t.displayName }}</option>
         </select>
       </label>

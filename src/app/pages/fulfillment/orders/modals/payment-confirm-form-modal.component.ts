@@ -66,6 +66,7 @@ interface IPaymentConfirmDialog {
             class="select-wrapper"
             [class.is-error]="transferTo.invalid && (transferTo.touched || transferTo.dirty)"
             [formControl]="transferTo">
+            <option disabled selected [ngValue]="null"> --Select-- </option>
             <option
               *ngFor="let paymentGateway of paymentGateways"
               [value]="paymentGateway.href"

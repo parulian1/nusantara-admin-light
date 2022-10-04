@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -7,13 +7,16 @@ import {
   DialogResult,
   ToastService,
   AbstractDetailComponent,
-  getSlugFromHref
+  getSlugFromHref,
+  IResultResponse
 } from '@nusantara/core';
-import { inventory, ISubLocation, IWarehouse } from '@nusantara/models';
+import { inventory, ISubLocation, IWarehouse, products } from '@nusantara/models';
 import { InventoryTransferService } from '@nusantara/services';
 import { IProductClass } from '@nusantara/models/products';
 import { IStockRecord, ReceivingOrderStatusChoices } from '@nusantara/models/inventory';
 import {ConfirmModalInventoryOrderComponent, StockRecordSelectionModalComponent} from '@nusantara/shared';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 /**
  * Allows a user to receive a new batch of inventory.
@@ -21,8 +24,7 @@ import {ConfirmModalInventoryOrderComponent, StockRecordSelectionModalComponent}
 @Component({
   selector: 'nus-inventory-transfer',
   template: `
-    <h1 class="title-1" i18n>Inventory Transfer</h1>
-
+    <nus-page-title i18n-title title="Inventory Transfer"></nus-page-title>
     <form [formGroup]="form" (ngSubmit)="save()">
       <table class="header">
         <tbody>
@@ -170,7 +172,8 @@ import {ConfirmModalInventoryOrderComponent, StockRecordSelectionModalComponent}
   `
   ]
 })
-export class InventoryTransferOrderComponent extends AbstractDetailComponent<inventory.ITransferOrder> implements OnInit, AfterViewInit {
+export class InventoryTransferOrderComponent extends AbstractDetailComponent<inventory.ITransferOrder>
+  implements OnInit, AfterViewInit, OnDestroy {
 
   warehouses: IWarehouse[];
   productClasses: IProductClass[] = [];
@@ -183,13 +186,16 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
     href: string,
     amount: number
   }> = [];
+  private destroy$: Subject<boolean> = new Subject<boolean>();
+
 
   constructor(private fb: FormBuilder,
               toast: ToastService,
               public authService: AuthService,
               service: InventoryTransferService,
               route: ActivatedRoute,
-              router: Router) {
+              router: Router,
+              private cdr: ChangeDetectorRef) {
     super(route, router, toast, service);
   }
 
@@ -200,17 +206,27 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
 
   ngOnInit() {
     super.ngOnInit();
-    this.route.data.subscribe((data: { warehouses: IWarehouse[], productClasses: IProductClass[]}) => {
+    this.route.data.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe((data: { warehouses: IWarehouse[], productClasses: IProductClass[]}) => {
       this.productClasses = data.productClasses;
       this.warehouses = data.warehouses;
+      this.resetForm();
     });
     this.currentDate = new Date();
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
   }
 
   ngAfterViewInit() {
     // wire-up modal closed callback
-    this.stockRecordSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
-    this.confirmModalReceiving.onClose.subscribe(() => this.onConfirmModalClosed());
+    this.stockRecordSelectionModal.onClose.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => this.onProductSelectionModalClosed());
+    this.confirmModalReceiving.onClose.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => this.onConfirmModalClosed());
   }
 
   initializeForm(entity?: inventory.ITransferOrder) {
@@ -314,8 +330,9 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
   }
 
   save(): void {
-    super.save();
-    this.stockRecords.clear();
+    if (this.form.valid) {
+      super.save();
+    }
   }
 
   resetForm(warnOnDirty = false) {
@@ -327,10 +344,15 @@ export class InventoryTransferOrderComponent extends AbstractDetailComponent<inv
         window.location.reload();
       }
     }
-    this.form.reset();
+    this.cdr.detectChanges();
+    // this.form.reset();
     this.warehouse.enable();
     this.destinationWarehouse.enable();
     this.stockRecords.clear();
+  }
+
+  protected onSaveSuccess(result: IResultResponse<inventory.ITransferOrder>) {
+    super.onSaveSuccess(result);
   }
 
   removeLine(index: number) {

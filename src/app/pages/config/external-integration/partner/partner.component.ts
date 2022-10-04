@@ -19,6 +19,7 @@ import { PartnerService } from "@nusantara/services/integrations/partner.service
       <label>
         <span i18n>Partner</span>
         <select formControlName="partner" name="partner">
+          <option disabled selected [ngValue]="null"> --Select-- </option>
           <option value="wms">WMS</option>
         </select>
         <nus-field-errors [control]="form.get('partner')"></nus-field-errors>

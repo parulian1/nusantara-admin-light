@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'nus-external-integration',
   template: `
-    <h1 class="title-1" i18n>External Integration</h1>
+    <nus-page-title i18n-title title="External Integration"></nus-page-title>
     <div class="wrapper">
       <div>
         <h1 class="heading-1" i18n>Connect to partner</h1>
@@ -31,8 +31,4 @@ import { Component, OnInit } from '@angular/core';
     'p { line-height: 20px }',
   ]
 })
-export class ExternalIntegrationComponent {
-
-  constructor() { }
-
-}
+export class ExternalIntegrationComponent {}

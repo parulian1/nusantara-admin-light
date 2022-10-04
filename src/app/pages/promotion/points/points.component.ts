@@ -14,7 +14,7 @@ import {getProductBasePrice} from '@nusantara/shared/helpers';
 @Component({
   selector: 'nus-points',
   template: `
-    <h1 class="title-1" i18n>Points</h1>
+    <nus-page-title i18n-title title="Points"></nus-page-title>
     <form [formGroup]="form" (ngSubmit)="save()" class="fluid">
       <nus-tabs>
         <nus-tab [title]="'Configuration'">

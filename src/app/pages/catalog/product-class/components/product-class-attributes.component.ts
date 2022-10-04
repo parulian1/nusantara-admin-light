@@ -13,7 +13,7 @@ import { FormArray, FormBuilder, Validators } from '@angular/forms';
             <th i18n>Name</th>
             <th i18n>Type</th>
             <th i18n>Searchable</th>
-            <th i18n>Filterable</th>
+<!--            <th i18n>Filterable</th>-->
             <th></th>
           </tr>
         </thead>
@@ -28,6 +28,7 @@ import { FormArray, FormBuilder, Validators } from '@angular/forms';
               </td>
               <td class="immediate-error-display">
                 <select formControlName="type">
+                  <option disabled selected [ngValue]="null"> --Select-- </option>
                   <option *ngFor="let opt of choices" [ngValue]="opt.value">
                     {{ opt.displayName }}
                   </option>
@@ -36,9 +37,9 @@ import { FormArray, FormBuilder, Validators } from '@angular/forms';
               <td>
                 <input type="checkbox" formControlName="isSearchable" />
               </td>
-              <td>
-                <input type="checkbox" formControlName="isFilterable" />
-              </td>
+<!--              <td>-->
+<!--                <input type="checkbox" formControlName="isFilterable" />-->
+<!--              </td>-->
               <td *ngIf="!hideRemoveButton">
                 <button
                   (click)="removeAttribute(i)"

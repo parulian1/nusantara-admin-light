@@ -596,11 +596,8 @@ const logger = new Logger('ProductComponent');
     '.total-price td.price { text-align: right; }',
     '#barcode-label { display: block; margin-bottom: 4px; }',
     '#barcode-label > span:first-child { font-size: 14px; line-height: 20px; font-weight: bold; margin-right: 10px; }',
-    `.input-error-info {
-      display: flex;
-      justify-content: space-between;
-    }
-    `, `
+    '.input-error-info { display: flex; justify-content: space-between; }',
+    `
       .greybox {
         display: flex;
         flex-direction: row;
@@ -1454,10 +1451,12 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         }
       }
       try {
-        for (let x = this.priceListHost.priceLists.first?.rangeComponents?.length; x > 1; x--) {
-          this.priceListHost.priceLists.first?.rangeComponents.get(x - 1).remove.emit(this.priceListHost.priceLists.first.rangeComponents.get(x - 1));
+        if (this.priceListHost.priceLists.first) {
+          for (let x = this.priceListHost.priceLists.first.rangeComponents.length; x > 1; x--) {
+            this.priceListHost.priceLists.first.rangeComponents.get(x - 1).remove.emit(this.priceListHost.priceLists.first.rangeComponents.get(x - 1));
+          }
+          this.priceListHost.priceLists.first.rangeComponents.get(0).price.setValue(this.price.value);
         }
-        this.priceListHost.priceLists.first?.rangeComponents.get(0).price.setValue(this.price.value);
       } catch (e) {
         logger.error(e);
       }

@@ -14,6 +14,7 @@ import { Observable, zip } from 'rxjs';
       <label>
         <span i18n>Packet*</span>
         <select [formControl]="packet">
+          <option disabled selected [ngValue]="null"> --Select-- </option>
           <option *ngFor="let opt of packetChoices" [ngValue]="opt.value">
             {{opt.displayName}}
           </option>
@@ -23,6 +24,7 @@ import { Observable, zip } from 'rxjs';
       <label>
         <span i18n>Subscription duration*</span>
         <select [formControl]="duration">
+          <option disabled selected [ngValue]="null"> --Select-- </option>
           <option *ngFor="let opt of durationChoices" [ngValue]="opt.value">
             {{opt.displayName}}
           </option>
@@ -32,6 +34,7 @@ import { Observable, zip } from 'rxjs';
       <label>
         <span i18n>Subscription length*</span>
         <select [formControl]="length">
+          <option disabled selected [ngValue]="null"> --Select-- </option>
           <option *ngFor="let opt of lengthChoices" [ngValue]="opt.value">
             {{opt.displayName}}
           </option>

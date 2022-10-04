@@ -12,7 +12,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
   template: `
     <nus-detail-title
       [originalName]="originalEntityName"
-      [typeName]="entityTypeName">
+      typeName="Warehouse">
     </nus-detail-title>
 
     <ul class="non-field-errors" *ngIf="!!nonFieldErrors.length">
@@ -35,6 +35,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
 
       <label *ngIf="enterpriseGuard.canActivate(null, null)" i18n>Type
         <select formControlName="type" name="type">
+          <option disabled selected [ngValue]="null"> --Select-- </option>
           <option *ngFor="let opt of types" [ngValue]="opt.value">
             {{opt.displayName}}
           </option>
@@ -45,6 +46,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
       <label *ngIf="enterpriseGuard.canActivate(null, null)">
         <span i18n>Financial Reporting As</span>
         <select formControlName="financialReportingAs" name="financialReportingAs">
+          <option disabled selected [ngValue]="null"> --Select-- </option>
           <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
             {{ wh.name }}
           </option>
@@ -103,6 +105,7 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
             <td><input type="text" formControlName="code" maxlength="50"></td>
             <td>
               <select formControlName="type">
+                <option disabled selected [ngValue]="null"> --Select-- </option>
                 <option *ngFor="let opt of subLocationTypes" [ngValue]="opt.value">
                   {{opt.displayName}}
                 </option>

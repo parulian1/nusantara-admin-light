@@ -63,6 +63,7 @@ const logger = new Logger('PriceListComponent');
             <select [formControl]="type"
                     name="pricelist-type"
                     data-qa="pricelist-type">
+              <option disabled selected [ngValue]="null"> --Select-- </option>
               <option
                 *ngFor="let opt of types"
                 [ngValue]="opt.value">{{ opt.displayName }}
