@@ -196,6 +196,8 @@ export class CategoryGroupControlComponent
   onSelect(category: marketplace.IProductCategory) {
     if (category.hasChildren) {
       this.addChild(category);
+    } else {
+      this.deleteGroupFromArray(0);
     }
   }
 }
