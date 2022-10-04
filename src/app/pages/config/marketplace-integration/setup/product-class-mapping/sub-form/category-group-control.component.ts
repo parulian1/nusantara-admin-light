@@ -194,6 +194,7 @@ export class CategoryGroupControlComponent
   }
 
   onSelect(category: marketplace.IProductCategory) {
+    console.log('cat', category)
     if (category.hasChildren) {
       this.addChild(category);
     } else {
