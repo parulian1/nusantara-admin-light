@@ -46,4 +46,5 @@ export interface IProduct extends INamedHrefEntity {
   barcode?: string;
   stockAmount?: number;
   enabledAttributes?: INamedHrefEntity[];
+  googleProductCategory?: string;
 }
