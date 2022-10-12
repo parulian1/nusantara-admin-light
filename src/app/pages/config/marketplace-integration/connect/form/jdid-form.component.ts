@@ -36,6 +36,9 @@ import { MarketplaceClientEnum } from '../markeplace-client-enum';
           [control]="shopId"
           variable="Shop ID"
         ></nus-field-errors-marketplace>
+        <div *ngIf="form.get('shopId').errors?.notNumeric" class="error-detail" i18n>
+          Shop ID must be integer
+        </div>
       </label>
       <label>
         <span i18n>Warehouse</span>
@@ -147,9 +150,28 @@ export class JdidFormComponent implements OnInit {
   initializeForm(entity?: marketplace.IJdidCredential) {
     this.form = this.fb.group({
       shopName: [entity?.shopName ?? '', [Validators.required,]],
-      shopId: [entity?.shopId ?? '', [Validators.required,]],
+      shopId: [entity?.shopId ?? '', [Validators.required, this.isInteger()]],
       warehouseId: [entity?.warehouse, [Validators.required]],
     });
+  }
+
+  check_if_is_integer(value){
+    if(value==""){
+      return true
+    } else {
+      return ((parseFloat(value) == parseInt(value)) && !isNaN(value) && (value.toString().length <= 10));
+    }
+  }
+
+
+  isInteger(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null =>  {
+      if(control.value!==null){
+          return this.check_if_is_integer(control.value) ? null : {
+              notNumeric: true
+          }
+      }
+    }
   }
 
   getFormValue(): any {
