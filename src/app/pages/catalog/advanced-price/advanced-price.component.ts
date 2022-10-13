@@ -6,7 +6,7 @@ import {AbstractControl, FormArray, FormBuilder, FormControl, Validators} from '
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {INamedHrefEntity, IWarehouse} from '@nusantara/models';
 import {IProduct} from '@nusantara/models/products';
-import {ProductSelectionModalComponent} from '@nusantara/shared';
+import {CustomerGroupModalComponent, ProductSelectionModalComponent} from '@nusantara/shared';
 import {AdvancedPriceWarehouseModalComponent} from '@nusantara/pages/catalog/advanced-price/advanced-price-warehouse-modal.component';
 import {getProductBasePrice} from '@nusantara/shared/helpers';
 import {of} from 'rxjs';
@@ -109,6 +109,24 @@ import {map} from 'rxjs/operators';
                 Ensure that there are no more than 16 digits
               </p>
             </div>
+            <div id="customer-group-wrapper">
+              <label>
+                <span i18n>Customer Groups</span>
+                <button type="button" (click)="selectCustomerGroup()" class="new-add-button" [disabled]="isDisabled">
+                  <i class="material-icons">add</i>
+                  <span i18n>Select Customer Group</span>
+                </button>
+              </label>
+              <div class="pill-wrapper">
+                <div *ngFor="let custGroup of customerGroups.value; let i=index" class="pill">
+                  <span class="subheading-2">{{ custGroup.name }}</span>
+                  <button type="button" class="remove-button" (click)="removeCustomerGroup(custGroup.href)"
+                          [disabled]="isDisabled">
+                    <i class="material-icons">highlight_off</i>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
           <nus-detail-actions
             [component]="this"
@@ -161,8 +179,9 @@ import {map} from 'rxjs/operators';
       <nus-product-selection-modal></nus-product-selection-modal>
       <nus-advanced-price-warehouse-modal
         [choices]="warehouseChoices"
-        [selectedWarehouses]="warehouses"
-      ></nus-advanced-price-warehouse-modal>
+        [selectedWarehouses]="warehouses"></nus-advanced-price-warehouse-modal>
+      <nus-customer-group-selection-modal [selectedGroups]="entity?.customerGroups">
+      </nus-customer-group-selection-modal>
     </form>
   `,
   styles: [`
@@ -299,6 +318,8 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
   defaultAmountNumber: FormControl ;
   errorDefaultAmount = false;
 
+  @ViewChild(CustomerGroupModalComponent) customerGroupSelectionModal: CustomerGroupModalComponent;
+
   constructor(service: AdvancedPriceListService,
               route: ActivatedRoute,
               router: Router,
@@ -340,6 +361,7 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
   ngAfterViewInit() {
     this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
     this.advancedPriceWarehouseModal.onClose.subscribe(() => this.onWarehouseSelectionModalClosed());
+    this.customerGroupSelectionModal.onClose.subscribe(() => this.onGroupSelectionModalClosed());
   }
 
   get href(): FormControl {
@@ -378,6 +400,10 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
     return this.form.get('products') as FormArray;
   }
 
+  get customerGroups(): FormArray {
+    return this.form.get('customerGroups') as FormArray;
+  }
+
   initializeForm(entity?: IAdvancedPriceList) {
     this.entity = entity;
 
@@ -390,7 +416,8 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
       isOffline: [entity?.isOffline ?? false, []],
       type: [entity?.type ?? 'percentage', []],
       defaultAmount: [entity?.defaultAmount ?? 1, [Validators.required, Validators.max(9999999999999998)]],
-      products: this.fb.array([])
+      products: this.fb.array([]),
+      customerGroups: this.fb.array([]),
     });
 
     this.defaultAmountSign = new FormControl('positive', []);
@@ -430,6 +457,10 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
     }
 
     this.filteredProducts$ = this.products.controls;
+
+    entity?.customerGroups.forEach((customerGroup) => {
+      this.addCustomerGroup(customerGroup);
+    });
   }
   /* WAREHOUSE SELECTION */
   selectWarehouse() {
@@ -613,4 +644,39 @@ export class AdvancedPriceComponent extends AbstractDetailComponent<IAdvancedPri
       }, this.reloadTimeout);
     }
   }
+
+  selectCustomerGroup() {
+    this.customerGroupSelectionModal.open();
+  }
+
+  onGroupSelectionModalClosed() {
+    if (this.customerGroupSelectionModal.result === DialogResult.OK) {
+
+      const selectedGroup = this.customerGroupSelectionModal.group.value as INamedHrefEntity;
+
+      const f = this.fb.group({
+        href: [selectedGroup.href, []],
+        name: [selectedGroup.name, []]
+      });
+      this.customerGroups.push(f);
+    }
+  }
+
+  addCustomerGroup(customerGroup?: INamedHrefEntity) {
+    const arr = this.fb.group({
+      name: [customerGroup?.name, [Validators.required, ]],
+      href: [customerGroup?.href, []],
+    });
+    this.customerGroups.push(arr);
+  }
+
+  removeCustomerGroup(cgHref: string): void {
+    if (!this.isNew) {
+      this.toast?.addError('This section can\'t be edited, please create a new one to make changes.', 'Failed to remove warehouse');
+      return;
+    }
+    const index = this.customerGroups.value.findIndex(cg => cg.href === cgHref);
+    this.customerGroups.removeAt(index);
+  }
+
 }
