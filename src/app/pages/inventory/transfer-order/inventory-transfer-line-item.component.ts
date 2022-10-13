@@ -1,14 +1,14 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ControlContainer, FormArray, FormControl, FormGroup } from '@angular/forms';
 
-import { products, ISubLocation, INamedHrefEntity } from '@nusantara/models';
+import { products, INamedHrefEntity } from '@nusantara/models';
 import { IProductClass } from '../../../models/products';
 
 @Component({
   selector: 'nus-inventory-transfer-line',
   template: `
     <tr [formGroup]="form">
-      <td><a>{{ displayedProductName }} / {{ displayedLocationName }} </a></td>
+      <td>{{ displayedProductName }} / {{ displayedLocationName }}</td>
       <td class="immediate-error-display">
         {{ sku.value }}
       </td>
@@ -28,7 +28,7 @@ import { IProductClass } from '../../../models/products';
       </td>
       <td>
         <button (click)="remove.emit()" type="button" class="remove-button" data-qa="remove-button">
-          <i class="material-icons">remove_circle_outline</i>
+          <i class="material-icons">delete_outline</i>
         </button>
       </td>
     </tr>
@@ -38,9 +38,9 @@ import { IProductClass } from '../../../models/products';
     'td:nth-child(1) { min-width: 115px; }',
     'td:nth-child(2) { width: 80px; }',
     'td:nth-child(3) { width: 108px; }',
-    'td:nth-child(4) { width: 108px; }',
+    'td:nth-child(5) { width: 10%; }',
+    'td:nth-child(6) { width: 10%; }',
     'td:nth-child(7) { width: 5%; text-align: center; }',
-    'td:last-child { width: 2%; }',
     'td>div>input {float: left; width: 80%;}',
     'td>div>button {float: left; width: 20%;}',
     'resolve-button { border: none;}',

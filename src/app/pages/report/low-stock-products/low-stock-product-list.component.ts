@@ -37,8 +37,9 @@ import {ActivatedRoute} from "@angular/router";
           </mat-form-field>
         </div>
         <div class="action">
-          <button class="control secondary" (click)="downloadProductList()" [disabled]="displayedResults?.totalResults == 0"
-             i18n>Export</button>
+          <button type="button" class="control secondary" (click)="downloadProductList()"
+                  [disabled]="displayedResults?.totalResults == 0" i18n>Export
+          </button>
         </div>
       </div>
       <nus-low-stock-product-pagination
