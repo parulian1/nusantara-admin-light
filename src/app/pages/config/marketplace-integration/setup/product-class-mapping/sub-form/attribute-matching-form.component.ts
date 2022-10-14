@@ -81,10 +81,14 @@ import { SubFormComponent } from './sub-form.component';
                   <div *ngIf="selectedAttr.value === 'addNewAttr'" class="new-attr-input">
                     <input type="text" formControlName="newAttrName" />
                     <div *ngIf="
-                        attributes.controls[i].get('newAttrName').invalid &&
+                        attributes.controls[i].get('newAttrName').hasError('required') &&
                         attributes.controls[i].get('newAttrName').touched
                       " class="error-detail" i18n>
                       This field is required
+                    </div>
+                    <div *ngIf="
+                        attributes.controls[i].get('newAttrName').hasError('maxlength')" class="error-detail" i18n>
+                      Max length 100
                     </div>
                   </div>
                 </div>
@@ -318,7 +322,7 @@ export class AttributeMatchingFormComponent
   attrChange(value: string, index: number) {
     const attr = this.attributes.at(index).get('newAttrName');
     if (value === 'addNewAttr') {
-      attr.setValidators(Validators.required);
+      attr.setValidators(Validators.compose([Validators.required, Validators.maxLength(100)]));
     } else {
       attr.clearValidators();
       attr.reset();
