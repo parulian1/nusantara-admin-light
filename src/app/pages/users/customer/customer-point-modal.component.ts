@@ -1,7 +1,8 @@
-import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, ViewChild} from '@angular/core';
 import {NgxSmartModalComponent} from 'ngx-smart-modal';
 import {UserPointService} from '@nusantara/services/user-point.service';
 import {ICustomer} from '@nusantara/models';
+import {IPointHistory} from "@nusantara/models/point-history";
 
 @Component({
   selector: 'nus-customer-point-modal',
@@ -25,7 +26,7 @@ import {ICustomer} from '@nusantara/models';
           </thead>
           <tbody>
             <tr *ngFor="let p of pointHistory">
-              <td class="point-information">{{ p.info }}</td>
+              <td class="point-information">{{ p.info }} #{{ p.orderNumber }}</td>
               <td class="point-date">{{ p.date|date }}</td>
               <td class="point-amount">{{ p.pointValue|number }}</td>
             </tr>
@@ -40,7 +41,6 @@ import {ICustomer} from '@nusantara/models';
   styles: [
     'h2 { padding-bottom: 16px }',
     'p { color : var(--darken-grey); margin-bottom: 16px; }',
-    'td { white-space: nowrap;  overflow: hidden; text-overflow: ellipsis; }',
     'table { table-layout: fixed }',
     'td { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }',
     `
@@ -70,6 +70,9 @@ import {ICustomer} from '@nusantara/models';
         max-height: 50vh;
         overflow: auto;
       }
+      .point-information {
+        width: 50%;
+      }
       .point-date, .point-amount {
         text-align: right;
       }
@@ -83,7 +86,7 @@ export class CustomerPointModalComponent implements AfterViewInit {
   constructor(protected service: UserPointService) {}
 
   pointTotal: number;
-  pointHistory: Array<any>;
+  pointHistory: Array<IPointHistory>;
 
   ngAfterViewInit(): void {
     this.modal.onOpen.subscribe(() => {
