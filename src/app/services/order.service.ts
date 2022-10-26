@@ -91,11 +91,11 @@ export class OrderService extends AbstractCrudService<IOrder> {
   }
 
   downloadAWBBulk(formData): Observable<any> {
-    const options:any= {
-      responseType:"blob",
-    }
+    // const options:any= {
+    //   responseType:"application",
+    // }
     return this.httpClient.post(
-      `/api/order/order-bulk-download-awb/`, formData, options
+      `/api/order/order-bulk-download-awb/`, formData
     );
   }
 }

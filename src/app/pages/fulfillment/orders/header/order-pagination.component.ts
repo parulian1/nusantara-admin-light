@@ -166,9 +166,28 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
     const formData = {
       order_numbers: this.checkedlist,
     }
+
+    // let authorizationToken = localStorage.getItem("token")
+    // let fullAuthorizationToken = 'Bearer '+ authorizationToken
+    // let params = {
+    //   Authorization : fullAuthorizationToken,
+    // };
+
+    //Add authentication headers in URL
+    // const urls = ["https://www.africau.edu/images/default/sample.pdf", "https://http.cat/100"];
+    // urls.forEach((url, index) => {
+    //   window.open(url, "_blank" + index);
+    // });
     this.orderService.downloadAWBBulk(formData).subscribe((response) => {
-        this.orderDownloadService.downloadAsZip(response, 'download-awb-bulk');
-    });
+      // console.log(response)
+      response.data.forEach((url, index)=>{
+        // let urls = [url, $.param(params)].join('?');
+
+        window.open(url, "_blank" + index).focus();
+      });
+      // this.orderDownloadService.downloadAsZip(response, 'download-awb-bulk');
+      // console.log(response)
+     });
   }
 
   dateRangeValidation(filters: IOrderFilterValue){
