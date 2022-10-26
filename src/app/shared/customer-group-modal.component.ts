@@ -35,7 +35,7 @@ import { CustomerGroupService } from '@nusantara/services';
             </thead>
             <tbody>
             <tr *ngFor="let group of displayedResults?.entities">
-              <td><a href="#" (click)="selectGroup(group)">{{ group.name }}</a></td>
+              <td class="cgName"><a href="#" (click)="selectGroup(group)">{{ group.name }}</a></td>
             </tr>
             </tbody>
           </table>
@@ -43,6 +43,11 @@ import { CustomerGroupService } from '@nusantara/services';
       </form>
     </ngx-smart-modal>
   `,
+  styles: [`
+    .cgName {
+      word-break: break-word;
+    }
+  `]
 
 })
 export class CustomerGroupModalComponent implements OnInit, AfterViewInit {
