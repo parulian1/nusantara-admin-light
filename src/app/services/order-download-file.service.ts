@@ -56,6 +56,7 @@ export class OrderDownloadFileService {
     dwldLink.setAttribute("href", url);
     dwldLink.setAttribute("download", filename + ".zip");
     dwldLink.style.visibility = "hidden";
+    window.open(url,'_blank')
     document.body.appendChild(dwldLink);
     dwldLink.click();
     document.body.removeChild(dwldLink);
