@@ -65,7 +65,7 @@ import {ProductSelectionModalComponent} from "@nusantara/shared";
             <p i18n class="body-2">Send daily email notification when stock is low. / Email notification will be send
               regularly every 6 am</p>
             <div class="email-input">
-              <input type="text"
+              <input type="email"
                      placeholder="insert email to receive daily notification"
                      (keydown)="removeChipAlert()"
                      (keydown.enter)="addChips()"
@@ -239,7 +239,7 @@ export class LowStockConfigComponent extends AbstractDetailComponent<ILowStock> 
       href: [entity?.href, []],
       isActive: [entity?.isActive, []],
       quantity: [entity?.quantity, [Validators.required, Validators.min(1), Validators.pattern(`^\\d+$`)]],
-      email: [entity?.email, [Validators.pattern(`^(([^<>()[\\]\\\\.,;:\\s@\\"]+(\\.[^<>()[\\]\\\\.,;:\\s@\\"]+)*)|(\\".+\\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$`)]],
+      email: [entity?.email, [Validators.pattern(`^(([^<>()[\\]\\\\.,;:\\s@\\"]+(\\.[^<>()[\\]\\\\.,;:\\s@\\"]+)*)|(\\".+\\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$`), Validators.maxLength(74), Validators.email,]],
       emails: this.fb.array([]),
       customThreshold: [false, []],
       customThresholdProducts: this.fb.array([])
