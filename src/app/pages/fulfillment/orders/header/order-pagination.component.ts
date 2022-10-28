@@ -184,7 +184,7 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
     downloadLink.href = window.URL.createObjectURL(
       new Blob(binaryData, { type: "application/pdf" })
     );
-    window.open(downloadLink.href)
+    window.open(downloadLink.href).focus()
     });
   }
 
