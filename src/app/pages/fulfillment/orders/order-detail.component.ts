@@ -750,7 +750,8 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
 
   getOrderStatus(childOrder: IOrderChildrenData): string {
     if (!!childOrder?.status) {
-      if (childOrder.shippingMethod.toLowerCase() === this.pickupInStore.toLowerCase()) {
+      if (childOrder.shippingMethod.toLowerCase() === this.pickupInStore.toLowerCase() &&
+        childOrder.status === 'shipped') {
         return 'Shipped/Ready for pickup';
       }
       return childOrder.status;
