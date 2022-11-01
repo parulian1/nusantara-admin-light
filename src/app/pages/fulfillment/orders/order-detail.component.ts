@@ -584,7 +584,7 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
     if (
       childrenData.status !== 'paid' ||
       ['ready', 'waiting', 'shipped', 'complete'].indexOf(childrenData.status) > -1 ||
-      childrenData.shippingMethod === this.pickupInStore
+      childrenData.shippingMethod.toLowerCase() === this.pickupInStore.toLowerCase()
     ) {
       return true;
     }
@@ -596,7 +596,7 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
       childrenData.status !== 'ready' ||
       ['waiting', 'shipped', 'complete'].indexOf(childrenData.status ) > -1 ||
       this.isRequestShipment ||
-      childrenData.shippingMethod === this.pickupInStore
+      childrenData.shippingMethod.toLowerCase() === this.pickupInStore.toLowerCase()
     ) {
       return true;
     }
@@ -750,7 +750,7 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
 
   getOrderStatus(childOrder: IOrderChildrenData): string {
     if (!!childOrder?.status) {
-      if (childOrder.shippingMethod === this.pickupInStore) {
+      if (childOrder.shippingMethod.toLowerCase() === this.pickupInStore.toLowerCase()) {
         return 'Shipped/Ready for pickup';
       }
       return childOrder.status;
