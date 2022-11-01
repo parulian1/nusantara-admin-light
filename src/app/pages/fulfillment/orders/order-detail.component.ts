@@ -56,8 +56,8 @@ function isTSCOrder(orderData: order.IOrderDetail) {
                 <div class="body-2" i18n>Status</div>
                 <div class="subheading-2">
                   {{
-                    (children.data[0]?.status ? children.data[0]?.status : "-")
-                      | titlecase
+
+                     getOrderStatus(children.data[0]) | titlecase
                   }}
                 </div>
               </td>
@@ -106,7 +106,7 @@ function isTSCOrder(orderData: order.IOrderDetail) {
               <td colspan="5" class="status-action-row">
                 <span class="button-status-action">
                   <nus-milestone
-                    [steps]="['ready', 'ship', 'complete']"
+                    [steps]="['ready', 'Ship/Ready for pickup', 'complete']"
                     [current]="getcurrentMilestone(children.data[0]?.status)"
                     [isCompleted]="
                       getcurrentMilestone(children.data[0]?.status) ===
@@ -392,6 +392,8 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   // enable refresh AWB for following source name
   enableRefreshAwb = ['tokopedia', 'shopee', 'bukalapak', 'lazada', 'tiktok'];
 
+  pickupInStore = 'Pickup In-Store';
+
   constructor(
     public route: ActivatedRoute,
     public service: OrderService,
@@ -417,7 +419,7 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   }
 
   getcurrentMilestone(status: string) {
-    return status === 'shipped' ? 'ship' : status;
+    return status === 'shipped' ? 'Ship/Ready for pickup' : status;
   }
 
   getAwbNumber(childrenData: any) {
@@ -581,8 +583,8 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   isReadyButtonHidden(childrenData: any): boolean {
     if (
       childrenData.status !== 'paid' ||
-      childrenData.status === 'ready' ||
-      childrenData.status === 'waiting'
+      ['ready', 'waiting', 'shipped', 'complete'].indexOf(childrenData.status) > -1 ||
+      childrenData.shippingMethod.toLowerCase() === this.pickupInStore.toLowerCase()
     ) {
       return true;
     }
@@ -592,8 +594,9 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   isShipButtonHidden(childrenData: any): boolean {
     if (
       childrenData.status !== 'ready' ||
-      childrenData.status === 'shipped' ||
-      this.isRequestShipment
+      ['waiting', 'shipped', 'complete'].indexOf(childrenData.status ) > -1 ||
+      this.isRequestShipment ||
+      childrenData.shippingMethod.toLowerCase() === this.pickupInStore.toLowerCase()
     ) {
       return true;
     }
@@ -743,5 +746,15 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
             });
           }
       });
+  }
+
+  getOrderStatus(childOrder: IOrderChildrenData): string {
+    if (!!childOrder?.status) {
+      if (childOrder.shippingMethod.toLowerCase() === this.pickupInStore.toLowerCase()) {
+        return 'Shipped/Ready for pickup';
+      }
+      return childOrder.status;
+    }
+    return "-";
   }
 }
