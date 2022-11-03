@@ -1,5 +1,5 @@
 export interface IPartner {
-  name: string;
+  name?: string;
   partner: string;
   slug: string;
   clientId: number;
@@ -8,4 +8,7 @@ export interface IPartner {
   customerId: number;
   access: string;
   isActive: boolean;
+  forstokId:string;
+  secretKey: string;
+  warehouse:string;
 }
