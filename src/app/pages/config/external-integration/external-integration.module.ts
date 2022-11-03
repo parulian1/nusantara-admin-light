@@ -5,12 +5,14 @@ import { ExternalIntegrationRoutingModule } from "./external-integration-routing
 import { KgxWmsComponent } from "./kgx-wms/kgx-wms.component";
 import { ExternalIntegrationComponent } from "./external-integration.component";
 import { SharedModule } from "@nusantara/shared";
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { WarehouseMappingComponent } from "./warehouse-mapping/warehouse-mapping.component";
 import { WarehouseMappingListComponent } from "./warehouse-mapping/warehouse-mapping-list.component";
 import {
   PartnerListComponent,
   PartnerComponent,
+  WMSFormComponent,
+  ForstokFormComponent,
 } from "./partner";
 
 @NgModule({
@@ -21,12 +23,15 @@ import {
     WarehouseMappingListComponent,
     PartnerComponent,
     PartnerListComponent,
+    WMSFormComponent,
+    ForstokFormComponent
   ],
   imports: [
     CommonModule,
     ExternalIntegrationRoutingModule,
     SharedModule,
     ReactiveFormsModule,
+    FormsModule
   ],
 })
 export class ExternalIntegrationModule {}
