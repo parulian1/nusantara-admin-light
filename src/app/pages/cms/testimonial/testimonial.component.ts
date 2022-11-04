@@ -217,7 +217,7 @@ export class TestimonialComponent extends AbstractDetailComponent<ITestimonial> 
   }
 
   save() {
-    if (!!this.entity?.href && !!this.entity?.photo && !this.form.get('photo').value) {
+    if (!!this.entity?.href && !!this.entity?.photo && !this.form.get('photo')?.value) {
       this.form.removeControl('photo');
     }
     if (!!this.photo && this.photoPreviewUrl.match(/^(?:[data]{4}:(image)\/[a-z]*)/)) {
