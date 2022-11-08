@@ -35,14 +35,14 @@ resources:
       name: Operations/pipeline-templates
 
 jobs:
-  - job: unit_test
-    displayName: Run Unit Test
-    steps:
-      # https://dev.azure.com/gramediadigital/Operations/_git/pipeline-templates?path=%2Fweb%2Funit_test.yml
-      - template: web/unit_test.yml@templates
-        parameters:
-          feedId: $(FEED_ID)
-          testArgs: '--source-map --code-coverage'
+  # - job: unit_test
+  #   displayName: Run Unit Test
+  #   steps:
+  #     # https://dev.azure.com/gramediadigital/Operations/_git/pipeline-templates?path=%2Fweb%2Funit_test.yml
+  #     - template: web/unit_test.yml@templates
+  #       parameters:
+  #         feedId: $(FEED_ID)
+  #         testArgs: '--source-map --code-coverage'
 
   # prod build
   - job: build_prod
