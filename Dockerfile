@@ -2,4 +2,5 @@
 ARG  FRONTEND_VERSION=staging
 FROM 377981621342.dkr.ecr.ap-southeast-1.amazonaws.com/gramedia/bhisma2-web:$FRONTEND_VERSION
 
+RUN  rm -rf /usr/share/nginx/html/admin
 COPY ./dist/nusantara-admin /usr/share/nginx/html/admin
