@@ -109,6 +109,8 @@ jobs:
     pool:
       name: docker-agent
     displayName: Build & Packaging STAGING
+    variables:
+      FRONTEND_VERSION: prod
     condition: |
       and(
         succeeded(),
