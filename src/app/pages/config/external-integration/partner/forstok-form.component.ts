@@ -99,10 +99,7 @@ export class ForstokFormComponent
       this.warehouses = data
     });
 
-    // this.isEdit = !!this.route.snapshot.paramMap.get("slug");
-    // if (this.isEdit) {
-    //   this.form.get("partner").disable();
-    // }
+    this.isEdit = !!this.route.snapshot.paramMap.get("slug");
   }
 
   get warehouseId(): FormControl {
@@ -110,7 +107,6 @@ export class ForstokFormComponent
   }
 
   initializeForm(entity?: IPartner) {
-    console.log(entity)
     this.form = this.fb.group({
       slug: [this.route.snapshot.paramMap.get("slug"), []],
       name: [entity?.name, [Validators.required]],
@@ -135,9 +131,8 @@ export class ForstokFormComponent
       secretKey: this.form.value.secretKey,
       warehouseId: this.form.value.warehouseId
     };
-    this.isEdit = !!this.route.snapshot.paramMap.get("slug");
     if (this.isEdit) {
-      const updateValue = {...formValue, access: this.entity.access}
+      const updateValue = {...formValue, access: this.entity.access};
       return updateValue;
     }
     return formValue;
