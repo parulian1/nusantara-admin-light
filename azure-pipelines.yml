@@ -18,7 +18,7 @@ variables:
     value: web-admin
 
   - name: DOCKER_REPO
-    value: gramedia/nginx
+    value: gramedia/bhisma2-web
 
   # runtime variables, automatically defined by agent when pipeline running
   - name: IS_NON_MASTER_BRANCH
@@ -77,9 +77,9 @@ jobs:
         inputs:
           awsCredentials: 'Aws-Ecs (New Account)'
           regionName: 'ap-southeast-1'
-          repository: 'gramedia/nginx'
+          repository: '$(DOCKER_REPO)'
           imageSource: 'imagetag'
-          imageTag: 'gramedia.io'
+          imageTag: 'staging'
 
       - task: Docker@2
         displayName: Docker Build
@@ -97,7 +97,7 @@ jobs:
           sourceImageName: $(DOCKER_REPO)
           sourceImageTag: '$(Build.BuildId)'
           repositoryName: $(DOCKER_REPO)
-          pushTag: admin-$(Build.SourceBranchName)
+          pushTag: $(Build.SourceBranchName)
           autoCreateRepository: true
 
       - task: ECRPushImage@1
@@ -108,7 +108,7 @@ jobs:
           sourceImageName: $(DOCKER_REPO)
           sourceImageTag: '$(Build.BuildId)'
           repositoryName: $(DOCKER_REPO)
-          pushTag: admin-latest
+          pushTag: latest
           autoCreateRepository: true
 
   # Staging Build
@@ -140,9 +140,9 @@ jobs:
         inputs:
           awsCredentials: 'Aws-Ecs (New Account)'
           regionName: 'ap-southeast-1'
-          repository: 'gramedia/nginx'
+          repository: '$(DOCKER_REPO)'
           imageSource: 'imagetag'
-          imageTag: 'gramedia.io'
+          imageTag: 'staging'
 
       - task: Docker@2
         displayName: Docker Build
@@ -160,7 +160,7 @@ jobs:
           sourceImageName: $(DOCKER_REPO)
           sourceImageTag: '$(Build.BuildId)'
           repositoryName: $(DOCKER_REPO)
-          pushTag: admin-$(Build.SourceBranchName)
+          pushTag: $(Build.SourceBranchName)
           autoCreateRepository: true
 
       - task: ECRPushImage@1
@@ -171,5 +171,5 @@ jobs:
           sourceImageName: $(DOCKER_REPO)
           sourceImageTag: '$(Build.BuildId)'
           repositoryName: $(DOCKER_REPO)
-          pushTag: admin-dev
+          pushTag: dev
           autoCreateRepository: true
