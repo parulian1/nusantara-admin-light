@@ -50,9 +50,6 @@ jobs:
     pool:
       name: docker-agent
     displayName: Build & Packaging PROD
-    variables:
-      FRONTEND_VERSION: prod
-
     condition: |
       and(
         succeeded(),
@@ -109,8 +106,6 @@ jobs:
     pool:
       name: docker-agent
     displayName: Build & Packaging STAGING
-    variables:
-      FRONTEND_VERSION: prod
     condition: |
       and(
         succeeded(),
@@ -142,9 +137,10 @@ jobs:
         displayName: Docker Build
         inputs:
           repository: $(DOCKER_REPO)
-          command: build
+          command: build 
           tags: |
             $(Build.BuildId)
+          arguments: '--build-arg "FRONTEND_VERSION=prod"'
 
       - task: ECRPushImage@1
         displayName: Docker Push to ECR (Version Tags)
