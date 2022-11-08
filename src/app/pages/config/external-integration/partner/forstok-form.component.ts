@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { FormBuilder, Validators } from "@angular/forms";
+import { FormBuilder, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { RequireIsEnterpriseGuard } from "@nusantara/auth";
 import { AbstractDetailComponent, ToastService } from "@nusantara/core";
@@ -25,13 +25,13 @@ import { PartnerExternalEnum } from "./partner-external-enum";
       </label>
       <label>
         <span i18n
-          >Forstok ID
+          >Email Forstok
           <nus-tooltip
             [text]="'Registered Forstok ID provided by Forstok'"
           ></nus-tooltip>
         </span>
-        <input type="text" formControlName="forstokId" name="forstokId" />
-        <nus-field-errors [control]="form.get('forstokId')"></nus-field-errors>
+        <input type="text" formControlName="partnerEmail" name="partnerEmail" />
+        <nus-field-errors [control]="form.get('partnerEmail')"></nus-field-errors>
       </label>
       <label>
         <span i18n
@@ -47,12 +47,12 @@ import { PartnerExternalEnum } from "./partner-external-enum";
       <label>
         <span i18n>Warehouse</span>
         <select formControlName="warehouseId">
-          <option [value]="null" i18n>Select Warehouse</option>
+          <option [ngValue]="null" i18n>Select Warehouse</option>
           <option *ngFor="let opt of warehouses" [ngValue]="opt.warehouseId">
             {{ opt.name }}
           </option>
         </select>
-        <nus-field-errors [control]="form.get('warehouse')"></nus-field-errors>
+        <nus-field-errors [control]="warehouseId"></nus-field-errors>
       </label>
 
       <nus-detail-actions
@@ -99,36 +99,47 @@ export class ForstokFormComponent
       this.warehouses = data
     });
 
-    this.isEdit = !!this.route.snapshot.paramMap.get("slug");
-    if (this.isEdit) {
-      this.form.get("partner").disable();
-    }
+    // this.isEdit = !!this.route.snapshot.paramMap.get("slug");
+    // if (this.isEdit) {
+    //   this.form.get("partner").disable();
+    // }
+  }
+
+  get warehouseId(): FormControl {
+    return this.form.get('warehouseId') as FormControl;
   }
 
   initializeForm(entity?: IPartner) {
+    console.log(entity)
     this.form = this.fb.group({
       slug: [this.route.snapshot.paramMap.get("slug"), []],
       name: [entity?.name, [Validators.required]],
-      forstokId: [
-        entity?.forstokId,
+      partnerEmail: [
+        entity?.partnerEmail,
         [Validators.required],
       ],
       secretKey: [entity?.secretKey, [Validators.required]],
-      warehouse: [entity?.warehouse, [Validators.required]]
+      warehouseId: [entity?.warehouseId, [Validators.required]]
     });
 
     // need to mark as touched to make custom styling works
   }
 
   getFormValue() {
+
     const formValue = {
       partner: PartnerExternalEnum.forstok,
       name: this.form.value.name,
       slug: this.form.value.slug,
-      forstokId:  this.form.value.forstokId,
+      partnerEmail:  this.form.value.partnerEmail,
       secretKey: this.form.value.secretKey,
-      warehouse: this.form.value.warehouse
+      warehouseId: this.form.value.warehouseId
     };
+    this.isEdit = !!this.route.snapshot.paramMap.get("slug");
+    if (this.isEdit) {
+      const updateValue = {...formValue, access: this.entity.access}
+      return updateValue;
+    }
     return formValue;
   }
 }

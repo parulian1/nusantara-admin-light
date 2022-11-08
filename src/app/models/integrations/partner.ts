@@ -8,7 +8,7 @@ export interface IPartner {
   customerId: number;
   access: string;
   isActive: boolean;
-  forstokId:string;
+  partnerEmail:string;
   secretKey: string;
-  warehouse:string;
+  warehouseId:string;
 }
