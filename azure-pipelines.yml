@@ -50,6 +50,9 @@ jobs:
     pool:
       name: docker-agent
     displayName: Build & Packaging PROD
+    variables:
+      FRONTEND_VERSION: prod
+
     condition: |
       and(
         succeeded(),
@@ -79,7 +82,7 @@ jobs:
           regionName: 'ap-southeast-1'
           repository: '$(DOCKER_REPO)'
           imageSource: 'imagetag'
-          imageTag: 'staging'
+          imageTag: 'prod'
 
       - task: Docker@2
         displayName: Docker Build
@@ -97,18 +100,7 @@ jobs:
           sourceImageName: $(DOCKER_REPO)
           sourceImageTag: '$(Build.BuildId)'
           repositoryName: $(DOCKER_REPO)
-          pushTag: $(Build.SourceBranchName)
-          autoCreateRepository: true
-
-      - task: ECRPushImage@1
-        displayName: Docker Push to ECR (Version Tags)
-        inputs:
-          awsCredentials: $(AWS_CREDENTIAL_NAME)
-          regionName: $(AWS_REGION)
-          sourceImageName: $(DOCKER_REPO)
-          sourceImageTag: '$(Build.BuildId)'
-          repositoryName: $(DOCKER_REPO)
-          pushTag: latest
+          pushTag: admin-$(Build.SourceBranchName)
           autoCreateRepository: true
 
   # Staging Build
@@ -160,16 +152,5 @@ jobs:
           sourceImageName: $(DOCKER_REPO)
           sourceImageTag: '$(Build.BuildId)'
           repositoryName: $(DOCKER_REPO)
-          pushTag: $(Build.SourceBranchName)
-          autoCreateRepository: true
-
-      - task: ECRPushImage@1
-        displayName: Docker Push to ECR (Version Tags)
-        inputs:
-          awsCredentials: $(AWS_CREDENTIAL_NAME)
-          regionName: $(AWS_REGION)
-          sourceImageName: $(DOCKER_REPO)
-          sourceImageTag: '$(Build.BuildId)'
-          repositoryName: $(DOCKER_REPO)
-          pushTag: dev
+          pushTag: admin-$(Build.SourceBranchName)
           autoCreateRepository: true
