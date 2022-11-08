@@ -46,7 +46,7 @@ jobs:
 
   # prod build
   - job: build_prod
-    # dependsOn: unit_test
+    dependsOn: unit_test
     pool:
       name: docker-agent
     displayName: Build & Packaging PROD
@@ -103,7 +103,7 @@ jobs:
 
   # Staging Build
   - job: build_staging
-    # dependsOn: unit_test
+    dependsOn: unit_test
     pool:
       name: docker-agent
     displayName: Build & Packaging STAGING
