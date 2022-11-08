@@ -152,3 +152,14 @@ jobs:
           repositoryName: $(DOCKER_REPO)
           pushTag: admin-$(Build.SourceBranchName)
           autoCreateRepository: true
+
+      - task: ECRPushImage@1
+        displayName: Docker Push to ECR (Version Tags)
+        inputs:
+          awsCredentials: $(AWS_CREDENTIAL_NAME)
+          regionName: $(AWS_REGION)
+          sourceImageName: $(DOCKER_REPO)
+          sourceImageTag: '$(Build.BuildId)'
+          repositoryName: $(DOCKER_REPO)
+          pushTag: admin-dev
+          autoCreateRepository: true
