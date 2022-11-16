@@ -23,7 +23,7 @@ const logger = new Logger('TransactionHistoryReportFilter');
                       panelClass="mat-select-panel"
                       formControlName="platform"
                       (selectionChange)="selectChange($event)">
-            <mat-option value="" i18n>All Platform</mat-option>
+            <mat-option [value]="''" i18n>All Platform</mat-option>
             <mat-option
               *ngFor="let platform of orderFilter.platform"
               [value]="platform.option">
@@ -34,19 +34,17 @@ const logger = new Logger('TransactionHistoryReportFilter');
       </div>
     </label>
     <div class="action-column">
-      <button type="button" class="control" (click)="downloadOrderList()" i18n>
-        <i class="material-icons">file_download</i>
-        Export to .csv
-      </button>
+      <button type="button" class="control secondary" (click)="downloadOrderList()" i18n>Export</button>
+      <span class="caption-2">Download is limited to last 14 days</span>
     </div>
   </form>`,
   styles: [
     'form { max-width: none; display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 16px; grid-template-areas:"filter action";}',
-    '.filters { display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 16px; }',
+    '.filters { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 16px; }',
     '.select-date { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 20px; }',
-    '.filter-column { grid-area: filter; }',
-    '.action-column { grid-area: action; display: flex; justify-content: center; align-items: center; margin-left: auto;}',
-    '.action-column > button {display: flex; justify-content: flex-end; align-items: center; padding: 0 42px;}'
+    '.filter-column { grid-area: filter; display: flex; align-items: center; gap: 16px;}',
+    '.action-column { grid-area: action; display: flex; justify-content: center; align-items: center; margin-left: auto; flex-direction: column;}',
+    '.action-column > button {width: 100%; margin-bottom: 4px;}'
   ]
 })
 export class TransactionHistoryFilterComponent extends OrderFiltersComponent {
@@ -73,6 +71,12 @@ export class TransactionHistoryFilterComponent extends OrderFiltersComponent {
   dateRangeValidation(filters: IOrderFilterValue){
     if(moment(filters.date.end).diff(moment(filters.date.start), "days") > 14) {
       const newStartDate = moment(moment(filters.date.end).subtract(14, "days"));
+      filters.date.start = newStartDate.format("YYYY-MM-DDTHH:mm:ss");
+      return filters;
+    }
+
+    if (filters.date.start == null && filters.date.end == null) {
+      const newStartDate = moment(moment(new Date()).subtract(14, "days"));
       filters.date.start = newStartDate.format("YYYY-MM-DDTHH:mm:ss");
       return filters;
     }
