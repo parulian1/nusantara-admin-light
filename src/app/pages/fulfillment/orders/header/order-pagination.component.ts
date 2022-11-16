@@ -181,10 +181,17 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
     let binaryData = [];
     binaryData.push(response.body);
     let downloadLink = document.createElement("a");
-    downloadLink.href = window.URL.createObjectURL(
-      new Blob(binaryData, { type: "application/pdf" })
-    );
-    window.open(downloadLink.href).focus()
+
+    if(response.body.type == "application/pdf"){
+      downloadLink.href = window.URL.createObjectURL(
+        new Blob(binaryData, {type: 'application/pdf'})
+      );
+    }else if(response.body.type == "text/html"){
+      downloadLink.href = window.URL.createObjectURL(
+        new Blob(binaryData, {type: 'text/html'})
+      );
+    }
+      window.open(downloadLink.href).focus()
     });
   }
 
@@ -193,7 +200,6 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
       order_numbers: this.checkedlist,
     }
     this.orderService.downloadAWBBulk(formData).subscribe((response) => {
-      // console.log(response)
       response.data.forEach((url)=>{
         this.getShippingLabel(url)
       });
