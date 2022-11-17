@@ -273,7 +273,10 @@ export class EmployeeComponent
       identityNumber: [entity?.identityNumber, [Validators.required]],
       firstName: [entity?.firstName, [Validators.required]],
       lastName: [entity?.lastName, [Validators.required]],
-      email: [entity?.email, [Validators.required]],
+      email: [entity?.email, [
+        Validators.required,
+        Validators.email,
+        Validators.maxLength(74),]],
       href: [entity?.href, []],
       phoneNumber: [entity?.phoneNumber,
         [

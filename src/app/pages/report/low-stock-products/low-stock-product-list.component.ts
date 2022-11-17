@@ -1,16 +1,18 @@
 import {PagedResponse} from '@nusantara/core';
-import {ILowStockProduct} from '@nusantara/models/products';
-import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
+import {ILowStock, ILowStockProduct} from '@nusantara/models/products';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {LowStockProductService} from '@nusantara/services/low-stock-product.service';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {drf} from '@nusantara/models';
+import {drf, IWarehouse} from '@nusantara/models';
 import {MatSelectChange} from '@angular/material/select';
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'nus-low-stock-product-list',
   template: `
+    <nus-page-title i18n-title title="Low Stock Product"></nus-page-title>
     <form [formGroup]="form" class="fluid">
       <div class="list-page-header">
         <div class="search control">
@@ -19,12 +21,13 @@ import {MatSelectChange} from '@angular/material/select';
                  i18n-placeholder>
         </div>
         <div class="filter">
+          <span class="subheading-2">Filter</span>
           <mat-form-field>
             <mat-select [disableOptionCentering]="true"
                         panelClass="mat-select-panel"
                         formControlName="warehouse"
                         (selectionChange)="selectChange($event)">
-              <mat-option value="" i18n>Select Warehouse</mat-option>
+              <mat-option [value]="''" i18n>Select Warehouse</mat-option>
               <mat-option
                 *ngFor="let warehouse of warehouses"
                 [value]="warehouse.name">
@@ -34,18 +37,21 @@ import {MatSelectChange} from '@angular/material/select';
           </mat-form-field>
         </div>
         <div class="action">
-          <a class="control secondary" (click)="downloadProductList()" *ngIf="displayedResults?.totalResults > 0"
-             i18n>Export</a>
+          <button type="button" class="control secondary" (click)="downloadProductList()"
+                  [disabled]="displayedResults?.totalResults == 0" i18n>Export
+          </button>
         </div>
       </div>
       <nus-low-stock-product-pagination
-        *ngIf="displayedResults"
+        *ngIf="displayedResults?.totalResults > 0"
         [page]="displayedResults"
+        [updatedDate]="updatedDate"
         (updatePage)="updatePage($event)">
       </nus-low-stock-product-pagination>
       <table>
         <thead>
         <tr>
+          <th class="custom-threshold-star"></th>
           <th i18n>Name</th>
           <th i18n>UPC</th>
           <th i18n>Warehouse</th>
@@ -55,23 +61,29 @@ import {MatSelectChange} from '@angular/material/select';
         </thead>
         <tbody *ngIf="displayedResults?.totalResults > 0">
         <tr *ngFor="let entity of displayedResults.entities">
+          <td class="custom-threshold-star">
+            <span *ngIf="entity.isCustomThreshold"  class="tooltip">
+               <i class="material-icons">star</i>
+              <span class="text body-2">Custom threshold</span>
+            </span>
+          </td>
           <td>{{entity.name}}</td>
           <td>{{entity.upc}}</td>
           <td>{{entity.warehouseName}}</td>
-          <td>{{entity.sublocationName}} ({{entity.sublocationType}})</td>
+          <td>{{entity.sublocationName}} ({{entity.sublocationType | sublocationTypeToLabel }})</td>
           <td>{{entity.latestStock}}</td>
         </tr>
         </tbody>
         <tbody *ngIf="displayedResults?.totalResults === 0">
         <tr>
-          <td colspan="4" class="centered">
+          <td colspan="6" class="centered">
             <p class="body-1" i18n>No low stock product found</p>
           </td>
         </tr>
         </tbody>
       </table>
       <nus-low-stock-product-pagination
-        *ngIf="displayedResults"
+        *ngIf="displayedResults?.totalResults > 0"
         [page]="displayedResults"
         (updatePage)="updatePage($event)">
       </nus-low-stock-product-pagination>
@@ -108,18 +120,77 @@ import {MatSelectChange} from '@angular/material/select';
     }
     .filter {
         grid-area: filter;
+        display: flex;
+        align-items: center;
+        gap: 16px;
     }
     .action {
       grid-area: action;
       display: flex; justify-content: center; align-items: center; margin-left: auto;
     }
     .action > a {text-align: center;}
+
+    th:first-child, td:first-child { width: 1%; }
+
+    .custom-threshold-star .material-icons {
+      font-size: 18px;
+      color: var(--alert);
+    }
+
+    /* Tooltip container */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    /* Tooltip text */
+    .tooltip .text {
+      visibility: hidden;
+      min-width: 120px;
+      font-weight: 400;
+      text-align: left;
+      padding: 16px;
+      border-radius: 4px;
+      background-color: white;
+
+      /* Position the tooltip text */
+      position: absolute;
+      z-index: 1;
+      top: 130%;
+      left: -30%;
+
+      /* Fade in tooltip */
+      opacity: 0;
+      transition: opacity 1s;
+      box-shadow: 0 0 8px -1px var(--shadow-color);
+    }
+
+    /* Tooltip arrow */
+    .tooltip .text::before {
+      content: "";
+      position: absolute;
+      bottom: 100%;
+      left: 6%;
+
+      width: 0;
+      height: 0;
+      border: 10px solid transparent;
+      border-bottom-color: white;
+      filter: drop-shadow(0 -2px 2px var(--shadow-color));
+    }
+
+    /* Show the tooltip text when you mouse over the tooltip container */
+    .tooltip:hover .text {
+      visibility: visible;
+      opacity: 1;
+    }
   `]
 })
 
 export class LowStockProductListComponent implements OnInit, AfterViewInit {
-  @Input() warehouses: Array<{ href: string, name: string, code: string }>;
-  @Input() subLocationTypes: Array<drf.IChoice>;
+  warehouses: Array<{ href: string, name: string, code: string }>;
+  subLocationTypes: Array<drf.IChoice>;
+  updatedDate: string;
 
   entity: ILowStockProduct;
 
@@ -134,8 +205,9 @@ export class LowStockProductListComponent implements OnInit, AfterViewInit {
 
   currentPage = 1;
 
-  constructor(protected service: LowStockProductService, protected fb: FormBuilder) {
-  }
+  constructor(protected service: LowStockProductService,
+              protected fb: FormBuilder,
+              protected route: ActivatedRoute) {}
 
   get searchText(): FormControl {
     return this.form.get('searchText') as FormControl;
@@ -146,6 +218,16 @@ export class LowStockProductListComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.route.data.subscribe((data: {
+      lowStockConfig: ILowStock,
+      subLocationTypes: drf.IChoice[],
+      allWarehouses: IWarehouse[]
+    }) => {
+      this.subLocationTypes = data.subLocationTypes;
+      this.warehouses = data.allWarehouses;
+      this.updatedDate = data.lowStockConfig.productListUpdatedAt;
+    });
+
     this.initializeForm();
     this.fetchProduct();
   }

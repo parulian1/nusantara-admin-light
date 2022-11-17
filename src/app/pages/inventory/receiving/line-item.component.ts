@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {ControlContainer, FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 
 import {products, ISubLocation} from '@nusantara/models';
@@ -74,15 +74,16 @@ const logger = new Logger('InventoryReceivingLine');
     `
   ]
 })
-export class LineItemComponent implements OnInit {
+export class LineItemComponent implements OnInit, OnChanges{
 
   @Input() availableSubLocations: ISubLocation[] = [];
   @Input() productClasses: IProductClass[];
   @Output() remove = new EventEmitter<void>();
-  form: FormGroup;
+  @Input() form: FormGroup;
 
   minDate: Date;
   maxDate: Date;
+  isPerishable = false;
 
 
   constructor(private controlContainer: ControlContainer) {
@@ -91,20 +92,6 @@ export class LineItemComponent implements OnInit {
   get displayedProductName(): string {
     const p = this.product.value as products.IProduct;
     return `${p.name} (${p.upc})`;
-  }
-
-  get isPerishable(): boolean {
-    const p = this.product.value as products.IProduct;
-    let currentPc = [];
-    if (!!this.productClasses) {
-      currentPc = this.productClasses.filter(pc => pc.href === p.productClass.href);
-    }
-
-    if (currentPc.length > 0) {
-      return currentPc[0].isPerishable;
-    } else {
-      return false;
-    }
   }
 
   get product(): FormControl {
@@ -140,7 +127,7 @@ export class LineItemComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.form = (this.controlContainer.control as FormGroup);
+    // this.form = (this.controlContainer.control as FormGroup);
     this.sku.setValidators([Validators.pattern('^[A-Z0-9a-z-/&_]+$'), Validators.maxLength(20), Validators.required]);
     this.batchNumber.setValidators([Validators.maxLength(30), Validators.pattern('^[A-Z0-9]+$')]);
     this.cost.setValidators([Validators.max(999999999), Validators.min(0), Validators.required, Validators.pattern('^[0-9]+$')]);
@@ -155,6 +142,36 @@ export class LineItemComponent implements OnInit {
         minDateValidator(this.minDate),
         maxDateValidator(this.maxDate)
       ]);
+      this.expiryDate.updateValueAndValidity()
+    } else {
+      this.expiryDate.clearValidators();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const p = this.product.value as products.IProduct;
+    let currentPc = [];
+    if (!!this.productClasses) {
+      currentPc = this.productClasses.filter(pc => {
+        logger.debug('pcfilter', pc.href, p.productClass.href)
+        return pc.href === p.productClass.href;
+      });
+    }
+    if (currentPc.length > 0) {
+      logger.debug('ngOnChanges isPerishable')
+      this.isPerishable = currentPc[0].isPerishable;
+    } else {
+      logger.debug('ngOnChanges not isPerishable')
+      this.isPerishable = false;
+    }
+
+    if (this.isPerishable) {
+      this.expiryDate.setValidators([
+        Validators.required,
+        minDateValidator(this.minDate),
+        maxDateValidator(this.maxDate)
+      ]);
+      this.expiryDate.updateValueAndValidity()
     } else {
       this.expiryDate.clearValidators();
     }

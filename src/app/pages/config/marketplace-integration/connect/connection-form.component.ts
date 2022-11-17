@@ -8,7 +8,7 @@ import { MarketplaceClientEnum } from './markeplace-client-enum';
 @Component({
   selector: 'nus-marketplace-integration',
   template: `
-    <h1 class="title-1" i18n>Add Store</h1>
+    <nus-page-title i18n-title title="Add Store"></nus-page-title>
     <div class="wrapper">
       <h1 class="heading-1" i18n>Connect to Marketplace</h1>
       <p i18n>Connect to manage products in marketplace.</p>
@@ -21,6 +21,7 @@ import { MarketplaceClientEnum } from './markeplace-client-enum';
             [(ngModel)]="selectedClient"
             name="client"
           >
+            <option disabled selected [ngValue]="null"> --Select-- </option>
             <option *ngFor="let opt of marketplaces" value="{{ opt.option }}">
               {{ opt.marketplaceName }}
             </option>

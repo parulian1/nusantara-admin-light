@@ -14,7 +14,8 @@ import { InventoryRoutingModule } from './inventory-routing.module';
 import { InventoryOrderListComponent, InventoryFiltersComponent, InventoryDateFilterComponent } from './pending-order';
 import {
   InventoryTransferOrderComponent,
-  InventoryTransferLineItemComponent
+  InventoryTransferLineItemComponent, InventoryTransferDetailItemComponent,
+  InventoryTransferDetailComponent
 } from './transfer-order';
 import {
   AdjustmentComponent,
@@ -40,6 +41,8 @@ import { MatInputModule } from '@angular/material/input';
     InventoryDateFilterComponent,
     InventoryTransferOrderComponent,
     InventoryTransferLineItemComponent,
+    InventoryTransferDetailComponent,
+    InventoryTransferDetailItemComponent,
 
     AdjustmentComponent,
     AdjustmentLineItemComponent,

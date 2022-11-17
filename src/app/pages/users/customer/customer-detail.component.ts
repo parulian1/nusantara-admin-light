@@ -1,12 +1,14 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {FormBuilder, FormControl, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
 
-import { OrderService, UserService } from '@nusantara/services';
-import { AbstractDetailComponent, PagedResponse, ToastService } from '@nusantara/core';
-import { ICustomer, ICustomerGroup, IOrder } from '@nusantara/models';
-import { RequireIsEnterpriseGuard } from '@nusantara/auth';
-import { CustomerPointModalComponent } from '@nusantara/pages/users/customer/customer-point-modal.component';
+import {CustomerService, OrderService, UserService} from '@nusantara/services';
+import {AbstractDetailComponent, IResultResponse, Logger, PagedResponse, ToastService} from '@nusantara/core';
+import {ICustomer, ICustomerGroup, IOrder} from '@nusantara/models';
+import {RequireIsEnterpriseGuard} from '@nusantara/auth';
+import {CustomerPointModalComponent} from '@nusantara/pages/users/customer/customer-point-modal.component';
+
+const logger = new Logger('CustomerDetailComponent');
 
 /**
  * Displays basic information about a customer, their profile, purchase history,
@@ -16,8 +18,7 @@ import { CustomerPointModalComponent } from '@nusantara/pages/users/customer/cus
 @Component({
   selector: 'nus-customer-detail',
   template: `
-    <h1 class="title-1" i18n>Customer Details</h1>
-
+    <nus-page-title i18n-title title="Customer Details"></nus-page-title>
     <ul class="non-field-errors">
       <li *ngFor="let err of nonFieldErrors">{{ err }}</li>
     </ul>
@@ -27,122 +28,133 @@ import { CustomerPointModalComponent } from '@nusantara/pages/users/customer/cus
       <label>
         <span i18n>First Name</span>
         <input type="text" formControlName="firstName">
+        <nus-field-errors [control]="firstName"></nus-field-errors>
       </label>
 
       <label>
         <span i18n>Last Name</span>
         <input type="text" formControlName="lastName">
+        <nus-field-errors [control]="lastName"></nus-field-errors>
       </label>
 
       <label>
         <span i18n>Email Address</span>
+        <ng-container *ngIf="!entity; else emailReadOnly">
         <input type="email" formControlName="email">
+        <nus-field-errors [control]="email"></nus-field-errors>
+        </ng-container>
+        <ng-template #emailReadOnly>
+          <div class="input-read-only">{{ email.value }}</div>
+        </ng-template>
       </label>
 
       <label>
         <span i18n>Phone Number</span>
         <input type="tel" formControlName="phoneNumber">
+        <nus-field-errors [control]="phoneNumber"></nus-field-errors>
       </label>
 
       <label>
         <span i18n>Home Phone Number</span>
         <input type="tel" formControlName="homePhoneNumber">
+        <nus-field-errors [control]="homePhoneNumber"></nus-field-errors>
       </label>
 
-      <div class="tab-header">
-        <label [ngClass]="{'active': currentTab === 'summary'}">
-          <i class="material-icons">analytics</i>
-          <input type="radio" id="tab_summary" value="summary" formControlName="currentTab" i18n>
-          Summary
-        </label>
+      <div class="customer-tab" *ngIf="entity">
+        <div class="tab-header">
+          <label [ngClass]="{'active': currentTab === 'summary'}">
+            <i class="material-icons">analytics</i>
+            <input type="radio" id="tab_summary" value="summary" formControlName="currentTab" i18n>
+            Summary
+          </label>
 
-        <label [ngClass]="{'active': currentTab === 'profile'}">
-          <i class="material-icons">face</i>
-          <input type="radio" id="tab_profile" value="profile" formControlName="currentTab" i18n>
-          Profile
-        </label>
+          <label [ngClass]="{'active': currentTab === 'profile'}">
+            <i class="material-icons">face</i>
+            <input type="radio" id="tab_profile" value="profile" formControlName="currentTab" i18n>
+            Profile
+          </label>
 
-        <label [ngClass]="{'active': currentTab === 'orders'}">
-          <i class="material-icons">receipt_long</i>
-          <input type="radio" id="tab_profile" value="orders" formControlName="currentTab" i18n>
-          Orders
-        </label>
+          <label [ngClass]="{'active': currentTab === 'orders'}">
+            <i class="material-icons">receipt_long</i>
+            <input type="radio" id="tab_profile" value="orders" formControlName="currentTab" i18n>
+            Orders
+          </label>
 
-        <label [ngClass]="{'active': currentTab === 'groups'}" *ngIf="enterpriseGuard.canActivate(null, null)">
-          <i class="material-icons">group_work</i>
-          <input type="radio" id="tab_profile" value="groups" formControlName="currentTab" i18n>
-          Groups
-        </label>
-      </div>
-
-      <div *ngIf="currentTab === 'summary'" id="summary">
-        <div class="shadow-box" id="summary-acquisition">
-          <h2 i18n><i class="material-icons">verified</i> Acquisition</h2>
-          <dl>
-            <dt i18n>Registration Date</dt>
-            <dd>{{ dateJoined|date }}</dd>
-            <dt i18n>Campaign</dt>
-            <dd>{{ registrationCampaign || 'None' }}</dd>
-            <dt i18n>Channel</dt>
-            <dd>{{ profile.registrationChannel }}</dd>
-            <dt i18n>Last Login</dt>
-            <dd>{{ (lastLogin|date) || 'Never' }}</dd>
-          </dl>
+          <label [ngClass]="{'active': currentTab === 'groups'}" *ngIf="enterpriseGuard.canActivate(null, null)">
+            <i class="material-icons">group_work</i>
+            <input type="radio" id="tab_profile" value="groups" formControlName="currentTab" i18n>
+            Groups
+          </label>
         </div>
 
-        <div class="shadow-box">
-          <h2 i18n><i class="material-icons">star</i> Value</h2>
-          <dl>
-            <dt i18n>Lifetime Value</dt>
-            <dd>{{ profile.lifetimeValue|currency:"IDR" }}</dd>
-            <dt i18n>Orders</dt>
-            <dd>{{ profile.purchaseCount }}</dd>
-            <dt i18n>Avg Basket Size</dt>
-            <!-- just divide by 1 if purchase count is 0 so no divide-by-zero error -->
-            <dd>{{ (profile.lifetimeValue/(profile.purchaseCount || 1)) |currency:"IDR" }}</dd>
-            <dt i18n>Last Purchase</dt>
-            <dd>{{ (profile.lastPurchaseDate|date) || "None" }}</dd>
-          </dl>
-        </div>
-      </div>
+        <div *ngIf="currentTab === 'summary'" id="summary">
+          <div class="shadow-box" id="summary-acquisition">
+            <h2 i18n><i class="material-icons">verified</i> Acquisition</h2>
+            <dl>
+              <dt i18n>Registration Date</dt>
+              <dd>{{ dateJoined|date }}</dd>
+              <dt i18n>Campaign</dt>
+              <dd>{{ registrationCampaign || 'None' }}</dd>
+              <dt i18n>Channel</dt>
+              <dd>{{ profile.registrationChannel }}</dd>
+              <dt i18n>Last Login</dt>
+              <dd>{{ (lastLogin|date) || 'Never' }}</dd>
+            </dl>
+          </div>
 
-      <div *ngIf="currentTab === 'profile'" id="profile">
-        <section id="customer-point-summary">
-          <div id="customer-total-point">
-            <img src="assets/point-icon.svg" alt="Profile Image">
-            <span i18n>{{ userPoint | number }} Point</span>
+          <div class="shadow-box">
+            <h2 i18n><i class="material-icons">star</i> Value</h2>
+            <dl>
+              <dt i18n>Lifetime Value</dt>
+              <dd>{{ profile.lifetimeValue|currency:"IDR" }}</dd>
+              <dt i18n>Orders</dt>
+              <dd>{{ profile.purchaseCount }}</dd>
+              <dt i18n>Avg Basket Size</dt>
+              <!-- just divide by 1 if purchase count is 0 so no divide-by-zero error -->
+              <dd>{{ (profile.lifetimeValue / (profile.purchaseCount || 1)) |currency:"IDR" }}</dd>
+              <dt i18n>Last Purchase</dt>
+              <dd>{{ (profile.lastPurchaseDate|date) || "None" }}</dd>
+            </dl>
           </div>
-          <div>
-            <a (click)="pointHistory()" i18n>Points History</a>
-          </div>
-        </section>
-        <table>
-          <thead>
-          <tr>
-            <th i18n>Attribute</th>
-            <th i18n>Value</th>
-          </tr>
-          </thead>
-          <tbody>
+        </div>
+
+        <div *ngIf="currentTab === 'profile'" id="profile">
+          <section id="customer-point-summary">
+            <div id="customer-total-point">
+              <img src="assets/point-icon.svg" alt="Profile Image">
+              <span i18n>{{ userPoint | number }} Point</span>
+            </div>
+            <div>
+              <a (click)="pointHistory()" i18n>Points History</a>
+            </div>
+          </section>
+          <table>
+            <thead>
+            <tr>
+              <th i18n>Attribute</th>
+              <th i18n>Value</th>
+            </tr>
+            </thead>
+            <tbody>
             <tr *ngFor="let kvp of profile | keyvalue">
               <td>{{ kvp.key | camelToHumanized }}</td>
               <td>{{ kvp.value }}</td>
             </tr>
-          </tbody>
-        </table>
-      </div>
+            </tbody>
+          </table>
+        </div>
 
-      <div *ngIf="currentTab === 'orders'" id="orders">
-        <table>
-          <thead>
+        <div *ngIf="currentTab === 'orders'" id="orders">
+          <table>
+            <thead>
             <th i18n>Number</th>
             <th i18n>Date</th>
             <th i18n>Channel</th>
             <th i18n>Type</th>
             <th i18n>Status</th>
             <th i18n>Grand Total</th>
-          </thead>
-          <tbody>
+            </thead>
+            <tbody>
             <tr *ngFor="let order of orders">
               <td>{{ order.orderNumber }}</td>
               <td>{{ order.created | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
@@ -151,27 +163,29 @@ import { CustomerPointModalComponent } from '@nusantara/pages/users/customer/cus
               <td>{{ order.status }}</td>
               <td>{{ order.orderPayment ? order.orderPayment.amount : 0 | currency:"IDR" }}</td>
             </tr>
-          </tbody>
-        </table>
-        <div *ngIf="!!page">
+            </tbody>
+          </table>
+          <div *ngIf="!!page">
             <nus-pagination-child [page]="page" (fetchPageNumber)="fetchOrders($event)"></nus-pagination-child>
+          </div>
+        </div>
+
+        <div *ngIf="currentTab === 'groups'" id="groups">
+          <table>
+            <thead>
+            <tr>
+              <th i18n>Group Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let customergroup of customerGroups">
+              <td>{{ customergroup.name }}</td>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
-      <div *ngIf="currentTab === 'groups'" id="groups">
-        <table>
-          <thead>
-          <tr>
-            <th i18n>Group Name</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let customergroup of customerGroups">
-            <td>{{ customergroup.name }}</td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
 
       <nus-detail-actions
         [component]="this"
@@ -188,7 +202,10 @@ import { CustomerPointModalComponent } from '@nusantara/pages/users/customer/cus
 
   `,
   styles: [`
-    #summary { display: grid; grid-template-columns: 1fr 1fr; }
+    #summary {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
 
     #summary dl {
       display: grid;
@@ -197,23 +214,61 @@ import { CustomerPointModalComponent } from '@nusantara/pages/users/customer/cus
       font-size: 11.2px;
       padding: 0 5px;
     }
-    #summary dt { font-weight: bold; }
-    #summary dd { margin-left: 0; padding-bottom: 7px; font-size: 16px; }
 
-    #summary dl dt:nth-of-type(1) { grid-column: 1/3; }
-    #summary dl dd:nth-of-type(1) { grid-column: 1/3; grid-row: 2; }
+    #summary dt {
+      font-weight: bold;
+    }
 
-    #summary dl dt:nth-of-type(2) { grid-row: 3; }
-    #summary dl dd:nth-of-type(2) { grid-row: 4; }
+    #summary dd {
+      margin-left: 0;
+      padding-bottom: 7px;
+      font-size: 16px;
+    }
 
-    #summary dl dt:nth-of-type(3) { grid-column: 2; grid-row: 3; }
-    #summary dl dd:nth-of-type(3) { grid-column: 2; grid-row: 4; }
+    #summary dl dt:nth-of-type(1) {
+      grid-column: 1/3;
+    }
 
-    #summary dl dt:nth-of-type(4) { grid-row: 5; }
-    #summary dl dd:nth-of-type(4) { grid-row: 6; }
+    #summary dl dd:nth-of-type(1) {
+      grid-column: 1/3;
+      grid-row: 2;
+    }
 
-    #summary dl dt:nth-of-type(5) { grid-column: 2; grid-row: 5; }
-    #summary dl dd:nth-of-type(5) { grid-column: 2; grid-row: 6; }
+    #summary dl dt:nth-of-type(2) {
+      grid-row: 3;
+    }
+
+    #summary dl dd:nth-of-type(2) {
+      grid-row: 4;
+    }
+
+    #summary dl dt:nth-of-type(3) {
+      grid-column: 2;
+      grid-row: 3;
+    }
+
+    #summary dl dd:nth-of-type(3) {
+      grid-column: 2;
+      grid-row: 4;
+    }
+
+    #summary dl dt:nth-of-type(4) {
+      grid-row: 5;
+    }
+
+    #summary dl dd:nth-of-type(4) {
+      grid-row: 6;
+    }
+
+    #summary dl dt:nth-of-type(5) {
+      grid-column: 2;
+      grid-row: 5;
+    }
+
+    #summary dl dd:nth-of-type(5) {
+      grid-column: 2;
+      grid-row: 6;
+    }
 
     h2 {
       font-size: 16px;
@@ -221,25 +276,46 @@ import { CustomerPointModalComponent } from '@nusantara/pages/users/customer/cus
       text-align: center;
       color: #707070;
     }
+
     h2 > i {
       font-size: 1em;
     }
 
-    .tab-header label { display: inline-block; }
-    .tab-header label.active { color: var(--bhisma-orange); }
-    .tab-header input:checked { background-color: var(--bhisma-orange); }
-    .tab-header { margin-bottom: 5px; }
-    .tab-header i { display: block; }
-    .tab-header input[type=radio] { display: none; }
+    .tab-header label {
+      display: inline-block;
+    }
+
+    .tab-header label.active {
+      color: var(--bhisma-orange);
+    }
+
+    .tab-header input:checked {
+      background-color: var(--bhisma-orange);
+    }
+
+    .tab-header {
+      margin-bottom: 5px;
+    }
+
+    .tab-header i {
+      display: block;
+    }
+
+    .tab-header input[type=radio] {
+      display: none;
+    }
+
     .tab-header label {
       border-bottom: 2px solid;
       text-align: center;
       padding-right: 10px;
       padding-left: 10px;
     }
+
     .shadow-box {
       margin: 5px;
     }
+
     #customer-point-summary {
       display: flex;
       flex-direction: row;
@@ -251,20 +327,23 @@ import { CustomerPointModalComponent } from '@nusantara/pages/users/customer/cus
       border-radius: 4px;
       margin: 16px 0;
     }
-    #customer-point-summary span{
+
+    #customer-point-summary span {
       font-weight: bold;
       font-size: 16px;
       line-height: 24px;
     }
+
     #customer-total-point {
       display: flex;
     }
-    #customer-total-point img{
+
+    #customer-total-point img {
       margin-inline-end: 8px;
     }
   `]
 })
-export class CustomerDetailComponent extends AbstractDetailComponent<ICustomer> implements OnInit{
+export class CustomerDetailComponent extends AbstractDetailComponent<ICustomer> implements OnInit {
 
   dateJoined: Date;
   registrationCampaign: string;
@@ -283,9 +362,29 @@ export class CustomerDetailComponent extends AbstractDetailComponent<ICustomer> 
     return this.form.get('currentTab').value;
   }
 
+  get firstName(): FormControl {
+    return this.form.get('firstName') as FormControl;
+  }
+
+  get lastName(): FormControl {
+    return this.form.get('lastName') as FormControl;
+  }
+
+  get email(): FormControl {
+    return this.form.get('email') as FormControl;
+  }
+
+  get phoneNumber(): FormControl {
+    return this.form.get('phoneNumber') as FormControl;
+  }
+
+  get homePhoneNumber(): FormControl {
+    return this.form.get('homePhoneNumber') as FormControl;
+  }
+
   @ViewChild('pointHistoryModal') pointHistoryModal: CustomerPointModalComponent;
 
-  constructor(service: UserService,
+  constructor(service: CustomerService,
               route: ActivatedRoute,
               router: Router,
               toast: ToastService,
@@ -297,7 +396,9 @@ export class CustomerDetailComponent extends AbstractDetailComponent<ICustomer> 
 
   ngOnInit() {
     super.ngOnInit();
-    this.fetchOrders();
+    if (this.entity) {
+      this.fetchOrders();
+    }
   }
 
   fetchOrders(pageNumber?: number) {
@@ -310,27 +411,66 @@ export class CustomerDetailComponent extends AbstractDetailComponent<ICustomer> 
 
   initializeForm(entity?: ICustomer) {
     this.form = this.fb.group({
-      firstName: [entity?.firstName, [Validators.required, ]],
-      lastName: [entity?.lastName, [Validators.required, ]],
-      email: [entity?.email, [Validators.required, ]],
+      firstName: [entity?.firstName, [
+        Validators.required,
+        Validators.maxLength(120),
+        Validators.pattern('^[a-zA-Z0-9 .]*$'),
+      ]],
+      lastName: [entity?.lastName, [
+        Validators.required,
+        Validators.maxLength(120),
+        Validators.pattern('^[a-zA-Z0-9 .]*$'),
+      ]],
+      email: [entity?.email, [
+        Validators.required,
+        Validators.email,
+        Validators.maxLength(74),
+      ]],
       href: [entity?.href, []],
-      phoneNumber: [entity?.phoneNumber, []],
-      homePhoneNumber: [entity?.homePhoneNumber, []],
+      phoneNumber: [entity?.phoneNumber,
+        [
+          Validators.required, Validators.pattern('^[0-9]*$'),
+          Validators.minLength(9), Validators.maxLength(14)
+        ]
+      ],
+      homePhoneNumber: [entity?.homePhoneNumber,
+        [
+          Validators.required, Validators.pattern('^[0-9]*$'),
+          Validators.minLength(9), Validators.maxLength(14)
+        ]],
       currentTab: ['summary', []]
     });
-
-    this.dateJoined = new Date(entity?.dateJoined);
-    this.lastLogin = entity?.lastLogin ? new Date(entity.lastLogin) : null;
-    this.registrationCampaign = entity.profile?.registrationCampaign;
-    this.profile = entity.profile;
-    this.customerGroups = entity.customerGroups;
-    this.userEmail = entity.email;
-    this.userPoint = entity.userPoint ? entity.userPoint : 0;
-    this.entity = entity;
+    if (entity) {
+      this.dateJoined = new Date(entity?.dateJoined);
+      this.lastLogin = entity?.lastLogin ? new Date(entity.lastLogin) : null;
+      this.registrationCampaign = entity.profile?.registrationCampaign;
+      this.profile = entity.profile;
+      this.customerGroups = entity.customerGroups;
+      this.userEmail = entity.email;
+      this.userPoint = entity.userPoint ? entity.userPoint : 0;
+      this.entity = entity;
+    }
   }
 
   pointHistory() {
     this.pointHistoryModal.open();
   }
 
+
+  getFormValue(): any {
+    const formValue = super.getFormValue();
+    delete formValue?.title;
+    if (!this.entity) {
+      return {...formValue, email: this.email.value.toLowerCase()};
+    } else {
+      delete formValue?.email;
+      return formValue;
+    }
+  }
+
+
+  protected onSaveSuccess(result: IResultResponse<ICustomer>) {
+    logger.debug(result);
+    super.onSaveSuccess(result);
+  }
 }

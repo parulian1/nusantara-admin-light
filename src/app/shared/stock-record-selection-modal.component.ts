@@ -36,26 +36,51 @@ import { map } from 'rxjs/operators';
           </colgroup>
           <thead>
           <tr style="background-color: #F4F4F4;">
-            <th class="product-name" i18n>Receiving ID / Product Name</th>
+            <th class="product-name" i18n>
+              <ng-container *ngIf="!isTransferDisplay; else transferHeader">
+                Receiving ID / Product Name
+              </ng-container>
+              <ng-template #transferHeader>
+                Product Name / Location
+              </ng-template>
+            </th>
             <th class="product-sku" i18n>SKU</th>
             <th class="stock-receiving-date" i18n>Receiving Date</th>
             <th class="stock-batch" i18n>Batch</th>
             <th class="stock-expiry-date" i18n>Expiry Date</th>
-            <th class="product-original-qty" i18n>Stock</th>
+            <th class="product-original-qty" i18n>
+              <ng-container *ngIf="!isTransferDisplay; else transferHeaderStock">
+                Stock
+              </ng-container>
+              <ng-template #transferHeaderStock>
+                Stock Available
+              </ng-template>
+            </th>
             <th class="centered" i18n>Action</th>
           </tr>
           </thead>
           <tbody *ngIf="displayedResults; else loading">
           <tr *ngFor="let p of displayedResults?.entities">
             <td class="product-name" title="{{ displayReceivingID(p?.receivingOrder?.href) }} / {{ p?.product?.name }}">
-              {{ displayReceivingID(p?.receivingOrder?.href) }} / {{ p?.product?.name }}
+              <ng-container *ngIf="!isTransferDisplay; else transferDisplay">
+                {{ displayReceivingID(p?.receivingOrder?.href) }} / {{ p?.product?.name }}
+              </ng-container>
+              <ng-template #transferDisplay>
+                {{ p?.product?.name }} / {{ p?.location?.name }}
+              </ng-template>
             </td>
             <td class="product-sku" title="{{ p.sku }}">{{ p.sku }}</td>
-            <td class="stock-receiving-date" title="{{ p.created | date }}">{{ p.created | date }}</td>
+            <td class="stock-receiving-date" title="{{ p.created | date: 'dd/MM/yyyy' }}">
+              {{ p.created | date: 'dd/MM/yyyy' }}
+            </td>
             <td class="stock-batch" title="{{ p.batchNumber }}">{{ p.batchNumber }}</td>
-            <td class="stock-expiry-date" title="{{ p.expiryDate | date }}">{{ p.expiryDate | date }}</td>
+            <td class="stock-expiry-date" title="{{ p.expiryDate | date: 'dd/MM/yyyy' }}">
+              {{ p.expiryDate | date: 'dd/MM/yyyy' }}
+            </td>
             <td class="product-original-qty" title="{{ p.originalQuantity }}">{{ p.originalQuantity }}</td>
-            <td class="centered"><a href="#" (click)="selectStockRecord(p)" i18n>Add</a></td>
+            <td class="centered">
+              <a href="#" (click)="selectStockRecord(p)" i18n>Add</a>
+            </td>
           </tr>
           </tbody>
 
@@ -114,6 +139,7 @@ import { map } from 'rxjs/operators';
     `,
     'table { table-layout: fixed }',
     'td { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }',
+    'table thead tr th:first-child { width: 25%; }'
   ]
 })
 export class StockRecordSelectionModalComponent implements OnInit, AfterViewInit {
@@ -130,7 +156,7 @@ export class StockRecordSelectionModalComponent implements OnInit, AfterViewInit
   originalValue: string = null;
   filters = {};
 
-  @Input() isInStock = true;
+  @Input() isTransferDisplay?: boolean = false;
 
   //
   constructor(
@@ -211,11 +237,6 @@ export class StockRecordSelectionModalComponent implements OnInit, AfterViewInit
       this.service.fetchListWithFilter(this.searchText.value, 1, 10, this.filters)
         .pipe(map(stockRecords => {
           // show only stock record with original quantity more than 0
-          if (this.isInStock) {
-            stockRecords.entities = stockRecords.entities.filter(
-              entity => entity.originalQuantity > 0
-            );
-          }
           return stockRecords;
         })).subscribe((page) => {
         this.displayedResults = page;

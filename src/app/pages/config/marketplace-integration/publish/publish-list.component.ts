@@ -9,7 +9,7 @@ import {
 @Component({
   selector: 'nus-marketplace-publish',
   template: `
-    <h1 class="title-1" i18n>Publish List</h1>
+    <nus-page-title i18n-title title="Publish List"></nus-page-title>
     <div class="empty-list">
       <nus-empty-list
         *ngIf="!shops?.entities?.length && !processing?.entities?.length && !completed?.entities?.length"

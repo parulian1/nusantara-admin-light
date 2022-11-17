@@ -10,7 +10,8 @@ import { MarketplaceClientEnum } from '../connect/markeplace-client-enum';
 
 @Component({
   selector: 'nus-marketplace-setup',
-  template: `<h1 class="title-1" i18n>Marketplace Set Up</h1>
+  template: `
+    <nus-page-title i18n-title title="Marketplace Set Up"></nus-page-title>
     <nus-empty-list
       *ngIf="!page?.entities?.length; else elseBlock"
       title="No Connected Store Yet!"

@@ -293,12 +293,13 @@ const logger = new Logger('ProductComponent');
             <label class="single-price immediate-error-display-input">
               <span i18n>Default Price</span>
               <div class="prepend-label">
-                <span class="prepended-label">Rp.</span>
+                <span class="prepended-label" [ngClass]="{'disabled': this.price.disabled}">Rp.</span>
                 <input type="number" [formControl]="price" name="price" min="1" appOnlyNumber decimal="true"
                        placeholder="Input 1-{{MAX_PRICE}}"
                        i18n-placeholder data-qa="single-price"
                 >
               </div>
+              <span class="caption-2" *ngIf="this.isAdvancePriceAvailable" i18n>Please exclude the product from the Advanced Price to edit this column.</span>
               <nus-field-errors [control]="price"></nus-field-errors>
             </label>
 
@@ -316,7 +317,6 @@ const logger = new Logger('ProductComponent');
                   <nus-field-errors [control]="priceSelector"></nus-field-errors>
                 </label>
               </div>
-
             </label>
             <label>
               <div [ngClass]="{'hidden' : !enterpriseLicense()}">
@@ -451,6 +451,15 @@ const logger = new Logger('ProductComponent');
               <nus-field-length-counter [control]="seoMeta"
                                         [maxLength]="SEO_MAX_LENGTH"></nus-field-length-counter>
               </span>
+            </label>
+            <label class="immediate-error-display-input">
+              <span i18n>Google Product Category</span>
+              <input type="text"
+                     [formControl]="googleProductCategory"
+                     name="google-product-category"
+                     placeholder="Google Product Category" i18n-placeholder
+                     data-qa="google-product-category"/>
+              <nus-field-errors [control]="googleProductCategory"></nus-field-errors>
             </label>
           </div>
 
@@ -596,11 +605,8 @@ const logger = new Logger('ProductComponent');
     '.total-price td.price { text-align: right; }',
     '#barcode-label { display: block; margin-bottom: 4px; }',
     '#barcode-label > span:first-child { font-size: 14px; line-height: 20px; font-weight: bold; margin-right: 10px; }',
-    `.input-error-info {
-      display: flex;
-      justify-content: space-between;
-    }
-    `, `
+    '.input-error-info { display: flex; justify-content: space-between; }',
+    `
       .greybox {
         display: flex;
         flex-direction: row;
@@ -671,6 +677,11 @@ const logger = new Logger('ProductComponent');
         width: 25px;
         text-align: center;
         font-style: normal;
+        padding-left: 5px;
+      }
+
+      span.prepended-label.disabled {
+        color: var(--grey);
       }
 
       .prepend-label > input {
@@ -945,6 +956,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     return this.form?.get('barcode') as FormControl;
   }
 
+  get googleProductCategory(): FormControl {
+    return this.form?.get('googleProductCategory') as FormControl;
+  }
+
   ngAfterViewInit() {
     super.ngAfterViewInit();
     this.productRecommendationSelectionModal.onClose.subscribe(() => this.onProductRecommendationSelectionModalClosed());
@@ -966,9 +981,12 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         this.price.setValidators([Validators.min(1), Validators.max(this.MAX_PRICE)]);
         this.priceRangeEnabled = false;
       } else {
-        this.price.enable({emitEvent: false});
-        this.price.clearValidators();
-        this.price.setValidators([Validators.required, Validators.min(1), Validators.max(this.MAX_PRICE)]);
+        if (!this.isAdvancePriceAvailable) {
+          // Default price field will not be enabled if there is an advance price
+          this.price.enable({emitEvent: false});
+          this.price.clearValidators();
+          this.price.setValidators([Validators.required, Validators.min(1), Validators.max(this.MAX_PRICE)]);
+        }
         this.priceRangeEnabled = true;
       }
     });
@@ -1097,6 +1115,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         Validators.maxLength(this.BARCODE_MAX_LENGTH),
         Validators.pattern('^[A-Z0-9]+$'),
       ]],
+      googleProductCategory: [entity?.googleProductCategory, [Validators.maxLength(255)]]
     });
 
 
@@ -1243,9 +1262,13 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     if (!!this.productSlug) {
       this.advancedPriceListService.search_by_product_slug(this.productSlug).pipe(catchError(err => {
         logger.debug('Cannot get advanced price');
+        logger.debug(err);
         return of(EMPTY);
       })).subscribe((data: Array<IAdvancedPriceList>) => {
         this.isAdvancePriceAvailable = data.length > 0;
+        if (this.isAdvancePriceAvailable) {
+          this.price.disable({emitEvent: false});
+        }
       });
     }
   }
@@ -1442,10 +1465,12 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         }
       }
       try {
-        for (let x = this.priceListHost.priceLists.first.rangeComponents.length; x > 1; x--) {
-          this.priceListHost.priceLists.first.rangeComponents.get(x - 1).remove.emit(this.priceListHost.priceLists.first.rangeComponents.get(x - 1));
+        if (this.priceListHost.priceLists.first) {
+          for (let x = this.priceListHost.priceLists.first.rangeComponents.length; x > 1; x--) {
+            this.priceListHost.priceLists.first.rangeComponents.get(x - 1).remove.emit(this.priceListHost.priceLists.first.rangeComponents.get(x - 1));
+          }
+          this.priceListHost.priceLists.first.rangeComponents.get(0).price.setValue(this.price.value);
         }
-        this.priceListHost.priceLists.first.rangeComponents.get(0).price.setValue(this.price.value);
       } catch (e) {
         logger.error(e);
       }

@@ -121,12 +121,7 @@ export class OrderFiltersComponent implements OnInit {
         this.orderStatuses = data.orderStatus;
         this.orderFilter = data.orderFilter;
         this.orderFilter = {
-          platform: [{
-            option: '0',
-            title: 'Web Order',
-          } as IOption].concat(this.orderFilter.platform.map(vl => {
-            return {option: `${vl.option}`, title: vl.title};
-          })),
+          platform: this.orderFilter.platform,
           orderStatus: this.orderFilter.orderStatus,
           logistics: this.orderFilter.logistics,
         } as IOrderFilter;
@@ -199,19 +194,6 @@ export class OrderFiltersComponent implements OnInit {
         logistic: logistic ? logistic : '',
         isTesting: isTesting ? isTesting.toLowerCase() === 'true' : false,
       });
-
-      // this.filtersForm.valueChanges.subscribe((newValue) => {
-      //   this.updateRoute({
-      //     [this.PLATFORM_PARAM]: newValue.platform ? newValue.platform : null,
-      //     [this.STATUS_PARAM]: newValue.status ? newValue.status : null,
-      //     [this.LOGISTIC_PARAM]: newValue.logistic ? newValue.logistic : null,
-      //     [this.TESTING_PARAM]: newValue.isTesting ? newValue.isTesting : null
-      //   });
-      //
-      //   this.updatePlatform(newValue.platform);
-      //   this.updateStatus(newValue.status);
-      //   this.updateLogistic(newValue.logistic);
-      // });
     });
   }
 

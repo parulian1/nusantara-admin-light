@@ -12,7 +12,7 @@ import { Kgx, ShippingServicesTypes } from './shipping-service/constants';
   template: `
     <nus-detail-title
       [originalName]="originalEntityName"
-      [typeName]="entityTypeName">
+      typeName="Shipping Method">
     </nus-detail-title>
 
     <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
@@ -27,6 +27,7 @@ import { Kgx, ShippingServicesTypes } from './shipping-service/constants';
       <label>
         <span i18n>Type</span>
         <select formControlName="type">
+          <option disabled selected [ngValue]="null"> --Select-- </option>
           <option *ngFor="let choice of types" [ngValue]="choice.value">{{ choice.displayName }}</option>
         </select>
         <nus-field-errors [control]="type"></nus-field-errors>
@@ -149,7 +150,6 @@ export class ShippingProviderDetailComponent extends AbstractDetailComponent<ISh
       this.types = data.types;
       this.shippingServiceTypes = ShippingServicesTypes;
     });
-    this.originalEntityName = 'Shipping Method';
   }
 
   get name(): FormControl { return this.form.get('name') as FormControl; }

@@ -171,11 +171,33 @@ a.disabled {
   cursor: not-allowed;
 }
 
+.caption-1 {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 18px;
+}
+.caption-2 {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 16px;
+}
+
+
 
 /**
  * 2. Forms
  * --------
  */
+.input-read-only {
+  font-size: 1em;
+  font-family: inherit;
+  background: white;
+  box-sizing: border-box;
+  padding: 5px;
+  height: 40px;
+}
  input:not([type=checkbox]):not([type=radio]), select {
   font-size: 1em;
   font-family: inherit;

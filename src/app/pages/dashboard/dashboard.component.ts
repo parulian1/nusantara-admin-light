@@ -1,7 +1,8 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IHrefEntity } from '@nusantara/models/base';
 import { AuthService } from '@nusantara/auth';
+import {Title} from "@angular/platform-browser";
 
 
 @Component({
@@ -18,11 +19,15 @@ import { AuthService } from '@nusantara/auth';
   `,
   styles: [`iframe { min-height: 950px; }`]
 })
-export class DashboardComponent implements AfterViewInit {
+export class DashboardComponent implements AfterViewInit, OnInit {
 
   @ViewChild('metabase') metabaseIframe: ElementRef;
 
-  constructor(protected route: ActivatedRoute, public authService: AuthService) { }
+  constructor(protected route: ActivatedRoute, public authService: AuthService, private titleService: Title) { }
+
+  ngOnInit() {
+    this.titleService.setTitle('Bhisma Admin - Dashboard');
+  }
 
   ngAfterViewInit(): void {
     if (!!this.allowToShow) {

@@ -235,3 +235,36 @@ export function getProductBasePrice(priceLists: Array<any>) {
 
   return basePrice;
 }
+
+export function convertDateTime(timestamp: string) {
+  if (timestamp) {
+    const date = new Date(timestamp);
+
+    const year = date.getFullYear();
+    let month: string | number = date.getMonth() + 1; // getMonth() is zero-indexed, so we'll increment to get the correct month number
+    let day: string | number = date.getDate();
+    let hours: string | number = date.getHours();
+    let minutes: string | number = date.getMinutes();
+    let seconds: string | number = date.getSeconds();
+
+    month = (month < 10) ? '0' + month : month;
+    day = (day < 10) ? '0' + day : day;
+    hours = (hours < 10) ? '0' + hours : hours;
+    minutes = (minutes < 10) ? '0' + minutes : minutes;
+    seconds = (seconds < 10) ? '0' + seconds : seconds;
+    return (`${year}-${month}-${day}T${hours}:${minutes}:${seconds}`);
+  }
+  return '';
+}
+
+// Get display name of login user
+export function userDisplayName(authService): string {
+  const email = authService.tokenPayload?.email ?? '';
+  const fullName = `${authService.tokenPayload?.last_name} ${authService.tokenPayload?.first_name}`.trim();
+
+  if (fullName && email) {
+    return [fullName, `(${email})`, ].join(' ').trim();
+  } else {
+    return email;
+  }
+}

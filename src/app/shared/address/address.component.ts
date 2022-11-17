@@ -31,6 +31,7 @@ import { InternalAddressValue } from './internal-address-value';
       <label>
         <span i18n>Province</span>
         <select [formControl]="province" name="province">
+          <option disabled selected [ngValue]="null"> --Select-- </option>
           <option *ngFor="let prov of availableProvinces" [ngValue]="prov">
             {{ prov.name }}
           </option>
@@ -41,6 +42,7 @@ import { InternalAddressValue } from './internal-address-value';
       <label>
         <span i18n>City</span>
         <select [formControl]="city" name="city">
+          <option disabled selected [ngValue]="null"> --Select-- </option>
           <option *ngFor="let city of availableCities" [ngValue]="city">
             {{ city.name }}
           </option>
@@ -51,6 +53,7 @@ import { InternalAddressValue } from './internal-address-value';
       <label>
         <span i18n>Postal Code</span>
         <select [formControl]="postal" name="postal">
+          <option disabled selected [ngValue]="null"> --Select-- </option>
           <option *ngFor="let postalInfo of availablePostals" [ngValue]="postalInfo">
             {{ postalInfo.district }} / {{ postalInfo.subDistrict }} ({{ postalInfo.postalCode }})
           </option>

@@ -1,4 +1,5 @@
-import { Input, Component } from '@angular/core';
+import {Input, Component, OnInit} from '@angular/core';
+import {Title} from "@angular/platform-browser";
 
 /**
  * Use on a detail page to show an H1 with either 'New some-type' or 'Update "my model"'
@@ -13,8 +14,19 @@ import { Input, Component } from '@angular/core';
     </h1>
   `
 })
-export class DetailTitleComponent {
+export class DetailTitleComponent implements OnInit{
   @Input() originalName?: string;
   @Input() typeName: string;
   @Input() isLink:boolean;
+
+  constructor(private titleService: Title) {
+  }
+
+  ngOnInit() {
+    let title = 'Add '+this.typeName;
+    if(!!this.originalName && this.originalName!=='Object') {
+      title = this.originalName;
+    }
+    this.titleService.setTitle('Bhisma Admin - '+title);
+  }
 }

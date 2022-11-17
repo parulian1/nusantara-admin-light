@@ -86,9 +86,12 @@ import {MatDialogModule} from '@angular/material/dialog';
     MatCheckboxModule,
     MatDialogModule
   ],
+  exports: [
+    OrderDateFilterComponent
+  ],
   providers: [
-    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { floatLabel: 'never', appearance: 'outline' } },
-    { provide: MAT_RIPPLE_GLOBAL_OPTIONS, useValue: { disabled: true } },
+    {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {floatLabel: 'never', appearance: 'outline'}},
+    {provide: MAT_RIPPLE_GLOBAL_OPTIONS, useValue: {disabled: true}},
   ]
 })
 export class FulfillmentModule { }

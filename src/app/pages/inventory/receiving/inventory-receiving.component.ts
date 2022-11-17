@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, NavigationEnd, Router, RouterEvent} from '@angular/router';
 
-import { AuthService } from '../../../auth';
+import {AuthService} from '../../../auth';
 import {AbstractDetailComponent, DialogResult, ErrorResult, Logger, ToastService} from '../../../core';
 import {
   inventory,
@@ -12,16 +12,16 @@ import {
   IError
 } from '@nusantara/models';
 import {InventoryReceivingService, MarketplaceClientService, ProductClassService} from '../../../services';
-import { IProduct, IProductClass } from '../../../models/products';
+import {IProduct, IProductClass} from '../../../models/products';
 import {
   ConfirmModalReceivingOrderComponent,
   MarketplaceChannelInfoModalComponent,
   ProductSelectionModalComponent
 } from '../../../shared';
-import { catchError } from 'rxjs/operators';
-import { HttpErrorResponse } from '@angular/common/http';
-import {EMPTY, of} from 'rxjs';
-import {getSlugFromHref} from "@nusantara/shared/helpers";
+import {catchError, filter, takeUntil} from 'rxjs/operators';
+import {HttpErrorResponse} from '@angular/common/http';
+import {EMPTY, Observable, of, Subject, Subscription} from 'rxjs';
+import {getSlugFromHref, userDisplayName} from '@nusantara/shared/helpers';
 
 const logger = new Logger('InventoryReceivingComponent');
 
@@ -31,37 +31,36 @@ const logger = new Logger('InventoryReceivingComponent');
 @Component({
   selector: 'nus-inventory-receiving',
   template: `
-    <h1 i18n>Delivery (Receiving)</h1>
-
+    <nus-page-title i18n-title title="Delivery (Receiving)"></nus-page-title>
     <form [formGroup]="form" (ngSubmit)="saveForm()">
       <div class="container">
         <div class="general-info">
           <div class="general-info--header box-container">
             <div>
-              <label i18n>Created By</label>
-              <span>{{ userDisplayName }}</span>
+              <label class="body-2" i18n>Created By</label>
+              <span class="subheading-2">{{ userDisplayName }}</span>
             </div>
             <div>
-              <label i18n>Created Date</label>
-              <span>{{ currentDate|date }}</span>
+              <label class="body-2" i18n>Created Date</label>
+              <span class="subheading-2">{{ currentDate|date }}</span>
             </div>
           </div>
           <div class="general-info--detail box-container">
             <h3 i18n>General Information</h3>
             <div class="immediate-error-display">
-              <label for="do-number" i18n>DO Number (Optional)</label>
+              <label for="do-number" class="subheading-2" i18n>DO Number (Optional)</label>
               <input id="do-number" type="text" [formControl]="doNumber" placeholder="Input DO Number">
               <nus-field-errors [control]="doNumber"></nus-field-errors>
             </div>
             <div class="immediate-error-display">
-              <label for="pic-sender">PIC Sender (Optional)</label>
+              <label for="pic-sender" class="subheading-2" i18n>PIC Sender (Optional)</label>
               <input id="pic-sender" type="text" [formControl]="dcPic" placeholder="Input PIC Sender">
               <nus-field-errors [control]="dcPic"></nus-field-errors>
             </div>
             <div [formGroup]="warehouse">
-              <label for="warehouse" i18n>Warehouse</label>
+              <label for="warehouse" class="subheading-2" i18n>Warehouse</label>
               <div class="confirm-warehouse">
-                <select id="warehouse" formControlName="href">
+                <select formControlName="href">
                   <option [ngValue]="null" i18n>Select Warehouse</option>
                   <option *ngFor="let wh of warehouses" [ngValue]="wh.href">
                     {{ wh.name }}
@@ -111,19 +110,19 @@ const logger = new Logger('InventoryReceivingComponent');
 
           <nus-inventory-receiving-line
             *ngFor="let rec of stockRecords.controls; let i=index"
-            [formGroup]="rec"
+            [form]="rec"
             [availableSubLocations]="availableSubLocations"
             [productClasses]="productClasses"
             (remove)="stockRecords.removeAt(i)">
           </nus-inventory-receiving-line>
 
-            <tr>
-              <td colspan="9">
-                <button type="button" (click)="addLine()" class="new-add-button wide" i18n>
-                  <i class="material-icons">add</i> Add Record
-                </button>
-              </td>
-            </tr>
+          <tr>
+            <td colspan="9">
+              <button type="button" (click)="addLine()" class="new-add-button wide" i18n>
+                <i class="material-icons">add</i> Add Record
+              </button>
+            </td>
+          </tr>
           </tbody>
         </table>
 
@@ -147,16 +146,21 @@ const logger = new Logger('InventoryReceivingComponent');
     'button.confirm { width: auto }',
     '.container { display: grid; grid-template-columns: 4fr 1fr; grid-gap: 24px; }',
     '.box-container { border: 1px solid var(--grey); border-radius: 4px; padding: 16px 24px; }',
-    '.general-info h3 { margin-bottom: 20px; }',
-    '.general-info > div:not(:last-child), .general-info--detail > div:not(:last-child) { margin-bottom: 23px; }',
-    '.general-info label { min-height: 0; line-height: 20px; color: var(--darken-grey); padding-bottom: 0;}',
-    '.general-info--detail label { color: var(--lighten-black); font-weight: bold; }',
-    '.general-info span{ font-weight: 700; color: var(--lighten-black); }',
+    '.box-container h3 { margin-bottom: 20px; }',
+    '.box-container:not(:last-child), .general-info--detail > div:not(:last-child) { margin-bottom: 24px; }',
+    '.box-container label { min-height: 0; color: var(--darken-grey); padding-bottom: 0;}',
+    '.box-container span, .general-info--detail label{ color: var(--lighten-black); }',
     '.general-info--header { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); }',
     `
       @media (max-width: 768px) {
-        .general-info--header { display: grid; grid-template-columns: 1fr; }
-        .general-info--header > div:not(:last-child) { margin-bottom: 23px; }
+        .general-info--header {
+          display: grid;
+          grid-template-columns: 1fr;
+        }
+
+        .general-info--header > div:not(:last-child) {
+          margin-bottom: 23px;
+        }
       }
     `,
     '.mp-info > h3 { margin-bottom: 16px; }',
@@ -173,12 +177,13 @@ const logger = new Logger('InventoryReceivingComponent');
     }`
   ]
 })
-export class InventoryReceivingComponent extends AbstractDetailComponent<inventory.IReceivingOrder> implements OnInit, AfterViewInit {
+export class InventoryReceivingComponent extends AbstractDetailComponent<inventory.IReceivingOrder> implements OnInit, AfterViewInit, OnDestroy {
 
   warehouses: IWarehouse[];
   availableSubLocations: ISubLocation[] = [];
   warehouseDetail: marketplace.IWarehouseDetail[];
   productClasses: IProductClass[] = [];
+  userDisplayName = userDisplayName(this.authService)
 
   @ViewChild(ProductSelectionModalComponent) productSelectionModal: ProductSelectionModalComponent;
   @ViewChild(MarketplaceChannelInfoModalComponent) marketplaceChannelInfo: MarketplaceChannelInfoModalComponent;
@@ -191,6 +196,9 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
   showDetail = false;
   productType: string = 'single';
 
+  pipeEvent: Subscription;
+  private destroy$: Subject<boolean> = new Subject<boolean>();
+
   constructor(private fb: FormBuilder,
               public toast: ToastService,
               public authService: AuthService,
@@ -198,7 +206,8 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
               public clientService: MarketplaceClientService,
               public route: ActivatedRoute,
               public router: Router,
-              public productClassService: ProductClassService,) {
+              public productClassService: ProductClassService,
+              private cdr: ChangeDetectorRef) {
     super(route, router, toast, service);
   }
 
@@ -212,18 +221,34 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
 
   ngOnInit() {
     super.ngOnInit();
-    this.route.data.subscribe((data: { warehouses: IWarehouse[] }) => {
+    this.route.data.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe((data: { warehouses: IWarehouse[] }) => {
       this.warehouses = data.warehouses;
+      this.availableSubLocations = [];
+      this.resetForm();
+      logger.debug('Route data subcribe end');
     });
     this.currentDate = new Date();
   }
 
   ngAfterViewInit() {
     // wire-up modal closed callback
-    this.productSelectionModal.onClose.subscribe(() => this.onProductSelectionModalClosed());
-    this.marketplaceChannelInfo.onClose.subscribe(() => this.onMarketplaceModalClosed());
-    this.confirmModalReceiving.onClose.subscribe(() => this.onConfirmModalClosed());
+    this.productSelectionModal.onClose.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => this.onProductSelectionModalClosed());
+    this.marketplaceChannelInfo.onClose.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => this.onMarketplaceModalClosed());
+    this.confirmModalReceiving.onClose.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => this.onConfirmModalClosed());
   }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+  }
+
 
   get doNumber(): FormControl {
     return this.form.get('doNumber') as FormControl;
@@ -241,11 +266,11 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
         href: [null, Validators.required],
         // name: ['', ],
       }),
-      status: ['pending', [Validators.required, ]],
+      status: ['pending', [Validators.required,]],
       createdBy: this.fb.group({
         href: `https://bhisma.cloud/api/iam/${this.authService.tokenPayload.user_id}/`
       }),
-      reviewedBy: [null, ],
+      reviewedBy: [null,],
       stockRecords: this.fb.array([], [Validators.required, Validators.minLength(1)]),
       doNumber: ['', [Validators.maxLength(30),]],
       dcPic: ['', [Validators.maxLength(30),]],
@@ -338,6 +363,7 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
         })).subscribe(res => {
           const productClass = res as IProductClass;
           this.productClasses.push(productClass);
+          this.productClasses = Array.from(this.productClasses);
         });
       }
 
@@ -359,30 +385,17 @@ export class InventoryReceivingComponent extends AbstractDetailComponent<invento
     }
   }
 
-  get userDisplayName(): string {
-    const lastName = this.authService.tokenPayload?.last_name ?? '';
-    const firstName = this.authService.tokenPayload?.first_name ?? '';
-    const email = this.authService.tokenPayload?.email ?? '';
-    const fullname = firstName.concat(' ', lastName);
-
-    if (lastName && firstName && email) {
-      return [fullname, `(${email})`, ].join(' ').trim();
-    } else {
-      return email;
-    }
-  }
-
   getFormValue() {
     return this.form.getRawValue();
   }
 
   resetForm(warnOnDirty = false) {
-    this.form.reset();
+    this.cdr.detectChanges();
+    // this.form.reset()  // this caused form to be fully disabled
     this.warehouse.enable();
     this.stockRecords.clear();
   }
 
   onMarketplaceModalClosed() {
   }
-
 }

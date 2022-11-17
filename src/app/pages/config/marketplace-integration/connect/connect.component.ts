@@ -12,7 +12,8 @@ import { OrderDownloadFileService } from '@nusantara/services/order-download-fil
 
 @Component({
   selector: 'nus-marketplace-setup',
-  template: `<h1 class="title-1" i18n>Connect to Marketplace</h1>
+  template: `
+    <nus-page-title i18n-title title="Connect to Marketplace"></nus-page-title>
     <nus-empty-list
       *ngIf="!page?.entities?.length; else elseBlock"
       title="No Connected Store Yet!"

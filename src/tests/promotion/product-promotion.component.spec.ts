@@ -163,7 +163,8 @@ describe('ProductPromotionComponent', () => {
       customerGroups: [],
       promotionGroup: {
         href: 'https://staging.bhisma.cloud/api/catalog/promotion-group/pac/'
-      }
+      },
+      multiplier: 0
     });
     // @ts-ignore
     const p1 = component.fb.group({
@@ -219,7 +220,8 @@ describe('ProductPromotionComponent', () => {
       customerGroups: [],
       promotionGroup: {
         href: 'https://staging.bhisma.cloud/api/catalog/promotion-group/pac/'
-      }
+      },
+      multiplier: 0
     });
 
     component.save();

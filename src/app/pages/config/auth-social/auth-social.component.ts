@@ -20,6 +20,7 @@ import { drf } from '../../../models';
       <label>
         <span i18n>Type</span>
         <select [formControl]="authType">
+          <option disabled selected [ngValue]="null"> --Select-- </option>
           <option *ngFor="let opt of authTypeChoice" [value]="opt.value">
             {{opt.displayName}}
           </option>
