@@ -21,7 +21,7 @@ export interface IDimensions {
 export interface IProduct extends INamedHrefEntity {
   id:number;
   upc: string;
-  skuforstok:string;
+  skuForstok:string;
   description: string;
   structure: StructureType;
   parent?: string;
