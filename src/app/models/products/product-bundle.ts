@@ -13,6 +13,7 @@ export interface IProductBundleInfo extends INamedHrefEntity {
   vendor?: string;
   category?: string;
   upc?: string;
+  skuforstok?: string;
   weight?: number;
   media?: IProductMedia[];
   defaultPrice?: number;
