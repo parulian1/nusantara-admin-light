@@ -136,7 +136,7 @@ export class ContentFooterComponent extends AbstractDetailComponent<IContentFoot
     this.form = this.fb.group({
       title: [entity?.title, [Validators.required]],
       href: [entity?.href],
-      url: [entity?.displayUrl],
+      url: [entity?.url],
       position: [entity?.position, [Validators.required]],
       relativeTo: [entity?.relativeTo],
       isActive: [entity?.isActive ?? true, [Validators.required]],

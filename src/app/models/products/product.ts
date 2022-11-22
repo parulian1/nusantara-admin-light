@@ -46,4 +46,5 @@ export interface IProduct extends INamedHrefEntity {
   bundle?: Array<IProductBundle>;
   barcode?: string;
   enabledAttributes?: INamedHrefEntity[];
+  googleProductCategory?: string;
 }

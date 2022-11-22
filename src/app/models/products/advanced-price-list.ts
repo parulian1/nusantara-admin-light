@@ -12,6 +12,7 @@ export interface IAdvancedPriceList extends INamedHrefEntity {
   type: AdvancedPriceListType;
   products: Array<IAdvancedPriceListProduct>;
   defaultAmount: number;
+  customerGroups?: Array<INamedHrefEntity>;
 }
 
 export interface IAdvancedPriceListProduct {

@@ -463,6 +463,15 @@ const logger = new Logger('ProductComponent');
                                         [maxLength]="SEO_MAX_LENGTH"></nus-field-length-counter>
               </span>
             </label>
+            <label class="immediate-error-display-input">
+              <span i18n>Google Product Category</span>
+              <input type="text"
+                     [formControl]="googleProductCategory"
+                     name="google-product-category"
+                     placeholder="Google Product Category" i18n-placeholder
+                     data-qa="google-product-category"/>
+              <nus-field-errors [control]="googleProductCategory"></nus-field-errors>
+            </label>
           </div>
 
           <nus-marketplace-info id="marketplace-information"
@@ -962,6 +971,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     return this.form?.get('barcode') as FormControl;
   }
 
+  get googleProductCategory(): FormControl {
+    return this.form?.get('googleProductCategory') as FormControl;
+  }
+
   ngAfterViewInit() {
     super.ngAfterViewInit();
     this.productRecommendationSelectionModal.onClose.subscribe(() => this.onProductRecommendationSelectionModalClosed());
@@ -1120,6 +1133,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
         Validators.maxLength(this.BARCODE_MAX_LENGTH),
         Validators.pattern('^[A-Z0-9]+$'),
       ]],
+      googleProductCategory: [entity?.googleProductCategory, [Validators.maxLength(255)]]
     });
 
 
