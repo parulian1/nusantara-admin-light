@@ -1088,7 +1088,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       upc: [entity?.upc, [Validators.required,
         Validators.maxLength(this.UPC_MAX_LENGTH),
         Validators.pattern('^[A-Z0-9a-z-/&_]+$')]],
-      skuForstok:[entity.skuForstok, [Validators.required,
+      skuForstok:[entity?.skuForstok, [Validators.required,
         Validators.maxLength(this.UPC_MAX_LENGTH),
         Validators.pattern('^[A-Z0-9a-z-/&_]+$')]],
       structure: [entity?.structure ?? 'parent', [Validators.required,]],
