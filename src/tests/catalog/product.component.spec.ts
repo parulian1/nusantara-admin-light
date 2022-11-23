@@ -34,6 +34,7 @@ describe('ProductComponent', () => {
     href: 'https://superbearzz.dev.bisma.systems/api/catalog/product/pedang/',
     upc: 'pedang',
     barcode: 'pedang1',
+    skuForstok: 'PED101',
     name: 'pedang',
     description: '<p>pedang</p>',
     category: {
@@ -153,6 +154,7 @@ describe('ProductComponent', () => {
     const name = component.name;
     const upc = component.upc;
     const barcode = component.barcode;
+    const skuForstok = component.skuForstok;
     const structure = component.structure;
     const description = component.description;
     const weight = component.weight;
@@ -163,6 +165,7 @@ describe('ProductComponent', () => {
     name.setValue('');
     upc.setValue('');
     barcode.setValue('');
+    skuForstok.setValue('');
     structure.setValue('');
     description.setValue('');
     weight.setValue('');
@@ -172,6 +175,7 @@ describe('ProductComponent', () => {
     expect(name.hasError('required')).toBeTruthy();
     expect(upc.hasError('required')).toBeTruthy();
     expect(barcode.hasError('required')).toBeTruthy();
+    expect(skuForstok.hasError('required')).toBeTruthy();
     expect(structure.hasError('required')).toBeTruthy();
     expect(description.hasError('required')).toBeTruthy();
     expect(weight.hasError('required')).toBeTruthy();
@@ -204,6 +208,7 @@ describe('ProductComponent', () => {
       href: '',
       upc: addProductResp.upc,
       barcode: addProductResp.barcode,
+      skuForstok: addProductResp.skuForstok,
       structure: addProductResp.structure,
       description: addProductResp.description,
       weight: addProductResp.weight,
@@ -249,6 +254,7 @@ describe('ProductComponent', () => {
     expect(mock.request.body.vendor.href).toBe(addProductResp.vendor.href);
     expect(mock.request.body.upc).toBe(addProductResp.upc);
     expect(mock.request.body.barcode).toBe(addProductResp.barcode);
+    expect(mock.request.body.skuForstok).toBe(addProductResp.skuForstok);
     expect(mock.request.body.structure).toBe(addProductResp.structure);
     expect(mock.request.body.description).toBe(addProductResp.description);
 
@@ -289,6 +295,7 @@ describe('ProductComponent', () => {
       href: 'https://superbearzz.dev.bisma.systems/api/catalog/product/pedang-edit/',
       upc: 'pedang',
       barcode: 'pedang1',
+      skuForstok: 'PED101',
       name: 'pedang',
       description: '<p>pedang</p>',
       category: {
@@ -348,6 +355,7 @@ describe('ProductComponent', () => {
       },
       upc: editProductResp.upc,
       barcode: editProductResp.barcode,
+      skuForstok: editProductResp.skuForstok,
       structure: editProductResp.structure,
       description: editProductResp.description,
       weight: editProductResp.weight,
@@ -393,6 +401,7 @@ describe('ProductComponent', () => {
     expect(mock.request.body.vendor.href).toBe(editProductResp.vendor.href);
     expect(mock.request.body.upc).toBe(editProductResp.upc);
     expect(mock.request.body.barcode).toBe(editProductResp.barcode);
+    expect(mock.request.body.skuForstok).toBe(editProductResp.skuForstok);
     expect(mock.request.body.structure).toBe(editProductResp.structure);
     expect(mock.request.body.description).toBe(editProductResp.description);
 

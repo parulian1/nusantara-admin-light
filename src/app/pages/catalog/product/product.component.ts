@@ -267,16 +267,16 @@ const logger = new Logger('ProductComponent');
               </label>
             </ng-template>
 
-<!--
+
             <label class="immediate-error-display-input">
               <span i18n>SKU Forstok</span>
               <input type="text"
                      [formControl]="skuForstok"
                      name="sku-forstok"
-                     placeholder="SKU Forstok must be the same as upc" i18n-placeholder
+                     placeholder="SKU in Forstok for product " i18n-placeholder
                      data-qa="sku-forstok"/>
               <nus-field-errors [control]="skuForstok"></nus-field-errors>
-            </label> -->
+            </label>
 
             <label class="immediate-error-display-input">
               <span i18n>UPC</span>
@@ -855,9 +855,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
     return this.form?.get('upc') as FormControl;
   }
 
-  // get skuForstok(): FormControl {
-  //   return this.form?.get('skuForstok') as FormControl;
-  // }
+  get skuForstok(): FormControl {
+    return this.form?.get('skuForstok') as FormControl;
+  }
 
   get productClass(): FormControl {
     return this.form?.get('productClass').get('href') as FormControl;
@@ -1088,9 +1088,9 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       upc: [entity?.upc, [Validators.required,
         Validators.maxLength(this.UPC_MAX_LENGTH),
         Validators.pattern('^[A-Z0-9a-z-/&_]+$')]],
-      // skuForstok:[entity.skuForstok, [Validators.required,
-      //   Validators.maxLength(this.UPC_MAX_LENGTH),
-      //   Validators.pattern('^[A-Z0-9a-z-/&_]+$')]],
+      skuForstok:[entity.skuForstok, [Validators.required,
+        Validators.maxLength(this.UPC_MAX_LENGTH),
+        Validators.pattern('^[A-Z0-9a-z-/&_]+$')]],
       structure: [entity?.structure ?? 'parent', [Validators.required,]],
       description: [entity?.description, [
         Validators.required,
@@ -1683,7 +1683,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
           }, []],
           name: [selectedProduct.name, []],
           upc: [selectedProduct.upc, []],
-          // skuForstok: [selectedProduct.skuForstok, []],
+          skuForstok: [selectedProduct.skuForstok, []],
           weight: [selectedProduct.weight, []],
           quantity: [defaultQty, Validators.required],
           price: [selectedProductPrice, []],
@@ -1787,7 +1787,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
           }, []],
           name: [productInfo.product.name, []],
           upc: [productInfo.product.upc, []],
-          // skuForstok: [productInfo.product.skuForstok, []],
+          skuForstok: [productInfo.product.skuForstok, []],
           weight: [productInfo.product.weight, []],
           quantity: [productInfo.quantity, Validators.required],
           media: [productInfo.product.media, []],
