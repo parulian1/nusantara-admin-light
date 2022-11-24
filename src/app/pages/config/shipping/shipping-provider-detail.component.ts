@@ -103,7 +103,7 @@ import { Kgx, ShippingServicesTypes } from './shipping-service/constants';
             [shippingServiceTypes]="shippingServiceTypes"
             [selectedService]="selectedService"
             (remove)="services.removeAt(i)"
-            (newSelectedService)="updateSelectedService($event)"
+            (newSelectedService)="updateSelectedService($event, i)"
             (removeSelectedService)="removeSelectedService($event)"
             [shippingType]="type.value"
           >
@@ -247,8 +247,8 @@ export class ShippingProviderDetailComponent extends AbstractDetailComponent<ISh
     super.save();
   }
 
-  updateSelectedService(serviceName: string) {
-    this.selectedService.push(serviceName);
+  updateSelectedService(serviceName: string, index: number) {
+    this.selectedService[index] = serviceName;
   }
 
   removeSelectedService(serviceName: string) {
