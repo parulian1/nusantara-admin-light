@@ -607,7 +607,8 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
     if (
       childrenData.status !== 'shipped' ||
       childrenData.status === 'complete' ||
-      this.isRedirectMarketplaceShowed(childrenData)
+      this.isRedirectMarketplaceShowed(childrenData) ||
+      childrenData.shippingMethod.toLowerCase() === this.pickupInStore.toLowerCase()
     ) {
       return true;
     }
