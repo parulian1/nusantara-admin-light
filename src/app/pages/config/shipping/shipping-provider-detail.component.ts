@@ -18,115 +18,128 @@ import { Kgx, ShippingServicesTypes } from './shipping-service/constants';
     <nus-non-field-errors [nonFieldErrors]="nonFieldErrors"></nus-non-field-errors>
 
     <form [formGroup]="form" (ngSubmit)="save()" #f>
-      <label>
-        <span i18n>Name</span>
-        <input type="text" formControlName="name" maxlength="25">
-        <nus-field-errors [control]="name"></nus-field-errors>
-      </label>
+      <div class="container">
+        <div class="general-info">
 
-      <label>
-        <span i18n>Type</span>
-        <select formControlName="type">
-          <option disabled selected [ngValue]="null"> --Select-- </option>
-          <option *ngFor="let choice of types" [ngValue]="choice.value">{{ choice.displayName }}</option>
-        </select>
-        <nus-field-errors [control]="type"></nus-field-errors>
-      </label>
+          <label>
+            <span i18n>Name</span>
+            <input type="text" formControlName="name" maxlength="25">
+            <nus-field-errors [control]="name"></nus-field-errors>
+          </label>
 
-      <label>
-        <span i18n>Auth User</span>
-        <input type="text" formControlName="authUser">
-        <nus-field-errors [control]="authUser"></nus-field-errors>
-      </label>
+          <label>
+            <span i18n>Type</span>
+            <select formControlName="type">
+              <option disabled selected [ngValue]="null"> --Select-- </option>
+              <option *ngFor="let choice of types" [ngValue]="choice.value">{{ choice.displayName }}</option>
+            </select>
+            <nus-field-errors [control]="type"></nus-field-errors>
+          </label>
 
-      <label>
-        <span i18n>Auth Key</span>
-        <input type="text" formControlName="authPass">
-        <nus-field-errors [control]="authPass"></nus-field-errors>
-      </label>
+          <label>
+            <span i18n>Auth User</span>
+            <input type="text" formControlName="authUser">
+            <nus-field-errors [control]="authUser"></nus-field-errors>
+          </label>
 
-      <label class="checkbox">
-        <span i18n>Is Active</span>
-        <input type="checkbox" formControlName="isActive">
-      </label>
+          <label>
+            <span i18n>Auth Key</span>
+            <input type="text" formControlName="authPass">
+            <nus-field-errors [control]="authPass"></nus-field-errors>
+          </label>
 
-      <label>
-        <span i18n>Icon</span>
-        <img [src]="iconPreviewUrl" alt="Shipping Method Icon" class="preview">
-        <input type="file" [formControl]="icon" (change)="setIconImagePreview($event)"
-               name="icon" accept="image/*">
-        <nus-field-errors [control]="icon"></nus-field-errors>
-      </label>
+          <label class="checkbox">
+            <span i18n>Is Active</span>
+            <input type="checkbox" formControlName="isActive">
+          </label>
 
-      <label>
-        <span i18n>Description</span>
-        <input type="text" formControlName="description">
-        <nus-field-errors [control]="description"></nus-field-errors>
-      </label>
+          <label>
+            <span i18n>Icon</span>
+            <img [src]="iconPreviewUrl" alt="Shipping Method Icon" class="preview">
+            <input type="file" [formControl]="icon" (change)="setIconImagePreview($event)"
+                   name="icon" accept="image/*">
+            <nus-field-errors [control]="icon"></nus-field-errors>
+          </label>
 
-      <label>
-        <span i18n>Sender Name</span>
-        <input type="text" formControlName="senderName">
-        <nus-field-errors [control]="senderName"></nus-field-errors>
-      </label>
+          <label>
+            <span i18n>Description</span>
+            <input type="text" formControlName="description">
+            <nus-field-errors [control]="description"></nus-field-errors>
+          </label>
 
-      <label>
-        <span i18n>Sender Email</span>
-        <input type="text" formControlName="senderEmail">
-        <nus-field-errors [control]="senderEmail"></nus-field-errors>
-      </label>
+          <label>
+            <span i18n>Sender Name</span>
+            <input type="text" formControlName="senderName">
+            <nus-field-errors [control]="senderName"></nus-field-errors>
+          </label>
 
-      <label>
-        <span i18n>Sender Phone</span>
-        <input type="text" formControlName="senderPhone">
-        <nus-field-errors [control]="senderPhone"></nus-field-errors>
-      </label>
+          <label>
+            <span i18n>Sender Email</span>
+            <input type="text" formControlName="senderEmail">
+            <nus-field-errors [control]="senderEmail"></nus-field-errors>
+          </label>
 
-      <ng-container *ngIf="type.value">
-        <div class="sosmed-title">
-          <h3 i18n>
-            Shipping Service Settings
-          </h3>
+          <label>
+            <span i18n>Sender Phone</span>
+            <input type="text" formControlName="senderPhone">
+            <nus-field-errors [control]="senderPhone"></nus-field-errors>
+          </label>
+
+          <ng-container *ngIf="type.value">
+            <div class="sosmed-title">
+              <h3 i18n>
+                Shipping Service Settings
+              </h3>
+            </div>
+            <hr/>
+            <table class="line-items">
+              <thead>
+              <tr>
+                <th i18n>Type</th>
+                <th *ngIf="type.value != 'kgx'" i18n>Active</th>
+                <th *ngIf="type.value != 'kgx'" i18n>Minimum Weight</th>
+                <th *ngIf="type.value != 'kgx'" i18n>Handling Fee</th>
+                <th *ngIf="type.value != 'kgx'" i18n>Grace Amount</th>
+                <th *ngIf="type.value != 'kgx'" i18n>Description</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              <nus-shipping-service-host
+                *ngFor="let item of services.controls; let i=index"
+                [form]="item"
+                [shippingServiceTypes]="shippingServiceTypes"
+                [selectedService]="selectedService"
+                (remove)="services.removeAt(i)"
+                (newSelectedService)="updateSelectedService($event, i)"
+                (removeSelectedService)="removeSelectedService($event)"
+                [shippingType]="type.value"
+              >
+              </nus-shipping-service-host>
+              <tr *ngIf="selectedService.length !== shippingServiceTypes.length">
+                <td colspan="9">
+                  <button type="button" (click)="addService()" class="new-add-button wide" i18n>
+                    Add Record
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </ng-container>
+          <nus-detail-actions
+            [component]="this"
+            (cancel)="navigateToParent(true)"
+            (delete)="delete()">
+          </nus-detail-actions>
         </div>
-        <hr/>
-        <table class="line-items">
-          <thead>
-          <tr>
-            <th i18n>Type</th>
-            <th></th>
-          </tr>
-          </thead>
-          <tbody>
-          <nus-shipping-service-host
-            *ngFor="let item of services.controls; let i=index"
-            [form]="item"
-            [shippingServiceTypes]="shippingServiceTypes"
-            [selectedService]="selectedService"
-            (remove)="services.removeAt(i)"
-            (newSelectedService)="updateSelectedService($event, i)"
-            (removeSelectedService)="removeSelectedService($event)"
-            [shippingType]="type.value"
-          >
-          </nus-shipping-service-host>
-          <tr *ngIf="selectedService.length !== shippingServiceTypes.length">
-            <td colspan="9">
-              <button type="button" (click)="addService()" class="add-button" i18n>
-                Add Record
-              </button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </ng-container>
+      </div>
 
-      <nus-detail-actions
-        [component]="this"
-        (cancel)="navigateToParent(true)"
-        (delete)="delete()">
-      </nus-detail-actions>
     </form>
   `,
-
+  styles: [
+    'form{ max-width: none;}',
+    '.container { display: grid; grid-template-columns: 4fr 1fr; grid-gap: 24px; }',
+  ]
 })
 export class ShippingProviderDetailComponent extends AbstractDetailComponent<IShippingProvider> implements OnInit {
 
