@@ -269,7 +269,9 @@ const logger = new Logger('ProductComponent');
 
 
             <label class="immediate-error-display-input">
-              <span i18n>SKU Forstok</span>
+              <span i18n>SKU Forstok
+                <nus-tooltip [text]="infoForstok"></nus-tooltip>
+              </span>
               <input type="text"
                      [formControl]="skuForstok"
                      name="sku-forstok"
@@ -802,6 +804,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   mediaError: Array<string> = [];
   priceRangeEnabled = false;
   allowPriceSelector = false;
+  infoForstok = 'This is for Forstok Integration Only'
 
   @ViewChild(ProductMediaHostComponent) mediaHost: ProductMediaHostComponent;
   @ViewChild(PriceListHostComponent) priceListHost: PriceListHostComponent;
