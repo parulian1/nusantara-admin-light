@@ -273,7 +273,7 @@ const logger = new Logger('ProductComponent');
               <input type="text"
                      [formControl]="skuForstok"
                      name="sku-forstok"
-                     placeholder="SKU in Forstok for product " i18n-placeholder
+                     placeholder="Input Forstok SKU" i18n-placeholder
                      data-qa="sku-forstok"/>
               <nus-field-errors [control]="skuForstok"></nus-field-errors>
             </label>
@@ -1088,9 +1088,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       upc: [entity?.upc, [Validators.required,
         Validators.maxLength(this.UPC_MAX_LENGTH),
         Validators.pattern('^[A-Z0-9a-z-/&_]+$')]],
-      skuForstok:[entity?.skuForstok, [Validators.required,
-        Validators.maxLength(this.UPC_MAX_LENGTH),
-        Validators.pattern('^[A-Z0-9a-z-/&_]+$')]],
+      skuForstok:[entity?.skuForstok ],
       structure: [entity?.structure ?? 'parent', [Validators.required,]],
       description: [entity?.description, [
         Validators.required,
