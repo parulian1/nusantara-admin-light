@@ -175,7 +175,6 @@ describe('ProductComponent', () => {
     expect(name.hasError('required')).toBeTruthy();
     expect(upc.hasError('required')).toBeTruthy();
     expect(barcode.hasError('required')).toBeTruthy();
-    expect(skuForstok.hasError('required')).toBeTruthy();
     expect(structure.hasError('required')).toBeTruthy();
     expect(description.hasError('required')).toBeTruthy();
     expect(weight.hasError('required')).toBeTruthy();
