@@ -260,7 +260,6 @@ export class ShippingProviderDetailComponent extends AbstractDetailComponent<ISh
   }
 
   save() {
-    console.log(this.icon)
     if (!!this.entity?.href && !!this.entity?.icon && !this.icon.value) {
       this.form.removeControl('icon');
     }
