@@ -260,6 +260,7 @@ export class ShippingProviderDetailComponent extends AbstractDetailComponent<ISh
   }
 
   save() {
+    console.log(this.icon)
     if (!!this.entity?.href && !!this.entity?.icon && !this.icon.value) {
       this.form.removeControl('icon');
     }
@@ -278,5 +279,12 @@ export class ShippingProviderDetailComponent extends AbstractDetailComponent<ISh
     if (index > -1) {
       this.selectedService.splice(index, 1);
     }
+  }
+
+  protected onSaveError(error: any) {
+    super.onSaveError(error);
+
+    // Add back icon control that has been remove when save
+    this.form.addControl('icon', new FormControl(this.entity?.href ? '' : null, this.entity?.icon ? [] : [Validators.required]))
   }
 }
