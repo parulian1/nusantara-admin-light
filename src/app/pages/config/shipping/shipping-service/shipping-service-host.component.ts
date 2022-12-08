@@ -17,22 +17,25 @@ import { ActivatedRoute, Router } from '@angular/router';
           </option>
         </select>
       </td>
-      <td *ngIf="!isShippingKgx"><input type="checkbox" [formControl]="isActive"></td>
-      <td *ngIf="!isShippingKgx"><input type="number" [formControl]="minimumWeight"></td>
-      <td *ngIf="!isShippingKgx"><input type="number" [formControl]="handlingFee"></td>
-      <td *ngIf="!isShippingKgx"><input type="number" [formControl]="graceAmount"></td>
+      <td *ngIf="!isShippingKgx" class="checkbox"><input type="checkbox" [formControl]="isActive"></td>
+      <td *ngIf="!isShippingKgx" class="numeric"><input type="number" [formControl]="minimumWeight"></td>
+      <td *ngIf="!isShippingKgx" class="numeric"><input type="number" [formControl]="handlingFee"></td>
+      <td *ngIf="!isShippingKgx" class="numeric"><input type="number" [formControl]="graceAmount"></td>
       <td *ngIf="!isShippingKgx">
         <input type="text" [formControl]="description" data-qa="description" placeholder="lorem ipsum ..">
       </td>
       <td>
         <button (click)="removeService()" type="button" class="remove-button" data-qa="remove-button">
-          <i class="material-icons">remove_circle_outline</i>
+          <i class="material-icons">delete_outline</i>
         </button>
       </td>
     </tr>`,
   styles: [
     ':host { display: contents; }',
-    'td > select { width: 100%; }'
+    'td > select { width: 100%; }',
+    'td:last-child { width: 5%; }',
+    'td.checkbox { width: 5%; }',
+    'td.numeric { width: 10%; }'
   ]
 })
 

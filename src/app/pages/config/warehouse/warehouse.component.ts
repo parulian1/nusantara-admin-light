@@ -81,6 +81,11 @@ import { RequireIsEnterpriseGuard } from '@nusantara/auth';
         <nus-field-errors [control]="form.get('isManagedKgx')"></nus-field-errors>
       </label>
 
+      <label class="checkbox">
+        <input type="checkbox" formControlName="isAllowPickup" name="isAllowPickup" i18n> Is Allow Pickup In-Store
+        <nus-field-errors [control]="form.get('isAllowPickup')"></nus-field-errors>
+      </label>
+
       <div *ngIf="enterpriseGuard.canActivate(null, null)">
         <h2>
           <span i18n>Inventory Locations</span>
@@ -215,11 +220,13 @@ export class WarehouseComponent extends AbstractDetailComponent<IWarehouse> impl
         longitude: [entity?.address?.longitude, []],
       }),
       phoneNumber: [entity?.phoneNumber, [Validators.maxLength(50), ]],
+      isAllowPickup: [entity?.isAllowPickup ?? false]
     });
 
     // need to mark as touched to make custom styling works
     this.form.controls.isActive.markAsTouched();
     this.form.controls.isManagedKgx.markAsTouched();
+    this.form.controls.isAllowPickup.markAsTouched();
 
     const defaultSubLoc: ISubLocation = {
       id: null,

@@ -14,4 +14,5 @@ export class IWarehouse {
   isActive: boolean;
   isManagedKgx: boolean;
   phoneNumber: string;
+  isAllowPickup: boolean;
 }
