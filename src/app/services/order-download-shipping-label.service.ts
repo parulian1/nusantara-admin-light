@@ -22,7 +22,18 @@ export class OrderDownloadShippingLabel {
           this.openDownloadHtml(response);
         }
       });
+
   }
+
+  getPdfNewTab(href:string){
+    return this.httpClient
+      .get<Blob>(href, {
+        observe: "response",
+        responseType: "blob" as "json",
+      })
+  }
+
+
 
   getFileName(response: HttpResponse<Blob>) {
     let filename: string;

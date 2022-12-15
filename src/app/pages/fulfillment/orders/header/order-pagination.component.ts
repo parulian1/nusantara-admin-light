@@ -10,13 +10,15 @@ import {
   ViewChild
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ICheckedOrder } from '@nusantara/models';
+import {ICheckedOrder, order} from '@nusantara/models';
 import { DialogResult, ToastLevelEnum, ToastService } from '@nusantara/core';
 import { PaginationComponent } from '@nusantara/shared/pagination.component';
 import { OrderDownloadFileService, OrderReportService, OrderService, SvgIconService } from '@nusantara/services';
 import { IOrderFilterValue } from '@nusantara/models/order/filter';
 import * as moment from 'moment';
 import { ConfirmModalComponent } from '@nusantara/shared/confirm-modal.component';
+import {OrderDownloadShippingLabel} from "@nusantara/services/order-download-shipping-label.service";
+import {HttpResponse} from "@angular/common/http";
 
 @Component({
   selector: 'nus-order-custom-pagination',
@@ -94,6 +96,10 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
 
   @ViewChild(ConfirmModalComponent)confirmModal: ConfirmModalComponent;
 
+  orderDetailData: order.IOrderDetail;
+
+  customHandlingAWB = ['tokopedia', 'shopee', 'bukalapak', 'lazada', 'tiktok'];
+
   confirmTitle = "Accept Selected Order?";
   confirmText =
     "No Order Selected";
@@ -110,6 +116,7 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
     private toast: ToastService,
     private orderReportService: OrderReportService,
     private orderDownloadService: OrderDownloadFileService,
+    private shippingLabelDownloadService: OrderDownloadShippingLabel,
     private orderService: OrderService,
     svgIconService: SvgIconService) {
       super(router, route);
@@ -162,13 +169,41 @@ export class OrderCustomPaginationComponent extends PaginationComponent implemen
     });
   }
 
+  get isAwbManagedByMarketplace() {
+    return (
+      this.orderDetailData.source === 'marketplace' && this.orderDetailData.sourceName !== 'shopify' &&
+      this.customHandlingAWB.includes(this.orderDetailData.sourceName)
+    );
+  }
+
+  getShippingLabel(labelUrl: string) {
+    this.shippingLabelDownloadService.getPdfNewTab(labelUrl).subscribe((response: HttpResponse<Blob>) => {
+    let binaryData = [];
+    binaryData.push(response.body);
+    let downloadLink = document.createElement("a");
+
+    if(response.body.type == "application/pdf"){
+      downloadLink.href = window.URL.createObjectURL(
+        new Blob(binaryData, {type: 'application/pdf'})
+      );
+    }else if(response.body.type == "text/html"){
+      downloadLink.href = window.URL.createObjectURL(
+        new Blob(binaryData, {type: 'text/html'})
+      );
+    }
+      window.open(downloadLink.href).focus()
+    });
+  }
+
   downloadAWBBulk(){
     const formData = {
       order_numbers: this.checkedlist,
     }
     this.orderService.downloadAWBBulk(formData).subscribe((response) => {
-        this.orderDownloadService.downloadAsZip(response, 'download-awb-bulk');
-    });
+      response.data.forEach((url)=>{
+        this.getShippingLabel(url)
+      });
+     });
   }
 
   dateRangeValidation(filters: IOrderFilterValue){

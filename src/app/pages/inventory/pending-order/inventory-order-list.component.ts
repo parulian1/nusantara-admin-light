@@ -47,7 +47,7 @@ import { IOrderFilterValue } from '@nusantara/models/order/filter';
             {{ entity.status | titlecase }}
           </span>
         </td>
-        <td>{{ entity.createdBy.name ? entity.createdBy.name : '-' }}</td>
+        <td>{{ entity.createdBy ? entity.createdBy?.name : '-' }}</td>
         <td>{{ entity.reviewedBy ? entity.reviewedBy?.name : '-'}}</td>
         <td>{{ entity.warehouse.name }}</td>
         <td class="numeric">{{ entity.created|date: 'dd/MM/yyyy HH:mm:ss' }}</td>
