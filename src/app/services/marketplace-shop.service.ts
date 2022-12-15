@@ -11,6 +11,7 @@ import { map } from 'rxjs/operators';
 })
 export class MarketplaceShopService {
   baseUrl = '/api/marketplace/shop';
+  syncUrl = '/api/marketplace/shop-sync'
 
   constructor(private httpClient: HttpClient) {}
 
@@ -34,21 +35,32 @@ export class MarketplaceShopService {
 
   fetchCategory(
     shopSlug: string,
-    parentId?: number
+    parentId?: number,
+    parentCode?:string
   ): Observable<marketplace.IProductCategory[]> {
     return parentId
       ? this.httpClient.get<marketplace.IProductCategory[]>(
           `${this.baseUrl}/${shopSlug}/item-category/${parentId}/`
         )
-      : this.httpClient.get<marketplace.IProductCategory[]>(
-          `${this.baseUrl}/${shopSlug}/item-category/`
-        );
+      : parentCode ?
+        this.httpClient.get<marketplace.IProductCategory[]>(
+          `${this.baseUrl}/${shopSlug}/item-category/${parentCode}/`
+        )
+        :this.httpClient.get<marketplace.IProductCategory[]>(
+            `${this.baseUrl}/${shopSlug}/item-category/`
+          );
   }
 
-  fetchAttribute(shopSlug: string, categoryId: number): Observable<any> {
-    return this.httpClient.get<any>(
-      `${this.baseUrl}/${shopSlug}/item-category/${categoryId}/attribute/`
-    );
+  fetchAttribute(shopSlug: string, categoryId?: number, categoryCode?:string): Observable<any> {
+    if (categoryCode){
+      return this.httpClient.get<any>(
+        `${this.baseUrl}/${shopSlug}/item-category/${categoryCode}/attribute/`
+      );
+    }else {
+      return this.httpClient.get<any>(
+        `${this.baseUrl}/${shopSlug}/item-category/${categoryId}/attribute/`
+      );
+    }
   }
 
   mapAttribute(
@@ -94,4 +106,16 @@ export class MarketplaceShopService {
       formData
     );
   }
+
+  // getSyncType(shopSlug: string, typeSync: string): Observable<any> {
+  //   return this.httpClient.get<any>(
+  //     `${this.syncUrl}/${shopSlug}/${typeSync}/`
+  //   );
+  // }
+
+  // synchronizeSyncType(shopSlug: string, typeSync: string, formData): Observable<any> {
+  //   return this.httpClient.post(
+  //     `${this.syncUrl}/${shopSlug}/${typeSync}/`, formData
+  //   );
+  // }
 }

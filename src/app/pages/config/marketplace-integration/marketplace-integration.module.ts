@@ -15,7 +15,9 @@ import {
   TscFormComponent,
   LazadaFormComponent,
   BukalapakFormComponent,
-  TiktokFormComponent
+  TiktokFormComponent,
+  BlibliFormComponent,
+  JdidFormComponent
 } from './connect';
 
 import {
@@ -32,7 +34,7 @@ import {
   ShowcaseComponent,
   AddNewShowcaseModalComponent,
   DeleteShowcaseModalComponent,
-  ShowcaseSelectProductComponent
+  ShowcaseSelectProductComponent,
 } from './setup';
 
 import { PublishListComponent, PublishDetailComponent } from './publish';
@@ -51,6 +53,7 @@ import * as fromReducer from '@nusantara/reducers/marketplace.reducers';
 
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 export function getMarketplacesConfig(
   saveKeys: string[],
@@ -80,6 +83,8 @@ export function getMarketplacesConfig(
     AttributeMatchingFormComponent,
     BukalapakFormComponent,
     TiktokFormComponent,
+    BlibliFormComponent,
+    JdidFormComponent,
 
     // setup
     SetupComponent,
@@ -114,6 +119,7 @@ export function getMarketplacesConfig(
     // Angular Material
     MatIconModule,
     MatSlideToggleModule,
+    MatProgressSpinnerModule,
 
     MarketplaceIntegrationRoutingModule,
   ],
