@@ -82,4 +82,10 @@ export class WarehouseService extends AbstractCrudService<IWarehouse> {
         { observe: 'body', responseType: 'json' }
         );
   }
+
+  getWarehouse(): Observable<IWarehouse[]> {
+    return this.httpClient.get<IWarehouse[]>(
+      `${this.baseUrl}/`
+    );
+  }
 }
