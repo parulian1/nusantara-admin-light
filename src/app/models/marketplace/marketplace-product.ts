@@ -10,6 +10,7 @@ export interface IProductClass {
 export interface IProductCategory {
   name: string;
   categoryId: number;
+  categoryCode:string;
   hasChildren: boolean;
   childUrl: string;
 }
@@ -17,4 +18,5 @@ export interface IProductCategory {
 export interface ISelectedCategory {
   categoryNames: string[];
   deepestChildId: number;
+  deepestChildCode: string;
 }

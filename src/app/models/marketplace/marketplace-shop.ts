@@ -10,10 +10,12 @@ export interface IShop {
 export interface IShopAttribute {
   name: string;
   attributeId: number;
+  attributeCode:string;
   isMandatory: boolean;
   options: string[];
   type: string;
   isVariant:boolean;
+  isSpecialAttribute:boolean;
 }
 
 export interface IShopAttributeMapping {

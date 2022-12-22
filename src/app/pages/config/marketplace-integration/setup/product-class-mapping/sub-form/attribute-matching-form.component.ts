@@ -81,10 +81,14 @@ import { SubFormComponent } from './sub-form.component';
                   <div *ngIf="selectedAttr.value === 'addNewAttr'" class="new-attr-input">
                     <input type="text" formControlName="newAttrName" />
                     <div *ngIf="
-                        attributes.controls[i].get('newAttrName').invalid &&
+                        attributes.controls[i].get('newAttrName').hasError('required') &&
                         attributes.controls[i].get('newAttrName').touched
                       " class="error-detail" i18n>
                       This field is required
+                    </div>
+                    <div *ngIf="
+                        attributes.controls[i].get('newAttrName').hasError('maxlength')" class="error-detail" i18n>
+                      Max length 100
                     </div>
                   </div>
                 </div>
@@ -167,6 +171,7 @@ export class AttributeMatchingFormComponent
   productClassSlug: string;
   form: FormGroup;
   categoryId: number;
+  categoryCode:string;
   categoryNames: string;
   attributeNames: string;
   selectedCategory: marketplace.ISelectedCategory = null;
@@ -200,7 +205,7 @@ export class AttributeMatchingFormComponent
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    const catCurrValue = changes.category?.currentValue;
+
     const attrCurrValue = changes.attribute?.currentValue;
 
     if (
@@ -213,9 +218,9 @@ export class AttributeMatchingFormComponent
             this.bhismaAttributes = data.attributes;
             this.bhismaAttributeTypes = data.attributeType;
           });
-
-        if (catCurrValue) {
+        if (this.category) {
           this.categoryId = this.category.deepestChildId;
+          this.categoryCode = this.category.deepestChildCode ? this.category.deepestChildCode : null;
           this.categoryNames = this.category.categoryNames.join(' > ');
         }
         if (attrCurrValue) {
@@ -255,6 +260,10 @@ export class AttributeMatchingFormComponent
   addAttributeInputs(attrs: marketplace.IShopAttribute[]) {
     if (attrs) {
       attrs.forEach((obj) => {
+        if (!obj.isSpecialAttribute){
+          obj.isSpecialAttribute = false
+        }
+
         const attrGroup = this.fb.group({
           marketplaceName: obj.name,
           marketplaceType: obj.type,
@@ -262,6 +271,7 @@ export class AttributeMatchingFormComponent
           bhismaType: ['', Validators.required],
           newAttrName: null,
           isVariant:obj.isVariant,
+          isSpecialAttribute:obj.isSpecialAttribute
         });
         this.attributes.push(attrGroup);
       });
@@ -293,6 +303,7 @@ export class AttributeMatchingFormComponent
   onSubmit() {
     const formValue = {
       category_id: this.categoryId,
+      category_code: this.categoryCode,
       attributes: this.formValueMapping,
     };
 
@@ -311,7 +322,7 @@ export class AttributeMatchingFormComponent
   attrChange(value: string, index: number) {
     const attr = this.attributes.at(index).get('newAttrName');
     if (value === 'addNewAttr') {
-      attr.setValidators(Validators.required);
+      attr.setValidators(Validators.compose([Validators.required, Validators.maxLength(100)]));
     } else {
       attr.clearValidators();
       attr.reset();
@@ -345,6 +356,7 @@ export class AttributeMatchingFormComponent
       return {
         marketplace_attribute_name: attr.marketplaceName,
         marketplace_attribute_id: this.marketplaceAttributes[i].attributeId,
+        marketplace_attribute_code: this.marketplaceAttributes[i].attributeCode,
         marketplace_attribute_type: attr.marketplaceType,
         marketplace_attribute_option: this.marketplaceAttributes[i].options,
         product_class_attribute_id: attr.bhismaObj.attributeId
@@ -352,7 +364,8 @@ export class AttributeMatchingFormComponent
           : null,
         product_class_attribute_type: attr.bhismaType,
         new_attribute_name: attr.newAttrName,
-        isVariant:attr.isVariant
+        isVariant:attr.isVariant,
+        isSpecialAttribute: attr.isSpecialAttribute
       };
     });
   }

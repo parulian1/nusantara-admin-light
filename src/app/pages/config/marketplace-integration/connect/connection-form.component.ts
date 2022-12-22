@@ -60,6 +60,16 @@ import { MarketplaceClientEnum } from './markeplace-client-enum';
           [shopSlug]="shopSlug"
           [isEdit]="editMode"
         ></nus-tiktok-client-form>
+        <nus-blibli-client-form
+          *ngSwitchCase="marketplaceClient.blibli"
+          [shopSlug]="shopSlug"
+          [isEdit]="editMode"
+        ></nus-blibli-client-form>
+        <nus-jdid-client-form
+          *ngSwitchCase="marketplaceClient.jdid"
+          [shopSlug]="shopSlug"
+          [isEdit]="editMode"
+        ></nus-jdid-client-form>
       </div>
     </div>
   `,

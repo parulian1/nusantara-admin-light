@@ -183,6 +183,11 @@ export class CategoryGroupControlComponent
   }
 
   getchildCategories(): Observable<marketplace.IProductCategory[]> {
+    if (this.selectedCategory.categoryCode) {
+      return this.service.fetchCategory(
+        this.shopSlug, null, this.selectedCategory.categoryCode
+      );
+    }
     return this.service.fetchCategory(
       this.shopSlug,
       this.selectedCategory.categoryId
@@ -192,6 +197,8 @@ export class CategoryGroupControlComponent
   onSelect(category: marketplace.IProductCategory) {
     if (category.hasChildren) {
       this.addChild(category);
+    } else {
+      this.deleteGroupFromArray(0);
     }
   }
 }

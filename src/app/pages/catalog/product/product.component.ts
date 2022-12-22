@@ -267,6 +267,19 @@ const logger = new Logger('ProductComponent');
               </label>
             </ng-template>
 
+
+            <label class="immediate-error-display-input">
+              <span i18n>SKU Forstok
+                <nus-tooltip [text]="infoForstok"></nus-tooltip>
+              </span>
+              <input type="text"
+                     [formControl]="skuForstok"
+                     name="sku-forstok"
+                     placeholder="Input Forstok SKU" i18n-placeholder
+                     data-qa="sku-forstok"/>
+              <nus-field-errors [control]="skuForstok"></nus-field-errors>
+            </label>
+
             <label class="immediate-error-display-input">
               <span i18n>UPC</span>
               <input type="text"
@@ -791,6 +804,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
   mediaError: Array<string> = [];
   priceRangeEnabled = false;
   allowPriceSelector = false;
+  infoForstok = 'This is for Forstok Integration Only'
 
   @ViewChild(ProductMediaHostComponent) mediaHost: ProductMediaHostComponent;
   @ViewChild(PriceListHostComponent) priceListHost: PriceListHostComponent;
@@ -842,6 +856,10 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
 
   get upc(): FormControl {
     return this.form?.get('upc') as FormControl;
+  }
+
+  get skuForstok(): FormControl {
+    return this.form?.get('skuForstok') as FormControl;
   }
 
   get productClass(): FormControl {
@@ -1073,6 +1091,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
       upc: [entity?.upc, [Validators.required,
         Validators.maxLength(this.UPC_MAX_LENGTH),
         Validators.pattern('^[A-Z0-9a-z-/&_]+$')]],
+      skuForstok:[entity?.skuForstok ],
       structure: [entity?.structure ?? 'parent', [Validators.required,]],
       description: [entity?.description, [
         Validators.required,
@@ -1665,6 +1684,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
           }, []],
           name: [selectedProduct.name, []],
           upc: [selectedProduct.upc, []],
+          skuForstok: [selectedProduct.skuForstok, []],
           weight: [selectedProduct.weight, []],
           quantity: [defaultQty, Validators.required],
           price: [selectedProductPrice, []],
@@ -1768,6 +1788,7 @@ export class ProductComponent extends AbstractDetailComponent<products.IProduct>
           }, []],
           name: [productInfo.product.name, []],
           upc: [productInfo.product.upc, []],
+          skuForstok: [productInfo.product.skuForstok, []],
           weight: [productInfo.product.weight, []],
           quantity: [productInfo.quantity, Validators.required],
           media: [productInfo.product.media, []],
