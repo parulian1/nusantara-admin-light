@@ -106,16 +106,4 @@ export class MarketplaceShopService {
       formData
     );
   }
-
-  // getSyncType(shopSlug: string, typeSync: string): Observable<any> {
-  //   return this.httpClient.get<any>(
-  //     `${this.syncUrl}/${shopSlug}/${typeSync}/`
-  //   );
-  // }
-
-  // synchronizeSyncType(shopSlug: string, typeSync: string, formData): Observable<any> {
-  //   return this.httpClient.post(
-  //     `${this.syncUrl}/${shopSlug}/${typeSync}/`, formData
-  //   );
-  // }
 }

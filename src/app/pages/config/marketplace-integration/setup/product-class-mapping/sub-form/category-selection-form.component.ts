@@ -136,7 +136,7 @@ export class CategorySelectionFormComponent
   ngOnInit() {
     this.shopSlug = this.route.snapshot.paramMap.get('shop-slug');
     this.productClassName = this.state.productClass.name;
-    this.typeSync = 'category'
+    this.typeSync = 'category';
 
     this.service
       .fetchCategory(this.shopSlug)
@@ -194,41 +194,6 @@ export class CategorySelectionFormComponent
       return names;
     }
   }
-
-  // syncCategory(){
-  //   if (this.catSync.lastSync) {
-  //     const syncValidator = moment(new Date(this.catSync.lastSync)).add(3, 'h').toDate().getTime();
-  //     const now = new Date().getTime();
-
-  //     if(now < syncValidator){
-  //       this.onSaveError('Error use another sync after 3 hour from the last sync');
-  //     } else{
-  //       this.loading = true;
-  //       this.service.synchronizeSyncType(this.shopSlug, this.typeSync, this.catSync).subscribe(resp => {
-  //         this.loading = false;
-  //         if (resp instanceof ErrorResult) {
-  //           this.onSaveError(resp);
-  //         } else {
-  //           this.onSaveSuccess(resp);
-  //           setTimeout(function(){
-  //             window.location.reload();
-  //           }, 3000);
-  //         }
-  //       });
-  //     }
-  //   } else {
-  //     this.service.synchronizeSyncType(this.shopSlug, this.typeSync, this.catSync).subscribe(resp => {
-  //       if (resp instanceof ErrorResult) {
-  //         this.onSaveError(resp);
-  //       } else {
-  //         this.onSaveSuccess(resp);
-  //         setTimeout(function(){
-  //           window.location.reload();
-  //         }, 3000);
-  //       }
-  //     });
-  //   }
-  // }
 
   onSaveError(resp) {
     if (resp.message) {
