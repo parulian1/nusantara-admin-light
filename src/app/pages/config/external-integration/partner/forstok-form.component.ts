@@ -96,7 +96,7 @@ export class ForstokFormComponent
       this.entity = data.entity;
     });
     this.warehouseService.getWarehouse().subscribe((data: IWarehouse[]) => {
-      this.warehouses = data
+      this.warehouses = data;
     });
 
     this.isEdit = !!this.route.snapshot.paramMap.get("slug");
