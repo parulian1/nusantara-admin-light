@@ -19,6 +19,8 @@ import {
 } from '@angular/forms';
 import { SubFormComponent } from './sub-form.component';
 import { NgxSmartModalService } from 'ngx-smart-modal';
+import * as moment from "moment";
+import { ErrorResult, IResultResponse, ToastLevelEnum, ToastService } from '@nusantara/core';
 
 @Component({
   selector: 'nus-category-selection-form',
@@ -33,6 +35,22 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
             <span i18n>Product Class Name</span>
             <span>{{ productClassName }}</span>
           </label>
+
+          <!-- <div class="wrapper-sync" *ngIf="!this.state.productClass.isMapped">
+            <div class="container">
+              <div>
+                <p class="latest">Latest Update</p>
+                <span><b>{{catSync.lastSync}}</b></span>
+              </div>
+              <div class="button-sync">
+                <button class="control secondary ghost control spin-tha-wheel" [disabled]="this.loading" (click)="syncCategory()">
+                  <mat-spinner *ngIf="this.loading" class="track" mode="determinate" value="100" [diameter]="30"></mat-spinner>
+                  <mat-spinner *ngIf="this.loading" [diameter]="30"></mat-spinner>
+                  <span *ngIf="!this.loading">Sync Category</span>
+                </button>
+              </div>
+            </div>
+          </div> -->
 
           <ng-container formArrayName="categories">
             <nus-category-group-control
@@ -56,10 +74,17 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
   `,
   styles: [
     `.wrapper { padding: 16px 24px; border: solid 1px var(--grey); border-radius: 4px; width: 60vw; margin-bottom: 20px; }`,
+    `.wrapper-sync { padding: 12px 22px; border: solid 1px var(--grey); border-radius: 4px; width: 57.5vw; margin-bottom: 20px; }`,
+    '.latest {padding-top: 3px; margin: 0;}',
+    '.button-sync{padding-top: 3px; padding-left: 20px;}',
+    '.container{display: grid; grid-template-columns: 1fr .15fr; grid-column-gap: 16px;}',
     'p {color: var(--darken-grey); }',
     '.form { margin-top: 20px; }',
     'label { margin-bottom: 12px; min-height: 0; }',
     'button:not(:first-of-type) { margin-left: 5px; }',
+    '.spin-tha-wheel{float:left; position:relative; margin-right:20px}',
+    '.spin-tha-wheel .mat-progress-spinner{display: inline; left: 43px; position: absolute; top: 6px;}',
+    ':host ::ng-deep .track circle{stroke-opacity: 0.3 !important;}',
   ],
   providers: [
     {
@@ -87,14 +112,21 @@ export class CategorySelectionFormComponent
   shopSlug: string;
   productClassName: string;
   form: FormGroup;
-
+  typeSync: string;
+  catSync = {
+    lastSync: '',
+    shop: '',
+    marketplace:''
+  };
+  loading:boolean;
 
   constructor(
     private service: MarketplaceShopService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
-    private modal: NgxSmartModalService
+    private modal: NgxSmartModalService,
+    public toast: ToastService
   ) {
     super();
     this.initializeForm();
@@ -104,6 +136,7 @@ export class CategorySelectionFormComponent
   ngOnInit() {
     this.shopSlug = this.route.snapshot.paramMap.get('shop-slug');
     this.productClassName = this.state.productClass.name;
+    this.typeSync = 'category';
 
     this.service
       .fetchCategory(this.shopSlug)
@@ -111,6 +144,9 @@ export class CategorySelectionFormComponent
         this.categories = data;
       });
 
+    // this.service.getSyncType(this.shopSlug, this.typeSync).subscribe((data) => {
+    //   this.catSync = data
+    // })
     this.changeDetectorRef.detectChanges();
   }
 
@@ -141,6 +177,14 @@ export class CategorySelectionFormComponent
     }
   }
 
+  getChildCatgoryCode(data): string {
+    if (data[0].childs.length > 0) {
+      return this.getChildCatgoryCode(data[0].childs);
+    } else {
+      return data[0].category.categoryCode;
+    }
+  }
+
   getSelectedCategoryNames(data: any, names?: string[]): string[] {
     names = names || [];
     names.push(data[0].category.name);
@@ -151,11 +195,24 @@ export class CategorySelectionFormComponent
     }
   }
 
+  onSaveError(resp) {
+    if (resp.message) {
+      this.toast?.addMessage(resp.message, 'Process syncing error', ToastLevelEnum.error)
+    } else {
+      this.toast?.addMessage(resp, 'Process syncing error', ToastLevelEnum.error)
+    }
+  }
+
+  onSaveSuccess(resp) {
+    this.toast?.addMessage(resp.message, 'Successfully Sync', ToastLevelEnum.success);
+  }
+
   onNext() {
     this.next.next(true);
     const selectedCat: marketplace.ISelectedCategory = {
       categoryNames: this.getSelectedCategoryNames(this.form.value.categories),
       deepestChildId: this.getChildCatgoryId(this.form.value.categories),
+      deepestChildCode: this.getChildCatgoryCode(this.form.value.categories)
     };
     this.selectedCategory.next(selectedCat);
   }

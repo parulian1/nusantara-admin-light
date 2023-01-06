@@ -29,8 +29,8 @@ import { SiteConfigService } from "@nusantara/services";
             <a [routerLink]="entity.slug">{{ entity.name }}</a>
           </td>
           <td>{{ entity.partner }}</td>
-          <td>{{ entity.clientId }}</td>
-          <td>{{ entity.companyId }}</td>
+          <td>{{ entity.clientId ? entity.clientId : '-' }}</td>
+          <td>{{ entity.companyId ? entity.companyId : '-' }}</td>
           <td>
             <span
               *ngIf="entity.isConnected; else notConnected"

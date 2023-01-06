@@ -87,11 +87,11 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                 <td>
                   <span class="badge" [ngClass]="{
                     'success': product.status === 'Published',
-                    'alert': product.status === 'Publishing',
-                    'error': product.status === err }">
+                    'alert': product.status === 'Publishing' || product.status === 'In QC',
+                    'error': product.status === err || product.status === 'QC Failed' }">
                     {{ product.status }}
                   </span>
-                  <div class="cust-tooltip" *ngIf="product.status === err">
+                  <div class="cust-tooltip" *ngIf="product.status === err || product.status === 'QC Failed'">
                     <i id="transform" class="material-icons preview-icon">info</i>
                       <p class="tooltiptext triangle-border top" id="myDropdown">Error <br/> <span class="err-message">{{product.errorMessage}}</span></p>
                   </div>
@@ -106,6 +106,12 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                   <ng-template [ngIf]="product.errorStatus === 'error_timeout'" i18n>
                     Time Out Error
                   </ng-template>
+                  <ng-template [ngIf]="product.errorStatus === 'qc'" i18n>
+                    QC
+                  </ng-template>
+                  <ng-template [ngIf]="product.errorStatus === 'qc_failed'" i18n>
+                    QC Failed
+                  </ng-template>
                   <ng-template [ngIf]="product.errorStatus === 'published'">-</ng-template>
                 </td>
               </tr>
@@ -116,6 +122,60 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
             [page]="allProducts"
             (fetchPageNumber)="fetchAllProducts($event)">
           </nus-pagination-child>
+        </nus-tab>
+        <nus-tab [title]="'QC (' + order?.totalRecord.qc + ')'">
+          <!-- <div *ngIf="order?.totalRecord.qc > 0" class="error-info">
+            <div>
+              <h2 class="heading-2" i18n> {{ order?.totalRecord.pending }} Products in QC</h2>
+              <p i18n>Please wait until QC finish</p>
+            </div>
+          </div> -->
+          <nus-pagination-child
+            *ngIf="qc?.entities?.length"
+            [page]="qc"
+            (fetchPageNumber)="fetchQC($event)"
+          ></nus-pagination-child>
+          <table>
+            <thead>
+              <tr>
+                <th i18n>Product (UPC)</th>
+                <th i18n>SKU</th>
+                <th class="numeric" i18n>Quantity</th>
+                <th i18n>Location</th>
+                <th i18n>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let product of qc?.entities">
+                <td>
+                  <a [routerLink]="['/catalog/products', product.slug]">
+                    <div>{{ product.name}}</div>
+                    <div>({{ product.sku }})</div>
+                  </a>
+                </td>
+                <td>{{ product.sku }}</td>
+                <td class="numeric">{{ product.quantity }}</td>
+                <td>{{ product.sublocation }}</td>
+                <td>
+                  <span class="badge" [ngClass]="{
+                    'success': product.status === 'Published',
+                    'alert': product.status === 'Publishing' || product.status === 'In QC',
+                    'error': product.status === err || product.status === 'QC Failed' }">
+                    {{ product.status }}
+                  </span>
+                  <div class="cust-tooltip" *ngIf="product.status === err || product.status === 'QC Failed'">
+                    <i id="transform" class="material-icons preview-icon">info</i>
+                      <p class="tooltiptext triangle-border top" id="myDropdown">Error <br/> <span class="err-message">{{product.errorMessage}}</span></p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <nus-pagination-child
+            *ngIf="qc?.entities?.length"
+            [page]="qc"
+            (fetchPageNumber)="fetchQC($event)"
+          ></nus-pagination-child>
         </nus-tab>
         <nus-tab [title]="'Credentials Error (' + order?.totalRecord.errorAuthentication + ')'">
           <div *ngIf="order?.totalRecord.errorAuthentication > 0" class="error-info">
@@ -148,11 +208,11 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                 <td>
                   <span class="badge" [ngClass]="{
                     'success': shop.status === 'Published',
-                    'alert': shop.status === 'Publishing',
-                    'error': shop.status === err }">
+                    'alert': shop.status === 'Publishing' || shop.status === 'In QC',
+                    'error': shop.status === err || shop.status === 'QC Failed' }">
                     {{ shop.status }}
                   </span>
-                  <div class="cust-tooltip" *ngIf="shop.status === err">
+                  <div class="cust-tooltip" *ngIf="shop.status === err || shop.status === 'QC Failed'">
                     <i id="transform" class="material-icons preview-icon">info</i>
                       <p class="tooltiptext triangle-border top" id="myDropdown" >Error <br/> <span class="err-message">{{shop.errorStatus}}</span></p>
                   </div>
@@ -206,11 +266,11 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                 <td>
                   <span class="badge" [ngClass]="{
                     'success': product.status === 'Published',
-                    'alert': product.status === 'Publishing',
-                    'error': product.status === err }">
+                    'alert': product.status === 'Publishing' || product.status === 'In QC',
+                    'error': product.status === err || product.status === 'QC Failed' }">
                     {{ product.status }}
                   </span>
-                  <div class="cust-tooltip" *ngIf="product.status === err">
+                  <div class="cust-tooltip" *ngIf="product.status === err || product.status === 'QC Failed'">
                     <i id="transform" class="material-icons preview-icon">info</i>
                       <p class="tooltiptext triangle-border top" id="myDropdown">Error <br/> <span class="err-message">{{product.errorMessage}}</span></p>
                   </div>
@@ -267,11 +327,11 @@ import { MarketplaceReceivingProductsService } from '@nusantara/services';
                 <td>
                   <span class="badge" [ngClass]="{
                     'success': product.status === 'Published',
-                    'alert': product.status === 'Publishing',
-                    'error': product.status === err}">
+                    'alert': product.status === 'Publishing' || product.status === 'In QC',
+                    'error': product.status === err || product.status === 'QC Failed' }">
                     {{ product.status }}
                   </span>
-                  <div class="cust-tooltip" *ngIf="product.status === err">
+                  <div class="cust-tooltip" *ngIf="product.status === err || product.status === 'QC Failed'">
                     <i id="transform" class="material-icons preview-icon">info</i>
                       <p class="tooltiptext triangle-border top" id="myDropdown">Error <br/> <span class="err-message">{{product.errorMessage}}</span></p>
                   </div>
@@ -340,6 +400,7 @@ export class PublishDetailComponent implements OnInit {
   credentialsError: PagedResponse<marketplace.IShopErrorDetail>;
   dataError: PagedResponse<marketplace.IReceivingProduct>;
   timeoutError: PagedResponse<marketplace.IReceivingProduct>;
+  qc: PagedResponse<marketplace.IReceivingProduct>;
   isReady = true;
   err = 'Error';
 
@@ -365,6 +426,14 @@ export class PublishDetailComponent implements OnInit {
       .fetchProducts(pageNumber || 1, this.receivingOrderId)
       .subscribe((page) => {
         this.allProducts = page;
+      });
+  }
+
+  fetchQC(pageNumber?: number) {
+    this.service
+      .fetchProducts(pageNumber || 1, this.receivingOrderId, 'in-qc')
+      .subscribe((page) => {
+        this.qc = page;
       });
   }
 
@@ -395,6 +464,7 @@ export class PublishDetailComponent implements OnInit {
   loadAllData() {
     this.fetchDetail();
     this.fetchAllProducts();
+    this.fetchQC()
     this.fetchCredentialsError();
     this.fetchDataError();
     this.fetchTimeoutError();

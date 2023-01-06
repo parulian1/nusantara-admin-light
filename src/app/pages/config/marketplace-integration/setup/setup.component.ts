@@ -48,7 +48,7 @@ import { MarketplaceClientEnum } from '../connect/markeplace-client-enum';
             <td>
               <a [routerLink]="['edit-shipping/', entity.slug]"
                 (click)="setSelectedShop(entity)"
-                [ngClass]="{'disabled': entity.isConnected === false}" i18n>
+                [ngClass]="{'disabled': isDisabledShipping(entity)}" i18n>
                 Edit Shipping
               </a>
             </td>
@@ -90,11 +90,20 @@ export class SetupComponent implements OnInit {
     this.store.dispatch(new shopActions.SetCurrentShop(shop));
   }
 
+  isDisabledShipping(entity: marketplace.IShop) {
+    return (
+      entity.marketplace === this.marketplaceClient.jdid ||
+      !entity.isConnected
+    );
+  }
+
   isDisabledShowcase(entity: marketplace.IShop) {
     return (
       entity.marketplace === this.marketplaceClient.shopee ||
       entity.marketplace === this.marketplaceClient.tsc ||
       entity.marketplace === this.marketplaceClient.tiktok ||
+      entity.marketplace === this.marketplaceClient.blibli ||
+      entity.marketplace === this.marketplaceClient.jdid ||
       !entity.isConnected
     );
   }

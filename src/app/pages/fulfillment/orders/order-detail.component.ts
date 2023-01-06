@@ -17,8 +17,7 @@ import {
 } from '@nusantara/core';
 import { OrderService, ShipmentService } from '@nusantara/services';
 import {
-  drf, IOrder,
-  IOrderChildrenData,
+  drf, IOrderChildrenData,
   order,
   OrderStatusType,
 } from '@nusantara/models';
@@ -33,7 +32,6 @@ import {
   TransportToCounterSelectionModalComponent,
 } from './modals';
 import { MarketplaceOrderService } from '@nusantara/services/marketplace-order.service';
-import { IOrderChildren } from '@nusantara/models/order/order-children';
 import { MatDialog } from '@angular/material/dialog';
 import { OrderDownloadShippingLabel } from '@nusantara/services/order-download-shipping-label.service';
 
@@ -117,7 +115,7 @@ function isTSCOrder(orderData: order.IOrderDetail) {
 
                   <ng-container *ngIf="isShippableOrder">
                     <button
-                      *ngIf="!isReadyButtonHidden(children.data[0])"
+                      *ngIf="!isReadyButtonHidden(children.data[0], children.orderType)"
                       type="button"
                       class="control"
                       (click)="updateOrder(children.data[0], 'ready')"
@@ -127,7 +125,7 @@ function isTSCOrder(orderData: order.IOrderDetail) {
                       Ready
                     </button>
                     <button
-                      *ngIf="!isShipButtonHidden(children.data[0]) && !customshipping.includes(orderDetailData.sourceName) "
+                      *ngIf="!isShipButtonHidden(children.data[0], children.orderType) && !customshipping.includes(orderDetailData.sourceName) "
                       type="button"
                       class="control"
                       (click)="requestShipmentAndUpdateOrder(children.data[0])"
@@ -136,7 +134,7 @@ function isTSCOrder(orderData: order.IOrderDetail) {
                       Ship
                     </button>
                     <button
-                      *ngIf="!isShipButtonHidden(children.data[0]) && customshipping.includes(orderDetailData.sourceName) "
+                      *ngIf="!isShipButtonHidden(children.data[0], children.orderType) && customshipping.includes(orderDetailData.sourceName) "
                       type="button"
                       class="control"
                       (click)="openTransferModal()"
@@ -144,7 +142,7 @@ function isTSCOrder(orderData: order.IOrderDetail) {
                       Ship
                     </button>
                     <button
-                      *ngIf="!isShipButtonHidden(children.data[0])"
+                      *ngIf="!isShipButtonHidden(children.data[0], children.orderType)"
                       type="button"
                       class="control"
                       [disabled]="isAwbManagedByMarketplace"
@@ -154,7 +152,7 @@ function isTSCOrder(orderData: order.IOrderDetail) {
                       Manual Shipment
                     </button>
                     <button
-                      *ngIf="!isCompleteButtonHidden(children.data[0])"
+                      *ngIf="!isCompleteButtonHidden(children.data[0], children.orderType)"
                       type="button"
                       class="control"
                       (click)="updateOrder(children.data[0], 'complete')"
@@ -392,7 +390,7 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   // enable refresh AWB for following source name
   enableRefreshAwb = ['tokopedia', 'shopee', 'bukalapak', 'lazada', 'tiktok'];
 
-  pickupInStore = 'Pickup In-Store';
+  pickupInStore = 'pickup-instore';
 
   constructor(
     public route: ActivatedRoute,
@@ -580,34 +578,35 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
     return childrenData === 'unpaid';
   }
 
-  isReadyButtonHidden(childrenData: any): boolean {
+  isReadyButtonHidden(childrenData: any, orderType: string): boolean {
     if (
       childrenData.status !== 'paid' ||
       ['ready', 'waiting', 'shipped', 'complete'].indexOf(childrenData.status) > -1 ||
-      childrenData.shippingMethod.toLowerCase() === this.pickupInStore.toLowerCase()
+      orderType === this.pickupInStore
     ) {
       return true;
     }
     return false;
   }
 
-  isShipButtonHidden(childrenData: any): boolean {
+  isShipButtonHidden(childrenData: any, orderType: string): boolean {
     if (
       childrenData.status !== 'ready' ||
       ['waiting', 'shipped', 'complete'].indexOf(childrenData.status ) > -1 ||
       this.isRequestShipment ||
-      childrenData.shippingMethod.toLowerCase() === this.pickupInStore.toLowerCase()
+      orderType === this.pickupInStore
     ) {
       return true;
     }
     return false;
   }
 
-  isCompleteButtonHidden(childrenData: any): boolean {
+  isCompleteButtonHidden(childrenData: any, orderType: string): boolean {
     if (
       childrenData.status !== 'shipped' ||
       childrenData.status === 'complete' ||
-      this.isRedirectMarketplaceShowed(childrenData)
+      this.isRedirectMarketplaceShowed(childrenData) ||
+      orderType === this.pickupInStore
     ) {
       return true;
     }

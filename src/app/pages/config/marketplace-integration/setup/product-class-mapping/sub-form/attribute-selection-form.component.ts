@@ -35,29 +35,29 @@ import { SubFormComponent } from './sub-form.component';
 
           <label class="attributes">
             <span i18n>{{ currentShop }} Attributes</span>
-            <div *ngIf="mandatoryAttributes">
-              <p i18n>Mandatory</p>
-              <div class="checkboxes">
-                <div *ngFor="let attr of mandatories.controls; let i = index">
-                  <input type="checkbox" [formControl]="attr" formArrayName="mandatories"/>
-                  <span>{{ mandatoryAttributes[i].name }}</span>
-                </div>
-              </div>
-            </div>
-
-            <div *ngIf="optionalAttributes">
-              <p i18n>Optionals</p>
-              <div class="checkboxes">
-                <div *ngFor="let attr of optionals.controls; let i = index">
-                  <label [for]="i">
-                    <input type="checkbox" [id]="i" [formControl]="attr" formArrayName="optionals"/>
-                    <span>{{ optionalAttributes[i].name }}</span>
-                  </label>
-                </div>
-              </div>
-            </div>
           </label>
 
+          <div *ngIf="mandatoryAttributes">
+            <p i18n>Mandatory</p>
+            <div class="checkboxes">
+              <div *ngFor="let attr of mandatories.controls; let i = index">
+                <input type="checkbox" [formControl]="attr" formArrayName="mandatories"/>
+                <span>{{ mandatoryAttributes[i].name }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="optionalAttributes">
+            <p i18n>Optionals</p>
+            <div class="checkboxes">
+              <div *ngFor="let attr of optionals.controls; let i = index">
+                <label [for]="i">
+                  <input type="checkbox" [id]="i" [formControl]="attr" formArrayName="optionals"/>
+                  <span>{{ optionalAttributes[i].name }}</span>
+                </label>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -148,7 +148,7 @@ export class AttributeSelectionFormComponent
     if (currValue && (JSON.stringify(currValue) !== JSON.stringify(prevValue))) {
       this.isBusy = true;
       this.service
-        .fetchAttribute(this.shopSlug, currValue.deepestChildId)
+        .fetchAttribute(this.shopSlug, currValue.deepestChildId, currValue.deepestChildCode)
         .subscribe(
           (attributes: marketplace.IShopAttribute[]) => {
 
