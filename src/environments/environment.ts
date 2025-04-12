@@ -9,7 +9,7 @@ import { env } from '@env/.env';
 export const environment = {
   production: false,
   apiBaseUrl: '/api',
-  googleApiKey: env.YOUTUBE_KEY || 'AIzaSyB7m0r7paaV5I5U6vjf0pDmocvD8-K-D-w',
+  googleApiKey: env.YOUTUBE_KEY,
   appVersion: version,
   elasticAPM: {
     serviceName: env.APM_NAME || 'nusantara-admin',
